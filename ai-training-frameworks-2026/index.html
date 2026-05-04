@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>大模型与多模态生成模型训练框架技术图谱 2026</title>
+<meta name="author" content="Winston">
+<meta name="description" content="面向工程选型的大模型、多模态大模型与生成模型训练框架技术报告。">
+<meta name="keywords" content="大模型训练, 后训练, 多模态训练, 强化学习后训练, 生成模型训练">
+<meta name="generator" content="Kami">
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @page {
+    size: A4;
+    margin: 18mm 20mm 20mm 20mm;
+    background: #f5f4ed;
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+    @bottom-center {
+      content: counter(page) "  ·  训练框架技术图谱 2026";
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 9pt;
+      color: #6b6a64;
+    }
+  }
+  @page:first { @top-right { content: ""; } @bottom-center { content: ""; } }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper: #f5f4ed;
+    --ivory: #faf9f5;
+    --near-black: #141413;
+    --dark-warm: #3d3d3a;
+    --olive: #504e49;
+    --stone: #6b6a64;
+    --brand: #1B365D;
+    --brand-tint: #EEF2F7;
+    --border: #e8e6dc;
+    --border-strong: #d8d4c7;
+    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+  }
+  html, body { background: var(--paper); }
+  @media screen { body { max-width: 210mm; margin: 0 auto; padding: 18mm 20mm 20mm 20mm; } }
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 10pt;
+    line-height: 1.54;
+    letter-spacing: 0.16pt;
+    widows: 3;
+    orphans: 3;
+  }
+  .cover {
+    min-height: 241mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 30mm;
+    break-after: page;
+  }
+  .cover-eyebrow {
+    color: var(--brand);
+    font-size: 10pt;
+    letter-spacing: 1.1pt;
+    text-transform: uppercase;
+    margin-bottom: 18pt;
+  }
+  .cover-title {
+    font-size: 32pt;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: 0.1pt;
+    margin-bottom: 18pt;
+    max-width: 94%;
+  }
+  .cover-sub {
+    max-width: 88%;
+    color: var(--olive);
+    font-size: 13pt;
+    line-height: 1.56;
+  }
+  .cover-rule {
+    width: 46mm;
+    height: 2pt;
+    background: var(--brand);
+    margin: 0 0 18pt 0;
+    border-radius: 2pt;
+  }
+  .cover-meta {
+    color: var(--stone);
+    font-size: 10pt;
+    line-height: 1.6;
+  }
+  .cover-meta strong { color: var(--dark-warm); font-weight: 500; }
+  .toc { break-after: page; }
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: 14pt;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    gap: 8pt;
+    padding: 6pt 0;
+    border-bottom: 0.35pt dotted var(--border-strong);
+    font-size: 11pt;
+  }
+  .toc-num { min-width: 28pt; color: var(--brand); font-weight: 500; }
+  .toc-title { flex: 1; }
+  .toc-note { color: var(--stone); font-size: 9pt; }
+  .chapter { break-before: page; }
+  .chapter-num {
+    color: var(--brand);
+    font-size: 9.6pt;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+  }
+  h1 {
+    font-size: 22pt;
+    font-weight: 500;
+    line-height: 1.2;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    margin-bottom: 10pt;
+    break-after: avoid;
+  }
+  h2 {
+    font-size: 15.6pt;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 22pt 0 8pt;
+    string-set: section-title content();
+    break-after: avoid;
+  }
+  h3 {
+    color: var(--dark-warm);
+    font-size: 12.4pt;
+    font-weight: 500;
+    line-height: 1.32;
+    margin: 15pt 0 6pt;
+    break-after: avoid;
+  }
+  p { margin: 0 0 8.5pt; line-height: 1.54; }
+  .lead {
+    color: var(--dark-warm);
+    font-size: 11.4pt;
+    line-height: 1.56;
+    margin-bottom: 12pt;
+  }
+  strong { font-weight: 500; }
+  .hl { color: var(--brand); font-weight: 500; }
+  ul, ol { margin: 6pt 0 10pt 0; padding-left: 18pt; line-height: 1.5; }
+  li { margin-bottom: 3pt; }
+  li::marker { color: var(--brand); }
+  a { color: var(--brand); text-decoration: none; }
+  code {
+    font-family: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+    font-size: 8.5pt;
+    background: var(--ivory);
+    padding: 1pt 3pt;
+    border-radius: 2pt;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 11pt 0 12pt;
+    font-size: 8.6pt;
+    break-inside: avoid;
+  }
+  th {
+    text-align: left;
+    color: var(--dark-warm);
+    font-weight: 500;
+    padding: 5pt 6pt;
+    border-bottom: 1pt solid var(--border-strong);
+  }
+  td {
+    padding: 4pt 6pt;
+    border-bottom: 0.3pt solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) td { background: var(--ivory); }
+  .compact th { font-size: 7.5pt; padding: 3pt 4pt; }
+  .compact td { font-size: 7.5pt; line-height: 1.34; padding: 2.5pt 4pt; }
+  .note, .callout {
+    background: var(--ivory);
+    border-left: 1.5pt solid var(--brand);
+    border-radius: 5pt;
+    padding: 10pt 13pt;
+    margin: 12pt 0;
+    break-inside: avoid;
+  }
+  .note-label {
+    color: var(--brand);
+    font-size: 8.5pt;
+    letter-spacing: 0.6pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+  .tag {
+    display: inline-block;
+    background: var(--brand-tint);
+    color: var(--brand);
+    font-size: 8.2pt;
+    font-weight: 500;
+    padding: 1pt 5pt;
+    border-radius: 3pt;
+    margin: 0 3pt 3pt 0;
+    white-space: nowrap;
+  }
+  .small { color: var(--stone); font-size: 8.4pt; }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10pt;
+    margin: 12pt 0 14pt;
+  }
+  .summary-card {
+    background: var(--ivory);
+    border: 0.5pt solid var(--border);
+    border-radius: 6pt;
+    padding: 9pt 11pt;
+    break-inside: avoid;
+  }
+  .summary-card .num {
+    color: var(--brand);
+    font-size: 14pt;
+    font-weight: 500;
+    line-height: 1.1;
+    margin-bottom: 3pt;
+  }
+  .summary-card .label {
+    color: var(--stone);
+    font-size: 8.2pt;
+    letter-spacing: 0.45pt;
+    text-transform: uppercase;
+    margin-bottom: 3pt;
+  }
+  .layer-stack {
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .layer-row {
+    display: grid;
+    grid-template-columns: 128pt 1fr;
+    gap: 10pt;
+    align-items: start;
+    min-height: 44pt;
+    padding: 8pt 10pt;
+    margin-bottom: 7pt;
+    border: 0.9pt solid #504e49;
+    border-radius: 6pt;
+    background: rgba(250,249,245,0.45);
+  }
+  .layer-row.focal {
+    border: 1.35pt solid var(--brand);
+    background: var(--brand-tint);
+  }
+  .layer-title {
+    font-size: 15pt;
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--near-black);
+  }
+  .layer-copy {
+    color: var(--dark-warm);
+    font-size: 9.6pt;
+    line-height: 1.48;
+  }
+  .chip-line { margin-top: 2pt; }
+  .chip {
+    display: inline-block;
+    margin: 0 4pt 3pt 0;
+    padding: 1pt 5pt;
+    border-radius: 3pt;
+    background: #faf9f5;
+    border: 0.35pt solid var(--border-strong);
+    color: var(--dark-warm);
+    white-space: nowrap;
+  }
+  .focal .chip { border-color: #d0dce9; }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12pt;
+    margin: 10pt 0;
+  }
+  .mini-card {
+    background: var(--ivory);
+    border: 0.5pt solid var(--border);
+    border-radius: 6pt;
+    padding: 10pt 12pt;
+    break-inside: avoid;
+  }
+  .mini-card h3 { margin-top: 0; }
+  .fit { color: var(--brand); font-weight: 500; }
+  .avoid { color: var(--olive); }
+  figure { margin: 13pt 0; break-inside: avoid; }
+  figcaption { color: var(--stone); font-size: 8.7pt; text-align: center; margin-top: 5pt; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div>
+    <div class="cover-eyebrow">TECHNICAL SURVEY · 2026</div>
+    <div class="cover-rule"></div>
+    <div class="cover-title">大模型与多模态生成模型训练框架技术图谱</div>
+    <div class="cover-sub">面向工程选型的训练框架报告，覆盖预训练、继续预训练、SFT、参数高效微调、偏好优化、RL 后训练、多模态训练，以及图像和视频生成模型训练栈。</div>
+  </div>
+  <div class="cover-meta">
+    <strong>Winston</strong><br>
+    资料口径截至 2026-05-04<br>
+    Primary repositories · official documentation · technical papers
+  </div>
+</section>
+
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">执行摘要</span><span class="toc-note">训练框架不能用总榜理解</span></div>
+  <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">分类框架</span><span class="toc-note">按训练阶段和系统层级拆分</span></div>
+  <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">从零训练与分布式底座</span><span class="toc-note">Megatron、DeepSpeed、TorchTitan、NeMo</span></div>
+  <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">SFT、LoRA 与偏好优化</span><span class="toc-note">LlamaFactory、Axolotl、ms-swift、TRL</span></div>
+  <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">RL 后训练系统</span><span class="toc-note">verl、OpenRLHF、NeMo RL、AReaL、slime</span></div>
+  <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">多模态训练</span><span class="toc-note">VLM、MLLM、视觉预训练</span></div>
+  <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">图像与视频生成训练</span><span class="toc-note">Diffusers、Open-Sora、Wan、HunyuanVideo</span></div>
+  <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">选型方法与边界</span><span class="toc-note">场景入口、风险清单、资料口径</span></div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">01 · Executive Summary</div>
+  <h1>执行摘要</h1>
+  <p class="lead">现阶段训练框架的关键分化，不在项目热度，而在训练目标、模型形态和系统边界。预训练底座、SFT 工作台、RL 后训练系统、VLM 配方库和视频生成模型项目承担的是不同职责，混合排序会掩盖真正的选型问题。</p>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="label">Finding 01</div>
+      <div class="num">训练阶段先于项目名</div>
+      <p>从零训练关注并行、显存、吞吐和恢复；业务微调关注数据、模板、adapter、导出和验证；在线 RL 关注 rollout、reward、环境和权重同步。</p>
+    </div>
+    <div class="summary-card">
+      <div class="label">Finding 02</div>
+      <div class="num">后训练已进入系统工程</div>
+      <p>DPO 等离线偏好优化仍可作为普通训练任务处理，GRPO/PPO/Agentic RL 则需要训练引擎、推理引擎、奖励服务和环境接口协同。</p>
+    </div>
+    <div class="summary-card">
+      <div class="label">Finding 03</div>
+      <div class="num">多模态没有统一入口</div>
+      <p>VLM 训练比文本 SFT 多出 processor、图像分辨率、多图样本、视觉 token、projector 和评测链路，模型族适配比算法名更重要。</p>
+    </div>
+    <div class="summary-card">
+      <div class="label">Finding 04</div>
+      <div class="num">生成模型按模型族选栈</div>
+      <p>图像 LoRA、Flux/SDXL 微调、Wan/Hunyuan 视频 LoRA、Open-Sora 式研究训练依赖不同数据格式、VAE/DiT/text encoder 和显存预算。</p>
+    </div>
+  </div>
+
+  <h2>本报告的结论范围</h2>
+  <p>本文讨论的是训练框架与训练闭环，不展开推理服务框架。vLLM、SGLang、FlashAttention、xFormers、Liger Kernel、torchao 等项目仅在影响训练吞吐、RL rollout、量化训练或导出验证时出现；纯推理部署、服务编排和线上压测不作为本次主题。</p>
+
+  <div class="note">
+    <div class="note-label">选型主线</div>
+    大规模预训练优先评估 Megatron Core/Megatron-LM、DeepSpeed、TorchTitan、NeMo、Megatron Bridge、VeOmni、Nanotron 等底座；常规业务微调优先评估 LlamaFactory、Axolotl、ms-swift、TRL/PEFT/Accelerate、Unsloth、torchtune、XTuner；在线 RL 优先评估 verl、OpenRLHF、NeMo RL、AReaL、slime；图像和视频生成训练应按模型族进入 Diffusers、sd-scripts、SimpleTuner、ai-toolkit、OneTrainer、musubi-tuner、diffusion-pipe、Open-Sora、Wan、HunyuanVideo 等生态。</div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">02 · Taxonomy</div>
+  <h1>分类框架</h1>
+  <p class="lead">训练框架应按“任务层、编排层、控制层、分布式层、模型与数据层、运行依赖层”理解。项目名相近并不代表职责相同，模型仓库、训练脚本、分布式底座、后训练系统和推理引擎需要分开判断。</p>
+
+  <div class="layer-stack">
+    <div class="layer-row focal">
+      <div class="layer-title">任务层</div>
+      <div class="layer-copy">定义训练目标和评测口径，决定后续工具链的边界。
+        <div class="chip-line"><span class="chip">预训练</span><span class="chip">继续预训练</span><span class="chip">SFT</span><span class="chip">LoRA / QLoRA</span><span class="chip">DPO / KTO / ORPO</span><span class="chip">GRPO / PPO</span><span class="chip">VLM</span><span class="chip">Diffusion</span><span class="chip">Video</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-title">训练编排层</div>
+      <div class="layer-copy">组织模型、数据、loss、评测、导出和日志，决定实验是否可复现。
+        <div class="chip-line"><span class="chip">LlamaFactory</span><span class="chip">Axolotl</span><span class="chip">ms-swift</span><span class="chip">TRL</span><span class="chip">torchtune</span><span class="chip">XTuner</span><span class="chip">Diffusers</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-title">RL 控制层</div>
+      <div class="layer-copy">协调 actor、critic、reference、rollout、reward、工具环境和异步采样。
+        <div class="chip-line"><span class="chip">verl</span><span class="chip">OpenRLHF</span><span class="chip">NeMo RL</span><span class="chip">AReaL</span><span class="chip">slime</span><span class="chip">open-instruct</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-title">分布式与内核层</div>
+      <div class="layer-copy">处理显存、并行、通信、checkpoint 和吞吐，上层框架通常建立在这一层之上。
+        <div class="chip-line"><span class="chip">Megatron</span><span class="chip">DeepSpeed</span><span class="chip">TorchTitan</span><span class="chip">NeMo</span><span class="chip">ColossalAI</span><span class="chip">FSDP</span><span class="chip">FlashAttention</span><span class="chip">Liger Kernel</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-title">模型与数据层</div>
+      <div class="layer-copy">模型定义、adapter、tokenizer、dataset、reward data 和多模态 processor 决定训练是否对齐。
+        <div class="chip-line"><span class="chip">Transformers</span><span class="chip">PEFT</span><span class="chip">Datasets</span><span class="chip">torchao</span><span class="chip">Open Thoughts</span><span class="chip">ModelScope</span></div>
+      </div>
+    </div>
+    <div class="layer-row">
+      <div class="layer-title">运行依赖层</div>
+      <div class="layer-copy">在线 RL、评测和导出验证会反复调用推理引擎和任务环境，这一层影响训练成本但不是本报告主体。
+        <div class="chip-line"><span class="chip">vLLM</span><span class="chip">SGLang</span><span class="chip">Ray</span><span class="chip">torchrun</span><span class="chip">checkpoint store</span><span class="chip">W&B / TensorBoard</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>训练框架的五类角色</h2>
+  <table>
+    <thead><tr><th>角色</th><th>代表项目</th><th>主要解决的问题</th><th>不应期待它解决的问题</th></tr></thead>
+    <tbody>
+      <tr><td>分布式底座</td><td>Megatron、DeepSpeed、TorchTitan、NeMo、ColossalAI、VeOmni、Nanotron</td><td>多维并行、显存优化、吞吐、容错、checkpoint 和大规模训练配方。</td><td>业务数据清洗、模板适配、端到端产品化微调体验。</td></tr>
+      <tr><td>微调工作台</td><td>LlamaFactory、Axolotl、ms-swift、TRL、Unsloth、torchtune、XTuner</td><td>统一数据格式、chat template、LoRA/QLoRA、偏好优化、评测和导出。</td><td>超大规模预训练的系统上限，复杂在线 RL 控制面。</td></tr>
+      <tr><td>RL 后训练系统</td><td>verl、OpenRLHF、NeMo RL、AReaL、slime</td><td>rollout、reward、environment、actor/reference/critic、异步调度和权重同步。</td><td>替代数据策略、自动保证 reward 可信、覆盖所有推理部署场景。</td></tr>
+      <tr><td>模型配方项目</td><td>LLaVA、InternVL、VILA、Qwen-VL、Open-Sora、Wan、HunyuanVideo、CogVideo</td><td>给出模型结构、训练 recipe、数据处理和评测参考。</td><td>成为跨模型族的通用训练平台。</td></tr>
+      <tr><td>训练组件</td><td>Transformers、PEFT、Accelerate、Diffusers、FlashAttention、Liger Kernel、torchao</td><td>提供模型定义、adapter、分布式启动、生成模型 pipeline、内核或量化能力。</td><td>单独承担完整工程项目的流程治理。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">03 · Pretraining Stack</div>
+  <h1>从零训练与分布式底座</h1>
+  <p class="lead">从零训练的优先级是系统上限：并行策略能否覆盖模型形态，通信和显存是否可控，checkpoint 是否能稳定恢复，训练产物能否和主流模型生态互转。入口易用性重要，但不是首要指标。</p>
+
+  <h2>主力底座项目</h2>
+  <table>
+    <thead><tr><th>项目</th><th>核心能力</th><th>适合场景</th><th>边界与风险</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Megatron-LM / Megatron Core</strong></td><td>TP、PP、DP、EP、CP 等多维并行，面向大规模 Transformer、MoE 和 VLM 训练。</td><td>需要在 NVIDIA GPU 集群上训练十亿到千亿级模型，并愿意投入分布式训练工程能力。</td><td>抽象层级低，排错成本高；团队需要理解并行拓扑、通信重叠和 checkpoint 结构。</td></tr>
+      <tr><td><strong>DeepSpeed</strong></td><td>ZeRO、offload、MoE、pipeline 并行和大模型训练优化，常被上层框架调用。</td><td>多节点训练、显存受限训练、已有 PyTorch/HF 训练代码需要接入优化能力。</td><td>配置复杂度高；不同 ZeRO stage、offload 和并行组合需要逐项压测。</td></tr>
+      <tr><td><strong>TorchTitan</strong></td><td>PyTorch native 的预训练平台，围绕 FSDP2、DTensor、torch.compile 等官方抽象组织。</td><td>希望贴近 PyTorch 官方分布式路线，减少框架黑盒，并建立可读的预训练基线。</td><td>项目仍处在快速演进阶段，生产稳定性应按具体 recipe 验证。</td></tr>
+      <tr><td><strong>NeMo / Megatron Bridge</strong></td><td>NVIDIA 生态的 LLM、VLM、语音训练框架；Megatron Bridge 提供 Hugging Face 与 Megatron checkpoint 双向转换。</td><td>企业训练栈、NVIDIA 容器和 Megatron 生态深度绑定场景，尤其重视模型格式互操作。</td><td>生态依赖较重；非 NVIDIA 设备或非 Megatron 路线需评估迁移成本。</td></tr>
+      <tr><td><strong>VeOmni</strong></td><td>ByteDance Seed 开源的多模态训练框架，强调 model-centric distributed recipe。</td><td>单模态到多模态训练 recipe 需要统一组织，且希望保留训练逻辑透明度的团队。</td><td>新项目的长期稳定性、文档覆盖和社区案例仍需跟踪。</td></tr>
+      <tr><td><strong>ColossalAI</strong></td><td>低成本大模型训练、多种并行策略和研究复现生态。</td><td>教学、复现、成本敏感训练，以及部分视频生成项目关联的开源训练路线。</td><td>具体模型路径的维护状态差异较大，生产使用应以目标 recipe 为准。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>研究型与轻量底座</h2>
+  <p>Nanotron、LitGPT、LLM Foundry、GPT-NeoX、Lingua 等项目适合建立可读基线。它们未必是最大规模训练的首选，但在数据混合、tokenizer、学习率、checkpoint、评测和 loss 曲线验证阶段具有实际价值。大多数团队在进入大集群前，应先用轻量项目跑通闭环，再把已验证的训练配方迁移到底座型框架。</p>
+
+  <div class="two-col">
+    <div class="mini-card">
+      <h3>重型底座的触发条件</h3>
+      <p>模型规模超过单机多卡舒适区，需要 MoE、长上下文、FP8、复杂并行、跨节点容错或严格 checkpoint 管理时，应优先进入 Megatron、DeepSpeed、NeMo、TorchTitan 这一层。</p>
+    </div>
+    <div class="mini-card">
+      <h3>轻量底座的合理位置</h3>
+      <p>团队尚未确认数据质量、tokenizer、训练超参和评测闭环时，Nanotron、LitGPT、LLM Foundry、Lingua 这类项目能更快暴露问题。</p>
+    </div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">04 · SFT and Preference</div>
+  <h1>SFT、LoRA 与偏好优化</h1>
+  <p class="lead">业务微调需要稳定入口。评估重点不只是支持多少算法，而是 tokenizer、chat template、loss mask、packing、VLM processor、adapter 合并、量化和导出验证能否形成一条可复现的训练链路。</p>
+
+  <h2>常用工作台与组件</h2>
+  <table>
+    <thead><tr><th>项目</th><th>强项</th><th>适合场景</th><th>使用边界</th></tr></thead>
+    <tbody>
+      <tr><td><strong>LlamaFactory</strong></td><td>统一微调 LLM/VLM，CLI 与 Web UI 成熟，覆盖 SFT、LoRA、DPO、GRPO 等主流路径。</td><td>业务团队快速建立中文和通用模型微调流程。</td><td>复杂自定义训练逻辑会触及抽象边界，底层行为需要通过最小实验确认。</td></tr>
+      <tr><td><strong>Axolotl</strong></td><td>YAML 驱动，覆盖全参、LoRA/QLoRA、偏好优化、GRPO、奖励建模、多模态和多节点。</td><td>希望把训练配置长期沉淀成可审计资产的团队。</td><td>配置面广，前期需要建立字段规范和实验模板。</td></tr>
+      <tr><td><strong>ms-swift</strong></td><td>对 Qwen、InternVL、GLM、LLaVA 等中文和多模态生态适配积极，覆盖 CPT/SFT/DPO/GRPO。</td><td>主要模型来自 Qwen、ModelScope 或中文多模态生态的场景。</td><td>跨生态模型使用前仍需验证模板、processor 和导出兼容性。</td></tr>
+      <tr><td><strong>TRL + PEFT + Accelerate</strong></td><td>HF 原生组合，SFTTrainer、DPOTrainer、GRPOTrainer、RewardTrainer 等可编程性强。</td><td>有工程能力、需要精细控制训练逻辑和研究方法的团队。</td><td>自由度高，同时意味着数据 glue code、评测和导出治理要自行承担。</td></tr>
+      <tr><td><strong>Unsloth</strong></td><td>低显存、训练加速和本地化体验突出。</td><td>个人、小团队、预算敏感的 LoRA/QLoRA 微调。</td><td>复杂生产流水线、长期维护和多节点治理需额外评估。</td></tr>
+      <tr><td><strong>torchtune</strong></td><td>PyTorch native 后训练库，训练配方清晰，和 TorchTitan、torchao 路线衔接自然。</td><td>希望沿 PyTorch 官方栈建立后训练和量化流程。</td><td>生态覆盖不等同于工作台式开箱体验。</td></tr>
+      <tr><td><strong>XTuner / open-instruct</strong></td><td>分别贴近 InternLM/国产模型生态和公开后训练 recipe。</td><td>模型族适配、研究复现、开源配方学习。</td><td>通用业务生产入口需要按模型和数据格式逐项确认。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>微调框架的四个核验点</h2>
+  <p><strong>模型适配要落到细节，</strong>README 中的支持列表不能替代 tokenizer、template、vision processor、multi-image collator、loss mask 和导出路径验证。VLM 与 MoE 尤其应先跑小样本。</p>
+  <p><strong>数据链路要可解释，</strong>训练效果异常时，应能区分数据格式错误、assistant mask 错误、packing 影响、样本质量问题和评测集波动。无法解释数据流的工作台不适合进入生产闭环。</p>
+  <p><strong>导出属于训练闭环，</strong>adapter 合并、量化、checkpoint 转换、推理一致性和 serving 兼容不应视为训练后的杂项工作。只能训练、不能稳定交付的工具价值有限。</p>
+  <p><strong>偏好优化需要分层处理，</strong>DPO/KTO/ORPO 多数情况下仍可作为离线训练任务；GRPO/PPO 如果引入在线采样、工具调用或程序化 reward，应转入第五章的 RL 系统评估。正式采用前，可使用同一份 1k 到 5k 样本在候选框架中分别跑最小 LoRA 或 QLoRA，记录显存、吞吐、loss 曲线、样本级 mask、导出后一致性和配置可读性。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">05 · RL Post-training</div>
+  <h1>RL 后训练系统</h1>
+  <p class="lead">RL 后训练从算法问题转为系统问题。在线采样、奖励计算、工具环境、token 轨迹、异步调度、权重同步和可观测性共同决定训练是否可控，单看 PPO、GRPO 或 REINFORCE++ 的算法名不足以完成选型。</p>
+
+  <h2>重点项目</h2>
+  <table>
+    <thead><tr><th>项目</th><th>定位</th><th>适合场景</th><th>评估重点</th></tr></thead>
+    <tbody>
+      <tr><td><strong>verl</strong></td><td>HybridFlow 路线的 RL post-training 框架，支持多训练后端和 vLLM/SGLang/HF rollout。</td><td>复杂 RL 数据流、多 worker、长链路 agent、高吞吐 rollout。</td><td>训练后端选择、rollout 引擎稳定性、权重同步开销、日志粒度。</td></tr>
+      <tr><td><strong>OpenRLHF</strong></td><td>Ray、vLLM、DeepSpeed 组合，覆盖 PPO、REINFORCE++、GRPO、RLOO、DPO/KTO 和 agentic RL。</td><td>希望快速搭建 RLHF/GRPO 集群的团队。</td><td>Ray 集群治理、reward service、数据生成和训练的资源隔离。</td></tr>
+      <tr><td><strong>NeMo RL</strong></td><td>NVIDIA NeMo 体系下的 RL 后训练库，面向 LLM/VLM reinforcement。</td><td>NVIDIA 生态、Megatron 后端、多模态 RL、企业 recipe 复现。</td><td>容器环境、Megatron/AutoModel 路线选择、与 NeMo Gym/Evaluator 的接口。</td></tr>
+      <tr><td><strong>AReaL</strong></td><td>连接 foundation model training 与 agent 应用的 RL infrastructure。</td><td>工具调用、交互环境、真实任务反馈驱动的 agent 后训练。</td><td>环境抽象、trajectory 记录、程序化 reward 和任务隔离。</td></tr>
+      <tr><td><strong>slime</strong></td><td>SGLang-native 的 RL scaling 后训练框架，结合 Megatron 与 SGLang。</td><td>关注 SGLang rollout、Megatron 训练和高性能 RL scaling 的团队。</td><td>Megatron/SGLang 版本耦合、数据生成接口、异步架构成熟度。</td></tr>
+      <tr><td><strong>TRL / open-instruct</strong></td><td>更轻量的后训练 trainer 与公开 recipe。</td><td>离线偏好优化、小规模 GRPO、公开方法复现。</td><td>规模边界、rollout 吞吐、工程治理能力。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>RL 选型的工程问题</h2>
+  <table>
+    <thead><tr><th>问题</th><th>为什么重要</th><th>核验方式</th></tr></thead>
+    <tbody>
+      <tr><td>rollout 吞吐</td><td>在线 RL 的时间主要消耗在生成和打分，推理引擎不稳定会直接放大训练成本。</td><td>用目标模型、目标上下文长度和真实 prompt 分布压测 vLLM/SGLang/HF rollout。</td></tr>
+      <tr><td>reward 可信度</td><td>数学、代码、工具调用、多轮任务的 reward 形态不同，错误 reward 会稳定优化错误行为。</td><td>抽样审计 reward 分布，保留失败样本和边界样本，评估 reward hacking 风险。</td></tr>
+      <tr><td>异步与权重同步</td><td>异步提高吞吐，也引入 stale policy、版本追踪和调试复杂度。</td><td>记录 policy version、rollout version、训练 step 和评测输出的对应关系。</td></tr>
+      <tr><td>可观测性</td><td>RL 失败时 loss 不足以解释问题，需要 token 轨迹、KL、reward 分布、样本质量和环境状态。</td><td>在最小任务上先打通日志、样本回放和异常样本定位。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">06 · Multimodal Training</div>
+  <h1>多模态训练</h1>
+  <p class="lead">VLM/MLLM 训练不能简单视为文本 SFT 增加一个 image 字段。视觉 encoder、projector、image token、分辨率策略、多图或视频样本、processor 和评测集都会影响训练结果。</p>
+
+  <h2>生态角色</h2>
+  <table>
+    <thead><tr><th>项目或生态</th><th>角色</th><th>选型价值</th><th>边界</th></tr></thead>
+    <tbody>
+      <tr><td><strong>LLaVA / LLaVA-NeXT</strong></td><td>视觉指令微调范式和公开基线。</td><td>理解 conversation template、图文数据格式和 VLM 评测的基础参照。</td><td>不等同于覆盖最新模型族的通用训练平台。</td></tr>
+      <tr><td><strong>InternVL / Qwen-VL / VILA</strong></td><td>高影响力多模态模型族。</td><td>决定 ms-swift、XTuner、LlamaFactory、Axolotl 等工具的 processor 和模板适配优先级。</td><td>模型仓库开放的训练范围、微调脚本和权重许可需要逐项确认。</td></tr>
+      <tr><td><strong>MMEngine / MMPreTrain</strong></td><td>传统视觉训练和预训练底座。</td><td>CV backbone、分类、检索、视觉预训练任务不必强行套 LLM 微调工具。</td><td>对 LLM 式对话模板和 VLM 指令微调不是天然入口。</td></tr>
+      <tr><td><strong>VeOmni / NeMo / Megatron</strong></td><td>从零训练多模态模型的分布式底座。</td><td>模型规模、模态组合和集群规模进入大训练区间时更有价值。</td><td>数据、模态对齐和评测设计仍需团队自行治理。</td></tr>
+      <tr><td><strong>ms-swift / XTuner / LlamaFactory / Axolotl</strong></td><td>多模态微调工作台。</td><td>业务 VLM 微调、中文模型生态适配、小规模验证。</td><td>多图、视频、长上下文和特定 processor 需要先做最小样本测试。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>VLM 微调的最小测试集</h2>
+  <p>十几条样本即可暴露主要问题：单图、多图和空图样本是否都能通过 collator；不同分辨率是否按预期缩放或切块；assistant mask 是否只训练回答；processor 输出是否和推理端一致；adapter 合并后是否能在目标 serving 框架中复现训练期输出。该测试应先于任何长周期微调。</p>
+
+  <div class="note">
+    <div class="note-label">路线建议</div>
+    中文和通用 VLM 微调优先评估 ms-swift、XTuner、LlamaFactory、Axolotl；研究 LLaVA 范式时保留 LLaVA/LLaVA-NeXT 作为基线；NVIDIA 生态或从零训练 VLM 时回到 NeMo、Megatron、VeOmni 等底座。</div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">07 · Generative Model Training</div>
+  <h1>图像与视频生成训练</h1>
+  <p class="lead">生成模型训练应按模型族而非统一框架名选型。Diffusers 是组件和示例体系，sd-scripts、SimpleTuner、ai-toolkit、OneTrainer 更接近训练工作流；Open-Sora、Wan、HunyuanVideo、CogVideo、LTX-Video、Cosmos、SkyReels、Infinity 则更多体现模型结构、权重、训练报告和生态配方。</p>
+
+  <h2>图像生成训练栈</h2>
+  <table>
+    <thead><tr><th>项目</th><th>定位</th><th>适合场景</th><th>注意事项</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Diffusers</strong></td><td>图像、视频、音频扩散模型的 PyTorch 组件库和训练示例。</td><td>需要自定义 pipeline、scheduler、UNet/DiT、LoRA 或训练脚本的工程团队。</td><td>示例脚本强调可读和可改，生产化仍需自行补齐数据治理和实验管理。</td></tr>
+      <tr><td><strong>sd-scripts</strong></td><td>Stable Diffusion 及相关模型训练脚本生态。</td><td>SD/SDXL/SD3/Flux 周边 LoRA、DreamBooth、Textual Inversion 和社区训练。</td><td>版本、模型族和社区参数经验变化快，训练前应确认目标分支和文档。</td></tr>
+      <tr><td><strong>SimpleTuner</strong></td><td>面向 image/video/audio diffusion 的通用 fine-tuning kit。</td><td>希望统一管理多种扩散模型训练配置的研究或工程团队。</td><td>模型支持面广，具体数据格式和显存预算需要按模型族验证。</td></tr>
+      <tr><td><strong>ai-toolkit</strong></td><td>扩散模型 finetuning 工具箱。</td><td>Flux 等新图像模型的轻量训练和社区实验。</td><td>适合作为训练工具，不应替代系统级实验治理。</td></tr>
+      <tr><td><strong>OneTrainer</strong></td><td>面向 diffusion training 的一站式工具。</td><td>偏 GUI、配置化和工作流整合的训练用户。</td><td>复杂自定义研究训练仍需回到脚本和组件层。</td></tr>
+      <tr><td><strong>Infinity</strong></td><td>高分辨率图像生成的 autoregressive 模型项目。</td><td>观察图像生成路线从 diffusion 向其他建模方式扩展。</td><td>不是通用训练工具，更多作为模型方法和研究生态跟踪对象。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>视频生成训练栈</h2>
+  <table>
+    <thead><tr><th>项目</th><th>定位</th><th>适合场景</th><th>注意事项</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Open-Sora</strong></td><td>开源视频生成模型与训练栈，技术报告覆盖数据、架构、训练策略和系统优化。</td><td>研究完整视频训练链路和成本控制方法。</td><td>完整训练与 LoRA 微调是不同问题，资源预算差异很大。</td></tr>
+      <tr><td><strong>Wan / HunyuanVideo</strong></td><td>大规模视频生成模型项目，提供模型、权重、技术报告和生态接口。</td><td>视频生成模型研究、LoRA 生态、推理和二次训练路线评估。</td><td>需要分清官方开放的训练代码、推理代码、权重和第三方 tuner。</td></tr>
+      <tr><td><strong>CogVideo / LTX-Video / Cosmos / SkyReels</strong></td><td>视频生成模型族和关联生态。</td><td>比较视频生成模型结构、许可、推理成本和训练可获得性。</td><td>不要把模型热度直接等同于可训练性。</td></tr>
+      <tr><td><strong>musubi-tuner / diffusion-pipe</strong></td><td>视频 diffusion LoRA 和 pipeline parallel 训练工具。</td><td>Hunyuan、Wan、FramePack 等社区训练和显存受限微调。</td><td>适合微调或社区训练，不是从零训练视频基础模型的完整替代。</td></tr>
+      <tr><td><strong>Open-Sora-Plan</strong></td><td>Sora 风格 T2V 复现计划。</td><td>跟踪开放视频生成研究路线和训练配方。</td><td>项目定位偏复现和研究，生产选型需结合目标模型族重新评估。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>生成模型训练的真实约束</h2>
+  <p>图像和视频训练的瓶颈往往不在命令行参数，而在数据治理。caption 质量、镜头切分、帧率、时长、分辨率、运动幅度、重复样本、版权和安全过滤都会影响模型表现。训练框架可以降低实验门槛，但不能代替数据筛选和评测设计。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">08 · Selection Playbook</div>
+  <h1>选型方法与边界</h1>
+  <p class="lead">选型应从任务、规模、模型族、数据形态和交付物倒推，而不是从项目列表出发。下面的表格给出可执行的起步路线，并标出容易被忽略的验证项。</p>
+
+  <h2>按任务选择入口</h2>
+  <table>
+    <thead><tr><th>任务</th><th>优先评估</th><th>补充关注</th><th>关键验证项</th></tr></thead>
+    <tbody>
+      <tr><td>从零训练 LLM/MoE</td><td>Megatron、NeMo、DeepSpeed、TorchTitan</td><td>VeOmni、ColossalAI、Nanotron</td><td>并行拓扑、checkpoint 恢复、吞吐、MFU、数据管线。</td></tr>
+      <tr><td>继续预训练</td><td>Megatron/DeepSpeed、Axolotl、ms-swift</td><td>LitGPT、LLM Foundry、Lingua、Nanotron</td><td>数据混合、学习率、tokenizer、评测漂移、模型格式转换。</td></tr>
+      <tr><td>业务 SFT/LoRA</td><td>LlamaFactory、Axolotl、ms-swift、Unsloth</td><td>TRL、PEFT、torchtune</td><td>chat template、loss mask、packing、adapter 合并、推理一致性。</td></tr>
+      <tr><td>偏好优化</td><td>TRL、LlamaFactory、ms-swift、Axolotl</td><td>open-instruct、NeMo</td><td>偏好数据质量、reference model、reward 分布、评测集稳定性。</td></tr>
+      <tr><td>GRPO/PPO/Agentic RL</td><td>verl、OpenRLHF、NeMo RL</td><td>AReaL、slime、TRL</td><td>rollout 吞吐、reward service、环境接口、异步和权重同步。</td></tr>
+      <tr><td>VLM 微调</td><td>ms-swift、XTuner、LlamaFactory、Axolotl</td><td>LLaVA、InternVL、Qwen-VL、VILA</td><td>processor、collator、多图样本、分辨率策略、导出验证。</td></tr>
+      <tr><td>图像 LoRA / diffusion 微调</td><td>Diffusers、sd-scripts、SimpleTuner、ai-toolkit</td><td>OneTrainer、模型官方脚本</td><td>模型族、caption、VAE/DiT/text encoder、显存预算。</td></tr>
+      <tr><td>视频 LoRA / 视频研究</td><td>Open-Sora、musubi-tuner、diffusion-pipe</td><td>Wan、HunyuanVideo、CogVideo、LTX、SkyReels、Cosmos</td><td>完整训练与微调边界、帧率、时长、镜头切分、训练开放范围。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>正式采用前的检查清单</h2>
+  <table>
+    <thead><tr><th>维度</th><th>需要确认</th><th>不满足时的处理</th></tr></thead>
+    <tbody>
+      <tr><td>训练目标</td><td>预训练、继续预训练、SFT、偏好优化、在线 RL、VLM 或生成模型训练是否已明确。</td><td>先缩小任务边界，避免把微调工作台当预训练底座使用。</td></tr>
+      <tr><td>模型族</td><td>目标模型的 tokenizer、processor、checkpoint 格式、许可和官方推荐工具链。</td><td>优先跑官方最小 recipe，再迁移到统一工作台。</td></tr>
+      <tr><td>数据形态</td><td>文本、偏好对、程序化 reward、多图样本、视频片段、caption 和安全过滤是否可追溯。</td><td>先建立数据审计样本，而不是直接延长训练。</td></tr>
+      <tr><td>系统规模</td><td>单卡、单机多卡、多节点、MoE、长上下文、FP8、pipeline 和容错要求。</td><td>规模不足时使用轻量工作台；规模上升后回到底座层。</td></tr>
+      <tr><td>交付链路</td><td>adapter 合并、量化、导出、推理一致性、评测和 serving 兼容是否可复现。</td><td>把导出验证纳入训练脚本，不作为训练后的人工步骤。</td></tr>
+      <tr><td>许可证与维护</td><td>训练代码、权重、数据和依赖项目的 license 是否允许目标用途。</td><td>涉及 AGPL、未声明 license 或模型权重限制时先完成合规评估。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>资料口径与限制</h2>
+  <p>本报告优先依据项目官方仓库、官方文档、论文页面和技术报告建立判断。仓库公开元数据用于识别项目状态和生态关注度，不作为质量排序依据；能力描述以官方文档和可复现实验路径为准。项目更新速度较快，正式落地前仍应复核目标版本、目标模型族和目标硬件环境。</p>
+</section>
+
+</body>
+</html>

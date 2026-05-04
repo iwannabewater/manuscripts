@@ -1,0 +1,60 @@
+repo	stars	forks	license	pushed_at	created_at	description	url
+NVIDIA/Megatron-LM	16217	3906	NOASSERTION	2026-05-04T09:52:59Z	2019-03-21T16:15:52Z	Ongoing research training transformer models at scale	https://github.com/NVIDIA/Megatron-LM
+deepspeedai/DeepSpeed	42252	4815	Apache-2.0	2026-05-02T06:44:28Z	2020-01-23T18:35:18Z	DeepSpeed is a deep learning optimization library that makes distributed training and inference easy, efficient, and effective.	https://github.com/deepspeedai/DeepSpeed
+pytorch/torchtitan	5297	800	BSD-3-Clause	2026-05-04T08:20:47Z	2023-12-13T01:51:37Z	A PyTorch native platform for training generative AI models	https://github.com/pytorch/torchtitan
+NVIDIA-NeMo/NeMo	17165	3401	Apache-2.0	2026-05-02T01:29:56Z	2019-08-05T20:16:42Z	A scalable generative AI framework built for researchers and developers working on Large Language Models, Multimodal, and Speech AI (Automatic Speech Recognition and Text-to-Speech)	https://github.com/NVIDIA-NeMo/NeMo
+NVIDIA-NeMo/Megatron-Bridge	613	299	Apache-2.0	2026-05-04T09:59:22Z	2025-05-21T21:45:06Z	Training library for Megatron-based models with bidirectional Hugging Face conversion capability	https://github.com/NVIDIA-NeMo/Megatron-Bridge
+ByteDance-Seed/VeOmni	1889	185	Apache-2.0	2026-05-02T17:28:25Z	2025-03-28T03:42:42Z	VeOmni: Scaling Any Modality Model Training with Model-Centric Distributed Recipe Zoo	https://github.com/ByteDance-Seed/VeOmni
+huggingface/nanotron	2675	304	Apache-2.0	2026-04-07T13:25:10Z	2023-09-11T14:40:28Z	Minimalistic large language model 3D-parallelism training	https://github.com/huggingface/nanotron
+hpcaitech/ColossalAI	41376	4515	Apache-2.0	2026-04-27T17:41:15Z	2021-10-28T16:19:44Z	Making large AI models cheaper, faster and more accessible	https://github.com/hpcaitech/ColossalAI
+EleutherAI/gpt-neox	7425	1111	Apache-2.0	2026-04-13T22:43:59Z	2020-12-22T14:37:54Z	An implementation of model parallel autoregressive transformers on GPUs, based on the Megatron and DeepSpeed libraries	https://github.com/EleutherAI/gpt-neox
+mosaicml/llm-foundry	4402	589	Apache-2.0	2026-03-25T17:22:01Z	2023-04-28T22:33:27Z	LLM training code for Databricks foundation models	https://github.com/mosaicml/llm-foundry
+Lightning-AI/litgpt	13339	1426	Apache-2.0	2026-05-01T12:01:13Z	2023-05-04T17:46:11Z	20+ high-performance LLMs with recipes to pretrain, finetune and deploy at scale.	https://github.com/Lightning-AI/litgpt
+facebookresearch/lingua	4763	271	BSD-3-Clause	2025-07-18T09:36:44Z	2024-10-16T19:16:50Z	Meta Lingua: a lean, efficient, and easy-to-hack codebase to research LLMs.	https://github.com/facebookresearch/lingua
+huggingface/transformers	160226	33102	Apache-2.0	2026-05-04T10:03:25Z	2018-10-29T13:56:00Z	🤗 Transformers: the model-definition framework for state-of-the-art machine learning models in text, vision, audio, and multimodal models, for both inference and training. 	https://github.com/huggingface/transformers
+huggingface/accelerate	9653	1342	Apache-2.0	2026-04-29T13:52:37Z	2020-10-30T13:27:12Z	🚀 A simple way to launch, train, and use PyTorch models on almost any device and distributed configuration, automatic mixed precision (including fp8), and easy-to-configure FSDP and DeepSpeed support	https://github.com/huggingface/accelerate
+huggingface/peft	21055	2277	Apache-2.0	2026-05-01T05:22:35Z	2022-11-25T03:51:09Z	🤗 PEFT: State-of-the-art Parameter-Efficient Fine-Tuning.	https://github.com/huggingface/peft
+huggingface/trl	18265	2692	Apache-2.0	2026-05-04T09:32:36Z	2020-03-27T10:54:55Z	Train transformer language models with reinforcement learning.	https://github.com/huggingface/trl
+meta-pytorch/torchtune	5749	717	BSD-3-Clause	2026-05-03T11:48:45Z	2023-10-20T21:10:49Z	PyTorch native post-training library	https://github.com/meta-pytorch/torchtune
+axolotl-ai-cloud/axolotl	11827	1333	Apache-2.0	2026-05-01T12:47:40Z	2023-04-14T04:25:47Z	Go ahead and axolotl questions	https://github.com/axolotl-ai-cloud/axolotl
+hiyouga/LlamaFactory	70896	8662	Apache-2.0	2026-05-03T10:36:56Z	2023-05-28T10:09:12Z	Unified Efficient Fine-Tuning of 100+ LLMs & VLMs (ACL 2024)	https://github.com/hiyouga/LlamaFactory
+modelscope/ms-swift	13995	1392	Apache-2.0	2026-04-30T10:08:24Z	2023-08-01T15:06:39Z	Use PEFT or Full-parameter to CPT/SFT/DPO/GRPO 600+ LLMs (Qwen3.6, DeepSeek-R1, GLM-5.1, InternLM3, Llama4, ...) and 300+ MLLMs (Qwen3-VL, Qwen3-Omni, InternVL3.5, Ovis2.5, GLM4.5v, Gemma4, Llava, Phi4, ...) (AAAI 2025).	https://github.com/modelscope/ms-swift
+unslothai/unsloth	63552	5578	Apache-2.0	2026-05-04T09:48:05Z	2023-11-29T16:50:09Z	Web UI for training and running open models like Gemma 4, Qwen3.6, DeepSeek, gpt-oss locally.	https://github.com/unslothai/unsloth
+InternLM/xtuner	5129	419	Apache-2.0	2026-05-04T01:49:33Z	2023-07-11T03:18:13Z	A Next-Generation Training Engine Built for Ultra-Large MoE Models	https://github.com/InternLM/xtuner
+meta-llama/llama-cookbook	18314	2724	MIT	2026-04-21T21:24:26Z	2023-07-17T07:33:48Z	Welcome to the Llama Cookbook! This is your go to guide for Building with Llama: Getting started with Inference, Fine-Tuning, RAG. We also show you how to solve end to end problems using Llama model family and using them on various provider services  	https://github.com/meta-llama/llama-cookbook
+allenai/open-instruct	3708	539	Apache-2.0	2026-05-04T06:01:31Z	2023-06-09T16:50:38Z	AllenAI's post-training codebase	https://github.com/allenai/open-instruct
+open-thoughts/open-thoughts	2255	187	Apache-2.0	2025-12-02T21:57:07Z	2025-01-27T22:28:56Z	Fully open data curation for reasoning models	https://github.com/open-thoughts/open-thoughts
+verl-project/verl	21059	3792	Apache-2.0	2026-04-30T21:49:59Z	2024-10-31T06:11:15Z	verl/HybridFlow: A Flexible and Efficient RL Post-Training Framework 	https://github.com/verl-project/verl
+OpenRLHF/OpenRLHF	9441	934	Apache-2.0	2026-05-04T04:57:24Z	2023-07-30T02:20:13Z	An Easy-to-use, Scalable and High-performance Agentic RL Framework based on Ray (PPO & DAPO & REINFORCE++ &  VLM & TIS & vLLM & Ray & Async  RL)	https://github.com/OpenRLHF/OpenRLHF
+NVIDIA-NeMo/RL	1606	364	Apache-2.0	2026-05-04T03:26:02Z	2025-03-16T17:43:21Z	Scalable toolkit for efficient model reinforcement	https://github.com/NVIDIA-NeMo/RL
+inclusionAI/AReaL	5133	486	Apache-2.0	2026-05-04T05:53:34Z	2025-02-24T07:23:43Z	The RL Bridge for LLM-based Agent Applications. Made Simple & Flexible.	https://github.com/inclusionAI/AReaL
+THUDM/slime	5552	769	Apache-2.0	2026-04-30T22:27:52Z	2025-06-18T07:15:54Z	slime is an LLM post-training framework for RL Scaling.	https://github.com/THUDM/slime
+vllm-project/vllm	78974	16384	Apache-2.0	2026-05-04T08:58:05Z	2023-02-09T11:23:20Z	A high-throughput and memory-efficient inference and serving engine for LLMs	https://github.com/vllm-project/vllm
+sgl-project/sglang	27014	5679	Apache-2.0	2026-05-04T09:59:38Z	2024-01-08T04:15:52Z	SGLang is a high-performance serving framework for large language models and multimodal models.	https://github.com/sgl-project/sglang
+linkedin/Liger-Kernel	6327	526	BSD-2-Clause	2026-04-30T23:01:44Z	2024-08-06T17:47:52Z	Efficient Triton Kernels for LLM Training	https://github.com/linkedin/Liger-Kernel
+Dao-AILab/flash-attention	23628	2684	BSD-3-Clause	2026-05-03T01:46:11Z	2022-05-19T21:22:06Z	Fast and memory-efficient exact attention	https://github.com/Dao-AILab/flash-attention
+facebookresearch/xformers	10442	772	NOASSERTION	2026-04-21T15:57:47Z	2021-10-13T18:08:50Z	Hackable and optimized Transformers building blocks, supporting a composable construction.	https://github.com/facebookresearch/xformers
+pytorch/ao	2813	502	NOASSERTION	2026-05-01T21:00:27Z	2023-11-03T21:27:36Z	PyTorch native quantization and sparsity for training and inference	https://github.com/pytorch/ao
+haotian-liu/LLaVA	24753	2762	Apache-2.0	2024-08-12T09:52:38Z	2023-04-17T16:13:11Z	[NeurIPS'23 Oral] Visual Instruction Tuning (LLaVA) built towards GPT-4V level capabilities and beyond.	https://github.com/haotian-liu/LLaVA
+LLaVA-VL/LLaVA-NeXT	4653	458	Apache-2.0	2026-04-15T06:38:26Z	2024-03-08T12:54:09Z		https://github.com/LLaVA-VL/LLaVA-NeXT
+OpenGVLab/InternVL	10013	776	MIT	2025-09-22T01:36:48Z	2023-11-22T08:08:08Z	[CVPR 2024 Oral] InternVL Family: A Pioneering Open-Source Alternative to GPT-4o.  接近GPT-4o表现的开源多模态对话模型	https://github.com/OpenGVLab/InternVL
+NVlabs/VILA	3792	319	Apache-2.0	2026-03-12T01:04:00Z	2024-02-23T09:19:16Z	VILA is a family of state-of-the-art vision language models (VLMs) for diverse multimodal AI tasks across the edge, data center, and cloud.	https://github.com/NVlabs/VILA
+QwenLM/Qwen3-VL	19103	1749	Apache-2.0	2026-01-30T04:47:30Z	2024-08-29T08:30:38Z	Qwen3-VL is the multimodal large language model series developed by Qwen team, Alibaba Cloud.	https://github.com/QwenLM/Qwen3-VL
+open-mmlab/mmengine	1470	446	Apache-2.0	2025-12-23T04:41:48Z	2022-02-08T09:05:09Z	OpenMMLab Foundational Library for Training Deep Learning Models	https://github.com/open-mmlab/mmengine
+open-mmlab/mmpretrain	3842	1111	Apache-2.0	2024-11-01T06:27:36Z	2020-07-09T16:25:04Z	OpenMMLab Pre-training Toolbox and Benchmark	https://github.com/open-mmlab/mmpretrain
+huggingface/diffusers	33535	6964	Apache-2.0	2026-05-03T00:35:15Z	2022-05-30T16:04:02Z	🤗 Diffusers: State-of-the-art diffusion models for image, video, and audio generation in PyTorch.	https://github.com/huggingface/diffusers
+kohya-ss/sd-scripts	7012	1188	Apache-2.0	2026-05-04T09:25:43Z	2022-12-18T04:32:15Z		https://github.com/kohya-ss/sd-scripts
+bghira/SimpleTuner	2826	279	AGPL-3.0	2026-04-27T17:19:16Z	2023-05-28T18:01:02Z	A general fine-tuning kit geared toward image/video/audio diffusion models.	https://github.com/bghira/SimpleTuner
+ostris/ai-toolkit	10430	1287	MIT	2026-04-30T22:00:24Z	2023-07-05T18:45:11Z	The ultimate training toolkit for finetuning diffusion models	https://github.com/ostris/ai-toolkit
+Nerogar/OneTrainer	2959	283	AGPL-3.0	2026-05-01T12:55:08Z	2023-04-12T07:01:57Z	OneTrainer is a one-stop solution for all your Diffusion training needs.	https://github.com/Nerogar/OneTrainer
+tdrussell/diffusion-pipe	1932	272	GPL-3.0	2026-04-25T18:09:04Z	2024-08-03T02:00:25Z	A pipeline parallel training script for diffusion models.	https://github.com/tdrussell/diffusion-pipe
+kohya-ss/musubi-tuner	1815	264	NOASSERTION	2026-04-20T00:35:25Z	2024-12-31T11:34:01Z		https://github.com/kohya-ss/musubi-tuner
+hpcaitech/Open-Sora	28930	2942	Apache-2.0	2026-04-09T01:52:40Z	2024-02-20T03:01:34Z	Open-Sora: Democratizing Efficient Video Production for All	https://github.com/hpcaitech/Open-Sora
+PKU-YuanGroup/Open-Sora-Plan	12161	1066	MIT	2026-03-08T12:48:46Z	2024-02-20T14:01:03Z	This project aim to reproduce Sora (Open AI T2V model), we wish the open source community contribute to this project.	https://github.com/PKU-YuanGroup/Open-Sora-Plan
+Tencent-Hunyuan/HunyuanVideo	12046	1237	NOASSERTION	2025-11-21T06:36:57Z	2024-11-28T08:38:31Z	HunyuanVideo: A Systematic Framework For Large Video Generation Model	https://github.com/Tencent-Hunyuan/HunyuanVideo
+Wan-Video/Wan2.1	15947	2675	Apache-2.0	2026-03-05T09:38:07Z	2025-02-25T11:49:33Z	Wan: Open and Advanced Large-Scale Video Generative Models	https://github.com/Wan-Video/Wan2.1
+zai-org/CogVideo	12699	1285	Apache-2.0	2025-11-04T11:19:04Z	2022-05-29T06:46:18Z	text and image to video generation: CogVideoX (2024) and CogVideo (ICLR 2023)	https://github.com/zai-org/CogVideo
+Lightricks/LTX-Video	10169	996	Apache-2.0	2026-01-05T22:37:07Z	2024-11-20T20:06:28Z	Official repository for LTX-Video	https://github.com/Lightricks/LTX-Video
+NVIDIA/Cosmos	8095	511	NOASSERTION	2026-01-06T01:52:23Z	2024-12-30T17:21:14Z	New repo collection for NVIDIA Cosmos: https://github.com/nvidia-cosmos	https://github.com/NVIDIA/Cosmos
+SkyworkAI/SkyReels-V2	6842	1447	NOASSERTION	2026-01-29T05:21:27Z	2025-04-15T10:16:25Z	SkyReels-V2: Infinite-length Film Generative model	https://github.com/SkyworkAI/SkyReels-V2
+FoundationVision/Infinity	1563	93	MIT	2026-04-16T03:02:02Z	2024-11-29T07:54:59Z	[CVPR 2025 Oral]Infinity ∞ : Scaling Bitwise AutoRegressive Modeling for High-Resolution Image Synthesis	https://github.com/FoundationVision/Infinity
