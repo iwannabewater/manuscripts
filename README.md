@@ -7,6 +7,7 @@
 | 作品 | 主题 | 文件 |
 |---|---|---|
 | AI Training Frameworks 2026 | 大模型、多模态大模型与生成模型训练框架技术图谱 | `ai-training-frameworks-2026/index.html` / `ai-training-frameworks-2026/ai-training-frameworks-2026.pdf` |
+| AI Inference Frameworks 2026 | 大模型、多模态大模型与生成模型推理框架技术图谱 | `ai-inference-frameworks-2026/index.html` / `ai-inference-frameworks-2026/ai-inference-frameworks-2026.pdf` |
 
 ## Structure
 
@@ -17,6 +18,16 @@ manuscripts/
     README.md
     index.html
     ai-training-frameworks-2026.pdf
+    sources.md
+    data/
+      repository-metadata.tsv
+    fonts/
+      TsangerJinKai02-W04.ttf
+      TsangerJinKai02-W05.ttf
+  ai-inference-frameworks-2026/
+    README.md
+    index.html
+    ai-inference-frameworks-2026.pdf
     sources.md
     data/
       repository-metadata.tsv
