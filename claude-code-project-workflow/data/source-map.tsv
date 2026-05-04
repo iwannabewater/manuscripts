@@ -1,0 +1,14 @@
+source	role	url
+Claude Code overview	product boundary and interface surfaces	https://code.claude.com/docs/en/overview
+Quickstart	installation and first project workflow	https://code.claude.com/docs/en/quickstart
+How Claude Code works	agentic loop, sessions, context, permissions	https://code.claude.com/docs/en/how-claude-code-works
+Common workflows	codebase exploration, bug fixing, git-oriented work	https://code.claude.com/docs/en/common-workflows
+Best practices	task framing, planning, verification and review practices	https://code.claude.com/docs/en/best-practices
+Memory	CLAUDE.md, auto memory, scoped rules and instruction limits	https://code.claude.com/docs/en/memory
+Permission modes	default, plan, auto-accept edits, auto mode and blocked actions	https://code.claude.com/docs/en/permission-modes
+Security	permissions, tool boundaries and sensitive operations	https://code.claude.com/docs/en/security
+MCP	external tool and data-source integration	https://code.claude.com/docs/en/mcp
+Hooks	lifecycle automation, command hooks and event schemas	https://code.claude.com/docs/en/hooks
+Subagents	context isolation and specialized assistants	https://code.claude.com/docs/en/sub-agents
+Skills	repeatable workflow packaging	https://code.claude.com/docs/en/skills
+Anthropic engineering blog	team practice and empirical usage guidance	https://www.anthropic.com/engineering/claude-code-best-practices
