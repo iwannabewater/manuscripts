@@ -1,0 +1,16 @@
+source	use	checked_at
+GitHub Pages creating site	Pages static hosting, entry files, server-side language boundary	2026-05-05
+GitHub Pages custom workflows	Pages actions, permissions, artifact deployment	2026-05-05
+GitHub Pages REST API	build_type workflow configuration	2026-05-05
+GitHub Pages limits	site size, bandwidth, build timeout, build frequency	2026-05-05
+Vite getting started	Node version, scaffolding, scripts, project entry	2026-05-05
+Vite static deploy	dist output, base path, GitHub Pages workflow	2026-05-05
+npm ci	CI clean install behavior and lockfile requirements	2026-05-05
+npm package.json	scripts field and dependency conventions	2026-05-05
+MDN HTML	semantic document structure	2026-05-05
+MDN accessibility HTML	semantic elements, labels, alt text, keyboard accessibility	2026-05-05
+web.dev Web Vitals	LCP, INP, CLS, percentile measurement	2026-05-05
+GitHub CLI gh repo create	repository creation from existing local directory	2026-05-05
+GitHub remote repositories	remote origin setup and verification	2026-05-05
+GitHub push protection	secret scanning and blocked push behavior	2026-05-05
+GitHub API action release tags	latest major versions for checkout, setup-node, configure-pages, upload-pages-artifact, deploy-pages	2026-05-05
