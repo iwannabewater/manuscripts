@@ -1,0 +1,30 @@
+category	name	url	evidence	notes
+repository	THUDM/slime	https://github.com/THUDM/slime	official repository clone	Upstream repository captured at commit 82007faf.
+documentation	README	https://github.com/THUDM/slime	official README	Architecture overview, capabilities, model support and argument categories.
+documentation	Quick Start	https://github.com/THUDM/slime/blob/main/docs/en/get_started/quick_start.md	official documentation	Docker, checkpoint conversion and first run commands.
+documentation	Usage	https://github.com/THUDM/slime/blob/main/docs/en/usage.md	official documentation	Resource, checkpoint, SGLang and data usage notes.
+documentation	Customization	https://github.com/THUDM/slime/blob/main/docs/en/usage/customization.md	official documentation	Custom rollout, generate, reward, loss, filter and data source hooks.
+documentation	SGLang config	https://github.com/THUDM/slime/blob/main/docs/en/usage/sglang_config.md	official documentation	YAML model/server group configuration and router usage.
+documentation	Fault tolerance	https://github.com/THUDM/slime/blob/main/docs/en/usage/fault_tolerance.md	official documentation	Rollout server health check and recovery.
+documentation	Low precision	https://github.com/THUDM/slime/blob/main/docs/en/usage/low_precision.md	official documentation	FP8 rollout/training and INT4 notes.
+documentation	PD disaggregation	https://github.com/THUDM/slime/blob/main/docs/en/usage/pd_disaggregation.md	official documentation	Prefill/decode separation for rollout.
+documentation	Reproducibility	https://github.com/THUDM/slime/blob/main/docs/en/usage/reproducibility.md	official documentation	Deterministic SGLang and Megatron modes.
+release	v0.2.4	https://github.com/THUDM/slime/releases/tag/v0.2.4	GitHub release metadata	Release snapshot and change summary.
+blog	LMSYS slime blog	https://lmsys.org/blog/2025-07-09-slime/	public technical blog	System design rationale and SGLang/Megatron native positioning.
+source	train.py	https://github.com/THUDM/slime/blob/main/train.py	source review	Synchronous training loop.
+source	train_async.py	https://github.com/THUDM/slime/blob/main/train_async.py	source review	Asynchronous rollout/training loop.
+source	rollout.py	https://github.com/THUDM/slime/blob/main/slime/ray/rollout.py	source review	RolloutManager, RolloutServer, ServerGroup and router lifecycle.
+source	placement_group.py	https://github.com/THUDM/slime/blob/main/slime/ray/placement_group.py	source review	Ray placement group and model actor creation.
+source	actor_group.py	https://github.com/THUDM/slime/blob/main/slime/ray/actor_group.py	source review	RayTrainGroup and MegatronTrainRayActor launch environment.
+source	megatron actor	https://github.com/THUDM/slime/blob/main/slime/backends/megatron_utils/actor.py	source review	Megatron actor initialization, training data preparation and weight update orchestration.
+source	loss.py	https://github.com/THUDM/slime/blob/main/slime/backends/megatron_utils/loss.py	source review	Logprob, entropy, policy/value/custom loss.
+source	ppo_utils.py	https://github.com/THUDM/slime/blob/main/slime/utils/ppo_utils.py	source review	Advantage, returns and KL utilities.
+source	SGLang rollout	https://github.com/THUDM/slime/blob/main/slime/rollout/sglang_rollout.py	source review	GenerateState, generate, reward, dynamic sampling and abort.
+source	data_source.py	https://github.com/THUDM/slime/blob/main/slime/rollout/data_source.py	source review	RolloutDataSource and buffer behavior.
+source	types.py	https://github.com/THUDM/slime/blob/main/slime/utils/types.py	source review	Sample structure and status semantics.
+source	SGLang engine	https://github.com/THUDM/slime/blob/main/slime/backends/sglang_utils/sglang_engine.py	source review	SGLang process launch, router registration, weight update endpoints and health.
+source	distributed weight update	https://github.com/THUDM/slime/blob/main/slime/backends/megatron_utils/update_weight/update_weight_from_distributed.py	source review	NCCL based decoupled weight update.
+source	tensor weight update	https://github.com/THUDM/slime/blob/main/slime/backends/megatron_utils/update_weight/update_weight_from_tensor.py	source review	Colocated tensor/Ray IPC weight update.
+source	weight common	https://github.com/THUDM/slime/blob/main/slime/backends/megatron_utils/update_weight/common.py	source review	Parameter all-gather and HF conversion helpers.
+script	GLM4 9B example	https://github.com/THUDM/slime/blob/main/scripts/run-glm4-9B.sh	source review	Official GLM rollout/training script.
+script	Qwen3 4B example	https://github.com/THUDM/slime/blob/main/scripts/run-qwen3-4B.sh	source review	Official colocated Qwen example script.

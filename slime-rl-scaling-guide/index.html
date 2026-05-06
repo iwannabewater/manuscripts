@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>slime 上手实操与技术详解</title>
+<meta name="author" content="Winston">
+<meta name="description" content="面向 RL Scaling 的 THUDM/slime 上手实操与源码级技术详解。">
+<meta name="keywords" content="slime, THUDM, RL Scaling, Megatron, SGLang, GRPO, PPO, LLM post-training">
+<meta name="generator" content="Kami">
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @page {
+    size: A4;
+    margin: 18mm 20mm 20mm 20mm;
+    background: #f5f4ed;
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+    @bottom-center {
+      content: counter(page) "  ·  slime 上手实操与技术详解";
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 9pt;
+      color: #6b6a64;
+    }
+  }
+  @page:first { @top-right { content: ""; } @bottom-center { content: ""; } }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper: #f5f4ed;
+    --ivory: #faf9f5;
+    --near-black: #141413;
+    --dark-warm: #3d3d3a;
+    --olive: #504e49;
+    --stone: #6b6a64;
+    --brand: #1B365D;
+    --brand-2: #425B76;
+    --accent: #8A6F3D;
+    --brand-tint: #EEF2F7;
+    --accent-tint: #F4EFE3;
+    --border: #e8e6dc;
+    --border-strong: #d8d4c7;
+    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --mono: "JetBrains Mono", "SF Mono", Consolas, "Liberation Mono", monospace;
+  }
+  html, body { background: var(--paper); }
+  @media screen {
+    body { max-width: 210mm; margin: 0 auto; padding: 18mm 20mm 20mm 20mm; }
+  }
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 10pt;
+    line-height: 1.55;
+    letter-spacing: 0.12pt;
+    widows: 3;
+    orphans: 3;
+  }
+  .cover {
+    min-height: 241mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 28mm;
+    break-after: page;
+  }
+  .cover-eyebrow {
+    color: var(--brand);
+    font-size: 10pt;
+    letter-spacing: 1.1pt;
+    text-transform: uppercase;
+    margin-bottom: 18pt;
+  }
+  .cover-title {
+    font-size: 31pt;
+    font-weight: 500;
+    line-height: 1.14;
+    letter-spacing: 0.1pt;
+    margin-bottom: 18pt;
+    max-width: 95%;
+  }
+  .cover-sub {
+    max-width: 91%;
+    color: var(--olive);
+    font-size: 13pt;
+    line-height: 1.58;
+  }
+  .cover-rule {
+    width: 46mm;
+    height: 2pt;
+    background: var(--brand);
+    margin: 0 0 18pt 0;
+    border-radius: 2pt;
+  }
+  .cover-meta {
+    color: var(--stone);
+    font-size: 10pt;
+    line-height: 1.6;
+  }
+  .cover-meta strong { color: var(--dark-warm); font-weight: 500; }
+  .toc { break-after: page; }
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: 14pt;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    gap: 8pt;
+    padding: 6pt 0;
+    border-bottom: 0.35pt dotted var(--border-strong);
+    font-size: 11pt;
+  }
+  .toc-num { min-width: 28pt; color: var(--brand); font-weight: 500; }
+  .toc-title { flex: 1; }
+  .toc-note { color: var(--stone); font-size: 9pt; }
+  .chapter { break-before: page; }
+  .chapter-num {
+    color: var(--brand);
+    font-size: 9.6pt;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+  }
+  h1 {
+    font-size: 22pt;
+    font-weight: 500;
+    line-height: 1.2;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    margin-bottom: 10pt;
+    break-after: avoid;
+  }
+  h2 {
+    font-size: 15.6pt;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 22pt 0 8pt;
+    string-set: section-title content();
+    break-after: avoid;
+  }
+  h3 {
+    color: var(--dark-warm);
+    font-size: 12.4pt;
+    font-weight: 500;
+    line-height: 1.32;
+    margin: 15pt 0 6pt;
+    break-after: avoid;
+  }
+  p { margin: 0 0 8.5pt; line-height: 1.55; }
+  .lead {
+    color: var(--dark-warm);
+    font-size: 11.4pt;
+    line-height: 1.58;
+    margin-bottom: 12pt;
+  }
+  strong { font-weight: 500; }
+  a { color: var(--brand); text-decoration: none; }
+  code {
+    font-family: var(--mono);
+    font-size: 8.45pt;
+    background: var(--ivory);
+    padding: 1pt 3pt;
+    border-radius: 2pt;
+  }
+  pre {
+    background: #fbfaf6;
+    border: 0.45pt solid var(--border-strong);
+    border-left: 1.8pt solid var(--brand);
+    border-radius: 5pt;
+    padding: 8pt 9pt;
+    margin: 9pt 0 12pt;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-family: var(--mono);
+    font-size: 7.5pt;
+    line-height: 1.38;
+    break-inside: avoid;
+  }
+  pre code {
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    font-size: inherit;
+  }
+  ul, ol { margin: 6pt 0 10pt 0; padding-left: 18pt; line-height: 1.5; }
+  li { margin-bottom: 3pt; }
+  li::marker { color: var(--brand); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 11pt 0 12pt;
+    font-size: 8.55pt;
+    break-inside: avoid;
+  }
+  th {
+    text-align: left;
+    color: var(--dark-warm);
+    font-weight: 500;
+    padding: 5pt 6pt;
+    border-bottom: 1pt solid var(--border-strong);
+  }
+  td {
+    padding: 4pt 6pt;
+    border-bottom: 0.3pt solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) td { background: var(--ivory); }
+  .compact th { font-size: 7.4pt; padding: 3pt 4pt; }
+  .compact td { font-size: 7.25pt; line-height: 1.34; padding: 2.7pt 4pt; }
+  .note, .callout {
+    background: var(--ivory);
+    border-left: 1.5pt solid var(--brand);
+    border-radius: 5pt;
+    padding: 10pt 13pt;
+    margin: 12pt 0;
+    break-inside: avoid;
+  }
+  .warning { border-left-color: var(--accent); background: var(--accent-tint); }
+  .note-label {
+    color: var(--brand);
+    font-size: 8.5pt;
+    letter-spacing: 0.6pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+  .tag {
+    display: inline-block;
+    background: var(--brand-tint);
+    color: var(--brand);
+    font-size: 8.2pt;
+    font-weight: 500;
+    padding: 1pt 5pt;
+    border-radius: 3pt;
+    margin: 0 3pt 3pt 0;
+    white-space: nowrap;
+  }
+  .small { color: var(--stone); font-size: 8.35pt; }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10pt;
+    margin: 12pt 0 14pt;
+  }
+  .summary-card {
+    background: var(--ivory);
+    border: 0.5pt solid var(--border);
+    border-radius: 6pt;
+    padding: 9pt 11pt;
+    break-inside: avoid;
+  }
+  .summary-card .label {
+    color: var(--stone);
+    font-size: 8.2pt;
+    letter-spacing: 0.45pt;
+    text-transform: uppercase;
+    margin-bottom: 3pt;
+  }
+  .summary-card .num {
+    color: var(--brand);
+    font-size: 14pt;
+    font-weight: 500;
+    line-height: 1.12;
+    margin-bottom: 3pt;
+  }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12pt;
+    margin: 10pt 0;
+  }
+  .mini-card {
+    background: var(--ivory);
+    border: 0.5pt solid var(--border);
+    border-radius: 6pt;
+    padding: 10pt 12pt;
+    break-inside: avoid;
+  }
+  .mini-card h3 { margin-top: 0; }
+  .fit { color: var(--brand); font-weight: 500; }
+  .avoid { color: var(--olive); }
+  figure { margin: 13pt 0; break-inside: avoid; }
+  figcaption { color: var(--stone); font-size: 8.7pt; text-align: center; margin-top: 5pt; }
+  .diagram {
+    background: #fbfaf6;
+    border: 0.45pt solid var(--border-strong);
+    border-radius: 6pt;
+    padding: 7pt;
+  }
+  .diagram svg { display: block; width: 100%; height: auto; }
+  .diagram text {
+    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    fill: var(--near-black);
+  }
+  .kbd {
+    font-family: var(--mono);
+    font-size: 7.6pt;
+    border: 0.35pt solid var(--border-strong);
+    background: var(--ivory);
+    border-radius: 3pt;
+    padding: 0.5pt 3pt;
+  }
+  .page-break { break-before: page; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div>
+    <div class="cover-eyebrow">TECHNICAL GUIDE · RL SCALING</div>
+    <div class="cover-rule"></div>
+    <div class="cover-title">slime 上手实操与技术详解</div>
+    <div class="cover-sub">面向 THUDM/slime 的工程化读本：从 Docker 跑通第一轮 GRPO，到解释 Megatron 训练、SGLang rollout、Ray 编排、数据缓冲、优势估计、损失计算、权重同步、低精度、容错和扩展接口。</div>
+  </div>
+  <div class="cover-meta">
+    <strong>Winston</strong><br>
+    资料口径截至 2026-05-06<br>
+    THUDM/slime main@82007faf · latest release v0.2.4<br>
+    Official repository · documentation · source code · release notes
+  </div>
+</section>
+
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">阅读前的定位</span><span class="toc-note">slime 解决什么问题</span></div>
+  <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">一小时跑通</span><span class="toc-note">Docker、模型、数据、转换、启动脚本</span></div>
+  <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">脚本拆解</span><span class="toc-note">资源、批量、Megatron 与 SGLang 参数</span></div>
+  <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">系统架构</span><span class="toc-note">training、rollout、data buffer、Ray</span></div>
+  <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">源码级训练闭环</span><span class="toc-note">train.py 与 train_async.py</span></div>
+  <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">Rollout 生成链路</span><span class="toc-note">SGLang router、Sample、reward、partial rollout</span></div>
+  <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">训练端计算</span><span class="toc-note">logprob、advantage、policy loss、value loss</span></div>
+  <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">权重同步与显存切换</span><span class="toc-note">colocate、decoupled、NCCL、Ray IPC</span></div>
+  <div class="toc-item"><span class="toc-num">09</span><span class="toc-title">扩展与生产要点</span><span class="toc-note">自定义函数、低精度、容错、调试、边界</span></div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">01 · Position</div>
+  <h1>阅读前的定位</h1>
+  <p class="lead">slime 是 THUDM 开源的 LLM post-training 框架，官方描述为面向 RL Scaling 的后训练系统。它的核心价值不在于把 PPO 或 GRPO 写成一个训练脚本，而在于把大规模强化学习后训练所需的训练引擎、推理服务、样本生成、奖励计算、数据缓冲、权重同步、资源编排和可扩展接口放到同一个工程闭环中。</p>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="label">System Role</div>
+      <div class="num">训练与推理的双引擎系统</div>
+      <p>训练侧以 Megatron 为主，负责 actor、critic、reference、teacher、optimizer 和并行训练；rollout 侧以 SGLang 与 sgl-router 为主，负责高吞吐生成、路由、KV 管理、奖励与样本组织。</p>
+    </div>
+    <div class="summary-card">
+      <div class="label">Primary Objective</div>
+      <div class="num">让 RL 扩展到真实大模型</div>
+      <p>slime 针对的不是单卡算法 demo，而是 GLM、Qwen、DeepSeek、Llama 等大模型后训练中常见的多 GPU、多节点、长响应、动态采样、低精度 rollout 和权重同步问题。</p>
+    </div>
+    <div class="summary-card">
+      <div class="label">Design Trait</div>
+      <div class="num">SGLang-native 与 Megatron-native</div>
+      <p>slime 对 SGLang 参数使用 <code>--sglang-</code> 前缀透传，对 Megatron 参数保持原生风格。训练循环没有被深度封装进不可见的 trainer，而是保留在 <code>train.py</code> 与 <code>train_async.py</code>。</p>
+    </div>
+    <div class="summary-card">
+      <div class="label">Snapshot</div>
+      <div class="num">main@82007faf</div>
+      <p>本文基于 2026-05-06 抓取的上游快照撰写。对应最新 release 为 v0.2.4，发布于 2026-03-29；仓库当日 HEAD 为 <code>82007faf4b398abd32bd8e07f9638f6cfeb70729</code>。</p>
+    </div>
+  </div>
+
+  <h2>slime 不应被误读成什么</h2>
+  <p>第一，它不是一个只提供 reward model glue code 的轻量脚手架。源码中真正复杂的部分，是 rollout server 的生命周期、Ray placement group 的资源隔离、Megatron actor 的训练数据整理、策略损失的分布式计算，以及训练权重向 SGLang 推理引擎的同步。</p>
+  <p>第二，它不是一个通用推理服务框架。SGLang 是 slime 的 rollout 引擎，但 slime 的上层职责是后训练闭环。若目标只是部署聊天 API，直接使用 SGLang、vLLM 或 TensorRT-LLM 更合适；若目标是把生成、判分、训练、保存、评估和权重更新串成可扩展的 RL pipeline，slime 才是合适的入口。</p>
+  <p>第三，它不是隐藏底层复杂度的低代码平台。slime 保留了大量 Megatron、SGLang、Ray、NCCL 和模型配置参数。使用者需要理解 tensor parallel、pipeline parallel、expert parallel、context parallel、rollout batch、global batch、显存分配、checkpoint 格式和 tokenizer 约束，否则脚本可以启动，但训练语义未必正确。</p>
+
+  <h2>一条主线理解 slime</h2>
+  <p>最稳妥的理解方式，是把 slime 看作一个分布式控制器。它先从 prompt 数据源取出一批问题，在 SGLang 集群上生成多个候选响应；然后把响应、token、loss mask、reward、rollout logprob、metadata 等结构化为 <code>Sample</code>；再按数据并行切分为 Megatron 可消费的训练批；训练端计算 ref logprob、teacher logprob、优势、policy loss 或 value loss；optimizer 更新 actor 后，slime 把新权重同步回 SGLang rollout 引擎，下一轮 rollout 使用更新后的策略继续采样。</p>
+
+  <div class="note">
+    <div class="note-label">Reading Method</div>
+    <p>本文按工程落地顺序组织：先跑通，再拆参数，再读架构，最后进入源码链路。这样做的原因很简单：slime 的学习曲线不是 API 名称，而是训练侧与生成侧的资源耦合。只看算法公式，无法解释为什么 <code>rollout-batch-size × n-samples-per-prompt</code> 必须匹配 <code>global-batch-size × num-steps-per-rollout</code>；只看启动脚本，也无法判断权重同步和样本过滤是否符合任务目标。</p>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">02 · Quick Start</div>
+  <h1>一小时跑通</h1>
+  <p class="lead">slime 的官方快速开始以 Docker 为主路径。对首次上手而言，不建议先在裸机拼装环境；Megatron、SGLang、CUDA、NCCL、Ray、TransformerEngine、模型转换工具和 tokenizer 版本任何一处偏差，都可能把问题从“理解 slime”变成“排查深度学习环境”。</p>
+
+  <h2>环境准备</h2>
+  <p>官方镜像为 <code>slimerl/slime:latest</code>。容器启动时应打开 GPU、IPC 和较大的共享内存；训练与推理进程之间会使用 NCCL、Ray 和多进程通信，默认 Docker 配置往往不足。</p>
+  <pre><code class="language-bash">docker pull slimerl/slime:latest
+
+docker run --rm --gpus all --ipc=host --shm-size=16g \
+  --ulimit memlock=-1 --ulimit stack=67108864 \
+  -it slimerl/slime:latest /bin/bash</code></pre>
+
+  <p>容器内通常已经包含 slime。若需要对齐上游最新代码，可以在容器内更新源码并以 editable 模式重新安装。</p>
+  <pre><code class="language-bash">cd /root/slime
+git pull
+pip install -e . --no-deps</code></pre>
+
+  <div class="warning note">
+    <div class="note-label">Hardware Note</div>
+    <p>slime 的示例脚本假定存在可用于 Megatron 训练和 SGLang rollout 的多张 GPU。单卡或显存较小的消费级 GPU 可能无法直接运行官方 GLM/Qwen 示例。此处的目标是说明标准路径，生产训练前仍需按模型规模、上下文长度、并行策略和 rollout 并发重新预算显存。</p>
+  </div>
+
+  <h2>下载模型、训练数据和评估数据</h2>
+  <p>官方快速开始以 <code>zai-org/GLM-Z1-9B-0414</code>、<code>zhuzilin/dapo-math-17k</code> 和 <code>zhuzilin/aime-2024</code> 为示例。模型下载到本地后，需要同时满足两条链路：Megatron 训练侧需要 Megatron checkpoint，SGLang rollout 侧需要 Hugging Face 格式模型目录和 tokenizer。</p>
+  <pre><code class="language-bash">cd /root
+git lfs install
+git clone https://huggingface.co/zai-org/GLM-Z1-9B-0414
+git clone https://huggingface.co/datasets/zhuzilin/dapo-math-17k
+git clone https://huggingface.co/datasets/zhuzilin/aime-2024</code></pre>
+
+  <h2>把 Hugging Face checkpoint 转成 Megatron torch_dist</h2>
+  <p>Megatron 训练侧不能直接读取 Hugging Face checkpoint。slime 推荐的训练 checkpoint 格式是 <code>torch_dist</code>。转换前必须 source 对应模型的参数脚本，使 hidden size、层数、attention heads、group query、vocab size、rotary 参数和并行配置与模型真实结构一致。</p>
+  <pre><code class="language-bash">cd /root/slime
+source scripts/models/glm4-9B.sh
+
+PYTHONPATH=/root/Megatron-LM python tools/convert_hf_to_torch_dist.py \
+  ${MODEL_ARGS[@]} \
+  --hf-checkpoint /root/GLM-Z1-9B-0414 \
+  --save /root/GLM-Z1-9B-0414_torch_dist</code></pre>
+
+  <p>训练结束后若要导出 Hugging Face 格式，可从某个 Megatron 迭代目录反向转换。这里的 <code>--origin-hf-dir</code> 不是装饰参数，它提供 tokenizer、config 与 HF 目录结构基准。</p>
+  <pre><code class="language-bash">PYTHONPATH=/root/Megatron-LM python tools/convert_torch_dist_to_hf.py \
+  --input-dir /path/to/torch_dist_ckpt/iter_xxx/ \
+  --output-dir /root/GLM-Z1-9B-0414-iter_xxx \
+  --origin-hf-dir /root/GLM-Z1-9B-0414</code></pre>
+
+  <h2>启动官方示例</h2>
+  <p>GLM-4 9B 示例可直接通过脚本启动。这个命令背后会创建 Ray placement group，启动 SGLang rollout server 与 router，初始化 Megatron actor，执行首轮权重同步，然后进入 generate、train、save、update weights 的循环。</p>
+  <pre><code class="language-bash">cd /root/slime
+bash scripts/run-glm4-9B.sh</code></pre>
+
+  <p>若使用 Qwen3-4B，官方脚本走 colocate 路径，更适合在同一批 GPU 上交替运行训练与 rollout。脚本会自动检测 GPU 数量，并设置 <code>--colocate</code> 与 <code>--sglang-mem-fraction-static 0.7</code>。</p>
+  <pre><code class="language-bash">cd /root/slime
+bash scripts/run-qwen3-4B.sh</code></pre>
+
+  <h2>成功启动后应观察什么</h2>
+  <table>
+    <thead>
+      <tr><th>观察点</th><th>含义</th><th>异常时优先排查</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Ray actor 创建</td><td>训练 actor、rollout engine、router 与辅助 actor 被调度到预期 GPU。</td><td>GPU 数量、Ray 资源、placement group、端口占用。</td></tr>
+      <tr><td>SGLang server ready</td><td>rollout HTTP server 已加载模型、tokenizer 与 processor，并注册到 router。</td><td><code>--hf-checkpoint</code>、显存、SGLang 参数、模型架构支持。</td></tr>
+      <tr><td>首次 weight update</td><td>Megatron actor 权重同步到 rollout 引擎，rollout 才使用正确策略。</td><td>checkpoint 转换、TP/PP/EP/CP 配置、NCCL、colocate/decoupled 模式。</td></tr>
+      <tr><td>rollout samples</td><td>prompt 被扩展为多个 Sample，包含 response、reward、loss mask 和状态。</td><td>数据格式、chat template、reward function、生成长度、过滤器。</td></tr>
+      <tr><td>training metrics</td><td>policy loss、reward、response length、KL、clip ratio 等开始上报。</td><td>batch 等式、advantage estimator、ref logprob、loss mask。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <div class="note-label">Minimal Correctness Check</div>
+    <p>第一次跑通不要只看进程是否存活。更重要的是确认：rollout 使用的是刚同步的 actor 权重；reward 与 loss mask 不为空；训练端看到的 token 与 response length 合法；首个训练 step 的 KL 与 reference 关系符合预期。slime 的发布说明中也将“首个 rollout 的 recomputed log prob 与 reference log prob 一致、首个训练 step 的 ppo_kl 为 0”作为正确性 CI 的关键检查思路。</p>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">03 · Script Anatomy</div>
+  <h1>脚本拆解</h1>
+  <p class="lead">slime 的启动脚本同时配置四类系统：资源编排、Megatron 训练、SGLang rollout、RL 算法与数据。阅读脚本时不宜按参数出现顺序理解，而应按“这组参数控制哪条链路”拆解。</p>
+
+  <h2>最重要的批量等式</h2>
+  <p>官方文档明确要求：</p>
+  <pre><code class="language-text">rollout-batch-size × n-samples-per-prompt = global-batch-size × num-steps-per-rollout</code></pre>
+  <p>左侧表示每轮 rollout 生成多少条可训练样本，右侧表示 Megatron 在这一轮 rollout 数据上消耗多少样本。若左侧大于右侧，样本会滞留或被截断；若左侧小于右侧，训练端会等待或重复消费不符合预期的数据。以官方 GLM/Qwen 示例常见配置为例，<code>rollout-batch-size=32</code>，<code>n-samples-per-prompt=8</code>，左侧为 256；若 <code>global-batch-size=256</code> 且 <code>num-steps-per-rollout=1</code>，训练与生成正好对齐。</p>
+
+  <h2>资源参数</h2>
+  <table>
+    <thead>
+      <tr><th>参数</th><th>控制对象</th><th>工程含义</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>--actor-num-nodes</code></td><td>Megatron actor</td><td>训练侧节点数量。影响数据并行、tensor parallel、pipeline parallel 和 NCCL 拓扑。</td></tr>
+      <tr><td><code>--actor-num-gpus-per-node</code></td><td>Megatron actor</td><td>每节点训练 GPU 数。与 Megatron 并行参数共同决定 world size。</td></tr>
+      <tr><td><code>--rollout-num-gpus</code></td><td>SGLang rollout</td><td>rollout 总 GPU 数。decoupled 模式下通常独立于训练 GPU，colocate 模式下与 actor 共享。</td></tr>
+      <tr><td><code>--rollout-num-gpus-per-engine</code></td><td>SGLang engine</td><td>单个 SGLang engine 使用多少 GPU，通常对应 rollout tensor parallel 或 engine 内并行。</td></tr>
+      <tr><td><code>--colocate</code></td><td>资源布局</td><td>训练和 rollout 共享同一组 GPU，依靠 offload、onload 和显存释放在两个阶段切换。</td></tr>
+      <tr><td><code>--prefill-num-servers</code></td><td>PD disaggregation</td><td>使用 prefill/decode 分离时的 prefill server 数量，用于长上下文和 agentic RL 场景。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Megatron 参数</h2>
+  <p>Megatron 参数主要来自模型脚本，例如 <code>scripts/models/glm4-9B.sh</code> 或 <code>scripts/models/qwen3-4B.sh</code>。这些参数描述模型结构和训练并行策略。Qwen3-4B 脚本中可以看到 36 层、hidden size 2560、FFN hidden size 9728、32 个 attention heads、8 个 query groups、vocab size 151936、rotary base 1000000 等结构参数；这些值必须与 checkpoint 匹配。</p>
+
+  <table>
+    <thead>
+      <tr><th>类别</th><th>常见参数</th><th>错误后果</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>模型结构</td><td><code>--num-layers</code>、<code>--hidden-size</code>、<code>--ffn-hidden-size</code>、<code>--num-attention-heads</code></td><td>权重形状不匹配，或者训练虽然启动但语义错误。</td></tr>
+      <tr><td>并行策略</td><td><code>--tensor-model-parallel-size</code>、<code>--pipeline-model-parallel-size</code>、<code>--context-parallel-size</code>、<code>--expert-model-parallel-size</code></td><td>NCCL group、参数切分、sequence 切分或 expert 权重聚合错误。</td></tr>
+      <tr><td>批量与长度</td><td><code>--global-batch-size</code>、<code>--micro-batch-size</code>、<code>--seq-length</code>、<code>--max-tokens-per-gpu</code></td><td>显存溢出、padding 过多、数据并行切分不均或训练吞吐异常。</td></tr>
+      <tr><td>checkpoint</td><td><code>--ref-load</code>、<code>--load</code>、<code>--save</code></td><td>reference、actor 初始化或保存目录不正确。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>SGLang 参数</h2>
+  <p>SGLang 参数在 slime 中以 <code>--sglang-</code> 前缀传入。使用者应把它们视为 rollout 引擎参数，而不是训练参数。<code>--hf-checkpoint</code> 用于初始化 SGLang server 和 tokenizer；真正的 actor 权重会在训练循环开始前由 Megatron 同步到 SGLang。因此，HF checkpoint 与 Megatron checkpoint 需要来自同一模型族和同一 tokenizer 语义。</p>
+
+  <table>
+    <thead>
+      <tr><th>参数</th><th>建议理解</th><th>常见用途</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>--hf-checkpoint</code></td><td>SGLang 初始化目录</td><td>加载 tokenizer、processor、config 和初始权重外形。</td></tr>
+      <tr><td><code>--sglang-context-length</code></td><td>rollout 上下文长度</td><td>控制 prompt 与 response 的总长度上限。</td></tr>
+      <tr><td><code>--sglang-mem-fraction-static</code></td><td>静态显存比例</td><td>colocate 或显存紧张时控制 SGLang 的显存预留。</td></tr>
+      <tr><td><code>--sglang-server-concurrency</code></td><td>请求并发</td><td>影响 GenerateState 中的 semaphore，并约束并发生成。</td></tr>
+      <tr><td><code>--router-*</code></td><td>sgl-router 参数</td><td>透传到 router，控制路由行为、metrics 和 worker 注册。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>RL 与数据参数</h2>
+  <p>slime 支持多种 advantage estimator，包括 <code>grpo</code>、<code>gspo</code>、<code>reinforce_plus_plus</code>、<code>reinforce_plus_plus_baseline</code> 和 <code>ppo</code>。官方 GLM/Qwen 示例采用 GRPO，并通过 <code>--rm-type deepscaler</code> 指向数学任务 verifier。数据采用 JSONL，每行是一个 JSON object，可通过 <code>--input-key</code>、<code>--label-key</code>、<code>--apply-chat-template</code> 和 metadata 字段控制样本解析。</p>
+
+  <pre><code class="language-json">{
+  "prompt": "计算 23 + 19，并给出推理过程。",
+  "label": "42",
+  "metadata": {
+    "source": "demo-math"
+  }
+}</code></pre>
+
+  <p>对于真实任务，reward function 的质量比启动脚本更重要。slime 提供了 <code>--custom-rm-path</code>、<code>--custom-generate-function-path</code>、<code>--dynamic-sampling-filter-path</code>、<code>--buffer-filter-path</code>、<code>--custom-loss-function-path</code> 等接口，允许把任务逻辑放入 pipeline，而不是修改框架主干。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">04 · Architecture</div>
+  <h1>系统架构</h1>
+  <p class="lead">slime 的架构可以压缩成三个模块：training、rollout、data buffer。training 侧负责 Megatron 训练与权重产出；rollout 侧负责 SGLang 生成、奖励和样本状态；data buffer 侧负责 prompt 初始化、样本流转和局部回收。Ray 将这些角色编排为分布式 actor，并通过 placement group 将 GPU 资源固定到合理位置。</p>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 920 430" role="img" aria-label="slime architecture">
+      <defs>
+        <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="#1B365D"/>
+        </marker>
+      </defs>
+      <rect x="20" y="28" width="880" height="374" rx="10" fill="#FAF9F5" stroke="#D8D4C7"/>
+      <text x="44" y="58" font-size="20" font-weight="500" fill="#1B365D">slime RL 后训练闭环</text>
+
+      <rect x="54" y="96" width="185" height="92" rx="8" fill="#EEF2F7" stroke="#1B365D"/>
+      <text x="82" y="124" font-size="18" font-weight="500">Data Source</text>
+      <text x="78" y="151" font-size="13">JSONL prompt</text>
+      <text x="78" y="170" font-size="13">metadata / label / tools</text>
+
+      <rect x="54" y="236" width="185" height="92" rx="8" fill="#EEF2F7" stroke="#1B365D"/>
+      <text x="80" y="264" font-size="18" font-weight="500">Data Buffer</text>
+      <text x="78" y="291" font-size="13">partial rollout</text>
+      <text x="78" y="310" font-size="13">filter / recycle</text>
+
+      <rect x="315" y="72" width="245" height="140" rx="8" fill="#F4EFE3" stroke="#8A6F3D"/>
+      <text x="346" y="102" font-size="18" font-weight="500">RolloutManager</text>
+      <text x="344" y="130" font-size="13">generate_rollout_async</text>
+      <text x="344" y="149" font-size="13">reward / verifier</text>
+      <text x="344" y="168" font-size="13">Sample to train_data</text>
+      <text x="344" y="187" font-size="13">DP split / metrics</text>
+
+      <rect x="638" y="64" width="214" height="154" rx="8" fill="#EEF2F7" stroke="#1B365D"/>
+      <text x="676" y="95" font-size="18" font-weight="500">SGLang Rollout</text>
+      <text x="669" y="123" font-size="13">sgl-router</text>
+      <text x="669" y="142" font-size="13">regular / prefill / decode</text>
+      <text x="669" y="161" font-size="13">KV cache / generation</text>
+      <text x="669" y="180" font-size="13">health / profiling</text>
+
+      <rect x="315" y="258" width="245" height="102" rx="8" fill="#EEF2F7" stroke="#1B365D"/>
+      <text x="352" y="287" font-size="18" font-weight="500">Megatron Actor</text>
+      <text x="344" y="315" font-size="13">logprob / advantage</text>
+      <text x="344" y="334" font-size="13">policy loss / optimizer</text>
+
+      <rect x="638" y="268" width="214" height="82" rx="8" fill="#F4EFE3" stroke="#8A6F3D"/>
+      <text x="674" y="298" font-size="18" font-weight="500">Weight Update</text>
+      <text x="669" y="325" font-size="13">NCCL / Ray IPC / tensor</text>
+
+      <line x1="239" y1="142" x2="315" y2="142" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow)"/>
+      <line x1="560" y1="142" x2="638" y2="142" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow)"/>
+      <line x1="638" y1="188" x2="560" y2="265" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow)"/>
+      <line x1="315" y1="310" x2="239" y2="282" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow)"/>
+      <line x1="239" y1="282" x2="315" y2="175" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow)"/>
+      <line x1="560" y1="310" x2="638" y2="310" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow)"/>
+      <line x1="745" y1="268" x2="745" y2="218" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow)"/>
+
+      <text x="267" y="132" font-size="12" fill="#504e49">prompt groups</text>
+      <text x="582" y="132" font-size="12" fill="#504e49">HTTP generate</text>
+      <text x="575" y="248" font-size="12" fill="#504e49">samples</text>
+      <text x="575" y="300" font-size="12" fill="#504e49">new weights</text>
+    </svg>
+    <figcaption>图 1：slime 的主控制闭环。图中箭头表示数据或权重的主要流向，真实实现中由 Ray actor、HTTP server、NCCL group 和本地进程共同完成。</figcaption>
+  </figure>
+
+  <h2>Ray placement group 的作用</h2>
+  <p><code>slime/ray/placement_group.py</code> 会创建 Ray placement group，并通过 <code>InfoActor</code> 收集节点 IP 与 GPU ID，再按节点和 GPU 排序。这一步看似普通，实际上决定了训练 actor 与 rollout engine 的资源映射稳定性。对于多节点训练，GPU 的物理位置、节点分布和 Ray bundle 排列会影响 NCCL 通信、SGLang server 分布和 colocate 模式下的显存切换。</p>
+  <p>若不使用 <code>--colocate</code>，rollout GPU 通常从 actor GPU 之后开始分配，训练与推理资源相对独立。若使用 <code>--colocate</code>，训练与 rollout 共享 GPU，框架必须在训练和生成之间释放、恢复、offload 或 onload 显存。Qwen3-4B 示例就采用 colocate 路径，并通过 SGLang 的 static memory fraction 控制 rollout 侧显存占用。</p>
+
+  <h2>训练模型的创建</h2>
+  <p><code>create_training_models</code> 会创建 actor 和可选 critic，并为不同角色应用 Megatron 参数 override。actor 是核心训练对象，critic 只在需要 value function 的算法中启用。创建完成后，rollout manager 会被附着到训练 actor，后续 actor 执行 <code>update_weights()</code> 时可以直接访问可更新的 rollout engines。</p>
+
+  <h2>rollout server 的结构</h2>
+  <p><code>slime/ray/rollout.py</code> 中的 <code>ServerGroup</code> 与 <code>RolloutServer</code> 管理 SGLang 进程。一个 model 可以有多个 server group，group 类型包括 regular、prefill、decode、placeholder 和 encoder。regular 适合普通 rollout；prefill/decode 用于 PD disaggregation；placeholder 和 encoder 支持更复杂的多模型或多模态配置。</p>
+  <p>router 由 <code>sglang_router.launch_router.RouterArgs</code> 启动。slime 已经将路由栈统一到 sgl-router，并在 v0.2.4 release 中明确移除了旧的 slime-router。router 的职责不是训练，而是把 rollout 请求分发到正确的 SGLang workers，提供 worker 注册、请求转发、指标和健康检查入口。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">05 · Training Loop</div>
+  <h1>源码级训练闭环</h1>
+  <p class="lead">slime 的主训练循环保留在 <code>train.py</code> 中。这个选择值得重视：大规模 RL 后训练的控制流经常需要按任务改动，例如何时评估、何时保存、何时更新权重、何时 offload rollout、何时 onload KV cache。如果框架把这些步骤封进深层 trainer，调试难度会显著上升。</p>
+
+  <figure class="diagram">
+    <svg viewBox="0 0 920 360" role="img" aria-label="slime training sequence">
+      <defs>
+        <marker id="arrow2" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+          <path d="M0,0 L0,6 L9,3 z" fill="#1B365D"/>
+        </marker>
+      </defs>
+      <rect x="20" y="24" width="880" height="304" rx="10" fill="#FAF9F5" stroke="#D8D4C7"/>
+      <text x="44" y="56" font-size="20" font-weight="500" fill="#1B365D">train.py 每个 rollout_id 的主要顺序</text>
+      <g font-size="14">
+        <rect x="48" y="92" width="108" height="64" rx="8" fill="#EEF2F7" stroke="#1B365D"/>
+        <text x="72" y="119" font-weight="500">Eval</text>
+        <text x="62" y="141" font-size="12">if needed</text>
+
+        <rect x="188" y="92" width="120" height="64" rx="8" fill="#F4EFE3" stroke="#8A6F3D"/>
+        <text x="217" y="119" font-weight="500">Generate</text>
+        <text x="205" y="141" font-size="12">rollout data</text>
+
+        <rect x="340" y="92" width="112" height="64" rx="8" fill="#EEF2F7" stroke="#1B365D"/>
+        <text x="374" y="119" font-weight="500">Train</text>
+        <text x="355" y="141" font-size="12">actor / critic</text>
+
+        <rect x="484" y="92" width="106" height="64" rx="8" fill="#EEF2F7" stroke="#1B365D"/>
+        <text x="518" y="119" font-weight="500">Save</text>
+        <text x="502" y="141" font-size="12">checkpoint</text>
+
+        <rect x="622" y="92" width="112" height="64" rx="8" fill="#F4EFE3" stroke="#8A6F3D"/>
+        <text x="648" y="119" font-weight="500">Update</text>
+        <text x="640" y="141" font-size="12">weights</text>
+
+        <rect x="766" y="92" width="104" height="64" rx="8" fill="#EEF2F7" stroke="#1B365D"/>
+        <text x="790" y="119" font-weight="500">Next</text>
+        <text x="784" y="141" font-size="12">rollout_id</text>
+
+        <line x1="156" y1="124" x2="188" y2="124" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow2)"/>
+        <line x1="308" y1="124" x2="340" y2="124" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow2)"/>
+        <line x1="452" y1="124" x2="484" y2="124" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow2)"/>
+        <line x1="590" y1="124" x2="622" y2="124" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow2)"/>
+        <line x1="734" y1="124" x2="766" y2="124" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow2)"/>
+      </g>
+      <rect x="86" y="218" width="748" height="58" rx="8" fill="#FBFAF6" stroke="#D8D4C7"/>
+      <text x="112" y="244" font-size="14">colocate / offload 情况下，generate 与 train 之间还会穿插 rollout 权重、KV cache、训练权重和显存占用的 release / resume / offload / onload。</text>
+      <text x="112" y="266" font-size="14">异步训练则由 train_async.py 提前启动下一轮 rollout，再在权重同步点等待 generation future。</text>
+    </svg>
+    <figcaption>图 2：同步训练循环与资源切换。真实源码中还包含 tracking、metrics、fault tolerance、profiling 和分布式 barrier。</figcaption>
+  </figure>
+
+  <h2>同步训练路径：train.py</h2>
+  <p><code>train.py</code> 的关键顺序如下。首先配置日志、初始化 tracking，创建 placement groups 和 rollout manager；随后创建 actor/critic 并执行一次 <code>actor_model.update_weights()</code>，确保 SGLang rollout engine 使用当前 actor 权重。进入循环后，每个 <code>rollout_id</code> 可先执行评估，再通过 <code>rollout_manager.generate</code> 生成训练数据；训练端消费这批数据，更新 actor 和可选 critic；保存 checkpoint 后，框架在需要时清理训练显存、恢复 rollout 侧权重和 KV cache，并再次同步 actor 权重。</p>
+  <p>这个顺序解释了一个常见误区：rollout 不是“训练前的独立数据预处理”，而是每轮策略更新的组成部分。对于 on-policy 或近似 on-policy 的 RL 算法，样本必须与当前或可追踪版本的 policy 关联。slime 的 <code>Sample</code> 中保留 <code>weight_versions</code>，rollout logprobs 也可被保存并用于训练侧校验或修正。</p>
+
+  <h2>异步训练路径：train_async.py</h2>
+  <p><code>train_async.py</code> 的目标是隐藏 rollout 或训练的部分等待时间。它不支持 colocate，因为异步路径要求训练与 rollout 同时占用资源。核心差异是：框架可以先启动下一轮 rollout，再训练当前数据；当达到 <code>update_weights_interval</code> 或必须同步时，再等待 generation future 并更新 rollout engine 权重。</p>
+  <p>异步训练提高资源利用率，但也引入 policy staleness。是否采用异步路径，取决于任务是否能容忍样本来自略旧的策略、训练吞吐与 rollout 吞吐哪个更慢、以及 weight update 的成本是否足够高。对严格 on-policy 实验，默认同步路径更易解释；对大模型长响应训练，异步路径可能更接近可接受的工程折中。</p>
+
+  <h2>RayTrainGroup 与 MegatronTrainRayActor</h2>
+  <p><code>slime/ray/actor_group.py</code> 中的 <code>RayTrainGroup</code> 会为每张训练 GPU 创建一个 <code>MegatronTrainRayActor</code>。actor 启动前会设置一组环境变量，例如 <code>NCCL_CUMEM_ENABLE</code>、<code>NVTE_FP8_BLOCK_SCALING_FP32_SCALES</code>，以及 offload 训练时可能需要的 <code>LD_PRELOAD</code>。这些不是普通配置噪声，而是为 NCCL、TransformerEngine、FP8 block scaling 和 torch memory saver 准备运行时环境。</p>
+  <p><code>MegatronTrainRayActor.init</code> 会初始化分布式通信、Megatron 全局参数、HF config/tokenizer、模型、optimizer、scheduler、weight backuper 和可选 reference/teacher/old_actor。随后根据资源布局选择权重更新器：colocate 模式使用 <code>UpdateWeightFromTensor</code>，decoupled 模式使用 <code>UpdateWeightFromDistributed</code>。</p>
+
+  <h2>训练数据进入 Megatron 前发生了什么</h2>
+  <p><code>_get_rollout_data</code> 是训练侧的关键入口。它将 rollout 产生的 token、response length、loss mask、reward、metadata、multimodal input、rollout logprob 和 routed experts 整理为 GPU 上的训练张量。若使用 context parallel，会对 sequence 维度进行切分；若 QKV 格式为 <code>bshd</code>，还要处理 padding；若存在 teacher logprob 或 expert routing 信息，也会按并行策略整理。</p>
+  <p>因此，rollout 输出的每一个字段都不是孤立 JSON。它会进入 Megatron 的 packed sequence、loss mask、优势估计和损失函数。自定义 rollout 或 reward 时，必须遵守 <code>Sample</code> 的字段语义，否则错误可能直到 loss 计算时才暴露。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">06 · Rollout</div>
+  <h1>Rollout 生成链路</h1>
+  <p class="lead">rollout 是 slime 的工程重心之一。大模型 RL 的昂贵部分不只是反向传播，生成长响应、动态过滤、奖励计算、失败恢复、partial rollout、权重版本管理和多模型路由同样决定训练效率。</p>
+
+  <h2>Sample 是核心数据结构</h2>
+  <p><code>slime/utils/types.py</code> 中的 <code>Sample</code> 将 prompt、tokens、response、response_length、label、reward、loss_mask、rollout_log_probs、teacher_log_probs、metadata、train_metadata、multimodal_inputs、session_id、status、timing 和权重版本组织在一个对象中。它的状态枚举包括 pending、completed、truncated、aborted 和 failed。</p>
+  <p>这个结构的设计目的，是让生成、奖励、过滤、训练和日志共享同一份样本语义。比如动态采样可以根据 reward 分布过滤样本，partial rollout 可以把 aborted 请求保留到 buffer，训练端可以用 loss mask 控制哪些 token 参与 policy gradient，多模态任务可以携带 processor 所需输入。</p>
+
+  <h2>GenerateState 与并发控制</h2>
+  <p><code>slime/rollout/sglang_rollout.py</code> 中的 <code>GenerateState</code> 是 rollout 过程的单例状态。它保存 tokenizer、processor、采样参数、HTTP client、server URL 和 semaphore。并发上限由 <code>sglang_server_concurrency × rollout_num_gpus / rollout_num_gpus_per_engine</code> 计算，保证请求数量与 rollout engine 数量和单 engine GPU 数匹配。</p>
+  <p>生成函数会准备 prompt ids，将请求发送给 router 的 <code>/generate</code> 接口，并要求返回 logprob。若启用 routed experts 或多模态输入，也会将相关字段传入。响应返回后，Sample 会被更新为完整 token 序列、response 文本、response_length、rollout_log_probs、finish reason 与 meta info。</p>
+
+  <h2>自定义 generate 与 reward</h2>
+  <p>默认生成路径适合普通 prompt-response 任务。若任务需要多轮交互、工具调用、环境反馈或特殊采样逻辑，应通过 <code>--custom-generate-function-path</code> 注入异步生成函数。</p>
+  <pre><code class="language-python">async def generate(args, sample: Sample, sampling_params) -> Sample:
+    ...
+    return sample</code></pre>
+
+  <p>reward 逻辑可通过 <code>--custom-rm-path</code> 或内置 reward type 接入。对于数学任务，reward 往往来自 verifier；对于 agentic 任务，reward 可能来自环境返回、规则检查、执行结果或外部服务。slime 的设计允许 reward 在 rollout 端完成，再把标量或更复杂 metadata 带入训练端。</p>
+
+  <h2>generate_rollout_async 的循环</h2>
+  <p><code>generate_rollout_async</code> 会持续从 data source 取 prompt group，直到达到目标 rollout batch。每个 prompt 会扩展出 <code>n_samples_per_prompt</code> 个 Sample。生成完成后，框架应用动态过滤器，记录首尾样本和统计指标，并在需要时调用 abort 接口终止未完成请求。若启用 <code>--partial-rollout</code>，未完整生成但有价值的中间样本可进入 data buffer，供后续回收。</p>
+
+  <h2>DataSource 与 buffer</h2>
+  <p><code>RolloutDataSource</code> 从 JSONL 或 dataset 加载 prompt，并按 epoch shuffle。它记录 epoch 与 sample offset，使 checkpoint 后恢复训练时可以继续取数。<code>RolloutDataSourceWithBuffer</code> 在此基础上加入 FIFO buffer，用于保存 partial rollout 或过滤后可复用样本。</p>
+  <p>buffer 的存在很重要。动态采样和长响应训练中，部分样本可能由于 reward 分布、长度、truncation 或环境失败而不适合直接训练。完全丢弃会浪费昂贵的生成成本；无条件使用又会污染梯度。slime 通过 filter 与 buffer 把这部分决策显式化。</p>
+
+  <h2>rollout 后处理</h2>
+  <p>RolloutManager 会把 Sample 转换为训练数据。转换字段包括 tokens、response_lengths、rewards、raw_reward、truncated、sample_indices、loss_masks、rollout_log_probs、routed experts、metadata、multimodal inputs 和 teacher_log_probs。若启用 <code>--balance-data</code>，框架会使用 sequence length balanced partition，尽量让数据并行 rank 的 token 负载接近；否则按数据并行 rank 做 strided split。</p>
+  <p>奖励后处理同样在 rollout manager 中完成。对于 GRPO、GSPO 和 Reinforce++ baseline，若启用 reward normalization，会按 group 做 reward 标准化；GRPO/GSPO 还可按标准差归一化。这一步直接影响 advantage 的尺度，进而影响 policy gradient 的稳定性。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">07 · Loss</div>
+  <h1>训练端计算</h1>
+  <p class="lead">训练端的核心问题，是把 rollout 样本变成可微的策略更新。slime 在 Megatron 内部计算当前策略 logprob、reference logprob、teacher logprob、优势、returns、KL、policy loss、value loss 或自定义 loss，并在分布式并行下保持张量形状与统计口径一致。</p>
+
+  <h2>logprob 与 entropy</h2>
+  <p><code>slime/backends/megatron_utils/loss.py</code> 中的 <code>get_log_probs_and_entropy</code> 会基于 packed token layout 计算 shifted token 的 logprob 与 entropy。大模型训练通常在 tensor parallel 下使用 vocab parallel cross entropy；若启用 context parallel，还要处理 sequence 维度的切分与 all-gather。源码中对 <code>allgather_cp</code>、padding 和 loss mask 的处理，正是为了保证 logprob 与实际参与训练的 response token 对齐。</p>
+
+  <h2>优势估计</h2>
+  <p><code>slime/utils/ppo_utils.py</code> 提供优势与 returns 计算。不同 estimator 的语义不同：</p>
+  <table>
+    <thead>
+      <tr><th>Estimator</th><th>训练信号</th><th>适用理解</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>grpo</code></td><td>按 prompt group 的 reward 相对差异形成 token 级优势。</td><td>适合每个 prompt 采样多个 response 的 verifier 任务，省去显式 value model。</td></tr>
+      <tr><td><code>gspo</code></td><td>与 GRPO 类似，但按 GSPO 口径处理策略目标。</td><td>适合需要 group-relative policy optimization 的变体实验。</td></tr>
+      <tr><td><code>ppo</code></td><td>基于 reward、KL 和 value function 计算 GAE 与 returns。</td><td>需要 critic，训练链路更完整，资源也更重。</td></tr>
+      <tr><td><code>reinforce_plus_plus</code></td><td>使用折扣 returns。</td><td>较直接的 policy gradient 路径。</td></tr>
+      <tr><td><code>reinforce_plus_plus_baseline</code></td><td>在 group baseline 基础上减小方差。</td><td>适合不启用 critic 但需要 baseline 的任务。</td></tr>
+    </tbody>
+  </table>
+
+  <p>KL 通过 <code>compute_approx_kl</code> 计算。若启用 OPD，框架还会使用 teacher reverse-KL 修正 advantage；若启用跨数据并行 advantage normalization，统计需要在 DP 维度保持一致。这里的细节决定了实验可复现性和指标解释，不应只看最终 reward 曲线。</p>
+
+  <h2>policy loss</h2>
+  <p><code>policy_loss_function</code> 会读取当前 logprob、旧策略或 rollout logprob、优势和 loss mask，计算 PPO/GSPO 风格 clipping、KL loss、entropy、ratio、clip ratio 和可能的 mismatch metrics。slime 还提供 OPSM mask、TIS/RS correction、自定义 reducer 和自定义 loss hook。</p>
+  <p>对工程使用者而言，最容易出错的是三件事。第一，loss mask 必须精确覆盖 response 中应该学习的 token。第二，rollout logprob 与当前策略 logprob 的版本关系必须清楚，特别是异步 rollout 或权重更新间隔大于 1 时。第三，reward scale 与 advantage normalization 会改变有效学习率，不能在不同实验之间随意比较。</p>
+
+  <h2>critic 与 value loss</h2>
+  <p>当 estimator 需要 value function 时，slime 会创建 critic 并计算 value loss。critic 的资源开销不可忽略，因为它同样运行在 Megatron 训练后端中，并可能与 actor 共享部分配置。若任务采用 GRPO 或其他不需要 critic 的方法，可以减少一部分训练复杂度，但也失去了 value baseline 的表达能力。</p>
+
+  <h2>SFT 与自定义 loss</h2>
+  <p><code>loss_function</code> 可以分派到 policy loss、value loss、SFT loss 或 custom loss。自定义 loss 不是为了把所有算法逻辑写进外部脚本，而是提供一个受控扩展点：保留 slime 的数据、并行、权重同步和 rollout 框架，只替换任务所需的局部目标函数。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">08 · Weight Update</div>
+  <h1>权重同步与显存切换</h1>
+  <p class="lead">slime 与普通离线训练框架最大的差别之一，是训练权重必须频繁同步给推理引擎。SGLang rollout server 不能长期停留在初始 checkpoint，否则生成样本来自旧策略，RL 训练语义会失真。slime 为 colocate 与 decoupled 两种资源布局分别实现了权重更新路径。</p>
+
+  <h2>decoupled：UpdateWeightFromDistributed</h2>
+  <p>在训练与 rollout 使用不同 GPU 的 decoupled 模式下，<code>UpdateWeightFromDistributed</code> 通过 NCCL group 将 Megatron 权重广播给 SGLang engines。源码会按 pipeline parallel rank 创建类似 <code>slime-pp_{pp_rank}</code> 的通信组，由训练 rank 与 rollout engine GPU 共同参与。非 expert 权重和 expert 权重分开处理；tensor parallel 需要 all-gather；expert parallel 需要按 expert 维度聚合；最后转换为 Hugging Face 风格张量名与切片。</p>
+  <p>为了避免 broadcast 死锁，rollout engines 在更新期间需要 lock。大张量会按 <code>update_weight_buffer_size</code> 分桶，metadata 通过 Ray 传递，tensor 数据通过 NCCL broadcast。这个路径适合训练与 rollout 并行占用独立资源的场景，代价是通信拓扑和版本控制更复杂。</p>
+
+  <h2>colocate：UpdateWeightFromTensor</h2>
+  <p>colocate 模式下，训练与 rollout 共享同一批 GPU，不能简单让 SGLang 一直持有全部显存。<code>UpdateWeightFromTensor</code> 会把 HF 格式权重 chunk 从 GPU 转到 CPU，序列化为 flattened buckets，再使用 Gloo <code>gather_object</code> 在 colocated ranks 间收集，随后通过 Ray IPC 调用 SGLang engine 的 <code>update_weights_from_tensor</code>。若 rollout engine 中仍有远端部分，也会处理分布式更新。</p>
+  <p>colocate 的优点是节省 GPU 资源，适合中小规模或资源紧张实验。缺点是训练和 rollout 不能完全并行，显存 release/resume/offload 的正确性成为关键。官方 GLM4.5 发布说明中提到，Megatron offload 可将 residual GPU memory 从 15-18GB 降到 3-5GB，使 rollout 侧可以使用更高的 SGLang memory fraction，这正是 colocate 路径的典型价值。</p>
+
+  <h2>参数重组：common.py</h2>
+  <p><code>update_weight/common.py</code> 中的 <code>all_gather_param</code> 处理 Megatron 参数到 rollout 权重的重组。例如 tensor parallel shard 需要 all-gather，GLU 的 <code>linear_fc1</code> 需要重新切分，部分 grouped MoE 的 <code>linear_fc2</code> 维度还要修正。权重同步不能被理解为“把 state_dict 发给 SGLang”，因为训练态权重布局与推理态权重布局并不相同。</p>
+
+  <h2>显存切换与低精度 rollout</h2>
+  <p>低精度是 slime 扩展大模型 RL 的重要手段。官方文档介绍了 FP8 rollout、FP8 training、INT4 QAT 与 INT4 inference。FP8 rollout 通常需要通过 <code>tools/convert_hf_to_fp8.py</code> 生成 blockwise quantized HF checkpoint；FP8 training 使用 TransformerEngine。需要注意，FP8 training 下保存的 <code>torch_dist</code> checkpoint 通常仍以原始精度保存，若要用 FP8 推理评估，需要先转回 HF，再转换为 FP8 HF。</p>
+  <p>在 GLM4.5 发布说明中，官方报告了 fp8 rollout、DeepEP、MTP、offload、CPU Adam 和更快权重同步等优化方向。对于 GLM4.5 355B-A32B，fp8、DeepEP 与 speculative sampling 将单数据点速度从低于 10 token/s 提升到 60-70 token/s；bf16 权重同步可达 48 秒，fp8 blockwise quantization 与 update 在当时分支约 100 秒。此类数字不应机械外推到其他模型，但它说明 slime 的优化目标是大模型 RL 的系统瓶颈，而不是单个 kernel benchmark。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">09 · Extension and Production</div>
+  <h1>扩展与生产要点</h1>
+  <p class="lead">slime 的正确用法，是尽量保留框架主干，把任务差异放入明确扩展点。这样既能复用 Megatron、SGLang、Ray、权重同步和数据切分，又能把 reward、生成、过滤、loss 和评估逻辑按任务替换。</p>
+
+  <h2>扩展接口速查</h2>
+  <table class="compact">
+    <thead>
+      <tr><th>接口参数</th><th>插入位置</th><th>典型用途</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>--rollout-function-path</code></td><td>整轮 rollout</td><td>完全替换 rollout 生成流程。</td></tr>
+      <tr><td><code>--custom-generate-function-path</code></td><td>单样本生成</td><td>多轮对话、工具调用、环境交互、自定义采样。</td></tr>
+      <tr><td><code>--custom-rm-path</code></td><td>reward model</td><td>verifier、规则奖励、执行奖励、外部服务奖励。</td></tr>
+      <tr><td><code>--dynamic-sampling-filter-path</code></td><td>rollout 中</td><td>按 group reward 或响应状态筛选样本。</td></tr>
+      <tr><td><code>--buffer-filter-path</code></td><td>data buffer</td><td>决定 partial rollout 或失败样本是否回收。</td></tr>
+      <tr><td><code>--rollout-sample-filter-path</code></td><td>rollout 后</td><td>过滤单个 Sample。</td></tr>
+      <tr><td><code>--rollout-all-samples-process-path</code></td><td>rollout 后</td><td>对全部样本做统一处理或统计。</td></tr>
+      <tr><td><code>--custom-loss-function-path</code></td><td>Megatron loss</td><td>替换或扩展训练目标。</td></tr>
+      <tr><td><code>--custom-tis-function-path</code></td><td>policy loss 修正</td><td>自定义 importance sampling 或 ratio 修正。</td></tr>
+      <tr><td><code>--custom-convert-samples-to-train-data-path</code></td><td>数据转换</td><td>特殊 multimodal、tool trace 或额外训练字段。</td></tr>
+      <tr><td><code>--data-source-path</code></td><td>数据源</td><td>自定义 prompt 读取、在线数据或课程学习。</td></tr>
+      <tr><td><code>--eval-function-path</code></td><td>评估</td><td>任务特定 evaluation。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>SGLang 配置文件</h2>
+  <p>当 rollout 需要多个模型、reference server、reward model server、encoder 或 PD disaggregation 时，建议使用 SGLang YAML 配置。顶层 <code>sglang</code> 下可以定义多个 model，每个 model 拥有自己的 router、model path、是否 update weights、单 engine GPU 数和 server groups。源码中可见 group 类型包括 regular、prefill、decode、placeholder 和 encoder。自定义代码可通过 <code>get_model_url(args, "ref")</code> 获取某个模型的 URL。</p>
+  <p>PD disaggregation 将 prefill 与 decode server 分离，适合长上下文、多轮、agentic RL 和 prefill 成本突出的场景。它不是默认应该打开的开关；只有当 profile 显示 prefill/decode 资源形态明显不同，且 router 与 server group 配置能稳定运行时，才值得引入。</p>
+
+  <h2>容错与健康检查</h2>
+  <p><code>--use-fault-tolerance</code> 会启用 rollout 健康检查。slime 通过 <code>/health_generate</code> 监控 SGLang server；如果发现 server 死亡，会在当前 rollout 与权重更新之后停止并重启相关服务。关键参数包括 <code>rollout-health-check-first-wait</code>、<code>rollout-health-check-interval</code> 和 <code>rollout-health-check-timeout</code>。</p>
+  <p>这类容错适合长时间训练，但不能替代根因排查。若 server 经常死亡，应优先查看显存峰值、请求长度、router worker 状态、NCCL 日志、weight update bucket、CUDA IPC cache、模型 processor 和自定义生成函数。v0.2.4 release 中修复了权重更新期间 CUDA IPC cache leak，以及 FLA 层在 SP/CP 下的梯度膨胀问题，这说明 rollout 与训练的交界处是高风险区域。</p>
+
+  <h2>调试路径</h2>
+  <table>
+    <thead>
+      <tr><th>问题</th><th>优先检查</th><th>解释</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>启动失败</td><td>Ray resource、端口、GPU 数、checkpoint 路径、SGLang 参数。</td><td>多数启动失败来自资源或模型加载，不是 RL 算法。</td></tr>
+      <tr><td>首轮 rollout 异常</td><td>tokenizer、chat template、prompt key、label key、response length、finish reason。</td><td>生成链路先于训练链路暴露数据问题。</td></tr>
+      <tr><td>reward 全零或 NaN</td><td>custom rm、verifier、metadata、截断、loss mask。</td><td>reward 不可信时，policy loss 的数值没有解释价值。</td></tr>
+      <tr><td>KL 异常</td><td>reference checkpoint、rollout logprob、weight version、old actor。</td><td>KL 是判断策略漂移和版本关系的核心指标。</td></tr>
+      <tr><td>OOM</td><td>context length、max tokens per GPU、micro batch、SGLang mem fraction、offload。</td><td>训练侧和 rollout 侧显存峰值发生在不同阶段，需要分别观测。</td></tr>
+      <tr><td>吞吐低</td><td>最长样本、动态采样、server concurrency、PD disaggregation、weight update 时间。</td><td>RL 训练经常被最长 response 和权重同步拖慢，而非平均 token/s。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>何时采用 slime</h2>
+  <p>slime 适合三类团队。第一类已经使用或愿意使用 Megatron 训练大模型，并需要把 RL 后训练扩展到多 GPU 或多节点。第二类需要 SGLang server-based rollout，希望在 rollout 中复用结构化输出、多轮交互、router、PD disaggregation 和低精度推理。第三类任务逻辑复杂，需要自定义 reward、生成、过滤、loss、评估和数据源，同时又不想重写训练与权重同步系统。</p>
+  <p>保持谨慎的场景也很明确。若只是做小模型单卡实验，slime 的分布式复杂度可能超过收益；若团队完全不熟悉 Megatron checkpoint 与并行参数，应先把模型转换和 SFT 训练链路跑稳；若任务 reward 仍不可靠，先投入 verifier 与评估体系，比调 slime 参数更重要。</p>
+
+  <h2>上手后的工程路线</h2>
+  <ol>
+    <li>先按官方 Docker 与示例脚本跑通一个小规模模型，确认生成、reward、训练、保存和权重同步全链路可用。</li>
+    <li>固定模型与数据，逐项修改 batch、并行、context length 和 SGLang memory fraction，建立本地资源预算表。</li>
+    <li>引入自定义 reward，不改主训练循环，先用 debug rollout 验证 Sample 字段和 reward 分布。</li>
+    <li>引入自定义 generate 或 data source，保留 loss 与 weight update 主干，确认失败样本、partial rollout 和 buffer 策略。</li>
+    <li>在算法层比较 GRPO、GSPO、PPO 或 Reinforce++ 变体，所有实验记录 reward normalization、loss mask、KL 与 weight version。</li>
+    <li>最后再考虑低精度、PD disaggregation、异步训练和容错。这些是性能与可靠性优化，不应早于正确性验证。</li>
+  </ol>
+
+  <div class="note">
+    <div class="note-label">Closing Position</div>
+    <p>slime 的工程价值，来自它承认 RL 后训练是一个系统问题。算法目标、生成服务、数据状态、分布式训练、权重版本和资源切换彼此耦合。掌握 slime 的关键，不是记住更多参数，而是能判断每个参数在训练闭环中的位置，以及它改变的是样本语义、训练数学、推理吞吐、显存峰值还是通信成本。</p>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">Appendix · Parameters</div>
+  <h1>附录：参数速查</h1>
+  <p class="lead">下表不是完整 CLI 文档，而是阅读 slime 脚本时最常遇到、也最容易误解的参数索引。完整参数应以官方仓库和当前版本源码为准。</p>
+
+  <table class="compact">
+    <thead>
+      <tr><th>领域</th><th>参数</th><th>一句话解释</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>资源</td><td><code>--actor-num-nodes</code></td><td>Megatron actor 使用的节点数量。</td></tr>
+      <tr><td>资源</td><td><code>--actor-num-gpus-per-node</code></td><td>每节点训练 GPU 数。</td></tr>
+      <tr><td>资源</td><td><code>--rollout-num-gpus</code></td><td>SGLang rollout 使用的 GPU 总数。</td></tr>
+      <tr><td>资源</td><td><code>--rollout-num-gpus-per-engine</code></td><td>单个 SGLang engine 的 GPU 数。</td></tr>
+      <tr><td>资源</td><td><code>--colocate</code></td><td>训练与 rollout 共享 GPU，通过显存切换复用资源。</td></tr>
+      <tr><td>批量</td><td><code>--rollout-batch-size</code></td><td>每轮取多少个 prompt group。</td></tr>
+      <tr><td>批量</td><td><code>--n-samples-per-prompt</code></td><td>每个 prompt 采样多少个 response。</td></tr>
+      <tr><td>批量</td><td><code>--global-batch-size</code></td><td>Megatron 每轮训练消费的全局样本数。</td></tr>
+      <tr><td>批量</td><td><code>--num-steps-per-rollout</code></td><td>每轮 rollout 后训练多少步。</td></tr>
+      <tr><td>SGLang</td><td><code>--hf-checkpoint</code></td><td>SGLang 初始化和 tokenizer 来源。</td></tr>
+      <tr><td>SGLang</td><td><code>--sglang-context-length</code></td><td>rollout 最大上下文长度。</td></tr>
+      <tr><td>SGLang</td><td><code>--sglang-mem-fraction-static</code></td><td>SGLang static memory fraction。</td></tr>
+      <tr><td>checkpoint</td><td><code>--ref-load</code></td><td>reference model 的 Megatron checkpoint。</td></tr>
+      <tr><td>checkpoint</td><td><code>--load</code></td><td>actor 初始化或恢复训练 checkpoint。</td></tr>
+      <tr><td>checkpoint</td><td><code>--save</code></td><td>训练 checkpoint 保存目录。</td></tr>
+      <tr><td>算法</td><td><code>--advantage-estimator</code></td><td>选择 GRPO、GSPO、PPO、Reinforce++ 等优势估计。</td></tr>
+      <tr><td>算法</td><td><code>--use-kl-loss</code></td><td>在训练目标中加入 KL loss。</td></tr>
+      <tr><td>算法</td><td><code>--kl-loss-coef</code></td><td>KL loss 系数。</td></tr>
+      <tr><td>算法</td><td><code>--eps-clip</code></td><td>PPO/GRPO 风格 ratio clipping 下界相关参数。</td></tr>
+      <tr><td>算法</td><td><code>--eps-clip-high</code></td><td>上界 clipping 参数，常用于非对称 clip。</td></tr>
+      <tr><td>数据</td><td><code>--input-key</code></td><td>JSONL 中 prompt 字段名。</td></tr>
+      <tr><td>数据</td><td><code>--label-key</code></td><td>JSONL 中 label 字段名。</td></tr>
+      <tr><td>数据</td><td><code>--apply-chat-template</code></td><td>是否用 tokenizer chat template 包装输入。</td></tr>
+      <tr><td>可靠性</td><td><code>--use-fault-tolerance</code></td><td>启用 rollout server 健康检查和恢复。</td></tr>
+      <tr><td>扩展</td><td><code>--custom-rm-path</code></td><td>自定义 reward model 或 verifier。</td></tr>
+      <tr><td>扩展</td><td><code>--custom-generate-function-path</code></td><td>自定义单样本生成逻辑。</td></tr>
+    </tbody>
+  </table>
+
+  <p class="small">资料来源、复核口径和本地抓取清单见同目录 <code>sources.md</code> 与 <code>data/source-map.tsv</code>。</p>
+</section>
+
+</body>
+</html>

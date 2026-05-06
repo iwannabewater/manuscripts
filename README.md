@@ -15,6 +15,7 @@
 |---|---|---|
 | AI Training Frameworks 2026 | 大模型、多模态大模型与生成模型训练框架技术图谱 | `ai-training-frameworks-2026/index.html` / `ai-training-frameworks-2026/ai-training-frameworks-2026.pdf` |
 | AI Inference Frameworks 2026 | 大模型、多模态大模型与生成模型推理框架技术图谱 | `ai-inference-frameworks-2026/index.html` / `ai-inference-frameworks-2026/ai-inference-frameworks-2026.pdf` |
+| slime RL Scaling Guide | THUDM/slime 上手实操与源码级技术详解 | `slime-rl-scaling-guide/index.html` / `slime-rl-scaling-guide/slime-rl-scaling-guide.pdf` |
 | Claude Code Project Workflow | 面向工程团队的 Claude Code 项目工作流手册 | `claude-code-project-workflow/index.html` / `claude-code-project-workflow/claude-code-project-workflow.pdf` |
 | Zero to GitHub Pages Website | 从 0 构建网站并部署到 GitHub Pages 的完整工程链路 | `zero-to-github-pages-website/index.html` / `zero-to-github-pages-website/zero-to-github-pages-website.pdf` |
 
