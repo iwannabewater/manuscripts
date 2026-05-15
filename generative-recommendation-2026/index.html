@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>生成式推荐技术全史与产业落地报告 2026</title>
+<meta name="author" content="Winston">
+<meta name="description" content="从推荐系统基本原理、发展史、主流算法到生成式推荐产业落地与趋势判断的系统性技术报告。">
+<meta name="keywords" content="生成式推荐, 推荐系统, 语义ID, 生成式检索, 大模型推荐">
+<meta name="generator" content="Kami">
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @page {
+    size: A4;
+    margin: 18mm 20mm 20mm 20mm;
+    background: #f5f4ed;
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+    @bottom-center {
+      content: counter(page) "  ·  生成式推荐技术全史与产业落地报告 2026";
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8.8pt;
+      color: #6b6a64;
+    }
+  }
+  @page:first { @top-right { content: ""; } @bottom-center { content: ""; } }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper: #f5f4ed;
+    --ivory: #faf9f5;
+    --near-black: #141413;
+    --dark-warm: #3d3d3a;
+    --olive: #504e49;
+    --stone: #6b6a64;
+    --brand: #1B365D;
+    --brand-tint: #EEF2F7;
+    --border: #e8e6dc;
+    --border-strong: #d8d4c7;
+    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+  }
+  html, body { background: var(--paper); }
+  @media screen { body { max-width: 210mm; margin: 0 auto; padding: 18mm 20mm 20mm 20mm; } }
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 9.7pt;
+    line-height: 1.53;
+    letter-spacing: 0.16pt;
+    widows: 3;
+    orphans: 3;
+  }
+  .cover {
+    min-height: 241mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 29mm;
+    break-after: page;
+  }
+  .cover-eyebrow {
+    color: var(--brand);
+    font-size: 9.6pt;
+    letter-spacing: 1.1pt;
+    text-transform: uppercase;
+    margin-bottom: 18pt;
+  }
+  .cover-title {
+    font-size: 31pt;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: 0.12pt;
+    margin-bottom: 18pt;
+    max-width: 96%;
+  }
+  .cover-sub {
+    max-width: 91%;
+    color: var(--olive);
+    font-size: 12.7pt;
+    line-height: 1.56;
+  }
+  .cover-rule {
+    width: 46mm;
+    height: 2pt;
+    background: var(--brand);
+    margin: 0 0 18pt 0;
+    border-radius: 2pt;
+  }
+  .cover-meta {
+    color: var(--stone);
+    font-size: 9.6pt;
+    line-height: 1.6;
+  }
+  .cover-meta strong { color: var(--dark-warm); font-weight: 500; }
+  .toc { break-after: page; }
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: 14pt;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    gap: 8pt;
+    padding: 5.2pt 0;
+    border-bottom: 0.35pt dotted var(--border-strong);
+    font-size: 10.7pt;
+  }
+  .toc-num { min-width: 28pt; color: var(--brand); font-weight: 500; }
+  .toc-title { flex: 1; }
+  .toc-note { color: var(--stone); font-size: 8.4pt; }
+  .chapter { margin-top: 22pt; }
+  .chapter-num {
+    color: var(--brand);
+    font-size: 9.3pt;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+  }
+  h1 {
+    font-size: 21.5pt;
+    font-weight: 500;
+    line-height: 1.2;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    margin-bottom: 10pt;
+    break-after: avoid;
+  }
+  h2 {
+    font-size: 15.4pt;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 22pt 0 8pt;
+    string-set: section-title content();
+    break-after: avoid;
+  }
+  h3 {
+    color: var(--dark-warm);
+    font-size: 12.2pt;
+    font-weight: 500;
+    line-height: 1.32;
+    margin: 14pt 0 6pt;
+    break-after: avoid;
+  }
+  p { margin: 0 0 8.3pt; line-height: 1.53; }
+  .lead {
+    color: var(--dark-warm);
+    font-size: 11.2pt;
+    line-height: 1.56;
+    margin-bottom: 12pt;
+  }
+  strong { font-weight: 500; }
+  .hl { color: var(--brand); font-weight: 500; }
+  ul, ol { margin: 6pt 0 10pt 0; padding-left: 18pt; line-height: 1.5; }
+  li { margin-bottom: 2.6pt; }
+  li::marker { color: var(--brand); }
+  a { color: var(--brand); text-decoration: none; }
+  code {
+    font-family: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+    font-size: 8.2pt;
+    background: var(--ivory);
+    padding: 1pt 3pt;
+    border-radius: 2pt;
+  }
+  pre {
+    font-family: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+    font-size: 8.3pt;
+    line-height: 1.45;
+    background: var(--ivory);
+    border: 0.35pt solid var(--border);
+    border-radius: 5pt;
+    padding: 8pt 10pt;
+    margin: 10pt 0 12pt;
+    white-space: pre-wrap;
+    break-inside: avoid;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10.5pt 0 12pt;
+    font-size: 8.25pt;
+    break-inside: avoid;
+  }
+  th {
+    text-align: left;
+    color: var(--dark-warm);
+    font-weight: 500;
+    padding: 4.8pt 5.4pt;
+    border-bottom: 1pt solid var(--border-strong);
+  }
+  td {
+    padding: 3.8pt 5.4pt;
+    border-bottom: 0.3pt solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) td { background: var(--ivory); }
+  .compact th { font-size: 7.2pt; padding: 3pt 4pt; }
+  .compact td { font-size: 7.2pt; line-height: 1.34; padding: 2.6pt 4pt; }
+  .source-map { break-inside: auto; }
+  .source-map tr { break-inside: avoid; }
+  .note, .callout {
+    background: var(--ivory);
+    border-left: 1.5pt solid var(--brand);
+    border-radius: 5pt;
+    padding: 9.5pt 12pt;
+    margin: 11pt 0;
+    break-inside: avoid;
+  }
+  .note-label {
+    color: var(--brand);
+    font-size: 8.2pt;
+    letter-spacing: 0.6pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+  .tag {
+    display: inline-block;
+    background: var(--brand-tint);
+    color: var(--brand);
+    font-size: 8pt;
+    font-weight: 500;
+    padding: 1pt 5pt;
+    border-radius: 3pt;
+    margin: 0 3pt 3pt 0;
+    white-space: nowrap;
+  }
+  .small { color: var(--stone); font-size: 8.2pt; }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9pt;
+    margin: 11pt 0 14pt;
+  }
+  .summary-card {
+    background: var(--ivory);
+    border: 0.5pt solid var(--border);
+    border-radius: 6pt;
+    padding: 8.5pt 10pt;
+    break-inside: avoid;
+  }
+  .summary-card .num {
+    color: var(--brand);
+    font-size: 13.2pt;
+    font-weight: 500;
+    line-height: 1.15;
+    margin-bottom: 3pt;
+  }
+  .summary-card .label {
+    color: var(--stone);
+    font-size: 7.8pt;
+    letter-spacing: 0.45pt;
+    text-transform: uppercase;
+    margin-bottom: 3pt;
+  }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 11pt;
+    margin: 10pt 0;
+  }
+  .mini-card {
+    background: var(--ivory);
+    border: 0.5pt solid var(--border);
+    border-radius: 6pt;
+    padding: 9.5pt 11pt;
+    break-inside: avoid;
+  }
+  .mini-card h3 { margin-top: 0; }
+  figure { margin: 12pt 0; break-inside: avoid; }
+  figcaption { color: var(--stone); font-size: 8.3pt; text-align: center; margin-top: 5pt; }
+  svg { width: 100%; height: auto; display: block; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div>
+    <div class="cover-eyebrow">TECHNICAL REPORT · 2026</div>
+    <div class="cover-rule"></div>
+    <div class="cover-title">生成式推荐技术全史与产业落地报告</div>
+    <div class="cover-sub">从协同过滤、深度排序、序列建模到语义 ID、生成式检索、LLM 推荐、扩散推荐和推荐智能体的系统性报告，面向希望从 0 到 1 建立完整认知并能进入工程落地讨论的读者。</div>
+  </div>
+  <div class="cover-meta">
+    <strong>Winston</strong><br>
+    资料口径截至 2026-05-15<br>
+    Primary papers · official engineering sources · public industrial systems
+  </div>
+</section>
+
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">执行摘要</span><span class="toc-note">为什么 GR 是推荐范式变化，不只是 LLM 接口</span></div>
+  <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">概念边界</span><span class="toc-note">推荐系统、生成式推荐、生成式检索的关系</span></div>
+  <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">发展史</span><span class="toc-note">从协同过滤到基础模型推荐</span></div>
+  <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">推荐系统基本功</span><span class="toc-note">目标、反馈、召回、排序、重排和评估</span></div>
+  <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">经典与深度算法</span><span class="toc-note">MF、FM、Wide & Deep、DIN、MIND、SASRec、DLRM</span></div>
+  <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">生成式推荐算法谱系</span><span class="toc-note">语义 ID、序列转导、LLM、扩散、生成式重排</span></div>
+  <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">语义 ID 与生成式检索</span><span class="toc-note">把候选集搜索改写成 token 生成</span></div>
+  <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">LLM、扩散与多模态推荐</span><span class="toc-note">模型能力如何进入推荐链路</span></div>
+  <div class="toc-item"><span class="toc-num">09</span><span class="toc-title">海外大厂实践</span><span class="toc-note">Google、Meta、Amazon、Netflix、Pinterest</span></div>
+  <div class="toc-item"><span class="toc-num">10</span><span class="toc-title">国内大厂实践</span><span class="toc-note">Alibaba、ByteDance、Kuaishou、Tencent 等</span></div>
+  <div class="toc-item"><span class="toc-num">11</span><span class="toc-title">工程落地方法</span><span class="toc-note">从离线实验到线上系统的路线图</span></div>
+  <div class="toc-item"><span class="toc-num">12</span><span class="toc-title">评估、治理与风险</span><span class="toc-note">指标、A/B、偏差、隐私、安全和内容生态</span></div>
+  <div class="toc-item"><span class="toc-num">13</span><span class="toc-title">趋势判断</span><span class="toc-note">2026 之后的主线和开放问题</span></div>
+  <div class="toc-item"><span class="toc-num">14</span><span class="toc-title">附录</span><span class="toc-note">阅读路径、术语表和来源映射</span></div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">01 · Executive Summary</div>
+  <h1>执行摘要</h1>
+  <p class="lead">生成式推荐（Generative Recommendation, GR）不是“用大模型写推荐理由”的窄概念，而是把推荐链路中的候选生成、偏好建模、列表决策、内容理解、解释交互和新内容生成逐步改写为<span class="hl">生成任务</span>。它继承推荐系统的工程约束，也引入基础模型的 token 化、序列建模、对齐、推理成本和安全治理问题。</p>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="label">Finding 01</div>
+      <div class="num">推荐系统仍是三段式工程</div>
+      <p>召回、排序、重排和策略层不会因为 GR 消失。变化在于：召回可以由模型生成候选标识，排序可以吃更长行为序列，重排可以直接优化列表，交互层可以理解自然语言意图。</p>
+    </div>
+    <div class="summary-card">
+      <div class="label">Finding 02</div>
+      <div class="num">语义 ID 是 GR 的关键接口</div>
+      <p>商品、视频、广告和内容不能直接放进 LLM 词表。语义 ID 将物品压缩成低基数离散 token，使生成模型能“说出”物品，同时保留内容语义和协同信号。</p>
+    </div>
+    <div class="summary-card">
+      <div class="label">Finding 03</div>
+      <div class="num">大模型推荐有四种落点</div>
+      <p>LLM 可做特征增强、用户理解、候选生成、解释对话和模拟器。线上主链路是否直接调用 LLM，取决于延迟、成本、候选规模、可控性和安全要求。</p>
+    </div>
+    <div class="summary-card">
+      <div class="label">Finding 04</div>
+      <div class="num">产业主线不是单模型替代</div>
+      <p>Meta 的 HSTU、Google 的 TIGER、Pinterest 的 PinRec、淘宝 AIGQ、快手 OneMall、腾讯 TencentGR 共同指向一个方向：用生成式建模重构部分推荐环节，而非一次性替换全系统。</p>
+    </div>
+    <div class="summary-card">
+      <div class="label">Finding 05</div>
+      <div class="num">实时性仍决定上限</div>
+      <p>ByteDance Monolith 说明推荐系统对新反馈、稀疏特征和概念漂移极端敏感。GR 若不能和实时样本、近线训练、特征服务、索引更新协同，离线提升很难转化为线上收益。</p>
+    </div>
+    <div class="summary-card">
+      <div class="label">Finding 06</div>
+      <div class="num">治理问题会更难</div>
+      <p>GR 不仅推荐已有内容，还可能生成查询、广告创意、解释、图像或完整购物路径。偏见、过滤气泡、版权、安全、广告合规和可申诉性会从排序问题扩大为生成问题。</p>
+    </div>
+  </div>
+
+  <h2>本文回答的核心问题</h2>
+  <ul>
+    <li>推荐系统为什么从“打分排序”走向“生成候选、生成列表、生成解释和生成内容”？</li>
+    <li>语义 ID、生成式检索、HSTU、LLM 推荐、扩散推荐各自解决什么问题，彼此如何组合？</li>
+    <li>Google、Meta、Alibaba、ByteDance、Kuaishou、Tencent 等公开材料说明了哪些可落地路径？</li>
+    <li>企业要引入 GR 时，应如何设定实验、指标、系统边界和风险控制？</li>
+  </ul>
+
+  <div class="note">
+    <div class="note-label">阅读建议</div>
+    如果读者没有推荐系统背景，先读第 2 至第 5 章；如果已经熟悉召回排序链路，可直接读第 6 至第 8 章；如果目标是产业落地，重点读第 9 至第 12 章。附录给出术语表和来源编号，可作为后续复核入口。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">02 · Boundary</div>
+  <h1>概念边界</h1>
+  <p class="lead">讨论 GR 前，必须先把“推荐系统”“生成式推荐”“生成式检索”和“LLM 推荐”拆开。概念混用会导致错误预期：把聊天式购物助手当作完整推荐系统，或把语义 ID 召回当作全部生成式推荐。</p>
+
+  <h2>四个层级</h2>
+  <table>
+    <thead><tr><th>概念</th><th>简明定义</th><th>核心对象</th><th>典型输出</th><th>常见误解</th></tr></thead>
+    <tbody>
+      <tr><td><strong>推荐系统</strong></td><td>在给定用户、上下文、候选库和业务目标下，选择并排序最合适的物品或动作。</td><td>用户、物品、上下文、反馈、策略。</td><td>候选集、排序列表、页面布局、通知、广告。</td><td>只等于一个排序模型；忽略召回、策略、实验和反馈闭环。</td></tr>
+      <tr><td><strong>生成式推荐</strong></td><td>把推荐链路中的候选、列表、解释、查询、内容或交互动作表述为生成问题。</td><td>离散 token、语义 ID、行为序列、自然语言、多模态内容。</td><td>物品 ID 序列、推荐列表、解释文本、个性化内容、任务动作。</td><td>只等于把 LLM 接到推荐页。</td></tr>
+      <tr><td><strong>生成式检索</strong></td><td>用序列模型直接生成目标文档或物品的标识，而不是先向量召回再 ANN 搜索。</td><td>文档 ID、物品 ID、语义 ID、树状 ID。</td><td>一个或多个候选标识。</td><td>一定会完全替代向量检索；现实中常与 ANN 和规则召回混合。</td></tr>
+      <tr><td><strong>LLM 推荐</strong></td><td>使用大语言模型进行用户理解、特征增强、候选生成、重排、解释、对话或仿真。</td><td>文本、行为描述、item metadata、prompt、tool。</td><td>推荐理由、候选标题、排序判断、对话回复、用户画像。</td><td>LLM 直接对全库逐项打分即可上线；现实中成本和延迟通常不允许。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>生成式推荐的四种实际含义</h2>
+  <p><strong>第一种是生成候选：</strong>模型根据用户行为序列生成下一个物品的离散标识。TIGER 把物品表示成语义 ID，再用序列到序列模型预测下一物品 ID，是这一方向的标志性工作 [S18]。</p>
+  <p><strong>第二种是生成用户行为：</strong>把用户动作当作语言，建模“下一次点击、播放、购买、停留、跳过”。Meta 的 HSTU 论文把大规模推荐表述为序列转导任务，并声称在公开和生产场景观察到随训练计算量扩展的规律 [S20]。</p>
+  <p><strong>第三种是生成推荐表达：</strong>LLM 输出解释、比较、问答、购物路径、查询改写或广告创意。它提升交互和冷启动，但对主排序链路的延迟、事实性和安全性提出更高要求。</p>
+  <p><strong>第四种是生成可消费内容：</strong>系统不只推荐已有视频、图片、商品页或广告，还能按用户偏好生成素材、摘要、封面、标题或组合商品。这是推荐和 AIGC 最深的交汇处，也是版权与生态治理最敏感的区域。</p>
+
+  <figure>
+    <svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg">
+      <defs><pattern id="dots1" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/>
+      <rect width="100%" height="100%" fill="url(#dots1)" opacity="0.55"/>
+      <text x="70" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  1</text>
+      <text x="190" y="38" fill="#504e49" font-size="13" font-family="monospace" letter-spacing="3">GR IN THE RECOMMENDER PIPELINE</text>
+      <line x1="70" y1="52" x2="930" y2="52" stroke="#1B365D" stroke-width="0.8"/>
+      <rect x="80" y="90" width="145" height="86" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1.2"/>
+      <text x="152" y="126" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="serif">用户与上下文</text>
+      <text x="152" y="154" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">画像 · 行为 · 场景</text>
+      <path d="M225 133 L280 133" stroke="#504e49" stroke-width="1.4"/>
+      <path d="M270 126 L282 133 L270 140" fill="none" stroke="#504e49" stroke-width="1.4"/>
+      <rect x="285" y="90" width="145" height="86" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.6"/>
+      <text x="357" y="126" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="serif">生成候选</text>
+      <text x="357" y="154" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">语义 ID · beam</text>
+      <path d="M430 133 L485 133" stroke="#1B365D" stroke-width="1.5"/>
+      <path d="M475 126 L487 133 L475 140" fill="none" stroke="#1B365D" stroke-width="1.5"/>
+      <rect x="490" y="90" width="145" height="86" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1.2"/>
+      <text x="562" y="126" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="serif">排序打分</text>
+      <text x="562" y="154" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">CTR · CVR · 时长</text>
+      <path d="M635 133 L690 133" stroke="#504e49" stroke-width="1.4"/>
+      <path d="M680 126 L692 133 L680 140" fill="none" stroke="#504e49" stroke-width="1.4"/>
+      <rect x="695" y="90" width="145" height="86" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.6"/>
+      <text x="767" y="126" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="serif">生成列表</text>
+      <text x="767" y="154" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">重排 · 多目标</text>
+      <path d="M767 176 L767 232" stroke="#504e49" stroke-width="1.4"/>
+      <path d="M760 222 L767 234 L774 222" fill="none" stroke="#504e49" stroke-width="1.4"/>
+      <rect x="610" y="238" width="315" height="70" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1.1"/>
+      <text x="767" y="268" text-anchor="middle" fill="#141413" font-size="22" font-weight="600" font-family="serif">解释、对话、创意与行动</text>
+      <text x="767" y="293" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">LLM · 多模态生成 · agent</text>
+      <path d="M610 273 C450 315 270 270 152 176" stroke="#B2B1AC" stroke-width="1.2" fill="none" stroke-dasharray="5 5"/>
+      <text x="276" y="298" fill="#6b6a64" font-size="14" font-family="serif">反馈闭环：曝光、点击、停留、购买、负反馈、申诉</text>
+    </svg>
+    <figcaption>GR 插入推荐系统的多个位置，而不是单点替换召回或排序。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">03 · History</div>
+  <h1>发展史</h1>
+  <p class="lead">推荐系统的发展可以理解为一条主线：系统不断寻找更好的方式表示“人、物品、上下文、反馈和目标”。生成式推荐的出现，不是跳出这条线，而是把表示学习、序列建模和基础模型能力汇合到同一个可生成接口上。</p>
+
+  <h2>从协同过滤到 GR 的阶段划分</h2>
+  <table class="compact">
+    <thead><tr><th>阶段</th><th>代表思想</th><th>关键模型或系统</th><th>解决的问题</th><th>遗留问题</th></tr></thead>
+    <tbody>
+      <tr><td>1990s</td><td>协同过滤</td><td>用户邻域、物品邻域、显式评分预测。</td><td>不用理解内容，只根据相似用户或相似物品推荐。</td><td>稀疏、冷启动、规模化和实时更新困难。</td></tr>
+      <tr><td>2003-2009</td><td>工业化相似物品与矩阵分解</td><td>Amazon item-to-item、Netflix Prize、SVD、ALS、隐式反馈 MF [S01][S02]。</td><td>把大规模用户物品矩阵压缩成低维向量，显著改善稀疏评分预测。</td><td>难表达上下文、多目标、短期兴趣和内容语义。</td></tr>
+      <tr><td>2010-2016</td><td>大规模特征工程与深度排序</td><td>LR/GBDT/FM/FFM、DSSM、Wide & Deep、YouTube DNN [S03][S04]。</td><td>将稀疏特征、交叉特征和 embedding 引入线上 CTR/CVR 预测。</td><td>手工特征重、用户兴趣常被压成定长向量。</td></tr>
+      <tr><td>2017-2020</td><td>兴趣建模和序列建模</td><td>DeepFM、NCF、DIN、DIEN、MIND、SIM、SASRec、BERT4Rec [S05-S12]。</td><td>捕捉多兴趣、兴趣演化、长行为序列和候选相关激活。</td><td>仍以判别式打分为主，物品 ID 与语义之间存在断层。</td></tr>
+      <tr><td>2018-2022</td><td>图、实时、系统规模化</td><td>PinSage、DLRM、TorchRec、Monolith [S13-S16]。</td><td>图结构、超大 embedding、近实时训练、生产平台化。</td><td>模型越大，工程复杂度越高；推荐模型 scaling law 仍不清晰。</td></tr>
+      <tr><td>2022-2024</td><td>语言化推荐与生成式检索</td><td>P5、Chat-REC、TALLRec、TIGER、HSTU [S17-S20][S25-S28]。</td><td>把任务、物品、用户和反馈转成 token 序列，探索推荐基础模型。</td><td>延迟、候选规模、无效生成、语义 ID 质量和在线稳定性。</td></tr>
+      <tr><td>2024-2026</td><td>多模态、扩散、产业 GR</td><td>PinRec、OneMall、AIGQ、TencentGR、扩散推荐综述 [S23][S24][S32-S36]。</td><td>工业数据集、广告和电商场景、生成式重排、查询生成、多模态 token。</td><td>统一评估、系统互操作、合规和生成内容生态治理。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>为什么 2023 之后 GR 突然变得重要</h2>
+  <p><strong>第一，推荐对象变复杂。</strong>短视频、直播、广告、商品、服务、搜索 query、笔记、长视频、AI 生成素材都进入同一用户时间线。单个 item ID 已经难以承载内容理解、跨域泛化和冷启动。</p>
+  <p><strong>第二，行为序列变长。</strong>Meta HSTU 论文强调大规模推荐面对高基数、异质特征和每天数百亿级用户动作，需要处理更长、更非平稳的行为序列 [S20]。这和语言模型处理长上下文的技术路线发生共振。</p>
+  <p><strong>第三，交互方式变化。</strong>用户不只点击推荐，还会用自然语言表达“帮我找适合通勤的降噪耳机”“不要再推这个主题”“给我更短的视频”。传统推荐系统擅长从隐式反馈中学习，不擅长直接理解和执行这种指令。</p>
+  <p><strong>第四，内容生产被生成模型改变。</strong>当平台可以生成标题、封面、广告创意、商品描述和短视频时，推荐系统不再只是从固定库中选择，还要决定生成什么、给谁生成、何时生成、如何评估生成后的真实价值。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">04 · Fundamentals</div>
+  <h1>推荐系统基本功</h1>
+  <p class="lead">任何 GR 方案都必须回到推荐系统基本功：目标函数、反馈数据、候选库、召回排序重排、线上实验和反馈闭环。忽略这些约束，生成模型会给出漂亮的离线样例，却很难稳定改善真实业务。</p>
+
+  <h2>推荐问题的抽象</h2>
+  <p>在时间 <code>t</code>，系统观察用户 <code>u</code>、上下文 <code>c_t</code>、历史行为 <code>H_u</code> 和候选集合 <code>I</code>，输出一个列表 <code>L_t = [i_1, i_2, ... i_k]</code>。目标不是“预测用户喜欢什么”这么简单，而是在点击、停留、转化、满意度、商家收益、内容生态、安全和长期留存之间做约束优化。</p>
+
+  <pre><code>score(u, i, c) = E[utility | user=u, item=i, context=c, history=H_u]
+ranked_list = argmax_L  Σ position_weight(j) * utility(u, L[j], c)
+subject to: policy constraints, diversity, freshness, safety, inventory, latency</code></pre>
+
+  <h2>反馈信号的层次</h2>
+  <table>
+    <thead><tr><th>信号</th><th>例子</th><th>优点</th><th>风险</th><th>GR 下的新问题</th></tr></thead>
+    <tbody>
+      <tr><td>显式反馈</td><td>评分、点赞、收藏、不感兴趣。</td><td>语义清晰，解释性强。</td><td>覆盖率低，用户表达有偏。</td><td>自然语言偏好可加入，但需要解析、记忆和冲突处理。</td></tr>
+      <tr><td>隐式反馈</td><td>曝光、点击、播放、停留、购买、跳过。</td><td>规模大，接近真实行为。</td><td>位置偏差、选择偏差、曝光偏差。</td><td>生成候选改变曝光分布，离线日志的反事实问题更严重。</td></tr>
+      <tr><td>序列反馈</td><td>一次 session 中的点击、搜索、加购、成交。</td><td>能表达短期意图和兴趣演化。</td><td>噪声、突发事件、多人共用账号。</td><td>长序列建模成本上升，需要区分稳定偏好和临时意图。</td></tr>
+      <tr><td>文本反馈</td><td>评论、搜索词、对话指令、申诉。</td><td>能表达原因和约束。</td><td>事实性、讽刺、歧义、语言差异。</td><td>LLM 可解析，但解析结果必须能回写到可控策略。</td></tr>
+      <tr><td>生成反馈</td><td>对生成解释、生成封面、生成商品组合的反应。</td><td>能直接评估生成内容价值。</td><td>新颖性与误导性混杂。</td><td>推荐系统需要同时学习“推荐什么”和“生成什么”。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>召回、排序、重排和策略层</h2>
+  <p><strong>召回</strong>从百万到十亿级候选库中取回数百到数千个候选。传统路线包括 item-to-item、向量召回、图召回、规则召回、搜索召回和热度召回。GR 的生成式检索试图让模型直接生成候选 ID，但生产上常与其他召回源融合。</p>
+  <p><strong>排序</strong>对候选进行精细打分。主流模型处理稀疏特征、连续特征、上下文、历史行为、候选特征和多目标标签。Wide & Deep、DeepFM、DIN、DIEN、DLRM 都属于这一脉络。</p>
+  <p><strong>重排</strong>关心列表整体，而非单个 item。它处理多样性、去重、疲劳、商家公平、预算、广告频控和页面结构。生成式重排把列表当作序列生成或序列决策，能更自然地表达全局约束。</p>
+  <p><strong>策略层</strong>连接模型输出和产品规则。安全、隐私、合规、广告预算、库存、冷启动扶持、内容治理和商业化目标都在这一层显性化。GR 增强模型能力，但不会取消策略层。判断推荐系统是否成熟，不能只看模型结构；真正的成熟度体现在特征和样本是否可追溯、召回源是否可解释、排序指标是否和长期价值一致、线上实验是否能隔离偏差、策略变化是否能快速回滚。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">05 · Classical and Deep Models</div>
+  <h1>经典与深度算法</h1>
+  <p class="lead">理解 GR 不能跳过传统推荐算法。许多生成式方法的目标、数据和工程接口都来自经典推荐：矩阵分解定义了协同信号，DSSM 和双塔定义了向量召回，DIN/DIEN 定义了候选相关兴趣，SASRec/BERT4Rec 定义了行为序列语言化的早期形态。</p>
+
+  <h2>经典算法族</h2>
+  <table>
+    <thead><tr><th>算法族</th><th>核心思想</th><th>代表方法</th><th>优势</th><th>局限</th></tr></thead>
+    <tbody>
+      <tr><td>邻域协同过滤</td><td>相似用户喜欢相似物品，或相似物品被相似用户喜欢。</td><td>UserCF、ItemCF、Amazon item-to-item [S01]。</td><td>直观、可解释、工程实现早期成熟。</td><td>稀疏和冷启动严重；实时重算和跨域泛化困难。</td></tr>
+      <tr><td>矩阵分解</td><td>把用户和物品映射到低维隐空间，通过内积预测偏好。</td><td>SVD、ALS、BPR、隐式反馈 MF、Netflix Prize [S02]。</td><td>协同信号强，训练和存储相对高效。</td><td>难处理复杂上下文、非线性特征和多模态内容。</td></tr>
+      <tr><td>因子分解机</td><td>用低维向量表示稀疏特征交叉。</td><td>FM、FFM、DeepFM [S05]。</td><td>适合广告和 CTR 稀疏特征场景。</td><td>高阶交互和序列兴趣需要深度结构补充。</td></tr>
+      <tr><td>Learning to Rank</td><td>把推荐看作排序优化。</td><td>Pointwise、Pairwise、Listwise、LambdaMART。</td><td>和线上列表目标更接近。</td><td>候选生成和长期价值仍需单独处理。</td></tr>
+      <tr><td>上下文与 bandit</td><td>在探索和利用之间平衡，在线学习反馈。</td><td>Contextual bandit、多臂老虎机、广告和封面测试。</td><td>适合冷启动、创意选择和动态流量。</td><td>探索成本真实存在，安全和业务约束强。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>深度推荐算法族</h2>
+  <table class="compact">
+    <thead><tr><th>方向</th><th>代表模型</th><th>解决的问题</th><th>和 GR 的关系</th></tr></thead>
+    <tbody>
+      <tr><td>宽深结合</td><td>Wide & Deep、DeepFM、xDeepFM、DCN。</td><td>记忆高频交叉，同时泛化低频组合。Google Wide & Deep 在 Google Play 场景公开验证 [S03]。</td><td>仍是判别式打分，但 embedding 与特征交叉是 GR 的基础输入。</td></tr>
+      <tr><td>神经协同过滤</td><td>NCF、AutoRec、MultVAE。</td><td>用非线性结构替代纯内积，或用生成模型重构用户行为。</td><td>VAE 类方法是早期“生成式推荐”的前史。</td></tr>
+      <tr><td>双塔召回</td><td>DSSM、YouTube candidate generation、two-tower。</td><td>用户塔和物品塔分别编码，再用向量相似度召回。</td><td>生成式检索首先挑战的就是“向量召回 + ANN”范式。</td></tr>
+      <tr><td>候选相关兴趣</td><td>DIN、DIEN、DSIN、SIM。</td><td>用户兴趣不是固定向量，而应随候选 item 激活。DIN 和 DIEN 均来自 Alibaba 公开工作 [S07][S08]。</td><td>GR 中的 prompt、query 和候选生成也需要条件化用户兴趣。</td></tr>
+      <tr><td>多兴趣召回</td><td>MIND、ComiRec。</td><td>一个用户有多个兴趣簇，用多个向量召回不同方向 [S09]。</td><td>语义 ID 可进一步把多个兴趣方向转成可生成 token。</td></tr>
+      <tr><td>序列推荐</td><td>GRU4Rec、SASRec、BERT4Rec。</td><td>将历史行为按序列建模，预测下一物品或 mask 物品 [S11][S12]。</td><td>这是 HSTU、TIGER 和自回归 GR 的直接前置技术。</td></tr>
+      <tr><td>图推荐</td><td>PinSage、LightGCN、异构图召回。</td><td>利用用户、物品、内容、社交和行为图结构。PinSage 是 Pinterest 的网页规模 GCN 推荐实践 [S13]。</td><td>图 embedding 可作为语义 ID 学习和多模态 token 化的输入。</td></tr>
+      <tr><td>超大 sparse 模型</td><td>DLRM、TorchRec、Monolith。</td><td>处理高基数稀疏特征和超大 embedding 表 [S14-S16]。</td><td>GR 若进入主链路，必须面对同等的稀疏、实时和规模问题。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>从判别式到生成式的分水岭</h2>
+  <p>传统深度推荐通常学习 <code>p(y | u, i, c)</code>：给定用户、物品和上下文，预测点击、转化或满意度。生成式推荐倾向于学习 <code>p(i | u, c)</code>、<code>p(list | u, c)</code> 或 <code>p(action | u, c, instruction)</code>：直接生成候选、列表或动作。二者不是互斥关系。生产系统更可能采用混合式：生成式召回提供一部分候选，判别式 ranker 精排，多目标重排控制最终页面。</p>
+
+  <div class="two-col">
+    <div class="mini-card">
+      <h3>判别式推荐擅长什么</h3>
+      <p>对给定候选做稳定打分，融入复杂业务特征，满足低延迟和可控上线要求。CTR、CVR、观看时长、GMV、留存等指标仍主要依赖判别式模型。</p>
+    </div>
+    <div class="mini-card">
+      <h3>生成式推荐补上什么</h3>
+      <p>减少人工召回路径，改善冷启动和长尾泛化，统一多任务表达，利用长行为序列和自然语言意图，并让系统具备解释、对话和生成内容的能力。</p>
+    </div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">06 · GR Taxonomy</div>
+  <h1>生成式推荐算法谱系</h1>
+  <p class="lead">GR 不是单一算法，而是一组把推荐问题语言化、token 化、序列化和生成化的方法。最重要的区分不是“是否用了 LLM”，而是生成对象是什么：物品标识、行为序列、列表、解释、查询、广告创意还是完整交互动作。</p>
+
+  <h2>六类主流路线</h2>
+  <table>
+    <thead><tr><th>路线</th><th>生成对象</th><th>代表工作</th><th>适用位置</th><th>主要挑战</th></tr></thead>
+    <tbody>
+      <tr><td><strong>语义 ID 生成式检索</strong></td><td>物品的离散 token 序列。</td><td>TIGER、Semantic IDs、PinRec、TencentGR [S18][S19][S23][S24]。</td><td>召回、跨域召回、冷启动。</td><td>ID 学习质量、无效 ID、beam 成本、候选覆盖、索引更新。</td></tr>
+      <tr><td><strong>序列转导式推荐</strong></td><td>下一行为、下一物品、未来 action 序列。</td><td>HSTU、M-FALCON、Meta generative recommenders [S20][S21]。</td><td>长序列行为建模、基础推荐模型。</td><td>训练成本、在线延迟、非平稳数据、系统可解释性。</td></tr>
+      <tr><td><strong>LLM 增强推荐</strong></td><td>文本画像、推荐理由、候选、排序判断、对话。</td><td>P5、Chat-REC、TALLRec、GenRec、LLMRec [S25-S30]。</td><td>冷启动、解释、对话、query 理解、特征增强。</td><td>事实性、成本、延迟、幻觉、私域数据安全。</td></tr>
+      <tr><td><strong>扩散推荐</strong></td><td>用户偏好向量、交互矩阵、候选分布、生成素材。</td><td>DiffRec、Diffusion recommender surveys [S31][S32]。</td><td>数据增强、去噪表示、序列/图推荐、内容展示。</td><td>采样效率、离散物品建模、线上服务复杂度。</td></tr>
+      <tr><td><strong>生成式重排</strong></td><td>完整列表或列表编辑动作。</td><td>Taobao generative re-ranking [S35]。</td><td>多目标列表优化、广告和电商页面。</td><td>列表级评估、约束满足、与 ranker 和策略层协调。</td></tr>
+      <tr><td><strong>生成内容推荐</strong></td><td>标题、封面、广告创意、商品描述、个性化内容。</td><td>GeneRec、GEMRec、Meta GEM 相关材料 [S17][S36][S39]。</td><td>广告创意、内容个性化、购物助手。</td><td>内容质量、版权、误导、品牌安全和生态激励。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>GR 的数据形态</h2>
+  <p>传统推荐样本通常是 <code>(user, item, context, label)</code>。GR 样本会变成序列：<code>[user tokens, context tokens, history item tokens, instruction tokens] -> [target item tokens or action tokens]</code>。一旦进入这种格式，推荐系统开始继承语言模型训练中的问题：tokenizer 设计、长度截断、mask、teacher forcing、beam search、无效 token、对齐数据和推理约束。</p>
+
+  <h2>GR 的训练目标</h2>
+  <table>
+    <thead><tr><th>目标</th><th>形式</th><th>适合场景</th><th>注意点</th></tr></thead>
+    <tbody>
+      <tr><td>下一物品预测</td><td>最大化 <code>p(SID_i | history)</code>。</td><td>序列召回、session 推荐。</td><td>离线 Recall/NDCG 不等于线上收益；要控制曝光偏差。</td></tr>
+      <tr><td>多目标行为预测</td><td>预测点击、转化、停留或多种 action token。</td><td>广告、内容流、电商。</td><td>不同目标存在冲突，需在训练和重排中显式建模。</td></tr>
+      <tr><td>文本到推荐</td><td>从自然语言需求生成候选或解释。</td><td>对话推荐、搜索推荐、购物助手。</td><td>自然语言和物品库之间要有可验证 grounding。</td></tr>
+      <tr><td>列表生成</td><td>自回归生成一组 item 或位置动作。</td><td>多样性、搭配、页面布局。</td><td>需要避免重复、无效 item 和策略约束违反。</td></tr>
+      <tr><td>去噪与重构</td><td>从加噪偏好或交互恢复真实偏好分布。</td><td>扩散推荐、鲁棒表示。</td><td>采样步数和线上延迟要可控。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <div class="note-label">核心判断</div>
+    GR 的价值不在“生成”这个词本身，而在它是否降低召回碎片化、提高长尾泛化、吸收多模态语义、利用长序列行为、支持自然语言控制，并且能在真实延迟和成本约束下通过线上实验。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">07 · Semantic IDs</div>
+  <h1>语义 ID 与生成式检索</h1>
+  <p class="lead">语义 ID 是当前 GR 最重要的技术接口之一。它解决的不是“给物品重新编号”这么简单，而是把物品从不可学习的高基数 ID，变成模型能生成、能组合、能泛化的离散语义 token。</p>
+
+  <h2>为什么原始 item ID 不适合生成</h2>
+  <p>推荐平台的 item 数可以达到百万、千万甚至更高。若把每个 item 当作一个 token，词表过大、冷启动困难、相似物品没有共享结构。若直接让 LLM 输出商品标题或视频标题，又会出现标题歧义、重复命名、库外生成和不可控召回。语义 ID 试图在两者之间折中：每个物品由若干个离散 codeword 组成，例如 <code>[18, 203, 7, 41]</code>，不同物品可共享前缀或局部 token，从而表达相似性。</p>
+
+  <h2>语义 ID 的生成方法</h2>
+  <table>
+    <thead><tr><th>方法</th><th>输入</th><th>机制</th><th>优点</th><th>风险</th></tr></thead>
+    <tbody>
+      <tr><td>RQ-VAE / 残差量化</td><td>内容 embedding、协同 embedding 或多模态 embedding。</td><td>逐层量化残差，得到固定长度 code。</td><td>TIGER 使用的经典路线，易与 Transformer seq2seq 结合 [S18]。</td><td>tokenizer 与推荐目标可能错配，热门和长尾物品用同样长度不一定高效。</td></tr>
+      <tr><td>层次聚类 / 树状 ID</td><td>物品向量或行为图表示。</td><td>按树路径生成 ID，每一层表示粗到细的语义。</td><td>便于前缀约束和分层 beam。</td><td>树结构一旦固化，新增物品和语义漂移处理困难。</td></tr>
+      <tr><td>内容派生 ID</td><td>标题、描述、图像、视频、多模态模型表示。</td><td>用内容语义生成离散 token。</td><td>冷启动强，对新物品友好。</td><td>可能缺少协同信号，热门偏好和行为模式表达不足。</td></tr>
+      <tr><td>协同派生 ID</td><td>共现、点击、购买、播放、图结构。</td><td>用交互数据学习离散 token。</td><td>贴近推荐目标。</td><td>冷启动弱，数据偏差和曝光偏差会固化到 ID。</td></tr>
+      <tr><td>双对齐 ID</td><td>多模态内容和协同信号。</td><td>同时对齐内容语义和推荐目标。</td><td>DAS 等工作试图解决内容 ID 与推荐目标错配 [S22]。</td><td>训练复杂，评价要同时看召回、泛化和在线可用性。</td></tr>
+      <tr><td>可变长 ID</td><td>物品频率、语义复杂度和 catalog 分布。</td><td>热门物品用短 ID，长尾物品用更长描述。</td><td>更贴近自然语言和 Zipf 分布 [S24]。</td><td>解码、约束和 batch 训练更复杂。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>生成式检索的典型流程</h2>
+  <ol>
+    <li>用内容、行为或多模态表示为每个 item 学习语义 ID。</li>
+    <li>把用户历史 item 序列替换为对应语义 ID 序列。</li>
+    <li>训练自回归模型或 seq2seq 模型，根据历史预测目标 item 的语义 ID。</li>
+    <li>推理时用 beam search 生成多个候选 ID，并通过字典映射回真实 item。</li>
+    <li>对无效 ID、重复候选、已曝光候选、规则过滤和策略约束做后处理。</li>
+    <li>将生成候选与双塔召回、图召回、规则召回、热度召回合并，送入 ranker。</li>
+  </ol>
+
+  <h2>优势与代价</h2>
+  <table>
+    <thead><tr><th>维度</th><th>传统向量召回</th><th>生成式检索</th><th>落地判断</th></tr></thead>
+    <tbody>
+      <tr><td>候选表达</td><td>用户向量和物品向量在同一空间近邻搜索。</td><td>模型直接生成候选语义 ID。</td><td>生成式检索更统一，但 ANN 工程成熟度仍有优势。</td></tr>
+      <tr><td>冷启动</td><td>依赖物品内容塔或规则。</td><td>内容语义 ID 可让新物品共享已有 token。</td><td>内容丰富的短视频、电商、广告更受益。</td></tr>
+      <tr><td>可解释结构</td><td>向量维度难解释。</td><td>前缀或 codeword 可对应粗粒度语义。</td><td>解释性取决于 ID 学习方式，不自动成立。</td></tr>
+      <tr><td>推理成本</td><td>编码用户向量后 ANN 检索。</td><td>自回归生成多个 token，并进行 beam。</td><td>长 ID 和大 beam 会带来延迟压力。</td></tr>
+      <tr><td>错误形态</td><td>近邻不准或索引过期。</td><td>生成无效 ID、库外 ID、重复 ID、热门坍缩。</td><td>必须有 constrained decoding 和 fallback 召回。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <div class="note-label">工程要点</div>
+    语义 ID 系统上线前应单独监控 ID 覆盖率、无效生成率、beam 去重率、新物品召回率、长尾召回率、热门集中度、前缀分布漂移、ID 重建周期和与 ANN 召回的重合度。只看 Recall@K 不足以判断可上线性。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">08 · LLM and Diffusion</div>
+  <h1>LLM、扩散与多模态推荐</h1>
+  <p class="lead">LLM 和扩散模型给推荐系统带来的不是一个统一答案，而是新的表示能力、生成能力和交互能力。它们最适合进入语义理解、冷启动、多模态内容、解释对话、用户模拟和创意生成；是否进入主链路，要由延迟、成本和可控性决定。</p>
+
+  <h2>LLM 推荐的五种模式</h2>
+  <table>
+    <thead><tr><th>模式</th><th>做法</th><th>代表工作</th><th>适合场景</th><th>主要风险</th></tr></thead>
+    <tbody>
+      <tr><td>特征增强</td><td>用 LLM 生成 item 标签、摘要、类目、知识图谱边或用户画像。</td><td>LLMRec、RLMRec 等 [S30]。</td><td>冷启动、内容理解、跨域语义。</td><td>生成标签可能不稳定，需要离线审计和版本化。</td></tr>
+      <tr><td>文本化推荐</td><td>把推荐任务改写为自然语言输入输出。</td><td>P5、GenRec、LLM-Rec [S25][S28][S29]。</td><td>统一多任务、解释、少样本。</td><td>物品 grounding 和大规模候选检索困难。</td></tr>
+      <tr><td>对话推荐</td><td>LLM 与用户多轮澄清需求，再调用检索和排序工具。</td><td>Chat-REC [S26]。</td><td>购物助手、旅游、本地生活、长决策链商品。</td><td>对话满意不等于成交；需要可控工具调用和记忆治理。</td></tr>
+      <tr><td>LLM 重排</td><td>对小候选集进行语义判断、解释或列表比较。</td><td>多篇 LLM reranking 和 instruction tuning 工作。</td><td>候选较小、解释价值高、可离线或近线处理。</td><td>成本高，难直接覆盖高 QPS 主链路。</td></tr>
+      <tr><td>用户模拟器</td><td>用 LLM 模拟用户反馈或生成交互数据。</td><td>LLM-powered simulator 相关研究。</td><td>冷启动策略、RL 环境、产品原型评估。</td><td>模拟器偏差会诱导错误优化，不能替代线上实验。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>扩散推荐的三类作用</h2>
+  <p><strong>数据工程与表示增强：</strong>扩散模型可用于去噪交互、数据增强、补全稀疏行为或提升用户物品表示。相关综述将扩散在推荐中的作用归纳为数据工程与编码、直接推荐模型、内容展示生成三类 [S31]。</p>
+  <p><strong>直接推荐模型：</strong>模型从噪声或部分行为出发，逐步恢复用户偏好或候选分布。这一方向的挑战在于离散 item、采样步数、实时服务和与现有召回排序链路融合。</p>
+  <p><strong>内容呈现生成：</strong>扩散模型能生成广告创意、商品图、封面、搭配图或个性化展示素材。此时推荐系统要优化的不只是 item 选择，还包括 presentation 选择，即同一个商品以什么图、文案、封面呈现给哪个用户。</p>
+
+  <h2>多模态推荐为什么天然适合 GR</h2>
+  <p>短视频、电商、广告和本地生活中的物品本来就不是单一 ID。一个视频包含画面、音频、字幕、标题、作者、互动图谱；一个商品包含图片、标题、参数、评价、价格、商家和物流；一条广告包含素材、落地页、预算和人群约束。多模态基础模型能把这些信号统一到语义空间，而语义 ID 或生成式模型能把这些语义空间接入推荐任务。</p>
+
+  <div class="two-col">
+    <div class="mini-card">
+      <h3>LLM 适合做控制面</h3>
+      <p>理解用户指令、生成解释、调用检索工具、维护对话状态、输出策略约束。它更像推荐系统的语义控制层，而非必然替代 ranker。</p>
+    </div>
+    <div class="mini-card">
+      <h3>多模态模型适合做表示层</h3>
+      <p>把图像、视频、文本、音频和商品属性转为可比较表示，再通过语义 ID、双塔或图模型进入召回和排序。</p>
+    </div>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">09 · International Practice</div>
+  <h1>海外大厂实践</h1>
+  <p class="lead">海外公开实践显示，GR 并未脱离传统推荐工程。Google、Meta、Amazon、Netflix 和 Pinterest 的公开材料分别代表五条线：两阶段深度推荐、超大稀疏模型、内容冷启动、多层页面个性化、图和生成式检索。</p>
+
+  <h2>Google 与 YouTube：两阶段系统到生成式检索</h2>
+  <p>Google Wide & Deep 将线性模型的记忆能力与深度网络的泛化能力结合，并在 Google Play 这类大规模 app 推荐场景中生产化 [S03]。YouTube 2016 年公开的深度推荐架构则将系统划分为 candidate generation 和 ranking 两个网络，用候选生成先从巨大视频库中取回数百个候选，再由 ranking 使用更丰富特征精排 [S04]。</p>
+  <p>TIGER 代表 Google 系研究者在生成式检索方向的探索：先为 item 学习语义 ID，再训练 Transformer 序列模型根据用户 session 生成下一 item 的语义 ID [S18]。这一思路不是把 YouTube 两阶段架构作废，而是尝试改变召回阶段的表示和检索方式。</p>
+
+  <h2>Meta：DLRM、TorchRec、HSTU 与 GEM</h2>
+  <p>Meta 在推荐系统上的公开路线长期围绕超大稀疏特征、embedding 表和生产平台。DLRM 是其用于 CTR 预测的代表性模型；TorchRec 则提供大规模 embedding 表分片、规划和并行训练能力，官方仓库说明其支持 Meta 生产级推荐模型 [S14][S15]。</p>
+  <p>HSTU 论文把推荐问题重新表述为序列转导，针对高基数、异质、非平稳的流式推荐数据设计 Hierarchical Sequential Transduction Units。论文摘要中报告了 1.5 万亿参数 HSTU-based GR、线上 A/B 指标改善和多 surface 部署等公开声明 [S20]。这说明 Meta 的 GR 不是聊天助手路线，而是直接针对长行为序列和计算扩展规律的推荐基础模型路线。</p>
+  <p>Meta 2026 年官方业务材料还提到 Generative Ads Recommendation Model（GEM），并称 2025 年 Q4 加倍用于训练最新 ads ranking model 的 GPU，使用更高效的 sequence-learning architecture，带来 Facebook ad clicks 和 Instagram conversions 的提升 [S39]。这类材料虽不是论文细节，但说明生成式和序列学习已经进入广告排序叙事。</p>
+
+  <h2>Amazon：从 item-to-item 到内容冷启动</h2>
+  <p>Amazon 2003 年 item-to-item collaborative filtering 是工业推荐史的标志：把“买了 A 的人也买 B”工程化为可扩展相似物品推荐 [S01]。在视频推荐等现代场景，Amazon Science 公开材料显示 two-tower 可结合异构 metadata，如类别、文本描述和封面图，用于冷启动标题个性化 [S40]。这条线与 GR 的关系在于：当内容 metadata 越丰富，越值得用多模态模型和语义 ID 提升新物品泛化。</p>
+
+  <h2>Netflix：多层页面个性化</h2>
+  <p>Netflix 官方帮助中心将首页推荐描述为多层个性化：选择 row、选择 row 内 title、排序 title；并强调近期互动会逐步覆盖初始偏好 [S41]。这说明成熟推荐系统不是单列表排序，而是页面结构、行级选择、内容排序和视觉呈现的组合。GR 进入 Netflix 式系统时，可能作用于标题理解、素材个性化、解释生成和页面级列表决策，而不仅是单 item 打分。</p>
+
+  <h2>Pinterest：图推荐到 PinRec</h2>
+  <p>Pinterest 的 PinSage 展示了网页规模图卷积推荐，用图结构学习 pin 和用户表示 [S13]。2025 年 PinRec 则进一步提出 outcome-conditioned multi-token generative retrieval，用于 Pinterest 产业级推荐系统 [S23]。Pinterest 场景天然多模态：图片、文本、board、query 和购物意图高度耦合，因此从图 embedding 走向语义 token 和生成式召回有清晰逻辑。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">10 · China Practice</div>
+  <h1>国内大厂实践</h1>
+  <p class="lead">国内公开材料集中在电商、广告、短视频、直播和本地化实时推荐。Alibaba 强在电商兴趣建模和生成式电商链路，ByteDance 强在实时推荐系统，Kuaishou 强在短视频、电商和多场景 GR，Tencent 公开了工业广告 GR 数据集和竞赛基准。</p>
+
+  <h2>Alibaba 与 Taobao：从兴趣网络到电商 GR</h2>
+  <p>DIN 提出候选相关的 local activation：用户历史兴趣不应压成固定向量，而应随候选广告自适应激活。论文报告使用 Alibaba 超过 20 亿样本的生产数据，并已部署到 Alibaba online display advertising system [S07]。DIEN 进一步建模兴趣抽取和兴趣演化，AAAI 页面明确写到其部署在 Taobao display advertisement system，并取得 20.7% CTR improvement [S08]。</p>
+  <p>MIND 面向 Tmall 首页召回阶段，用动态路由为一个用户学习多个兴趣向量，并公开说明已处理 Mobile Tmall App 首页主要线上流量 [S09]。SIM 则用 search-based interest model 处理 lifelong sequential behavior，把长行为检索引入 CTR 预测 [S10]。这些工作构成 Alibaba 系推荐从候选相关兴趣、多兴趣召回到长行为建模的基础。</p>
+  <p>到 2025-2026 年，淘宝公开工作开始明显进入生成式链路。AIGQ 将淘宝首页 HintQ 查询推荐做成端到端 hybrid generative architecture，面向预搜索 query recommendation [S34]。Taobao generative re-ranking 则把电商列表级多目标优化表述为生成式重排问题 [S35]。这说明电商 GR 不只生成商品，也生成 query、列表和多目标决策。</p>
+
+  <h2>ByteDance：Monolith 与实时推荐</h2>
+  <p>ByteDance Monolith 论文指出通用深度学习框架在推荐场景中面临动态稀疏特征、批训练和服务分离等问题，提出 collisionless embedding table 与在线训练架构，并声明已落地 BytePlus Recommend [S16]。它不是 GR 论文，但对 GR 落地极关键：生成式候选如果不能跟上实时兴趣变化，主链路价值会受限。</p>
+  <p>短视频推荐尤其强调分钟级甚至秒级反馈。用户连续划走、完整播放、复看、评论、关注和分享都改变当前 session 意图。GR 的长序列建模和自然语言理解必须与实时训练或近线更新结合，否则会输给更朴素但新鲜的召回和排序特征。</p>
+
+  <h2>Kuaishou：OneMall、DiffusionGS 与直播数据</h2>
+  <p>Kuaishou 公开论文显示其在电商和内容推荐中积极探索 GR。OneMall 提出面向 Kuaishou E-Commerce 的 end-to-end generative recommender family，强调 one model, more scenarios [S33]。DiffusionGS 探索 query-conditioned diffusion for generative search in Kuaishou [S37]。KuaiLive 则发布直播推荐实时交互数据集，说明直播场景对动态互动和序列反馈的特殊要求 [S38]。</p>
+  <p>快手场景的难点在于内容流、电商、直播和作者关系交织。用户不是简单购买商品，也会被主播、内容节奏、价格机制和即时互动影响。生成式推荐如果用于这里，应同时建模 item、author、live room、商品、价格和 session 状态。</p>
+
+  <h2>Tencent：TencentGR 工业广告基准</h2>
+  <p>Tencent Advertising Algorithm Challenge 2025 的论文将 GR 定义为把 collaborative identifiers 和 multi-modal content 映射到离散 token 空间，并用自回归序列模型建模用户行为。论文发布 TencentGR-1M 和 TencentGR-10M 两个去标识广告日志数据集，后者包含 1000 万用户，并区分 click 与 conversion 事件 [S24]。这是产业界少见的 all-modality generative recommendation 公开基准，对研究者理解广告 GR 很有价值。</p>
+
+  <h2>其他国内平台的公开边界</h2>
+  <p>JD、Meituan、Baidu、小红书、Bilibili 等平台也长期深耕推荐，但“生成式推荐”层面的公开一手资料分散，且部分只以会议分享、专利或非公开工程材料存在。严谨做法是不把未公开细节写成事实。本报告只在有论文、官方页面或开源材料支持时给出具体落地描述。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">11 · Engineering Playbook</div>
+  <h1>工程落地方法</h1>
+  <p class="lead">企业引入 GR，不应从“训练一个大模型”开始，而应从推荐链路中最明确的瓶颈开始：长尾召回、冷启动、多模态理解、query 推荐、解释对话、列表重排或广告创意。不同瓶颈对应完全不同的工程路线。</p>
+
+  <h2>落地路线图</h2>
+  <table>
+    <thead><tr><th>阶段</th><th>目标</th><th>关键动作</th><th>通过标准</th></tr></thead>
+    <tbody>
+      <tr><td>0. 问题定位</td><td>确认 GR 要解决的具体问题。</td><td>拆分召回不足、排序不准、冷启动差、解释差、query 低质、创意低效等问题。</td><td>能用现有日志和线上指标描述问题，而不是只说“需要大模型”。</td></tr>
+      <tr><td>1. 离线基线</td><td>建立传统强基线。</td><td>双塔召回、item-to-item、序列模型、现有 ranker、规则召回和热度召回。</td><td>GR 必须对强基线有增量，而非只击败弱 baseline。</td></tr>
+      <tr><td>2. 表示与 token 化</td><td>建立 item 语义空间。</td><td>内容 embedding、协同 embedding、多模态 embedding、RQ-VAE 或聚类 ID。</td><td>ID 覆盖、重建、长尾泛化、内容一致性和协同一致性达标。</td></tr>
+      <tr><td>3. 生成模型训练</td><td>预测候选、query、列表或解释。</td><td>构造序列样本，训练自回归模型或 LLM/adapter，设置 constrained decoding。</td><td>离线 Recall/NDCG、无效率、重复率、延迟和成本可接受。</td></tr>
+      <tr><td>4. 混合召回与重排</td><td>接入现有推荐链路。</td><td>与 ANN、图召回、规则召回合并；ranker 精排；策略层过滤。</td><td>GR 候选贡献可追踪，不破坏主链路稳定性。</td></tr>
+      <tr><td>5. 小流量线上实验</td><td>验证真实增量。</td><td>A/B、holdout、分人群分品类分析、冷启动和长尾切片。</td><td>核心指标提升且护栏指标不降；异常可回滚。</td></tr>
+      <tr><td>6. 闭环治理</td><td>长期稳定迭代。</td><td>监控漂移、无效生成、安全、库存、合规、用户反馈和模型版本。</td><td>形成版本化训练、评估、上线、回滚和审计流程。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>不同场景的优先切入点</h2>
+  <table>
+    <thead><tr><th>场景</th><th>优先 GR 方向</th><th>不建议优先做</th><th>原因</th></tr></thead>
+    <tbody>
+      <tr><td>短视频内容流</td><td>长序列行为建模、多模态语义 ID、冷启动召回。</td><td>直接用 LLM 在线重排全候选。</td><td>QPS 和延迟压力极高，实时反馈比解释更关键。</td></tr>
+      <tr><td>电商首页</td><td>多兴趣召回、query 生成、列表重排、搭配推荐。</td><td>完全替代现有 ranker。</td><td>GMV、转化、库存、商家公平和促销约束复杂。</td></tr>
+      <tr><td>广告系统</td><td>多模态广告理解、生成式创意、长序列 ads ranking。</td><td>无约束生成广告文案或落地页。</td><td>广告合规、品牌安全和转化归因要求高。</td></tr>
+      <tr><td>长视频平台</td><td>内容冷启动、封面/标题个性化、页面行级推荐。</td><td>只优化单 title 点击。</td><td>观看完成率、会员满意度和内容供给结构更重要。</td></tr>
+      <tr><td>本地生活/旅游</td><td>对话推荐、约束理解、行程或套餐生成。</td><td>只做 item 相似召回。</td><td>用户需求含预算、位置、时间、同行人和偏好约束。</td></tr>
+      <tr><td>企业内容推荐</td><td>LLM 解释、权限感知检索、个性化知识流。</td><td>黑盒生成无引用答案。</td><td>事实性、权限和审计比娱乐点击更重要。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>系统架构建议</h2>
+  <p>生产级 GR 应保持分层：离线或近线训练语义 ID 和生成模型；在线召回只生成可控候选；主 ranker 继续吸收高价值实时特征；重排层处理多样性和约束；LLM 控制层只在需要自然语言交互、解释或复杂推理时介入。这样做不是保守，而是尊重推荐系统对延迟、稳定性和可回滚性的要求。</p>
+
+  <div class="note">
+    <div class="note-label">最小可行实验</div>
+    推荐先做“生成式召回作为新增召回源”的实验：选择一个冷启动或长尾明显的垂类，为 item 学习语义 ID，训练下一物品生成模型，生成 top-N 候选后与现有召回混合。线上只看新增候选贡献、去重后覆盖、长尾曝光、核心业务指标和护栏指标。不要第一步就替换排序主模型。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">12 · Evaluation and Governance</div>
+  <h1>评估、治理与风险</h1>
+  <p class="lead">GR 的评估比传统推荐更复杂，因为它可能改变候选分布、生成内容、解释理由和用户交互路径。离线指标仍必要，但必须结合线上实验、切片分析、反事实评估和安全治理。</p>
+
+  <h2>指标体系</h2>
+  <table>
+    <thead><tr><th>层级</th><th>指标</th><th>适用对象</th><th>注意点</th></tr></thead>
+    <tbody>
+      <tr><td>召回质量</td><td>Recall@K、NDCG@K、HitRate、coverage、novelty。</td><td>生成式检索、双塔、图召回。</td><td>要看去重后贡献、库外生成和长尾切片。</td></tr>
+      <tr><td>排序质量</td><td>AUC、GAUC、logloss、calibration、NDCG。</td><td>ranker、LLM reranker。</td><td>离线排序指标容易受曝光偏差影响。</td></tr>
+      <tr><td>业务目标</td><td>CTR、CVR、GMV、观看时长、留存、订阅、广告 ROI。</td><td>线上 A/B。</td><td>短期点击可能损害长期满意度。</td></tr>
+      <tr><td>列表体验</td><td>多样性、去重、疲劳、覆盖、serendipity。</td><td>重排和页面生成。</td><td>多样性不能脱离相关性和业务目标。</td></tr>
+      <tr><td>生成质量</td><td>事实性、grounding、可读性、安全性、品牌一致性。</td><td>解释、对话、广告创意、标题封面。</td><td>需要人工审计和自动安全规则结合。</td></tr>
+      <tr><td>系统质量</td><td>延迟、吞吐、成本、失败率、回滚时间。</td><td>全链路。</td><td>GR 的 token 生成成本必须纳入主指标。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>GR 特有风险</h2>
+  <p><strong>无效生成：</strong>模型生成不存在的 item ID、过期商品、不可售库存或策略禁止内容。解决方式包括 trie 约束、候选字典校验、库存和安全过滤、fallback 召回。</p>
+  <p><strong>热门坍缩：</strong>生成模型可能过度生成高频 token，导致热门更热门、长尾更难曝光。需要监控 token 频率、item 频率、作者/商家覆盖和新物品曝光。</p>
+  <p><strong>解释错配：</strong>LLM 给出的推荐理由可能听起来合理，但并非真实排序原因。解释层必须与可验证特征、用户意图和 item 属性绑定，避免“好听但不真实”。</p>
+  <p><strong>反馈污染：</strong>生成封面、标题或广告创意会改变用户反馈，导致模型学到的是呈现方式效果，而非 item 本身价值。训练样本需要记录 presentation version。</p>
+  <p><strong>合规扩大：</strong>当系统开始生成广告、商品描述、健康建议、金融推荐或本地服务路径，责任边界从“排序展示”扩大到“内容生成和决策辅助”。</p>
+
+  <h2>A/B 实验设计</h2>
+  <table>
+    <thead><tr><th>实验对象</th><th>推荐设计</th><th>关键切片</th><th>护栏指标</th></tr></thead>
+    <tbody>
+      <tr><td>生成式召回</td><td>作为新增召回源混入，不替换主召回。</td><td>新 item、长尾 item、低活用户、新用户、垂类。</td><td>延迟、重复率、无效率、举报率、核心指标。</td></tr>
+      <tr><td>LLM 解释</td><td>只改变解释文案，保持推荐列表一致。</td><td>高价商品、低信任类目、新用户。</td><td>误导投诉、转化后退款、跳出率。</td></tr>
+      <tr><td>生成式重排</td><td>限定候选池和策略约束，比较列表级收益。</td><td>多目标冲突场景、广告/自然混排、活动页。</td><td>商家集中度、内容重复、用户疲劳。</td></tr>
+      <tr><td>生成创意</td><td>创意版本随机化，记录素材 lineage。</td><td>广告主、类目、人群、素材类型。</td><td>品牌安全、审核拒绝率、负反馈、归因波动。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">13 · Trends</div>
+  <h1>趋势判断</h1>
+  <p class="lead">2026 之后，GR 的核心竞争不会是“谁把 LLM 接入推荐页”，而是谁能把语义 ID、长序列行为、多模态内容、实时反馈、列表决策和安全治理整合进可扩展系统。</p>
+
+  <h2>十个发展趋势</h2>
+  <ol>
+    <li><strong>语义 ID 从固定长度走向自适应。</strong>热门、长尾、新物品和复杂多模态内容需要不同信息量，可变长和分层 ID 会持续发展。</li>
+    <li><strong>生成式召回与 ANN 长期共存。</strong>生成模型负责语义泛化和长尾候选，传统向量、图和规则召回负责稳定覆盖和低延迟。</li>
+    <li><strong>推荐基础模型会先在大平台内部成熟。</strong>HSTU 类路线需要海量行为序列、算力、特征系统和线上实验，小团队更适合从垂类语义 ID 或 LLM 增强开始。</li>
+    <li><strong>LLM 成为推荐控制面。</strong>它会理解意图、解释结果、维护偏好记忆、调用工具和生成约束，但主链路 ranker 不会被简单替代。</li>
+    <li><strong>多模态 token 化成为电商和短视频标配。</strong>图像、视频、文本和互动图谱会共同决定 item 表示，单纯 title embedding 不够。</li>
+    <li><strong>列表级生成会进入电商和广告。</strong>多目标优化天然是列表问题，生成式重排比逐 item 打分更容易表达组合约束。</li>
+    <li><strong>实时 GR 是关键分水岭。</strong>离线生成候选若不能快速吸收新反馈，会被实时双塔、规则召回和近线 ranker 超越。</li>
+    <li><strong>推荐和生成内容合并。</strong>广告创意、商品图、封面和标题的生成会与推荐系统共同优化，presentation 将成为样本的一等字段。</li>
+    <li><strong>评估从点击走向长期满意和生态健康。</strong>更强生成能力会放大诱导点击、信息茧房和内容同质化问题，平台必须维护长期指标。</li>
+    <li><strong>合规和可审计性成为工程门槛。</strong>生成式解释、广告创意和个性化内容需要记录来源、版本、理由、过滤规则和用户申诉路径。</li>
+  </ol>
+
+  <h2>开放问题</h2>
+  <table>
+    <thead><tr><th>问题</th><th>为什么难</th><th>可能方向</th></tr></thead>
+    <tbody>
+      <tr><td>语义 ID 如何同时对齐内容和行为？</td><td>内容相似不等于协同相似，协同相似又受曝光偏差影响。</td><td>双对齐训练、端到端可微 tokenizer、动态 ID 更新。</td></tr>
+      <tr><td>如何避免生成式召回的库外和无效输出？</td><td>自回归模型天然可能生成未注册序列。</td><td>约束解码、prefix trie、有效 ID 语言模型、后验校验。</td></tr>
+      <tr><td>推荐基础模型是否有稳定 scaling law？</td><td>推荐数据非平稳、多目标、强反馈闭环，不同于互联网文本。</td><td>公开基准、跨域数据、长期线上指标、计算量系统研究。</td></tr>
+      <tr><td>LLM 推荐如何避免幻觉？</td><td>推荐理由和排序原因容易分离。</td><td>工具调用、引用 item metadata、特征级解释、可验证 grounding。</td></tr>
+      <tr><td>生成内容如何不破坏生态？</td><td>模型可能批量生成迎合点击的低质内容。</td><td>内容来源标记、质量审核、创作者激励、长期满意度约束。</td></tr>
+      <tr><td>如何评估 agentic recommendation？</td><td>多轮交互、工具调用和长期任务目标难以用单次点击衡量。</td><td>任务成功率、用户确认、长期留存、可回放轨迹和模拟器校准。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <div class="note-label">最终判断</div>
+    GR 的近期价值主要来自增强召回、增强表示、增强交互和增强内容呈现；中期价值来自统一多场景推荐建模；长期价值才可能是推荐基础模型和推荐智能体。对多数企业，正确路线是从局部可验证增量开始，而不是直接追求端到端替代。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">14 · Appendix</div>
+  <h1>附录</h1>
+
+  <h2>A. 从 0 到 1 学习路径</h2>
+  <table>
+    <thead><tr><th>阶段</th><th>应掌握内容</th><th>建议阅读</th><th>产出检验</th></tr></thead>
+    <tbody>
+      <tr><td>入门</td><td>协同过滤、矩阵分解、隐式反馈、召回排序。</td><td>Amazon item-to-item、Netflix MF、YouTube DNN。</td><td>能手写一个双塔召回和一个简单 ranker 的训练数据格式。</td></tr>
+      <tr><td>深度推荐</td><td>Wide & Deep、DeepFM、DIN、DIEN、MIND、SASRec、BERT4Rec。</td><td>第 5 章论文列表。</td><td>能解释候选相关 attention 和多兴趣召回的差异。</td></tr>
+      <tr><td>系统工程</td><td>embedding 表、特征服务、在线训练、A/B、实时反馈。</td><td>DLRM、TorchRec、Monolith。</td><td>能画出召回、排序、重排、策略、日志闭环。</td></tr>
+      <tr><td>GR 核心</td><td>语义 ID、生成式检索、beam、约束解码、HSTU。</td><td>TIGER、HSTU、PinRec、TencentGR。</td><td>能设计一个生成式召回作为新增召回源的实验。</td></tr>
+      <tr><td>扩展方向</td><td>LLM 推荐、扩散推荐、多模态 token、agentic 推荐。</td><td>P5、Chat-REC、LLMRec、diffusion survey、FM4RecSys survey。</td><td>能判断 LLM 应进入控制层、表示层还是主链路。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>B. 术语表</h2>
+  <p><strong>语义 ID（Semantic ID）：</strong>将物品映射成一串低基数离散 token，使生成模型能输出物品标识，并在 token 结构中保留语义或协同相似性。</p>
+  <p><strong>生成式检索（Generative Retrieval）：</strong>由模型直接生成目标文档或物品标识的检索范式，区别于“编码 query 后在向量库中近邻搜索”。</p>
+  <p><strong>召回（Candidate Generation / Retrieval）：</strong>从大候选库中快速取回小候选集，为后续精排降低计算量。</p>
+  <p><strong>排序（Ranking）：</strong>对召回候选进行精细打分，通常预测点击、转化、停留或多目标效用。</p>
+  <p><strong>重排（Re-ranking）：</strong>在排序结果上做列表级优化，处理多样性、去重、策略、预算和用户疲劳。</p>
+  <p><strong>长尾（Long Tail）：</strong>互动少、曝光少或新上线的物品集合。长尾推荐质量对内容生态和冷启动很关键。</p>
+  <p><strong>曝光偏差（Exposure Bias）：</strong>日志只记录被系统展示后的反馈，未展示物品的潜在反馈不可直接观察。</p>
+  <p><strong>Presentation：</strong>同一物品的展示方式，包括封面、标题、摘要、广告创意、价格信息和解释文案。</p>
+
+  <h2>C. 来源映射</h2>
+  <table class="compact source-map">
+    <thead><tr><th>编号</th><th>来源</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr><td>S01</td><td>Amazon.com Recommendations: Item-to-Item Collaborative Filtering</td><td>工业 item-to-item 协同过滤。</td></tr>
+      <tr><td>S02</td><td>Matrix Factorization Techniques for Recommender Systems</td><td>Netflix Prize 与矩阵分解。</td></tr>
+      <tr><td>S03</td><td>Google Wide & Deep</td><td>深度排序和生产化推荐。</td></tr>
+      <tr><td>S04</td><td>Deep Neural Networks for YouTube Recommendations</td><td>两阶段推荐架构。</td></tr>
+      <tr><td>S05</td><td>DeepFM</td><td>低阶与高阶特征交互。</td></tr>
+      <tr><td>S06</td><td>Neural Collaborative Filtering</td><td>神经协同过滤。</td></tr>
+      <tr><td>S07</td><td>DIN</td><td>候选相关兴趣激活。</td></tr>
+      <tr><td>S08</td><td>DIEN</td><td>兴趣演化和淘宝广告部署声明。</td></tr>
+      <tr><td>S09</td><td>MIND</td><td>多兴趣召回和天猫首页。</td></tr>
+      <tr><td>S10</td><td>SIM</td><td>长行为序列检索式兴趣建模。</td></tr>
+      <tr><td>S11</td><td>SASRec</td><td>自注意力序列推荐。</td></tr>
+      <tr><td>S12</td><td>BERT4Rec</td><td>双向 Transformer 序列推荐。</td></tr>
+      <tr><td>S13</td><td>PinSage</td><td>Pinterest 图推荐。</td></tr>
+      <tr><td>S14</td><td>DLRM</td><td>Meta 稀疏推荐模型。</td></tr>
+      <tr><td>S15</td><td>TorchRec</td><td>Meta 大规模推荐训练库。</td></tr>
+      <tr><td>S16</td><td>Monolith</td><td>ByteDance 实时推荐系统。</td></tr>
+      <tr><td>S17</td><td>Generative Recommendation: Towards Next-generation Recommender Paradigm</td><td>GR 概念和 GeneRec。</td></tr>
+      <tr><td>S18</td><td>TIGER</td><td>语义 ID 生成式检索。</td></tr>
+      <tr><td>S19</td><td>Better Generalization with Semantic IDs</td><td>语义 ID 泛化。</td></tr>
+      <tr><td>S20</td><td>HSTU / Trillion-Parameter Sequential Transducers</td><td>Meta 生成式推荐和 scaling。</td></tr>
+      <tr><td>S21</td><td>meta-recsys/generative-recommenders</td><td>HSTU/M-FALCON 开源仓库。</td></tr>
+      <tr><td>S22</td><td>DAS</td><td>双对齐语义 ID。</td></tr>
+      <tr><td>S23</td><td>PinRec</td><td>Pinterest 产业级生成式检索。</td></tr>
+      <tr><td>S24</td><td>TencentGR</td><td>腾讯广告全模态 GR 基准。</td></tr>
+      <tr><td>S25</td><td>P5</td><td>推荐语言化统一范式。</td></tr>
+      <tr><td>S26</td><td>Chat-REC</td><td>交互式可解释 LLM 推荐。</td></tr>
+      <tr><td>S27</td><td>TALLRec</td><td>LLM 与推荐对齐。</td></tr>
+      <tr><td>S28</td><td>GenRec LLM</td><td>LLM 生成式推荐。</td></tr>
+      <tr><td>S29</td><td>LLM-Rec</td><td>prompting LLM 做个性化推荐。</td></tr>
+      <tr><td>S30</td><td>LLMRec</td><td>LLM 图增强推荐。</td></tr>
+      <tr><td>S31</td><td>Diffusion Models for Recommender Systems survey</td><td>扩散推荐分类。</td></tr>
+      <tr><td>S32</td><td>Gen-RecSys survey / FM4RecSys survey</td><td>生成模型和基础模型推荐综述。</td></tr>
+      <tr><td>S33</td><td>Kuaishou OneMall</td><td>快手电商端到端 GR。</td></tr>
+      <tr><td>S34</td><td>Taobao AIGQ</td><td>电商 query 生成推荐。</td></tr>
+      <tr><td>S35</td><td>Taobao generative re-ranking</td><td>列表级多目标生成式重排。</td></tr>
+      <tr><td>S36</td><td>GEMRec</td><td>生成模型推荐概念。</td></tr>
+      <tr><td>S37</td><td>Kuaishou DiffusionGS</td><td>扩散式生成搜索。</td></tr>
+      <tr><td>S38</td><td>KuaiLive</td><td>直播推荐实时交互数据。</td></tr>
+      <tr><td>S39</td><td>Meta AI Drives Performance 2026</td><td>GEM ads ranking 官方业务材料。</td></tr>
+      <tr><td>S40</td><td>Amazon Science two-tower video recommendation</td><td>异构 metadata 和冷启动。</td></tr>
+      <tr><td>S41</td><td>Netflix Help Center recommendation system</td><td>多层页面个性化。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+</body>
+</html>

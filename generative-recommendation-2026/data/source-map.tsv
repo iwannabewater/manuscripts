@@ -1,0 +1,42 @@
+id	title	url	role
+S01	Amazon item-to-item collaborative filtering	https://ieeexplore.ieee.org/document/1167344	Industrial item-to-item collaborative filtering
+S02	Matrix Factorization Techniques for Recommender Systems	https://www.cs.columbia.edu/~blei/fogm/2025F/readings/KorenBellVolinsky2009.pdf	Matrix factorization and Netflix Prize context
+S03	Google Wide & Deep	https://research.google/pubs/wide-deep-learning-for-recommender-systems/	Wide and deep production ranking
+S04	Deep Neural Networks for YouTube Recommendations	https://research.google.com/pubs/archive/45530.pdf	Two-stage candidate generation and ranking
+S05	DeepFM	https://www.ijcai.org/Proceedings/2017/239	Feature interaction model
+S06	Neural Collaborative Filtering	https://arxiv.org/abs/1708.05031	Neural collaborative filtering
+S07	Deep Interest Network	https://arxiv.org/abs/1706.06978	Candidate-aware interest activation
+S08	Deep Interest Evolution Network	https://ojs.aaai.org/index.php/AAAI/article/view/4545	Interest evolution and Taobao ads deployment statement
+S09	MIND at Tmall	https://arxiv.org/abs/1904.08030	Multi-interest candidate generation
+S10	SIM lifelong behavior modeling	https://arxiv.org/abs/2006.05639	Long behavior sequence interest retrieval
+S11	SASRec	https://arxiv.org/abs/1808.09781	Self-attentive sequential recommendation
+S12	BERT4Rec	https://arxiv.org/abs/1904.06690	Bidirectional Transformer sequential recommendation
+S13	PinSage	https://arxiv.org/abs/1806.01973	Pinterest graph recommendation
+S14	DLRM	https://arxiv.org/abs/1906.00091	Meta sparse recommendation model
+S15	TorchRec	https://github.com/meta-pytorch/torchrec	Meta large-scale recommendation training library
+S16	Monolith	https://arxiv.org/abs/2209.07663	ByteDance real-time recommendation system
+S17	Generative Recommendation paradigm	https://arxiv.org/abs/2304.03516	Generative recommendation concept and GeneRec
+S18	TIGER	https://arxiv.org/abs/2305.05065	Semantic ID generative retrieval
+S19	Better Generalization with Semantic IDs	https://arxiv.org/abs/2306.08121	Semantic ID generalization
+S20	HSTU sequential transducers	https://arxiv.org/abs/2402.17152	Meta generative recommendation and scaling
+S21	Meta generative recommenders repository	https://github.com/meta-recsys/generative-recommenders	HSTU and M-FALCON open source reference
+S22	DAS dual-aligned semantic IDs	https://arxiv.org/abs/2508.10584	Dual-aligned semantic IDs
+S23	PinRec	https://arxiv.org/abs/2504.10507	Pinterest industrial generative retrieval
+S24	TencentGR	https://arxiv.org/abs/2604.04976	Tencent all-modality industrial GR benchmark
+S25	P5	https://arxiv.org/abs/2203.13366	Recommendation as language processing
+S26	Chat-REC	https://arxiv.org/abs/2303.14524	Interactive explainable LLM recommendation
+S27	TALLRec	https://arxiv.org/abs/2305.00447	LLM alignment for recommendation
+S28	GenRec LLM	https://arxiv.org/abs/2307.00457	LLM generative recommendation
+S29	LLM-Rec	https://arxiv.org/abs/2307.15780	Prompting LLMs for recommendation
+S30	LLMRec	https://arxiv.org/abs/2311.00423	LLM graph augmentation for recommendation
+S31	Diffusion models for recommender systems survey	https://arxiv.org/abs/2409.05033	Diffusion recommendation taxonomy
+S32	Foundation model-powered recommender systems survey	https://arxiv.org/abs/2504.16420	Foundation model recommendation survey
+S33	Kuaishou OneMall	https://arxiv.org/abs/2601.21770	Kuaishou e-commerce end-to-end GR
+S34	Taobao AIGQ	https://arxiv.org/abs/2603.19710	E-commerce query recommendation
+S35	Taobao generative re-ranking	https://arxiv.org/abs/2505.07197	List-level generative re-ranking
+S36	GEMRec	https://arxiv.org/abs/2308.02205	Generative model recommendation concept
+S37	Kuaishou DiffusionGS	https://arxiv.org/abs/2508.17754	Query-conditioned diffusion for generative search
+S38	KuaiLive	https://arxiv.org/abs/2508.05633	Live streaming recommendation interaction data
+S39	Meta AI Drives Performance 2026	https://about.fb.com/news/2026/01/2026-ai-drives-performance/	Meta GEM ads ranking business material
+S40	Amazon Science two-tower video recommendation	https://www.amazon.science/publications/exploring-heterogeneous-metadata-for-video-recommendation-with-two-tower-model	Metadata and cold-start two-tower recommendation
+S41	Netflix recommendation system help page	https://help.netflix.com/en/node/100639	Netflix page-level personalization description
