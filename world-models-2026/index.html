@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>世界模型技术全史与产业落地报告 2026</title>
+<meta name="author" content="Winston">
+<meta name="description" content="从模型式强化学习、视频世界模拟、预测表征、机器人和自动驾驶到世界基础模型产业落地的系统性技术报告。">
+<meta name="keywords" content="世界模型, World Model, 模型式强化学习, 物理AI, 世界基础模型">
+<meta name="generator" content="Kami">
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @page {
+    size: A4;
+    margin: 18mm 20mm 20mm 20mm;
+    background: #f5f4ed;
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+    @bottom-center {
+      content: counter(page) "  ·  世界模型技术全史与产业落地报告 2026";
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8.8pt;
+      color: #6b6a64;
+    }
+  }
+  @page:first { @top-right { content: ""; } @bottom-center { content: ""; } }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper: #f5f4ed;
+    --ivory: #faf9f5;
+    --near-black: #141413;
+    --dark-warm: #3d3d3a;
+    --olive: #504e49;
+    --stone: #6b6a64;
+    --brand: #1B365D;
+    --brand-tint: #EEF2F7;
+    --border: #e8e6dc;
+    --border-strong: #d8d4c7;
+    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+  }
+  html, body { background: var(--paper); }
+  @media screen { body { max-width: 210mm; margin: 0 auto; padding: 18mm 20mm 20mm 20mm; } }
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 9.7pt;
+    line-height: 1.53;
+    letter-spacing: 0.16pt;
+    widows: 3;
+    orphans: 3;
+  }
+  .cover {
+    min-height: 241mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 29mm;
+    break-after: page;
+  }
+  .cover-eyebrow {
+    color: var(--brand);
+    font-size: 9.6pt;
+    letter-spacing: 1.1pt;
+    text-transform: uppercase;
+    margin-bottom: 18pt;
+  }
+  .cover-title {
+    font-size: 31pt;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: 0.12pt;
+    margin-bottom: 18pt;
+    max-width: 96%;
+  }
+  .cover-sub {
+    max-width: 91%;
+    color: var(--olive);
+    font-size: 12.7pt;
+    line-height: 1.56;
+  }
+  .cover-rule {
+    width: 46mm;
+    height: 2pt;
+    background: var(--brand);
+    margin: 0 0 18pt 0;
+    border-radius: 2pt;
+  }
+  .cover-meta {
+    color: var(--stone);
+    font-size: 9.6pt;
+    line-height: 1.6;
+  }
+  .cover-meta strong { color: var(--dark-warm); font-weight: 500; }
+  .toc { break-after: page; }
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: 14pt;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    gap: 8pt;
+    padding: 5.2pt 0;
+    border-bottom: 0.35pt dotted var(--border-strong);
+    font-size: 10.7pt;
+  }
+  .toc-num { min-width: 28pt; color: var(--brand); font-weight: 500; }
+  .toc-title { flex: 1; }
+  .toc-note { color: var(--stone); font-size: 8.4pt; }
+  .chapter { margin-top: 22pt; }
+  .chapter-num {
+    color: var(--brand);
+    font-size: 9.3pt;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+  }
+  h1 {
+    font-size: 21.5pt;
+    font-weight: 500;
+    line-height: 1.2;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    margin-bottom: 10pt;
+    break-after: avoid;
+  }
+  h2 {
+    font-size: 15.4pt;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 22pt 0 8pt;
+    string-set: section-title content();
+    break-after: avoid;
+  }
+  h3 {
+    color: var(--dark-warm);
+    font-size: 12.2pt;
+    font-weight: 500;
+    line-height: 1.32;
+    margin: 14pt 0 6pt;
+    break-after: avoid;
+  }
+  p { margin: 0 0 8.3pt; line-height: 1.53; }
+  .lead {
+    color: var(--dark-warm);
+    font-size: 11.2pt;
+    line-height: 1.56;
+    margin-bottom: 12pt;
+  }
+  strong { font-weight: 500; }
+  .hl { color: var(--brand); font-weight: 500; }
+  ul, ol { margin: 6pt 0 10pt 0; padding-left: 18pt; line-height: 1.5; }
+  li { margin-bottom: 2.6pt; }
+  li::marker { color: var(--brand); }
+  a { color: var(--brand); text-decoration: none; }
+  code {
+    font-family: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+    font-size: 8.2pt;
+    background: var(--ivory);
+    padding: 1pt 3pt;
+    border-radius: 2pt;
+  }
+  pre {
+    font-family: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+    font-size: 8.3pt;
+    line-height: 1.45;
+    background: var(--ivory);
+    border: 0.35pt solid var(--border);
+    border-radius: 5pt;
+    padding: 8pt 10pt;
+    margin: 10pt 0 12pt;
+    white-space: pre-wrap;
+    break-inside: avoid;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10.5pt 0 12pt;
+    font-size: 8.25pt;
+    break-inside: avoid;
+  }
+  th {
+    text-align: left;
+    color: var(--dark-warm);
+    font-weight: 500;
+    padding: 4.8pt 5.4pt;
+    border-bottom: 1pt solid var(--border-strong);
+  }
+  td {
+    padding: 3.8pt 5.4pt;
+    border-bottom: 0.3pt solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) td { background: var(--ivory); }
+  .compact th { font-size: 7.2pt; padding: 3pt 4pt; }
+  .compact td { font-size: 7.2pt; line-height: 1.34; padding: 2.6pt 4pt; }
+  .source-map { break-inside: auto; }
+  .source-map tr { break-inside: avoid; }
+  .note, .callout {
+    background: var(--ivory);
+    border-left: 1.5pt solid var(--brand);
+    border-radius: 5pt;
+    padding: 9.5pt 12pt;
+    margin: 11pt 0;
+    break-inside: avoid;
+  }
+  .note-label {
+    color: var(--brand);
+    font-size: 8.2pt;
+    letter-spacing: 0.6pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9pt;
+    margin: 11pt 0 14pt;
+  }
+  .summary-card {
+    background: var(--ivory);
+    border: 0.5pt solid var(--border);
+    border-radius: 6pt;
+    padding: 8.5pt 10pt;
+    break-inside: avoid;
+  }
+  .summary-card .num {
+    color: var(--brand);
+    font-size: 13.2pt;
+    font-weight: 500;
+    line-height: 1.15;
+    margin-bottom: 3pt;
+  }
+  .summary-card .label {
+    color: var(--stone);
+    font-size: 7.8pt;
+    letter-spacing: 0.45pt;
+    text-transform: uppercase;
+    margin-bottom: 3pt;
+  }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 11pt;
+    margin: 10pt 0;
+  }
+  .mini-card {
+    background: var(--ivory);
+    border: 0.5pt solid var(--border);
+    border-radius: 6pt;
+    padding: 9.5pt 11pt;
+    break-inside: avoid;
+  }
+  .mini-card h3 { margin-top: 0; }
+  figure { margin: 12pt 0; break-inside: avoid; }
+  figcaption { color: var(--stone); font-size: 8.3pt; text-align: center; margin-top: 5pt; }
+  svg { width: 100%; height: auto; display: block; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div>
+    <div class="cover-eyebrow">TECHNICAL REPORT · 2026</div>
+    <div class="cover-rule"></div>
+    <div class="cover-title">世界模型技术全史与产业落地报告</div>
+    <div class="cover-sub">从 Dyna、World Models、PlaNet、Dreamer、MuZero 到 Sora、Genie、Cosmos、V-JEPA、Waymo World Model 和物理 AI 的系统性报告，面向希望从 0 到 1 建立完整认知并能进入工程落地讨论的读者。</div>
+  </div>
+  <div class="cover-meta">
+    <strong>Winston</strong><br>
+    资料口径截至 2026-05-15<br>
+    Primary papers · official model pages · industrial technical reports
+  </div>
+</section>
+
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">执行摘要</span><span class="toc-note">世界模型为什么成为后 LLM 阶段的核心议题</span></div>
+  <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">概念边界</span><span class="toc-note">world model、simulator、digital twin、video model 的关系</span></div>
+  <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">发展史</span><span class="toc-note">从 Dyna 到世界基础模型</span></div>
+  <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">理论框架</span><span class="toc-note">状态、动作、动态、奖励、观测和不确定性</span></div>
+  <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">模型式强化学习算法</span><span class="toc-note">PlaNet、Dreamer、MuZero、TD-MPC、MBPO</span></div>
+  <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">视频与交互式世界模型</span><span class="toc-note">Sora、Genie、UniSim、Runway GWM</span></div>
+  <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">预测表征与 JEPA</span><span class="toc-note">I-JEPA、V-JEPA、V-JEPA 2 与非生成式路线</span></div>
+  <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">物理 AI 与机器人</span><span class="toc-note">Cosmos、RoboDreamer、IRASim、对象中心模型</span></div>
+  <div class="toc-item"><span class="toc-num">09</span><span class="toc-title">自动驾驶世界模型</span><span class="toc-note">GAIA、Waymo World Model、4D occupancy 与闭环仿真</span></div>
+  <div class="toc-item"><span class="toc-num">10</span><span class="toc-title">国内外大厂实践</span><span class="toc-note">OpenAI、DeepMind、NVIDIA、Meta、Waymo、Tencent 等</span></div>
+  <div class="toc-item"><span class="toc-num">11</span><span class="toc-title">工程落地方法</span><span class="toc-note">数据、训练、推理、闭环、仿真和上线</span></div>
+  <div class="toc-item"><span class="toc-num">12</span><span class="toc-title">评估、治理与安全</span><span class="toc-note">物理一致性、闭环有效性、风险和合规</span></div>
+  <div class="toc-item"><span class="toc-num">13</span><span class="toc-title">趋势判断</span><span class="toc-note">2026 之后的主线和开放问题</span></div>
+  <div class="toc-item"><span class="toc-num">14</span><span class="toc-title">附录</span><span class="toc-note">学习路径、术语表和来源映射</span></div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">01 · Executive Summary</div>
+  <h1>执行摘要</h1>
+  <p class="lead">世界模型（World Model）是智能体关于环境如何变化的内部模型。它不仅回答“现在看到了什么”，更回答<span class="hl">如果我采取某个动作，接下来会发生什么</span>。从强化学习到机器人，从视频生成到自动驾驶，世界模型的共同目标都是把感知、预测、规划和控制连接起来。</p>
+
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="label">Finding 01</div>
+      <div class="num">世界模型不是视频模型的同义词</div>
+      <p>视频生成模型可以是世界模型的候选形态，但只有当它能保持状态、接受动作、预测后果、支持规划或闭环评估时，才进入严格意义的世界模型讨论。</p>
+    </div>
+    <div class="summary-card">
+      <div class="label">Finding 02</div>
+      <div class="num">两条主线正在汇合</div>
+      <p>模型式强化学习学习 latent dynamics 用于规划；视频/物理世界基础模型学习大规模视觉动态用于模拟。2024 之后，两条线在机器人和自动驾驶中开始合流。</p>
+    </div>
+    <div class="summary-card">
+      <div class="label">Finding 03</div>
+      <div class="num">闭环比画质重要</div>
+      <p>开放式视频样例很容易误导。机器人和自动驾驶关心的是 action-conditioned prediction、counterfactual rollout、sim-to-real transfer 和策略评估相关性。</p>
+    </div>
+    <div class="summary-card">
+      <div class="label">Finding 04</div>
+      <div class="num">JEPA 代表非生成式路线</div>
+      <p>Meta V-JEPA / V-JEPA 2 不重建像素，而在抽象表征空间预测缺失或未来状态，目标是避免把容量浪费在不可控的低层细节上 [S14-S16]。</p>
+    </div>
+    <div class="summary-card">
+      <div class="label">Finding 05</div>
+      <div class="num">产业落地先从仿真和数据开始</div>
+      <p>Waymo World Model、NVIDIA Cosmos、Wayve GAIA 和 IRASim 都把世界模型用于生成场景、训练数据、策略评估或边界案例，而不是直接替代控制器。</p>
+    </div>
+    <div class="summary-card">
+      <div class="label">Finding 06</div>
+      <div class="num">安全边界更硬</div>
+      <p>世界模型会影响真实世界决策。错一次不是生成一张坏图，而可能让机器人撞击、车辆误判、工业流程停摆或安全评估失真。</p>
+    </div>
+  </div>
+
+  <h2>本文回答的核心问题</h2>
+  <ul>
+    <li>世界模型和普通感知模型、视频生成模型、仿真器、数字孪生有什么本质区别？</li>
+    <li>Dyna、World Models、PlaNet、Dreamer、MuZero、TD-MPC、JEPA、Sora、Genie、Cosmos 各自解决什么问题？</li>
+    <li>OpenAI、Google DeepMind、NVIDIA、Meta、Waymo、Wayve、Runway、World Labs、Tencent、ByteDance 等公开实践说明了哪些可落地路径？</li>
+    <li>企业要建设世界模型能力，应如何选择数据、架构、评估指标、闭环实验和风险控制？</li>
+  </ul>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">02 · Boundary</div>
+  <h1>概念边界</h1>
+  <p class="lead">世界模型这个词在 2024 之后被广泛使用，也因此变得模糊。严谨讨论必须先区分四类系统：预测表征、动作条件动态模型、交互式生成环境和工程仿真平台。</p>
+
+  <h2>四个相邻概念</h2>
+  <table>
+    <thead><tr><th>概念</th><th>定义</th><th>核心能力</th><th>不是它的情况</th></tr></thead>
+    <tbody>
+      <tr><td><strong>世界模型</strong></td><td>学习环境状态和动态，使智能体能预测未来、评估动作、规划或生成可交互经验。</td><td>状态表示、动态预测、动作条件、rollout、不确定性、规划接口。</td><td>只做静态识别、只做单帧生成、只输出语言描述。</td></tr>
+      <tr><td><strong>视频生成模型</strong></td><td>根据文本、图像或视频条件生成未来画面。</td><td>视觉真实感、时序一致性、运动生成。</td><td>不能控制动作、不能保持可用状态、不能用于闭环规划时，只是生成模型。</td></tr>
+      <tr><td><strong>仿真器</strong></td><td>人为或数据驱动构建的环境，用于训练、测试或评估策略。</td><td>可重复、可控、可测、可插入策略。</td><td>传统物理引擎或规则仿真不一定是学习到的世界模型。</td></tr>
+      <tr><td><strong>数字孪生</strong></td><td>对具体资产、工厂、城市、车辆或流程的数字映射，常接入传感器和运营数据。</td><td>监控、预测维护、远程调试、运营决策。</td><td>如果只同步状态、不学习可泛化动态，就不是 AI world model。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>世界模型的最低能力集合</h2>
+  <p>一个系统要被严肃地称为世界模型，至少应满足三个条件：第一，有内部状态或表征，而不是只输出一段视频；第二，能预测未来状态或观测，并能表达某种动作、控制、目标或条件；第三，预测结果能服务于规划、控制、评估、数据生成或交互式环境，而不是纯展示。</p>
+
+  <figure>
+    <svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg">
+      <defs><pattern id="dots1" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/>
+      <rect width="100%" height="100%" fill="url(#dots1)" opacity="0.55"/>
+      <text x="70" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  1</text>
+      <text x="190" y="38" fill="#504e49" font-size="13" font-family="monospace" letter-spacing="3">WORLD MODEL LOOP</text>
+      <line x1="70" y1="52" x2="930" y2="52" stroke="#1B365D" stroke-width="0.8"/>
+      <rect x="88" y="96" width="152" height="84" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1.2"/>
+      <text x="164" y="130" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="serif">观测</text>
+      <text x="164" y="157" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">video · sensor · state</text>
+      <path d="M240 138 L304 138" stroke="#504e49" stroke-width="1.4"/>
+      <path d="M294 131 L306 138 L294 145" fill="none" stroke="#504e49" stroke-width="1.4"/>
+      <rect x="310" y="96" width="152" height="84" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.6"/>
+      <text x="386" y="130" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="serif">状态表征</text>
+      <text x="386" y="157" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">latent · object · 3D</text>
+      <path d="M462 138 L526 138" stroke="#1B365D" stroke-width="1.5"/>
+      <path d="M516 131 L528 138 L516 145" fill="none" stroke="#1B365D" stroke-width="1.5"/>
+      <rect x="532" y="96" width="152" height="84" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.6"/>
+      <text x="608" y="130" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="serif">动态预测</text>
+      <text x="608" y="157" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">s, a -> s'</text>
+      <path d="M684 138 L748 138" stroke="#504e49" stroke-width="1.4"/>
+      <path d="M738 131 L750 138 L738 145" fill="none" stroke="#504e49" stroke-width="1.4"/>
+      <rect x="754" y="96" width="152" height="84" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1.2"/>
+      <text x="830" y="130" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="serif">规划控制</text>
+      <text x="830" y="157" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">MPC · policy · tree</text>
+      <path d="M830 180 C780 252 610 282 420 260 C280 244 182 210 164 180" stroke="#B2B1AC" stroke-width="1.2" fill="none" stroke-dasharray="5 5"/>
+      <text x="500" y="274" text-anchor="middle" fill="#6b6a64" font-size="15" font-family="serif">闭环：动作改变世界，世界反馈新观测，模型继续校正</text>
+    </svg>
+    <figcaption>世界模型的核心不是“生成画面”，而是把观测、状态、动态和行动接成可闭环的预测系统。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">03 · History</div>
+  <h1>发展史</h1>
+  <p class="lead">世界模型的发展史不是一条单线。强化学习从一开始就关心“学一个模型来规划”，计算机视觉长期关心“从视频学习世界动态”，机器人关心“能否在仿真中安全学习”，生成式 AI 则把视觉模拟扩展到互联网规模。2024 之后，这些方向开始合并成物理 AI 和空间智能叙事。</p>
+
+  <h2>阶段划分</h2>
+  <table class="compact">
+    <thead><tr><th>阶段</th><th>代表思想</th><th>代表工作</th><th>解决的问题</th><th>遗留问题</th></tr></thead>
+    <tbody>
+      <tr><td>1990s</td><td>学习、规划和反应一体化。</td><td>Dyna [S01]。</td><td>把真实经验和模型生成经验都用于策略改进。</td><td>早期模型简单，难处理高维观测和复杂动态。</td></tr>
+      <tr><td>2000s-2017</td><td>模型式 RL 与深度视觉前夜。</td><td>Gaussian process dynamics、PILCO、model predictive control、video prediction。</td><td>提高样本效率，让 agent 在模型中试错。</td><td>模型误差会被规划放大，图像空间预测昂贵。</td></tr>
+      <tr><td>2018-2020</td><td>latent world model 成型。</td><td>World Models、PlaNet、Dreamer、MuZero [S02-S06]。</td><td>把高维像素压到 latent state，在 latent 空间预测和规划。</td><td>跨任务泛化有限，真实机器人和开放世界难度仍高。</td></tr>
+      <tr><td>2021-2023</td><td>可扩展模型式控制。</td><td>DreamerV3、TD-MPC2、EfficientZero、IRIS [S06-S11]。</td><td>稳定训练、跨域统一配置、Transformer 世界模型和连续控制扩展。</td><td>世界模型仍主要服务封闭 benchmark，和互联网视频/物理数据割裂。</td></tr>
+      <tr><td>2024</td><td>视频生成转向世界模拟。</td><td>Sora、Genie、V-JEPA、UniSim [S14-S20][S29]。</td><td>大规模视频数据带来长时序视觉动态和交互环境生成可能。</td><td>画质不等于物理正确，缺少可靠 action grounding 和闭环评估。</td></tr>
+      <tr><td>2025-2026</td><td>世界基础模型和物理 AI。</td><td>Cosmos、Genie 3、V-JEPA 2、Waymo World Model、GWM-1、HunyuanWorld、IRASim [S16][S21-S28][S35][S40-S45]。</td><td>将世界模型用于机器人数据、自动驾驶仿真、3D 世界生成、实时交互和空间智能。</td><td>可验证物理一致性、因果干预、长时记忆、安全和成本仍是瓶颈。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>为什么现在重新爆发</h2>
+  <p><strong>第一，语言模型触及物理边界。</strong>LLM 擅长符号、知识和对话，但它们缺少直接的几何、动态和动作后果经验。机器人、自动驾驶和工业控制不能只靠语言推理。</p>
+  <p><strong>第二，视频数据成为新的训练燃料。</strong>互联网视频、车载传感器、机器人演示、游戏轨迹和 3D 场景数据共同提供了“世界如何变化”的样本。Sora 技术报告把视频生成模型称为 world simulators 的候选路径 [S18]。</p>
+  <p><strong>第三，闭环仿真比真实试错便宜。</strong>自动驾驶极端场景、机器人失败动作和工业异常都很难靠真实世界反复采集。Waymo World Model、Cosmos、GAIA 和 IRASim 的共同价值在于降低稀有场景和策略评估的成本 [S22-S25][S31-S35][S40]。</p>
+  <p><strong>第四，生成式模型开始支持控制。</strong>Genie 从未标注视频学习可交互环境，Genie 3 官方页面将其定位为实时、可交互的世界模型 [S19-S21]。这代表视频生成从“看起来像未来”走向“能被动作改变”。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">04 · Theory</div>
+  <h1>理论框架</h1>
+  <p class="lead">世界模型可以用一个简单问题刻画：给定历史观测和动作，模型能否预测未来，并让智能体基于这些预测选择更好的动作。不同路线的差异，主要在状态空间、动态建模、奖励建模、规划方式和不确定性处理。</p>
+
+  <h2>基本形式</h2>
+  <pre><code>state_t = encode(observation_<=t, action_<t)
+next_state ~ dynamics(state_t, action_t)
+observation_pred ~ decoder(next_state)        # optional
+reward_pred, value_pred = heads(next_state)
+action_t = planner_or_policy(world_model, state_t, objective)</code></pre>
+
+  <h2>六个核心组件</h2>
+  <table>
+    <thead><tr><th>组件</th><th>问题</th><th>常见实现</th><th>失败形态</th></tr></thead>
+    <tbody>
+      <tr><td>状态表示</td><td>什么信息需要被记住？</td><td>VAE latent、RSSM state、object slots、BEV/occupancy、3D Gaussian、JEPA embedding。</td><td>压缩掉任务相关因素，或保留太多无关像素细节。</td></tr>
+      <tr><td>动态模型</td><td>动作后世界如何变化？</td><td>RNN/Transformer transition、diffusion dynamics、latent flow、neural simulator。</td><td>短期准确但长期漂移，接触、遮挡、碰撞和多智能体互动失真。</td></tr>
+      <tr><td>观测模型</td><td>是否需要重建画面？</td><td>decoder、video diffusion、occupancy decoder、sensor simulator。</td><td>画面漂亮但状态错误，或低层细节占用过多容量。</td></tr>
+      <tr><td>奖励/价值模型</td><td>未来好坏如何衡量？</td><td>reward head、value head、cost map、constraint score、human preference。</td><td>reward hacking，模拟器中成功、真实世界失败。</td></tr>
+      <tr><td>规划器</td><td>如何利用预测选择动作？</td><td>MPC、CEM、MCTS、trajectory optimization、imagined actor-critic。</td><td>模型误差被规划器放大，短视或过度利用模型漏洞。</td></tr>
+      <tr><td>不确定性</td><td>模型什么时候不知道？</td><td>ensemble、stochastic latent、Bayesian head、OOD detector、calibration。</td><td>对未见场景过度自信，安全边界被错误预测击穿。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>三种建模空间</h2>
+  <p><strong>像素空间</strong>直观但昂贵，适合需要直接评估视觉结果的生成、仿真和人类审查。Sora、GAIA、Genie、IRASim、HunyuanWorld 更接近这一类，但通常会在内部使用压缩 latent。</p>
+  <p><strong>潜变量空间</strong>把高维观测压缩成任务相关状态，再在 latent 中做动态预测。PlaNet、Dreamer 和 TD-MPC 都依赖这一思想。它更适合控制和规划，因为规划器不需要每一步都还原高清画面。</p>
+  <p><strong>结构化空间</strong>显式表示对象、关系、地图、occupancy、BEV、场景图或 3D primitive。机器人和自动驾驶常需要这种空间，因为碰撞、可达性、遮挡和几何约束不能只靠全局向量表达。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">05 · Model-Based RL</div>
+  <h1>模型式强化学习算法</h1>
+  <p class="lead">模型式强化学习是世界模型最清晰的算法源头。它的核心承诺是样本效率：真实交互昂贵，智能体应在学到的模型中想象、规划和试错。但它的核心风险也一直存在：模型不准时，规划会系统性利用模型漏洞。</p>
+
+  <h2>代表算法</h2>
+  <table>
+    <thead><tr><th>算法</th><th>核心思想</th><th>贡献</th><th>局限</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Dyna</strong></td><td>用真实经验学习模型，再用模型生成经验更新策略 [S01]。</td><td>奠定学习、规划、反应一体化框架。</td><td>早期模型与状态空间较简单，难处理图像和复杂控制。</td></tr>
+      <tr><td><strong>World Models</strong></td><td>VAE 编码视觉，RNN 预测 latent dynamics，小控制器在模型表征上决策 [S02]。</td><td>把神经世界模型概念推向现代深度学习社区。</td><td>主要验证在较小环境，控制器和模型分离较强。</td></tr>
+      <tr><td><strong>PlaNet</strong></td><td>学习 RSSM latent dynamics，从像素观测中做 latent planning [S03]。</td><td>证明从图像中学习潜动态并在线规划可行。</td><td>规划开销和长时任务扩展仍受限。</td></tr>
+      <tr><td><strong>Dreamer</strong></td><td>在 world model 内想象轨迹，用 actor-critic 学策略。DreamerV3 强调跨 150+ 任务的统一配置 [S06][S07]。</td><td>把 latent imagination 训练成高性能通用 RL 框架。</td><td>真实机器人、稀有安全约束和开放环境仍需专门处理。</td></tr>
+      <tr><td><strong>MuZero</strong></td><td>不学习可还原环境规则，只学习用于搜索的表示、动态、奖励和价值 [S04][S05]。</td><td>在棋类和 Atari 中展示 learned model + MCTS 的强大组合。</td><td>依赖搜索和自博弈/离散动作优势，直接迁移到连续物理世界不简单。</td></tr>
+      <tr><td><strong>MBPO</strong></td><td>用短模型 rollout 扩充 model-free policy optimization [S09]。</td><td>承认模型长 rollout 不可靠，用短程模型提升样本效率。</td><td>需要控制模型偏差和真实数据比例。</td></tr>
+      <tr><td><strong>TD-MPC2</strong></td><td>在隐式 latent world model 中做短时 MPC，并结合 temporal-difference 学习 [S08]。</td><td>展示单一超参和更大模型在多域连续控制中的扩展潜力。</td><td>仍主要面向连续控制 benchmark，和互联网视频世界模型尚未完全合流。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>模型式 RL 的关键取舍</h2>
+  <table>
+    <thead><tr><th>取舍</th><th>保守路线</th><th>激进路线</th><th>工程判断</th></tr></thead>
+    <tbody>
+      <tr><td>预测什么</td><td>只预测 reward/value 或 compact latent。</td><td>预测完整视频、传感器或 3D 场景。</td><td>控制优先时不必重建世界；仿真和审查需要可视化。</td></tr>
+      <tr><td>规划多远</td><td>短 horizon，频繁重规划。</td><td>长 rollout 和开放式想象。</td><td>模型误差随时间累积，安全场景优先短时闭环。</td></tr>
+      <tr><td>模型如何使用</td><td>作为辅助数据或评估器。</td><td>完全在模型中训练策略。</td><td>真实系统通常先让世界模型做数据增强和边界案例评估。</td></tr>
+      <tr><td>不确定性处理</td><td>ensemble 与 OOD guard。</td><td>单模型自信生成。</td><td>机器人和车必须知道自己不知道。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">06 · Video and Interactive Worlds</div>
+  <h1>视频与交互式世界模型</h1>
+  <p class="lead">Sora 之后，视频生成被重新解释为通向世界模拟的路径。但视频世界模型的判断标准不是单纯画质，而是长时一致性、可控性、动作条件、状态记忆、几何稳定性和物理可验证性。</p>
+
+  <h2>代表系统</h2>
+  <table>
+    <thead><tr><th>系统</th><th>公开定位</th><th>世界模型意义</th><th>边界</th></tr></thead>
+    <tbody>
+      <tr><td><strong>OpenAI Sora</strong></td><td>OpenAI 技术报告标题即为 Video generation models as world simulators [S18]。</td><td>统一视觉数据表示，生成长时、多尺度视频，展示视觉模拟能力。</td><td>报告也明确承认作为 simulator 仍有局限，包括长时不一致和对象异常。</td></tr>
+      <tr><td><strong>Google DeepMind Genie</strong></td><td>从未标注互联网视频中学习 generative interactive environments [S19][S20]。</td><td>把视频生成推进到“可交互环境”，可由动作控制。</td><td>早期 Genie 更偏 2D game-like world，和真实物理场景仍有距离。</td></tr>
+      <tr><td><strong>Genie 3</strong></td><td>DeepMind 官方页面称其为实时、交互式、photorealistic world model [S21]。</td><td>强调实时控制、长期一致性和世界记忆，是视频世界模型产业化的重要节点。</td><td>公开页面不等同于完整技术论文，具体训练和评测细节需继续跟踪。</td></tr>
+      <tr><td><strong>UniSim</strong></td><td>学习 interactive real-world simulator，将不同数据源拼接为可交互经验 [S29][S30]。</td><td>把静态图像、机器人动作和导航数据组合成模拟器，用于训练 policy。</td><td>通用性取决于数据覆盖和动作语义对齐。</td></tr>
+      <tr><td><strong>Runway GWM-1</strong></td><td>Runway 将其称为 General World Model，面向实时模拟、机器人 API 和 avatar/世界生成 [S26][S27]。</td><td>说明视频生成公司正在把模型从内容创作扩展到交互模拟。</td><td>公开材料偏产品研究介绍，严肃评估仍需闭环任务指标。</td></tr>
+      <tr><td><strong>World Labs Marble</strong></td><td>官方文档称 Marble 由 multimodal world models 驱动，可重建、生成和模拟 3D worlds [S28]。</td><td>把世界模型和空间智能、可编辑 3D 环境连接起来。</td><td>创作型 3D world 与机器人可用 world model 是相邻但不同的问题。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>视频世界模型的技术难点</h2>
+  <p><strong>时序一致性：</strong>模型必须记住对象存在、位置、身份和交互历史。短视频样例很容易掩盖长时漂移。</p>
+  <p><strong>几何一致性：</strong>相机移动、遮挡、镜面、透明物体和可变形物体会暴露模型是否真的理解空间结构。</p>
+  <p><strong>动作 grounding：</strong>如果输入动作是“向左转”“夹爪闭合”“刹车”，模型必须把动作映射到正确的视觉和物理后果。</p>
+  <p><strong>可干预性：</strong>世界模型不能只补全最可能未来，还要能回答反事实问题：如果这个物体移动、车辆减速、机器人换一个抓取点，结果如何。</p>
+  <p><strong>可评估性：</strong>画质指标不能替代任务指标。机器人和自动驾驶需要策略成功率、碰撞率、闭环轨迹、仿真和真实表现的相关性。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">07 · JEPA</div>
+  <h1>预测表征与 JEPA</h1>
+  <p class="lead">JEPA 路线代表对像素生成的反思：智能体未必需要重建每个像素，而应在抽象表征空间预测世界的可行动结构。这个思想和人类认知直觉接近，也和机器人控制中的任务相关表示相吻合。</p>
+
+  <h2>JEPA 的位置</h2>
+  <p>Yann LeCun 在 A Path Towards Autonomous Machine Intelligence 中把世界模型视为智能系统的核心模块，并主张在抽象表征中预测，而不是在像素空间重建全部细节 [S12]。I-JEPA 将该思路用于图像自监督学习，V-JEPA 扩展到视频，V-JEPA 2 则在官方材料中被明确称为 world model，并用于物理理解和零样本机器人规划探索 [S13-S17]。</p>
+
+  <h2>生成式路线与 JEPA 路线对比</h2>
+  <table>
+    <thead><tr><th>维度</th><th>生成式视频世界模型</th><th>JEPA / latent predictive route</th><th>落地判断</th></tr></thead>
+    <tbody>
+      <tr><td>训练目标</td><td>预测像素、视频 token 或 latent video。</td><td>预测目标区域或未来状态的抽象 embedding。</td><td>像素生成适合仿真和人类检查，JEPA 适合表示和控制。</td></tr>
+      <tr><td>容量使用</td><td>需要解释纹理、光照、背景和所有可见细节。</td><td>可忽略任务无关细节，聚焦语义和动态。</td><td>机器人控制不一定需要高清画面。</td></tr>
+      <tr><td>可视化</td><td>天然生成视频，易展示。</td><td>表征不可直接观看，需要 decoder 或下游任务评估。</td><td>产品展示和工程评估的指标不同。</td></tr>
+      <tr><td>物理推理</td><td>依赖数据和模型规模形成隐式动态。</td><td>希望通过抽象预测获得更稳定的因果结构。</td><td>两条路线可能融合：生成用于仿真，JEPA 用于控制表征。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>V-JEPA 2 的产业意义</h2>
+  <p>Meta V-JEPA 2 官方博客称模型为 1.2B 参数 world model，并强调其在视觉理解、预测、物理推理和零样本机器人规划方面的能力 [S16]。这说明世界模型竞争并非只有“谁能生成更逼真视频”，还包括“谁能学到可迁移、可规划、可用于行动的表征”。</p>
+
+  <div class="note">
+    <div class="note-label">路线判断</div>
+    生成式路线和 JEPA 路线不应被看成二选一。未来系统很可能同时包含可视化生成器、抽象动态模型、对象/几何状态和安全约束模型；不同模块服务不同层级的预测与规划。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">08 · Physical AI and Robotics</div>
+  <h1>物理 AI 与机器人</h1>
+  <p class="lead">机器人是世界模型最严格的检验场之一。因为机器人不仅要看懂世界，还要用身体改变世界。接触、摩擦、遮挡、柔性物体、工具使用和多步任务都会放大世界模型误差。</p>
+
+  <h2>机器人世界模型的典型用途</h2>
+  <table>
+    <thead><tr><th>用途</th><th>做法</th><th>代表材料</th><th>核心风险</th></tr></thead>
+    <tbody>
+      <tr><td>策略训练</td><td>在学到的 simulator 中训练高层或低层 policy。</td><td>UniSim 使用模拟经验训练 vision-language planner 和 RL policy [S29][S30]。</td><td>sim-to-real gap 和动作语义错位。</td></tr>
+      <tr><td>视觉想象</td><td>生成机器人执行动作后的未来视频或计划。</td><td>RoboDreamer 将指令分解为组合 primitive 来生成视频计划 [S39]。</td><td>想象看似合理，但可能不可执行。</td></tr>
+      <tr><td>策略评估</td><td>用世界模型代替真实环境评估候选策略。</td><td>IRASim 项目页报告其 policy evaluation 与 ground-truth simulator 有强相关性 [S40]。</td><td>评估器偏差会选择错误策略。</td></tr>
+      <tr><td>对象中心探索</td><td>显式建模对象和交互关系，引导探索。</td><td>FOCUS 面向机器人 manipulation 学习 object-centric world model [S38]。</td><td>对象分割和关系抽取在真实场景中不稳定。</td></tr>
+      <tr><td>合成数据</td><td>生成罕见姿态、接触和物体组合。</td><td>Cosmos、IRASim、视频世界模型均可作为数据扩增来源 [S22-S25][S40]。</td><td>合成数据分布偏差会污染训练。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>NVIDIA Cosmos：物理 AI 平台化</h2>
+  <p>NVIDIA 将 Cosmos 定位为面向 physical AI 的 world foundation model platform，包含世界基础模型、视频数据处理、评估和后训练框架 [S22-S24]。这一路线的意义在于把世界模型从单篇论文推进到平台：开发者不只需要模型权重，还需要数据清洗、post-training、评估、推理和生成数据管线。</p>
+
+  <h2>机器人落地的现实边界</h2>
+  <p>机器人世界模型不能只做“下一帧预测”。实际系统需要知道力、接触、可达性、工具约束、失败恢复和安全停止。一个能生成漂亮机械臂视频的模型，如果不能预测夹爪是否真正抓住物体，不能评估碰撞风险，不能在物体滑落时更新状态，就仍然不能承担核心控制闭环。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">09 · Autonomous Driving</div>
+  <h1>自动驾驶世界模型</h1>
+  <p class="lead">自动驾驶是世界模型最具产业价值的场景之一。核心原因不是视频生成，而是闭环仿真、边界案例、传感器一致性、多智能体交互和安全验证。真实道路无法反复制造稀有危险场景，世界模型可以降低这部分成本。</p>
+
+  <h2>自动驾驶世界模型的层级</h2>
+  <table>
+    <thead><tr><th>层级</th><th>建模对象</th><th>输出</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr><td>传感器层</td><td>相机、LiDAR、radar 或多模态传感器。</td><td>未来传感器观测或可控场景。</td><td>感知训练、仿真回放、极端天气。</td></tr>
+      <tr><td>BEV / occupancy 层</td><td>3D 空间占据、道路结构、动态对象。</td><td>4D occupancy、轨迹、可通行区域。</td><td>规划、碰撞预测、安全约束。</td></tr>
+      <tr><td>行为层</td><td>其他车辆、行人、骑行者和交通参与者。</td><td>交互式轨迹和意图。</td><td>多智能体闭环仿真。</td></tr>
+      <tr><td>场景生成层</td><td>道路、天气、异常事件、长尾场景。</td><td>可控 synthetic scenario。</td><td>边界案例和回归测试。</td></tr>
+      <tr><td>策略评估层</td><td>自动驾驶系统在模拟世界中的行为。</td><td>安全指标、舒适性、规则遵守。</td><td>上线前验证和快速迭代。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>代表实践</h2>
+  <p><strong>Wayve GAIA 系列</strong>把自动驾驶世界模型表述为 video、text 和 action 条件下的生成系统。GAIA-1 论文和官方材料强调可生成真实驾驶场景，并支持对 ego-vehicle 行为和场景特征进行细粒度控制 [S31-S33]。GAIA-2 进一步走向 controllable multi-view generation [S34]。</p>
+  <p><strong>Waymo World Model</strong>是 2026 年最明确的产业案例之一。Waymo 官方博客称其为面向自动驾驶仿真的 frontier generative model，用于大规模、逼真 simulation，并将罕见边界案例纳入训练和验证 [S35]。Waymo 此前也公开了 Waymax 作为轻量级自动驾驶研究仿真器 [S36]。</p>
+  <p><strong>自动驾驶综述</strong>将世界模型分为未来物理世界生成、智能体行为规划、预测与规划交互等层级，并覆盖 image、BEV、occupancy grid、point cloud 和 diffusion 等方法 [S37]。这说明自动驾驶世界模型不等同于车载视频生成，而是一个从传感器到规划的多层系统。</p>
+
+  <div class="note">
+    <div class="note-label">安全判断</div>
+    自动驾驶世界模型最危险的失败不是画质差，而是让 policy 在模拟中学到现实不存在的捷径，或让安全评估低估稀有场景风险。因此必须验证 open-loop 预测、closed-loop 交互、真实道路回归和人工安全审查之间的一致性。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">10 · Industrial Practice</div>
+  <h1>国内外大厂实践</h1>
+  <p class="lead">公开材料显示，世界模型产业化正在沿四条路径展开：视频世界模拟、物理 AI 平台、自动驾驶仿真、3D/空间世界生成。不同公司口径不同，但共同点是从内容生成走向可交互、可控制、可评估的环境。</p>
+
+  <h2>海外实践</h2>
+  <table>
+    <thead><tr><th>机构</th><th>公开系统</th><th>定位</th><th>落地启示</th></tr></thead>
+    <tbody>
+      <tr><td>OpenAI</td><td>Sora technical report [S18]</td><td>视频生成模型作为 physical/digital world simulators 的早期路线。</td><td>大规模视觉生成能学到部分物理和空间规律，但限制同样明确。</td></tr>
+      <tr><td>Google DeepMind</td><td>MuZero、Dreamer、Genie、Genie 3、UniSim [S04-S07][S19-S21][S29-S30]</td><td>从模型式 RL 到可交互世界生成的完整研究谱系。</td><td>DeepMind 同时押注控制算法和交互式环境生成。</td></tr>
+      <tr><td>NVIDIA</td><td>Cosmos [S22-S25]</td><td>面向 physical AI 的 world foundation model platform。</td><td>产业需要模型、数据处理、评估、后训练和推理工具链，而非单一模型。</td></tr>
+      <tr><td>Meta</td><td>JEPA、V-JEPA、V-JEPA 2 [S12-S17]</td><td>非生成式预测表征世界模型，强调物理推理和机器人规划。</td><td>世界模型不必以像素生成作为唯一目标。</td></tr>
+      <tr><td>Waymo / Wayve</td><td>Waymo World Model、GAIA [S31-S35]</td><td>自动驾驶仿真和可控 driving scenario generation。</td><td>自动驾驶是世界模型最清晰的商业落点之一。</td></tr>
+      <tr><td>Runway / World Labs</td><td>GWM-1、Marble [S26-S28]</td><td>从视频/3D 创作进入可交互 world generation 和空间智能。</td><td>创作者工具会成为世界模型早期商业化入口。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>国内公开实践</h2>
+  <p><strong>Tencent HunyuanWorld</strong>公开了 HunyuanWorld-1.0 GitHub 和技术报告，定位为从文字或图像生成沉浸、可探索、可交互 3D 世界的模型 [S43-S44]。后续 HYWorld 1.5 技术报告进一步强调实时交互世界模型和长时几何一致性 [S45]。腾讯还在官方材料中推动 Hunyuan 3D creation engine 的全球发布 [S46]。</p>
+  <p><strong>ByteDance Seed / IRASim</strong>通过 IRASim 展示机器人 manipulation 的细粒度 world model，项目页和代码仓库公开了模型定位、视频生成和机器人动作条件接口 [S40-S41]。这是国内公开材料中较直接面向机器人世界模型的工作。</p>
+  <p><strong>Alibaba Wan 与视频基础模型</strong>不是严格意义上的 world model，但 Wan2.2 官方发布显示国内大厂在开源视频生成基础模型上投入明显 [S47]。这类视频基础能力可能成为世界模型的数据和表征底座。</p>
+  <p><strong>Huawei Pangu Automotive</strong>在官方 Intelligent World Cloud Computing 2024 报告中提到 automotive model、spatio-temporal controllable generation、4DBEV video generation 和 autonomous driving simulation libraries 等方向 [S48]。这说明车端和云端厂商也在把可控视频生成与驾驶仿真连接起来。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">11 · Engineering Playbook</div>
+  <h1>工程落地方法</h1>
+  <p class="lead">企业建设世界模型能力，不应从“训练一个 Sora”开始，而应从任务闭环倒推：要降低真实采样成本、生成边界案例、评估策略、训练机器人，还是构建 3D 世界创作工具。不同目标需要完全不同的数据、架构和评估。</p>
+
+  <h2>落地路线图</h2>
+  <table>
+    <thead><tr><th>阶段</th><th>目标</th><th>关键动作</th><th>通过标准</th></tr></thead>
+    <tbody>
+      <tr><td>0. 场景定义</td><td>确认世界模型服务的闭环任务。</td><td>区分视频创作、仿真评估、机器人控制、自动驾驶边界案例、3D 世界生成。</td><td>能写出输入、输出、动作空间、评估指标和安全边界。</td></tr>
+      <tr><td>1. 数据治理</td><td>建立可训练的时序和动作数据。</td><td>同步观测、动作、状态、奖励、传感器、标注、场景 metadata。</td><td>数据能回放、切片、版本化，并能对齐动作和时间戳。</td></tr>
+      <tr><td>2. 表征选择</td><td>确定建模空间。</td><td>像素、latent、BEV、occupancy、object-centric、3D Gaussian、JEPA embedding。</td><td>表示能保留任务相关信息，且推理成本可控。</td></tr>
+      <tr><td>3. 动态训练</td><td>学习未来状态或观测。</td><td>训练 transition、video diffusion、Transformer rollout、world foundation model adapter。</td><td>open-loop 预测、短期闭环和不确定性校准达标。</td></tr>
+      <tr><td>4. 闭环集成</td><td>连接 policy、planner 或 evaluator。</td><td>MPC、MCTS、actor-critic、scenario generator、simulator API。</td><td>世界模型能真实改变决策，而不是只作为展示视频。</td></tr>
+      <tr><td>5. 安全验证</td><td>防止模型误导策略。</td><td>OOD 检测、真实回放对比、人工审查、规则 guard、fallback simulator。</td><td>模型失败时系统能识别、降级和回滚。</td></tr>
+      <tr><td>6. 生产运营</td><td>持续更新和监控。</td><td>数据漂移、场景覆盖、生成分布、策略收益、事故回放。</td><td>形成版本化训练、评估、上线、审计和追责链路。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>按场景选择入口</h2>
+  <table>
+    <thead><tr><th>场景</th><th>优先方向</th><th>不建议第一步做</th><th>原因</th></tr></thead>
+    <tbody>
+      <tr><td>机器人 manipulation</td><td>动作条件视频/latent dynamics、对象中心状态、短 horizon MPC。</td><td>直接让通用视频模型控制机器人。</td><td>接触和物体状态比视觉真实感更重要。</td></tr>
+      <tr><td>自动驾驶</td><td>边界案例生成、闭环仿真、多传感器一致性、4D occupancy。</td><td>只生成前视相机视频。</td><td>驾驶系统需要多视角、多智能体和安全指标。</td></tr>
+      <tr><td>游戏和交互娱乐</td><td>实时 interactive world generation、可编辑 3D 世界、角色动作闭环。</td><td>只做离线视频生成。</td><td>用户需要低延迟、可操作和一致记忆。</td></tr>
+      <tr><td>工业数字孪生</td><td>传感器预测、异常模拟、流程仿真、维护策略评估。</td><td>追求开放世界视频真实感。</td><td>工业价值来自状态准确、可审计和可解释。</td></tr>
+      <tr><td>通用智能体</td><td>抽象状态预测、工具后果模拟、长期记忆和计划评估。</td><td>把 LLM 输出当作世界状态。</td><td>语言推理需要和可验证环境反馈绑定。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <div class="note-label">最小可行实验</div>
+    推荐从“世界模型作为评估器或数据生成器”开始：选一个封闭垂直场景，收集真实轨迹，训练短 horizon action-conditioned model，用它生成边界案例或评估候选策略，再验证模型评估结果和真实环境结果的相关性。不要第一步就把世界模型接入核心控制闭环。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">12 · Evaluation and Governance</div>
+  <h1>评估、治理与安全</h1>
+  <p class="lead">世界模型的评估必须从“看起来像”升级到“用起来对”。如果一个模型生成视频很逼真，但策略在其中学到的动作无法迁移到真实世界，它就不是合格的工程世界模型。</p>
+
+  <h2>指标体系</h2>
+  <table>
+    <thead><tr><th>层级</th><th>指标</th><th>适用对象</th><th>注意点</th></tr></thead>
+    <tbody>
+      <tr><td>视觉质量</td><td>FVD、LPIPS、人评、分辨率、时序稳定性。</td><td>视频和 3D world generation。</td><td>只能说明可看，不说明可控或可规划。</td></tr>
+      <tr><td>预测准确</td><td>短期误差、长期漂移、状态重建、轨迹误差。</td><td>latent dynamics、自动驾驶、机器人。</td><td>长期 rollout 要分布外切片。</td></tr>
+      <tr><td>动作一致</td><td>action-conditioned success、counterfactual consistency。</td><td>交互式世界模型。</td><td>动作必须与物理后果一致。</td></tr>
+      <tr><td>闭环控制</td><td>任务成功率、碰撞率、能耗、舒适性、恢复能力。</td><td>机器人、车辆、游戏智能体。</td><td>最终指标应在真实或高保真环境中验证。</td></tr>
+      <tr><td>评估相关性</td><td>模拟评估和真实评估的 rank correlation。</td><td>policy evaluator、scenario simulator。</td><td>世界模型作为评估器时，这比画质更重要。</td></tr>
+      <tr><td>安全治理</td><td>OOD 检测、uncertainty calibration、事故回放、审计日志。</td><td>生产系统。</td><td>高风险场景必须能说明模型何时不可信。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>主要风险</h2>
+  <p><strong>模型漏洞被策略利用：</strong>规划器会寻找模型中高 reward 的路径，即使该路径在真实世界不存在。MBPO 短 rollout 和 MPC 频繁重规划，都是对这一风险的工程回应 [S09]。</p>
+  <p><strong>物理错觉：</strong>视频生成模型可能学到视觉相关性，而非因果和守恒规律。好看的视频不能保证力学、接触和遮挡正确。</p>
+  <p><strong>分布外过度自信：</strong>罕见天气、非标准物体、异常交通参与者、新工具和未见材质都可能让世界模型进入未知区域。安全系统必须把不确定性作为一等输出。</p>
+  <p><strong>合成数据污染：</strong>用世界模型生成大量训练数据，如果分布偏差未被识别，会让下游 policy 对错误模式过拟合。</p>
+  <p><strong>责任链模糊：</strong>当事故发生在“世界模型生成场景训练出的策略”上，责任可能跨越数据、生成模型、策略、评估器和部署系统。生产平台必须保留 lineage。</p>
+
+  <h2>发布前检查清单</h2>
+  <table>
+    <thead><tr><th>维度</th><th>需要确认</th><th>不满足时处理</th></tr></thead>
+    <tbody>
+      <tr><td>动作语义</td><td>动作输入是否与真实执行器、控制频率和延迟一致。</td><td>先限制动作空间，做短 horizon 验证。</td></tr>
+      <tr><td>状态覆盖</td><td>训练数据是否覆盖目标场景、边界条件和失败状态。</td><td>补采数据或限定模型适用范围。</td></tr>
+      <tr><td>闭环相关性</td><td>模型中的策略排名是否与真实环境排名一致。</td><td>禁止作为自动评估器，只能做候选生成。</td></tr>
+      <tr><td>安全降级</td><td>模型不确定或失败时是否能 fallback 到规则、传统仿真或人工审核。</td><td>上线前补齐 guard 和回滚流程。</td></tr>
+      <tr><td>审计链路</td><td>数据、模型、生成场景、策略版本和评估结果是否可追溯。</td><td>先建设 lineage，不进入高风险闭环。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">13 · Trends</div>
+  <h1>趋势判断</h1>
+  <p class="lead">2026 之后，世界模型不会只沿视频生成继续扩展。真正的主线会围绕动作条件、空间记忆、物理一致性、闭环评估和多模态传感器融合展开。</p>
+
+  <h2>十个发展趋势</h2>
+  <ol>
+    <li><strong>视频生成会分化为创作模型和行动模型。</strong>创作模型追求画面和可控编辑，行动模型追求状态一致、动作后果和闭环可用。</li>
+    <li><strong>世界基础模型平台化。</strong>NVIDIA Cosmos 这类平台说明产业需要数据处理、评估、post-training、推理和模型权重共同交付。</li>
+    <li><strong>自动驾驶是最先规模化的高价值落点。</strong>场景数据丰富，仿真价值明确，安全验证需求强，Waymo 和 Wayve 已给出公开路径。</li>
+    <li><strong>机器人会先采用短 horizon 世界模型。</strong>接触动态复杂，长期开放式想象风险高，短程预测加 MPC 更现实。</li>
+    <li><strong>JEPA 和生成式路线会融合。</strong>抽象表征用于规划，生成模型用于可视化和数据增强，结构化状态用于安全约束。</li>
+    <li><strong>3D/4D 表示成为核心接口。</strong>NeRF、Gaussian Splatting、occupancy、BEV、scene graph 和 object slots 会承担“可编辑世界状态”的角色。</li>
+    <li><strong>评估从 open-loop 走向 closed-loop。</strong>只预测下一帧没有意义；模型必须证明它能改善策略、评估或数据生成。</li>
+    <li><strong>世界模型会进入 agent 工具链。</strong>智能体在执行真实动作前，可用世界模型预演工具调用、环境变化和失败恢复。</li>
+    <li><strong>合成数据将成为竞争点。</strong>谁能生成可信的长尾场景，谁就能降低机器人和自动驾驶数据成本。</li>
+    <li><strong>安全治理会先于完全自主闭环。</strong>高风险行业会先把世界模型用于仿真、审查和训练，而不是直接控制真实执行器。</li>
+  </ol>
+
+  <h2>开放问题</h2>
+  <table>
+    <thead><tr><th>问题</th><th>为什么难</th><th>可能方向</th></tr></thead>
+    <tbody>
+      <tr><td>世界模型是否必须生成像素？</td><td>像素可审查但昂贵，latent 高效但不可直接验证。</td><td>多层世界模型：latent planning + visual decoder + structured safety state。</td></tr>
+      <tr><td>如何度量“物理理解”？</td><td>视觉真实和物理正确经常不一致。</td><td>干预测试、守恒约束、反事实评估、闭环任务指标。</td></tr>
+      <tr><td>如何控制长期漂移？</td><td>rollout 越长越偏离真实分布。</td><td>分层时间尺度、外部记忆、周期性重定位、真实观测校正。</td></tr>
+      <tr><td>如何从互联网视频学到动作？</td><td>大多数视频没有执行器动作和力反馈。</td><td>动作反演、弱标注、机器人数据混训、sim data 对齐。</td></tr>
+      <tr><td>如何证明合成数据无害？</td><td>合成数据偏差可能提高离线指标却损害真实表现。</td><td>真实验证集、数据 lineage、分布距离、policy-level ablation。</td></tr>
+      <tr><td>世界模型和 LLM 如何协同？</td><td>语言擅长目标和计划，世界模型擅长状态和后果。</td><td>LLM 负责目标分解和工具调用，世界模型负责可验证预演和风险评估。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <div class="note-label">最终判断</div>
+    世界模型的近期价值来自仿真、数据生成、策略评估和空间创作；中期价值来自机器人与自动驾驶闭环训练；长期价值才是通用智能体的物理常识和行动前预演。对多数团队，正确路线是从可验证的短闭环开始，而不是直接追求通用世界模拟。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">14 · Appendix</div>
+  <h1>附录</h1>
+
+  <h2>A. 从 0 到 1 学习路径</h2>
+  <table>
+    <thead><tr><th>阶段</th><th>应掌握内容</th><th>建议阅读</th><th>产出检验</th></tr></thead>
+    <tbody>
+      <tr><td>入门</td><td>MDP、模型式 RL、状态、动作、奖励、planning。</td><td>Dyna、World Models、PlaNet。</td><td>能解释为什么模型误差会被 planning 放大。</td></tr>
+      <tr><td>控制算法</td><td>RSSM、latent imagination、MCTS、MPC、value prediction。</td><td>DreamerV3、MuZero、TD-MPC2、MBPO。</td><td>能画出 world model + policy 的训练闭环。</td></tr>
+      <tr><td>表征学习</td><td>JEPA、masked prediction、latent state、object-centric。</td><td>I-JEPA、V-JEPA、V-JEPA 2、FOCUS。</td><td>能比较像素重建和表征预测的取舍。</td></tr>
+      <tr><td>视频世界模型</td><td>video diffusion、interactive environment、action-conditioned generation。</td><td>Sora、Genie、UniSim、Runway GWM。</td><td>能判断一个视频模型何时不能称为世界模型。</td></tr>
+      <tr><td>产业落地</td><td>仿真、自动驾驶、机器人、3D world generation、安全评估。</td><td>Cosmos、Waymo World Model、GAIA、IRASim、HunyuanWorld。</td><td>能设计一个世界模型作为评估器或数据生成器的 MVP。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>B. 术语表</h2>
+  <p><strong>世界模型（World Model）：</strong>学习环境状态和动态的模型，用于预测未来、规划动作、生成经验或评估策略。</p>
+  <p><strong>模型式强化学习（Model-Based RL）：</strong>显式或隐式学习环境模型，并利用该模型进行规划、策略改进或数据扩增的强化学习路线。</p>
+  <p><strong>RSSM：</strong>Recurrent State-Space Model，PlaNet 和 Dreamer 系列中常见的确定性加随机 latent dynamics 架构。</p>
+  <p><strong>MPC：</strong>Model Predictive Control，反复用模型预测短期未来并重规划的控制方法。</p>
+  <p><strong>MCTS：</strong>Monte Carlo Tree Search，MuZero 等系统中用 learned model 做树搜索的核心规划器。</p>
+  <p><strong>JEPA：</strong>Joint-Embedding Predictive Architecture，在抽象表征空间预测目标表示，而非直接重建像素。</p>
+  <p><strong>World Foundation Model：</strong>面向多任务物理世界模拟、数据生成、仿真或控制的基础模型平台。</p>
+  <p><strong>Sim-to-real：</strong>在仿真中训练或评估的策略迁移到真实世界的能力。</p>
+  <p><strong>Open-loop / Closed-loop：</strong>open-loop 只根据记录数据预测未来；closed-loop 让模型预测影响智能体动作，动作再影响下一状态。</p>
+
+  <h2>C. 来源映射</h2>
+  <table class="compact source-map">
+    <thead><tr><th>编号</th><th>来源</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr><td>S01</td><td>Dyna integrated learning planning reacting</td><td>学习、规划、反应一体化源流。</td></tr>
+      <tr><td>S02</td><td>World Models</td><td>现代神经世界模型框架。</td></tr>
+      <tr><td>S03</td><td>PlaNet</td><td>从像素学习 latent dynamics 并规划。</td></tr>
+      <tr><td>S04</td><td>MuZero Nature</td><td>无规则知识下用 learned model planning。</td></tr>
+      <tr><td>S05</td><td>MuZero DeepMind blog</td><td>MuZero 官方解释。</td></tr>
+      <tr><td>S06</td><td>DreamerV3</td><td>跨域 world model RL。</td></tr>
+      <tr><td>S07</td><td>Dreamer Nature 2025</td><td>多控制任务世界模型。</td></tr>
+      <tr><td>S08</td><td>TD-MPC2</td><td>连续控制 latent world model。</td></tr>
+      <tr><td>S09</td><td>MBPO</td><td>模型 rollout 与策略优化。</td></tr>
+      <tr><td>S10</td><td>EfficientZero</td><td>样本高效 MuZero 路线。</td></tr>
+      <tr><td>S11</td><td>IRIS</td><td>Transformer 世界模型。</td></tr>
+      <tr><td>S12</td><td>A Path Towards Autonomous Machine Intelligence</td><td>AMI 与 JEPA 世界模型愿景。</td></tr>
+      <tr><td>S13</td><td>I-JEPA</td><td>图像表征预测。</td></tr>
+      <tr><td>S14</td><td>V-JEPA</td><td>视频表征预测。</td></tr>
+      <tr><td>S15</td><td>Meta V-JEPA blog</td><td>V-JEPA 官方定位。</td></tr>
+      <tr><td>S16</td><td>Meta V-JEPA 2 blog</td><td>V-JEPA 2 物理推理和机器人。</td></tr>
+      <tr><td>S17</td><td>facebookresearch/jepa</td><td>JEPA 官方代码库。</td></tr>
+      <tr><td>S18</td><td>OpenAI Sora world simulators</td><td>视频生成作为世界模拟器。</td></tr>
+      <tr><td>S19</td><td>Google DeepMind Genie</td><td>生成式交互环境。</td></tr>
+      <tr><td>S20</td><td>Genie paper</td><td>未标注视频学习交互环境。</td></tr>
+      <tr><td>S21</td><td>Google DeepMind Genie 3</td><td>实时交互式世界模型。</td></tr>
+      <tr><td>S22</td><td>NVIDIA Cosmos platform</td><td>物理 AI 世界基础模型平台。</td></tr>
+      <tr><td>S23</td><td>NVIDIA Cosmos launch blog</td><td>Cosmos 官方发布。</td></tr>
+      <tr><td>S24</td><td>Cosmos WFM paper</td><td>Cosmos 平台论文。</td></tr>
+      <tr><td>S25</td><td>Cosmos-Predict1</td><td>Cosmos Predict 研究页。</td></tr>
+      <tr><td>S26</td><td>Runway GWM-1</td><td>General World Model。</td></tr>
+      <tr><td>S27</td><td>Runway available models</td><td>GWM-1 可用模型页。</td></tr>
+      <tr><td>S28</td><td>World Labs Marble docs</td><td>3D world model 产品文档。</td></tr>
+      <tr><td>S29</td><td>UniSim</td><td>交互式真实世界模拟器。</td></tr>
+      <tr><td>S30</td><td>UniSim DeepMind page</td><td>UniSim 官方摘要。</td></tr>
+      <tr><td>S31</td><td>GAIA-1</td><td>自动驾驶生成式世界模型。</td></tr>
+      <tr><td>S32</td><td>Wayve GAIA-1 official</td><td>GAIA-1 官方发布。</td></tr>
+      <tr><td>S33</td><td>Wayve Scaling GAIA-1</td><td>GAIA-1 扩展。</td></tr>
+      <tr><td>S34</td><td>GAIA-2</td><td>多视角驾驶世界模型。</td></tr>
+      <tr><td>S35</td><td>Waymo World Model</td><td>自动驾驶仿真世界模型。</td></tr>
+      <tr><td>S36</td><td>Waymo Waymax</td><td>自动驾驶仿真器。</td></tr>
+      <tr><td>S37</td><td>Autonomous driving world model survey</td><td>自动驾驶世界模型分类。</td></tr>
+      <tr><td>S38</td><td>FOCUS</td><td>对象中心机器人世界模型。</td></tr>
+      <tr><td>S39</td><td>RoboDreamer</td><td>机器人组合式想象。</td></tr>
+      <tr><td>S40</td><td>IRASim project</td><td>机器人 manipulation 世界模型。</td></tr>
+      <tr><td>S41</td><td>IRASim GitHub</td><td>IRASim 开源代码。</td></tr>
+      <tr><td>S42</td><td>World Model for Robot Learning survey</td><td>机器人世界模型综述。</td></tr>
+      <tr><td>S43</td><td>Tencent HunyuanWorld-1.0</td><td>开源 3D 世界生成。</td></tr>
+      <tr><td>S44</td><td>HunyuanWorld 1.0 technical report</td><td>HunyuanWorld 技术报告。</td></tr>
+      <tr><td>S45</td><td>HunyuanWorld 1.5 technical report</td><td>实时交互世界模型。</td></tr>
+      <tr><td>S46</td><td>Tencent Hunyuan 3D engine</td><td>腾讯 3D 创作引擎。</td></tr>
+      <tr><td>S47</td><td>Alibaba Wan2.2</td><td>国产开源视频基础模型。</td></tr>
+      <tr><td>S48</td><td>Huawei Intelligent World Cloud Computing 2024</td><td>Pangu automotive 与可控生成。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+</body>
+</html>

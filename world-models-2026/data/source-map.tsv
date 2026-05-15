@@ -1,0 +1,49 @@
+id	title	url	role
+S01	Dyna integrated learning planning reacting	https://papersdb.cs.ualberta.ca/~papersdb/view_publication.php?pub_id=500	Learning-planning-reacting architecture precursor
+S02	World Models	https://arxiv.org/abs/1803.10122	Modern neural world model framing
+S03	PlaNet	https://arxiv.org/abs/1811.04551	Latent dynamics planning from pixels
+S04	MuZero Nature	https://www.nature.com/articles/s41586-020-03051-4	Planning with a learned model without known rules
+S05	MuZero DeepMind blog	https://deepmind.google/blog/muzero-mastering-go-chess-shogi-and-atari-without-rules/	Official MuZero explanation
+S06	DreamerV3	https://arxiv.org/abs/2301.04104	General world-model RL across diverse domains
+S07	Dreamer Nature 2025	https://www.nature.com/articles/s41586-025-08744-2	World models for diverse control tasks
+S08	TD-MPC2	https://arxiv.org/abs/2310.16828	Scalable robust latent world models for continuous control
+S09	MBPO	https://arxiv.org/abs/1906.08253	Model-based policy optimization
+S10	EfficientZero	https://arxiv.org/abs/2111.00210	Sample-efficient MuZero-style world model
+S11	IRIS	https://arxiv.org/abs/2209.00588	Transformer world models for Atari
+S12	A Path Towards Autonomous Machine Intelligence	https://openreview.net/pdf?id=BZ5a1r-kVsf	LeCun AMI and JEPA world model vision
+S13	I-JEPA	https://arxiv.org/abs/2301.08243	Joint-embedding predictive architecture for images
+S14	V-JEPA	https://arxiv.org/abs/2404.08471	Latent video prediction world model line
+S15	Meta V-JEPA blog	https://ai.meta.com/blog/v-jepa-yann-lecun-ai-model-video-joint-embedding-predictive-architecture/	Official V-JEPA positioning
+S16	Meta V-JEPA 2 blog	https://ai.meta.com/blog/v-jepa-2-world-model-benchmarks/	V-JEPA 2 physical reasoning and robotics claims
+S17	facebookresearch/jepa	https://github.com/facebookresearch/jepa	Official JEPA codebase
+S18	OpenAI Sora world simulators	https://openai.com/index/video-generation-models-as-world-simulators/	Video generation models as world simulators
+S19	Google DeepMind Genie	https://deepmind.google/research/publications/genie-generative-interactive-environments/	Generative interactive environments
+S20	Genie paper	https://arxiv.org/abs/2402.15391	Unsupervised interactive environment generation
+S21	Google DeepMind Genie 3	https://deepmind.google/models/genie/	Real-time interactive world model page
+S22	NVIDIA Cosmos platform	https://www.nvidia.com/en-us/ai/cosmos/	World foundation model platform
+S23	NVIDIA Cosmos launch blog	https://blogs.nvidia.com/blog/cosmos-world-foundation-models/	Cosmos official launch
+S24	Cosmos WFM paper	https://arxiv.org/abs/2501.03575	Open world foundation model platform paper
+S25	Cosmos-Predict1	https://research.nvidia.com/labs/cosmos-lab/cosmos-predict1/	Cosmos Predict model research page
+S26	Runway GWM-1	https://runwayml.com/research/introducing-runway-gwm-1	General world model product research
+S27	Runway available models	https://help.runwayml.com/hc/en-us/articles/48649877897107-Available-Models-on-Runway	Runway model availability
+S28	World Labs Marble docs	https://docs.worldlabs.ai/	Multimodal 3D world model product docs
+S29	UniSim	https://arxiv.org/abs/2310.06114	Interactive real-world simulator
+S30	UniSim DeepMind page	https://deepmind.google/research/publications/47545/	Official UniSim summary
+S31	GAIA-1	https://arxiv.org/abs/2309.17080	Autonomous driving generative world model
+S32	Wayve GAIA-1 official	https://wayve.ai/press/wayve-releases-gaia-1-technical-report/	Wayve GAIA-1 release
+S33	Wayve Scaling GAIA-1	https://wayve.ai/thinking/scaling-gaia-1/	Scaling GAIA-1 to larger model size
+S34	GAIA-2	https://arxiv.org/abs/2503.20523	Multi-view autonomous driving world model
+S35	Waymo World Model	https://waymo.com/blog/2026/02/the-waymo-world-model-a-new-frontier-for-autonomous-driving-simulation/	Autonomous driving simulation world model
+S36	Waymo Waymax	https://waymo.com/blog/2023/10/waymo-advances-ai-research-with-our-multifunctional-waymax-simulator	Waymo autonomous driving simulator
+S37	Autonomous driving world model survey	https://arxiv.org/abs/2501.11260	Autonomous driving taxonomy
+S38	FOCUS	https://arxiv.org/abs/2307.02427	Object-centric robotic manipulation world model
+S39	RoboDreamer	https://arxiv.org/abs/2404.12377	Compositional robot imagination
+S40	IRASim project	https://gen-irasim.github.io/	Fine-grained robot manipulation world model
+S41	IRASim GitHub	https://github.com/bytedance/IRASim	IRASim code
+S42	World Model for Robot Learning survey	https://huggingface.co/papers/2605.00080	Robot world model survey
+S43	Tencent HunyuanWorld-1.0	https://github.com/Tencent-Hunyuan/HunyuanWorld-1.0	Open-source 3D world generation model
+S44	HunyuanWorld 1.0 technical report	https://3d-models.hunyuan.tencent.com/world/HY_World_1_technical_report.pdf	HunyuanWorld technical report
+S45	HunyuanWorld 1.5 technical report	https://3d-models.hunyuan.tencent.com/world/world1_5/HYWorld_1.5_Tech_Report.pdf	HY-World 1.5 real-time interaction report
+S46	Tencent Hunyuan 3D engine	https://www.tencent.com/en-us/articles/2202235.html	Tencent 3D creation engine launch
+S47	Alibaba Wan2.2	https://www.alibabacloud.com/en/press-room/alibaba-releases-wan2-2-to-uplift-cinematic	Open-source video generation model release
+S48	Huawei Intelligent World Cloud Computing 2024	https://www-file.huawei.com/-/media/corp2020/pdf/giv/striding-towards-the-intelligent-world/2024/intelligent_world_cloud_computing_2024_en.pdf	Pangu automotive model and controllable generation
