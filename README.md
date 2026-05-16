@@ -13,6 +13,7 @@
 
 | 作品 | 主题 | 文件 |
 |---|---|---|
+| LLM RL Algorithms 2026 | 大模型强化学习算法全景，覆盖 RLHF、RLAIF、RLVR、DPO、PPO、GRPO、DAPO、GSPO 等主流算法 | `llm-rl-algorithms-2026/index.html` / `llm-rl-algorithms-2026/llm-rl-algorithms-2026.pdf` |
 | AI Training Frameworks 2026 | 大模型、多模态大模型与生成模型训练框架技术图谱 | `ai-training-frameworks-2026/index.html` / `ai-training-frameworks-2026/ai-training-frameworks-2026.pdf` |
 | AI Inference Frameworks 2026 | 大模型、多模态大模型与生成模型推理框架技术图谱 | `ai-inference-frameworks-2026/index.html` / `ai-inference-frameworks-2026/ai-inference-frameworks-2026.pdf` |
 | Generative Recommendation 2026 | 生成式推荐的发展史、主流算法、产业落地与趋势判断 | `generative-recommendation-2026/index.html` / `generative-recommendation-2026/generative-recommendation-2026.pdf` |
