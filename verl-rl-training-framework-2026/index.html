@@ -429,7 +429,7 @@
   <p class="lead">HybridFlow 的关键判断是把 RL 训练拆成两层：高层控制流由一个 driver 进程表达，底层计算流由多进程训练和推理后端执行。这个折中牺牲了一部分 driver 与 worker 之间的数据通信开销，换来算法可读性、后端可替换性和资源放置灵活性。</p>
 
   <figure>
-    <svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg">
+    <svg viewBox="0 0 1000 640" xmlns="http://www.w3.org/2000/svg">
       <defs>
         <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
           <circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/>
@@ -441,51 +441,58 @@
       <text x="205" y="42" fill="#504e49" font-size="15" font-family="monospace" letter-spacing="3">VERL HYBRIDFLOW MENTAL MODEL</text>
       <line x1="70" y1="58" x2="930" y2="58" stroke="#1B365D" stroke-width="1"/>
 
-      <rect x="70" y="92" width="860" height="76" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="96" y="126" fill="#1B365D" font-size="24" font-weight="600" font-family="serif">用户输入层</text>
-      <text x="96" y="150" fill="#504e49" font-size="16" font-family="monospace">Hydra config · parquet data · reward function · model path · resource plan</text>
+      <rect x="90" y="92" width="820" height="88" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="118" y="124" fill="#1B365D" font-size="24" font-weight="600" font-family="serif">用户输入层</text>
+      <text x="118" y="150" fill="#504e49" font-size="14" font-family="monospace">Hydra config · parquet data · reward function</text>
+      <text x="118" y="170" fill="#504e49" font-size="14" font-family="monospace">model path · resource plan</text>
 
-      <rect x="70" y="208" width="860" height="92" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
-      <text x="96" y="242" fill="#1B365D" font-size="24" font-weight="600" font-family="serif">单控制器层</text>
-      <text x="96" y="267" fill="#504e49" font-size="16" font-family="monospace">TaskRunner / RLTrainer runs algorithm dataflow in one process</text>
-      <text x="640" y="267" fill="#504e49" font-size="16" font-family="monospace">rollout -> reward -> advantage -> update</text>
+      <rect x="90" y="226" width="820" height="104" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
+      <text x="118" y="260" fill="#1B365D" font-size="24" font-weight="600" font-family="serif">单控制器层</text>
+      <text x="118" y="286" fill="#504e49" font-size="14" font-family="monospace">TaskRunner / RLTrainer</text>
+      <text x="118" y="306" fill="#504e49" font-size="14" font-family="monospace">runs algorithm dataflow in one process</text>
+      <text x="574" y="286" fill="#504e49" font-size="14" font-family="monospace">rollout -> reward</text>
+      <text x="574" y="306" fill="#504e49" font-size="14" font-family="monospace">advantage -> update</text>
 
-      <rect x="70" y="340" width="260" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="96" y="374" fill="#141413" font-size="22" font-weight="600" font-family="serif">WorkerGroup</text>
-      <text x="96" y="399" fill="#504e49" font-size="15" font-family="monospace">dispatch · execute · collect</text>
-      <text x="96" y="421" fill="#6b6a64" font-size="14" font-family="monospace">Ray actors behind one method call</text>
+      <rect x="80" y="374" width="260" height="104" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="104" y="408" fill="#141413" font-size="22" font-weight="600" font-family="serif">WorkerGroup</text>
+      <text x="104" y="434" fill="#504e49" font-size="14" font-family="monospace">dispatch · execute</text>
+      <text x="104" y="454" fill="#504e49" font-size="14" font-family="monospace">collect · one call</text>
 
-      <rect x="370" y="340" width="260" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="396" y="374" fill="#141413" font-size="22" font-weight="600" font-family="serif">ResourcePool</text>
-      <text x="396" y="399" fill="#504e49" font-size="15" font-family="monospace">GPU placement · colocation</text>
-      <text x="396" y="421" fill="#6b6a64" font-size="14" font-family="monospace">actor / critic / reward / rollout</text>
+      <rect x="370" y="374" width="260" height="104" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="394" y="408" fill="#141413" font-size="22" font-weight="600" font-family="serif">ResourcePool</text>
+      <text x="394" y="434" fill="#504e49" font-size="14" font-family="monospace">GPU placement</text>
+      <text x="394" y="454" fill="#504e49" font-size="14" font-family="monospace">actor · critic · rollout</text>
 
-      <rect x="670" y="340" width="260" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="696" y="374" fill="#141413" font-size="22" font-weight="600" font-family="serif">DataProto</text>
-      <text x="696" y="399" fill="#504e49" font-size="15" font-family="monospace">TensorDict + non tensors + meta</text>
-      <text x="696" y="421" fill="#6b6a64" font-size="14" font-family="monospace">chunk · concat · union · pop</text>
+      <rect x="660" y="374" width="260" height="104" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="684" y="408" fill="#141413" font-size="22" font-weight="600" font-family="serif">DataProto</text>
+      <text x="684" y="434" fill="#504e49" font-size="14" font-family="monospace">TensorDict + metadata</text>
+      <text x="684" y="454" fill="#504e49" font-size="14" font-family="monospace">chunk · concat · union</text>
 
-      <rect x="70" y="480" width="200" height="78" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
-      <text x="96" y="512" fill="#141413" font-size="21" font-weight="600" font-family="serif">Model Engine</text>
-      <text x="96" y="537" fill="#504e49" font-size="14" font-family="monospace">FSDP2 · Megatron · VeOmni</text>
-      <rect x="290" y="480" width="200" height="78" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
-      <text x="316" y="512" fill="#141413" font-size="21" font-weight="600" font-family="serif">Rollout Engine</text>
-      <text x="316" y="537" fill="#504e49" font-size="14" font-family="monospace">vLLM · SGLang · HF</text>
-      <rect x="510" y="480" width="200" height="78" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
-      <text x="536" y="512" fill="#141413" font-size="21" font-weight="600" font-family="serif">Checkpoint</text>
-      <text x="536" y="537" fill="#504e49" font-size="14" font-family="monospace">save · load · weight sync</text>
-      <rect x="730" y="480" width="200" height="78" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
-      <text x="756" y="512" fill="#141413" font-size="21" font-weight="600" font-family="serif">Reward / Env</text>
-      <text x="756" y="537" fill="#504e49" font-size="14" font-family="monospace">rule · RM · sandbox · tools</text>
+      <rect x="70" y="530" width="204" height="78" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
+      <text x="94" y="560" fill="#141413" font-size="20" font-weight="600" font-family="serif">Model Engine</text>
+      <text x="94" y="584" fill="#504e49" font-size="13" font-family="monospace">FSDP2 · Megatron</text>
+      <text x="94" y="602" fill="#504e49" font-size="13" font-family="monospace">VeOmni</text>
+      <rect x="294" y="530" width="204" height="78" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
+      <text x="318" y="560" fill="#141413" font-size="20" font-weight="600" font-family="serif">Rollout Engine</text>
+      <text x="318" y="584" fill="#504e49" font-size="13" font-family="monospace">vLLM · SGLang</text>
+      <text x="318" y="602" fill="#504e49" font-size="13" font-family="monospace">HF rollout</text>
+      <rect x="518" y="530" width="204" height="78" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
+      <text x="542" y="560" fill="#141413" font-size="20" font-weight="600" font-family="serif">Checkpoint</text>
+      <text x="542" y="584" fill="#504e49" font-size="13" font-family="monospace">save · load</text>
+      <text x="542" y="602" fill="#504e49" font-size="13" font-family="monospace">weight sync</text>
+      <rect x="742" y="530" width="204" height="78" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
+      <text x="766" y="560" fill="#141413" font-size="20" font-weight="600" font-family="serif">Reward / Env</text>
+      <text x="766" y="584" fill="#504e49" font-size="13" font-family="monospace">rule · RM</text>
+      <text x="766" y="602" fill="#504e49" font-size="13" font-family="monospace">sandbox · tools</text>
 
-      <path d="M500 168 L500 208" stroke="#1B365D" stroke-width="1.5"/>
-      <path d="M493 198 L500 208 L507 198" fill="none" stroke="#1B365D" stroke-width="1.5" stroke-linecap="round"/>
-      <path d="M500 300 L200 340" stroke="#504e49" stroke-width="1.2"/>
-      <path d="M500 300 L500 340" stroke="#504e49" stroke-width="1.2"/>
-      <path d="M500 300 L800 340" stroke="#504e49" stroke-width="1.2"/>
-      <path d="M200 436 L170 480" stroke="#504e49" stroke-width="1.2"/>
-      <path d="M500 436 L610 480" stroke="#504e49" stroke-width="1.2"/>
-      <path d="M800 436 L830 480" stroke="#504e49" stroke-width="1.2"/>
+      <path d="M500 180 L500 226" stroke="#1B365D" stroke-width="1.5"/>
+      <path d="M493 216 L500 226 L507 216" fill="none" stroke="#1B365D" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M500 330 L210 374" stroke="#504e49" stroke-width="1.2"/>
+      <path d="M500 330 L500 374" stroke="#504e49" stroke-width="1.2"/>
+      <path d="M500 330 L790 374" stroke="#504e49" stroke-width="1.2"/>
+      <path d="M210 478 L172 530" stroke="#504e49" stroke-width="1.2"/>
+      <path d="M500 478 L620 530" stroke="#504e49" stroke-width="1.2"/>
+      <path d="M790 478 L844 530" stroke="#504e49" stroke-width="1.2"/>
     </svg>
     <figcaption>HybridFlow 的重点不是某个后端，而是把算法控制、资源放置、数据协议和底层计算分开。</figcaption>
   </figure>
