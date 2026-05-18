@@ -1,0 +1,20 @@
+id	source	url	access_date	used_for
+S1	verl official repository	https://github.com/verl-project/verl	2026-05-18	project positioning, features, latest repo facts
+S2	verl documentation index	https://verl.readthedocs.io/en/latest/	2026-05-18	documentation scope and current docs navigation
+S3	HybridFlow Programming Guide	https://verl.readthedocs.io/en/latest/hybrid_flow.html	2026-05-18	HybridFlow design, PPO loop, repository organization
+S4	verl.single_controller design	https://verl.readthedocs.io/en/latest/single_controller.html	2026-05-18	WorkerGroup binding, dispatch, collect, register decorator
+S5	PPO Example Architecture	https://verl.readthedocs.io/en/latest/examples/ppo_code_architecture.html	2026-05-18	PPO entrypoint, role mapping, reward, worker construction
+S6	PPO Ray Trainer	https://verl.readthedocs.io/en/latest/workers/ray_trainer.html	2026-05-18	trainer loop and WorkerGroup orchestration
+S7	Engine Workers	https://verl.readthedocs.io/en/latest/workers/engine_workers.html	2026-05-18	ActorRolloutRefWorker, TrainingWorker, backend selection
+S8	Model Engine	https://verl.readthedocs.io/en/latest/workers/model_engine.html	2026-05-18	BaseEngine, checkpointing, backend extension
+S9	Config Explanation	https://verl.readthedocs.io/en/latest/examples/config.html	2026-05-18	Hydra config semantics
+S10	PPO algorithm page	https://verl.readthedocs.io/en/latest/algo/ppo.html	2026-05-18	PPO configuration and KL control
+S11	GRPO algorithm page	https://verl.readthedocs.io/en/latest/algo/grpo.html	2026-05-18	GRPO group sampling and config
+S12	DAPO algorithm page	https://verl.readthedocs.io/en/latest/algo/dapo.html	2026-05-18	DAPO components and reproduction notes
+S13	Performance tuning guide	https://verl.readthedocs.io/en/latest/perf/perf_tuning.html	2026-05-18	rollout and batch tuning
+S14	LLM best practices	https://verl.readthedocs.io/en/latest/perf/best_practices.html	2026-05-18	DAPO and Qwen3-235B parameter interpretation
+S15	Agentic RL training	https://verl.readthedocs.io/en/latest/start/agentic_rl.html	2026-05-18	async server rollout and agent loop
+S16	verl v0.7 release blog	https://verl.readthedocs.io/en/latest/blog/v0.7.html	2026-05-18	verl-core, rollout server, transfer queue, checkpoint engine
+S17	HybridFlow paper	https://arxiv.org/abs/2409.19256	2026-05-18	paper definition and throughput claims
+S18	DAPO paper	https://arxiv.org/abs/2503.14476	2026-05-18	DAPO paper context and result claim
+S19	DeepSeekMath paper	https://arxiv.org/abs/2402.03300	2026-05-18	GRPO origin

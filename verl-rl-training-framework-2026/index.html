@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>verl 大模型强化学习训练框架：从 0 到 1 的系统掌控</title>
+<meta name="author" content="Winston">
+<meta name="description" content="面向大模型强化学习后训练的 verl 框架全景说明，覆盖 HybridFlow、单控制器、WorkerGroup、DataProto、训练循环、算法配置、性能调优与扩展路线。">
+<meta name="keywords" content="verl, HybridFlow, 大模型强化学习, RLHF, RLVR, PPO, GRPO, DAPO">
+<meta name="generator" content="Kami">
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("fonts/JetBrainsMono.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 18mm 20mm 20mm 20mm;
+    background: #f5f4ed;
+
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02", "Source Han Serif SC",
+                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+
+    @bottom-center {
+      content: counter(page) "  ·  verl 大模型强化学习训练框架";
+      font-family: "TsangerJinKai02", "Source Han Serif SC",
+                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 9pt;
+      color: #6b6a64;
+    }
+  }
+
+  @page:first {
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #f5f4ed;
+    --ivory: #faf9f5;
+    --near-black: #141413;
+    --dark-warm: #3d3d3a;
+    --olive: #504e49;
+    --stone: #6b6a64;
+    --brand: #1B365D;
+    --border: #e8e6dc;
+    --border-soft: #e5e3d8;
+    --tag-bg: #E4ECF5;
+    --brand-tint: #EEF2F7;
+    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --sans: var(--serif);
+    --mono: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+  }
+
+  html, body { background: var(--parchment); }
+
+  @media screen {
+    body { max-width: 210mm; margin: 0 auto; padding: 18mm 20mm 20mm 20mm; }
+  }
+
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 10pt;
+    line-height: 1.55;
+    letter-spacing: 0.14pt;
+    widows: 3;
+    orphans: 3;
+  }
+
+  a { color: var(--brand); text-decoration: none; }
+  p { margin: 0 0 9pt 0; line-height: 1.55; color: var(--near-black); }
+  strong { font-weight: 500; }
+  .hl { color: var(--brand); font-weight: 500; }
+
+  .cover {
+    min-height: 242mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 34mm 0 0 0;
+    break-after: page;
+  }
+  .cover-eyebrow {
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 18pt;
+  }
+  .cover-title {
+    font-size: 34pt;
+    font-weight: 500;
+    line-height: 1.16;
+    margin-bottom: 16pt;
+    letter-spacing: 0.2pt;
+  }
+  .cover-sub {
+    font-size: 13pt;
+    color: var(--olive);
+    line-height: 1.5;
+    max-width: 92%;
+  }
+  .cover-meta {
+    font-size: 10pt;
+    color: var(--stone);
+    line-height: 1.55;
+  }
+  .cover-meta strong { color: var(--dark-warm); }
+
+  .toc { break-after: page; }
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: 14pt;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6pt 0;
+    border-bottom: 0.3pt dotted var(--border);
+    font-size: 10.5pt;
+  }
+  .toc-num {
+    color: var(--brand);
+    font-weight: 500;
+    min-width: 30pt;
+  }
+  .toc-title { flex: 1; padding-left: 6pt; }
+  .toc-page { color: var(--stone); font-variant-numeric: tabular-nums; }
+
+  .chapter { break-before: page; }
+  .chapter-num {
+    font-size: 9pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+  }
+  h1 {
+    font-size: 22pt;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 10pt 0;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    break-after: avoid;
+  }
+  h2 {
+    font-size: 16pt;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 22pt 0 8pt 0;
+    string-set: section-title content();
+    break-after: avoid;
+  }
+  h3 {
+    font-size: 13pt;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 16pt 0 6pt 0;
+    color: var(--dark-warm);
+    break-after: avoid;
+  }
+  .lead {
+    font-size: 11.4pt;
+    line-height: 1.55;
+    color: var(--dark-warm);
+    margin-bottom: 12pt;
+  }
+  ul, ol {
+    margin: 6pt 0 10pt 0;
+    padding-left: 20pt;
+    line-height: 1.52;
+  }
+  li { margin-bottom: 3pt; }
+  ul li::marker, ol li::marker { color: var(--brand); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9pt;
+    margin: 10pt 0 12pt 0;
+    break-inside: avoid;
+  }
+  th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--dark-warm);
+    padding: 5pt 6pt;
+    border-bottom: 1pt solid var(--border);
+  }
+  td {
+    padding: 4pt 6pt;
+    border-bottom: 0.3pt solid var(--border-soft);
+    vertical-align: top;
+  }
+  table.compact th, table.compact td { font-size: 8.2pt; padding: 3pt 5pt; line-height: 1.38; }
+  table.striped tbody tr:nth-child(even) td { background: var(--ivory); }
+
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--brand);
+    font-size: 8.5pt;
+    font-weight: 500;
+    padding: 1pt 5pt;
+    border-radius: 3pt;
+    margin-right: 4pt;
+  }
+  .callout, .takeaway {
+    background: var(--ivory);
+    border-left: 2pt solid var(--brand);
+    padding: 10pt 13pt;
+    border-radius: 4pt;
+    margin: 12pt 0;
+    break-inside: avoid;
+  }
+  .takeaway-label {
+    font-size: 8.5pt;
+    color: var(--brand);
+    letter-spacing: 0.5pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10pt;
+    margin: 10pt 0 12pt;
+  }
+  .card {
+    background: var(--ivory);
+    border: 0.5pt solid var(--border);
+    border-radius: 6pt;
+    padding: 10pt 12pt;
+    break-inside: avoid;
+  }
+  .card h3 { margin-top: 0; }
+  .small { font-size: 9pt; color: var(--olive); line-height: 1.45; }
+  .mono { font-family: var(--mono); }
+
+  code {
+    font-family: var(--mono);
+    font-size: 8.6pt;
+    background: var(--ivory);
+    padding: 1pt 4pt;
+    border-radius: 2pt;
+    color: var(--dark-warm);
+  }
+  pre {
+    font-family: var(--mono);
+    font-size: 8.2pt;
+    line-height: 1.42;
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 9pt 12pt;
+    margin: 10pt 0;
+    white-space: pre-wrap;
+    break-inside: avoid;
+  }
+  pre code { background: transparent; padding: 0; font-size: inherit; }
+
+  figure {
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  svg { max-width: 100%; height: auto; display: block; }
+  figcaption {
+    font-size: 8.8pt;
+    color: var(--stone);
+    margin-top: 5pt;
+    text-align: center;
+  }
+  .source-note {
+    font-size: 8.6pt;
+    color: var(--stone);
+    margin-top: 6pt;
+  }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div>
+    <div class="cover-eyebrow">TECHNICAL REPORT · 2026</div>
+    <div class="cover-title">verl 大模型强化学习训练框架：<br>从 0 到 1 的系统掌控</div>
+    <div class="cover-sub">HybridFlow 编程模型、Ray 单控制器、DataProto 数据协议、Worker/Engine 分层、PPO/GRPO/DAPO 映射、性能调优与扩展路线的完整说明。</div>
+  </div>
+  <div class="cover-meta">
+    <strong>Winston</strong><br>
+    V1.0 · 2026.05.18<br>
+    Sources checked against verl official repository, official docs and primary papers
+  </div>
+</section>
+
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">执行摘要：先建立一张完整地图</span><span class="toc-page">03</span></div>
+  <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">问题定义：LLM 强化学习后训练在解决什么</span><span class="toc-page">05</span></div>
+  <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">架构总览：HybridFlow 的核心判断</span><span class="toc-page">07</span></div>
+  <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">控制平面：Ray、ResourcePool、WorkerGroup</span><span class="toc-page">09</span></div>
+  <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">数据协议：DataProto 如何让分布式调用像单机函数</span><span class="toc-page">11</span></div>
+  <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">训练链路：从 parquet 到 update_actor</span><span class="toc-page">13</span></div>
+  <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">Worker 与 Engine：角色、后端与权重同步</span><span class="toc-page">15</span></div>
+  <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">算法层：PPO、GRPO、DAPO 与优势估计</span><span class="toc-page">17</span></div>
+  <div class="toc-item"><span class="toc-num">09</span><span class="toc-title">配置层：Hydra 参数如何改变训练行为</span><span class="toc-page">19</span></div>
+  <div class="toc-item"><span class="toc-num">10</span><span class="toc-title">工程落地：性能、调试、异步、Agentic RL</span><span class="toc-page">21</span></div>
+  <div class="toc-item"><span class="toc-num">11</span><span class="toc-title">附录：源码路线、术语表与来源</span><span class="toc-page">23</span></div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">01 · Executive Summary</div>
+  <h1>执行摘要：先建立一张完整地图</h1>
+  <p class="lead">verl 是面向大语言模型后训练的强化学习训练框架。它真正要解决的不是「如何写一个 PPO loss」，而是如何把 <span class="hl">多模型、多阶段、多后端、多 GPU</span> 的 RLHF / RLVR 训练组织成一条可扩展、可替换、可调试的数据流。</p>
+
+  <div class="takeaway">
+    <div class="takeaway-label">本文口径</div>
+    本文资料核对于 2026-05-18。官方仓库 `main` 浅克隆 HEAD 为 <code>657cfa5</code>，版本文件为 <code>0.8.0.dev</code>；远端标签列表中最新标签为 <code>v0.7.1</code>。因此本文把「主线开发能力」和「稳定发布标签」分开表述。
+  </div>
+
+  <h2>一句话理解 verl</h2>
+  <p>在普通监督训练中，训练循环通常是数据进来、模型前向、loss、反向、优化器更新。LLM 强化学习后训练多出至少 5 个环节：当前策略生成回答、旧策略或 rollout 策略计算 log probability、参考策略计算 KL、奖励函数或奖励模型打分、critic 或 group baseline 估计 advantage。每个环节可能使用不同模型、不同并行方式、不同 GPU 放置和不同推理引擎。verl 的主张是：<span class="hl">算法控制流由单控制器写成清晰的 Python 程序，重计算由分布式 Worker 和 Engine 执行</span>。</p>
+
+  <h2>核心结论</h2>
+  <ul>
+    <li><strong>HybridFlow 是架构主轴。</strong>它把 RL 算法看成高层 dataflow：rollout、log-prob、reward、advantage、update_actor、update_critic 是高层算子；FSDP、Megatron、vLLM、SGLang 内部的 tensor 并行和 collective 通信是底层 computation flow。</li>
+    <li><strong>Ray 单控制器降低算法开发成本。</strong>开发者在 driver 进程里像写单机程序一样调用 <code>actor_rollout_wg.generate_sequences(batch)</code>，WorkerGroup 负责把数据切给远端 worker、触发 RPC、收集结果。</li>
+    <li><strong>DataProto 是 verl 的数据契约。</strong>它把 tensor batch、非 tensor 元数据和 meta 信息放在同一容器里，支持 <code>pop</code>、<code>union</code>、<code>chunk</code>、<code>concat</code> 等操作，让高层训练循环不需要知道每个后端的 rank 拓扑。</li>
+    <li><strong>Worker 与 Engine 分层是可扩展性的关键。</strong><code>ActorRolloutRefWorker</code> 负责 actor、rollout、reference policy 的组合；<code>TrainingWorker</code> 包住具体 <code>BaseEngine</code>；<code>EngineRegistry</code> 决定使用 FSDP、FSDP2、Megatron、Automodel、VeOmni 或 TorchTitan 等后端。</li>
+    <li><strong>配置不是附属品，而是训练语义。</strong><code>data.train_batch_size</code>、<code>rollout.n</code>、<code>ppo_mini_batch_size</code>、<code>ppo_micro_batch_size_per_gpu</code>、<code>adv_estimator</code>、<code>use_kl_loss</code>、<code>use_kl_in_reward</code> 共同决定算法行为、吞吐、显存和收敛稳定性。</li>
+  </ul>
+
+  <h2>读者应该掌握的 5 层模型</h2>
+  <table class="striped">
+    <thead>
+      <tr><th>层级</th><th>你要回答的问题</th><th>verl 中的对象</th><th>掌握标准</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>算法层</td><td>我到底在优化什么目标？</td><td>PPO, GRPO, DAPO, RLOO, REINFORCE++</td><td>能解释 reward、advantage、KL、clip ratio 的作用。</td></tr>
+      <tr><td>控制层</td><td>每一步先后顺序是什么？</td><td>RayPPOTrainer, main_ppo_sync, TaskRunner</td><td>能手画 rollout -> reward -> advantage -> update 的循环。</td></tr>
+      <tr><td>数据层</td><td>各阶段传递什么字段？</td><td>DataProto, TensorDict, non_tensor_batch</td><td>能说清 prompt、responses、old_log_probs、values、token_level_rewards 的来源。</td></tr>
+      <tr><td>执行层</td><td>哪个模型在哪些 GPU 上跑？</td><td>ResourcePool, WorkerGroup, ActorRolloutRefWorker</td><td>能设计 colocate 或 disaggregate 放置方案。</td></tr>
+      <tr><td>后端层</td><td>训练与生成由谁实际计算？</td><td>BaseEngine, vLLM, SGLang, CheckpointEngine</td><td>能根据模型规模选择 FSDP2、Megatron 和 rollout TP。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    学会 verl 的标志不是记住某个脚本，而是看到一组配置和日志后，能定位「这一步是在 controller 上算，还是在 worker 上算；数据是不是 DataProto；瓶颈是 rollout、log-prob、critic、reward 还是权重同步」。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">02 · Problem Definition</div>
+  <h1>问题定义：LLM 强化学习后训练在解决什么</h1>
+  <p class="lead">大模型强化学习后训练把语言模型视为策略。prompt 是状态的一部分，生成 token 是动作，完整回答是轨迹，奖励来自人类偏好模型、规则验证器、沙箱测试、环境反馈或它们的组合。</p>
+
+  <h2>为什么 SFT 不够</h2>
+  <p>监督微调 SFT 让模型模仿给定答案，优化的是「目标 token 的似然」。这适合灌输格式、风格和基础任务能力，但它不能直接表达「多个回答都像训练集，但只有一个通过单元测试」「推理链很长，中间没有逐 token 标签」「工具调用需要和环境互动」这类目标。RLVR 和 RLHF 把评价函数放到生成之后：模型先完整生成，再由 reward 给出分数。</p>
+  <p>因此后训练任务从一个普通 batch training 问题变成一个闭环：生成会消耗大量推理算力，奖励可能在 CPU、GPU、远程沙箱或外部环境里执行，训练又要把生成样本变成可求梯度的 policy loss。verl 的工程价值就在这里：它把闭环拆成明确阶段，并让每个阶段能放到最合适的后端。</p>
+
+  <h2>LLM RL 的基本变量</h2>
+  <table class="striped">
+    <thead>
+      <tr><th>符号 / 字段</th><th>直观含义</th><th>在 verl 中常见位置</th><th>错误会造成什么</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>q</code> / prompt</td><td>题目、对话历史或环境观测</td><td><code>data.prompt_key</code>, parquet <code>prompt</code></td><td>chat template 不一致、长度截断、reward 找不到 ground truth。</td></tr>
+      <tr><td><code>o</code> / response</td><td>策略生成的回答 token 序列</td><td><code>responses</code>, <code>response_mask</code></td><td>EOS mask 错误会污染 loss 和 reward。</td></tr>
+      <tr><td><code>R</code></td><td>序列级或 token 级奖励</td><td><code>token_level_scores</code>, <code>token_level_rewards</code></td><td>奖励尺度过大导致 KL 爆炸，过稀导致方差高。</td></tr>
+      <tr><td><code>A</code></td><td>advantage，回答相对基线的好坏</td><td><code>advantages</code>, <code>returns</code></td><td>估计器不匹配会使 PPO/GRPO 行为偏离预期。</td></tr>
+      <tr><td><code>log πθ</code></td><td>当前 actor 对生成 token 的 log probability</td><td><code>old_log_probs</code>, <code>log_probs</code></td><td>训练/生成不一致会导致 ratio 失真。</td></tr>
+      <tr><td><code>log πref</code></td><td>参考策略 log probability</td><td><code>ref_log_prob</code></td><td>KL 约束失效，模型容易 reward hacking。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>从 RLHF 到 RLVR 和 Agentic RL</h2>
+  <p>RLHF 传统上依赖奖励模型或偏好模型给回答打分。RLVR 更常见于数学、代码、形式化证明和检索任务：奖励来自可验证规则，例如最终答案匹配、测试用例通过、定理证明检查器接受。Agentic RL 再进一步，回答不再是单轮文本，而是多轮 action：模型调用搜索、代码解释器、浏览器、数据库或外部环境，reward 可能在多次交互后才出现。</p>
+  <p>这三类任务要求同一个框架同时支持多种 reward 来源、长序列、多轮轨迹、异步生成、外部工具调用和训练后端切换。verl 官方文档把这些能力分散在 <code>preparation</code>、<code>reward_function</code>、<code>sglang_multiturn</code>、<code>agent_loop</code>、<code>fully_async</code> 等章节中；本文把它们收束到一条主线：<span class="hl">数据怎么进来，模型怎么生成，奖励怎么进入 batch，梯度怎么回到 actor</span>。</p>
+
+  <h2>一个最小闭环</h2>
+  <ol>
+    <li>把原始数据预处理成 parquet，至少包含 <code>prompt</code>，通常还包含 <code>data_source</code>、<code>reward_model.ground_truth</code>、<code>extra_info</code>。</li>
+    <li>用当前 actor 作为 rollout policy，针对每个 prompt 生成 <code>n</code> 条回答。</li>
+    <li>计算旧策略 log probability 和参考策略 log probability，用于 PPO ratio 或 KL 约束。</li>
+    <li>调用 reward function、reward model 或环境，得到序列级或 token 级分数。</li>
+    <li>根据 PPO、GRPO、DAPO 等算法计算 advantage 和 returns。</li>
+    <li>更新 actor，必要时更新 critic，然后把新权重同步给 rollout engine。</li>
+    <li>按 <code>test_freq</code> 验证，按 <code>save_freq</code> 保存 checkpoint，持续记录 rollout、reward、KL、长度和吞吐指标。</li>
+  </ol>
+
+  <div class="takeaway">
+    <div class="takeaway-label">从 0 到 1 的第一条判断</div>
+    不要先问「我该用 PPO 还是 GRPO」。先问「我的 reward 是谁给的，reward 是否稀疏，是否需要 critic，是否每个 prompt 要采多条回答，生成是否是单轮，训练和生成是否能共用 GPU」。这些答案会自然指向算法和工程配置。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">03 · HybridFlow Architecture</div>
+  <h1>架构总览：HybridFlow 的核心判断</h1>
+  <p class="lead">HybridFlow 的关键判断是把 RL 训练拆成两层：高层控制流由一个 driver 进程表达，底层计算流由多进程训练和推理后端执行。这个折中牺牲了一部分 driver 与 worker 之间的数据通信开销，换来算法可读性、后端可替换性和资源放置灵活性。</p>
+
+  <figure>
+    <svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/>
+      <rect width="100%" height="100%" fill="url(#dots)" opacity="0.55"/>
+      <text x="70" y="42" fill="#1B365D" font-size="15" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  1</text>
+      <text x="205" y="42" fill="#504e49" font-size="15" font-family="monospace" letter-spacing="3">VERL HYBRIDFLOW MENTAL MODEL</text>
+      <line x1="70" y1="58" x2="930" y2="58" stroke="#1B365D" stroke-width="1"/>
+
+      <rect x="70" y="92" width="860" height="76" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="96" y="126" fill="#1B365D" font-size="24" font-weight="600" font-family="serif">用户输入层</text>
+      <text x="96" y="150" fill="#504e49" font-size="16" font-family="monospace">Hydra config · parquet data · reward function · model path · resource plan</text>
+
+      <rect x="70" y="208" width="860" height="92" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
+      <text x="96" y="242" fill="#1B365D" font-size="24" font-weight="600" font-family="serif">单控制器层</text>
+      <text x="96" y="267" fill="#504e49" font-size="16" font-family="monospace">TaskRunner / RLTrainer runs algorithm dataflow in one process</text>
+      <text x="640" y="267" fill="#504e49" font-size="16" font-family="monospace">rollout -> reward -> advantage -> update</text>
+
+      <rect x="70" y="340" width="260" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="96" y="374" fill="#141413" font-size="22" font-weight="600" font-family="serif">WorkerGroup</text>
+      <text x="96" y="399" fill="#504e49" font-size="15" font-family="monospace">dispatch · execute · collect</text>
+      <text x="96" y="421" fill="#6b6a64" font-size="14" font-family="monospace">Ray actors behind one method call</text>
+
+      <rect x="370" y="340" width="260" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="396" y="374" fill="#141413" font-size="22" font-weight="600" font-family="serif">ResourcePool</text>
+      <text x="396" y="399" fill="#504e49" font-size="15" font-family="monospace">GPU placement · colocation</text>
+      <text x="396" y="421" fill="#6b6a64" font-size="14" font-family="monospace">actor / critic / reward / rollout</text>
+
+      <rect x="670" y="340" width="260" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="696" y="374" fill="#141413" font-size="22" font-weight="600" font-family="serif">DataProto</text>
+      <text x="696" y="399" fill="#504e49" font-size="15" font-family="monospace">TensorDict + non tensors + meta</text>
+      <text x="696" y="421" fill="#6b6a64" font-size="14" font-family="monospace">chunk · concat · union · pop</text>
+
+      <rect x="70" y="480" width="200" height="78" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
+      <text x="96" y="512" fill="#141413" font-size="21" font-weight="600" font-family="serif">Model Engine</text>
+      <text x="96" y="537" fill="#504e49" font-size="14" font-family="monospace">FSDP2 · Megatron · VeOmni</text>
+      <rect x="290" y="480" width="200" height="78" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
+      <text x="316" y="512" fill="#141413" font-size="21" font-weight="600" font-family="serif">Rollout Engine</text>
+      <text x="316" y="537" fill="#504e49" font-size="14" font-family="monospace">vLLM · SGLang · HF</text>
+      <rect x="510" y="480" width="200" height="78" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
+      <text x="536" y="512" fill="#141413" font-size="21" font-weight="600" font-family="serif">Checkpoint</text>
+      <text x="536" y="537" fill="#504e49" font-size="14" font-family="monospace">save · load · weight sync</text>
+      <rect x="730" y="480" width="200" height="78" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
+      <text x="756" y="512" fill="#141413" font-size="21" font-weight="600" font-family="serif">Reward / Env</text>
+      <text x="756" y="537" fill="#504e49" font-size="14" font-family="monospace">rule · RM · sandbox · tools</text>
+
+      <path d="M500 168 L500 208" stroke="#1B365D" stroke-width="1.5"/>
+      <path d="M493 198 L500 208 L507 198" fill="none" stroke="#1B365D" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M500 300 L200 340" stroke="#504e49" stroke-width="1.2"/>
+      <path d="M500 300 L500 340" stroke="#504e49" stroke-width="1.2"/>
+      <path d="M500 300 L800 340" stroke="#504e49" stroke-width="1.2"/>
+      <path d="M200 436 L170 480" stroke="#504e49" stroke-width="1.2"/>
+      <path d="M500 436 L610 480" stroke="#504e49" stroke-width="1.2"/>
+      <path d="M800 436 L830 480" stroke="#504e49" stroke-width="1.2"/>
+    </svg>
+    <figcaption>HybridFlow 的重点不是某个后端，而是把算法控制、资源放置、数据协议和底层计算分开。</figcaption>
+  </figure>
+
+  <h2>为什么不用纯多控制器</h2>
+  <p>在传统分布式训练中，常见做法是每个 rank 跑同一段程序，DDP 或 FSDP 负责同步。这个模式适合单模型训练，但 RLHF 有多个模型和多个 DAG：actor 负责策略更新，rollout 负责生成，reference 负责 KL，critic 负责 value，reward 可能是另一个模型或外部函数。若把控制流也写成多进程程序，算法逻辑会和某个后端的并行细节强绑定，换 FSDP 到 Megatron 或调整 actor/rollout 放置都会牵动控制代码。</p>
+  <p>verl 选择把高层控制流留在一个单进程 driver 中。这样写 PPO 或 GRPO 的人可以直接表达「先生成、再打分、再更新」；FSDP、Megatron、vLLM、SGLang 的复杂分布式实现隐藏在 Worker 和 Engine 里面。代价是 controller 与 worker 之间存在数据往返，但换来的是算法可写、后端可换、资源可调。</p>
+
+  <h2>两层 dataflow</h2>
+  <table>
+    <thead>
+      <tr><th>层</th><th>节点是什么</th><th>边上传什么</th><th>谁负责</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>RL 控制流</td><td>rollout、log-prob、reward、advantage、actor update</td><td>DataProto / TensorDict / BatchMeta</td><td>RLTrainer / RayPPOTrainer / main_ppo_sync</td></tr>
+      <tr><td>模型计算流</td><td>forward、backward、optimizer step、KV cache、weight sync</td><td>tensor shard、parameter、gradient、activation</td><td>FSDP2、Megatron、vLLM、SGLang、CheckpointEngine</td></tr>
+    </tbody>
+  </table>
+
+  <h2>verl-core 与 verl-trainer</h2>
+  <p>官方 v0.7 release blog 把主线架构拆成两块：<code>verl-core</code> 提供 Model Engine、Rollout Engine、Checkpoint Engine、TransferQueue 等可插拔基础组件；<code>verl-trainer</code> 在这些组件之上组合 on-policy、one-step-off-policy 和 fully async 等训练 pipeline。这个拆分很重要，因为它说明 verl 不是只有一个 PPO trainer，而是在向「可组合 RL 训练系统」演进。</p>
+  <p>对使用者而言，最保守的路线是从同步 on-policy pipeline 开始：actor 与 rollout 通常 colocate，算法最接近标准定义，调试最直接。等瓶颈明确后，再考虑一步 off-policy 或全异步，把生成和训练重叠，或把 rollout server 从训练节点中拆出去。</p>
+
+  <div class="callout">
+    HybridFlow 的教授级解释可以压缩为一句话：它把「算法的顺序」和「算子的并行实现」解耦。前者追求可读，后者追求吞吐；二者通过 DataProto、WorkerGroup 和 Engine API 接上。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">04 · Control Plane</div>
+  <h1>控制平面：Ray、ResourcePool、WorkerGroup</h1>
+  <p class="lead">verl 的控制平面把分布式系统包装成一组可调用对象。你在 driver 上调用一个方法，背后发生的是数据切分、Ray actor 远程执行、结果收集和重新拼接。</p>
+
+  <h2>入口：Hydra main 到 TaskRunner</h2>
+  <p>典型 PPO 入口在 <code>verl/trainer/main_ppo.py</code>，当前源码已标注该文件将被 <code>main_ppo_sync.py</code> 替代。入口函数由 Hydra 加载 <code>ppo_trainer</code> 配置，然后初始化 Ray。真正的训练主体不是直接在当前进程里跑，而是创建一个 Ray remote <code>TaskRunner</code>，再在它的 <code>run(config)</code> 中完成 worker 映射、数据集构造、trainer 初始化和 <code>fit()</code>。</p>
+  <pre><code>main(config)
+  -> auto_set_device(config)
+  -> migrate_legacy_reward_impl(config)
+  -> run_ppo(config)
+      -> ray.init(runtime_env)
+      -> TaskRunner.remote()
+      -> runner.run.remote(config)</code></pre>
+  <p>这个设计有两个实际意义。第一，driver 可以不跑在 Ray head 节点上，避免 head 节点资源不足导致内存压力。第二，所有资源、worker 和 trainer 对象都在 Ray 管理范围内创建，便于跨节点调度。</p>
+
+  <h2>ResourcePool：GPU 资源怎么分组</h2>
+  <p><code>ResourcePool</code> 或 <code>RayResourcePool</code> 把集群 GPU 划成逻辑池。最简单配置是一个 <code>global_pool</code>，actor、rollout、critic、reference、reward 都映射到同一组 GPU。这种 colocate 模式更容易起步，也方便 actor 和 rollout 之间做快速权重同步。</p>
+  <p>当任务变大时，资源池会变成策略问题：reward model 是否单独占 GPU，teacher model 是否单独占 GPU，rollout 是否需要更多推理副本，critic 是否可以和 actor 分开，Megatron 的不同角色是否需要不同 3D 并行配置。verl 的 mapping 设计让这些策略不必侵入训练循环。</p>
+
+  <table class="striped">
+    <thead>
+      <tr><th>资源放置</th><th>适合场景</th><th>优点</th><th>风险</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>全 colocate</td><td>单机或小集群起步、严格 on-policy baseline</td><td>配置简单，权重同步短路径，调试容易</td><td>rollout 和训练互相挤显存，长尾生成会让训练等待。</td></tr>
+      <tr><td>reward 单独池</td><td>奖励模型较大或验证成本高</td><td>避免 reward 占用 actor/rollout 显存</td><td>reward 结果回传成为额外数据依赖。</td></tr>
+      <tr><td>rollout 单独池</td><td>长 CoT、多轮工具调用、生成瓶颈明显</td><td>推理可弹性扩展，训练和生成可重叠</td><td>权重同步和 stale policy 控制变复杂。</td></tr>
+      <tr><td>teacher 单独池</td><td>on-policy distillation 或大 teacher</td><td>teacher 查询不阻塞 actor 显存</td><td>需要监控 teacher wait time。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>WorkerGroup：一个方法背后的三段式</h2>
+  <p>WorkerGroup 是用户最应该理解的控制平面对象。它管理多个远端 worker，但暴露成一个本地对象。verl 文档把一次分布式方法调用拆成 3 个动作：<span class="hl">dispatch、execute、collect</span>。</p>
+  <ol>
+    <li><strong>dispatch</strong>：把输入 DataProto 按 worker world size 切分，或者把同一个配置复制给所有 worker。</li>
+    <li><strong>execute</strong>：通过 Ray RPC 触发每个 worker 上的同名方法。</li>
+    <li><strong>collect</strong>：把每个 worker 的返回值收集、拼接、聚合成 driver 继续能用的数据。</li>
+  </ol>
+  <pre><code>@register(dispatch_mode=Dispatch.DP_COMPUTE_PROTO)
+def generate_sequences(self, prompts: DataProto):
+    pass  # worker-side generation
+
+# driver 侧看起来像普通函数
+output = actor_rollout_ref_wg.generate_sequences(batch)</code></pre>
+
+  <h2>dispatch mode 的意义</h2>
+  <table>
+    <thead>
+      <tr><th>模式</th><th>做什么</th><th>典型用途</th><th>思考方式</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>ONE_TO_ALL</code></td><td>同一份参数发给所有 worker</td><td><code>init_model</code>, <code>save_checkpoint</code></td><td>每个 rank 都要做同一件事。</td></tr>
+      <tr><td><code>DP_COMPUTE_PROTO</code></td><td>按数据并行维度切 DataProto</td><td>rollout、log-prob、value、reward</td><td>每个 worker 处理 batch 的一片。</td></tr>
+      <tr><td><code>make_nd_compute_dataproto_dispatch_fn</code></td><td>根据 engine mesh 生成 n-d dispatch</td><td>Megatron PP/TP/DP 组合下的 log-prob 和 update</td><td>后端拓扑被映射成 controller 可理解的数据分发。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="takeaway">
+    <div class="takeaway-label">掌握标准</div>
+    看到一个 worker 方法时，先看它的 <code>@register</code>。这比先看函数体更重要，因为它告诉你该方法是在所有 worker 同步执行，还是按数据切片执行，返回值是否会被拼回 driver。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">05 · Data Protocol</div>
+  <h1>数据协议：DataProto 如何让分布式调用像单机函数</h1>
+  <p class="lead">DataProto 是 verl 的共同语言。没有它，rollout、reward、critic、actor update 之间会被各种后端的 tensor 格式、Python 元数据和 Ray object ref 拆散。</p>
+
+  <h2>三类内容</h2>
+  <table class="striped">
+    <thead>
+      <tr><th>部分</th><th>类型</th><th>放什么</th><th>例子</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>batch</code></td><td>TensorDict</td><td>可按 batch 维切分的 tensor</td><td><code>input_ids</code>, <code>attention_mask</code>, <code>responses</code>, <code>old_log_probs</code>, <code>advantages</code></td></tr>
+      <tr><td><code>non_tensor_batch</code></td><td>dict</td><td>每条样本对应的非 tensor 信息</td><td><code>data_source</code>, <code>reward_model</code>, <code>extra_info</code>, <code>uid</code></td></tr>
+      <tr><td><code>meta_info</code></td><td>dict</td><td>这次调用的全局控制信息</td><td><code>eos_token_id</code>, <code>pad_token_id</code>, <code>validate</code>, <code>global_steps</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>为什么不是普通 dict</h2>
+  <p>RL 训练的 batch 会经历多次增删：生成前只需要 prompts、attention mask 和 position ids；生成后新增 responses；log-prob 后新增 old log probability；reward 后新增 token-level scores；advantage 后新增 advantages 和 returns。普通 dict 无法稳定表达「tensor 字段按 batch 切、非 tensor 字段按样本跟随、meta 信息原样复制」这三种行为。</p>
+  <p>DataProto 提供 <code>pop</code>、<code>select</code>、<code>union</code>、<code>chunk</code>、<code>split</code>、<code>concat</code>、<code>repeat</code> 等操作，正好覆盖训练循环需要的所有数据变形。它不是算法模块，但它决定了算法模块之间是否能组合。</p>
+
+  <h2>一次 PPO batch 的字段演化</h2>
+  <figure>
+    <svg viewBox="0 0 1000 520" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots2" width="22" height="22" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/>
+      <rect width="100%" height="100%" fill="url(#dots2)" opacity="0.55"/>
+      <text x="70" y="42" fill="#1B365D" font-size="15" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  2</text>
+      <text x="205" y="42" fill="#504e49" font-size="15" font-family="monospace" letter-spacing="3">DATAPROTO FIELD EVOLUTION</text>
+      <line x1="70" y1="58" x2="930" y2="58" stroke="#1B365D" stroke-width="1"/>
+
+      <rect x="70" y="104" width="164" height="92" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.4"/>
+      <text x="92" y="134" font-size="20" font-family="serif" font-weight="600" fill="#1B365D">01 数据加载</text>
+      <text x="92" y="160" font-size="14" font-family="monospace" fill="#504e49">prompts</text>
+      <text x="92" y="180" font-size="14" font-family="monospace" fill="#504e49">reward_model</text>
+
+      <rect x="286" y="104" width="164" height="92" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="308" y="134" font-size="20" font-family="serif" font-weight="600" fill="#141413">02 生成</text>
+      <text x="308" y="160" font-size="14" font-family="monospace" fill="#504e49">responses</text>
+      <text x="308" y="180" font-size="14" font-family="monospace" fill="#504e49">response_mask</text>
+
+      <rect x="502" y="104" width="164" height="92" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="524" y="134" font-size="20" font-family="serif" font-weight="600" fill="#141413">03 概率</text>
+      <text x="524" y="160" font-size="14" font-family="monospace" fill="#504e49">old_log_probs</text>
+      <text x="524" y="180" font-size="14" font-family="monospace" fill="#504e49">ref_log_prob</text>
+
+      <rect x="718" y="104" width="164" height="92" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="740" y="134" font-size="20" font-family="serif" font-weight="600" fill="#141413">04 奖励</text>
+      <text x="740" y="160" font-size="14" font-family="monospace" fill="#504e49">token_scores</text>
+      <text x="740" y="180" font-size="14" font-family="monospace" fill="#504e49">rm_scores</text>
+
+      <rect x="178" y="286" width="224" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="204" y="320" font-size="21" font-family="serif" font-weight="600" fill="#141413">05 Advantage</text>
+      <text x="204" y="346" font-size="14" font-family="monospace" fill="#504e49">advantages · returns</text>
+      <text x="204" y="368" font-size="14" font-family="monospace" fill="#6b6a64">GAE / GRPO / RLOO</text>
+
+      <rect x="598" y="286" width="224" height="96" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
+      <text x="624" y="320" font-size="21" font-family="serif" font-weight="600" fill="#141413">06 Update</text>
+      <text x="624" y="346" font-size="14" font-family="monospace" fill="#504e49">update_actor</text>
+      <text x="624" y="368" font-size="14" font-family="monospace" fill="#6b6a64">update_critic if needed</text>
+
+      <path d="M234 150 L286 150" stroke="#1B365D" stroke-width="1.5"/>
+      <path d="M276 143 L286 150 L276 157" fill="none" stroke="#1B365D" stroke-width="1.5" stroke-linecap="round"/>
+      <path d="M450 150 L502 150" stroke="#504e49" stroke-width="1.3"/>
+      <path d="M492 143 L502 150 L492 157" fill="none" stroke="#504e49" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M666 150 L718 150" stroke="#504e49" stroke-width="1.3"/>
+      <path d="M708 143 L718 150 L708 157" fill="none" stroke="#504e49" stroke-width="1.3" stroke-linecap="round"/>
+      <path d="M800 196 C800 252 290 230 290 286" fill="none" stroke="#504e49" stroke-width="1.3"/>
+      <path d="M290 382 C290 430 710 430 710 382" fill="none" stroke="#1B365D" stroke-width="1.5"/>
+      <path d="M703 392 L710 382 L717 392" fill="none" stroke="#1B365D" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <figcaption>DataProto 让每个阶段只追加或取出自己关心的字段，训练循环由字段演化连接起来。</figcaption>
+  </figure>
+
+  <h2>DataProtoFuture 与异步趋势</h2>
+  <p>当前主线源码中还有 <code>DataProtoFuture</code>，目标是避免 driver 过早 materialize 数据。它保存来自另一个 WorkerGroup 的 future 列表，并携带 collect 与 dispatch 函数；当下游 worker 真正需要数据时再取。这个对象体现了 verl 后续异步化方向：控制流继续在 driver 上表达，但数据流尽量不被 driver 拿回内存。</p>
+  <p>v0.7 release blog 进一步提出 TransferQueue，用 BatchMeta / KVBatchMeta 等元数据引用真实 tensor 数据，降低大规模多模态与异步训练中的数据搬运成本。本文把它视为主线演进方向，而不是所有稳定用户都必须立即采用的默认入口。</p>
+
+  <div class="callout">
+    如果你的自定义模块不能接入 verl，先检查它是否遵守 DataProto 契约：batch 维是否一致，non_tensor_batch 是否逐样本对齐，meta_info 是否只放控制信息，返回值是否能被 WorkerGroup collect。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">06 · Training Flow</div>
+  <h1>训练链路：从 parquet 到 update_actor</h1>
+  <p class="lead">verl 的训练链路可以理解成一条状态机。每一步都消费一个 DataProto，产生一个带有更多字段的 DataProto，最后交给 actor 和 critic 更新。</p>
+
+  <h2>第一步：准备 parquet 数据</h2>
+  <p>官方快速开始以 GSM8K 为例，把 Hugging Face dataset 转成 parquet。最小字段是 <code>prompt</code>，但强化学习训练通常还需要 <code>data_source</code>、<code>ability</code>、<code>reward_model.ground_truth</code>、<code>extra_info</code>。这些字段不是装饰，它们决定 reward manager 如何选择打分函数。</p>
+  <pre><code>{
+  "data_source": "openai/gsm8k",
+  "prompt": [{"role": "user", "content": "question text"}],
+  "ability": "math",
+  "reward_model": {"style": "rule", "ground_truth": "42"},
+  "extra_info": {"split": "train", "index": 17}
+}</code></pre>
+  <p>自定义数据的第一条纪律是：reward function 使用的 ground truth 口径必须和数据预处理完全一致。数学任务常见问题是最终答案提取规则不同；代码任务常见问题是测试用例、输入输出格式和沙箱约定没有进入 <code>extra_info</code>。</p>
+
+  <h2>第二步：创建 dataset 和 dataloader</h2>
+  <p><code>RLHFDataset</code> 读取 parquet，应用 chat template，处理 padding 与 truncation，并生成 <code>input_ids</code>、<code>attention_mask</code>、<code>position_ids</code> 等字段。<code>StatefulDataLoader</code> 支持训练中断恢复时保留采样状态。<code>data.train_batch_size</code> 是每次训练迭代抽取的 prompt 全局数量，GRPO/DAPO 中如果 <code>rollout.n > 1</code>，实际生成回答数量是 <code>train_batch_size * n</code>。</p>
+
+  <h2>第三步：rollout 生成</h2>
+  <p>trainer 会从 batch 中取出生成所需字段，构造 <code>gen_batch</code>，然后调用 <code>actor_rollout_wg.generate_sequences(gen_batch)</code>。这一步由 rollout backend 实际执行，常见后端是 vLLM 或 SGLang；调试或小规模探索可以使用 HF rollout。生成结果包含 responses 和相关 mask，然后与原 batch 合并。</p>
+  <p>生成阶段通常是 RL 训练最大的时间成本。长链推理、工具调用和多轮 Agent 会产生长尾请求，导致同步训练等待最慢样本。verl 的异步 rollout、server mode、AgentLoop 和 fully async pipeline 都是在缓解这个问题。</p>
+
+  <h2>第四步：概率、奖励与优势</h2>
+  <p>PPO 需要当前策略对生成 token 的旧 log probability，也需要 reference policy 的 log probability 来控制 KL，还需要 critic 给出 value。GRPO 不训练 critic，而是对同一 prompt 的多条回答做 group baseline。DAPO 在 GRPO 类思路上加入动态采样、clip higher、token-level loss 和 overlong reward shaping。</p>
+  <pre><code>batch = batch.union(gen_batch_output)
+batch = batch.union(actor_rollout_wg.compute_log_prob(batch))
+batch = batch.union(ref_policy_wg.compute_ref_log_prob(batch))   # if KL needed
+batch = batch.union(critic_wg.compute_values(batch))             # if critic needed
+batch.batch["token_level_scores"] = reward_fn(batch)
+batch = compute_advantage(batch, adv_estimator=config.algorithm.adv_estimator)</code></pre>
+
+  <h2>第五步：更新 actor 和 critic</h2>
+  <p>当 batch 包含 responses、old log probabilities、rewards、advantages 等字段后，actor worker 就可以按 mini-batch 和 PPO epoch 训练。critic 若启用，也会更新 value head。更新完成后，metrics 被收集回 driver，用于 logger、验证和 checkpoint。</p>
+  <p>真正要理解的是 batch size 的三层含义：<code>train_batch_size</code> 是采多少 prompt，<code>ppo_mini_batch_size</code> 是一次优化看多少轨迹，<code>ppo_micro_batch_size_per_gpu</code> 或 dynamic token limit 是每张 GPU 一次 forward/backward 承受多少样本或 token。第一类影响算法，第三类主要影响显存和吞吐。</p>
+
+  <h2>第六步：验证、保存与恢复</h2>
+  <p><code>trainer.test_freq</code> 控制验证频率，<code>trainer.save_freq</code> 控制 checkpoint 频率，<code>trainer.resume_mode</code> 控制从 checkpoint 自动恢复还是指定路径恢复。官方配置默认 checkpoint 存在 <code>checkpoints/${trainer.project_name}/${trainer.experiment_name}</code>。FSDP 与 Megatron 的中间 checkpoint 通常是分片格式，若要部署为 Hugging Face 模型，需要走对应 merge 工具。</p>
+
+  <div class="takeaway">
+    <div class="takeaway-label">训练循环记忆法</div>
+    先生成，后定价，再归因，最后更新。生成给出行为，概率给出 ratio 和 KL，奖励给出方向，advantage 给出归因，actor update 才真正改变模型。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">07 · Worker And Engine</div>
+  <h1>Worker 与 Engine：角色、后端与权重同步</h1>
+  <p class="lead">verl 的 Worker 不是简单进程，而是「角色组合」。同一个 ActorRolloutRefWorker 可以只构造 actor，也可以构造 actor + rollout，也可以构造 actor + rollout + ref。真正的训练实现进一步交给 TrainingWorker 和 BaseEngine。</p>
+
+  <h2>角色拆解</h2>
+  <table class="striped">
+    <thead>
+      <tr><th>角色</th><th>做什么</th><th>常见对象</th><th>什么时候需要</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Actor</td><td>被优化的策略模型</td><td><code>TrainingWorker</code> + LM engine</td><td>所有 RL 后训练都需要。</td></tr>
+      <tr><td>Rollout</td><td>用当前或近似当前策略生成回答</td><td><code>BaseRollout</code> + vLLM/SGLang/HF</td><td>on-policy、GRPO、Agentic RL 都需要。</td></tr>
+      <tr><td>Reference</td><td>提供 KL 约束基准</td><td>forward-only <code>TrainingWorker</code></td><td>PPO KL reward 或 GRPO KL loss 需要。</td></tr>
+      <tr><td>Critic</td><td>估计 value，降低方差</td><td>value model <code>TrainingWorker</code></td><td>PPO/GAE 需要，GRPO 通常不需要。</td></tr>
+      <tr><td>Reward</td><td>给回答打分</td><td>rule function、reward model、sandbox、env</td><td>所有 RL 都需要某种 reward。</td></tr>
+      <tr><td>Teacher</td><td>蒸馏或知识提供方</td><td>teacher pool / server</td><td>on-policy distillation 等场景。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>ActorRolloutRefWorker</h2>
+  <p>官方 Engine Workers 文档把 <code>ActorRolloutRefWorker</code> 定义为 hybrid worker。它的 <code>role</code> 字段决定 <code>init_model</code> 里构造哪些子对象：<code>actor</code> 构造 actor TrainingWorker 和 checkpoint engine；<code>rollout</code> 构造 rollout engine；<code>ref</code> 构造 forward-only reference TrainingWorker；<code>actor_rollout</code> 或 <code>actor_rollout_ref</code> 则组合这些角色。</p>
+  <p>这种组合有很强的工程目的：actor 与 rollout colocate 时，更新后的 actor 权重可以通过本地或 NCCL 路径更快送到 rollout engine；LoRA 场景中 reference policy 可以被视为不带 adapter 的 base model，减少额外模型常驻成本。</p>
+
+  <h2>TrainingWorker 与 BaseEngine</h2>
+  <p><code>TrainingWorker</code> 是一个 Ray-wrapped engine API。它负责 reset、to device/offload、set_loss_fn、train_mini_batch、train_batch、infer_batch、save_checkpoint、load_checkpoint。它不关心底层是 FSDP2 还是 Megatron，底层实现由 <code>EngineRegistry.new(model_type, backend, device)</code> 决定。</p>
+  <table>
+    <thead>
+      <tr><th>后端</th><th>主要优势</th><th>使用判断</th><th>注意点</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>FSDP / FSDP2</td><td>上手快，Hugging Face 模型支持好</td><td>研究、原型、中等规模 dense 模型</td><td>MoE 和超大模型扩展性不如 Megatron；需关注 offload、activation checkpointing。</td></tr>
+      <tr><td>Megatron / MCore</td><td>TP、PP、CP、EP 等并行能力强</td><td>百亿到千亿参数、MoE、大集群</td><td>新模型适配成本更高，配置与 checkpoint 转换更复杂。</td></tr>
+      <tr><td>Automodel / VeOmni / TorchTitan</td><td>主线扩展中的统一 engine 方向</td><td>特定生态或实验 pipeline</td><td>按官方版本与测试矩阵确认成熟度。</td></tr>
+      <tr><td>NPU / MindSpeed 相关</td><td>昇腾硬件支持</td><td>Ascend 集群</td><td>需按 Ascend tutorial 的模型、算法和精度支持矩阵配置。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Rollout Engine：从批量推理到 server mode</h2>
+  <p>README 中列出的 rollout 后端包括 vLLM、SGLang 和 HF Transformers。安装文档建议 vLLM 0.8.3 及以上更稳定，并建议打开 <code>VLLM_USE_V1=1</code> 以获取更好性能。SGLang 在 multi-turn、agentic RL、VLM RLHF、server-based RL 等方向发展较快。</p>
+  <p>v0.7 release blog 明确指出，随着任务从单轮静态生成转向多轮动态交互，旧式 SPMD rollout 已不足以支撑长尾和工具调用场景，主线转向 server-based rollout。server mode 下，推理引擎像在线服务一样接收逐样本请求，通过动态 batching 提高吞吐；AgentLoop 作为客户端管理工具调用和环境交互。</p>
+
+  <h2>Checkpoint Engine 与权重同步</h2>
+  <p>强化学习后训练的特殊之处在于 rollout 使用的策略必须不断跟上训练后的 actor。同步训练中，actor 更新后会把最新权重推给 rollout engine。异步或解耦训练中，rollout 和训练可能在不同节点，权重同步成为独立工程问题。官方主线引入 Checkpoint Engine，目标是提供统一的权重发送与接收接口，并支持 NCCL、NIXL 等 transport。</p>
+
+  <div class="callout">
+    Worker 是角色组合，Engine 是计算实现，Checkpoint Engine 是权重流动。三者分开后，你才能把算法保持不变，同时替换 FSDP 为 Megatron，或把 rollout 从 colocate 改成独立 server。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">08 · Algorithms</div>
+  <h1>算法层：PPO、GRPO、DAPO 与优势估计</h1>
+  <p class="lead">verl 的算法层不是把每个算法写成互不相干的 trainer，而是尽量复用同一条 rollout、reward、advantage、update 数据流。差异主要落在 advantage estimator、critic 是否启用、KL 放在 reward 还是 loss、采样组大小和 loss aggregation。</p>
+
+  <h2>PPO：actor-critic 与 GAE</h2>
+  <p>PPO 使用 actor-critic 架构。actor 是被优化的策略，critic 估计 value。生成后，PPO 计算 old policy 与 new policy 的概率比，再用 clipped surrogate objective 限制单次策略更新幅度。GAE 用 <code>gamma</code> 和 <code>lam</code> 在 bias 与 variance 之间折中。</p>
+  <table>
+    <thead>
+      <tr><th>PPO 配置</th><th>作用</th><th>起步判断</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>algorithm.adv_estimator=gae</code></td><td>启用 GAE 优势估计</td><td>需要 critic 时使用。</td></tr>
+      <tr><td><code>critic.*</code></td><td>critic 模型、优化器、batch 参数</td><td>critic 显存可比 actor 小，但仍需规划。</td></tr>
+      <tr><td><code>actor.clip_ratio</code></td><td>限制 policy ratio</td><td>默认 0.2 是常见起点。</td></tr>
+      <tr><td><code>algorithm.use_kl_in_reward</code></td><td>把 KL 作为 reward penalty</td><td>PPO/RLHF 常见。</td></tr>
+      <tr><td><code>algorithm.kl_ctrl</code></td><td>固定或自适应 KL 系数</td><td>reward hacking 或 KL 失控时重点检查。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>GRPO：去掉 critic，用组内相对奖励</h2>
+  <p>GRPO 的核心是对每个 prompt 采样多条回答，使用组内平均奖励作为 baseline。它避免训练 critic，降低显存和计算复杂度，但要求 <code>rollout.n</code> 大于 1，并且 reward 必须能区分同一 prompt 下不同回答的质量。</p>
+  <p>verl 文档提醒，很多配置仍带 <code>ppo_</code> 前缀，但可用于 GRPO，因为训练循环与 PPO 近似，只是没有 critic。GRPO 通常设置 <code>algorithm.adv_estimator=grpo</code>、<code>actor_rollout_ref.rollout.n &gt; 1</code>，并用 <code>actor.use_kl_loss=True</code> 在 actor loss 中加 KL。</p>
+
+  <h2>DAPO：把 GRPO 式训练推向长 CoT 和大规模复现</h2>
+  <p>DAPO 在 verl 官方算法页中作为 recipe 呈现，并与 DAPO 论文、BytedTsinghua-SIA DAPO 项目关联。它关注长链推理训练中的几个关键问题：动态采样过滤无信息 group、clip higher 调整上下界、token-level loss 改变长回答归一化、overlong reward shaping 控制过长输出。</p>
+  <table class="striped">
+    <thead>
+      <tr><th>DAPO 机制</th><th>配置入口</th><th>解决的问题</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Clip Higher</td><td><code>clip_ratio_low</code>, <code>clip_ratio_high</code></td><td>对正负 advantage 使用不对称更新边界，控制策略更新。</td></tr>
+      <tr><td>Dynamic Sampling</td><td><code>algorithm.filter_groups.enable</code></td><td>过滤全对或全错 group，避免无 advantage 信号的样本浪费训练 batch。</td></tr>
+      <tr><td>Token-level Loss</td><td><code>actor.loss_agg_mode="token-mean"</code></td><td>让长序列训练按 token 聚合，降低长 CoT 场景中的长度偏置。</td></tr>
+      <tr><td>Overlong Reward Shaping</td><td><code>reward_model.overlong_buffer</code></td><td>对接近最大长度的输出逐步惩罚，而不是只做硬截断。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>AdvantageEstimator 注册表</h2>
+  <p>当前源码中的 <code>core_algos.py</code> 用 <code>AdvantageEstimator</code> 枚举和 registry 管理优势估计器，包括 <code>gae</code>、<code>grpo</code>、<code>reinforce_plus_plus</code>、<code>reinforce_plus_plus_baseline</code>、<code>remax</code>、<code>rloo</code>、<code>opo</code>、<code>grpo_passk</code>、<code>gpg</code>、<code>rloo_vectorized</code>、<code>grpo_vectorized</code>、<code>optimal_token_baseline</code>、<code>tir_optimal_token_baseline</code>、<code>gdpo</code> 等。使用者不必把每个算法都改成新 trainer，很多扩展只需要注册新的 advantage 函数或 policy loss。</p>
+
+  <h2>选择算法的实用路线</h2>
+  <table>
+    <thead>
+      <tr><th>任务特征</th><th>优先算法</th><th>理由</th><th>额外检查</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>奖励模型给连续偏好分，已有 critic 预算</td><td>PPO</td><td>actor-critic 稳定，KL reward penalty 成熟</td><td>critic loss、value clipping、KL controller。</td></tr>
+      <tr><td>数学/代码可验证奖励，每题可采多条回答</td><td>GRPO</td><td>不需要 critic，组内 baseline 简洁</td><td><code>rollout.n</code>、group reward 方差、loss aggregation。</td></tr>
+      <tr><td>长 CoT，样本常出现全对/全错 group</td><td>DAPO</td><td>动态采样和 token-level loss 更贴合长推理</td><td>overlong reward、clip high、生成 batch 上限。</td></tr>
+      <tr><td>希望极简或做 baseline</td><td>REINFORCE++ / RLOO</td><td>实现更简单，减少 critic 成本</td><td>方差、batch size、reward 标准化。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="takeaway">
+    <div class="takeaway-label">算法层最常见误区</div>
+    把 <code>micro_batch_size</code> 当算法参数调，或者把 <code>rollout.n</code> 当纯性能参数调。前者主要是显存与吞吐，后者直接改变 GRPO/DAPO 的 group 结构和 advantage 估计。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">09 · Configuration</div>
+  <h1>配置层：Hydra 参数如何改变训练行为</h1>
+  <p class="lead">verl 的配置是架构的一部分。它不是简单把命令行参数传给脚本，而是在运行时决定数据、模型、后端、资源、算法、日志、checkpoint 和恢复策略。</p>
+
+  <h2>配置树的骨架</h2>
+  <table class="striped">
+    <thead>
+      <tr><th>配置块</th><th>控制对象</th><th>必须理解的字段</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>data</code></td><td>数据文件、长度、batch、字段名、截断</td><td><code>train_files</code>, <code>val_files</code>, <code>prompt_key</code>, <code>max_prompt_length</code>, <code>max_response_length</code>, <code>train_batch_size</code></td></tr>
+      <tr><td><code>actor_rollout_ref.model</code></td><td>actor/ref/rollout 共用模型路径与 HF 配置</td><td><code>path</code>, <code>trust_remote_code</code>, <code>use_remove_padding</code>, <code>enable_gradient_checkpointing</code></td></tr>
+      <tr><td><code>actor_rollout_ref.actor</code></td><td>actor 训练与 policy loss</td><td><code>strategy</code>, <code>ppo_mini_batch_size</code>, <code>ppo_micro_batch_size_per_gpu</code>, <code>use_dynamic_bsz</code>, <code>clip_ratio</code>, <code>use_kl_loss</code></td></tr>
+      <tr><td><code>actor_rollout_ref.rollout</code></td><td>生成后端与采样</td><td><code>name</code>, <code>n</code>, <code>temperature</code>, <code>top_p</code>, <code>tensor_model_parallel_size</code>, <code>gpu_memory_utilization</code></td></tr>
+      <tr><td><code>critic</code></td><td>value model</td><td><code>strategy</code>, <code>model.path</code>, <code>ppo_micro_batch_size_per_gpu</code></td></tr>
+      <tr><td><code>reward</code> / <code>reward_model</code></td><td>奖励模型、奖励函数、reward manager</td><td><code>enable</code>, <code>path</code>, <code>reward_manager</code>, <code>custom_reward_function</code></td></tr>
+      <tr><td><code>algorithm</code></td><td>优势估计与 KL</td><td><code>adv_estimator</code>, <code>gamma</code>, <code>lam</code>, <code>use_kl_in_reward</code>, <code>kl_ctrl</code>, <code>filter_groups</code></td></tr>
+      <tr><td><code>trainer</code></td><td>集群规模、日志、验证、保存、恢复</td><td><code>nnodes</code>, <code>n_gpus_per_node</code>, <code>logger</code>, <code>test_freq</code>, <code>save_freq</code>, <code>resume_mode</code></td></tr>
+    </tbody>
+  </table>
+
+  <h2>batch size 的四个维度</h2>
+  <p>batch 配置是新手最容易误解的地方。verl 官方文档反复强调，含 <code>micro_batch_size</code> 的参数是为了避免 OOM 和调吞吐，理论上不应该改变算法收敛语义；而 train batch、rollout group size 和 mini-batch 会改变训练数据组织。</p>
+  <table>
+    <thead>
+      <tr><th>字段</th><th>层级</th><th>语义</th><th>改变后影响</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>data.train_batch_size</code></td><td>算法</td><td>每次迭代采多少 prompt</td><td>影响 on-policy batch、方差、更新频率。</td></tr>
+      <tr><td><code>rollout.n</code></td><td>算法</td><td>每个 prompt 采多少回答</td><td>GRPO/DAPO group 大小，生成成本线性增加。</td></tr>
+      <tr><td><code>actor.ppo_mini_batch_size</code></td><td>算法/优化</td><td>一次 policy update mini-batch 全局大小</td><td>影响梯度估计和优化步数量。</td></tr>
+      <tr><td><code>*micro_batch_size_per_gpu</code></td><td>工程</td><td>每 GPU 一次 forward/backward 的样本数</td><td>主要影响显存、梯度累积、吞吐。</td></tr>
+      <tr><td><code>*max_token_len_per_gpu</code></td><td>工程</td><td>dynamic batch 的每 GPU token 上限</td><td>影响长序列显存和利用率。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>最小命令怎么读</h2>
+  <pre><code>python3 -m verl.trainer.main_ppo \
+  data.train_files=$HOME/data/gsm8k/train.parquet \
+  data.val_files=$HOME/data/gsm8k/test.parquet \
+  data.train_batch_size=256 \
+  data.max_prompt_length=512 \
+  data.max_response_length=512 \
+  actor_rollout_ref.model.path=Qwen/Qwen2.5-0.5B-Instruct \
+  actor_rollout_ref.rollout.name=vllm \
+  actor_rollout_ref.rollout.tensor_model_parallel_size=1 \
+  actor_rollout_ref.actor.ppo_mini_batch_size=64 \
+  actor_rollout_ref.actor.ppo_micro_batch_size_per_gpu=4 \
+  critic.model.path=Qwen/Qwen2.5-0.5B-Instruct \
+  algorithm.kl_ctrl.kl_coef=0.001 \
+  trainer.n_gpus_per_node=1 \
+  trainer.nnodes=1</code></pre>
+  <p>这段命令里，数据路径决定样本来源；模型路径决定 actor、critic 的初始权重；rollout 后端决定生成由谁完成；mini/micro batch 决定优化与显存；KL 系数决定策略偏离参考模型的惩罚；节点和 GPU 数决定 Ray 资源池大小。读命令时不要从上到下机械阅读，而要按「数据、模型、生成、算法、资源、日志」分组。</p>
+
+  <h2>配置审查清单</h2>
+  <ul>
+    <li><strong>数据字段：</strong><code>prompt_key</code> 是否和 parquet 一致，<code>reward_model.ground_truth</code> 是否存在，<code>uid</code> 是否能支持 group 归因。</li>
+    <li><strong>长度：</strong><code>max_prompt_length</code> 是否误截题目，<code>max_response_length</code> 是否导致大量截断，validation 是否使用不同采样参数。</li>
+    <li><strong>算法：</strong>PPO 是否启用 critic，GRPO/DAPO 是否 <code>rollout.n &gt; 1</code>，KL 是放 reward 还是 loss。</li>
+    <li><strong>后端：</strong>FSDP2 适合原型，Megatron 适合大规模；rollout TP 要满足模型权重和 KV cache。</li>
+    <li><strong>显存：</strong>先调 micro batch、dynamic token limit、gradient checkpointing、activation offload，再调算法 batch。</li>
+    <li><strong>可复现：</strong>固定 seed、记录 commit、保存完整 Hydra 配置、保存 reward function 文件和数据预处理脚本。</li>
+  </ul>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">10 · Operations</div>
+  <h1>工程落地：性能、调试、异步、Agentic RL</h1>
+  <p class="lead">能跑通 demo 只是开始。真正使用 verl，需要能从日志判断瓶颈、从异常定位层级、从任务形态选择同步或异步 pipeline。</p>
+
+  <h2>性能瓶颈从哪里看</h2>
+  <table class="striped">
+    <thead>
+      <tr><th>日志信号</th><th>可能瓶颈</th><th>优先处理</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>timing/gen</code> 高</td><td>rollout 生成慢、KV cache 不足、TP/DP 不合适、长尾输出</td><td>调 <code>gpu_memory_utilization</code>、<code>max_num_batched_tokens</code>、rollout TP/DP、server async。</td></tr>
+      <tr><td><code>timing/ref</code> / log-prob 高</td><td>forward-only batch 太小或动态 batch 未启用</td><td>提高 <code>log_prob_micro_batch_size_per_gpu</code> 或 token limit。</td></tr>
+      <tr><td><code>timing/update_actor</code> 高</td><td>训练后端吞吐不足，micro batch 太小，通信开销大</td><td>gradient checkpointing、dynamic batch、FSDP2、Megatron 并行配置。</td></tr>
+      <tr><td>KL 快速升高</td><td>reward 太强、KL 约束太弱、log-prob 不一致</td><td>检查 reference、old_log_probs、reward scale、KL coef。</td></tr>
+      <tr><td>response_length 接近上限</td><td>模型过长输出或被截断</td><td>检查 overlong reward、max_response_length、prompt 格式。</td></tr>
+      <tr><td>reward 全 0 或全 1</td><td>打分函数无区分度或数据答案错</td><td>抽样 dump generations，逐条验证 reward。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>调优顺序</h2>
+  <ol>
+    <li><strong>先做正确性。</strong>用小模型、小 batch、console logger、少量数据跑 3 到 5 个 step，确认 reward、KL、response length、checkpoint 都正常。</li>
+    <li><strong>再做显存。</strong>OOM 时先降 <code>*micro_batch_size_per_gpu</code> 或 dynamic token limit，打开 gradient checkpointing，再考虑 offload。</li>
+    <li><strong>再做 rollout 吞吐。</strong>调 <code>gpu_memory_utilization</code>、<code>max_num_seqs</code>、<code>max_num_batched_tokens</code>、TP/DP；不同推理后端含义不完全相同，不能直接照搬。</li>
+    <li><strong>最后做算法 batch。</strong>只有当系统稳定后，才扩大 <code>train_batch_size</code>、<code>rollout.n</code> 或 DAPO dynamic sampling 上限。</li>
+  </ol>
+
+  <h2>Agentic RL 的特殊复杂性</h2>
+  <p>Agentic RL 不只是把 prompt 变长。它引入外部环境等待、工具调用解析、trace、失败恢复、token 与文本不可逆转换等问题。官方 Agentic RL 文档解释了为什么训练期间 server 提供 token-based generate 接口，而不是普通 chat completion API：训练要严格使用推理引擎实际生成的 token，否则 log-prob 和 advantage 会对不上。</p>
+  <p>工具调用训练通常需要 <code>data.return_raw_chat=True</code>、<code>actor_rollout_ref.rollout.mode=async</code>，并在数据中加入 <code>agent_name</code> 等字段，让 rollout 时选择 ToolAgentLoop 或 SingleTurnAgentLoop。调试时应启用 trace 或 dump generations，先看模型是否生成合法工具调用，再看工具结果是否写回上下文，最后看 reward 是否按最终轨迹给分。</p>
+
+  <h2>异步训练的边界</h2>
+  <p>官方 v0.7 口径中，verl-trainer 包含同步 on-policy、one-step-off-policy 和 fully async 三类 pipeline。同步最接近算法定义，但会被长尾生成拖慢；一步 off-policy 把当前训练和下一批生成重叠，通常在稳定性与吞吐之间折中；全异步把 trainer 和 rollouter 解耦，适合 128+ GPU 或长链推理等生成严重瓶颈场景，但需要 staleness control、权重同步和数据队列能力。</p>
+  <p>实践中不要过早上全异步。先用同步 pipeline 找到 reward 和算法参数，再用日志证明 <code>timing/gen</code> 是主要瓶颈，最后再引入异步。否则你会同时调 reward、算法、数据传输、权重同步和 stale policy，定位成本会陡增。</p>
+
+  <h2>故障定位树</h2>
+  <table>
+    <thead>
+      <tr><th>问题</th><th>第一检查点</th><th>第二检查点</th><th>最终定位层</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>启动失败</td><td>Hydra 配置键是否存在</td><td>Ray runtime env 是否安装依赖</td><td>配置层 / 环境层</td></tr>
+      <tr><td>数据报错</td><td>parquet 字段和 prompt_key</td><td>chat template 与 tokenizer</td><td>数据层</td></tr>
+      <tr><td>reward 异常</td><td>dump 5 条输入输出</td><td>ground_truth 提取与 reward 函数</td><td>任务层</td></tr>
+      <tr><td>OOM</td><td>rollout 还是 actor update</td><td>micro batch、KV cache、offload</td><td>后端层</td></tr>
+      <tr><td>训练不涨</td><td>reward 是否有方差</td><td>KL 是否过强或过弱</td><td>算法层</td></tr>
+      <tr><td>多机 hang</td><td>NCCL / Ray 日志</td><td>worker world size 与并行配置</td><td>控制层 / 后端层</td></tr>
+    </tbody>
+  </table>
+
+  <div class="takeaway">
+    <div class="takeaway-label">工程判断</div>
+    verl 调试要按层定位。不要看到 OOM 就改算法，不要看到 reward 低就调显存，不要看到 Ray 报错就怀疑 PPO。先把现象归到数据、控制、后端、算法或环境其中一层。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">11 · Appendix</div>
+  <h1>附录：源码路线、术语表与来源</h1>
+  <p class="lead">这一章给出可执行的源码阅读路线和术语表。读完正文后，按这里的顺序看源码，可以把概念压实到具体文件。</p>
+
+  <h2>源码阅读路线</h2>
+  <table class="striped">
+    <thead>
+      <tr><th>顺序</th><th>文件 / 目录</th><th>你要看什么</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td><code>verl/trainer/main_ppo.py</code></td><td>Hydra 入口、Ray 初始化、TaskRunner、角色映射、dataset 创建。注意该文件已标注将被 <code>main_ppo_sync.py</code> 替代。</td></tr>
+      <tr><td>2</td><td><code>verl/trainer/main_ppo_sync.py</code></td><td>同步 PPO 新入口、TransferQueue、ReplayBuffer、AgentLoop、RewardLoop、CheckpointEngineManager。</td></tr>
+      <tr><td>3</td><td><code>verl/trainer/ppo/ray_trainer.py</code></td><td>RayPPOTrainer 的 dataloader、init_workers、fit、reward、advantage、update、validation。</td></tr>
+      <tr><td>4</td><td><code>verl/protocol.py</code></td><td>DataProto、DataProtoFuture、chunk、concat、union、serialization。</td></tr>
+      <tr><td>5</td><td><code>verl/single_controller/</code></td><td>WorkerGroup、register decorator、dispatch/collect registry、RayWorkerGroup 绑定。</td></tr>
+      <tr><td>6</td><td><code>verl/workers/engine_workers.py</code></td><td>TrainingWorker、ActorRolloutRefWorker、init_model、compute_log_prob、update_actor、update_weights。</td></tr>
+      <tr><td>7</td><td><code>verl/workers/engine/</code></td><td>BaseEngine、FSDP、Megatron、Automodel、VeOmni、TorchTitan 后端实现。</td></tr>
+      <tr><td>8</td><td><code>verl/workers/rollout/</code></td><td>vLLM/SGLang/HF rollout 适配、server mode、async generate。</td></tr>
+      <tr><td>9</td><td><code>verl/trainer/ppo/core_algos.py</code></td><td>advantage estimator registry、KL controller、policy loss registry。</td></tr>
+      <tr><td>10</td><td><code>verl/trainer/config/</code></td><td>Hydra 默认配置，确认字段名和默认值。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>扩展路线</h2>
+  <div class="grid-2">
+    <div class="card">
+      <h3>新增数据集</h3>
+      <p class="small">写 preprocessing 脚本，把原始样本转成 parquet。确保 <code>prompt</code>、<code>data_source</code>、<code>reward_model.ground_truth</code> 和 <code>extra_info</code> 足够 reward 使用。</p>
+    </div>
+    <div class="card">
+      <h3>新增 reward</h3>
+      <p class="small">实现 <code>compute_score(data_source, solution_str, ground_truth, extra_info)</code> 或配置 <code>custom_reward_function.path/name</code>。先用离线样本单测，不要直接进训练。</p>
+    </div>
+    <div class="card">
+      <h3>新增算法</h3>
+      <p class="small">优先复用 trainer 数据流，注册新的 advantage estimator 或 policy loss。只有控制流顺序变化时，才考虑新 trainer。</p>
+    </div>
+    <div class="card">
+      <h3>新增后端</h3>
+      <p class="small">实现 <code>BaseEngine</code> 子类并注册到 <code>EngineRegistry</code>。worker 层通常无需改动，关键是 forward、train、infer、checkpoint、dispatch 信息。</p>
+    </div>
+  </div>
+
+  <h2>术语表</h2>
+  <table class="compact striped">
+    <thead>
+      <tr><th>术语</th><th>定义</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Actor</td><td>被强化学习优化的策略模型，输出下一个 token 的概率分布。</td></tr>
+      <tr><td>Critic</td><td>估计状态或 token 价值的模型，用于 GAE 等 actor-critic 方法。</td></tr>
+      <tr><td>Rollout</td><td>用策略模型生成回答或轨迹的过程，LLM RL 中通常是最耗时环节。</td></tr>
+      <tr><td>Reference Policy</td><td>KL 约束中的参考模型，常为 SFT 或 base policy。</td></tr>
+      <tr><td>Reward Model</td><td>用模型给回答打分，区别于 rule-based verifier。</td></tr>
+      <tr><td>RLVR</td><td>Reinforcement Learning with Verifiable Rewards，使用可验证规则或环境反馈作为奖励。</td></tr>
+      <tr><td>HybridFlow</td><td>verl 采用的混合控制架构：高层单控制器表达 RL 数据流，底层多进程后端执行重计算。</td></tr>
+      <tr><td>WorkerGroup</td><td>Ray 远端 worker 组在 driver 侧的代理，负责 dispatch、execute、collect。</td></tr>
+      <tr><td>ResourcePool</td><td>Ray 集群中一组 GPU 资源的逻辑划分，用于角色放置。</td></tr>
+      <tr><td>DataProto</td><td>verl 的数据交换协议，包含 TensorDict、non_tensor_batch 和 meta_info。</td></tr>
+      <tr><td>SPMD</td><td>Single Program Multiple Data，多进程执行同一程序，常见于分布式训练后端。</td></tr>
+      <tr><td>MPMD</td><td>Multiple Program Multiple Data，多角色不同程序并行，常用于描述 actor/critic/rollout 等角色组合。</td></tr>
+      <tr><td>FSDP2</td><td>PyTorch Fully Sharded Data Parallel 新版本，在内存和组合性上较 FSDP1 有改进。</td></tr>
+      <tr><td>Megatron</td><td>面向超大模型的并行训练后端，支持 TP、PP、CP、EP 等组合。</td></tr>
+      <tr><td>Dynamic Batch Size</td><td>按 token 数而不是固定样本数组织 micro batch，提高长短序列混合时的利用率。</td></tr>
+      <tr><td>KL Penalty</td><td>惩罚当前策略偏离参考策略，防止 reward hacking 和分布漂移。</td></tr>
+      <tr><td>Checkpoint Engine</td><td>主线架构中的权重保存、加载和训练到 rollout 权重同步抽象。</td></tr>
+      <tr><td>TransferQueue</td><td>主线实验/演进方向，用引用传递和队列降低大数据量跨组件传输成本。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>来源</h2>
+  <ul>
+    <li>verl official repository: <a href="https://github.com/verl-project/verl">https://github.com/verl-project/verl</a></li>
+    <li>verl official documentation: <a href="https://verl.readthedocs.io/en/latest/">https://verl.readthedocs.io/en/latest/</a></li>
+    <li>HybridFlow paper: <a href="https://arxiv.org/abs/2409.19256">https://arxiv.org/abs/2409.19256</a></li>
+    <li>DAPO paper: <a href="https://arxiv.org/abs/2503.14476">https://arxiv.org/abs/2503.14476</a></li>
+    <li>DeepSeekMath / GRPO source paper: <a href="https://arxiv.org/abs/2402.03300">https://arxiv.org/abs/2402.03300</a></li>
+  </ul>
+  <p class="source-note">完整来源、版本口径和事实边界见同目录 <code>sources.md</code> 与 <code>data/source-map.tsv</code>。</p>
+</section>
+
+</body>
+</html>
