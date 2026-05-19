@@ -1,0 +1,61 @@
+id	type	name	date	url	used_for
+S01	official	Google DeepMind RT-2 blog	2023-07-28	https://deepmind.google/blog/rt-2-new-model-translates-vision-and-language-into-action	VLA paradigm and RT-2 summary
+S02	paper	RT-2 arXiv	2023	https://arxiv.org/abs/2307.15818	robotic transformer technical reference
+S03	paper	Open X-Embodiment	2023	https://arxiv.org/abs/2310.08864	multi-robot data scale and RT-X
+S04	official	Google Gemini Robotics	2025-03-12	https://deepmind.google/blog/gemini-robotics-brings-ai-into-the-physical-world/	Gemini Robotics model family
+S05	official	Gemini Robotics 1.5	2025	https://deepmind.google/blog/gemini-robotics-15-brings-ai-agents-into-the-physical-world/	embodied reasoning and agentic robotics
+S06	official	Gemini Robotics-ER 1.6	2026	https://deepmind.google/blog/gemini-robotics-er-1-6/	current Google embodied reasoning update
+S07	project	OpenVLA project	2024	https://openvla.github.io/	open VLA model facts
+S08	repo	OpenVLA GitHub	2024	https://github.com/openvla/openvla	training and fine-tuning stack
+S09	repo	Octo GitHub	2024	https://github.com/octo-models/octo	open generalist robot policy
+S10	official	Physical Intelligence pi0	2024	https://www.pi.website/blog/pi0	generalist policy direction
+S11	official	Physical Intelligence pi0.5	2025	https://www.pi.website/blog/pi05	open-world generalization direction
+S12	official	Physical Intelligence pi0.7	2026-04-16	https://www.pi.website/blog/pi07	latest PI model direction
+S13	repo	Physical Intelligence GitHub	2026	https://github.com/Physical-Intelligence	openpi and public code
+S14	official	Meta V-JEPA 2	2025	https://ai.meta.com/blog/v-jepa-2-world-model-benchmarks/	world model direction
+S15	official	Meta PARTNR	2024	https://ai.meta.com/research/publications/partnr-a-benchmark-for-planning-and-reasoning-in-embodied-multi-agent-tasks/	embodied multi-agent benchmark
+S16	official	Meta Habitat 3.0	2024	https://ai.meta.com/research/publications/habitat-3-0-a-co-habitat-for-humans-avatars-and-robots/	simulation and human-robot collaboration
+S17	official	NVIDIA GR00T N1	2025-03-18	https://nvidianews.nvidia.com/news/nvidia-isaac-gr00t-n1-open-humanoid-robot-foundation-model-simulation-frameworks	NVIDIA humanoid foundation model
+S18	official	NVIDIA Cosmos	2025-01-06	https://nvidianews.nvidia.com/news/nvidia-launches-cosmos-world-foundation-model-platform-to-accelerate-physical-ai-development	world foundation models for physical AI
+S19	official	NVIDIA open models 2026	2026-03-16	https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Expands-Open-Model-Families-to-Power-the-Next-Wave-of-Agentic-Physical-and-Healthcare-AI/default.aspx	GR00T N1.7 and Cosmos 3 context
+S20	official	NVIDIA robotics ecosystem 2026	2026-03-16	https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-and-Global-Robotics-Leaders-Take-Physical-AI-to-the-Real-World/	industry ecosystem
+S21	official	Figure Helix	2025-02-20	https://www.figure.ai/news/helix	Figure VLA
+S22	official	Figure 03	2025-10-09	https://www.figure.ai/news/introducing-figure-03	Figure hardware and deployment direction
+S23	official	Figure Helix 02	2026-01-27	https://www.figure.ai/news/helix-02	full-body autonomy
+S24	official	Figure BMW deployment	2025	https://www.figure.ai/news/production-at-bmw	industrial deployment claim
+S25	official	BMW Figure pilot	2024	https://www.bmwgroup.com/en/news/general/2024/humanoid-robots.html	independent customer context
+S26	official	TRI Large Behavior Models	2025	https://www.tri.global/our-work/large-behavior-models	LBM concept
+S27	official	Toyota and Boston Dynamics LBM	2025-08-20	https://pressroom.toyota.com/ai-powered-robot-by-boston-dynamics-and-toyota-research-institute-takes-a-key-step-towards-general-purpose-humanoids/	Atlas with LBM
+S28	official	Boston Dynamics Atlas	2026	https://bostondynamics.com/atlas/	Atlas product positioning
+S29	official	Amazon Vulcan	2025	https://www.aboutamazon.eu/news/company-news/introducing-vulcan-amazons-first-robot-with-a-sense-of-touch	tactile warehouse robot
+S30	official	Agility Digit GXO	2024	https://www.agilityrobotics.com/content/digit-deployed-at-gxo-in-historic-humanoid-raas-agreement	commercial humanoid deployment
+S31	official	Agility products	2026	https://www.agilityrobotics.com/products	Digit product and customer messaging
+S32	official	Apptronik funding and Google partnership	2025	https://apptronik.com/news-collection/apptronik-raises-350-million-in-series-a-funding	Apptronik Apollo ecosystem
+S33	official	1X NEO	2025	https://www.1x.tech/ja_jp/discover/neo-home-robot	consumer home robot positioning
+S34	official	Skild AI robotic brain	2025-07-29	https://www.skild.ai/blogs/building-the-general-purpose-robotic-brain	general-purpose robotic brain
+S35	official	Tesla AI and Robotics	2026	https://www.tesla.com/AI	Optimus positioning
+S36	official	AGIBOT World 2026	2026	https://www.agibot.com/article/231/detail/54.html	Chinese embodied dataset
+S37	official	AGIBOT MWC 2026	2026-03-02	https://www.agibot.com/article/231/detail/44.html	AGIBOT product portfolio
+S38	official	AGIBOT X2	2026	https://store.agibot.com/products/x2	product facts
+S39	official	Unitree open source	2026	https://unitree-robot.com/opensource/	Unitree SDK/data/open-source ecosystem
+S40	press	Unitree G1 PR	2024	https://www.prnewswire.com/news-releases/unitree-robotics-introduces-g1-humanoid-agent-ai-avatar-302146198.html	G1 launch
+S41	official	UBTECH Walker S2	2026	https://www.ubtrobot.com/en/humanoid/products/WalkerS2	Walker S2 product
+S42	official	UBTECH Walker S1	2026	https://www.ubtrobot.com/en/humanoid/products/walker-s1	Walker S1 technology framing
+S43	press	UBTECH mass production	2025	https://www.prnewswire.com/news-releases/ubtech-humanoid-robot-walker-s2-begins-mass-production-and-delivery-with-orders-exceeding-800-million-yuan-302616978.html	orders and capacity targets
+S44	model	Tencent HY-Embodied Hugging Face	2026	https://huggingface.co/tencent/HY-Embodied-0.5	Chinese open embodied model
+S45	paper	Tencent HY-Embodied arXiv	2026	https://arxiv.org/abs/2604.07430	model design
+S46	official	Alibaba embodied foundation model	2026	https://www.alibabacloud.com/blog/602898	DAMO/Qwen robotics model direction
+S47	government	China standard framework	2026-03-02	https://govt.chinadaily.com.cn/s/202603/02/WS69a5171c498e23165e06dc3c/china-introduces-a-standard-framework-for-humanoid-and-embodied-intelligence.html	China standardization and manufacturer counts
+S48	docs	ROS docs	2026	https://docs.ros.org/	middleware stack
+S49	docs	ROS 2 Jazzy docs	2026	https://docs.ros.org/en/jazzy/	current ROS 2 LTS reference
+S50	docs	MuJoCo docs	2026	https://mujoco.readthedocs.io/en/stable/overview.html	physics engine
+S51	docs	MuJoCo website	2026	https://mujoco.org/	simulator positioning
+S52	official	NVIDIA Isaac Lab	2026	https://developer.nvidia.com/isaac/lab	robot learning simulation
+S53	official	Hugging Face LeRobot	2026	https://huggingface.co/lerobot	open robotics library
+S54	repo	LeRobot GitHub	2026	https://github.com/huggingface/lerobot	end-to-end robot learning stack
+S55	repo	ManiSkill GitHub	2026	https://github.com/haosulab/ManiSkill	manipulation simulator benchmark
+S56	paper	DROID RSS paper	2024	https://www.roboticsproceedings.org/rss20/p120.pdf	in-the-wild robot manipulation data
+S57	industry	Goldman Sachs humanoid robot market	2024	https://www.goldmansachs.com/insights/articles/the-global-market-for-robots-could-reach-38-billion-by-2035	market forecast
+S58	industry	IFR World Robotics 2025	2025	https://ifr.org/ifr-press-releases/global-robot-demand-in-factories-doubles-over-10-years	industrial robot installed base trend
+S59	report	Stanford AI Index 2025 PDF	2025	https://hai.stanford.edu/assets/files/hai_ai_index_report_2025.pdf	AI and robotics macro context
+S60	report	Stanford HAI AI Index	2026	https://hai.stanford.edu/ai-index/	report landing page

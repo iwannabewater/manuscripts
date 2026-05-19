@@ -1,0 +1,1046 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>具身智能入门与技术栈全景报告 2026</title>
+<meta name="author" content="Winston">
+<meta name="description" content="从定义、架构、算法、技术栈、公司版图到学习路线的具身智能系统性入门报告。">
+<meta name="keywords" content="具身智能, 机器人学习, VLA, 世界模型, 技术栈">
+<meta name="generator" content="Kami">
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("fonts/JetBrainsMono.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 18mm 20mm 20mm 20mm;
+    background: #f5f4ed;
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+    @bottom-center {
+      content: counter(page) "  ·  具身智能入门与技术栈全景报告 2026";
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8.8pt;
+      color: #6b6a64;
+    }
+  }
+  @page:first { @top-right { content: ""; } @bottom-center { content: ""; } }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper: #f5f4ed;
+    --ivory: #faf9f5;
+    --near-black: #141413;
+    --dark-warm: #3d3d3a;
+    --olive: #504e49;
+    --stone: #6b6a64;
+    --brand: #1B365D;
+    --brand-tint: #EEF2F7;
+    --border: #e8e6dc;
+    --border-soft: #e5e3d8;
+    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --mono: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+  }
+  html, body { background: var(--paper); }
+  @media screen { body { max-width: 210mm; margin: 0 auto; padding: 18mm 20mm 20mm 20mm; } }
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 9.85pt;
+    line-height: 1.53;
+    letter-spacing: 0.16pt;
+    widows: 3;
+    orphans: 3;
+  }
+  .cover {
+    min-height: 241mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 28mm;
+    break-after: page;
+  }
+  .cover-eyebrow {
+    color: var(--brand);
+    font-size: 9.8pt;
+    letter-spacing: 1.1pt;
+    text-transform: uppercase;
+    margin-bottom: 18pt;
+  }
+  .cover-title {
+    font-size: 33pt;
+    font-weight: 500;
+    color: var(--near-black);
+    line-height: 1.17;
+    letter-spacing: 0.22pt;
+    max-width: 92%;
+    margin-bottom: 14pt;
+  }
+  .cover-sub {
+    color: var(--olive);
+    font-size: 13pt;
+    line-height: 1.48;
+    max-width: 88%;
+  }
+  .cover-meta {
+    color: var(--stone);
+    font-size: 9.6pt;
+    line-height: 1.55;
+  }
+  .cover-meta strong { color: var(--dark-warm); font-weight: 500; }
+  .toc { break-after: page; }
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: 14pt;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 5.4pt 0;
+    border-bottom: 0.3pt dotted var(--border);
+    font-size: 10.2pt;
+  }
+  .toc-num { color: var(--brand); min-width: 30pt; font-weight: 500; }
+  .toc-title { flex: 1; color: var(--near-black); padding-left: 5pt; }
+  .toc-page { color: var(--stone); font-variant-numeric: tabular-nums; }
+  .chapter { break-before: page; }
+  .chapter-num {
+    color: var(--brand);
+    font-size: 9pt;
+    letter-spacing: 0.8pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+  }
+  h1 {
+    font-size: 21.5pt;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 10pt 0;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    color: var(--near-black);
+    break-after: avoid;
+  }
+  h2 {
+    font-size: 15.3pt;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 20pt 0 8pt 0;
+    color: var(--near-black);
+    break-after: avoid;
+    string-set: section-title content();
+  }
+  h3 {
+    font-size: 12.3pt;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 15pt 0 5.5pt 0;
+    color: var(--dark-warm);
+    break-after: avoid;
+  }
+  p { margin: 0 0 8.5pt 0; line-height: 1.53; }
+  .lead {
+    font-size: 11.3pt;
+    line-height: 1.54;
+    color: var(--dark-warm);
+    margin-bottom: 12pt;
+  }
+  .hl { color: var(--brand); font-weight: 500; }
+  strong { font-weight: 500; }
+  ul, ol { margin: 5pt 0 9pt 0; padding-left: 19pt; line-height: 1.5; }
+  li { margin: 2pt 0; }
+  ul li::marker, ol li::marker { color: var(--brand); font-weight: 500; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8.7pt;
+    margin: 10pt 0;
+    break-inside: avoid;
+  }
+  th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--dark-warm);
+    padding: 5pt 6pt;
+    border-bottom: 1pt solid var(--border);
+  }
+  td {
+    padding: 4.2pt 6pt;
+    border-bottom: 0.3pt solid var(--border-soft);
+    vertical-align: top;
+  }
+  table.compact { font-size: 8.1pt; }
+  table.compact th { padding: 3pt 5pt; }
+  table.compact td { padding: 2.7pt 5pt; line-height: 1.38; }
+  .callout, .takeaway {
+    background: var(--ivory);
+    border-left: 1.7pt solid var(--brand);
+    border-radius: 4pt;
+    padding: 9pt 12pt;
+    margin: 10pt 0 12pt 0;
+    break-inside: avoid;
+  }
+  .takeaway-label, .tag {
+    color: var(--brand);
+    font-size: 8.4pt;
+    letter-spacing: 0.5pt;
+    text-transform: uppercase;
+  }
+  .takeaway-label { margin-bottom: 4pt; }
+  .tag {
+    display: inline-block;
+    background: var(--brand-tint);
+    padding: 1pt 5pt;
+    border-radius: 3pt;
+    margin: 0 3pt 3pt 0;
+    font-weight: 500;
+  }
+  figure { margin: 12pt 0; break-inside: avoid; }
+  figcaption { color: var(--stone); font-size: 8.6pt; text-align: center; margin-top: 5pt; }
+  code {
+    font-family: var(--mono);
+    font-size: 8.5pt;
+    background: var(--ivory);
+    padding: 0.5pt 3pt;
+    border-radius: 2pt;
+    color: var(--dark-warm);
+  }
+  pre {
+    font-family: var(--mono);
+    font-size: 8.3pt;
+    line-height: 1.45;
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 8pt 10pt;
+    margin: 8pt 0 10pt 0;
+    white-space: pre-wrap;
+    break-inside: avoid;
+  }
+  a { color: var(--brand); text-decoration: none; }
+  .small { color: var(--stone); font-size: 8.5pt; line-height: 1.45; }
+  .no-break { break-inside: avoid; }
+  .source-note { color: var(--stone); font-size: 8pt; margin-top: 4pt; }
+  .two-col {
+    columns: 2;
+    column-gap: 18pt;
+  }
+  .two-col p, .two-col li { break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div>
+    <div class="cover-eyebrow">TECHNICAL FIELD GUIDE · 2026</div>
+    <div class="cover-title">具身智能入门与<br>技术栈全景报告 2026</div>
+    <div class="cover-sub">从机器人身体、数据闭环、VLA 模型、世界模型到产业格局与学习路线：给希望从 0 到 1 建立完整判断框架的技术读者。</div>
+  </div>
+  <div class="cover-meta">
+    <strong>Winston</strong><br>
+    V1.0 · 2026-05-20<br>
+    独立技术教程与产业研究笔记
+  </div>
+</section>
+
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">执行摘要：具身智能到底在解决什么</span><span class="toc-page">03</span></div>
+  <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">概念地图：从 AI 到机器人行动</span><span class="toc-page">04</span></div>
+  <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">完整架构：一个具身系统怎样闭环</span><span class="toc-page">06</span></div>
+  <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">机器人基础：身体、坐标、控制与安全</span><span class="toc-page">08</span></div>
+  <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">数据工程：机器人学习的燃料与瓶颈</span><span class="toc-page">10</span></div>
+  <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">算法谱系：从模仿学习到 VLA 与世界模型</span><span class="toc-page">13</span></div>
+  <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">主流技术栈：从实验室到真实部署</span><span class="toc-page">15</span></div>
+  <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">国内外大厂与创业公司工作图谱</span><span class="toc-page">17</span></div>
+  <div class="toc-item"><span class="toc-num">09</span><span class="toc-title">发展方向：未来三到五年的关键赌点</span><span class="toc-page">19</span></div>
+  <div class="toc-item"><span class="toc-num">10</span><span class="toc-title">0 到 1 学习路线：怎样真正入门</span><span class="toc-page">21</span></div>
+  <div class="toc-item"><span class="toc-num">11</span><span class="toc-title">前景判断：机会、限制与风险</span><span class="toc-page">23</span></div>
+  <div class="toc-item"><span class="toc-num">12</span><span class="toc-title">术语表、阅读清单与参考资料</span><span class="toc-page">25</span></div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">01 · Executive Summary</div>
+  <h1>执行摘要：具身智能到底在解决什么</h1>
+
+  <p class="lead">具身智能不是“给机器人接一个大模型”这么简单。它要解决的是一个更硬的问题：让系统在带噪声、带延迟、会碰撞、会失误的真实世界里，把语言目标转化为可验证的身体行动。这个领域的核心资产不是单个模型，而是 <span class="hl">身体、数据、模型、控制、安全、运维</span> 组成的闭环。</p>
+
+  <h2>五个结论先放在前面</h2>
+  <ol>
+    <li><strong>具身智能的难点在行动闭环。</strong>文本模型可以一次性输出答案，机器人必须持续感知、规划、执行、纠错。一个 2 秒任务可能包含几十到几百个控制步，每一步都可能被摩擦、遮挡、物体形变、人类干预打断。</li>
+    <li><strong>数据是最大瓶颈。</strong>互联网文本可以低成本爬取，机器人数据需要真实设备、遥操作、仿真、标注、失败采样和安全复现。Open X-Embodiment、DROID、LeRobot、AgiBot World 这类公开数据集的价值，正是把机器人学习从孤岛实验推向跨平台复用。</li>
+    <li><strong>VLA 是当前最重要的范式之一。</strong>VLA 指 Vision-Language-Action，即把视觉、语言和动作放在同一个模型接口里。RT-2、OpenVLA、Octo、Physical Intelligence 的 π 系列、Figure Helix、NVIDIA GR00T 和 Google Gemini Robotics 都在围绕这个方向推进。</li>
+    <li><strong>产业落地会先从受控场景开始。</strong>仓储、制造、质检、搬运、分拣、简单装配、门店后场和医院物流比开放家庭更早商业化。原因不是家庭价值低，而是家庭环境过于开放，物体长尾、人的偏好、责任边界和售后成本都更难控制。</li>
+    <li><strong>未来三到五年的胜负手是数据飞轮。</strong>硬件可买，模型可跟进，算法论文会扩散。真正难复制的是高频真实场景、低成本采集、自动评测、失败回流、仿真再生成和安全上线组成的工程系统。</li>
+  </ol>
+
+  <div class="takeaway">
+    <div class="takeaway-label">本文档回答的问题</div>
+    读完后你应该能回答四个问题：具身智能和传统机器人、普通大模型有什么区别；一个可部署系统由哪些层组成；主流算法和工具链各自解决什么；如果今天从零入门，前三个月应该怎样学习和做项目。
+  </div>
+
+  <h2>这份报告怎样读</h2>
+  <p>前半部分给出概念、架构和方法论，适合从零建立框架。中间部分拆技术栈和公司版图，适合判断行业趋势。最后给出学习路径、项目建议和前景判断。每章都尽量遵守一个原则：先讲为什么需要这一层，再讲它怎么做，最后讲它失败时会发生什么。</p>
+
+  <h2>事实边界</h2>
+  <p>本文的公开资料边界是 <span class="hl">2026-05-20</span>。公司产品、模型版本、订单、量产进度和市场预测会变化。正文中涉及企业进展时，优先采用官方博客、论文、GitHub、模型仓库、企业新闻稿和政府/行业报告；对第三方预测只作为趋势参考，不当作事实结论。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">02 · Concept Map</div>
+  <h1>概念地图：从 AI 到机器人行动</h1>
+
+  <p class="lead">理解具身智能，先不要从“人形机器人”开始。人形只是身体形态之一。更稳的起点是：任何智能体只要需要借助身体在环境中感知、行动、改变世界，并从结果中学习，就进入了具身智能的范畴。</p>
+
+  <h2>定义：具身智能的四个必要条件</h2>
+  <table>
+    <thead>
+      <tr><th>条件</th><th>含义</th><th>为什么必要</th><th>典型反例</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>身体</td><td>有可执行动作的物理载体或仿真载体</td><td>行动能力受关节、末端执行器、传感器和动力学限制</td><td>只聊天的网页助手</td></tr>
+      <tr><td>环境</td><td>任务发生在可变化的空间中</td><td>环境会反馈成功、失败、碰撞、遮挡和人类干预</td><td>离线分类器</td></tr>
+      <tr><td>闭环</td><td>感知、决策、执行、再感知连续发生</td><td>真实世界不能靠一次性答案完成任务</td><td>单次文本生成</td></tr>
+      <tr><td>学习</td><td>系统能从数据、反馈、失败或仿真中改进行为</td><td>手写规则无法覆盖物体、任务和场景长尾</td><td>固定脚本机械臂</td></tr>
+    </tbody>
+  </table>
+
+  <h2>具身智能和传统机器人有什么不同</h2>
+  <p>传统机器人也可以很强。工业机械臂在焊接、喷涂、码垛、搬运上已经长期稳定工作。差异不在“有没有机器人”，而在 <span class="hl">任务是否足够固定</span>。如果物体、位置、流程、夹具、节拍都稳定，传统机器人可以用确定性工程做到极高可靠性。如果任务开放，物体不固定，语言目标会变化，人会进入工作区，机器人就需要更强的感知、泛化和失败恢复能力。</p>
+
+  <table>
+    <thead>
+      <tr><th>维度</th><th>传统自动化</th><th>具身智能</th><th>判断标准</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>任务描述</td><td>坐标、工序、轨迹、PLC 程序</td><td>语言目标、视觉目标、上下文约束</td><td>换任务时是否需要工程师重编程</td></tr>
+      <tr><td>环境假设</td><td>夹具固定，物体姿态受控</td><td>物体位置、遮挡、形变和干扰常变化</td><td>任务现场是否能被完全结构化</td></tr>
+      <tr><td>控制方式</td><td>显式轨迹和控制律</td><td>学习策略加低层控制</td><td>动作是否由数据学习出来</td></tr>
+      <tr><td>失败恢复</td><td>停机报警，由人排查</td><td>识别失败，重新抓取，调整计划</td><td>失败是否被纳入正常流程</td></tr>
+      <tr><td>扩展方式</td><td>复制产线方案</td><td>复用数据、模型和技能库</td><td>新增物体/任务的边际成本</td></tr>
+    </tbody>
+  </table>
+
+  <h2>具身智能和大模型有什么不同</h2>
+  <p>大语言模型主要处理符号世界，输入输出是文本、图像、音频或代码。具身系统必须把抽象目标落到物理动作上。这里出现三个额外约束：第一，动作有时间成本和安全成本；第二，真实世界状态不能被完全观测；第三，错误会改变环境本身，甚至造成损坏。</p>
+
+  <div class="callout">
+    文本模型的错误通常可以重试；机器人错误可能把杯子打碎、夹伤人、撞坏设备，或者把现场状态变成另一个更难恢复的状态。因此具身智能必须把“安全、约束、可回退、可观察”放进架构，而不是把模型输出直接接到电机。
+  </div>
+
+  <h2>能力分级：从遥控设备到通用具身体</h2>
+  <table>
+    <thead>
+      <tr><th>层级</th><th>能力形态</th><th>系统特征</th><th>典型评价</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>L0 远程控制</td><td>人控制机器人</td><td>机器人是人的延伸，无自主决策</td><td>遥操作延迟、稳定性、视角质量</td></tr>
+      <tr><td>L1 固定自动化</td><td>固定脚本执行</td><td>流程受控，异常由人处理</td><td>节拍、停机率、安全联锁</td></tr>
+      <tr><td>L2 感知辅助</td><td>看见物体后执行预设技能</td><td>视觉定位加抓取/导航技能</td><td>识别率、抓取成功率、误检漏检</td></tr>
+      <tr><td>L3 任务级自主</td><td>根据目标组合技能</td><td>能分解任务、选择工具、失败重试</td><td>任务成功率、恢复率、平均完成时长</td></tr>
+      <tr><td>L4 跨场景泛化</td><td>新物体、新场景可迁移</td><td>依赖大规模数据、多模态模型和仿真</td><td>零样本/少样本任务表现</td></tr>
+      <tr><td>L5 开放世界助手</td><td>长期、多目标、人类共处</td><td>需要记忆、社会规范、责任边界和持续学习</td><td>长期可靠性、信任、安全与成本</td></tr>
+    </tbody>
+  </table>
+
+  <h2>为什么现在突然加速</h2>
+  <p>加速来自四个条件同时成熟。第一，多模态基础模型让视觉和语言接口统一，机器人不再只依赖窄域识别器。第二，遥操作和低成本硬件降低了真实数据采集门槛。第三，仿真平台和世界模型让合成数据更有用。第四，仓储、制造、养老、服务业的人力缺口给自动化提供了明确需求。任何一个条件单独存在都不足以改变行业，四者叠加才构成这一轮具身智能热潮。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">03 · System Architecture</div>
+  <h1>完整架构：一个具身系统怎样闭环</h1>
+
+  <p class="lead">具身智能系统可以看成一个持续运行的控制闭环：传感器把世界变成状态，模型把状态和任务变成动作，控制器把动作变成力和运动，安全层持续检查边界，数据系统把成功和失败带回训练流程。</p>
+
+  <figure>
+    <svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="具身智能全栈架构图">
+      <defs>
+        <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/>
+      <rect width="100%" height="100%" fill="url(#dots)" opacity="0.55"/>
+      <text x="72" y="42" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono, monospace" letter-spacing="3">FIGURE  1</text>
+      <text x="194" y="42" fill="#504e49" font-size="14" font-family="JetBrains Mono, monospace" letter-spacing="3">EMBODIED AI SYSTEM LOOP</text>
+      <line x1="72" y1="56" x2="928" y2="56" stroke="#1B365D" stroke-width="0.8"/>
+
+      <rect x="72" y="94" width="196" height="82" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="92" y="126" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">身体与传感器</text>
+      <text x="92" y="154" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">相机、力矩、触觉、IMU、关节</text>
+
+      <rect x="308" y="94" width="176" height="82" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="328" y="126" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">状态估计</text>
+      <text x="328" y="154" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">定位、建图、物体状态、记忆</text>
+
+      <rect x="524" y="94" width="184" height="82" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
+      <text x="544" y="126" fill="#1B365D" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">任务与策略模型</text>
+      <text x="544" y="154" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">VLA、世界模型、技能选择</text>
+
+      <rect x="748" y="94" width="180" height="82" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="768" y="126" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">低层控制</text>
+      <text x="768" y="154" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">轨迹、阻抗、MPC、伺服</text>
+
+      <rect x="72" y="238" width="220" height="78" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="92" y="270" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">任务接口</text>
+      <text x="92" y="298" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">语言、UI、工作流、工单</text>
+
+      <rect x="332" y="238" width="220" height="78" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="352" y="270" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">安全约束层</text>
+      <text x="352" y="298" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">人机距离、力限、碰撞、权限</text>
+
+      <rect x="592" y="238" width="220" height="78" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="612" y="270" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">执行与环境反馈</text>
+      <text x="612" y="298" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">成功、失败、异常、人工接管</text>
+
+      <rect x="132" y="400" width="236" height="86" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
+      <text x="154" y="434" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">数据回流</text>
+      <text x="154" y="462" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">演示、日志、失败片段、标签</text>
+
+      <rect x="416" y="400" width="236" height="86" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
+      <text x="438" y="434" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">训练与评测</text>
+      <text x="438" y="462" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">仿真、离线训练、回归测试</text>
+
+      <rect x="700" y="400" width="188" height="86" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
+      <text x="722" y="434" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">灰度上线</text>
+      <text x="722" y="462" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">策略版本、门控、回滚</text>
+
+      <path d="M268 135 L308 135" stroke="#504e49" stroke-width="1.4" fill="none"/>
+      <path d="M302 130 L310 135 L302 140" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M484 135 L524 135" stroke="#504e49" stroke-width="1.4" fill="none"/>
+      <path d="M518 130 L526 135 L518 140" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M708 135 L748 135" stroke="#1B365D" stroke-width="1.6" fill="none"/>
+      <path d="M742 130 L750 135 L742 140" stroke="#1B365D" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+      <path d="M838 176 C838 214 748 216 704 238" stroke="#504e49" stroke-width="1.2" fill="none"/>
+      <path d="M700 231 L704 238 L696 238" stroke="#504e49" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M292 276 L332 276" stroke="#504e49" stroke-width="1.2" fill="none"/>
+      <path d="M326 271 L334 276 L326 281" stroke="#504e49" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M552 276 L592 276" stroke="#504e49" stroke-width="1.2" fill="none"/>
+      <path d="M586 271 L594 276 L586 281" stroke="#504e49" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M702 316 C702 366 642 374 560 400" stroke="#504e49" stroke-width="1.2" fill="none"/>
+      <path d="M556 393 L560 400 L552 399" stroke="#504e49" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M368 443 L416 443" stroke="#504e49" stroke-width="1.2" fill="none"/>
+      <path d="M410 438 L418 443 L410 448" stroke="#504e49" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M652 443 L700 443" stroke="#504e49" stroke-width="1.2" fill="none"/>
+      <path d="M694 438 L702 443 L694 448" stroke="#504e49" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+      <path d="M794 400 C778 346 686 222 616 176" stroke="#1B365D" stroke-width="1.3" fill="none" stroke-dasharray="6 5"/>
+      <path d="M612 184 L616 176 L622 183" stroke="#1B365D" stroke-width="1.3" fill="none" stroke-linecap="round"/>
+
+      <text x="92" y="560" fill="#504e49" font-size="16" font-family="TsangerJinKai02, serif">判断一个具身系统成熟度，不看演示视频的顺滑程度，而看它是否具备失败采样、版本回滚、场景覆盖和安全门控。</text>
+    </svg>
+    <figcaption>图 1：具身智能系统的核心不是一个模型节点，而是模型与身体、安全、数据和运维共同组成的闭环。</figcaption>
+  </figure>
+
+  <h2>分层架构：每一层各管什么</h2>
+  <table>
+    <thead>
+      <tr><th>层</th><th>职责</th><th>常见实现</th><th>失败模式</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>任务层</td><td>接收人类目标，维护任务上下文</td><td>自然语言、工单、UI、规则模板</td><td>目标歧义，权限不足，任务约束漏掉</td></tr>
+      <tr><td>语义理解层</td><td>把目标映射到对象、区域、工具、步骤</td><td>VLM、LLM、场景图、检索记忆</td><td>物体指代错误，常识过度泛化</td></tr>
+      <tr><td>状态估计层</td><td>估计机器人与环境状态</td><td>SLAM、视觉伺服、物体姿态估计、触觉反馈</td><td>遮挡、漂移、反光、透明物体</td></tr>
+      <tr><td>策略层</td><td>决定下一段动作或技能</td><td>VLA、扩散策略、ACT、技能库、行为树</td><td>动作不稳定，长时任务忘记目标</td></tr>
+      <tr><td>控制层</td><td>把动作转成轨迹、力矩和电机命令</td><td>PID、MPC、阻抗控制、运动规划</td><td>震荡、过冲、碰撞、力控失稳</td></tr>
+      <tr><td>安全层</td><td>约束动作边界并处理中断</td><td>急停、速度限制、碰撞检测、权限门控</td><td>模型绕过约束，异常无法降级</td></tr>
+      <tr><td>数据层</td><td>采集、清洗、标注、训练和评测</td><td>日志系统、RLDS/LeRobot 数据格式、仿真回放</td><td>数据偏置，成功样本过多，失败不可复现</td></tr>
+    </tbody>
+  </table>
+
+  <h2>快慢双系统：为什么不能所有事都交给大模型</h2>
+  <p>真实机器人通常需要两个速度层。慢系统负责语义理解、任务规划、场景重构和策略选择，频率可以是 1 到 10 Hz。快系统负责关节控制、平衡、避障、力控和安全制动，频率可以是 100 到 1000 Hz。大模型适合慢系统，不适合直接闭环控制高速电机。把慢系统输出限制在技能、目标位姿、动作块或约束条件上，再交给低层控制执行，是更稳妥的工程划分。</p>
+
+  <h2>动作表示：模型到底输出什么</h2>
+  <table>
+    <thead>
+      <tr><th>动作表示</th><th>例子</th><th>优点</th><th>风险</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>离散技能</td><td>抓取、放置、开门、导航到货架</td><td>安全可控，便于业务编排</td><td>泛化能力受技能库限制</td></tr>
+      <tr><td>末端位姿</td><td>夹爪移动到某个 6D 姿态</td><td>适合机械臂操作，解释性较好</td><td>需要稳定姿态估计和运动规划</td></tr>
+      <tr><td>关节增量</td><td>每步输出多个关节的角度变化</td><td>表达能力强，可端到端学习</td><td>安全风险高，对数据和控制频率敏感</td></tr>
+      <tr><td>动作 token</td><td>把连续动作离散化成词表</td><td>便于复用语言模型训练框架</td><td>量化误差与长序列稳定性问题</td></tr>
+      <tr><td>轨迹块</td><td>一次输出未来若干步动作</td><td>降低推理频率，动作更平滑</td><td>遇到突发干扰时需要快速重规划</td></tr>
+    </tbody>
+  </table>
+
+  <h2>评估口径：不要只看单次成功视频</h2>
+  <p>具身智能最容易被演示视频误导。严肃评估至少要看四类指标：任务成功率、失败恢复率、平均完成时间和安全事件数。更进一步，还要按物体、光照、视角、场景、操作者、机器人个体和时间段分层统计。如果模型只在熟悉物体、固定机位和剪辑过的视频里成功，它还不能被称为可部署能力。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">04 · Robotics Foundations</div>
+  <h1>机器人基础：身体、坐标、控制与安全</h1>
+
+  <p class="lead">从 AI 背景进入具身智能，最容易低估机器人本体约束。模型输出的“拿起杯子”在物理系统里会变成相机标定、坐标变换、逆运动学、轨迹规划、力控、碰撞检测和异常处理。</p>
+
+  <h2>机器人身体：形态决定任务边界</h2>
+  <table>
+    <thead>
+      <tr><th>形态</th><th>适合任务</th><th>优势</th><th>短板</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>固定机械臂</td><td>抓取、装配、质检、上下料</td><td>稳定、承载强、定位精度高</td><td>工作空间固定，场景需要结构化</td></tr>
+      <tr><td>移动底盘加机械臂</td><td>仓储拣选、实验室自动化、医院物流</td><td>可移动，可操作，落地场景清晰</td><td>导航和操作耦合，安全复杂度上升</td></tr>
+      <tr><td>四足机器人</td><td>巡检、复杂地形移动、安防</td><td>越障能力强，稳定性高</td><td>精细操作能力通常依赖外挂手臂</td></tr>
+      <tr><td>人形机器人</td><td>为人类空间设计的通用任务</td><td>可使用现有人类环境、工具和通道</td><td>成本、功耗、平衡、手部灵巧性和可靠性都难</td></tr>
+      <tr><td>灵巧手</td><td>小物体操作、工具使用、装配</td><td>动作空间丰富</td><td>触觉、力控和数据采集难度极高</td></tr>
+    </tbody>
+  </table>
+
+  <h2>坐标系：具身智能的“语法”</h2>
+  <p>机器人系统里常见坐标包括世界坐标、底盘坐标、相机坐标、末端执行器坐标、物体坐标和任务坐标。一个简单抓取任务也需要把相机看到的像素点，转成相机坐标中的三维点，再经过外参变换转到底盘或机械臂基座坐标，最后求出末端执行器应该到达的位姿。任何一步标定错误，都会表现为“模型看懂了，但手伸歪了”。</p>
+
+  <div class="callout">
+    入门时要先熟悉三个词：pose 是位置加姿态，通常是 3D 平移加旋转；kinematics 是关节和末端位置之间的几何关系；calibration 是让传感器、机器人和世界坐标对齐。没有这三件事，VLA 模型输出再漂亮也落不到真实动作。
+  </div>
+
+  <h2>控制：高层智能和低层稳定性的分工</h2>
+  <p>控制层负责把目标动作变成可执行运动。常见控制方式包括位置控制、速度控制、力矩控制、阻抗控制和模型预测控制。位置控制适合简单搬运，力控适合插拔、擦拭、装配和接触丰富的任务。越接近真实操作，越不能只看“到达目标点”，还要控制接触力、速度、路径和安全距离。</p>
+
+  <table>
+    <thead>
+      <tr><th>问题</th><th>高层模型负责</th><th>低层控制负责</th><th>工程边界</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>把杯子放到托盘</td><td>识别杯子与托盘，选择放置区域</td><td>规划抓取姿态、避障、释放动作</td><td>模型不直接输出电机电流</td></tr>
+      <tr><td>开抽屉</td><td>理解抽屉把手位置和动作意图</td><td>沿约束方向施力并保持接触</td><td>需要力控或视觉伺服</td></tr>
+      <tr><td>人靠近机器人</td><td>识别人类进入工作区</td><td>限速、停止、撤离轨迹</td><td>安全策略优先于任务策略</td></tr>
+      <tr><td>双足行走</td><td>选择目标路径和步态意图</td><td>平衡、落脚点、关节力矩</td><td>高频控制不适合大模型直接闭环</td></tr>
+    </tbody>
+  </table>
+
+  <h2>传感器：视觉之外还有身体感觉</h2>
+  <p>视觉是目前具身智能中最常用的输入，但仅靠视觉不足以处理接触任务。力矩传感器能告诉系统是否碰到物体，触觉传感器能感知滑动和压力分布，IMU 能用于姿态估计，编码器能提供关节状态，麦克风和语音接口可用于人机协作。高阶具身能力往往来自多传感器融合，而不是单个视觉模型的提升。</p>
+
+  <h2>安全：不是最后一层补丁</h2>
+  <p>安全应该从系统设计初期进入，而不是上线前加一个急停按钮。最低要求包括速度和力限制、碰撞检测、工作区边界、人类接近降速、策略置信度门控、异常状态回退、日志留存和版本回滚。对人形机器人和移动操作机器人来说，还要考虑跌倒、夹伤、隐私、远程接管和责任归属。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">05 · Data Engine</div>
+  <h1>数据工程：机器人学习的燃料与瓶颈</h1>
+
+  <p class="lead">具身智能最稀缺的不是模型参数，而是覆盖真实任务分布的数据。语言模型可以从互联网上学习大量文本，机器人却必须亲自经历物体、空间、接触、失败和恢复。</p>
+
+  <h2>数据来源：每一种都有代价</h2>
+  <table>
+    <thead>
+      <tr><th>来源</th><th>获得方式</th><th>适合学习</th><th>主要问题</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>人工遥操作</td><td>人用手柄、VR、外骨骼或同构设备控制机器人</td><td>高质量操作策略、复杂动作</td><td>成本高，操作者风格差异大</td></tr>
+      <tr><td>自主执行日志</td><td>机器人上线后记录成功和失败轨迹</td><td>真实场景分布、故障模式</td><td>早期模型能力不足，失败数据有安全成本</td></tr>
+      <tr><td>仿真数据</td><td>在 MuJoCo、Isaac、ManiSkill 等平台生成</td><td>大规模探索、危险场景、域随机化</td><td>仿真到现实的差距仍然存在</td></tr>
+      <tr><td>互联网视频</td><td>从人类行为视频中学习目标、物体和动作先验</td><td>常识、动作语义、长时任务理解</td><td>缺少机器人可执行动作标签</td></tr>
+      <tr><td>合成数据</td><td>用生成模型、世界模型或程序化场景生成</td><td>稀有场景、视觉多样性、预训练</td><td>如果物理不准，会放大错误先验</td></tr>
+      <tr><td>公开数据集</td><td>Open X-Embodiment、DROID、AgiBot World 等</td><td>跨机器人预训练、基准比较</td><td>动作空间和硬件差异需要对齐</td></tr>
+    </tbody>
+  </table>
+
+  <h2>数据结构：一条轨迹包含什么</h2>
+  <p>机器人数据的基本单位通常是 episode，也就是一次任务轨迹。它至少包含时间戳、图像、机器人状态、动作、任务描述和终止标记。更完整的数据还会包含深度图、点云、触觉、力矩、相机外参、物体标签、成功标记、失败原因和人工接管记录。数据质量不只看数量，也看字段是否足以复现当时发生了什么。</p>
+
+  <pre><code>episode = {
+  "instruction": "把红色杯子放到左侧托盘",
+  "observations": {
+    "rgb": [T, H, W, 3],
+    "depth": [T, H, W],
+    "joint_state": [T, J],
+    "end_effector_pose": [T, 7]
+  },
+  "actions": {
+    "delta_pose": [T, 7],
+    "gripper": [T, 1]
+  },
+  "metadata": {
+    "robot": "mobile_manipulator",
+    "camera_calibration": "...",
+    "success": true,
+    "failure_reason": null
+  }
+}</code></pre>
+
+  <h2>数据闭环：比单次训练更重要</h2>
+  <p>成熟团队不会把数据采集看成一次性工程。更合理的流程是：先用遥操作和公开数据训练基础策略，再部署到受控场景收集失败，按失败类型重采样和标注，然后在仿真中扩大变体，最后做离线回归测试和小流量上线。每次模型更新都应该回答两个问题：它在哪些任务上变好，在哪些已知能力上退化。</p>
+
+  <figure>
+    <svg viewBox="0 0 1000 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="机器人数据飞轮">
+      <defs>
+        <pattern id="dots2" width="22" height="22" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/>
+      <rect width="100%" height="100%" fill="url(#dots2)" opacity="0.55"/>
+      <text x="72" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono, monospace" letter-spacing="3">FIGURE  2</text>
+      <text x="194" y="40" fill="#504e49" font-size="14" font-family="JetBrains Mono, monospace" letter-spacing="3">ROBOT DATA FLYWHEEL</text>
+      <line x1="72" y1="54" x2="928" y2="54" stroke="#1B365D" stroke-width="0.8"/>
+      <rect x="86" y="112" width="148" height="74" rx="8" fill="#faf9f5" stroke="#141413"/>
+      <text x="110" y="144" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02, serif">采集</text>
+      <text x="110" y="168" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">演示与上线日志</text>
+      <rect x="286" y="112" width="148" height="74" rx="8" fill="#faf9f5" stroke="#141413"/>
+      <text x="310" y="144" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02, serif">筛选</text>
+      <text x="310" y="168" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">成功、失败、异常</text>
+      <rect x="486" y="112" width="148" height="74" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
+      <text x="510" y="144" fill="#1B365D" font-size="22" font-weight="600" font-family="TsangerJinKai02, serif">训练</text>
+      <text x="510" y="168" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">预训练与微调</text>
+      <rect x="686" y="112" width="148" height="74" rx="8" fill="#faf9f5" stroke="#141413"/>
+      <text x="710" y="144" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02, serif">评测</text>
+      <text x="710" y="168" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">回归与场景覆盖</text>
+      <rect x="386" y="258" width="228" height="74" rx="8" fill="#EAE9E2" stroke="#504e49"/>
+      <text x="410" y="290" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02, serif">灰度上线与失败回流</text>
+      <text x="410" y="314" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">只让可解释的改进进入现场</text>
+      <path d="M234 149 L286 149" stroke="#504e49" fill="none" stroke-width="1.3"/>
+      <path d="M280 144 L288 149 L280 154" stroke="#504e49" fill="none" stroke-linecap="round"/>
+      <path d="M434 149 L486 149" stroke="#1B365D" fill="none" stroke-width="1.5"/>
+      <path d="M480 144 L488 149 L480 154" stroke="#1B365D" fill="none" stroke-linecap="round"/>
+      <path d="M634 149 L686 149" stroke="#504e49" fill="none" stroke-width="1.3"/>
+      <path d="M680 144 L688 149 L680 154" stroke="#504e49" fill="none" stroke-linecap="round"/>
+      <path d="M760 186 C760 236 656 254 614 278" stroke="#504e49" fill="none" stroke-width="1.3"/>
+      <path d="M610 270 L614 278 L606 277" stroke="#504e49" fill="none" stroke-linecap="round"/>
+      <path d="M386 295 C250 292 160 245 160 186" stroke="#504e49" fill="none" stroke-width="1.3"/>
+      <path d="M154 194 L160 186 L166 194" stroke="#504e49" fill="none" stroke-linecap="round"/>
+    </svg>
+    <figcaption>图 2：机器人数据飞轮的核心是失败回流。没有失败样本，模型只是在重复熟悉动作。</figcaption>
+  </figure>
+
+  <h2>数据质量的十个检查点</h2>
+  <ol>
+    <li>相机、机器人本体和环境坐标是否可复现。</li>
+    <li>成功与失败是否都被记录，而不是只留好看的轨迹。</li>
+    <li>任务描述是否和实际动作对齐。</li>
+    <li>动作空间是否一致，例如末端位姿、关节增量或离散 token。</li>
+    <li>是否记录人类接管、急停和异常。</li>
+    <li>不同物体、光照、背景、操作者、机器人个体是否覆盖。</li>
+    <li>训练集、验证集和真实部署场景是否泄漏。</li>
+    <li>标注是否只标结果，还是标失败原因。</li>
+    <li>数据格式是否便于流式训练、检索和回放。</li>
+    <li>每次模型更新是否能追溯到数据变更。</li>
+  </ol>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">06 · Algorithms</div>
+  <h1>算法谱系：从模仿学习到 VLA 与世界模型</h1>
+
+  <p class="lead">具身智能的算法不是单线进化。经典规划、控制理论、模仿学习、强化学习、多模态基础模型、世界模型和安全验证会长期共存。真正的系统能力来自组合，而不是某篇论文单独解决一切。</p>
+
+  <h2>模仿学习：先让机器人学会像人一样做</h2>
+  <p>模仿学习把人类演示映射为策略。最简单形式是行为克隆：输入观测，输出动作，用监督学习拟合。它的优点是稳定、工程简单、适合真实数据；缺点是遇到训练分布外状态时容易积累误差。ACT 把动作切成一段一段预测，适合低成本双臂遥操作数据；Diffusion Policy 用扩散模型生成动作序列，能表达多峰动作分布，适合接触丰富的操作。</p>
+
+  <h2>强化学习：让系统从试错中优化</h2>
+  <p>强化学习可以在仿真中大规模探索，适合运动控制、平衡、抓取策略和奖励明确的任务。问题是现实试错成本高，奖励设计难，仿真到现实存在差距。今天更常见的路线是：在仿真里训练低层技能或策略先验，再用真实数据微调，或者把强化学习用于局部能力而不是直接训练全栈通用机器人。</p>
+
+  <h2>VLA：把看、说、做接到一个接口里</h2>
+  <p>VLA 模型把视觉输入、语言指令和机器人动作放在同一建模框架下。RT-2 将视觉语言知识迁移到机器人控制；OpenVLA 和 Octo 推动开源复现；Physical Intelligence 的 π 系列强调跨机器人、跨场景泛化；Figure 的 Helix 把 VLA 用在人形机器人控制；Google Gemini Robotics 继续沿着多模态推理和物理行动扩展。这条路线的关键问题是：动作空间如何表示，跨硬件如何对齐，失败如何评测，安全边界如何注入。</p>
+
+  <table>
+    <thead>
+      <tr><th>方法</th><th>核心思想</th><th>适合阶段</th><th>主要短板</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>行为克隆</td><td>用演示数据监督学习动作</td><td>入门项目、受控任务</td><td>分布外状态恢复差</td></tr>
+      <tr><td>ACT</td><td>预测动作块，降低遥操作噪声</td><td>双臂、桌面操作、低成本硬件</td><td>依赖演示质量，长时任务仍难</td></tr>
+      <tr><td>Diffusion Policy</td><td>用扩散过程生成连续动作序列</td><td>接触丰富、多解操作</td><td>推理成本和稳定性需要工程优化</td></tr>
+      <tr><td>强化学习</td><td>通过奖励最大化学习策略</td><td>仿真训练、运动控制、局部技能</td><td>奖励设计、样本效率、安全成本</td></tr>
+      <tr><td>VLA</td><td>视觉、语言、动作统一建模</td><td>跨任务泛化、开放指令</td><td>数据规模、动作对齐、实时性</td></tr>
+      <tr><td>世界模型</td><td>预测环境未来状态，用于规划和生成数据</td><td>仿真增强、物理推理、策略验证</td><td>物理精度和长时预测误差</td></tr>
+      <tr><td>层级策略</td><td>高层选技能，低层执行动作</td><td>复杂长任务、可靠部署</td><td>技能边界和接口设计难</td></tr>
+    </tbody>
+  </table>
+
+  <h2>世界模型：让机器人先在脑内试一遍</h2>
+  <p>世界模型的目标是预测动作会怎样改变环境。它可以用于三件事：生成训练数据，评估候选动作，帮助长期规划。NVIDIA Cosmos 和 Meta V-JEPA 2 都把物理世界建模作为重点方向。世界模型不能替代真实世界，因为接触、摩擦、材料形变和人类行为仍然难预测；但它能减少真实试错成本，并让系统在上线前看到更多边界场景。</p>
+
+  <h2>层级智能：从“下一步动作”到“长期任务”</h2>
+  <p>开放任务通常需要层级结构。高层负责理解目标，例如“整理桌面”；中层把目标拆成子任务，例如“识别垃圾、拿起杯子、归位书本”；低层负责连续控制，例如“夹爪闭合到合适力”。层级结构的价值是降低每一层的问题难度，也让系统更容易解释和回退。纯端到端策略有吸引力，但在商业部署里通常还需要规则、技能库和安全层共同工作。</p>
+
+  <h2>一个实用判断：什么时候该用端到端，什么时候该用模块化</h2>
+  <table>
+    <thead>
+      <tr><th>场景特征</th><th>更适合端到端</th><th>更适合模块化</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>数据量</td><td>同类任务有大量真实轨迹</td><td>数据少但规则清楚</td></tr>
+      <tr><td>任务变化</td><td>物体和动作组合多，规则难写</td><td>流程稳定，异常可枚举</td></tr>
+      <tr><td>安全要求</td><td>可在低风险环境充分试错</td><td>靠近人、贵重设备或危险物品</td></tr>
+      <tr><td>解释需求</td><td>允许黑盒策略，只看统计效果</td><td>需要审计、追责、合规和回滚</td></tr>
+      <tr><td>实时性</td><td>推理延迟可接受</td><td>低层控制需要毫秒级稳定</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">07 · Tech Stack</div>
+  <h1>主流技术栈：从实验室到真实部署</h1>
+
+  <p class="lead">具身智能技术栈横跨机器人、机器学习、系统工程和产品运营。入门时不要试图一次掌握所有工具。先理解每一层要解决什么，再按项目需要选择最小可行栈。</p>
+
+  <h2>全栈清单</h2>
+  <table class="compact">
+    <thead>
+      <tr><th>层</th><th>主流工具/框架</th><th>用途</th><th>入门优先级</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>机器人中间件</td><td>ROS 2、DDS、MoveIt 2</td><td>节点通信、传感器接入、运动规划</td><td>高</td></tr>
+      <tr><td>仿真</td><td>MuJoCo、NVIDIA Isaac Lab/Sim、ManiSkill、Habitat</td><td>物理模拟、数据生成、策略评估</td><td>高</td></tr>
+      <tr><td>控制</td><td>PID、MPC、阻抗控制、运动规划器</td><td>把目标位姿变成稳定动作</td><td>高</td></tr>
+      <tr><td>数据格式</td><td>RLDS、LeRobot dataset、HDF5、Parquet</td><td>轨迹存储、训练和回放</td><td>高</td></tr>
+      <tr><td>模型训练</td><td>PyTorch、JAX、Transformers、Diffusers</td><td>策略模型、VLA、扩散策略训练</td><td>高</td></tr>
+      <tr><td>开源机器人学习</td><td>LeRobot、OpenVLA、Octo、openpi</td><td>复现算法、微调模型、跑基线</td><td>高</td></tr>
+      <tr><td>感知</td><td>SAM 系列、GroundingDINO、VLM、点云网络、SLAM</td><td>物体、区域、姿态、地图和语义理解</td><td>中</td></tr>
+      <tr><td>部署</td><td>ONNX、TensorRT、Triton、Jetson、边缘 GPU</td><td>模型压缩、低延迟推理、设备部署</td><td>中</td></tr>
+      <tr><td>观测运维</td><td>日志、回放、指标平台、版本管理、远程接管</td><td>现场问题定位和策略迭代</td><td>高</td></tr>
+      <tr><td>安全</td><td>急停、碰撞检测、工作区限制、权限系统</td><td>保证模型不能越过物理和业务边界</td><td>高</td></tr>
+    </tbody>
+  </table>
+
+  <h2>三套入门栈</h2>
+  <table>
+    <thead>
+      <tr><th>目标</th><th>硬件/仿真</th><th>软件栈</th><th>适合做的第一个项目</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>纯软件入门</td><td>MuJoCo 或 ManiSkill</td><td>Python、PyTorch、Gymnasium、LeRobot 数据格式</td><td>用行为克隆训练一个抓取或推方块策略</td></tr>
+      <tr><td>桌面机械臂</td><td>低成本机械臂加 RGB-D 相机</td><td>ROS 2、MoveIt 2、LeRobot、OpenCV</td><td>遥操作采集 100 条轨迹，训练 pick-and-place</td></tr>
+      <tr><td>移动操作</td><td>移动底盘加机械臂或仿真移动机械臂</td><td>ROS 2 Nav2、SLAM、任务规划、策略模型</td><td>让机器人按语言指令去指定区域拿取物体</td></tr>
+    </tbody>
+  </table>
+
+  <h2>推荐的最小项目架构</h2>
+  <p>一个合理的入门项目不应该一上来做人形机器人。更可控的项目是桌面机械臂完成 3 到 5 类物体的抓取和放置。系统可以拆成六个节点：相机节点发布图像；标定节点维护相机到机械臂的变换；策略节点读取图像和指令输出末端位姿；规划节点调用运动规划；控制节点执行轨迹；日志节点记录每一步观测、动作和结果。</p>
+
+  <pre><code>camera -> state_estimator -> policy -> planner -> controller -> robot
+                     |          |          |             |
+                     +----------+----------+-------------+
+                                logs / replay / dataset</code></pre>
+
+  <h2>工程选型原则</h2>
+  <ol>
+    <li>能用仿真复现的错误，不要直接拿真机试。</li>
+    <li>能用传统控制稳定解决的低层问题，不要交给大模型赌运气。</li>
+    <li>数据格式要先统一，再谈模型对比。</li>
+    <li>每次训练都保留模型版本、数据版本和评测结果。</li>
+    <li>任何可以伤人、撞设备或损坏物体的动作，都必须经过安全层。</li>
+    <li>演示视频只是沟通材料，不是评测报告。</li>
+  </ol>
+
+  <h2>常见坑</h2>
+  <table>
+    <thead>
+      <tr><th>坑</th><th>表现</th><th>修正方式</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>忽略标定</td><td>视觉识别对了，手总是偏</td><td>系统学习手眼标定、坐标变换和误差传播</td></tr>
+      <tr><td>只采成功样本</td><td>模型一偏离轨迹就崩</td><td>记录失败、接管和恢复过程</td></tr>
+      <tr><td>仿真调得过美</td><td>仿真成功率高，真机失败</td><td>域随机化、真实噪声回放、少量真机微调</td></tr>
+      <tr><td>把 LLM 当控制器</td><td>动作慢、抖动、不可控</td><td>LLM 负责任务层，控制层保持确定性</td></tr>
+      <tr><td>无回归测试</td><td>新模型修好 A，弄坏 B</td><td>建立固定场景、固定物体、固定指标的评测集</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">08 · Industry Map</div>
+  <h1>国内外大厂与创业公司工作图谱</h1>
+
+  <p class="lead">产业版图可以按三条线看：做基础模型与平台的公司，做机器人本体和场景落地的公司，以及做数据、仿真、工具链和生态的公司。大厂强在算力、模型、平台和客户场景，创业公司强在专注硬件形态和高频迭代。</p>
+
+  <h2>国际大厂与研究机构</h2>
+  <table class="compact">
+    <thead>
+      <tr><th>机构</th><th>公开工作</th><th>核心方向</th><th>解读</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Google DeepMind</td><td>RT-2、Open X-Embodiment/RT-X、Gemini Robotics、Gemini Robotics-ER 1.6</td><td>多模态推理到机器人动作，跨机器人数据复用</td><td>路线清晰：用基础模型承接语义和物理推理，再把动作接口接到真实机器人。</td></tr>
+      <tr><td>NVIDIA</td><td>Cosmos、Isaac、GR00T N1/N1.7、Jetson Thor、Omniverse 生态</td><td>物理 AI 平台、仿真、数据生成、模型和算力</td><td>不只做模型，更想成为机器人时代的训练和部署基础设施。</td></tr>
+      <tr><td>Meta</td><td>Habitat、PARTNR、V-JEPA 2</td><td>仿真环境、世界模型、物理推理和协作基准</td><td>Meta 更偏研究平台和表征学习，短期商业机器人动作较少。</td></tr>
+      <tr><td>Amazon</td><td>仓储机器人、Vulcan 触觉机器人</td><td>物流自动化、仓库操作、触觉抓取</td><td>场景封闭、数据密集、ROI 清晰，是具身智能最现实的落地区域之一。</td></tr>
+      <tr><td>Toyota Research Institute</td><td>Large Behavior Models，与 Boston Dynamics Atlas 协作</td><td>大行为模型、家务和操作任务</td><td>汽车厂背景决定其重视安全、可靠性和长期真实任务。</td></tr>
+      <tr><td>Boston Dynamics</td><td>电动 Atlas、Spot、Stretch</td><td>高性能运动控制和机器人平台</td><td>强项是本体和运动能力，正在与学习型模型结合。</td></tr>
+      <tr><td>Tesla</td><td>Optimus、车端 AI/仿真/制造体系</td><td>人形机器人、自动驾驶经验迁移、规模化制造</td><td>最大看点是能否把汽车数据工程、硬件供应链和真实工厂场景迁移到 Optimus。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>国际创业公司</h2>
+  <table class="compact">
+    <thead>
+      <tr><th>公司</th><th>公开工作</th><th>重点</th><th>观察点</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Physical Intelligence</td><td>π0、π0.5、π0.7、openpi</td><td>跨机器人通用策略和可控 VLA</td><td>代表“先做通用策略模型，再接多种身体”的路线。</td></tr>
+      <tr><td>Figure AI</td><td>Figure 02/03、Helix、Helix 02、BMW 场景</td><td>人形本体加端到端 VLA 控制</td><td>看点是工厂部署数据能否形成持续飞轮。</td></tr>
+      <tr><td>Agility Robotics</td><td>Digit、GXO/RaaS 部署</td><td>物流搬运和人形商业化</td><td>比家庭场景更聚焦，商业路径更务实。</td></tr>
+      <tr><td>Apptronik</td><td>Apollo，2025 年宣布大额融资并披露 Google 相关合作</td><td>通用人形机器人平台</td><td>需要观察本体量产、应用场景和模型生态。</td></tr>
+      <tr><td>1X</td><td>NEO 家用机器人</td><td>家庭人形助手</td><td>家用场景价值高但开放度极高，可靠性和售后是核心挑战。</td></tr>
+      <tr><td>Skild AI</td><td>通用机器人“大脑”路线</td><td>跨本体 foundation model</td><td>强调从多形态机器人数据中学习通用策略。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>中国公司与生态</h2>
+  <table class="compact">
+    <thead>
+      <tr><th>机构/公司</th><th>公开工作</th><th>重点</th><th>解读</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>智元机器人 AGIBOT</td><td>AgiBot World 2026、X2、MWC 2026 全系列展示</td><td>本体、数据集、开源生态和多产品线</td><td>国内少数同时强调真实数据、硬件产品和生态建设的玩家。</td></tr>
+      <tr><td>宇树科技 Unitree</td><td>G1、人形/四足硬件、SDK 和开源页面</td><td>高性价比硬件、开发者生态</td><td>其优势是硬件可获得性和成本，对教育、研究和开发者扩散有帮助。</td></tr>
+      <tr><td>优必选 UBTECH</td><td>Walker S1/S2、工业人形机器人公开订单与交付信息</td><td>工业制造场景和人形机器人产品化</td><td>更靠近应用交付，关键在稳定量产和场景复用。</td></tr>
+      <tr><td>腾讯 Robotics X / 混元视觉团队</td><td>HY-Embodied-0.5 模型与论文</td><td>具身基础模型、真实世界智能体</td><td>大厂模型能力向具身接口延展的代表。</td></tr>
+      <tr><td>阿里巴巴</td><td>开源具身基础模型相关披露</td><td>多模态模型与机器人推理/控制结合</td><td>大模型生态会自然向机器人数据和动作接口延伸。</td></tr>
+      <tr><td>政策与标准体系</td><td>2026 年公开的中国人形机器人与具身智能标准框架</td><td>基础术语、安全、性能、接口与应用规范</td><td>标准化会影响量产、验收、认证和采购，不能只看模型论文。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>如何读懂公司宣传</h2>
+  <p>判断一家机器人公司，不要只看“通用”“量产”“端到端”这些词。应该问六个问题：机器人在哪个真实场景连续运行；任务成功率如何定义；失败由谁处理；数据是否能回流训练；硬件成本和维护成本是多少；安全事故由什么机制兜底。能回答这些问题的公司，比只展示剪辑视频的公司更值得认真看。</p>
+
+  <div class="takeaway">
+    <div class="takeaway-label">产业格局一句话</div>
+    2026 年的具身智能还没有进入“赢家通吃”阶段。平台型大厂在模型、仿真和算力上占优，硬件公司在真实数据和场景上占优，真正的壁垒会在两者结合处形成。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">09 · Directions</div>
+  <h1>发展方向：未来三到五年的关键赌点</h1>
+
+  <p class="lead">具身智能未来不是单点突破，而是多条技术线同时推进。下面这些方向会决定这个领域从演示走向产业化的速度。</p>
+
+  <h2>方向一：跨本体通用策略</h2>
+  <p>不同机器人有不同关节、相机、夹爪和动作空间。跨本体学习要解决的是：能否从一种机器人学到的能力迁移到另一种机器人。Open X-Embodiment、Octo、OpenVLA、Physical Intelligence 的 π 系列、NVIDIA GR00T 都在不同程度上处理这个问题。成功的关键是动作表示标准化、机器人状态对齐、任务语义对齐和足够多样的数据。</p>
+
+  <h2>方向二：世界模型与合成数据</h2>
+  <p>真实机器人数据贵，仿真数据便宜但不完全真实。世界模型试图在两者之间搭桥：用视频和物理先验预测未来，让机器人先在模型里尝试，再选择真实动作。短期内，它更可能用于训练数据扩增、危险场景生成和动作候选评估，而不是完全替代物理仿真或真机实验。</p>
+
+  <h2>方向三：灵巧操作和触觉</h2>
+  <p>抓一个方块和系鞋带不是同一个问题。开放世界里的高价值任务往往需要接触、滑动、挤压、插入、旋转和双手协调。仅靠 RGB 图像很难判断接触状态，触觉和力反馈会变得更重要。Amazon Vulcan 公开强调触觉能力，也说明工业场景已经开始重视“手感”而不是只看视觉抓取。</p>
+
+  <h2>方向四：长时任务和记忆</h2>
+  <p>短视频演示常常只展示 10 到 60 秒任务，真实应用需要数分钟到数小时的连续运行。长时任务需要任务记忆、环境记忆、失败恢复、资源管理和用户偏好。模型必须知道自己已经做过什么，哪些状态已改变，哪些目标仍未完成。</p>
+
+  <h2>方向五：安全、合规与责任边界</h2>
+  <p>机器人进入工厂、医院、门店和家庭后，风险不再是论文指标。速度限制、力限制、数据隐私、人机共处、远程接管、日志审计、责任归属和标准认证都会成为商业化前置条件。中国 2026 年公开的相关标准框架也说明，具身智能正在从研究话题进入产业治理阶段。</p>
+
+  <h2>方向六：低成本硬件和开发者生态</h2>
+  <p>模型进步需要更多真实数据，而真实数据需要更多人能买得起、修得起、改得动机器人。低成本机械臂、人形开发平台、开源 SDK、LeRobot 这类开源工具和公开数据集会降低入门门槛。硬件成本下降不是附属变量，而是数据规模化的前提。</p>
+
+  <h2>技术赌点矩阵</h2>
+  <table>
+    <thead>
+      <tr><th>赌点</th><th>如果成功</th><th>如果失败</th><th>最该跟踪的指标</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>VLA 泛化</td><td>新物体、新指令学习成本下降</td><td>每个场景仍需重采数据</td><td>少样本成功率、跨场景评测</td></tr>
+      <tr><td>世界模型</td><td>仿真和真实之间的数据缺口缩小</td><td>合成数据只能做视觉增强</td><td>预测误差、真机迁移收益</td></tr>
+      <tr><td>触觉和力控</td><td>装配、整理、工具使用能力提升</td><td>仍停留在简单抓放</td><td>接触任务成功率、损坏率</td></tr>
+      <tr><td>人形量产</td><td>本体成本下降，更多场景可测试</td><td>数据和部署规模受限</td><td>BOM、维护成本、连续运行小时数</td></tr>
+      <tr><td>标准化</td><td>采购、验收、数据格式和安全测试更清晰</td><td>各家系统继续割裂</td><td>接口标准、测试基准、认证流程</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">10 · Learning Path</div>
+  <h1>0 到 1 学习路线：怎样真正入门</h1>
+
+  <p class="lead">具身智能入门不能只读论文，也不能只搭硬件。最稳的路线是：先理解机器人基本约束，再用仿真跑通闭环，然后采集真实数据训练小策略，最后接触 VLA 和世界模型。</p>
+
+  <h2>前置知识</h2>
+  <table>
+    <thead>
+      <tr><th>方向</th><th>必须掌握</th><th>够用标准</th><th>不必一开始深挖</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Python 与深度学习</td><td>PyTorch、数据集、训练循环、调参</td><td>能训练并调试一个视觉模型</td><td>分布式训练细节</td></tr>
+      <tr><td>机器人基础</td><td>坐标变换、运动学、控制、ROS 2 基础</td><td>能解释相机坐标如何变成机械臂目标位姿</td><td>复杂动力学推导</td></tr>
+      <tr><td>计算机视觉</td><td>相机模型、目标检测、分割、深度图</td><td>能从图像里定位目标并给出 3D 点</td><td>所有 SOTA 模型细节</td></tr>
+      <tr><td>机器学习策略</td><td>行为克隆、强化学习、扩散策略</td><td>能说清每种方法适合什么数据</td><td>复杂证明</td></tr>
+      <tr><td>系统工程</td><td>日志、版本、回放、测试、部署</td><td>能复现一次失败并定位层级</td><td>大型云平台架构</td></tr>
+    </tbody>
+  </table>
+
+  <h2>十二周学习计划</h2>
+  <table class="compact">
+    <thead>
+      <tr><th>阶段</th><th>目标</th><th>任务</th><th>验收标准</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>第 1-2 周</td><td>建立机器人直觉</td><td>学习坐标系、运动学、ROS 2 节点通信；用 MuJoCo 跑一个机械臂环境</td><td>能画出传感器到动作的闭环，并解释每个坐标系</td></tr>
+      <tr><td>第 3-4 周</td><td>跑通仿真策略</td><td>用行为克隆训练一个简单抓取或推物体任务</td><td>有固定评测集和成功率记录</td></tr>
+      <tr><td>第 5-6 周</td><td>理解数据工程</td><td>把轨迹保存成统一格式，写回放工具，记录失败原因</td><td>任意一次失败可以从日志重放</td></tr>
+      <tr><td>第 7-8 周</td><td>接触真实设备或更真实仿真</td><td>采集遥操作数据，训练 ACT 或扩散策略基线</td><td>模型能在未见过的物体摆放上完成任务</td></tr>
+      <tr><td>第 9-10 周</td><td>接入语言和视觉</td><td>用 VLM 做目标定位，用语言指令选择任务</td><td>能从 3 条不同指令选择对应物体和放置区域</td></tr>
+      <tr><td>第 11-12 周</td><td>做系统复盘</td><td>整理评测、失败分类、改进计划和安全边界</td><td>形成一份可复现项目报告，而不是只留视频</td></tr>
+    </tbody>
+  </table>
+
+  <h2>第一个完整项目：桌面抓放系统</h2>
+  <p>项目目标：机器人根据指令把指定物体放到指定区域。硬件可以是真实低成本机械臂，也可以是仿真环境。最小版本只需要 RGB-D 相机、机械臂状态、末端位姿和夹爪开合。不要一开始追求“通用家务”，先让一个小任务可评测、可回放、可改进。</p>
+
+  <ol>
+    <li>定义 3 类物体和 2 个放置区域。</li>
+    <li>采集 50 到 200 条遥操作轨迹，记录成功和失败。</li>
+    <li>训练行为克隆基线，输入图像和指令，输出末端位姿增量。</li>
+    <li>加入固定评测集：不同光照、不同物体位置、不同背景。</li>
+    <li>统计成功率、失败原因和平均完成时间。</li>
+    <li>再尝试 ACT、扩散策略或 OpenVLA/LeRobot 相关基线。</li>
+  </ol>
+
+  <h2>论文和资料阅读顺序</h2>
+  <table>
+    <thead>
+      <tr><th>顺序</th><th>主题</th><th>推荐资料</th><th>读的时候看什么</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>1</td><td>机器人学习总览</td><td>Open X-Embodiment、DROID</td><td>数据如何组织，跨机器人为什么难</td></tr>
+      <tr><td>2</td><td>模仿学习</td><td>ACT、Diffusion Policy、LeRobot 示例</td><td>动作表示和误差累积</td></tr>
+      <tr><td>3</td><td>VLA</td><td>RT-2、OpenVLA、Octo、π0</td><td>视觉语言知识如何变成动作</td></tr>
+      <tr><td>4</td><td>世界模型</td><td>Cosmos、V-JEPA 2</td><td>预测未来和真实物理之间的差距</td></tr>
+      <tr><td>5</td><td>产业落地</td><td>Figure、NVIDIA、Amazon、UBTECH、AGIBOT 等官方资料</td><td>场景、数据、成本和安全如何表述</td></tr>
+    </tbody>
+  </table>
+
+  <div class="takeaway">
+    <div class="takeaway-label">入门判断标准</div>
+    当你能独立解释一次失败来自感知、数据、策略、控制还是硬件，并能设计下一轮实验去验证，你才算真正进入具身智能的工程语境。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">11 · Outlook</div>
+  <h1>前景判断：机会、限制与风险</h1>
+
+  <p class="lead">具身智能的长期空间很大，但短期落地会比大众想象更克制。它不是“模型一强，机器人马上进家”的问题，而是成本、可靠性、责任、安全和服务网络共同决定的产业化问题。</p>
+
+  <h2>最可能先落地的场景</h2>
+  <table>
+    <thead>
+      <tr><th>场景</th><th>为什么可能先落地</th><th>主要阻力</th><th>能力门槛</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>仓储物流</td><td>任务重复，环境相对可控，ROI 容易算</td><td>高峰期稳定性和异常处理</td><td>搬运、分拣、货架操作、触觉抓取</td></tr>
+      <tr><td>制造辅助</td><td>工位固定，数据可采，客户愿为效率付费</td><td>节拍、安全认证、维护成本</td><td>上下料、质检、简单装配、工具递送</td></tr>
+      <tr><td>实验室自动化</td><td>流程标准，样本贵，自动化价值明确</td><td>液体、耗材、污染和精细操作</td><td>抓取、移液、开关设备、记录流程</td></tr>
+      <tr><td>商业服务后场</td><td>人力短缺，任务有限，可半封闭部署</td><td>空间狭窄，人机混行</td><td>清洁、补货、配送、整理</td></tr>
+      <tr><td>家庭</td><td>潜在市场大，任务价值直观</td><td>开放世界、偏好差异、隐私和售后</td><td>长时记忆、通用操作、安全共处</td></tr>
+    </tbody>
+  </table>
+
+  <h2>市场预测怎么看</h2>
+  <p>Goldman Sachs 曾给出到 2035 年人形机器人市场规模可达 380 亿美元的预测，IFR 的 World Robotics 2025 则提供工业机器人需求和安装趋势。此类数字有参考价值，但不能替代具体场景的 unit economics。更实用的测算方式是：机器人每小时综合成本、可替代或增强的人工时长、停机和维护成本、场景改造成本、安全事故成本，以及部署后能否持续产生新数据。</p>
+
+  <h2>职业机会</h2>
+  <table>
+    <thead>
+      <tr><th>方向</th><th>核心能力</th><th>适合背景</th><th>作品集建议</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>机器人学习工程师</td><td>策略训练、数据处理、评测</td><td>机器学习、计算机视觉</td><td>公开一个可复现仿真到真实项目</td></tr>
+      <tr><td>机器人系统工程师</td><td>ROS、控制、传感器、部署</td><td>机器人、自动化、嵌入式</td><td>展示完整闭环和故障定位能力</td></tr>
+      <tr><td>VLA/多模态研究</td><td>基础模型、动作表示、跨本体泛化</td><td>大模型、多模态、强化学习</td><td>微调开源 VLA 并做严格评测</td></tr>
+      <tr><td>仿真与数据平台</td><td>物理引擎、合成数据、回放系统</td><td>图形学、后端、ML infra</td><td>做一个可复现的数据飞轮 demo</td></tr>
+      <tr><td>产品与解决方案</td><td>场景拆解、ROI、安全流程</td><td>行业运营、自动化实施</td><td>写出场景任务树和验收指标</td></tr>
+    </tbody>
+  </table>
+
+  <h2>主要风险</h2>
+  <ol>
+    <li><strong>演示泡沫。</strong>剪辑视频会放大能力，掩盖失败率和人工干预。</li>
+    <li><strong>硬件成本下降慢。</strong>如果本体价格、维护和能耗降不下来，很多场景无法算账。</li>
+    <li><strong>数据闭环难建立。</strong>没有高频真实场景，模型迭代会停在论文或实验室。</li>
+    <li><strong>安全事故影响信任。</strong>机器人一旦进入人类空间，单次事故可能拖慢整个品类。</li>
+    <li><strong>标准割裂。</strong>不同硬件、数据格式和动作接口不统一，会降低生态复用效率。</li>
+  </ol>
+
+  <h2>长期判断</h2>
+  <p>具身智能会先成为“高价值场景里的自动化增量”，再逐步走向“通用身体助手”。2026 年最值得关注的不是谁宣称通用，而是谁能在真实场景里持续采集数据、稳定降低失败率，并把一次部署经验复用到下一批场景。技术热度会波动，但机器人进入物理世界工作的方向不会逆转。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">12 · Appendix</div>
+  <h1>术语表、阅读清单与参考资料</h1>
+
+  <h2>核心术语表</h2>
+  <div class="two-col">
+    <p><strong>具身智能</strong>：智能体通过身体与环境交互，在感知、行动和反馈中完成任务的能力。</p>
+    <p><strong>VLA</strong>：Vision-Language-Action，把视觉、语言和动作统一建模的机器人模型接口。</p>
+    <p><strong>世界模型</strong>：预测环境未来状态的模型，用于规划、数据生成或策略评估。</p>
+    <p><strong>模仿学习</strong>：从人类或专家演示中学习策略的方法。</p>
+    <p><strong>行为克隆</strong>：把策略学习转成监督学习，输入观测，输出动作。</p>
+    <p><strong>扩散策略</strong>：用扩散模型生成动作序列，适合表达多种可行动作。</p>
+    <p><strong>遥操作</strong>：人远程控制机器人，用于任务执行或数据采集。</p>
+    <p><strong>Sim-to-Real</strong>：把仿真中学到的策略迁移到真实机器人的过程。</p>
+    <p><strong>域随机化</strong>：在仿真中随机改变纹理、光照、摩擦、质量等，提高迁移能力。</p>
+    <p><strong>末端执行器</strong>：机器人与环境直接交互的部件，例如夹爪、手、吸盘。</p>
+    <p><strong>位姿</strong>：位置和姿态的组合，常用于描述机器人末端或物体状态。</p>
+    <p><strong>阻抗控制</strong>：控制机器人与环境接触时的力和柔顺性。</p>
+    <p><strong>技能库</strong>：可复用的动作模块，例如抓取、放置、开门、导航。</p>
+    <p><strong>回归测试</strong>：用固定任务集检查新模型是否破坏已有能力。</p>
+  </div>
+
+  <h2>推荐阅读路线</h2>
+  <ol>
+    <li>先读 ROS 2、MuJoCo、LeRobot 文档，建立工具直觉。</li>
+    <li>再读 DROID、Open X-Embodiment，理解机器人数据为什么难。</li>
+    <li>接着读 RT-2、OpenVLA、Octo 和 Physical Intelligence π 系列，理解 VLA 路线。</li>
+    <li>补读 NVIDIA Cosmos、GR00T、Meta V-JEPA 2，理解平台和世界模型方向。</li>
+    <li>最后看 Figure、Amazon、AGIBOT、UBTECH、Unitree 等公司资料，训练自己从商业场景读技术。</li>
+  </ol>
+
+  <h2>参考资料</h2>
+  <p class="small">完整来源见同目录 <code>sources.md</code> 与 <code>data/source-map.tsv</code>。以下列出正文最核心的公开资料。</p>
+  <ol class="small">
+    <li>Google DeepMind, RT-2: <a href="https://deepmind.google/blog/rt-2-new-model-translates-vision-and-language-into-action">https://deepmind.google/blog/rt-2-new-model-translates-vision-and-language-into-action</a></li>
+    <li>Open X-Embodiment: <a href="https://arxiv.org/abs/2310.08864">https://arxiv.org/abs/2310.08864</a></li>
+    <li>Gemini Robotics: <a href="https://deepmind.google/blog/gemini-robotics-brings-ai-into-the-physical-world/">https://deepmind.google/blog/gemini-robotics-brings-ai-into-the-physical-world/</a></li>
+    <li>Gemini Robotics-ER 1.6: <a href="https://deepmind.google/blog/gemini-robotics-er-1-6/">https://deepmind.google/blog/gemini-robotics-er-1-6/</a></li>
+    <li>OpenVLA: <a href="https://openvla.github.io/">https://openvla.github.io/</a></li>
+    <li>Octo: <a href="https://github.com/octo-models/octo">https://github.com/octo-models/octo</a></li>
+    <li>Physical Intelligence π0.7: <a href="https://www.pi.website/blog/pi07">https://www.pi.website/blog/pi07</a></li>
+    <li>NVIDIA Cosmos: <a href="https://nvidianews.nvidia.com/news/nvidia-launches-cosmos-world-foundation-model-platform-to-accelerate-physical-ai-development">https://nvidianews.nvidia.com/news/nvidia-launches-cosmos-world-foundation-model-platform-to-accelerate-physical-ai-development</a></li>
+    <li>NVIDIA GR00T N1: <a href="https://nvidianews.nvidia.com/news/nvidia-isaac-gr00t-n1-open-humanoid-robot-foundation-model-simulation-frameworks">https://nvidianews.nvidia.com/news/nvidia-isaac-gr00t-n1-open-humanoid-robot-foundation-model-simulation-frameworks</a></li>
+    <li>Figure Helix: <a href="https://www.figure.ai/news/helix">https://www.figure.ai/news/helix</a></li>
+    <li>Amazon Vulcan: <a href="https://www.aboutamazon.eu/news/company-news/introducing-vulcan-amazons-first-robot-with-a-sense-of-touch">https://www.aboutamazon.eu/news/company-news/introducing-vulcan-amazons-first-robot-with-a-sense-of-touch</a></li>
+    <li>AGIBOT World 2026: <a href="https://www.agibot.com/article/231/detail/54.html">https://www.agibot.com/article/231/detail/54.html</a></li>
+    <li>UBTECH Walker S2: <a href="https://www.ubtrobot.com/en/humanoid/products/WalkerS2">https://www.ubtrobot.com/en/humanoid/products/WalkerS2</a></li>
+    <li>Tencent HY-Embodied-0.5: <a href="https://huggingface.co/tencent/HY-Embodied-0.5">https://huggingface.co/tencent/HY-Embodied-0.5</a></li>
+    <li>ROS 2 docs: <a href="https://docs.ros.org/">https://docs.ros.org/</a></li>
+    <li>MuJoCo docs: <a href="https://mujoco.readthedocs.io/en/stable/overview.html">https://mujoco.readthedocs.io/en/stable/overview.html</a></li>
+    <li>LeRobot: <a href="https://github.com/huggingface/lerobot">https://github.com/huggingface/lerobot</a></li>
+    <li>Stanford AI Index 2025: <a href="https://hai.stanford.edu/assets/files/hai_ai_index_report_2025.pdf">https://hai.stanford.edu/assets/files/hai_ai_index_report_2025.pdf</a></li>
+  </ol>
+
+  <h2>最后的学习建议</h2>
+  <p>具身智能看上去很宽，但入门路径可以很窄：选一个小任务，建立可复现实验，认真记录失败，逐步替换感知、策略、控制和数据模块。不要急着追“通用机器人”，先把一个具体任务从演示做成可统计、可回放、可迭代的系统。能做到这一点，就已经走过了从 0 到 1 最关键的一步。</p>
+</section>
+
+</body>
+</html>
