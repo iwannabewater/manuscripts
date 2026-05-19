@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<!-- ==================================================================
+     LONG DOCUMENT TEMPLATE · parchment design system
+     多页 A4 白皮书/技术报告/年度总结
+     结构：封面 -> 目录 -> 执行摘要 -> 正文章节 -> 附录
+     ================================================================== -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>ms-swift 大模型训练框架全景与源码级指南 2026</title>
+<meta name="author" content="Winston">
+<meta name="description" content="从定位、架构、训练链路、RL 后训练、Megatron 并行、评测部署到扩展点，系统掌握 ms-swift。">
+<meta name="keywords" content="ms-swift, 大模型训练, SFT, GRPO, Megatron-SWIFT">
+<meta name="generator" content="Kami">
+<style>
+  /* Regular weight */
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  /* Bold weight - W05 for all bold variants */
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 20mm 22mm 22mm 22mm;
+    background: #f5f4ed;
+
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02", "Source Han Serif SC",
+                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+
+    @bottom-center {
+      content: counter(page) "  ·  ms-swift 大模型训练框架全景与源码级指南 2026";
+      font-family: "TsangerJinKai02", "Source Han Serif SC",
+                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 9pt;
+      color: #6b6a64;
+    }
+  }
+
+  @page:first {
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #f5f4ed;
+    --ivory:     #faf9f5;
+    --near-black:#141413;
+    --dark-warm: #3d3d3a;
+    --olive:     #504e49;
+    --stone:     #6b6a64;
+    --brand:     #1B365D;
+    --border:    #e8e6dc;
+    --border-soft:#e5e3d8;
+    --tag-bg:    #E4ECF5;
+    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --sans: var(--serif);
+
+    --rhythm-module:  14pt;
+    --rhythm-section: 18pt;
+  }
+
+  html, body { background: var(--parchment); }
+
+  @media screen {
+    body { max-width: 210mm; margin: 0 auto; padding: 20mm 22mm 22mm 22mm; }
+  }
+
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 10.5pt;
+    line-height: 1.55;
+    letter-spacing: 0.3pt;
+    widows: 3;
+    orphans: 3;
+  }
+
+  .sans {
+    font-family: var(--sans);
+  }
+
+  /* ========== COVER ========== */
+  .cover {
+    min-height: 240mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40mm 0 0 0;
+    break-after: page;
+  }
+  .cover-eyebrow {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 18pt;
+  }
+  .cover-title {
+    font-size: 36pt;
+    font-weight: 500;
+    color: var(--near-black);
+    line-height: 1.15;
+    letter-spacing: 0.3pt;
+    margin-bottom: 16pt;
+  }
+  .cover-sub {
+    font-family: var(--sans);
+    font-size: 14pt;
+    color: var(--olive);
+    line-height: 1.5;
+    max-width: 85%;
+    margin-bottom: 30pt;
+  }
+  .cover-meta {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--stone);
+    line-height: 1.5;
+  }
+  .cover-meta strong {
+    color: var(--dark-warm);
+    font-weight: 500;
+  }
+
+  /* ========== TOC（目录）========== */
+  .toc { break-after: page; }
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: var(--rhythm-module);
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6pt 0;
+    border-bottom: 0.3pt dotted var(--border);
+    font-size: 11pt;
+  }
+  .toc-item:last-of-type { border-bottom: none; }
+  .toc-num {
+    color: var(--brand);
+    font-weight: 500;
+    min-width: 30pt;
+  }
+  .toc-title {
+    flex: 1;
+    color: var(--near-black);
+    padding-left: 6pt;
+  }
+  .toc-page {
+    color: var(--stone);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ========== HEADINGS ========== */
+  h1 {
+    font-size: 22pt;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 10pt 0;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    color: var(--near-black);
+    break-after: avoid;
+  }
+
+  h2 {
+    font-size: 16pt;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 24pt 0 8pt 0;
+    color: var(--near-black);
+    break-after: avoid;
+    string-set: section-title content();
+  }
+
+  h3 {
+    font-size: 13pt;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 18pt 0 6pt 0;
+    color: var(--dark-warm);
+    break-after: avoid;
+  }
+
+  .chapter-num {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+  }
+
+  /* ========== PARAGRAPHS ========== */
+  p {
+    margin: 0 0 10pt 0;
+    line-height: 1.55;
+    color: var(--near-black);
+    widows: 2;
+    orphans: 2;
+  }
+
+  .lead {
+    font-size: 12pt;
+    line-height: 1.55;
+    color: var(--dark-warm);
+    margin-bottom: var(--rhythm-module);
+  }
+
+  .hl { color: var(--brand); font-weight: 500; }
+  strong { font-weight: 500; }
+
+  /* ========== LISTS ========== */
+  ul, ol {
+    margin: 6pt 0 10pt 0;
+    padding-left: 20pt;
+    line-height: 1.55;
+  }
+  ul li::marker { color: var(--brand); }
+  ol li::marker { color: var(--brand); font-weight: 500; }
+
+  /* ========== QUOTE ========== */
+  blockquote, .quote {
+    border-left: 2pt solid var(--brand);
+    margin: 12pt 0;
+    padding: 4pt 0 4pt 16pt;
+    color: var(--olive);
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  blockquote .cite, .quote .cite {
+    display: block;
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 4pt;
+  }
+
+  /* ========== CODE ========== */
+  /* Mono first for English glyphs, then CJK fallback so Chinese comments
+     inside code/pre render correctly. A mono-only chain causes missing
+     glyphs rendered as "?" or missing-glyph boxes in WeasyPrint when the system lacks
+     a mono font with CJK coverage. */
+  code {
+    font-family: "JetBrains Mono", "SF Mono", Consolas,
+                 "TsangerJinKai02", "Source Han Serif SC",
+                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-size: 9pt;
+    background: var(--ivory);
+    padding: 1pt 4pt;
+    border-radius: 2pt;
+    color: var(--dark-warm);
+  }
+  pre {
+    font-family: "JetBrains Mono", "SF Mono", Consolas,
+                 "TsangerJinKai02", "Source Han Serif SC",
+                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-size: 9pt;
+    line-height: 1.5;
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 10pt 0;
+    white-space: pre-wrap;
+    color: var(--near-black);
+    break-inside: avoid;
+  }
+  pre code { background: transparent; padding: 0; font-size: inherit; }
+
+  /* ========== TABLE (kami-table) ========== */
+  table, .kami-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin: 12pt 0;
+    break-inside: avoid;
+  }
+  table th, .kami-table th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--dark-warm);
+    padding: 6pt 8pt;
+    border-bottom: 1pt solid var(--border);
+    background: transparent;
+  }
+  table td, .kami-table td {
+    padding: 5pt 8pt;
+    border-bottom: 0.3pt solid var(--border-soft);
+    vertical-align: top;
+  }
+  table.compact th, .kami-table.compact th { padding: 3pt 6pt; font-size: 8pt; }
+  table.compact td, .kami-table.compact td { padding: 2pt 6pt; font-size: 8pt; line-height: 1.4; }
+  table.financial td:not(:first-child), .kami-table.financial td:not(:first-child) {
+    text-align: right; font-variant-numeric: tabular-nums;
+  }
+  table.financial th:not(:first-child), .kami-table.financial th:not(:first-child) { text-align: right; }
+  table.striped tbody tr:nth-child(even) td, .kami-table.striped tbody tr:nth-child(even) td {
+    background: var(--ivory);
+  }
+  table .total td, .kami-table .total td {
+    font-weight: 500; border-top: 1pt solid var(--brand); border-bottom: none; color: var(--near-black);
+  }
+
+  /* ========== CALLOUT ========== */
+  .callout {
+    background: var(--ivory);
+    border-left: 2pt solid var(--brand);
+    padding: 10pt 14pt;
+    border-radius: 3pt;
+    margin: 12pt 0;
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  .callout blockquote,
+  .callout .quote {
+    border-left: none;
+    padding-left: 0;
+    margin: 6pt 0;
+    color: var(--olive);
+  }
+  .callout blockquote:first-child,
+  .callout .quote:first-child { margin-top: 0; }
+  .callout blockquote:last-child,
+  .callout .quote:last-child  { margin-bottom: 0; }
+
+  .takeaway {
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .takeaway-label {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--brand);
+    letter-spacing: 0.5pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+
+  /* ========== TAG ========== */
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--brand);
+    font-family: var(--sans);
+    font-size: 9pt;
+    font-weight: 500;
+    padding: 1pt 6pt;
+    border-radius: 3pt;
+    margin-right: 4pt;
+  }
+
+  /* ========== FIGURE ========== */
+  figure {
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  figure img {
+    max-width: 100%;
+    border-radius: 4pt;
+  }
+  figcaption {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 6pt;
+    text-align: center;
+  }
+
+  /* ========== EXECUTIVE SUMMARY ========== */
+  .exec-summary {
+    background: var(--ivory);
+    border-left: 1.4pt solid var(--brand);
+    border-radius: 6pt;
+    padding: 16pt 20pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .exec-summary h2 {
+    margin-top: 0;
+    font-size: 13pt;
+  }
+
+  /* ========== CHAPTER BREAK ========== */
+  .chapter { break-before: page; }
+</style>
+</head>
+<body>
+
+<!-- Cover -->
+<section class="cover">
+  <div>
+    <div class="cover-eyebrow">Technical Report · 2026</div>
+    <div class="cover-title">ms-swift 大模型训练框架<br>全景与源码级指南</div>
+    <div class="cover-sub">从 0 到 1 建立训练框架心智模型，再深入掌握 CLI、数据、模板、Trainer、RL 后训练、Megatron 并行、评测部署与扩展机制。</div>
+  </div>
+  <div class="cover-meta">
+    <strong>Winston</strong><br>
+    V1.0  ·  2026-05-19<br>
+    资料口径：ms-swift main commit 7dd6b0e；PyPI / GitHub 最新稳定版 v4.2.1
+  </div>
+</section>
+
+<!-- Contents -->
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">执行摘要：先建立正确的框架观</span><span class="toc-page">全局</span></div>
+  <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">定位与边界：ms-swift 解决哪一类训练问题</span><span class="toc-page">认知</span></div>
+  <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">整体架构：从命令入口到权重产物</span><span class="toc-page">架构</span></div>
+  <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">命令与参数：一次运行如何被解释</span><span class="toc-page">入口</span></div>
+  <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">数据、模板与损失：训练样本如何变成梯度</span><span class="toc-page">核心</span></div>
+  <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">CPT / SFT 主链路：最常用训练路径</span><span class="toc-page">实践</span></div>
+  <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">轻量微调与显存工程：LoRA、QLoRA、packing</span><span class="toc-page">效率</span></div>
+  <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">RL 后训练：DPO、RM、GRPO、GKD 与 rollout</span><span class="toc-page">对齐</span></div>
+  <div class="toc-item"><span class="toc-num">09</span><span class="toc-title">Megatron-SWIFT：大模型并行训练路线</span><span class="toc-page">规模</span></div>
+  <div class="toc-item"><span class="toc-num">10</span><span class="toc-title">多模态、Agent 与专门任务</span><span class="toc-page">任务</span></div>
+  <div class="toc-item"><span class="toc-num">11</span><span class="toc-title">评测、推理、导出与部署</span><span class="toc-page">闭环</span></div>
+  <div class="toc-item"><span class="toc-num">12</span><span class="toc-title">扩展、排障与掌控清单</span><span class="toc-page">进阶</span></div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">01 · Executive Summary</div>
+  <h1>执行摘要：先建立正确的框架观</h1>
+
+  <p class="lead">
+    ms-swift 不是一个只包了一层训练命令的 LoRA 脚手架，而是 ModelScope 社区维护的
+    <span class="hl">大模型与多模态大模型训练到部署全链路框架</span>。截至本稿核对时，官方 README 与 PyPI 页面宣称其支持
+    600+ 纯文本大模型、400+ 多模态大模型、150+ 数据集，并覆盖预训练、监督微调、人类对齐、推理、评测、量化和部署。
+  </p>
+
+  <p>
+    要真正掌握 ms-swift，不能把注意力停在一条 `swift sft` 命令上。正确的读法是把它拆成七层：命令入口负责把 CLI、YAML、分布式环境变量转成可执行进程；参数系统把模型、数据、模板、训练、生成、量化和后端选择统一起来；模型与模板注册层决定如何加载权重、如何把 messages 编码成 token；数据层决定样本清洗、列映射、packing、lazy tokenize 与缓存策略；Trainer 层把任务选择映射到 Hugging Face Trainer、TRL Trainer 或 ms-swift 自己的混入逻辑；RL 与 rollout 层处理采样、奖励、参考模型、vLLM 服务器和权重同步；导出与推理层把 checkpoint 重新接回实际服务。
+  </p>
+
+  <h2>五个核心结论</h2>
+  <ul>
+    <li><strong>ms-swift 的核心抽象不是模型，而是“模型元信息 + 数据标准格式 + 对话模板 + Trainer”。</strong>模型能否接入，取决于 `model_type`、`template`、loader、model_arch 与额外保存文件是否定义完整。</li>
+    <li><strong>训练命令只是入口，真正的主链路在 `swift/pipelines`。</strong>`swift sft` 会进入 `SwiftSft` pipeline，完成模型加载、模板准备、数据加载和编码、tuner 包装、TrainerFactory 选择、训练与状态保存。</li>
+    <li><strong>数据是最容易被低估的控制面。</strong>同一个 JSONL 文件可以通过 `messages`、`rejected_response`、`label`、`images`、`tools`、`loss`、`loss_scale` 等字段进入 SFT、DPO、KTO、GRPO、Agent、多模态训练等不同任务。</li>
+    <li><strong>RL 后训练的复杂度来自“生成”和“训练”的耦合。</strong>GRPO 不只是在 Trainer 里加一个损失函数，它需要 rollout、奖励函数、组内优势估计、参考策略 KL、vLLM / SGLang / LMDeploy 等推理后端以及权重同步共同工作。</li>
+    <li><strong>Megatron-SWIFT 是规模化路线，不是初学者默认路线。</strong>普通 SFT 优先用 `swift sft`；MoE、长上下文、FP8、TP/PP/CP/EP/VPP 或多机大规模训练，再切到 `megatron sft/rlhf/export` 与 Mcore-Bridge。</li>
+  </ul>
+
+  <div class="takeaway">
+    <div class="takeaway-label">本文读法</div>
+    第一遍按章节顺序读，建立整体逻辑；第二遍只看图表和决策表，形成操作路线；第三遍对照源码路径和命令清单，把自己的训练任务映射到具体参数、数据格式和扩展点。
+  </div>
+
+  <h2>资料口径与严谨边界</h2>
+  <table class="kami-table">
+    <thead>
+      <tr><th>项目</th><th>本稿采用口径</th><th>说明</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>稳定版本</td><td>PyPI `ms-swift 4.2.1`，发布于 2026-05-17</td><td>用于安装、版本判断和稳定能力描述。</td></tr>
+      <tr><td>主分支源码</td><td>commit `7dd6b0e`，2026-05-19 19:30 +0800</td><td>用于目录结构、pipeline、Trainer、RL trainer 等源码级解读。</td></tr>
+      <tr><td>官方文档</td><td>ReadTheDocs latest 标示为 `swift 4.3.0.dev0`</td><td>本文把 dev 文档中的新增能力与稳定 v4.2.1 区分表达。</td></tr>
+      <tr><td>论文口径</td><td>arXiv 2408.05517 v4；AAAI 2025 Demonstration Track</td><td>用于框架设计动机和学术引用，不用论文中过期数量覆盖 README 当前数量。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">02 · Positioning</div>
+  <h1>定位与边界：ms-swift 解决哪一类训练问题</h1>
+
+  <p class="lead">
+    ms-swift 的定位可以简化为一句话：让研究者和工程师以统一接口完成大模型与多模态大模型的训练、对齐、评测、量化、推理和部署。它的优势不是某一个单点算法，而是把模型适配、数据格式、训练策略、推理后端和导出链路收束成一个可复用系统。
+  </p>
+
+  <h2>它站在什么层次</h2>
+  <p>
+    训练框架通常分四层。最底层是 PyTorch、NCCL、CUDA、NPU runtime 等执行基座；再上一层是 Transformers、PEFT、TRL、DeepSpeed、FSDP、Megatron、vLLM 等通用库；第三层是面向 LLM / MLLM 的模型、数据、模板、任务协议；最上层才是用户直接操作的 CLI、Web-UI、Python API 与脚本。ms-swift 主要工作在第三层和第四层，同时把第二层的能力通过参数暴露出来。
+  </p>
+
+  <figure>
+    <svg viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots1" width="22" height="22" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/>
+      <rect width="100%" height="100%" fill="url(#dots1)" opacity="0.55"/>
+      <text x="80" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  1</text>
+      <text x="196" y="38" fill="#504e49" font-size="13" font-family="monospace" letter-spacing="3">MS-SWIFT STACK POSITION</text>
+      <line x1="80" y1="52" x2="920" y2="52" stroke="#1B365D" stroke-width="0.8"/>
+
+      <rect x="120" y="92" width="760" height="68" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
+      <text x="148" y="124" fill="#141413" font-size="24" font-weight="600" font-family="serif">用户入口</text>
+      <text x="148" y="148" fill="#504e49" font-size="15" font-family="monospace">swift sft / rlhf / infer / eval / export · Web-UI · Python API</text>
+
+      <rect x="120" y="176" width="760" height="76" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="148" y="208" fill="#141413" font-size="24" font-weight="600" font-family="serif">ms-swift 任务协议层</text>
+      <text x="148" y="232" fill="#504e49" font-size="15" font-family="monospace">Arguments · ModelMeta · Template · Dataset · Pipeline · TrainerFactory</text>
+
+      <rect x="120" y="268" width="760" height="76" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="148" y="300" fill="#141413" font-size="24" font-weight="600" font-family="serif">训练与推理生态</text>
+      <text x="148" y="324" fill="#504e49" font-size="15" font-family="monospace">Transformers · PEFT · TRL · DeepSpeed · FSDP · Megatron · vLLM · SGLang</text>
+
+      <rect x="120" y="360" width="760" height="76" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="148" y="392" fill="#141413" font-size="24" font-weight="600" font-family="serif">执行基座</text>
+      <text x="148" y="416" fill="#504e49" font-size="15" font-family="monospace">PyTorch · CUDA / NPU / MPS / CPU · NCCL / HCCL · 文件系统与缓存</text>
+
+      <rect x="120" y="468" width="760" height="36" rx="4" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
+      <text x="500" y="492" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">关键理解：ms-swift 不是替代底层库，而是把底层库组合成大模型训练的可执行协议。</text>
+    </svg>
+    <figcaption>ms-swift 位于大模型训练的任务协议层，它把底层库的自由度约束成可复用的训练流程。</figcaption>
+  </figure>
+
+  <h2>能力边界</h2>
+  <table class="kami-table">
+    <thead>
+      <tr><th>能力域</th><th>ms-swift 覆盖什么</th><th>不应误解为什么</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>训练任务</td><td>CPT、SFT、GRPO、GKD、DPO、KTO、RM、CPO、SimPO、ORPO、PPO、Embedding、Reranker、序列分类。</td><td>不是自动给出最优算法；算法选择仍依赖数据、目标和预算。</td></tr>
+      <tr><td>模型支持</td><td>通过模型注册与模板注册适配大量 LLM / MLLM，并默认使用 ModelScope 下载，也可切换 Hugging Face。</td><td>不是所有模型天然可训；新模型仍要核对 loader、template、model_arch 和特殊参数。</td></tr>
+      <tr><td>分布式与显存</td><td>DDP、device_map、DeepSpeed ZeRO、FSDP/FSDP2、sequence parallel、Megatron 并行、packing、padding_free、gradient checkpointing。</td><td>不是“一键省显存”；每个技术都会改变吞吐、稳定性或导出方式。</td></tr>
+      <tr><td>推理部署</td><td>Transformers、vLLM、SGLang、LMDeploy 推理后端，OpenAI 风格部署接口，LoRA merge、量化导出。</td><td>不是专门的推理服务平台；生产服务仍需监控、鉴权、限流与灰度。</td></tr>
+      <tr><td>扩展</td><td>模型、数据集、模板、loss、loss_scale、metrics、callbacks、optimizer、tuner、ORM、PRM、Agent template。</td><td>不是所有扩展都适合外部插件；进入主仓库前需要测试对齐和文档。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    判断是否使用 ms-swift 的简单标准：如果你的工作是“把一个开源或自定义 LLM / MLLM 在特定数据上完成可复现训练，并继续评测、导出、部署”，ms-swift 是高匹配；如果你要重写底层并行内核、研究全新的优化器理论，ms-swift 更适合作为实验承载层，而不是研究对象本身。
+  </div>
+
+  <h2>学习路线</h2>
+  <ol>
+    <li>先跑通单卡 LoRA SFT，理解 `model`、`dataset`、`template`、`output_dir`、`adapters`、`merge_lora` 这些对象的生命周期。</li>
+    <li>再读 `swift/pipelines/train/sft.py`，把命令行参数和源码对象一一对应起来。</li>
+    <li>随后学习标准数据集格式，尤其是 `messages`、`rejected_response`、`label`、`images`、`tools`、`loss`、`loss_scale`。</li>
+    <li>进入 RL 后训练前，先能解释 DPO / KTO / RM / GRPO 的数据差异，不要先调 reward function。</li>
+    <li>需要大模型并行时再读 Megatron-SWIFT，否则过早学习 TP、PP、CP、EP 会掩盖主链路。</li>
+  </ol>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">03 · Architecture</div>
+  <h1>整体架构：从命令入口到权重产物</h1>
+
+  <p class="lead">
+    ms-swift 的源码结构非常直接：一级目录基本对应一类扩展点或运行阶段。掌握这些目录，比记住几十个参数更重要，因为参数最终都会落到这些对象上。
+  </p>
+
+  <h2>源码目录地图</h2>
+  <table class="kami-table compact">
+    <thead>
+      <tr><th>目录</th><th>职责</th><th>掌握重点</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>`swift/cli`</td><td>命令分发与进程启动。</td><td>`swift sft`、`swift rlhf`、`swift infer` 等命令如何映射到 pipeline；何时自动走 torchrun。</td></tr>
+      <tr><td>`swift/arguments`</td><td>参数 dataclass、参数校验、从 checkpoint 读取 args。</td><td>`model`、`dataset`、`template`、`training_args` 如何被组合。</td></tr>
+      <tr><td>`swift/model`</td><td>模型元信息、模型加载、模型注册、NPU patch。</td><td>`ModelMeta`、`MODEL_MAPPING`、loader、model_arch。</td></tr>
+      <tr><td>`swift/template`</td><td>对话模板、多模态 token、messages 到 input_ids / labels 的编码。</td><td>训练哪些 token、忽略哪些 token、系统提示优先级。</td></tr>
+      <tr><td>`swift/dataset`</td><td>数据加载、列映射、标准格式转换、packing、缓存数据集。</td><td>`AutoPreprocessor`、`LazyLLMDataset`、`PackingDataset`、streaming。</td></tr>
+      <tr><td>`swift/pipelines`</td><td>训练、推理、评测、导出、采样等主流程。</td><td>读源码先读 pipeline，再读 trainer。</td></tr>
+      <tr><td>`swift/trainers`</td><td>SFT、预训练、Embedding、Reranker、序列分类等 Trainer。</td><td>基于 HF Trainer 的混入逻辑、loss、accuracy、dataloader。</td></tr>
+      <tr><td>`swift/rlhf_trainers`</td><td>DPO、KTO、RM、PPO、GRPO、GKD 等后训练 Trainer。</td><td>与 TRL 的关系、rollout、ref model、奖励、vLLM 客户端。</td></tr>
+      <tr><td>`swift/rollout` / `swift/rewards`</td><td>RL 采样和奖励函数。</td><td>GRPO / GKD 何时需要外部推理服务，ORM / PRM 如何挂入。</td></tr>
+      <tr><td>`swift/megatron`</td><td>Megatron-SWIFT 参数、pipeline、trainer、模型转换。</td><td>TP、PP、SP、CP、EP、Mcore-Bridge 与 checkpoint 格式。</td></tr>
+      <tr><td>`swift/infer_engine`</td><td>Transformers、vLLM、SGLang、LMDeploy 等推理后端。</td><td>训练后验证、批量推理、部署和 RL rollout 共享推理能力。</td></tr>
+      <tr><td>`swift/ui`</td><td>Web-UI 的训练、推理、评测、量化界面。</td><td>适合低门槛试验，不替代脚本化生产流程。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>一次 SFT 运行的架构流</h2>
+  <figure>
+    <svg viewBox="0 0 1000 620" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots2" width="22" height="22" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/>
+      <rect width="100%" height="100%" fill="url(#dots2)" opacity="0.55"/>
+      <text x="80" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  2</text>
+      <text x="196" y="38" fill="#504e49" font-size="13" font-family="monospace" letter-spacing="3">SFT EXECUTION PATH</text>
+      <line x1="80" y1="52" x2="920" y2="52" stroke="#1B365D" stroke-width="0.8"/>
+
+      <rect x="72" y="88" width="160" height="72" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
+      <text x="152" y="120" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">CLI</text>
+      <text x="152" y="144" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">swift sft</text>
+
+      <rect x="292" y="88" width="160" height="72" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="372" y="120" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Arguments</text>
+      <text x="372" y="144" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">SftArguments</text>
+
+      <rect x="512" y="88" width="160" height="72" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="592" y="120" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Pipeline</text>
+      <text x="592" y="144" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">SwiftSft</text>
+
+      <rect x="732" y="88" width="160" height="72" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="812" y="120" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Trainer</text>
+      <text x="812" y="144" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">TrainerFactory</text>
+
+      <path d="M232 124 L292 124" stroke="#1B365D" stroke-width="1.5" fill="none"/>
+      <path d="M284 119 L292 124 L284 129" stroke="#1B365D" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M452 124 L512 124" stroke="#504e49" stroke-width="1.2" fill="none"/>
+      <path d="M504 119 L512 124 L504 129" stroke="#504e49" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M672 124 L732 124" stroke="#504e49" stroke-width="1.2" fill="none"/>
+      <path d="M724 119 L732 124 L724 129" stroke="#504e49" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+      <rect x="108" y="236" width="216" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="132" y="268" fill="#141413" font-size="22" font-family="serif" font-weight="600">模型加载</text>
+      <text x="132" y="292" fill="#504e49" font-size="14" font-family="monospace">get_model_processor</text>
+      <text x="132" y="316" fill="#504e49" font-size="14" font-family="monospace">ModelMeta / loader</text>
+
+      <rect x="392" y="236" width="216" height="96" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
+      <text x="416" y="268" fill="#141413" font-size="22" font-family="serif" font-weight="600">模板编码</text>
+      <text x="416" y="292" fill="#504e49" font-size="14" font-family="monospace">get_template</text>
+      <text x="416" y="316" fill="#504e49" font-size="14" font-family="monospace">messages -> labels</text>
+
+      <rect x="676" y="236" width="216" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="700" y="268" fill="#141413" font-size="22" font-family="serif" font-weight="600">数据处理</text>
+      <text x="700" y="292" fill="#504e49" font-size="14" font-family="monospace">load_dataset</text>
+      <text x="700" y="316" fill="#504e49" font-size="14" font-family="monospace">packing / cache</text>
+
+      <rect x="108" y="408" width="216" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="132" y="440" fill="#141413" font-size="22" font-family="serif" font-weight="600">Tuner 包装</text>
+      <text x="132" y="464" fill="#504e49" font-size="14" font-family="monospace">LoRA / full / adapter</text>
+      <text x="132" y="488" fill="#504e49" font-size="14" font-family="monospace">prepare_model</text>
+
+      <rect x="392" y="408" width="216" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="416" y="440" fill="#141413" font-size="22" font-family="serif" font-weight="600">训练循环</text>
+      <text x="416" y="464" fill="#504e49" font-size="14" font-family="monospace">compute_loss</text>
+      <text x="416" y="488" fill="#504e49" font-size="14" font-family="monospace">save / eval / log</text>
+
+      <rect x="676" y="408" width="216" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="700" y="440" fill="#141413" font-size="22" font-family="serif" font-weight="600">产物</text>
+      <text x="700" y="464" fill="#504e49" font-size="14" font-family="monospace">checkpoint / args.json</text>
+      <text x="700" y="488" fill="#504e49" font-size="14" font-family="monospace">adapter / full weight</text>
+
+      <path d="M500 160 L500 236" stroke="#504e49" stroke-width="1.2" fill="none"/>
+      <path d="M495 228 L500 236 L505 228" stroke="#504e49" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M324 456 L392 456" stroke="#504e49" stroke-width="1.2" fill="none"/>
+      <path d="M384 451 L392 456 L384 461" stroke="#504e49" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M608 456 L676 456" stroke="#504e49" stroke-width="1.2" fill="none"/>
+      <path d="M668 451 L676 456 L668 461" stroke="#504e49" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    </svg>
+    <figcaption>`swift sft` 的运行路径不是线性脚本，而是参数、模型、模板、数据、tuner 与 Trainer 的对象协作。</figcaption>
+  </figure>
+
+  <h2>为什么说 pipeline 是源码阅读入口</h2>
+  <p>
+    初学者容易先读 `Trainer`，但这会丢失上下文。Trainer 只知道如何训练给定模型与数据集，不知道模型如何下载、模板如何选择、数据何时 lazy encode、LoRA 何时注入、checkpoint 如何附带 `args.json`。`SwiftSft` 这类 pipeline 才是运行时总装线。它先准备模型和 processor，再准备模板，随后加载并编码数据，最后通过 `TrainerFactory.get_trainer_cls(args)` 选择 Trainer。
+  </p>
+
+  <table class="kami-table">
+    <thead>
+      <tr><th>阶段</th><th>源码对象</th><th>用户可控参数</th><th>常见风险</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>模型准备</td><td>`args.get_model_processor()`</td><td>`--model`、`--model_type`、`--torch_dtype`、`--device_map`、`--model_kwargs`</td><td>模型类型自动匹配失败；训练和推理时模型特定参数不一致。</td></tr>
+      <tr><td>模板准备</td><td>`args.get_template(processor)`</td><td>`--template`、`--system`、`--loss_scale`、`--agent_template`、`--max_length`</td><td>模板不支持 packing / padding_free；base 模型误用 chat template。</td></tr>
+      <tr><td>数据准备</td><td>`load_dataset`、`_encode_dataset`、`_post_process_datasets`</td><td>`--dataset`、`--columns`、`--split_dataset_ratio`、`--streaming`、`--packing`、`--cached_dataset`</td><td>字段映射错误；多模态路径不一致；流式训练未设置 `max_steps`。</td></tr>
+      <tr><td>模型改造</td><td>`TunerMixin.prepare_model`</td><td>`--tuner_type`、`--target_modules`、`--lora_rank`、`--freeze_vit`、`--vit_lr`</td><td>目标模块不匹配；QLoRA 后不能直接 merge；多模态子模块学习率混乱。</td></tr>
+      <tr><td>训练执行</td><td>`trainer.train()`</td><td>`--learning_rate`、`--gradient_accumulation_steps`、`--deepspeed`、`--fsdp`、`--report_to`</td><td>有效 batch size 与预期不一致；ZeRO/FSDP 与 checkpoint 策略不匹配。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">04 · CLI And Arguments</div>
+  <h1>命令与参数：一次运行如何被解释</h1>
+
+  <p class="lead">
+    ms-swift 的 CLI 设计把“命令名”与“Python 模块”解耦。`swift.cli.main` 维护路由表，读取命令名后找到相应模块，再根据分布式环境变量决定是否通过 `torch.distributed.run` 启动。
+  </p>
+
+  <h2>命令路由表</h2>
+  <table class="kami-table compact">
+    <thead>
+      <tr><th>命令</th><th>模块</th><th>典型用途</th><th>是否可能 torchrun</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>`swift pt`</td><td>`swift.cli.pt`</td><td>CPT (继续预训练)。</td><td>是</td></tr>
+      <tr><td>`swift sft`</td><td>`swift.cli.sft`</td><td>SFT (监督微调)，最常用入口。</td><td>是</td></tr>
+      <tr><td>`swift rlhf`</td><td>`swift.cli.rlhf`</td><td>DPO、KTO、RM、PPO、GRPO、GKD 等后训练。</td><td>是</td></tr>
+      <tr><td>`swift infer`</td><td>`swift.cli.infer`</td><td>交互式或批量推理。</td><td>是</td></tr>
+      <tr><td>`swift deploy`</td><td>`swift.cli.deploy`</td><td>启动 OpenAI 风格服务。</td><td>通常否</td></tr>
+      <tr><td>`swift rollout`</td><td>`swift.cli.rollout`</td><td>RL 外部 vLLM rollout 服务。</td><td>通常否</td></tr>
+      <tr><td>`swift export`</td><td>`swift.cli.export`</td><td>Merge LoRA、量化、推送模型、缓存数据集。</td><td>通常否</td></tr>
+      <tr><td>`swift eval`</td><td>`swift.cli.eval`</td><td>调用 EvalScope 评测。</td><td>通常否</td></tr>
+      <tr><td>`swift sample`</td><td>`swift.cli.sample`</td><td>采样、蒸馏、PRM / ORM 过滤。</td><td>通常否</td></tr>
+      <tr><td>`swift web-ui`</td><td>`swift.cli.web_ui`</td><td>Gradio Web-UI。</td><td>否</td></tr>
+      <tr><td>`megatron sft`</td><td>`swift.cli._megatron.sft`</td><td>Megatron-SWIFT SFT。</td><td>是</td></tr>
+      <tr><td>`megatron export`</td><td>`swift.cli._megatron.export`</td><td>Megatron / HF 权重转换与导出。</td><td>是</td></tr>
+    </tbody>
+  </table>
+
+  <h2>YAML / JSON 与环境变量</h2>
+  <p>
+    ms-swift 允许把训练命令写成 YAML 或 JSON。`parse_yaml_args` 会把配置文件中的键值转成 CLI 参数，并把 `ENV` 字段写入当前进程环境变量。这一点对多模态模型尤其重要，因为部分模型的帧数、像素、音频参数既可以来自 `--model_kwargs`，也可能来自环境变量。
+  </p>
+
+  <pre><code class="language-yaml">ENV:
+  MAX_PIXELS: "1003520"
+  FPS_MAX_FRAMES: "12"
+model: Qwen/Qwen3-4B-Instruct-2507
+dataset:
+  - AI-ModelScope/alpaca-gpt4-data-zh#500
+  - swift/self-cognition#500
+tuner_type: lora
+learning_rate: 1e-4
+output_dir: output/qwen3_sft</code></pre>
+
+  <h2>参数的四层分类</h2>
+  <p>
+    官方文档把命令行参数分为基本参数、原子参数、集成参数和特定模型参数。掌握这个分类可以避免“看到参数就堆”的坏习惯。集成参数是用户实际使用的命令参数；原子参数来自训练、数据、模板、生成、量化等局部域；基本参数跨任务共享；特定模型参数则需要回到模型官方实现或 `model_kwargs` 解释。
+  </p>
+
+  <table class="kami-table">
+    <thead>
+      <tr><th>参数域</th><th>代表参数</th><th>应先问的问题</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>模型</td><td>`model`、`model_type`、`torch_dtype`、`attn_impl`、`device_map`</td><td>模型能否被自动识别？训练和推理的 dtype、attention、特殊模型参数是否一致？</td></tr>
+      <tr><td>数据</td><td>`dataset`、`columns`、`split_dataset_ratio`、`dataset_num_proc`、`cached_dataset`</td><td>样本是否能被 AutoPreprocessor 正确转成标准格式？验证集是否独立？</td></tr>
+      <tr><td>模板</td><td>`template`、`system`、`max_length`、`loss_scale`、`agent_template`</td><td>哪些 token 参与损失？多轮、工具调用、多模态 token 是否符合模型协议？</td></tr>
+      <tr><td>训练</td><td>`learning_rate`、`per_device_train_batch_size`、`gradient_accumulation_steps`、`deepspeed`、`fsdp`</td><td>有效 batch size 是多少？显存与吞吐的取舍如何？</td></tr>
+      <tr><td>轻量微调</td><td>`tuner_type`、`target_modules`、`lora_rank`、`lora_alpha`、`freeze_vit`</td><td>只训练 LLM，还是同时训练 ViT / aligner？目标模块能否匹配？</td></tr>
+      <tr><td>RL</td><td>`rlhf_type`、`beta`、`reward_funcs`、`use_vllm`、`vllm_mode`</td><td>数据提供偏好对、label、prompt，还是 reward ground truth？采样和训练是否共卡？</td></tr>
+      <tr><td>生成与部署</td><td>`infer_backend`、`temperature`、`max_new_tokens`、`stream`、`merge_lora`</td><td>验证效果要确定性，还是要接近生产采样？LoRA 是否需要合并后再部署？</td></tr>
+    </tbody>
+  </table>
+
+  <div class="takeaway">
+    <div class="takeaway-label">参数心法</div>
+    新手只调模型、数据、batch、学习率、LoRA 和输出目录；中级用户再调模板、packing、评测、导出；高级用户才调分布式、RL rollout、Megatron 并行和插件扩展。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">05 · Data Template Loss</div>
+  <h1>数据、模板与损失：训练样本如何变成梯度</h1>
+
+  <p class="lead">
+    大模型训练框架的关键问题不是“如何读 JSON”，而是如何把异构任务数据统一成可编码、可裁剪、可打包、可计算损失的样本。ms-swift 选择用标准数据集格式和 Template 编码器连接两端。
+  </p>
+
+  <h2>标准数据集格式</h2>
+  <p>
+    ms-swift 的标准格式以 `messages` 为核心，额外字段负责不同任务和模态：`rejected_response` 用于 DPO / ORPO / CPO / SimPO / RM 等偏好任务；`label` 用于 KTO 与分类；`images`、`videos`、`audios` 存储多模态资源；`tools` 用于 Agent；`objects` 用于 grounding；`loss` 与 `loss_scale` 则控制 token 是否参与训练以及权重。
+  </p>
+
+  <table class="kami-table">
+    <thead>
+      <tr><th>字段</th><th>适用任务</th><th>语义</th><th>常见错误</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>`messages`</td><td>几乎所有任务</td><td>system / user / assistant / tool_call / tool_response 的对话序列。</td><td>把历史多轮写成字符串，导致模板无法识别轮次。</td></tr>
+      <tr><td>`rejected_response` / `rejected_messages`</td><td>DPO、ORPO、CPO、SimPO、RM</td><td>偏好对中的拒绝回答或完整拒绝消息序列。</td><td>多模态偏好对没有提供 rejected_images，导致图文不一致。</td></tr>
+      <tr><td>`label`</td><td>KTO、序列分类、回归</td><td>偏好标签、分类标签或回归值。</td><td>把 KTO 的布尔标签写成字符串。</td></tr>
+      <tr><td>`images` / `videos` / `audios`</td><td>多模态训练</td><td>文件路径、URL、base64 或视频帧列表。</td><td>相对路径在多机或容器里失效。</td></tr>
+      <tr><td>`tools`</td><td>Agent 训练</td><td>函数工具声明，配合 agent_template 格式化。</td><td>模型模板与工具调用格式不匹配。</td></tr>
+      <tr><td>`loss`</td><td>SFT / Agent 等</td><td>控制某个 assistant 段是否参与损失。</td><td>误以为能对 user token 生效；官方逻辑只对 assistant 相关段有意义。</td></tr>
+      <tr><td>`loss_scale`</td><td>SFT / Agent / RLHF 部分场景</td><td>更细粒度的 token 权重控制。</td><td>出现大于 1 的权重却未关闭二值 loss_scale 假设。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>四类自动预处理入口</h2>
+  <p>
+    `AutoPreprocessor` 能处理 messages、ShareGPT、query-response、alpaca 四类常见格式。对新用户来说，优先把自己的数据转成这四类之一，再通过 `--columns` 做列名映射。只有当你需要自定义复杂字段、特殊采样或数据动态生成时，才应注册自定义数据集。
+  </p>
+
+  <pre><code class="language-jsonl">{"messages":[{"role":"user","content":"浙江的省会在哪？"},{"role":"assistant","content":"浙江的省会在杭州。"}]}
+{"instruction":"翻译成英文","input":"训练框架","output":"training framework"}
+{"query":"1+1 等于几？","response":"等于 2","system":"你是个数学助手"}</code></pre>
+
+  <h2>Template 的真实职责</h2>
+  <p>
+    Template 不是“把 prompt 拼成字符串”这么简单。它决定 system 的优先级、每轮对话的分隔符、assistant 部分的 label、工具调用如何编码、多模态占位符如何替换、哪些 token 被置为 `-100`、是否支持 padding_free / packing。对于训练框架来说，Template 是数据语义进入梯度的闸门。
+  </p>
+
+  <figure>
+    <svg viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots3" width="22" height="22" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/>
+      <rect width="100%" height="100%" fill="url(#dots3)" opacity="0.55"/>
+      <text x="80" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  3</text>
+      <text x="196" y="38" fill="#504e49" font-size="13" font-family="monospace" letter-spacing="3">DATA TO GRADIENT</text>
+      <line x1="80" y1="52" x2="920" y2="52" stroke="#1B365D" stroke-width="0.8"/>
+
+      <rect x="84" y="108" width="184" height="80" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="176" y="140" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">原始数据</text>
+      <text x="176" y="164" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">jsonl / csv / hub</text>
+
+      <rect x="328" y="108" width="184" height="80" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="420" y="140" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">预处理</text>
+      <text x="420" y="164" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">AutoPreprocessor</text>
+
+      <rect x="572" y="108" width="184" height="80" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
+      <text x="664" y="140" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">标准格式</text>
+      <text x="664" y="164" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">messages + fields</text>
+
+      <rect x="328" y="260" width="184" height="80" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
+      <text x="420" y="292" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Template</text>
+      <text x="420" y="316" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">encode / collate</text>
+
+      <rect x="572" y="260" width="184" height="80" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="664" y="292" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Batch</text>
+      <text x="664" y="316" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">input_ids / labels</text>
+
+      <rect x="328" y="412" width="184" height="80" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="420" y="444" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Loss</text>
+      <text x="420" y="468" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">CE / custom loss</text>
+
+      <rect x="572" y="412" width="184" height="80" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="664" y="444" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">梯度更新</text>
+      <text x="664" y="468" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">optimizer step</text>
+
+      <path d="M268 148 L328 148" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M320 143 L328 148 L320 153" stroke="#504e49" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M512 148 L572 148" stroke="#1B365D" stroke-width="1.5" fill="none"/><path d="M564 143 L572 148 L564 153" stroke="#1B365D" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M664 188 L664 228 L420 228 L420 260" stroke="#1B365D" stroke-width="1.2" fill="none"/><path d="M415 252 L420 260 L425 252" stroke="#1B365D" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M512 300 L572 300" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M564 295 L572 300 L564 305" stroke="#504e49" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M664 340 L664 380 L420 380 L420 412" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M415 404 L420 412 L425 404" stroke="#504e49" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M512 452 L572 452" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M564 447 L572 452 L564 457" stroke="#504e49" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+    </svg>
+    <figcaption>数据进入训练前至少经历格式转换、模板编码、batch collate、loss mask 四次语义裁决。</figcaption>
+  </figure>
+
+  <h2>loss 与 loss_scale 的区别</h2>
+  <p>
+    `loss` 是开关：某段 assistant 内容是否参与损失。`loss_scale` 是权重：参与损失的 token 以什么权重进入平均。SFT 默认主要训练 assistant；RLHF 默认只关注最后一轮 response；预训练默认是 `all`。Agent 训练中工具调用可能需要更高权重，空 thinking 段可能需要忽略，这正是 `loss_scale` 存在的原因。
+    如果训练后模型学会了重复 system、复读用户问题或工具调用格式错乱，第一反应不要调学习率；先用 `get_template(...).encode(data)` 打印 `input_ids`、`labels` 和 `loss_scale`，确认被训练的 token 是否正是你想训练的内容。
+  </p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">06 · CPT And SFT</div>
+  <h1>CPT / SFT 主链路：最常用训练路径</h1>
+
+  <p class="lead">
+    CPT (Continual Pre-Training, 继续预训练) 与 SFT (Supervised Fine-Tuning, 监督微调) 是 ms-swift 的基础训练路径。前者让模型继续吸收领域语料，后者让模型学习对话、指令、格式和任务行为。多数企业项目会先做数据清洗，再做 SFT；只有领域知识缺口明显、语料足够大时才优先 CPT。
+  </p>
+
+  <h2>CPT 与 SFT 的差异</h2>
+  <table class="kami-table">
+    <thead>
+      <tr><th>维度</th><th>CPT: `swift pt`</th><th>SFT: `swift sft`</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>目标</td><td>让模型继续学习领域语言分布、术语、文档风格和背景知识。</td><td>让模型在给定输入下输出期望回答、格式、推理过程或工具调用。</td></tr>
+      <tr><td>模板</td><td>默认 `use_chat_template=false`，生成式模板；官方说明可近似理解为 `sft --use_chat_template false --loss_scale all`。</td><td>默认使用 chat template，通常只训练 assistant 内容。</td></tr>
+      <tr><td>数据</td><td>大段文本、文档、代码、领域语料。</td><td>messages、多轮对话、指令-答案、图文问答、工具调用轨迹。</td></tr>
+      <tr><td>风险</td><td>数据质量差会损害通用能力；训练量不足时收益不明显。</td><td>模板和 loss mask 错误会直接教坏输出格式；过拟合小数据会降低泛化。</td></tr>
+      <tr><td>评估</td><td>困惑度、领域问答、知识覆盖、下游任务。</td><td>验证集生成质量、格式遵循、任务指标、人工抽检。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>单卡 LoRA SFT 最小闭环</h2>
+  <pre><code class="language-shell">CUDA_VISIBLE_DEVICES=0 \
+swift sft \
+  --model Qwen/Qwen3-4B-Instruct-2507 \
+  --tuner_type lora \
+  --dataset data/train.jsonl \
+  --torch_dtype bfloat16 \
+  --learning_rate 1e-4 \
+  --lora_rank 8 \
+  --lora_alpha 32 \
+  --target_modules all-linear \
+  --per_device_train_batch_size 1 \
+  --gradient_accumulation_steps 16 \
+  --max_length 2048 \
+  --split_dataset_ratio 0.01 \
+  --eval_steps 100 \
+  --save_steps 100 \
+  --output_dir output/qwen3_lora_sft</code></pre>
+
+  <p>
+    这条命令背后有三个关键数字：单卡 micro batch 为 1；梯度累积为 16；如果 world size 为 1，则有效 batch size 为 16。学习率 `1e-4` 是 LoRA 训练常见起点；全参数训练通常从更低学习率开始。`max_length` 是防止训练 OOM 的第一道闸门，但它会删除或裁剪超长样本，因此必须配合训练前数据长度统计。
+  </p>
+
+  <h2>训练后推理、合并与发布</h2>
+  <pre><code class="language-shell"># 使用 LoRA adapter 推理
+swift infer \
+  --adapters output/qwen3_lora_sft/vx-xxx/checkpoint-xxx \
+  --stream true \
+  --temperature 0
+
+# 合并 LoRA 后用 vLLM 验证
+swift infer \
+  --adapters output/qwen3_lora_sft/vx-xxx/checkpoint-xxx \
+  --merge_lora true \
+  --infer_backend vllm \
+  --vllm_max_model_len 8192 \
+  --temperature 0
+
+# 推送到 ModelScope 或 Hugging Face
+swift export \
+  --adapters output/qwen3_lora_sft/vx-xxx/checkpoint-xxx \
+  --push_to_hub true \
+  --hub_model_id your-org/your-model \
+  --use_hf false</code></pre>
+
+  <h2>SFT 训练检查表</h2>
+  <table class="kami-table">
+    <thead>
+      <tr><th>阶段</th><th>必须检查</th><th>失败信号</th><th>修正动作</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>训练前</td><td>数据样本能否被 `get_template(...).encode` 正确编码。</td><td>labels 全是 `-100` 或 system/user 被训练。</td><td>修正数据格式、template、loss_scale。</td></tr>
+      <tr><td>训练前</td><td>长度分布与 `max_length` 的关系。</td><td>大量样本被 delete / truncate。</td><td>提高 max_length、切分样本、使用长上下文策略。</td></tr>
+      <tr><td>训练中</td><td>loss 曲线、学习率曲线、grad_norm、eval loss。</td><td>loss 突然 NaN；eval 不下降。</td><td>降学习率、检查数据异常、关高风险 kernel、换 dtype。</td></tr>
+      <tr><td>训练后</td><td>使用训练参数自动加载 adapter 推理。</td><td>推理提示模板与训练不一致。</td><td>保留 `args.json`，必要时设置 `--load_args false` 并显式指定参数。</td></tr>
+      <tr><td>发布前</td><td>merge 后模型与 adapter 模式输出一致性。</td><td>merge 后效果明显变化。</td><td>检查 QLoRA 限制、target modules、dtype、特殊 token 保存。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">07 · Memory And Tuning</div>
+  <h1>轻量微调与显存工程：LoRA、QLoRA、packing</h1>
+
+  <p class="lead">
+    训练大模型时，算法选择往往受显存约束。ms-swift 暴露了三类手段：减少可训练参数、减少激活与中间状态、提高 token 利用率。不要把它们混为一谈。
+  </p>
+
+  <h2>三类显存策略</h2>
+  <table class="kami-table">
+    <thead>
+      <tr><th>策略</th><th>代表参数</th><th>节省对象</th><th>代价</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>参数高效微调</td><td>`--tuner_type lora/adalora/adapter/reft/...`</td><td>可训练参数、优化器状态。</td><td>表达能力受 rank、目标模块和任务复杂度影响。</td></tr>
+      <tr><td>量化加载 / QLoRA</td><td>`--quant_method bnb`、GPTQ / AWQ 量化模型</td><td>模型权重显存。</td><td>QLoRA 模型通常不能直接 Merge LoRA，部署链路受限。</td></tr>
+      <tr><td>激活节省</td><td>`--gradient_checkpointing true`、DeepSpeed、FSDP、sequence parallel</td><td>激活、梯度、优化器状态、参数分片。</td><td>训练速度下降或通信复杂度上升。</td></tr>
+      <tr><td>token 利用率</td><td>`--packing true`、`--padding_free true`</td><td>padding 浪费与 batch 内空位。</td><td>packing 需要额外预处理；padding_free 依赖 attention 实现支持。</td></tr>
+      <tr><td>多模态子模块冻结</td><td>`--freeze_vit`、`--freeze_aligner`、`--vit_lr`、`--aligner_lr`</td><td>ViT、aligner 或 LLM 的训练状态。</td><td>错误冻结会让视觉或跨模态对齐能力不适配任务。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>LoRA 决策表</h2>
+  <table class="kami-table">
+    <thead>
+      <tr><th>任务情形</th><th>建议</th><th>理由</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>单卡或少卡，目标是格式、口吻、工具调用、小规模领域任务。</td><td>LoRA，`target_modules=all-linear`，rank 从 8 或 16 起。</td><td>成本低，输出可 merge，适合快速迭代。</td></tr>
+      <tr><td>数据量较大，目标是深层能力变化或领域知识吸收。</td><td>全参数或 LoRA + 更高 rank，必要时先 CPT 后 SFT。</td><td>仅低 rank adapter 可能不足以承载知识分布变化。</td></tr>
+      <tr><td>显存非常紧张，只需验证可行性。</td><td>QLoRA 或量化模型训练。</td><td>能显著降低权重显存，但后续 merge 和推理后端要提前确认。</td></tr>
+      <tr><td>多模态任务只改变语言输出，不改变视觉识别。</td><td>冻结 ViT / aligner，仅训练 LLM LoRA。</td><td>减少显存和过拟合风险。</td></tr>
+      <tr><td>多模态任务改变 OCR、grounding、细粒度视觉理解。</td><td>考虑 `lora_llm`、解冻 ViT / aligner，并给不同学习率。</td><td>视觉编码和跨模态投影本身需要适配。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>packing 与 padding_free</h2>
+  <p>
+    packing 把多个短样本拼到接近 `max_length`，减少 padding，通常能提高吞吐并稳定显存；padding_free 则把 batch 展平，减少 padding 计算，但不需要额外预处理。官方文档提示 padding_free 需结合 flash attention 与较新 Transformers 支持。选择时先看数据长度分布：短样本多、长度差异大，packing 收益高；数据预处理很贵或动态样本多，padding_free 更灵活。
+  </p>
+
+  <div class="callout">
+    显存优化顺序建议：先降低 `max_length` 或清洗超长异常样本；再启用 gradient checkpointing；再调整 batch 与累积；再使用 LoRA / QLoRA；最后才引入 DeepSpeed ZeRO、FSDP、sequence parallel 或 Megatron。过早引入分布式会把数据和模板错误伪装成通信问题。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">08 · RLHF And GRPO</div>
+  <h1>RL 后训练：DPO、RM、GRPO、GKD 与 rollout</h1>
+
+  <p class="lead">
+    RLHF (Reinforcement Learning from Human Feedback, 基于反馈的强化学习) 在 ms-swift 中不是一个算法，而是一组训练任务。它们共享模型、模板、数据和 Trainer 基座，但数据格式、参考模型、生成方式、奖励来源和优化目标不同。
+  </p>
+
+  <h2>后训练任务地图</h2>
+  <table class="kami-table">
+    <thead>
+      <tr><th>任务</th><th>数据需求</th><th>核心对象</th><th>适用场景</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>DPO</td><td>chosen / rejected 偏好对。</td><td>policy model、reference model、偏好损失。</td><td>有明确偏好数据，希望不用在线 rollout。</td></tr>
+      <tr><td>KTO</td><td>单样本好坏标签 `label`。</td><td>可取 / 不可取回答的非成对偏好学习。</td><td>偏好对成本高，但能标出单条回答好坏。</td></tr>
+      <tr><td>RM</td><td>偏好对或带 margin 的偏好数据。</td><td>奖励模型。</td><td>需要先训练 reward model，再服务 PPO / rerank / filtering。</td></tr>
+      <tr><td>ORPO / SimPO / CPO</td><td>偏好对。</td><td>不同偏好损失变体。</td><td>希望简化 reference 或调整偏好目标。</td></tr>
+      <tr><td>PPO</td><td>prompt + reward / value 相关模型。</td><td>policy、ref、reward、value。</td><td>经典 RLHF，但工程复杂度高。</td></tr>
+      <tr><td>GRPO</td><td>prompt + 可计算奖励字段。</td><td>组内采样、奖励函数、优势估计、KL。</td><td>数学、代码、可验证任务、多轮 Agent、RLVR。</td></tr>
+      <tr><td>GKD / OPSD</td><td>教师输出或 prompt。</td><td>teacher model / teacher server、student model。</td><td>蒸馏强模型行为，或 on-policy 自蒸馏。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>GRPO 的运行逻辑</h2>
+  <p>
+    GRPO (Group Relative Policy Optimization, 组相对策略优化) 对同一个 prompt 采样多个 completion，用奖励函数给每个 completion 打分，再用组内均值和标准差归一化出 advantage。相较 PPO，它不依赖独立 value model，而是在策略损失中加入参考模型 KL 惩罚。ms-swift 官方文档把 GRPO 集成到 `swift rlhf --rlhf_type grpo` 与 Megatron-SWIFT 中，并支持 colocate 与 server 两类 vLLM 模式。
+  </p>
+
+  <figure>
+    <svg viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="dots4" width="22" height="22" patternUnits="userSpaceOnUse">
+          <circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/>
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/>
+      <rect width="100%" height="100%" fill="url(#dots4)" opacity="0.55"/>
+      <text x="80" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  4</text>
+      <text x="196" y="38" fill="#504e49" font-size="13" font-family="monospace" letter-spacing="3">GRPO TRAINING LOOP</text>
+      <line x1="80" y1="52" x2="920" y2="52" stroke="#1B365D" stroke-width="0.8"/>
+
+      <circle cx="500" cy="308" r="164" fill="none" stroke="#B2B1AC" stroke-width="1.2" stroke-dasharray="6 8"/>
+
+      <rect x="404" y="92" width="192" height="72" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="500" y="124" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Prompt Batch</text>
+      <text x="500" y="148" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">questions / tasks</text>
+
+      <rect x="672" y="248" width="192" height="72" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
+      <text x="768" y="280" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Rollout</text>
+      <text x="768" y="304" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">G completions</text>
+
+      <rect x="404" y="436" width="192" height="72" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="500" y="468" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Reward</text>
+      <text x="500" y="492" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">ORM / function</text>
+
+      <rect x="136" y="248" width="192" height="72" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="232" y="280" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Optimize</text>
+      <text x="232" y="304" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">loss + KL</text>
+
+      <path d="M596 128 Q768 128 768 248" stroke="#1B365D" stroke-width="1.5" fill="none"/>
+      <path d="M763 240 L768 248 L773 240" stroke="#1B365D" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M768 320 Q768 472 596 472" stroke="#504e49" stroke-width="1.2" fill="none"/>
+      <path d="M604 467 L596 472 L604 477" stroke="#504e49" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M404 472 Q232 472 232 320" stroke="#504e49" stroke-width="1.2" fill="none"/>
+      <path d="M227 328 L232 320 L237 328" stroke="#504e49" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+      <path d="M232 248 Q232 128 404 128" stroke="#504e49" stroke-width="1.2" fill="none"/>
+      <path d="M396 123 L404 128 L396 133" stroke="#504e49" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+
+      <rect x="360" y="264" width="280" height="88" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
+      <text x="500" y="296" text-anchor="middle" fill="#141413" font-size="20" font-family="serif" font-weight="600">组内相对优势</text>
+      <text x="500" y="324" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">A = (R - mean(R)) / std(R)</text>
+    </svg>
+    <figcaption>GRPO 的复杂度在于训练循环与推理采样循环被绑定，工程风险常出现在 rollout、奖励和权重同步。</figcaption>
+  </figure>
+
+  <h2>colocate 与 server 模式</h2>
+  <table class="kami-table">
+    <thead>
+      <tr><th>模式</th><th>资源关系</th><th>优点</th><th>风险与调参</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>colocate</td><td>训练与 vLLM 推理共享 GPU。</td><td>部署简单，适合少量机器快速试验。</td><td>OOM 风险高；需要调 `vllm_gpu_memory_utilization`、`sleep_level`、`offload_optimizer`、`offload_model`、`move_model_batches`。</td></tr>
+      <tr><td>server</td><td>训练与推理资源分离，通过 `swift rollout` 启外部 vLLM。</td><td>更接近生产，采样资源可独立扩展。</td><td>需要处理网络、超时、TP/DP、服务异常和权重同步延迟。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>奖励函数与额外字段</h2>
+  <p>
+    GRPO 数据可以只提供 prompt，但可验证任务通常还要提供 `solution`、`answer`、测试用例或环境状态。官方文档强调 GRPO 会把额外字段透传给 ORM，因此自定义奖励函数可以从样本额外字段读取 ground truth。这个设计非常重要：奖励函数不应从 prompt 文本里重新解析标准答案，否则数据清洗和奖励逻辑会耦合得难以复现。
+  </p>
+
+  <div class="callout">
+    做 GRPO 前先完成三个小实验：一是单 prompt 采样，确认答案多样性；二是离线奖励函数单测，确认奖励均值和标准差不是常数；三是小 batch 训练，检查 `reward_std`、`frac_reward_zero_std`、`kl`、`clip_ratio` 等指标。缺任何一项都不要上多机长跑。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">09 · Megatron-SWIFT</div>
+  <h1>Megatron-SWIFT：大模型并行训练路线</h1>
+
+  <p class="lead">
+    Megatron-SWIFT 把 Megatron 的并行技术接入 ms-swift 的数据、模板和任务协议。它适合全参数大模型、MoE、长上下文、FP8、RL 大规模采样等场景。与普通 `swift sft` 相比，它的学习成本来自并行维度和 checkpoint 格式。
+  </p>
+
+  <h2>支持能力</h2>
+  <p>
+    官方 Megatron-SWIFT 文档列出预训练、SFT、GRPO、GKD、DPO、KTO、RM、Embedding、Reranker、序列分类等任务，并覆盖全参数、LoRA、MoE、多模态与 FP8。README 中还明确提到 TP、PP、SP、CP、ETP、EP、VPP 等并行策略。不要把这些缩写当作参数装饰，它们决定模型、序列、上下文、专家和流水线如何切分。
+  </p>
+
+  <table class="kami-table">
+    <thead>
+      <tr><th>并行策略</th><th>含义</th><th>什么时候考虑</th><th>主要代价</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>DP</td><td>Data Parallel，数据并行。</td><td>模型单卡能放下，希望提高吞吐。</td><td>显存占用高，参数复制。</td></tr>
+      <tr><td>TP</td><td>Tensor Parallel，张量并行。</td><td>单层矩阵太大或 MoE / 大模型需切张量。</td><td>通信频繁，尽量放在高速互联域内。</td></tr>
+      <tr><td>PP / VPP</td><td>Pipeline Parallel / Virtual PP，流水线并行。</td><td>跨节点大模型训练，层级可切分。</td><td>pipeline bubble、调度复杂。</td></tr>
+      <tr><td>SP</td><td>Sequence Parallel，序列并行。</td><td>长上下文训练，降低序列维度激活压力。</td><td>依赖 attention / loss 处理支持。</td></tr>
+      <tr><td>CP</td><td>Context Parallel，上下文并行。</td><td>极长上下文或 Ring-Attention 场景。</td><td>通信与实现约束高。</td></tr>
+      <tr><td>EP / ETP</td><td>Expert Parallel / Expert Tensor Parallel，专家并行。</td><td>MoE 模型专家层训练。</td><td>专家通信、负载均衡与 capacity 设置复杂。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Mcore-Bridge 的意义</h2>
+  <p>
+    早期 Megatron 训练常见痛点是权重格式转换：HF safetensors 到 Megatron，再从 Megatron 回到 HF。Mcore-Bridge 的目标是让 Megatron 训练尽量像 Transformers 一样加载和保存 safetensors，支持 LoRA 增量权重转换、Megatron 到 vLLM 权重同步、超大模型多机转换。ms-swift 文档明确推荐 Mcore-Bridge 路线。
+  </p>
+
+  <pre><code class="language-shell">PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True \
+NPROC_PER_NODE=2 \
+CUDA_VISIBLE_DEVICES=0,1 \
+megatron sft \
+  --model Qwen/Qwen2.5-7B-Instruct \
+  --save_safetensors true \
+  --dataset data/train.jsonl \
+  --tensor_model_parallel_size 2 \
+  --sequence_parallel true \
+  --micro_batch_size 16 \
+  --global_batch_size 16 \
+  --finetune true \
+  --cross_entropy_loss_fusion true \
+  --lr 1e-5 \
+  --num_train_epochs 1 \
+  --output_dir megatron_output/qwen_sft \
+  --max_length 2048</code></pre>
+
+  <h2>何时不该用 Megatron-SWIFT</h2>
+  <ul>
+    <li>模型 7B 或更小，LoRA SFT 已能满足，且训练时间不是瓶颈。</li>
+    <li>你还没确认数据、模板、loss mask、验证集和导出闭环。</li>
+    <li>团队没有排查分布式通信、checkpoint 恢复、CUDA/NPU 环境差异的能力。</li>
+    <li>任务目标不是吞吐、上下文长度、MoE 或全参数训练，而只是格式对齐。</li>
+  </ul>
+
+  <div class="takeaway">
+    <div class="takeaway-label">规模化原则</div>
+    先用 `swift sft` 证明任务、数据和目标函数成立；再用 Megatron-SWIFT 扩规模。把“算法正确性”和“系统吞吐”分开验证，是训练工程最基本的风险控制。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">10 · Multimodal And Agent</div>
+  <h1>多模态、Agent 与专门任务</h1>
+
+  <p class="lead">
+    多模态和 Agent 是 ms-swift 相对突出的能力域。它们的共同点是：训练样本不再只有文本 response，而是包含图片、视频、音频、工具定义、工具调用、工具返回、bbox 或其他结构化字段。框架价值在于把这些结构映射到统一模板和 loss 规则。
+  </p>
+
+  <h2>多模态训练</h2>
+  <p>
+    多模态样本在标准 messages 基础上增加 `images`、`videos`、`audios`。正文中用 `&lt;image&gt;`、`&lt;video&gt;`、`&lt;audio&gt;` 标记模态资源插入位置。Template 会把这些特殊 token 交给对应 processor 处理。多模态训练的主要风险不在模型，而在资源路径、像素/帧数控制、bbox 坐标和子模块冻结策略。
+  </p>
+
+  <table class="kami-table">
+    <thead>
+      <tr><th>问题</th><th>参数 / 字段</th><th>判断</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>图片过大导致 OOM</td><td>`--max_pixels`、模型环境变量如 `MAX_PIXELS`</td><td>训练和推理的缩放策略必须一致，grounding 任务尤其敏感。</td></tr>
+      <tr><td>视频训练太慢</td><td>`FPS_MAX_FRAMES`、`VIDEO_MAX_PIXELS`、样本级控制字段</td><td>先限制帧数，再考虑数据采样；不要盲目增 batch。</td></tr>
+      <tr><td>只想改变回答格式</td><td>`--freeze_vit true`、`--freeze_aligner true`</td><td>通常冻结视觉侧，训练 LLM adapter 即可。</td></tr>
+      <tr><td>OCR / grounding 能力不足</td><td>`--freeze_vit false`、`--vit_lr`、`objects`、`norm_bbox`</td><td>需要谨慎解冻视觉或 aligner，并验证坐标归一化。</td></tr>
+      <tr><td>多模态 packing</td><td>`--packing true`</td><td>可提高训练速度，但要确认模板支持和资源读取稳定性。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Agent 训练</h2>
+  <p>
+    Agent 训练的难点是工具协议。不同模型对 tools、tool_call、tool_response 的序列化方式不同。ms-swift 通过 `agent_template` 把统一 Agent 数据集映射到各模型格式。一个 AgentTemplate 需要实现工具列表格式化、工具调用格式化、工具返回格式化和部署时 toolcall 解析。
+  </p>
+
+  <pre><code class="language-jsonl">{"tools":"[{\"type\":\"function\",\"function\":{\"name\":\"search\",\"parameters\":{\"type\":\"object\"}}}]",
+ "messages":[
+   {"role":"user","content":"查找杭州今天的天气"},
+   {"role":"tool_call","content":"{\"name\":\"search\",\"arguments\":{\"q\":\"杭州 天气\"}}"},
+   {"role":"tool_response","content":"{\"weather\":\"晴\"}"},
+   {"role":"assistant","content":"杭州今天晴。"}]}</code></pre>
+
+  <h2>Embedding、Reranker 与序列分类</h2>
+  <p>
+    这三类任务与 causal LM 不同，label 可能是样本级而不是 token 级。源码中 Trainer 对 sequence parallel 输入做了额外处理，避免把一维 labels 当作 token labels。使用这些任务时，不要沿用 SFT 的评价方式；Embedding 看向量检索指标，Reranker 看排序损失和列表级指标，序列分类看分类或回归指标。
+  </p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">11 · Eval Infer Export Deploy</div>
+  <h1>评测、推理、导出与部署</h1>
+
+  <p class="lead">
+    训练框架是否可用，最终看训练后能否被评测、推理、导出和部署复用。ms-swift 的全链路价值在这里体现：训练参数会保存到 checkpoint，推理可自动读取 adapter 中的 `args.json`，导出可以 merge、量化、推送，部署可以走 OpenAI 风格接口。
+  </p>
+
+  <h2>训练后的四个问题</h2>
+  <table class="kami-table">
+    <thead>
+      <tr><th>问题</th><th>命令</th><th>关键参数</th><th>验收标准</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>模型是否学到了任务？</td><td>`swift infer`</td><td>`--adapters` 或 `--model`、`--temperature 0`、`--load_data_args true`</td><td>固定验证 prompt 输出稳定，格式正确。</td></tr>
+      <tr><td>是否能批量评测？</td><td>`swift eval`</td><td>`--eval_dataset`、EvalScope 参数</td><td>指标可复现，评测集和训练集无泄漏。</td></tr>
+      <tr><td>是否能部署？</td><td>`swift deploy`</td><td>`--infer_backend vllm/sglang/lmdeploy`、`--merge_lora`</td><td>OpenAI 客户端可调用，延迟和吞吐达标。</td></tr>
+      <tr><td>是否能发布？</td><td>`swift export`</td><td>`--merge_lora`、`--quant_method`、`--push_to_hub`</td><td>权重、tokenizer、配置、额外文件完整。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>adapter、full checkpoint 与 merge 的区别</h2>
+  <p>
+    `--model` 指向完整权重目录，里面应包含模型、tokenizer、config 等完整文件；`--adapters` 指向增量 adapter 权重目录，通常含 `adapter_model.safetensors` 和训练参数 `args.json`。LoRA 推理可以直接挂 adapter，也可以 merge 成完整权重。生产部署通常倾向 merge 后再量化或使用推理后端，但 QLoRA、MoE、Megatron 格式等场景需要单独验证兼容性。
+  </p>
+
+  <h2>量化导出</h2>
+  <p>
+    ms-swift 支持 AWQ、GPTQ、FP8、BNB 等量化导出；README 也说明导出的模型可配合 vLLM、SGLang、LMDeploy 推理加速。量化不应只看显存下降，还要看目标后端、上下文长度、吞吐、精度回归和模型结构支持。尤其是 FP8 与 Megatron-SWIFT 相关能力，应按对应版本和硬件栈核对。
+  </p>
+
+  <div class="callout">
+    发布前最小验收：同一验证集上比较三种输出，训练中 checkpoint 推理、merge 后权重推理、目标部署后端推理。三者必须在关键格式和任务指标上等价，否则不能把训练成功等同于上线成功。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">12 · Extension And Troubleshooting</div>
+  <h1>扩展、排障与掌控清单</h1>
+
+  <p class="lead">
+    从会用到掌控的分水岭，是能否新增模型、数据、损失或奖励函数，并能定位训练失败发生在哪一层。ms-swift 的扩展点很清晰，排障也应按层推进。
+  </p>
+
+  <h2>扩展点总表</h2>
+  <table class="kami-table compact">
+    <thead>
+      <tr><th>扩展点</th><th>位置</th><th>何时使用</th><th>最小测试</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>自定义模型</td><td>`swift/model`，外部 `plugin.py`</td><td>新模型不能自动识别，或加载逻辑特殊。</td><td>注册 model_type，加载模型，单 prompt 推理对齐官方实现。</td></tr>
+      <tr><td>自定义模板</td><td>`swift/template`</td><td>模型 chat 格式、工具调用、多模态 token 不同。</td><td>打印 encode 后 input_ids / labels，与官方 prompt 对齐。</td></tr>
+      <tr><td>自定义数据集</td><td>`dataset_info.json` 或外部注册</td><td>标准格式不足以表达采样和预处理。</td><td>加载前 10 条，验证字段、长度、loss mask。</td></tr>
+      <tr><td>自定义 loss</td><td>`swift/loss`</td><td>SFT / pretrain / reranker / embedding 需要新损失。</td><td>单 batch 前向后向，loss 为标量且梯度非零。</td></tr>
+      <tr><td>loss_scale</td><td>`swift/loss_scale`</td><td>工具调用、thinking、分段答案需要不同权重。</td><td>可视化每段 token 权重。</td></tr>
+      <tr><td>metrics</td><td>`swift/metrics`</td><td>验证指标不只是 loss。</td><td>小验证集指标与独立脚本一致。</td></tr>
+      <tr><td>callbacks</td><td>`swift/callbacks`</td><td>保存、早停、日志、外部系统联动。</td><td>模拟训练开始、保存、结束事件。</td></tr>
+      <tr><td>optimizer</td><td>`swift/optimizers`</td><td>自定义优化器或不同子模块学习率。</td><td>param_groups 正确，学习率日志可解释。</td></tr>
+      <tr><td>tuner</td><td>`swift/tuner_plugin`</td><td>不满足内置 LoRA / adapter 逻辑。</td><td>prepare、save、from_pretrained 三段闭环。</td></tr>
+      <tr><td>ORM / PRM</td><td>`swift/rewards`</td><td>GRPO 或采样过滤需要结果/过程奖励。</td><td>离线样本奖励分布合理，异常返回可控。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>分层排障法</h2>
+  <table class="kami-table">
+    <thead>
+      <tr><th>症状</th><th>优先排查层</th><th>诊断动作</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>训练一开始就 OOM</td><td>长度、batch、dtype、模型加载。</td><td>统计 token 长度；降低 `max_length`；确认 dtype；关掉不必要的解冻模块。</td></tr>
+      <tr><td>loss 不下降</td><td>数据、模板、标签、学习率。</td><td>打印 labels；抽检样本质量；降低学习率；检查 assistant 段是否被训练。</td></tr>
+      <tr><td>模型输出模板符号</td><td>template 与 tokenizer。</td><td>确认 base/chat 模型模板，检查特殊 token 是否保存。</td></tr>
+      <tr><td>LoRA merge 后效果变差</td><td>量化、target modules、dtype、保存文件。</td><td>先用 adapter 模式验证；检查 QLoRA 限制；确认 additional_saved_files。</td></tr>
+      <tr><td>多模态训练很慢</td><td>资源读取、图像大小、dataset_num_proc。</td><td>改绝对路径；限制像素和帧数；观察 CPU 利用率与 I/O。</td></tr>
+      <tr><td>GRPO reward_std 为 0</td><td>采样和奖励函数。</td><td>提高采样多样性；检查 reward 解析；确认 ground truth 字段透传。</td></tr>
+      <tr><td>多机训练卡住</td><td>缓存、随机性、通信、共享存储。</td><td>设置共享 `MODELSCOPE_CACHE`；固定数据切分；检查 NCCL/HCCL 日志。</td></tr>
+      <tr><td>vLLM rollout OOM</td><td>colocate 显存分配与同步。</td><td>调 `sleep_level`、offload、TP、`move_model_batches`、仅同步 LoRA。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>从 0 到掌控的能力阶梯</h2>
+  <ol>
+    <li><strong>能跑通：</strong>完成官方 quick start，知道 checkpoint、adapter、args.json 在哪里。</li>
+    <li><strong>能换数据：</strong>把自己的 JSONL 转成标准格式，能解释每个字段为什么存在。</li>
+    <li><strong>能看模板：</strong>打印 input_ids / labels，确认模型学的是 assistant 而不是 prompt。</li>
+    <li><strong>能控显存：</strong>用 batch、累积、max_length、LoRA、packing、checkpointing 形成稳定配置。</li>
+    <li><strong>能闭环：</strong>训练后能 infer、eval、merge、quantize、deploy，并比较输出一致性。</li>
+    <li><strong>能对齐：</strong>会选择 DPO / KTO / RM / GRPO / GKD，并能写奖励函数或偏好数据。</li>
+    <li><strong>能扩展：</strong>注册新模型、新模板、新数据集或新 reward，并补最小测试。</li>
+    <li><strong>能扩规模：</strong>理解 DeepSpeed、FSDP、sequence parallel、Megatron 并行和 Mcore-Bridge 的取舍。</li>
+  </ol>
+
+  <div class="takeaway">
+    <div class="takeaway-label">最终判断</div>
+    掌握 ms-swift 的标志不是记住参数，而是能把一个训练需求分解为：模型注册是否满足、数据标准格式如何写、模板如何编码、损失训练哪些 token、Trainer 走哪条路径、显存如何预算、评测如何闭环、产物如何上线。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">13 · Appendix</div>
+  <h1>附录：术语、命令与来源</h1>
+
+  <h2>A. 常用命令速查</h2>
+  <table class="kami-table compact">
+    <thead>
+      <tr><th>目标</th><th>命令骨架</th><th>备注</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>继续预训练</td><td>`swift pt --model ... --dataset ...`</td><td>默认生成式模板与 `loss_scale=all` 语义。</td></tr>
+      <tr><td>监督微调</td><td>`swift sft --model ... --dataset ... --tuner_type lora`</td><td>最常用训练入口。</td></tr>
+      <tr><td>偏好优化</td><td>`swift rlhf --rlhf_type dpo --dataset ...`</td><td>需要 chosen / rejected 数据。</td></tr>
+      <tr><td>GRPO</td><td>`swift rlhf --rlhf_type grpo --use_vllm true`</td><td>需要 prompt、奖励函数和 rollout 配置。</td></tr>
+      <tr><td>推理</td><td>`swift infer --adapters ... --stream true`</td><td>adapter 中的 `args.json` 会被自动读取。</td></tr>
+      <tr><td>部署</td><td>`swift deploy --model ... --infer_backend vllm`</td><td>服务化前先用 infer 验证。</td></tr>
+      <tr><td>导出</td><td>`swift export --adapters ... --merge_lora true`</td><td>用于 merge、量化和推送。</td></tr>
+      <tr><td>M-训练</td><td>`megatron sft --model ... --tensor_model_parallel_size ...`</td><td>适合大规模并行。</td></tr>
+      <tr><td>M-导出</td><td>`megatron export --to_hf true ...`</td><td>MoE / Megatron 权重不要盲目用普通 export。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>B. 术语表</h2>
+  <p><strong>CPT</strong>：Continual Pre-Training，继续预训练，使用领域语料继续训练语言建模目标。</p>
+  <p><strong>SFT</strong>：Supervised Fine-Tuning，监督微调，使用输入输出样本训练模型遵循指令。</p>
+  <p><strong>LoRA</strong>：Low-Rank Adaptation，低秩适配，只训练附加低秩矩阵以降低训练成本。</p>
+  <p><strong>QLoRA</strong>：在量化权重上训练 LoRA，降低权重显存，但导出和推理兼容性需要验证。</p>
+  <p><strong>Template</strong>：把 messages、工具调用和多模态资源转成模型 token 序列的编码协议。</p>
+  <p><strong>loss_scale</strong>：token 级损失权重控制，用于忽略或强调特定输出片段。</p>
+  <p><strong>ORM</strong>：Outcome Reward Model / 结果奖励函数，按最终回答给奖励。</p>
+  <p><strong>PRM</strong>：Process Reward Model / 过程奖励函数，按推理过程或步骤给奖励。</p>
+  <p><strong>rollout</strong>：RL 训练中由当前策略生成 completion 的采样过程。</p>
+  <p><strong>Mcore-Bridge</strong>：ModelScope 的 Megatron-Core 桥接工具，降低 safetensors 与 Megatron 格式转换成本。</p>
+
+  <h2>C. 关键来源</h2>
+  <p>核心事实来自 modelscope/ms-swift GitHub README 与本地源码快照 commit `7dd6b0e`、PyPI `ms-swift 4.2.1`、GitHub Releases `v4.2.1` / `v4.2.0`、ReadTheDocs latest `swift 4.3.0.dev0`、AAAI 2025 论文与 arXiv:2408.05517。完整来源、文件路径和边界说明见 `sources.md`。</p>
+</section>
+
+</body>
+</html>

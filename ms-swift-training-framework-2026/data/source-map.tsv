@@ -1,0 +1,8 @@
+source_id	type	url_or_path	checked_at	use
+github-main	repository	https://github.com/modelscope/ms-swift	2026-05-19	Main README, source tree, CLI routes, pipelines, trainers
+pypi	package	https://pypi.org/project/ms-swift/	2026-05-19	Stable package version, release date, install metadata
+release-v4.2.1	release	https://github.com/modelscope/ms-swift/releases/tag/v4.2.1	2026-05-19	Latest stable release tag and date
+release-v4.2.0	release	https://github.com/modelscope/ms-swift/releases/tag/v4.2.0	2026-05-19	Recent feature changes and v4.2 baseline
+rtd-latest	docs	https://swift.readthedocs.io/zh-cn/latest/	2026-05-19	Docs structure, install, training, GRPO, Megatron, customization
+arxiv	paper	https://arxiv.org/abs/2408.05517	2026-05-19	Research paper and design motivation
+aaai	paper	https://ojs.aaai.org/index.php/AAAI/article/view/35383	2026-05-19	AAAI publication metadata
