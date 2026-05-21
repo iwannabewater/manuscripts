@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<!-- ==================================================================
+     LONG DOCUMENT TEMPLATE · parchment design system
+     多页 A4 白皮书/技术报告/年度总结
+     结构：封面 -> 目录 -> 执行摘要 -> 正文章节 -> 附录
+     ================================================================== -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>DeepSeek V4 技术报告深度解读：百万 Token 上下文、混合注意力与开放模型新范式</title>
+<meta name="author" content="Winston">
+<meta name="description" content="一份面向技术读者的 DeepSeek V4 官方 technical report 深度解读，覆盖架构、算法、系统、训练、后训练、评测与代际演进。">
+<meta name="keywords" content="DeepSeek V4, 技术报告, 混合注意力, MoE, 百万Token上下文">
+<meta name="generator" content="Kami">
+<style>
+  /* Regular weight */
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  /* Bold weight - W05 for all bold variants */
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 20mm 22mm 22mm 22mm;
+    background: #f5f4ed;
+
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02", "Source Han Serif SC",
+                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+
+    @bottom-center {
+      content: counter(page) "  ·  DeepSeek V4 技术报告深度解读";
+      font-family: "TsangerJinKai02", "Source Han Serif SC",
+                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 9pt;
+      color: #6b6a64;
+    }
+  }
+
+  @page:first {
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #f5f4ed;
+    --ivory:     #faf9f5;
+    --near-black:#141413;
+    --dark-warm: #3d3d3a;
+    --olive:     #504e49;
+    --stone:     #6b6a64;
+    --brand:     #1B365D;
+    --border:    #e8e6dc;
+    --border-soft:#e5e3d8;
+    --tag-bg:    #E4ECF5;
+    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --sans: var(--serif);
+
+    --rhythm-module:  14pt;
+    --rhythm-section: 18pt;
+  }
+
+  html, body { background: var(--parchment); }
+
+  @media screen {
+    body { max-width: 210mm; margin: 0 auto; padding: 20mm 22mm 22mm 22mm; }
+  }
+
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 10.5pt;
+    line-height: 1.55;
+    letter-spacing: 0.3pt;
+    widows: 3;
+    orphans: 3;
+  }
+
+  .sans {
+    font-family: var(--sans);
+  }
+
+  /* ========== COVER ========== */
+  .cover {
+    min-height: 240mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40mm 0 0 0;
+    break-after: page;
+  }
+  .cover-eyebrow {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 18pt;
+  }
+  .cover-title {
+    font-size: 36pt;
+    font-weight: 500;
+    color: var(--near-black);
+    line-height: 1.15;
+    letter-spacing: 0.3pt;
+    margin-bottom: 16pt;
+  }
+  .cover-sub {
+    font-family: var(--sans);
+    font-size: 14pt;
+    color: var(--olive);
+    line-height: 1.5;
+    max-width: 85%;
+    margin-bottom: 30pt;
+  }
+  .cover-meta {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--stone);
+    line-height: 1.5;
+  }
+  .cover-meta strong {
+    color: var(--dark-warm);
+    font-weight: 500;
+  }
+
+  /* ========== TOC（目录）========== */
+  .toc { break-after: page; }
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: var(--rhythm-module);
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6pt 0;
+    border-bottom: 0.3pt dotted var(--border);
+    font-size: 11pt;
+  }
+  .toc-item:last-of-type { border-bottom: none; }
+  .toc-num {
+    color: var(--brand);
+    font-weight: 500;
+    min-width: 30pt;
+  }
+  .toc-title {
+    flex: 1;
+    color: var(--near-black);
+    padding-left: 6pt;
+  }
+  .toc-page {
+    color: var(--stone);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ========== HEADINGS ========== */
+  h1 {
+    font-size: 22pt;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 10pt 0;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    color: var(--near-black);
+    break-after: avoid;
+  }
+
+  h2 {
+    font-size: 16pt;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 24pt 0 8pt 0;
+    color: var(--near-black);
+    break-after: avoid;
+    string-set: section-title content();
+  }
+
+  h3 {
+    font-size: 13pt;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 18pt 0 6pt 0;
+    color: var(--dark-warm);
+    break-after: avoid;
+  }
+
+  .chapter-num {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+  }
+
+  /* ========== PARAGRAPHS ========== */
+  p {
+    margin: 0 0 10pt 0;
+    line-height: 1.55;
+    color: var(--near-black);
+    widows: 2;
+    orphans: 2;
+  }
+
+  .lead {
+    font-size: 12pt;
+    line-height: 1.55;
+    color: var(--dark-warm);
+    margin-bottom: var(--rhythm-module);
+  }
+
+  .hl { color: var(--brand); font-weight: 500; }
+  strong { font-weight: 500; }
+
+  /* ========== LISTS ========== */
+  ul, ol {
+    margin: 6pt 0 10pt 0;
+    padding-left: 20pt;
+    line-height: 1.55;
+  }
+  ul li::marker { color: var(--brand); }
+  ol li::marker { color: var(--brand); font-weight: 500; }
+
+  /* ========== QUOTE ========== */
+  blockquote, .quote {
+    border-left: 2pt solid var(--brand);
+    margin: 12pt 0;
+    padding: 4pt 0 4pt 16pt;
+    color: var(--olive);
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  blockquote .cite, .quote .cite {
+    display: block;
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 4pt;
+  }
+
+  /* ========== CODE ========== */
+  /* Mono first for English glyphs, then CJK fallback so Chinese comments
+     inside code/pre render correctly. A mono-only chain causes missing
+     glyphs rendered as "?" or missing-glyph boxes in WeasyPrint when the system lacks
+     a mono font with CJK coverage. */
+  code {
+    font-family: "JetBrains Mono", "SF Mono", Consolas,
+                 "TsangerJinKai02", "Source Han Serif SC",
+                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-size: 9pt;
+    background: var(--ivory);
+    padding: 1pt 4pt;
+    border-radius: 2pt;
+    color: var(--dark-warm);
+  }
+  pre {
+    font-family: "JetBrains Mono", "SF Mono", Consolas,
+                 "TsangerJinKai02", "Source Han Serif SC",
+                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-size: 9pt;
+    line-height: 1.5;
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 10pt 0;
+    white-space: pre-wrap;
+    color: var(--near-black);
+    break-inside: avoid;
+  }
+  pre code { background: transparent; padding: 0; font-size: inherit; }
+
+  /* ========== TABLE (kami-table) ========== */
+  table, .kami-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin: 12pt 0;
+    break-inside: avoid;
+  }
+  table th, .kami-table th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--dark-warm);
+    padding: 6pt 8pt;
+    border-bottom: 1pt solid var(--border);
+    background: transparent;
+  }
+  table td, .kami-table td {
+    padding: 5pt 8pt;
+    border-bottom: 0.3pt solid var(--border-soft);
+    vertical-align: top;
+  }
+  table.compact th, .kami-table.compact th { padding: 3pt 6pt; font-size: 8pt; }
+  table.compact td, .kami-table.compact td { padding: 2pt 6pt; font-size: 8pt; line-height: 1.4; }
+  table.financial td:not(:first-child), .kami-table.financial td:not(:first-child) {
+    text-align: right; font-variant-numeric: tabular-nums;
+  }
+  table.financial th:not(:first-child), .kami-table.financial th:not(:first-child) { text-align: right; }
+  table.striped tbody tr:nth-child(even) td, .kami-table.striped tbody tr:nth-child(even) td {
+    background: var(--ivory);
+  }
+  table .total td, .kami-table .total td {
+    font-weight: 500; border-top: 1pt solid var(--brand); border-bottom: none; color: var(--near-black);
+  }
+
+  /* ========== CALLOUT ========== */
+  .callout {
+    background: var(--ivory);
+    border-left: 2pt solid var(--brand);
+    padding: 10pt 14pt;
+    border-radius: 3pt;
+    margin: 12pt 0;
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  .callout blockquote,
+  .callout .quote {
+    border-left: none;
+    padding-left: 0;
+    margin: 6pt 0;
+    color: var(--olive);
+  }
+  .callout blockquote:first-child,
+  .callout .quote:first-child { margin-top: 0; }
+  .callout blockquote:last-child,
+  .callout .quote:last-child  { margin-bottom: 0; }
+
+  .takeaway {
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .takeaway-label {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--brand);
+    letter-spacing: 0.5pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+
+  /* ========== TAG ========== */
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--brand);
+    font-family: var(--sans);
+    font-size: 9pt;
+    font-weight: 500;
+    padding: 1pt 6pt;
+    border-radius: 3pt;
+    margin-right: 4pt;
+  }
+
+  /* ========== FIGURE ========== */
+  figure {
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  figure img {
+    max-width: 100%;
+    border-radius: 4pt;
+  }
+  figcaption {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 6pt;
+    text-align: center;
+  }
+
+  /* ========== EXECUTIVE SUMMARY ========== */
+  .exec-summary {
+    background: var(--ivory);
+    border-left: 1.4pt solid var(--brand);
+    border-radius: 6pt;
+    padding: 16pt 20pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .exec-summary h2 {
+    margin-top: 0;
+    font-size: 13pt;
+  }
+
+  /* ========== CHAPTER BREAK ========== */
+  .chapter { break-before: page; }
+</style>
+</head>
+<body>
+
+<!-- ═════════════ COVER ═════════════ -->
+<section class="cover">
+  <div>
+    <div class="cover-eyebrow">Technical Report Reading Notes · 2026</div>
+    <div class="cover-title">DeepSeek V4<br>技术报告深度解读</div>
+    <div class="cover-sub">从 V3 / R1 / V3.2 到 V4：百万 Token 上下文、混合注意力、mHC、Muon、系统工程与后训练范式的完整拆解。</div>
+  </div>
+  <div class="cover-meta">
+    <strong>Winston</strong><br>
+    V1.0  ·  2026-05-21<br>
+    基于 DeepSeek 官方 transparency 页面、V4 technical report、V4 model card、V3.2 / V3 / R1 官方论文整理
+  </div>
+</section>
+
+<!-- ═════════════ TOC ═════════════ -->
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">执行摘要：V4 到底解决了什么</span><span class="toc-page">03</span></div>
+  <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">事实口径与阅读地图</span><span class="toc-page">05</span></div>
+  <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">代际演进：V3、R1、V3.2 到 V4</span><span class="toc-page">07</span></div>
+  <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">完整架构：MoE、MTP、mHC 与混合注意力</span><span class="toc-page">10</span></div>
+  <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">CSA 与 HCA：百万上下文的核心算法</span><span class="toc-page">13</span></div>
+  <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">mHC 与 Muon：稳定性、收敛与深层信号传播</span><span class="toc-page">18</span></div>
+  <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">系统工程：训练、推理、KV Cache 与确定性</span><span class="toc-page">22</span></div>
+  <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">预训练：数据、模型配置与训练稳定性</span><span class="toc-page">27</span></div>
+  <div class="toc-item"><span class="toc-num">09</span><span class="toc-title">后训练：专家、GRM、OPD、工具调用与沙箱</span><span class="toc-page">31</span></div>
+  <div class="toc-item"><span class="toc-num">10</span><span class="toc-title">评测对比：能力、效率、成本与边界</span><span class="toc-page">37</span></div>
+  <div class="toc-item"><span class="toc-num">11</span><span class="toc-title">创新点分层、局限与实践判断</span><span class="toc-page">43</span></div>
+  <div class="toc-item"><span class="toc-num">12</span><span class="toc-title">术语表与参考来源</span><span class="toc-page">47</span></div>
+</section>
+
+<!-- ═════════════ EXEC SUMMARY ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">01 · Executive Summary</div>
+  <h1>执行摘要：V4 到底解决了什么</h1>
+
+  <p class="lead">
+    DeepSeek V4 不是单纯把参数量继续做大，而是把“长上下文效率”重新放到架构中心。官方报告给出的核心命题是：在开放权重模型里，把 <span class="hl">1M Token 上下文</span> 从演示能力推进到可常规支持的工程能力，同时保留强推理、强代码和强 Agent 表现。
+  </p>
+
+  <div class="exec-summary">
+    <h2>一句话结论</h2>
+    <p>V3 证明了 MLA + DeepSeekMoE + FP8 训练可以把 671B MoE 做得高效；R1 证明了 GRPO 与可验证奖励可以释放推理；V3.2 用 DSA 把长上下文成本压低并强化 Agent；V4 则把这些线索合并为新的系统：<span class="hl">混合 CSA/HCA 注意力 + mHC 残差拓扑 + Muon 优化器 + OPD 后训练</span>。</p>
+    <p>从指标看，V4-Pro 为 1.6T 总参数、每 token 激活 49B；V4-Flash 为约 284B 总参数、每 token 激活 13B。两者均支持 1M 上下文。官方报告称在 1M 上下文下，V4-Pro 单 token 推理 FLOPs 约为 V3.2 的 27%，KV Cache 约为 V3.2 的 10%；V4-Flash 则约为 10% FLOPs 与 7% KV Cache。</p>
+    <p>从方法看，V4 的关键不是某一个技巧，而是“端到端共同设计”：注意力压缩改变了 KV 形态，KV 形态反过来要求新的 cache 管理、上下文并行、确定性 kernel、on-disk KV 复用和后训练 rollout 服务。</p>
+  </div>
+
+  <div class="takeaway">
+    <div class="takeaway-label">读完本文应掌握</div>
+    <ol>
+      <li>为什么 V4 需要同时引入 CSA、HCA、mHC 和 Muon，而不是只改注意力。</li>
+      <li>CSA 与 V3.2 的 DSA 有什么关系，HCA 为什么保留 dense attention。</li>
+      <li>mHC 如何把 residual stream 从一条线扩展为受约束的多通道混合。</li>
+      <li>OPD 如何替代 V3.2 的 mixed RL，解决多专家能力合并的问题。</li>
+      <li>如何客观看待 V4 对 GPT-5.4、Gemini-3.1、Claude Opus 4.6、Kimi K2.6、GLM-5.1 的比较。</li>
+    </ol>
+  </div>
+
+  <figure>
+    <svg width="100%" viewBox="0 0 1000 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DeepSeek V4 技术主线概览">
+      <defs><pattern id="dots1" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots1)" opacity="0.55"/>
+      <text x="80" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  1</text>
+      <text x="196" y="40" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="3">V4 的四条技术主线</text>
+      <line x1="80" y1="56" x2="920" y2="56" stroke="#1B365D" stroke-width="0.8"/>
+      <rect x="88" y="104" width="176" height="96" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.4"/>
+      <text x="176" y="138" fill="#141413" font-size="24" font-weight="600" font-family="serif" text-anchor="middle">长上下文效率</text>
+      <text x="176" y="166" fill="#504e49" font-size="15" font-family="monospace" text-anchor="middle">CSA + HCA</text>
+      <rect x="316" y="104" width="176" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="404" y="138" fill="#141413" font-size="24" font-weight="600" font-family="serif" text-anchor="middle">深层稳定性</text>
+      <text x="404" y="166" fill="#504e49" font-size="15" font-family="monospace" text-anchor="middle">mHC + Sinkhorn</text>
+      <rect x="544" y="104" width="176" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="632" y="138" fill="#141413" font-size="24" font-weight="600" font-family="serif" text-anchor="middle">训练收敛</text>
+      <text x="632" y="166" fill="#504e49" font-size="15" font-family="monospace" text-anchor="middle">Muon + 稳定技巧</text>
+      <rect x="772" y="104" width="176" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
+      <text x="860" y="138" fill="#141413" font-size="24" font-weight="600" font-family="serif" text-anchor="middle">能力合并</text>
+      <text x="860" y="166" fill="#504e49" font-size="15" font-family="monospace" text-anchor="middle">Specialists → OPD</text>
+      <path d="M264 152 L316 152" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M306 146 L316 152 L306 158" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M492 152 L544 152" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M534 146 L544 152 L534 158" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M720 152 L772 152" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M762 146 L772 152 L762 158" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <rect x="160" y="264" width="680" height="72" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
+      <text x="500" y="294" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">结果：1M 上下文从“昂贵功能”变成“模型设计默认前提”</text>
+      <text x="500" y="322" fill="#504e49" font-size="15" font-family="monospace" text-anchor="middle">FLOPs / KV cache / rollout / agent memory / on-disk prefix reuse 同时被重构</text>
+    </svg>
+    <figcaption>图 1：V4 的主线不是单点算法，而是架构、优化器、系统和后训练的联合设计。</figcaption>
+  </figure>
+
+  <h2>如何把 V4 记成三句话</h2>
+  <p>第一句话：V4 的首要目标是让百万上下文进入常规工程可用区，而不是只追求一次性长文本演示。第二句话：实现这个目标需要先把历史 KV 变成多分辨率记忆，再围绕这种新 KV 形态重做 cache、并行、量化和 rollout。第三句话：V4 的能力提升来自 pre-training、specialist training 与 OPD 的组合，因此它不是单一 reasoning 模型，也不是单一长上下文模型，而是面向长程任务的综合系统。</p>
+
+  <div class="callout">
+    <p>读 V4 时最容易误解的一点，是把 CSA/HCA 当成“注意力加速技巧”。更准确的表述是：CSA/HCA 改变了模型保存、检索和复用历史信息的基本单位；后面的系统工程几乎都围绕这个新单位展开。</p>
+  </div>
+</section>
+
+<!-- ═════════════ CHAPTER 2 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">02 · Sources and Reading Map</div>
+  <h1>事实口径与阅读地图</h1>
+
+  <p class="lead">
+    这份解读只把可追溯材料作为事实依据，把推断和判断单独标明。尤其是 V4 报告中含有大量内部评测、未来模型命名和自建 benchmark，本文会保留其口径，但不会把它们等同于第三方复现结论。
+  </p>
+
+  <h2>2.1 当前可核验来源</h2>
+  <table class="striped">
+    <thead><tr><th>来源</th><th>用途</th><th>本文采用口径</th></tr></thead>
+    <tbody>
+      <tr><td>DeepSeek 官方透明中心</td><td>确认 DeepSeek-V4 页面、发布日期与技术报告入口</td><td>页面列出 DeepSeek-V4，Release Date 为 2026-04-24，报告链接指向 Hugging Face。</td></tr>
+      <tr><td>DeepSeek_V4.pdf</td><td>本文主来源</td><td>PDF 共 58 页，标题为 DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence，PDF 元数据显示 2026-05-06 生成。</td></tr>
+      <tr><td>DeepSeek V4 Model Card</td><td>补充模型属性、分发许可、用途与模式</td><td>模型卡列 Release date 2026-04-24，说明 Pro / Flash、文本模态、三种 reasoning modes、1M context、MIT 权重许可。</td></tr>
+      <tr><td>DeepSeek-V3.2 / V3 / R1 官方论文</td><td>代际对比</td><td>用于解释 V4 继承了什么、替换了什么、为什么做这些替换。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <p><strong>口径提醒：</strong>官方不同材料对 V4-Flash 总参数有轻微差异：technical report 写 284B，model card 写 285B，Hugging Face collection 展示中可见 292B-Base。本文在模型配置表中优先采用 technical report 的 284B，并在讨论中视为约 285B 量级。</p>
+  </div>
+
+  <h2>2.2 V4 报告的章节结构</h2>
+  <p>V4 官方报告的组织方式很清楚：第 1 章提出问题，指出 vanilla attention 的二次复杂度限制了超长上下文和 test-time scaling；第 2 章讲模型架构，重点是 mHC、CSA、HCA、Muon；第 3 章讲工程基础设施；第 4 章讲预训练；第 5 章讲后训练与评测；第 6 章给出局限和未来方向。读者应把它理解为一份“模型架构 + 训练系统 + 后训练系统”的整体工程报告，而不是一篇只讲 benchmark 的模型卡。</p>
+
+  <h2>2.3 本文的读法</h2>
+  <p>本文将官方报告重排为学习顺序：先建立问题图景，再讲代际演进，接着逐个拆解模块，最后回到评测与局限。这样做的原因是，直接读官方报告会遇到一个困难：CSA/HCA、mHC、Muon、KV cache 管理、FP4 QAT、OPD 等模块相互依赖。如果不先理解它们在系统中的位置，单独读公式容易得到“知道每个模块，但不知道为什么它们必须同时出现”的碎片化印象。</p>
+
+  <table class="compact">
+    <thead><tr><th>读者问题</th><th>对应章节</th><th>应抓住的主线</th></tr></thead>
+    <tbody>
+      <tr><td>V4 相比 V3.2 最大变化是什么？</td><td>第 3、4、5 章</td><td>从 DSA 长上下文优化升级为 CSA/HCA 的百万上下文架构。</td></tr>
+      <tr><td>为什么需要 mHC？</td><td>第 6 章</td><td>让 residual stream 自身成为可扩展、可混合、受约束的表示通道。</td></tr>
+      <tr><td>Muon 在这里扮演什么角色？</td><td>第 6、8 章</td><td>优化大部分矩阵参数，使收敛和稳定性服务于更复杂架构。</td></tr>
+      <tr><td>为什么后训练从 mixed RL 转向 OPD？</td><td>第 9 章</td><td>先训练多个领域专家，再让统一学生在自己的轨迹上学习多教师分布。</td></tr>
+      <tr><td>评测能说明什么，不能说明什么？</td><td>第 10、11 章</td><td>内部评测给出方向性证据，第三方复现仍是边界。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═════════════ CHAPTER 3 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">03 · Evolution</div>
+  <h1>代际演进：V3、R1、V3.2 到 V4</h1>
+
+  <p class="lead">
+    DeepSeek V4 的创新不能孤立理解。V4 的每个关键模块都能在前代模型中找到动机：V3 负责高效 MoE 基座，R1 负责可验证推理范式，V3.2 负责稀疏注意力和 Agent 后训练，V4 则把这些路线推进到百万上下文。
+  </p>
+
+  <h2>3.1 V3：高效 MoE 基座的成型</h2>
+  <p>DeepSeek-V3 是后续版本的架构底座。它使用 671B 总参数、每 token 激活 37B 的 MoE，核心结构是 MLA 与 DeepSeekMoE。MLA 通过 latent KV 表示降低推理 cache；DeepSeekMoE 通过细粒度 routed experts 与 shared experts 提供容量；auxiliary-loss-free load balancing 避免为了路由均衡而损害模型质量；MTP 则让每个 token 同时学习预测未来 token，增加训练信号密度。</p>
+  <p>V3 的另一个重要意义是工程可信度。官方论文报告完整训练约 2.788M H800 GPU hours，14.8T 预训练 token，并声称训练过程中没有不可恢复 loss spike 或 rollback。这为后续“更激进的稀疏和长上下文设计”提供了工程信心。</p>
+
+  <h2>3.2 R1：推理能力从监督模仿转向结果驱动</h2>
+  <p>DeepSeek-R1 不是 V4 的直接架构前身，但它改变了 DeepSeek 系列的后训练哲学。R1-Zero 从 V3-Base 出发，跳过常规 SFT，使用 GRPO 和规则奖励直接优化数学、代码、逻辑等可验证任务。关键观察是：只约束最终正确性和输出格式，模型会自发学到更长的推理、自检、反思和策略切换。</p>
+  <p>R1 的局限同样重要：纯 RL 容易带来可读性差、语言混杂、过度推理和通用任务能力不足。因此 R1 正式版又引入冷启动数据、拒绝采样、SFT、第二阶段 RL 与偏好奖励。V4 的 post-training 并没有简单复制 R1，而是在 V3.2 的基础上转向“多个专家 + OPD 统一合并”。这说明 DeepSeek 已经把推理看成体系化后训练问题，而不是单一 reward trick。</p>
+
+  <h2>3.3 V3.2：DSA 与 Agent 后训练</h2>
+  <p>V3.2 的核心改动是 DeepSeek Sparse Attention。它从 DeepSeek-V3.1-Terminus 继续训练而来，在 MLA 上加入 lightning indexer 与 top-k token selection，把主注意力复杂度从 O(L²) 降到 O(Lk)。这使长上下文成本显著下降，但 V3.2 的上下文长度仍以 128K 为主，Agent workflow 超过窗口后还需要上下文管理策略。</p>
+  <p>V3.2 在后训练上也迈出一步：官方报告称 post-training 计算预算超过 pre-training 成本的 10%，并构造大规模 Agent 数据，包括 1,827 个 synthesized general-agent environments 与 85,000 个复杂 prompts。这个阶段解决的是“模型能不能在工具交互中维持推理”的问题，而 V4 进一步把这个问题推到百万上下文、保留推理痕迹和更强的沙箱基础设施。</p>
+
+  <h2>3.4 V4：从稀疏选择到混合压缩</h2>
+  <p>V4 相比 V3.2 的根本变化在于：不再只是在 token 粒度上稀疏选择历史 KV，而是先把历史 KV 沿序列维压缩，再在压缩后的条目上做稀疏或 dense attention。CSA 继承 DSA 的 lightning indexer 与 top-k 思路，但它面对的是 compressed KV entries；HCA 则使用更高压缩率，保留 dense attention。二者交替使用，使模型同时获得“可选择的精细长程信息”和“极低成本的全局粗粒度信息”。</p>
+
+  <table class="striped compact">
+    <thead><tr><th>版本</th><th>核心贡献</th><th>上下文与效率主线</th><th>后训练主线</th><th>V4 继承或替换</th></tr></thead>
+    <tbody>
+      <tr><td>DeepSeek-V3</td><td>MLA、DeepSeekMoE、aux-loss-free、MTP、FP8 训练</td><td>经济训练与推理；128K 扩展</td><td>SFT + RL，吸收 R1 推理模式</td><td>保留 DeepSeekMoE 与 MTP，但注意力不再采用 MLA 主线</td></tr>
+      <tr><td>DeepSeek-R1</td><td>GRPO、规则奖励、长 CoT 自演化</td><td>推理 token 扩展带来能力提升</td><td>纯 RL 到多阶段对齐</td><td>保留 GRPO 作为领域专家 RL 工具，但最终合并转向 OPD</td></tr>
+      <tr><td>DeepSeek-V3.2</td><td>DSA、scalable RL、Agent 数据合成</td><td>DSA 把注意力主成本降到 O(Lk)，128K 场景高效</td><td>mixed RL 与大规模 agentic task synthesis</td><td>CSA 吸收 DSA；V4 用 1M 上下文与 OPD 重构后训练</td></tr>
+      <tr><td>DeepSeek-V4</td><td>CSA/HCA、mHC、Muon、FP4 QAT、OPD、DSec</td><td>1M 上下文常规支持；V4-Pro 在 1M 下约 27% V3.2 FLOPs、10% KV</td><td>领域专家训练 + full-vocab OPD + long-context RL 基建</td><td>形成新的百万上下文开放模型范式</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═════════════ CHAPTER 4 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">04 · Architecture</div>
+  <h1>完整架构：MoE、MTP、mHC 与混合注意力</h1>
+
+  <p class="lead">
+    V4 仍是 Transformer-MoE 模型，但每个 Transformer block 的内部连接、注意力形态和优化器假设都变了。最适合的理解方式是：DeepSeekMoE 负责参数容量，CSA/HCA 负责长上下文访问，mHC 负责层间信号传播，MTP 继续作为训练信号增强器。
+  </p>
+
+  <h2>4.1 两个模型：Pro 与 Flash</h2>
+  <table class="financial striped compact">
+    <thead><tr><th>项目</th><th>DeepSeek-V4-Flash</th><th>DeepSeek-V4-Pro</th></tr></thead>
+    <tbody>
+      <tr><td>定位</td><td>成本效率优先</td><td>能力上限优先</td></tr>
+      <tr><td>总参数</td><td>284B，模型卡约 285B</td><td>1.6T</td></tr>
+      <tr><td>每 token 激活参数</td><td>13B</td><td>49B</td></tr>
+      <tr><td>Transformer 层数</td><td>43</td><td>61</td></tr>
+      <tr><td>Hidden dimension</td><td>4096</td><td>7168</td></tr>
+      <tr><td>Query heads</td><td>64</td><td>128</td></tr>
+      <tr><td>CSA top-k</td><td>512</td><td>1024</td></tr>
+      <tr><td>Routed experts</td><td>256，每 token 激活 6 个</td><td>384，每 token 激活 6 个</td></tr>
+      <tr><td>共享专家</td><td>1</td><td>1</td></tr>
+      <tr><td>上下文长度</td><td>1M</td><td>1M</td></tr>
+      <tr><td>预训练 token</td><td>32T</td><td>33T</td></tr>
+    </tbody>
+  </table>
+
+  <h2>4.2 Block 内部结构</h2>
+  <p>官方图中，V4 的每层 Transformer block 包含 CSA/HCA attention 与 DeepSeekMoE。mHC 并不是替换 attention 或 FFN，而是替换传统残差路径：在每个 block 前后进行 pre-block mixing 与 post-block mixing，使 residual stream 不再只是 x + F(x)，而是扩展为多个 residual channel 的受约束混合。</p>
+  <p>MoE 部分大体继承 V3：细粒度 routed experts + shared expert + auxiliary-loss-free load balancing。但 V4 做了三处值得注意的变化：第一，routing affinity activation 从 Sigmoid 改成 Sqrt(Softplus)；第二，移除 routing target nodes 数量约束，并以并行策略保持效率；第三，把最初若干 dense FFN 层替换为 Hash routing 的 MoE 层，V4-Flash 与 V4-Pro 都在前 3 个 MoE 层使用 Hash routing。</p>
+
+  <figure>
+    <svg width="100%" viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DeepSeek V4 架构示意">
+      <defs><pattern id="dots2" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots2)" opacity="0.55"/>
+      <text x="80" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  2</text>
+      <text x="196" y="40" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="3">DeepSeek V4 block-level architecture</text>
+      <line x1="80" y1="56" x2="920" y2="56" stroke="#1B365D" stroke-width="0.8"/>
+      <rect x="112" y="96" width="184" height="64" rx="8" fill="#faf9f5" stroke="#141413"/>
+      <text x="204" y="132" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">Input Tokens</text>
+      <text x="204" y="152" fill="#6b6a64" font-size="14" font-family="monospace" text-anchor="middle">128K vocab tokenizer</text>
+      <rect x="112" y="204" width="184" height="64" rx="8" fill="#faf9f5" stroke="#141413"/>
+      <text x="204" y="240" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">Embedding</text>
+      <rect x="376" y="88" width="248" height="376" rx="10" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.4"/>
+      <text x="500" y="122" fill="#1B365D" font-size="15" font-family="monospace" font-weight="600" text-anchor="middle" letter-spacing="2">TRANSFORMER BLOCK × L</text>
+      <rect x="416" y="152" width="168" height="52" rx="6" fill="#faf9f5" stroke="#504e49"/><text x="500" y="184" fill="#141413" font-size="21" font-weight="600" font-family="serif" text-anchor="middle">mHC Pre-Mix</text>
+      <rect x="416" y="228" width="168" height="64" rx="6" fill="#faf9f5" stroke="#1B365D" stroke-width="1.2"/><text x="500" y="258" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">CSA / HCA</text><text x="500" y="280" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">hybrid attention</text>
+      <rect x="416" y="316" width="168" height="64" rx="6" fill="#faf9f5" stroke="#504e49"/><text x="500" y="346" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">DeepSeekMoE</text><text x="500" y="368" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">shared + routed</text>
+      <rect x="416" y="404" width="168" height="52" rx="6" fill="#faf9f5" stroke="#504e49"/><text x="500" y="436" fill="#141413" font-size="21" font-weight="600" font-family="serif" text-anchor="middle">mHC Post-Mix</text>
+      <rect x="704" y="144" width="184" height="64" rx="8" fill="#faf9f5" stroke="#141413"/><text x="796" y="180" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">Prediction Head</text>
+      <rect x="704" y="264" width="184" height="64" rx="8" fill="#faf9f5" stroke="#141413"/><text x="796" y="294" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">MTP Module</text><text x="796" y="316" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">depth = 1</text>
+      <rect x="704" y="384" width="184" height="64" rx="8" fill="#faf9f5" stroke="#141413"/><text x="796" y="414" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">LM + MTP Loss</text><text x="796" y="436" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">main + future token</text>
+      <path d="M204 160 L204 204" stroke="#504e49" stroke-width="1.2"/><path d="M198 194 L204 204 L210 194" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M296 236 L376 236" stroke="#504e49" stroke-width="1.2"/><path d="M366 230 L376 236 L366 242" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M624 236 L704 176" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M694 176 L704 176 L698 184" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M624 300 L704 296" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M694 290 L704 296 L694 302" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M796 328 L796 384" stroke="#504e49" stroke-width="1.2"/><path d="M790 374 L796 384 L802 374" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+    </svg>
+    <figcaption>图 2：V4 block 内部的关键变化集中在 residual mixing 与 hybrid attention；MoE 和 MTP 则继承并微调自 V3。</figcaption>
+  </figure>
+
+  <h2>4.3 为什么不是继续沿用 MLA</h2>
+  <p>MLA 的优势在于压缩 KV 表示，降低常规推理 cache。V3.2 在 MLA 之上加入 DSA，使 query 只访问 top-k KV latent entries。但当上下文目标从 128K 扩到 1M，单纯“从 1M 历史 token 中选 top-k”仍面临两个问题：indexer 自身也要看很长历史，KV cache 管理仍以 token-level 或 latent-token-level 为基本单位，长程粗粒度信息与局部精细信息没有被显式分层。</p>
+  <p>V4 的 CSA/HCA 相当于把“历史”先变成不同分辨率的压缩条目，再执行选择或 dense attention。它把序列维从模型结构层面降采样，而不是只靠 kernel 和 top-k 稀疏计算降成本。这就是 V4 能把 1M context 作为 native 支持目标的原因。</p>
+</section>
+
+<!-- ═════════════ CHAPTER 5 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">05 · Hybrid Attention</div>
+  <h1>CSA 与 HCA：百万上下文的核心算法</h1>
+
+  <p class="lead">
+    V4 最重要的算法创新是 hybrid attention：CSA 负责“压缩后再稀疏选择”，HCA 负责“重压缩后保持 dense attention”。二者交替出现，使模型在 1M 上下文里同时拥有可计算的长程访问、可用的局部细节和可控的 KV cache。
+  </p>
+
+  <h2>5.1 从 vanilla attention 到 DSA，再到 CSA/HCA</h2>
+  <p>Vanilla attention 的推理瓶颈来自每个新 token 对全部历史 KV 做 attention，单 token 成本随上下文长度线性增长，整段序列训练成本则是二次复杂度。V3.2 的 DSA 通过 lightning indexer 选择 top-k 历史 KV，把核心 attention 从全量历史降到稀疏历史。但 DSA 的选择对象仍来自历史 token 级别或 MLA latent 条目。</p>
+  <p>CSA 的思路是两步：第一，把每 m 个 token 的 KV 压成一个 compressed KV entry；第二，在 compressed entries 上用 lightning indexer 选择 top-k，再做 core attention。HCA 的思路更激进：用更大的 m'，把很长的一段历史压成一个 entry，然后不做 top-k，保持 dense attention。可以把 CSA 看成“高分辨率但稀疏的长程记忆”，HCA 看成“低分辨率但连续的全局记忆”。</p>
+
+  <figure>
+    <svg width="100%" viewBox="0 0 1000 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CSA HCA 工作机制示意">
+      <defs><pattern id="dots3" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots3)" opacity="0.55"/>
+      <text x="80" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  3</text>
+      <text x="196" y="40" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="3">CSA / HCA compression logic</text>
+      <line x1="80" y1="56" x2="920" y2="56" stroke="#1B365D" stroke-width="0.8"/>
+      <text x="112" y="96" fill="#1B365D" font-size="14" font-family="monospace" font-weight="600" letter-spacing="2">CSA</text>
+      <rect x="112" y="124" width="60" height="34" rx="4" fill="#faf9f5" stroke="#141413"/><rect x="180" y="124" width="60" height="34" rx="4" fill="#faf9f5" stroke="#141413"/><rect x="248" y="124" width="60" height="34" rx="4" fill="#faf9f5" stroke="#141413"/><rect x="316" y="124" width="60" height="34" rx="4" fill="#faf9f5" stroke="#141413"/>
+      <text x="244" y="190" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">m=4 token-level KV</text>
+      <path d="M244 164 L244 224" stroke="#504e49" stroke-width="1.2"/><path d="M238 214 L244 224 L250 214" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <rect x="184" y="228" width="120" height="52" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.2"/><text x="244" y="258" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Compressed KV</text>
+      <path d="M304 254 L420 254" stroke="#504e49" stroke-width="1.2"/><path d="M410 248 L420 254 L410 260" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <rect x="420" y="216" width="168" height="76" rx="8" fill="#faf9f5" stroke="#141413"/><text x="504" y="246" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Lightning Indexer</text><text x="504" y="270" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">top-k compressed entries</text>
+      <path d="M588 254 L704 254" stroke="#504e49" stroke-width="1.2"/><path d="M694 248 L704 254 L694 260" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <rect x="704" y="216" width="168" height="76" rx="8" fill="#faf9f5" stroke="#141413"/><text x="788" y="246" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Shared-KV MQA</text><text x="788" y="270" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">sparse core attention</text>
+      <text x="112" y="348" fill="#1B365D" font-size="14" font-family="monospace" font-weight="600" letter-spacing="2">HCA</text>
+      <rect x="112" y="372" width="536" height="34" rx="4" fill="#faf9f5" stroke="#141413"/><text x="380" y="396" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">m'=128 token-level KV block</text>
+      <path d="M648 390 L704 390" stroke="#504e49" stroke-width="1.2"/><path d="M694 384 L704 390 L694 396" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <rect x="704" y="352" width="168" height="76" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.2"/><text x="788" y="382" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Heavy Compression</text><text x="788" y="406" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">dense attention retained</text>
+      <rect x="104" y="456" width="800" height="36" rx="6" fill="#EAE9E2" stroke="#504e49"/><text x="504" y="480" fill="#141413" font-size="16" font-family="serif" font-weight="600" text-anchor="middle">两者都额外接入 sliding-window uncompressed KV，以保留最近 token 的局部细节。</text>
+    </svg>
+    <figcaption>图 3：CSA 使用较小压缩率并稀疏选择；HCA 使用更大压缩率并保留 dense attention。</figcaption>
+  </figure>
+
+  <h2>5.2 CSA 的细节：压缩、选择、共享 KV MQA</h2>
+  <p>CSA 首先从 hidden states 计算两套 KV entries 与对应压缩权重。每个 compressed entry 不是简单平均，而是由压缩权重、可学习 positional bias 和 softmax 加权得到。官方公式中，C<sup>a</sup> 与 C<sup>b</sup> 两条路径存在交叠使用：一个 compressed entry 来自当前 m 个 C<sup>a</sup> 与前一段 m 个 C<sup>b</sup>，这让压缩后的序列长度仍约为原来的 1/m，但每个压缩条目可以吸收跨块边界的信息。</p>
+  <p>拿到 compressed KV 后，CSA 用 lightning indexer 计算 query 与压缩块的 index score，再选 top-k entries。这里的 indexer query 是低秩生成的，多头 index score 用 ReLU 相似度加权汇总。核心 attention 采用 MQA：compressed KV entry 同时作为 key 与 value，被多个 query heads 共享。这一设计是为了降低 KV 存储和访问成本。</p>
+  <p>Grouped output projection 解决了另一个计算问题：V4 的 head dimension 与 head 数较大，直接把所有 attention outputs 一次性投回 hidden size 会很重。因此 V4 先把 heads 分组，每组投到较低维中间表示，再合并投影到最终 attention output。这是长上下文模型里常见的“不要让输出投影吃掉注意力节省”的工程细节。</p>
+
+  <h2>5.3 HCA 的细节：更粗的全局记忆</h2>
+  <p>HCA 与 CSA 的压缩公式类似，但压缩率 m' 远大于 m，官方配置中 m=4、m'=128。HCA 不做 top-k sparse selection，而是在 heavily compressed entries 上做 dense attention。直觉上，CSA 解决“哪些长程片段值得精读”，HCA 解决“全局背景至少不能完全丢失”。在 1M 上下文场景，模型必须同时面对大量无关信息和少量关键证据；CSA 与 HCA 的组合正好对应这两种需求。</p>
+
+  <h2>5.4 保真机制：SWA、RoPE、RMSNorm、Attention Sink</h2>
+  <p>压缩会带来信息损失，V4 因此补了四个机制。第一，sliding window attention 分支保留最近 n<sub>win</sub>=128 个未压缩 KV，以弥补压缩块内无法访问同块 token 的因果限制。第二，query 与 compressed KV 在 core attention 前做 RMSNorm，抑制 attention logits 爆炸。第三，只在最后 64 个维度使用 RoPE，并在 attention output 上施加位置反向处理，使输出携带相对位置信息。第四，attention sink 给每个 head 一个可学习 sink logit，使总注意力质量可以小于 1，允许 query 在没有合适历史时不被迫分配全部注意力。</p>
+
+  <h2>5.5 效率数字如何理解</h2>
+  <p>官方报告给出了三个层级的效率比较。第一，相比 BF16 GQA8、head dimension 128 这类常见 baseline，V4 在 1M context 下 KV cache 可以压到约 2%。第二，相比已经高效的 V3.2，V4-Pro 在 1M context 下约为 27% 单 token FLOPs 与 10% KV cache；V4-Flash 约为 10% FLOPs 与 7% KV cache。第三，V4 还在 KV 存储中使用 RoPE 维度 BF16、其余维度 FP8，indexer attention 使用 FP4，并在 post-training 中对 MoE expert weights 与 indexer QK path 做 FP4 QAT。</p>
+
+  <figure>
+    <svg width="100%" viewBox="0 0 1000 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="V4 1M 上下文效率相对 V3.2 对比">
+      <defs><pattern id="dots4" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots4)" opacity="0.55"/>
+      <text x="80" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  4</text>
+      <text x="196" y="40" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="3">1M context efficiency, V3.2 = 100</text>
+      <line x1="80" y1="56" x2="920" y2="56" stroke="#1B365D" stroke-width="0.8"/>
+      <text x="176" y="96" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Single-token FLOPs</text>
+      <line x1="120" y1="340" x2="420" y2="340" stroke="#504e49" stroke-width="1"/>
+      <rect x="144" y="120" width="52" height="220" fill="#1B365D"/><rect x="236" y="281" width="52" height="59" fill="#EEF2F7" stroke="#1B365D"/><rect x="328" y="318" width="52" height="22" fill="#EAE9E2" stroke="#504e49"/>
+      <text x="170" y="112" fill="#141413" font-size="14" font-family="monospace" text-anchor="middle">100</text><text x="262" y="273" fill="#141413" font-size="14" font-family="monospace" text-anchor="middle">27</text><text x="354" y="310" fill="#141413" font-size="14" font-family="monospace" text-anchor="middle">10</text>
+      <text x="170" y="368" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">V3.2</text><text x="262" y="368" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">V4-Pro</text><text x="354" y="368" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">V4-Flash</text>
+      <text x="696" y="96" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Accumulated KV Cache</text>
+      <line x1="540" y1="340" x2="840" y2="340" stroke="#504e49" stroke-width="1"/>
+      <rect x="564" y="120" width="52" height="220" fill="#1B365D"/><rect x="656" y="318" width="52" height="22" fill="#EEF2F7" stroke="#1B365D"/><rect x="748" y="325" width="52" height="15" fill="#EAE9E2" stroke="#504e49"/>
+      <text x="590" y="112" fill="#141413" font-size="14" font-family="monospace" text-anchor="middle">100</text><text x="682" y="310" fill="#141413" font-size="14" font-family="monospace" text-anchor="middle">10</text><text x="774" y="317" fill="#141413" font-size="14" font-family="monospace" text-anchor="middle">7</text>
+      <text x="590" y="368" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">V3.2</text><text x="682" y="368" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">V4-Pro</text><text x="774" y="368" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">V4-Flash</text>
+    </svg>
+    <figcaption>图 4：官方报告给出的 1M context 相对效率。数值为相对 V3.2 的比例，V3.2 设为 100。</figcaption>
+  </figure>
+</section>
+
+<!-- ═════════════ CHAPTER 6 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">06 · mHC and Muon</div>
+  <h1>mHC 与 Muon：稳定性、收敛与深层信号传播</h1>
+
+  <p class="lead">
+    如果只看注意力，V4 像是一个长上下文效率模型；但 mHC 与 Muon 说明 DeepSeek 同时在处理更基础的问题：当模型更深、更稀疏、连接更复杂时，训练信号如何稳定传播，优化器如何在超大矩阵上保持可控更新。
+  </p>
+
+  <h2>6.1 mHC：把 residual stream 扩展成受约束混合空间</h2>
+  <p>传统 residual connection 可以写成 x<sub>l+1</sub> = x<sub>l</sub> + F<sub>l</sub>(x<sub>l</sub>)。Hyper-Connections 的想法是把 residual stream 从一个向量扩展成 n<sub>hc</sub> 个 residual channels，即 X<sub>l</sub> 属于 R<sup>n_hc × d</sup>。每层通过 A<sub>l</sub> 把多通道残差混成实际 layer input，通过 C<sub>l</sub> 把 layer output 写回多通道残差，再通过 B<sub>l</sub> 对 residual channels 做变换。</p>
+  <p>问题是，朴素 HC 在深层堆叠时可能数值不稳定。V4 引入 mHC，把 B<sub>l</sub> 约束到 doubly stochastic matrices 组成的 Birkhoff polytope。这样的矩阵行和、列和都为 1，元素非负，谱范数被界定在 1 以内，因而 residual transformation 是 non-expansive。更重要的是，这个集合对矩阵乘法封闭，深层堆叠时稳定性不会轻易破坏。</p>
+  <p>实现上，V4 先由输入动态生成 A、B、C 的 raw parameters，再加静态 bias 和小初始化 gate。A 与 C 通过 sigmoid 保持非负和有界；B 先指数化为正矩阵，再用 Sinkhorn-Knopp 做 20 次行列归一化，投影到近似 doubly stochastic manifold。直观地说，mHC 不是让每层任意改写 residual channels，而是要求每层以“守恒式混合”传播信息。</p>
+
+  <div class="callout">
+    <p>mHC 的价值不在于增加大量计算，而在于提供新的 scaling axis：residual width n<sub>hc</sub> 可以扩展，而 inner layer 的 hidden dimension d 不必同步扩大。V4 配置中 n<sub>hc</sub>=4，官方工程优化后 mHC wall-time overhead 约为 overlapped 1F1B pipeline stage 的 6.7%。</p>
+  </div>
+
+  <h2>6.2 Muon：对隐藏层矩阵做近似正交化更新</h2>
+  <p>V4 把大部分模块从 AdamW 改为 Muon。Muon 的核心是对梯度动量矩阵做近似 orthogonalization，再作为更新方向。官方算法中，先计算梯度 G<sub>t</sub>，更新 momentum buffer M<sub>t</sub>，然后对 μM<sub>t</sub> + G<sub>t</sub> 做 hybrid Newton-Schulz 迭代，得到近似正交化更新 O'<sub>t</sub>，再按矩阵维度和 rescaling factor 重新缩放 RMS，最后执行 weight decay 与参数更新。</p>
+  <p>V4 的 Muon 并非覆盖所有参数。Embedding、prediction head、mHC 的 static biases 与 gates、所有 RMSNorm weights 仍使用 AdamW；其余大部分模块使用 Muon。这个划分很合理：Muon 主要适合二维矩阵参数；norm、bias、embedding/head 等参数结构或训练敏感性不同，保留 AdamW 更保守。</p>
+  <p>hybrid Newton-Schulz 共 10 步，前 8 步使用一组激进系数快速把奇异值推近 1，后 2 步改用更稳定系数精确收敛。V4 还特别说明没有使用 QK-Clip，因为 CSA/HCA 在 attention queries 与 KV entries 上直接使用 RMSNorm，已经能抑制 attention logits 爆炸。</p>
+
+  <h2>6.3 训练稳定性：Anticipatory Routing 与 SwiGLU Clamping</h2>
+  <p>官方报告承认 V4 训练 trillion-parameter MoE 时遇到明显 instability，loss spikes 与 MoE 层 outliers 和 routing 机制有关。两个实用技巧解决了这个问题。第一是 Anticipatory Routing：在 step t 使用当前参数计算特征，但 routing indices 来自历史参数 θ<sub>t-Δt</sub>。工程上提前取 step t 的数据，在 t-Δt 时预计算并缓存 routing indices，loss spike 触发时短暂 rollback 并启用该模式，稳定后恢复标准训练。</p>
+  <p>第二是 SwiGLU Clamping：对 SwiGLU 的线性分量限制在 [-10, 10]，gate 分量上界限制为 10，用于消除 outliers。这里的教训是，MoE scaling 不只是容量问题，也是“路由反馈循环”的控制问题。路由网络把 token 分配到专家，专家 outlier 又会反过来改变下次路由分布；如果不切断或缓和这个循环，模型可能在局部异常上自我放大。</p>
+
+  <h2>6.4 这两个模块的共同意义</h2>
+  <p>mHC 与 Muon 分别作用在“网络拓扑”和“优化更新”两个层面。mHC 限制层间混合的谱行为，使 deep stack 的信息传播更稳定；Muon 约束大矩阵更新的方向，使训练更快、更稳。再配合 Anticipatory Routing 和 SwiGLU Clamping，V4 表明大模型架构创新已经进入一个阶段：不能只设计更稀疏的 attention，还必须把残差、优化器、路由动态和 kernel 实现作为一个整体处理。</p>
+</section>
+
+<!-- ═════════════ CHAPTER 7 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">07 · Infrastructure</div>
+  <h1>系统工程：训练、推理、KV Cache 与确定性</h1>
+
+  <p class="lead">
+    V4 的系统章节非常关键，因为 CSA/HCA 让 KV cache 变成异构结构，mHC 与 Muon 改变训练内存和通信模式，百万上下文又放大了 rollout、prefix reuse、确定性和沙箱执行成本。没有这些工程，算法不会变成可用模型。
+  </p>
+
+  <h2>7.1 MegaMoE：把 MoE 通信隐藏在计算后面</h2>
+  <p>MoE 的瓶颈通常是 expert parallelism 带来的 all-to-all 通信。V4 把每个 MoE 层拆成 Dispatch、Linear-1、Activation、Linear-2、Combine 等阶段，并设计 fine-grained expert waves。每个 wave 的专家一旦通信完成就立即计算，而不是等所有专家都到齐。稳态中，当前 wave 计算、下一 wave token transfer、已完成专家结果返回同时进行。</p>
+  <p>官方报告称，CUDA mega-kernel MegaMoE 在 NVIDIA GPU 与华为 Ascend NPU 平台都做了验证；相比强 non-fused baseline，通用推理场景加速 1.50 到 1.73 倍，RL rollout 和高速 agent serving 等 latency-sensitive 场景最高 1.96 倍。它还给硬件厂商提出了 compute/communication ratio、power headroom、低延迟通信 primitive 和低成本激活函数等建议。</p>
+
+  <h2>7.2 TileLang 与确定性 kernel</h2>
+  <p>V4 的架构如果用大量细粒度 Torch ATen operators 拼接，会带来调用开销和优化困难。DeepSeek 使用 TileLang 开发 fused kernels，并强调 Host Codegen 把 Python 侧 validation、argument marshaling 等逻辑移到生成的 host launcher 中，使每次调用的 CPU validation overhead 从几十或几百微秒降到小于 1 微秒。</p>
+  <p>另一个重点是 bitwise reproducibility。V4 为 attention、matrix multiplication、attention backward、MoE backward、mHC 小矩阵乘法等场景设计 batch-invariant 与 deterministic kernels。这样做不是形式主义，而是大规模训练调试的必要条件：当 loss spike 或后训练行为异常时，如果同一个 token 在不同 batch 位置产生不同 bitwise 输出，定位问题会变得近乎不可控。</p>
+
+  <h2>7.3 训练框架：Muon、mHC、Contextual Parallelism</h2>
+  <p>Muon 与 ZeRO 传统做法存在冲突，因为 Muon 需要完整梯度矩阵，而 ZeRO 喜欢把参数矩阵切分到多 rank。V4 对 dense parameters 限制 ZeRO 并行最大规模，用 knapsack 给 rank 分桶；超出部分用冗余 Muon update 换内存降低。对 MoE parameters，则按 expert 独立优化，flatten 同类矩阵并避免切开逻辑独立矩阵。</p>
+  <p>CSA/HCA 的 Context Parallelism 也需要重新设计。传统 CP 按序列维切分，每个 rank 持有连续 s 个 token；但压缩每 m 或 m' 个 token 才能产生 compressed KV，边界处可能跨 rank。V4 用两阶段通信：先把每个 rank 的最后 m 个未压缩 KV 发给下一个 rank，以便跨边界压缩；再 all-gather 本地 compressed KV，用 fused select-and-pad 统一整理可见范围。</p>
+
+  <h2>7.4 推理框架：异构 KV Cache 与 on-disk prefix reuse</h2>
+  <p>V4 的 KV cache 不再是每层同构、每 token 一个固定 block。它至少包含 CSA compressed KV、HCA compressed KV、CSA indexer KV、sliding window uncompressed KV，以及尚未凑满压缩块的 tail hidden states。传统 PagedAttention 假设很难直接覆盖这种结构，V4 因此把 cache 分成 classical KV cache 和 state cache：state cache 存 SWA 与未压缩 tail；classical KV cache 存 CSA/HCA 的 compressed entries。</p>
+  <p>on-disk KV cache storage 解决 shared-prefix 请求重复 prefilling 的问题。CSA/HCA 的 compressed KV 可以直接落盘并在 prefix hit 时读取；SWA KV 因为未压缩且体积约为 compressed CSA/HCA 的 8 倍，V4 提供三种策略：Full SWA Caching 完全存储但写入重；Periodic Checkpointing 每 p token 存一次最近 n<sub>win</sub> 状态；Zero SWA Caching 不存 SWA，命中时利用 CSA/HCA cache 重新计算最近 n<sub>win</sub> × L tokens 恢复状态。</p>
+
+  <table class="striped compact">
+    <thead><tr><th>系统问题</th><th>V4 方案</th><th>为什么重要</th></tr></thead>
+    <tbody>
+      <tr><td>MoE all-to-all 通信</td><td>fine-grained expert waves + fused MegaMoE kernel</td><td>让通信被计算隐藏，尤其改善小 batch rollout。</td></tr>
+      <tr><td>复杂 kernel 开发</td><td>TileLang、Host Codegen、Z3 整数分析</td><td>在快速迭代 CSA/HCA 等新算子时保持性能。</td></tr>
+      <tr><td>可复现性</td><td>batch-invariant 与 deterministic kernels</td><td>大规模训练与 post-training 调试需要 bitwise 对齐。</td></tr>
+      <tr><td>长上下文并行</td><td>两阶段 contextual parallelism</td><td>解决压缩块跨 CP rank 边界的问题。</td></tr>
+      <tr><td>异构 cache</td><td>state cache + classical KV cache</td><td>让 CSA/HCA/SWA 不同 cache policy 共存。</td></tr>
+      <tr><td>shared prefix</td><td>on-disk KV cache storage</td><td>避免百万上下文重复 prefill，提升服务效率。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═════════════ CHAPTER 8 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">08 · Pre-Training</div>
+  <h1>预训练：数据、模型配置与训练稳定性</h1>
+
+  <p class="lead">
+    V4 预训练不是简单扩大 token 数。它在 V3 数据管线之上强调更长有效上下文、更高质量长文档、更大多语语料和 agentic coding 数据，并把训练长度从 4K 逐步扩到 1M。
+  </p>
+
+  <h2>8.1 数据构造</h2>
+  <p>官方报告称，V4 预训练语料超过 32T tokens，包含数学、代码、网页、长文档和其他高质量类别。相比 V3，V4 继续过滤批量自动生成和模板化网页内容，以降低 model collapse 风险；数学和编程语料仍是核心；多语语料更大，以覆盖不同文化下的长尾知识；长文档数据被特别强调，尤其是科学论文、技术报告等具有独特学术价值的材料。</p>
+  <p>tokenizer 基本继承 V3，在其基础上增加少量用于 context construction 的 special tokens，词表仍为 128K。V4 也继承 token-splitting 与 Fill-in-Middle 策略，并使用 sample-level attention masking。对长上下文训练而言，packing 策略尤其重要：如果长文档频繁被截断，模型看到的是碎片而不是长程结构；V4 引用 fewer truncations 相关思路，尽量把不同来源文档打包到合适序列中。</p>
+
+  <h2>8.2 训练日程</h2>
+  <table class="financial striped compact">
+    <thead><tr><th>项目</th><th>V4-Flash</th><th>V4-Pro</th></tr></thead>
+    <tbody>
+      <tr><td>预训练 tokens</td><td>32T</td><td>33T</td></tr>
+      <tr><td>最大 batch tokens</td><td>75.5M</td><td>94.4M</td></tr>
+      <tr><td>Peak LR</td><td>2.7e-4</td><td>2.0e-4</td></tr>
+      <tr><td>End LR</td><td>2.7e-5</td><td>2.0e-5</td></tr>
+      <tr><td>Warmup</td><td>前 2000 steps</td><td>策略类似 Flash</td></tr>
+      <tr><td>序列长度</td><td>4K → 16K → 64K → 1M</td><td>4K → 16K → 64K → 1M</td></tr>
+      <tr><td>稀疏注意力引入</td><td>前 1T dense warmup；64K 时引入 sparse</td><td>dense stage 更长；之后同样两阶段引入 sparse</td></tr>
+      <tr><td>MTP loss weight</td><td>大部分训练 0.3，LR decay 后 0.1</td><td>同 Flash</td></tr>
+      <tr><td>Load balancing bias speed</td><td>0.001</td><td>0.001</td></tr>
+      <tr><td>Sequence-wise balance loss</td><td>0.0001</td><td>0.0001</td></tr>
+    </tbody>
+  </table>
+
+  <h2>8.3 Base model 评测透露了什么</h2>
+  <p>V4 报告 Table 1 对比了 V3.2-Base、V4-Flash-Base 和 V4-Pro-Base。最值得注意的是，V4-Flash-Base 虽然每 token 激活参数从 V3.2 的 37B 降到 13B，总参数从 671B 降到 284B，但在多数 benchmark 上超过 V3.2-Base。这说明 V4 的架构、数据和训练改进不仅提升长上下文效率，也提升了参数效率。</p>
+  <p>V4-Pro-Base 则基本全面领先，尤其在知识密集与长上下文任务上提升显著：SimpleQA verified 从 V3.2-Base 的 28.3 到 V4-Pro-Base 的 55.2；FACTS Parametric 从 27.1 到 62.6；LongBench-V2 从 40.2 到 51.5。代码与数学并非每项都单调提升，例如 BigCodeBench 上 V3.2-Base 63.9 高于 V4-Pro-Base 59.2，但 HumanEval、GSM8K、MATH 等项 V4-Pro-Base 更强。更专业的结论是：V4-Pro-Base 是更强通用基础模型，但单项 benchmark 的增减仍受数据、评测和任务形态影响。</p>
+
+  <table class="financial compact">
+    <thead><tr><th>指标</th><th>V3.2-Base</th><th>V4-Flash-Base</th><th>V4-Pro-Base</th></tr></thead>
+    <tbody>
+      <tr><td>Activated Params</td><td>37B</td><td>13B</td><td>49B</td></tr>
+      <tr><td>Total Params</td><td>671B</td><td>284B</td><td>1.6T</td></tr>
+      <tr><td>MMLU-Pro</td><td>65.5</td><td>68.3</td><td>73.5</td></tr>
+      <tr><td>SimpleQA verified</td><td>28.3</td><td>30.1</td><td>55.2</td></tr>
+      <tr><td>FACTS Parametric</td><td>27.1</td><td>33.9</td><td>62.6</td></tr>
+      <tr><td>HumanEval</td><td>62.8</td><td>69.5</td><td>76.8</td></tr>
+      <tr><td>MATH</td><td>60.5</td><td>57.4</td><td>64.5</td></tr>
+      <tr><td>LongBench-V2</td><td>40.2</td><td>44.7</td><td>51.5</td></tr>
+    </tbody>
+  </table>
+
+  <h2>8.4 训练稳定性的实际含义</h2>
+  <p>V4 报告没有把 loss spike 一笔带过，而是明确提出 Anticipatory Routing 与 SwiGLU Clamping。这意味着 V4 的架构复杂度已经接近一个临界点：MoE、hybrid attention、mHC、Muon 和超长序列训练相互耦合，传统“rollback 后继续跑”的办法不足以保证大规模稳定。未来如果要复现类似架构，训练监控、路由状态、激活 outlier、专家负载和确定性 kernel 都必须纳入第一等工程目标。</p>
+</section>
+
+<!-- ═════════════ CHAPTER 9 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">09 · Post-Training</div>
+  <h1>后训练：专家、GRM、OPD、工具调用与沙箱</h1>
+
+  <p class="lead">
+    V4 后训练的核心不是“再做一次 RL”，而是先让多个领域专家充分分化，再通过 full-vocabulary On-Policy Distillation 把能力合并到统一模型。这是从单一 policy optimization 转向多教师能力整合。
+  </p>
+
+  <h2>9.1 三种 reasoning modes</h2>
+  <p>V4 支持 Non-think、Think High、Think Max 三种模式。Non-think 面向快速日常任务；Think High 面向复杂问题、计划和中等风险决策；Think Max 用最大 reasoning effort 推到能力边界。训练上，不同模式对应不同 RL length penalty 与 context window，因此输出推理 token 长度不同。格式上，思考内容由 &lt;think&gt; 和 &lt;/think&gt; 标记；Think Max 还在 system prompt 前加入特殊指令，要求更彻底的问题分解和逻辑压力测试。</p>
+
+  <h2>9.2 Specialist Training 与 Generative Reward Model</h2>
+  <p>V4 先针对数学、代码、Agent、指令跟随等目标领域训练独立专家。每个专家先用高质量领域数据 SFT，再用 GRPO 进行领域 RL。易验证任务使用规则 verifier 或测试用例；难验证任务不依赖传统 scalar reward model，而是使用 rubric-guided RL data 与 Generative Reward Model。更准确地说，actor network 自身承担 GRM 角色，把评价能力和生成能力联合优化。</p>
+  <p>这个设计与 R1 的关系很清楚：R1 证明结果奖励可以诱导推理；V4 则把这个思想推广到难验证任务，用生成式判断取代单个标量分数。它的潜在优势是模型可以用自己的推理过程进行评判，减少人类标注量；风险是 GRM 仍可能受到 reward hacking 或自我偏见影响，需通过 rubrics、验证和人评约束。</p>
+
+  <h2>9.3 工具调用：DSML 与 XML schema</h2>
+  <p>V4 引入新的 tool-call schema，使用特殊 <code>|DSML|</code> token 和 XML 风格调用格式。核心目的是降低 escaping failure 与工具调用错误。JSON 在嵌套字符串、代码、引号和多工具场景中容易出错；XML 风格虽然更冗长，但边界更清晰，尤其适合模型输出结构化工具调用。</p>
+  <p>V4 还改进了 interleaved thinking 的上下文管理。V3.2 在 tool-result rounds 中保留 reasoning trace，但新用户消息到来时丢弃。V4 在真正的 tool-calling scenarios 中跨全部对话保留 reasoning content，包括跨用户消息边界；普通聊天场景则仍丢弃旧 reasoning content，以避免无谓上下文膨胀。这个变化只有在 1M context 下才真正合理，因为长期 Agent 任务需要累积状态，而不是每轮重建推理脉络。</p>
+
+  <h2>9.4 Quick Instruction：不用小模型也能做前置任务</h2>
+  <p>聊天系统常需要先判断是否搜索、生成检索 query、判断权威性、识别领域、提取 URL 等。传统做法是另起小模型，但会重复 prefill，无法复用大模型 KV cache。V4 引入 Quick Instruction：在输入后追加特殊 token，例如 &lt;|action|&gt;、&lt;|query|&gt;、&lt;|authority|&gt;、&lt;|domain|&gt;，让同一个模型利用已经计算好的 KV cache 并行执行这些辅助任务。它本质上是把 router / classifier / query generator 等系统小功能内生到主模型里。</p>
+
+  <h2>9.5 OPD：多专家能力合并的关键</h2>
+  <p>V4 把 V3.2 的 mixed RL stage 替换为 On-Policy Distillation。给定多个专家模型，统一学生模型在自己的生成轨迹上学习教师分布，目标是 reverse KL。与离线蒸馏不同，OPD 是 on-policy：训练样本来自 student 自己当前策略的轨迹，因此更能纠正 student 实际会访问的状态分布。</p>
+  <p>官方报告特别强调 full-vocabulary logit distillation，而不是只在采样 token 上做 KL 估计。后者更省资源，但梯度方差大、稳定性差。full-vocabulary KL 更忠实、更稳定，但代价巨大，因为词表超过 100K、教师超过 10 个、模型可达 trillion scale。V4 的工程解法是：教师权重集中 offload，按需加载；forward pass 只缓存 last-layer hidden states，不显式物化全部 logits；训练时再通过对应 prediction head 重建 logits，并用 TileLang kernel 计算精确 KL。</p>
+
+  <figure>
+    <svg width="100%" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DeepSeek V4 后训练流程">
+      <defs><pattern id="dots5" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots5)" opacity="0.55"/>
+      <text x="80" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  5</text>
+      <text x="196" y="40" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="3">post-training pipeline</text>
+      <line x1="80" y1="56" x2="920" y2="56" stroke="#1B365D" stroke-width="0.8"/>
+      <rect x="96" y="112" width="160" height="76" rx="8" fill="#faf9f5" stroke="#141413"/><text x="176" y="144" fill="#141413" font-size="21" font-weight="600" font-family="serif" text-anchor="middle">Base Model</text><text x="176" y="168" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">32T / 33T pretrain</text>
+      <rect x="320" y="76" width="176" height="64" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.2"/><text x="408" y="104" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Math Expert</text><text x="408" y="126" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">SFT + GRPO</text>
+      <rect x="320" y="164" width="176" height="64" rx="8" fill="#faf9f5" stroke="#141413"/><text x="408" y="192" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Code Expert</text><text x="408" y="214" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">SFT + GRPO</text>
+      <rect x="320" y="252" width="176" height="64" rx="8" fill="#faf9f5" stroke="#141413"/><text x="408" y="280" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Agent Expert</text><text x="408" y="302" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">tools + sandbox</text>
+      <rect x="584" y="144" width="176" height="96" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.2"/><text x="672" y="178" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">Full-vocab OPD</text><text x="672" y="204" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">student trajectories</text><text x="672" y="224" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">multi-teacher reverse KL</text>
+      <rect x="820" y="156" width="112" height="72" rx="8" fill="#faf9f5" stroke="#141413"/><text x="876" y="186" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Unified</text><text x="876" y="210" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">V4 Model</text>
+      <path d="M256 150 L320 108" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M310 108 L320 108 L314 116" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M256 150 L320 196" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M310 190 L320 196 L310 202" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M256 150 L320 284" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M312 276 L320 284 L308 286" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M496 108 L584 192" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M574 186 L584 192 L572 196" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M496 196 L584 192" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M574 186 L584 192 L574 198" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M496 284 L584 192" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M572 190 L584 192 L576 200" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <path d="M760 192 L820 192" stroke="#504e49" stroke-width="1.2"/><path d="M810 186 L820 192 L810 198" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+      <rect x="168" y="376" width="664" height="52" rx="8" fill="#EAE9E2" stroke="#504e49"/><text x="500" y="408" fill="#141413" font-size="17" font-family="serif" font-weight="600" text-anchor="middle">关键差异：V3.2 以 mixed RL 合并目标，V4 以多教师 full-vocabulary OPD 合并能力。</text>
+    </svg>
+    <figcaption>图 5：V4 后训练先分化专家，再通过 OPD 合并到统一学生模型。</figcaption>
+  </figure>
+
+  <h2>9.6 FP4 QAT、rollout WAL 与 DSec</h2>
+  <p>V4 在 post-training 中引入 FP4 quantization-aware training。量化对象包括 MoE expert weights 和 CSA indexer 的 QK path。对 expert weights，FP32 master weights 先量化到 FP4，再无损 dequantize 到 FP8 参与计算；反向传播通过 STE 把梯度传回 FP32 master weights。对 indexer，QK activations 以 FP4 cache、load 和 multiply，index scores 从 FP32 量化到 BF16，据称 top-k selector 加速 2 倍且 KV entry recall 保持 99.7%。</p>
+  <p>长上下文 RL/OPD 需要大量 rollout。V4 的 rollout service 支持 preemptible 与 fault-tolerant：每生成一个 token，就把它写入 token-granular Write-Ahead Log。任务被抢占时保存未完成请求 KV cache；恢复时用 WAL 与 KV cache 继续 decoding。官方特别指出，若遇到中断就从头重生成，会引入 length bias，因为短响应更容易在中断前完成并“幸存”。</p>
+  <p>Agent 后训练和评测还需要沙箱。DeepSeek Elastic Compute 使用 Rust 组件 Apiserver、Edge、Watcher，构建在 3FS 分布式文件系统之上，支持 Function Call、Container、microVM、fullVM 四种执行 substrate。它的目标是让大规模异构 Agent workload 在安全、可复现、可抢占、可恢复的环境中执行。</p>
+</section>
+
+<!-- ═════════════ CHAPTER 10 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">10 · Evaluation</div>
+  <h1>评测对比：能力、效率、成本与边界</h1>
+
+  <p class="lead">
+    V4 的评测应分三层看：基础模型能力证明架构有效，post-trained model 对比说明开放模型的前沿位置，真实任务评估揭示产品体验。所有这些数据主要来自 DeepSeek 官方内部评测，结论应带着来源边界阅读。
+  </p>
+
+  <h2>10.1 V4-Pro-Max 与其他模型</h2>
+  <p>官方 Table 6 将 DeepSeek-V4-Pro-Max 与 Claude Opus 4.6 Max、GPT-5.4 xHigh、Gemini-3.1-Pro High、Kimi K2.6 Thinking、GLM-5.1 Thinking 比较。整体上，V4-Pro-Max 在开放模型中非常强：SimpleQA-Verified 57.9，高于 K2.6 的 36.9 与 GLM-5.1 的 38.1；Codeforces rating 3206，高于 GPT-5.4 的 3168 和 Gemini-3.1-Pro 的 3052；Apex Shortlist 90.2，高于表中其他模型。它在 GPQA、HLE、Apex 等高难知识/推理项上仍落后于 Gemini-3.1-Pro 或 GPT-5.4。</p>
+  <p>Agent 项更复杂。SWE Verified 上 V4-Pro-Max 为 80.6，与 Gemini-3.1-Pro 80.6、Opus 4.6 80.8 基本齐平；Terminal Bench 2.0 为 67.9，低于 GPT-5.4 的 75.1，但高于 Opus 4.6 的 65.4；MCPAtlas Public 73.6，与 Opus 4.6 的 73.8 接近；Toolathlon 51.8，低于 GPT-5.4 的 54.6，高于 Opus 4.6 和 Gemini-3.1-Pro。</p>
+
+  <table class="financial striped compact">
+    <thead><tr><th>Benchmark</th><th>Opus-4.6 Max</th><th>GPT-5.4 xHigh</th><th>Gemini-3.1 High</th><th>K2.6</th><th>GLM-5.1</th><th>DS-V4-Pro Max</th></tr></thead>
+    <tbody>
+      <tr><td>SimpleQA-Verified</td><td>46.2</td><td>45.3</td><td>75.6</td><td>36.9</td><td>38.1</td><td>57.9</td></tr>
+      <tr><td>GPQA Diamond</td><td>91.3</td><td>93.0</td><td>94.3</td><td>90.5</td><td>86.2</td><td>90.1</td></tr>
+      <tr><td>HLE</td><td>40.0</td><td>39.8</td><td>44.4</td><td>36.4</td><td>34.7</td><td>37.7</td></tr>
+      <tr><td>LiveCodeBench</td><td>88.8</td><td>-</td><td>91.7</td><td>89.6</td><td>-</td><td>93.5</td></tr>
+      <tr><td>Codeforces Rating</td><td>-</td><td>3168</td><td>3052</td><td>-</td><td>-</td><td>3206</td></tr>
+      <tr><td>Apex Shortlist</td><td>85.9</td><td>78.1</td><td>89.1</td><td>75.5</td><td>72.4</td><td>90.2</td></tr>
+      <tr><td>Terminal Bench 2.0</td><td>65.4</td><td>75.1</td><td>68.5</td><td>66.7</td><td>63.5</td><td>67.9</td></tr>
+      <tr><td>SWE Verified</td><td>80.8</td><td>-</td><td>80.6</td><td>80.2</td><td>-</td><td>80.6</td></tr>
+      <tr><td>MCPAtlas Public</td><td>73.8</td><td>67.2</td><td>69.2</td><td>66.6</td><td>71.8</td><td>73.6</td></tr>
+      <tr><td>Toolathlon</td><td>47.2</td><td>54.6</td><td>48.8</td><td>50.0</td><td>40.7</td><td>51.8</td></tr>
+    </tbody>
+  </table>
+
+  <h2>10.2 Reasoning effort 的作用</h2>
+  <p>V4 把推理模式显式产品化。Table 7 显示，从 Non-think 到 High，再到 Max，许多任务显著提升。V4-Pro 在 HLE 上从 7.7 到 34.5，再到 37.7；LiveCodeBench 从 56.8 到 89.8，再到 93.5；Apex Shortlist 从 9.2 到 85.5，再到 90.2。V4-Flash 也类似：HMMT 从 40.8 到 91.9，再到 94.8；IMOAnswerBench 从 41.9 到 85.1，再到 88.4。</p>
+  <p>这说明 V4 的能力不能只用一个模型名表示，而要同时说明 reasoning mode 和 token budget。对用户而言，Non-think 是低延迟模式，High 是日常复杂任务的均衡模式，Max 是高风险、高难、可接受慢响应任务的能力上限模式。对研究者而言，这表明 test-time scaling 已经从“提示模型多想一会儿”变成训练、格式、窗口和服务策略共同定义的系统参数。</p>
+
+  <h2>10.3 1M 上下文：合成 retrieval 与真实 CorpusQA</h2>
+  <p>V4 的 1M context 评测包含 OpenAI MRCR 与 CorpusQA。MRCR 是多 needle retrieval 型任务，更强调在长上下文中找证据；CorpusQA 更接近真实语料级分析。官方报告称 V4-Pro 在 MRCR 上超过 Gemini-3.1-Pro，但低于 Claude Opus 4.6；在 CorpusQA 上也优于 Gemini-3.1-Pro。图 9 显示，MRCR 在 128K 内相对稳定，256K 后开始下降，但 1M 仍保留明显检索能力。</p>
+  <p>这里需要专业地看边界。1M context 不等于“模型能无损理解 1M token”。它表示模型能在这个窗口内进行有效访问，并且成本与 cache 可承受。实际任务仍会受信息密度、证据位置、干扰项、prompt 组织、工具调用和推理预算影响。V4 的贡献在于把 1M 从不可承受的显存/算力问题变成可工程调度的问题。</p>
+
+  <h2>10.4 真实任务：中文写作、搜索、白领任务、代码 Agent</h2>
+  <p>官方真实任务评估很有价值，因为它揭示 benchmark 以外的产品特性。中文 functional writing 中，V4-Pro 相比 Gemini-3.1-Pro 总体 win rate 为 62.65% 对 34.10%；creative writing 的 writing quality win rate 为 77.48%。但在复杂指令跟随和多轮写作上，V4-Pro 相比 Claude Opus 4.5 总体为 45.9% 对 52.0%，说明在极复杂约束和多轮场景仍有差距。</p>
+  <p>搜索方面，agentic search 相比 RAG 总体 win rate 为 61.7% 对 18.3%，但平均 tool calls 为 16.2，prefill tokens 13,649，output tokens 1,526，成本只比 RAG 略高但工具调用大多可并行。白领任务中，V4-Pro-Max 对 Opus-4.6-Max 的整体 non-loss rate 为 63%，优势主要在任务完成与内容质量，短板在 instruction following 和幻灯片视觉设计。内部 R&amp;D coding benchmark 上，V4-Pro-Max pass rate 67%，接近 Opus 4.5 的 70%，低于 Opus 4.6 Thinking 的 80%。</p>
+
+  <h2>10.5 如何做公平比较</h2>
+  <p>比较 V4 与其他模型时必须同时控制五件事：模型大小和开放性、reasoning effort、context length、工具协议、评测 harness。比如某个 Agent benchmark 的分数可能受工具 schema、上下文管理、是否保留 thinking、搜索 API 和 sandbox 环境影响；某个长上下文分数可能受 prompt packing 与证据位置影响；某个代码分数可能受候选采样数、测试集构造和工具步数影响。本文采用官方数据作为技术分析依据，但不把它们视为独立第三方排名。</p>
+</section>
+
+<!-- ═════════════ CHAPTER 11 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">11 · Innovations and Limits</div>
+  <h1>创新点分层、局限与实践判断</h1>
+
+  <p class="lead">
+    V4 的创新可以分成四层：模型结构、优化训练、系统基础设施、后训练产品化。它的强项是把这四层真正绑在一起；它的局限也来自复杂度本身。
+  </p>
+
+  <h2>11.1 创新点一：压缩注意力替代单纯稀疏选择</h2>
+  <p>CSA/HCA 是 V4 最核心的结构创新。它不是把 attention 稀疏化这么简单，而是先改变 KV 表示的时间分辨率。CSA 以 m=4 的较小压缩率保持较高分辨率，再通过 top-k 选择控制成本；HCA 以 m'=128 的大压缩率提供粗粒度全局记忆。这个设计比单纯 DSA 更适合 1M context，因为它把“历史太长”变成“多分辨率历史摘要”。</p>
+
+  <h2>11.2 创新点二：mHC 为深层 MoE 提供新的连接维度</h2>
+  <p>mHC 的价值在于让 residual path 本身可学习、可扩展、可稳定。它不像普通 residual 那样只是一条 identity shortcut，也不像任意 HC 那样可能在深层放大信号，而是通过 Birkhoff polytope 约束保持非扩张。对长期发展而言，这可能比单次 benchmark 提升更重要，因为它打开了“扩展 residual topology”这条架构路线。</p>
+
+  <h2>11.3 创新点三：Muon 与稳定技巧进入 trillion-scale 主线</h2>
+  <p>Muon 在 V4 中不是实验小技巧，而是用于大多数模块的主优化器。它将矩阵更新近似正交化，配合 hybrid Newton-Schulz、BF16 迭代、ZeRO bucket 策略和 MoE expert flattening。再加上 Anticipatory Routing 和 SwiGLU Clamping，V4 把优化器、路由稳定和 outlier 控制放到了核心位置。</p>
+
+  <h2>11.4 创新点四：OPD 把后训练从“混合目标”转向“专家合并”</h2>
+  <p>V3.2 的 mixed RL 把 reasoning、agent、alignment 混在一个 RL stage 中。V4 改为先训练多个专家，再用 OPD 合并。这个变化值得重视，因为大模型能力越来越像多个分布的集合：数学、代码、搜索、写作、Agent、工具使用、格式控制各自有不同 reward 与数据形态。OPD 给出一种工程上可扩展的能力合并路线。</p>
+
+  <h2>11.5 局限：复杂、未完全解释、依赖系统</h2>
+  <p>官方结论也承认 V4 为追求极致长上下文效率，保留了许多初步验证有效的组件和 tricks，使架构较复杂。Anticipatory Routing 与 SwiGLU Clamping 有效，但底层原理仍未充分理解。换句话说，V4 是非常强的工程系统，但还不是“优雅最小解”。未来方向包括把架构蒸馏到更本质的设计、研究训练稳定性原理、探索新的稀疏维度、降低长上下文延迟、增强长程多轮 Agent、加入多模态能力。</p>
+
+  <h2>11.6 实践判断：什么时候 V4 路线最有价值</h2>
+  <table class="striped compact">
+    <thead><tr><th>使用场景</th><th>V4 路线价值</th><th>注意事项</th></tr></thead>
+    <tbody>
+      <tr><td>百万级文档分析</td><td>CSA/HCA 与 on-disk KV 能显著降低长上下文成本</td><td>仍需良好文档组织，1M 不等于无损理解。</td></tr>
+      <tr><td>长程 Agent workflow</td><td>跨工具回合保留 thinking，可减少重复重建状态</td><td>只有真正 tool-calling path 才能完全受益。</td></tr>
+      <tr><td>高难数学/代码推理</td><td>Max mode 与 test-time scaling 带来明显提升</td><td>响应更慢，token 成本更高，需按任务风险选择。</td></tr>
+      <tr><td>企业知识搜索</td><td>Quick Instruction 与 agentic search 降低前置任务和检索迭代成本</td><td>需要控制工具质量、权限、引用和缓存策略。</td></tr>
+      <tr><td>自部署开放权重</td><td>MIT 权重许可降低研究与部署门槛</td><td>1.6T Pro 的部署要求极高；Flash 更现实。</td></tr>
+    </tbody>
+  </table>
+
+  <div class="takeaway">
+    <div class="takeaway-label">最终判断</div>
+    <p>DeepSeek V4 的真正意义是把开放模型竞争从“谁的 benchmark 更高”推进到“谁能把长上下文、推理、工具、训练稳定和服务成本打通”。它不是一个纯算法论文，而是一份架构和基础设施联合演进的工程宣言。</p>
+  </div>
+</section>
+
+<!-- ═════════════ APPENDIX ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">12 · Appendix</div>
+  <h1>术语表与参考来源</h1>
+
+  <h2>12.1 关键术语</h2>
+  <table class="striped compact">
+    <thead><tr><th>术语</th><th>解释</th></tr></thead>
+    <tbody>
+      <tr><td>MoE</td><td>Mixture-of-Experts。每个 token 只激活部分专家，用较低计算成本获得较大总参数容量。</td></tr>
+      <tr><td>DeepSeekMoE</td><td>DeepSeek 系列使用的 MoE 架构，包含 shared experts、fine-grained routed experts 与 load balancing 设计。</td></tr>
+      <tr><td>MLA</td><td>Multi-head Latent Attention。V3 使用的高效注意力形式，通过 latent KV 降低 cache。</td></tr>
+      <tr><td>DSA</td><td>DeepSeek Sparse Attention。V3.2 引入的稀疏注意力，用 lightning indexer 选择 top-k KV entries。</td></tr>
+      <tr><td>CSA</td><td>Compressed Sparse Attention。V4 引入，先压缩 KV，再对 compressed entries 做 top-k sparse attention。</td></tr>
+      <tr><td>HCA</td><td>Heavily Compressed Attention。V4 引入，以更大压缩率压缩 KV，并在压缩条目上保留 dense attention。</td></tr>
+      <tr><td>mHC</td><td>Manifold-Constrained Hyper-Connections。把 residual stream 扩展为多通道，并把 residual mixing matrix 约束到 doubly stochastic manifold。</td></tr>
+      <tr><td>Muon</td><td>基于矩阵更新近似正交化的优化器。V4 对多数模块使用 Muon，对 embedding、head、RMSNorm 等保留 AdamW。</td></tr>
+      <tr><td>GRPO</td><td>Group Relative Policy Optimization。R1 与 V4 specialist RL 中使用的强化学习算法，通过一组 samples 的相对奖励估计 advantage。</td></tr>
+      <tr><td>OPD</td><td>On-Policy Distillation。学生在自己的生成轨迹上学习多个教师模型分布，V4 用它合并领域专家能力。</td></tr>
+      <tr><td>FP4 QAT</td><td>FP4 Quantization-Aware Training。训练阶段显式适配 FP4 量化误差，使部署时可用更低精度加速和省显存。</td></tr>
+      <tr><td>DSec</td><td>DeepSeek Elastic Compute。用于 Agent 后训练和评测的沙箱平台，支持 Function Call、Container、microVM、fullVM。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>12.2 参考来源</h2>
+  <ul>
+    <li>DeepSeek 官方透明中心：DeepSeek-V4 条目，Release Date 2026-04-24。</li>
+    <li>DeepSeek-AI, DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence, Hugging Face PDF, 2026。</li>
+    <li>DeepSeek-AI, DeepSeek V4 Model Card, 2026。</li>
+    <li>DeepSeek-AI, DeepSeek-V3.2: Pushing the Frontier of Open Large Language Models, 2025。</li>
+    <li>DeepSeek-AI, DeepSeek-V3 Technical Report, arXiv:2412.19437, 2024/2025。</li>
+    <li>DeepSeek-AI, DeepSeek-R1: Incentivizing Reasoning Capability in LLMs via Reinforcement Learning, arXiv:2501.12948, 2026 version。</li>
+  </ul>
+
+  <h2>12.3 边界说明</h2>
+  <p>本文是技术解读，不是 DeepSeek 官方文档。所有 benchmark、模型规模、训练配置和发布时间以官方公开材料为依据；涉及“为什么这样设计”“该如何理解”的部分为本文基于报告内容做出的工程推断。若后续 DeepSeek 更新 V4 技术报告、模型卡或权重仓库，本文结论需按新材料复核。</p>
+</section>
+
+</body>
+</html>

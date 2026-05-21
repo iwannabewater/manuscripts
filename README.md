@@ -13,6 +13,7 @@
 
 | 作品 | 主题 | 文件 |
 |---|---|---|
+| DeepSeek V4 Technical Report 2026 | DeepSeek V4 官方 technical report 的完整中文深度解读，覆盖百万上下文、CSA/HCA、mHC、Muon、系统工程、后训练与代际对比 | `deepseek-v4-technical-report-2026/index.html` / `deepseek-v4-technical-report-2026/deepseek-v4-technical-report-2026.pdf` |
 | ms-swift Training Framework 2026 | 大模型训练框架 ms-swift 的完整架构、训练链路、源码路径、RL 后训练、Megatron 并行、评测部署与扩展排障 | `ms-swift-training-framework-2026/index.html` / `ms-swift-training-framework-2026/ms-swift-training-framework-2026.pdf` |
 | verl RL Training Framework 2026 | 大模型强化学习训练框架 verl 的完整架构、训练链路、算法配置、性能调优与源码路线 | `verl-rl-training-framework-2026/index.html` / `verl-rl-training-framework-2026/verl-rl-training-framework-2026.pdf` |
 | LLM RL Algorithms 2026 | 大模型强化学习算法全景，覆盖 RLHF、RLAIF、RLVR、DPO、PPO、GRPO、DAPO、GSPO 等主流算法 | `llm-rl-algorithms-2026/index.html` / `llm-rl-algorithms-2026/llm-rl-algorithms-2026.pdf` |
