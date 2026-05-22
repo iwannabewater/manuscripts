@@ -1,0 +1,30 @@
+id	title	url	type	used_for
+S01	Structured Denoising Diffusion Models in Discrete State-Spaces	https://arxiv.org/abs/2107.03006	paper	D3PM, discrete diffusion, absorbing state
+S02	Diffusion-LM Improves Controllable Text Generation	https://arxiv.org/abs/2205.14217	paper	continuous text diffusion and controllable generation
+S03	Discrete Diffusion Modeling by Estimating the Ratios of the Data Distribution	https://arxiv.org/abs/2310.16834	paper	SEDD and score entropy
+S04	Simple and Effective Masked Diffusion Language Models	https://arxiv.org/abs/2406.07524	paper	MDLM objective and training recipe
+S05	Large Language Diffusion Models	https://arxiv.org/abs/2502.09992	paper	LLaDA architecture and scaling
+S06	ML-GSAI/LLaDA	https://github.com/ML-GSAI/LLaDA	repository	LLaDA weights, inference and evaluation code
+S07	LLaDA 1.5	https://arxiv.org/abs/2505.19223	paper	VRPO and preference optimization
+S08	LLaDA-MoE	https://arxiv.org/abs/2509.24389	paper	MoE diffusion language model
+S09	RUC and Ant Group co-launch LLaDA-MoE	https://en.ruc.edu.cn/2025-09/26/c_2822.htm	official announcement	RUC and Ant Group collaboration context
+S10	inclusionAI/LLaDA2.X	https://github.com/inclusionAI/LLaDA2.X	repository	LLaDA2.0 model family and open-source claims
+S11	DreamLM/Dream	https://github.com/DreamLM/Dream	repository	Dream models, inference parameters and training code
+S11a	Dream 7B	https://arxiv.org/abs/2508.15487	paper	Dream paper
+S12	Introducing Mercury	https://www.inceptionlabs.ai/blog/introducing-mercury	official blog	Mercury Coder and speed claims
+S13	Mercury General Chat	https://www.inceptionlabs.ai/blog/introducing-mercury-our-general-chat-model	official blog	Mercury chat model and API
+S13a	Mercury 2 subagents	https://www.inceptionlabs.ai/blog/rise-of-realtime-subagents	official blog	Enterprise subagent and compaction use case
+S14	Gemini Diffusion	https://deepmind.google/models/gemini-diffusion/	official product page	Gemini Diffusion capabilities and benchmark table
+S15	Scaling DLM via AR adaptation	https://machinelearning.apple.com/research/scaling-diffusion-language-models	official research page	DiffuGPT, DiffuLLaMA and AR adaptation
+S16	DiffuCoder	https://machinelearning.apple.com/research/diffucoder	official research page	Code dLLM and coupled-GRPO
+S17	Fast-dLLM	https://arxiv.org/abs/2505.22618	paper	KV cache and parallel decoding
+S18	Block Diffusion	https://arxiv.org/abs/2503.09573	paper	block-wise hybrid architecture
+S19	DPad	https://arxiv.org/abs/2508.14148	paper	suffix dropout acceleration
+S20	CoDA paper	https://arxiv.org/abs/2510.03270	paper	Salesforce code diffusion model
+S20a	Salesforce CoDA model card	https://huggingface.co/Salesforce/CoDA-v0-Instruct	model card	model details, benchmark table and serving notes
+S21	MMaDA	https://arxiv.org/abs/2505.15809	paper	multimodal diffusion foundation model
+S22	LLaDA-V	https://arxiv.org/abs/2505.16933	paper	visual instruction tuning for diffusion LLM
+S23	LaViDa	https://arxiv.org/abs/2505.16839	paper	multimodal understanding
+S24	d1	https://arxiv.org/abs/2504.12216	paper	reasoning RL and diffu-GRPO
+S25	TiDAR	https://arxiv.org/abs/2511.08923	paper	hybrid diffusion drafting and AR talking
+S26	dLLM framework	https://arxiv.org/abs/2602.22661	paper	unified training, inference and evaluation framework
