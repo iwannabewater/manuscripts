@@ -654,27 +654,42 @@
       <rect x="104" y="96" width="792" height="72" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
       <text x="132" y="126" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="2">LAYER  1</text>
       <text x="132" y="152" fill="#141413" font-size="23" font-weight="600" font-family="serif">数据、tokenizer 与任务格式</text>
-      <text x="560" y="150" fill="#504e49" font-size="16" font-family="serif">预训练语料 · 指令数据 · 代码 · 多模态 token · 格式约束</text>
+      <text x="560" y="139" fill="#504e49" font-size="14" font-family="serif">
+        <tspan x="560" dy="0">预训练语料 · 指令数据 · 代码</tspan>
+        <tspan x="560" dy="21">多模态 token · tokenizer · 格式约束</tspan>
+      </text>
 
       <rect x="104" y="184" width="792" height="72" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
       <text x="132" y="214" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="2">LAYER  2</text>
       <text x="132" y="240" fill="#141413" font-size="23" font-weight="600" font-family="serif">前向噪声与训练目标</text>
-      <text x="560" y="238" fill="#504e49" font-size="16" font-family="serif">mask ratio · schedule · x0 prediction · score entropy · ELBO</text>
+      <text x="560" y="227" fill="#504e49" font-size="14" font-family="serif">
+        <tspan x="560" dy="0">mask ratio · schedule · x0 prediction</tspan>
+        <tspan x="560" dy="21">score entropy · ELBO · training recipe</tspan>
+      </text>
 
       <rect x="104" y="272" width="792" height="72" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="2"/>
       <text x="132" y="302" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="2">LAYER  3</text>
       <text x="132" y="328" fill="#141413" font-size="23" font-weight="600" font-family="serif">去噪 Transformer 主干</text>
-      <text x="560" y="326" fill="#504e49" font-size="16" font-family="serif">双向 attention · time embedding · MoE · vision connector · RL heads</text>
+      <text x="560" y="315" fill="#504e49" font-size="14" font-family="serif">
+        <tspan x="560" dy="0">双向 attention · time embedding · MoE</tspan>
+        <tspan x="560" dy="21">vision connector · RL heads · adapters</tspan>
+      </text>
 
       <rect x="104" y="360" width="792" height="72" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
       <text x="132" y="390" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="2">LAYER  4</text>
       <text x="132" y="416" fill="#141413" font-size="23" font-weight="600" font-family="serif">采样器与质量控制</text>
-      <text x="560" y="414" fill="#504e49" font-size="16" font-family="serif">remasking · confidence · entropy · temperature · verifier · guidance</text>
+      <text x="560" y="403" fill="#504e49" font-size="14" font-family="serif">
+        <tspan x="560" dy="0">remasking · confidence · entropy</tspan>
+        <tspan x="560" dy="21">temperature · verifier · guidance</tspan>
+      </text>
 
       <rect x="104" y="448" width="792" height="72" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
       <text x="132" y="478" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="2">LAYER  5</text>
       <text x="132" y="504" fill="#141413" font-size="23" font-weight="600" font-family="serif">推理服务与应用接口</text>
-      <text x="560" y="502" fill="#504e49" font-size="16" font-family="serif">KV Cache 变体 · batch · OpenAI API · streaming · edit · infill</text>
+      <text x="560" y="491" fill="#504e49" font-size="14" font-family="serif">
+        <tspan x="560" dy="0">KV Cache 变体 · batch · streaming</tspan>
+        <tspan x="560" dy="21">OpenAI API · edit · infill · routing</tspan>
+      </text>
 
       <path d="M500 168 L500 184" stroke="#504e49" stroke-width="1.6"/>
       <path d="M500 256 L500 272" stroke="#504e49" stroke-width="1.6"/>
