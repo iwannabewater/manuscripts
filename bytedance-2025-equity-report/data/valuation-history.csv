@@ -1,0 +1,8 @@
+date,valuation_usd_bn,marker_type,transaction_status,per_share_usd,holder_scope,evidence_level,source_id,note
+2022-09,300,investor_buyback,offered,176.90,investors,B,S06,Up to US$3bn repurchase
+2023-12,268,investor_buyback,offered,160.00,investors,B,S09,Same per-share price as employee offer but different valuation context
+2024-11,300,investor_buyback,approached,180.70,investors,B,S10,Reuters sources and document
+2025-03,315,employee_buyback,offered,189.90,US_employees,B,S11,Program-specific implied valuation
+2025-08,330,employee_buyback,planned,200.41,current_employees,B,S03,Reported as more than US$330bn
+2025-11,480,secondary_transaction,reported_completed,,secondary_investor,B,S13,Reported retrospectively by Reuters
+2026-02,550,proposed_share_sale,proposed,,General_Atlantic_stake,B,S13,Not a completed transaction

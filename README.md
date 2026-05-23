@@ -26,6 +26,7 @@
 | Claude Code Project Workflow | 面向工程团队的 Claude Code 项目工作流手册 | `claude-code-project-workflow/index.html` / `claude-code-project-workflow/claude-code-project-workflow.pdf` |
 | Zero to GitHub Pages Website | 从 0 构建网站并部署到 GitHub Pages 的完整工程链路 | `zero-to-github-pages-website/index.html` / `zero-to-github-pages-website/zero-to-github-pages-website.pdf` |
 | 小红书 FY2025 Equity Report | 小红书 2025 年业绩披露、历史估值与员工期权回购价格的证据分层研究 | `xiaohongshu-2025-equity-report/index.html` / `xiaohongshu-2025-equity-report/xiaohongshu-2025-equity-report.pdf` |
+| 字节跳动 FY2025 Equity Report | 字节跳动 2025 年业绩口径、员工权益回购价格与二级交易估值的证据分层研究 | `bytedance-2025-equity-report/index.html` / `bytedance-2025-equity-report/bytedance-2025-equity-report.pdf` |
 
 ## Directory Contract
 

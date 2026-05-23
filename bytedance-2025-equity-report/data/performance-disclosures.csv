@@ -1,0 +1,13 @@
+period,metric,value_usd_bn,growth_yoy,status,source_id,interpretation
+FY2022,revenue,80,,reported_by_media,S01,Historical sales reported by Bloomberg sources
+FY2022,EBITDA,25,,reported_by_media,S01,Not comparable to net profit
+FY2023,revenue,120,50.0%,reported_by_media,S01,Nearly US$120bn
+FY2023,EBITDA,40,60.0%,reported_by_media,S01,More than US$40bn
+FY2024,revenue,155,29.0%,reported_by_media,S02,The Information figure relayed by Reuters
+FY2024,net_profit,33,6.0%,reported_by_media,S02,Not a public audited filing
+2Q2025,revenue,48,25.0%,reported_by_media,S03,Quarterly figure relayed by Reuters sources
+FY2025,domestic_revenue_growth,,approximately_20%,investor_communication_reported,S05,No absolute revenue supplied
+FY2025,overseas_revenue_growth,,approximately_50%,investor_communication_reported,S05,Overseas share reported above 30 percent
+9M2025,net_income,40,,media_source_outlook,S04,Approximate Bloomberg source figure
+FY2025,profit_outlook,50,,media_source_outlook,S04,Pre-year-end outlook not audited full-year result
+FY2025,IFRS_net_profit_growth,,less_than_-70%,media_report_with_management_response,S05,Reported affected by preferred-share and option cost movements and emerging-business investment

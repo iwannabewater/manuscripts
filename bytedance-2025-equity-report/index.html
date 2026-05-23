@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<!-- EQUITY REPORT · Derived from the Kami parchment template -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>字节跳动 · FY2025 业绩与员工权益估值观察</title>
+<meta name="author" content="Winston">
+<meta name="description" content="字节跳动 FY2025 经营表现、利润口径冲突、员工权益回购报价与二级交易估值标记的证据分层研究。">
+<meta name="keywords" content="字节跳动, ByteDance, FY2025, 期权回购, RSU, 二级交易估值">
+<meta name="generator" content="Kami">
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @page {
+    size: A4;
+    margin: 16mm 18mm 18mm 18mm;
+    background: #f5f4ed;
+    @bottom-center {
+      content: counter(page) "  ·  字节跳动 FY2025 权益估值观察";
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", serif;
+      font-size: 9pt;
+      color: #6b6a64;
+    }
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --parchment: #f5f4ed;
+    --ivory: #faf9f5;
+    --near-black: #141413;
+    --dark-warm: #3d3d3a;
+    --olive: #504e49;
+    --stone: #6b6a64;
+    --brand: #1b365d;
+    --border: #e8e6dc;
+    --border-soft: #e5e3d8;
+    --tag-bg: #e4ecf5;
+    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+    --rhythm-module: 14pt;
+  }
+  html, body { background: var(--parchment); }
+  @media screen { body { max-width: 210mm; margin: 0 auto; padding: 16mm 18mm 18mm; } }
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 10pt;
+    line-height: 1.5;
+    letter-spacing: 0;
+    widows: 3;
+    orphans: 3;
+  }
+  strong { font-weight: 500; }
+  .hl { color: var(--brand); font-weight: 500; }
+  .report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--rhythm-module);
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .ticker-block { flex: 1; }
+  .ticker-eyebrow {
+    font-size: 9pt;
+    color: var(--brand);
+    letter-spacing: 0;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+  .ticker-name {
+    font-size: 24pt;
+    font-weight: 500;
+    line-height: 1.15;
+    margin-bottom: 4pt;
+  }
+  .ticker-sub { font-size: 10pt; color: var(--olive); line-height: 1.4; }
+  .price-block { text-align: right; padding-top: 4pt; }
+  .price-current {
+    font-size: 27pt;
+    font-weight: 500;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .price-change {
+    color: var(--brand);
+    font-size: 10pt;
+    font-weight: 500;
+    margin-top: 3pt;
+  }
+  .price-date { color: var(--stone); font-size: 9pt; margin-top: 2pt; }
+  .metrics {
+    display: flex;
+    gap: 8pt;
+    margin-bottom: 16pt;
+    padding: 7pt 0;
+    border-top: 0.3pt dotted var(--border);
+    border-bottom: 0.3pt dotted var(--border);
+  }
+  .metric { flex: 1; display: flex; flex-direction: column; gap: 3pt; min-height: 38pt; }
+  .metric-value {
+    color: var(--brand);
+    font-size: 14pt;
+    font-weight: 500;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .metric-label { color: var(--olive); font-size: 8.2pt; line-height: 1.32; }
+  h2 {
+    font-size: 16pt;
+    font-weight: 500;
+    margin: 18pt 0 6pt;
+    break-after: avoid;
+  }
+  h3 {
+    color: var(--dark-warm);
+    font-size: 12.5pt;
+    font-weight: 500;
+    margin: 11pt 0 4pt;
+    break-after: avoid;
+  }
+  p { margin-bottom: 8pt; line-height: 1.5; widows: 2; orphans: 2; }
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--brand);
+    font-size: 8.5pt;
+    font-weight: 500;
+    padding: 1pt 6pt;
+    border-radius: 3pt;
+    margin-right: 3pt;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.4pt;
+    margin: 8pt 0;
+    break-inside: avoid;
+  }
+  th {
+    color: var(--dark-warm);
+    font-weight: 500;
+    text-align: left;
+    padding: 5pt 8pt;
+    border-bottom: 1pt solid var(--border);
+  }
+  td {
+    padding: 4pt 8pt;
+    border-bottom: 0.3pt solid var(--border-soft);
+    vertical-align: top;
+  }
+  .compact th { padding: 3pt 6pt; font-size: 8.2pt; }
+  .compact td { padding: 2.5pt 6pt; font-size: 8.2pt; line-height: 1.38; }
+  .striped tbody tr:nth-child(even) td { background: var(--ivory); }
+  .financial th:not(:first-child), .financial td:not(:first-child) {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .financial td:last-child, .financial th:last-child { text-align: left; }
+  .total td {
+    border-top: 1pt solid var(--brand);
+    border-bottom: none;
+    font-weight: 500;
+  }
+  .thesis-table th:first-child, .thesis-table td:first-child { width: 48pt; white-space: nowrap; }
+  .validation-table th:first-child, .validation-table td:first-child { width: 46pt; white-space: nowrap; }
+  .scenario-table th:first-child, .scenario-table td:first-child { width: 40pt; white-space: nowrap; }
+  .scenario-table th:last-child, .scenario-table td:last-child { width: 108pt; }
+  .callout {
+    background: var(--ivory);
+    border-left: 2pt solid var(--brand);
+    border-radius: 3pt;
+    padding: 8pt 12pt;
+    margin: 10pt 0;
+    line-height: 1.5;
+    break-inside: avoid;
+  }
+  figure { margin: 11pt 0; break-inside: avoid; }
+  figcaption { color: var(--stone); font-size: 8.8pt; margin-top: 4pt; text-align: center; }
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 15pt; }
+  .risk-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8pt;
+    margin: 7pt 0;
+  }
+  .risk-item {
+    background: var(--ivory);
+    border-radius: 3pt;
+    padding: 6pt 9pt;
+    break-inside: avoid;
+  }
+  .risk-label { color: var(--brand); font-size: 9pt; font-weight: 500; margin-bottom: 2pt; }
+  .risk-desc { color: var(--olive); font-size: 8.8pt; line-height: 1.4; }
+  .analyst-box {
+    background: var(--ivory);
+    border-left: 1.4pt solid var(--brand);
+    border-radius: 4pt;
+    padding: 9pt 13pt;
+    margin: 10pt 0;
+    break-inside: avoid;
+  }
+  .analyst-label { color: var(--brand); font-size: 8.7pt; margin-bottom: 3pt; }
+  .report-footer {
+    margin-top: 11pt;
+    padding-top: 6pt;
+    border-top: 0.3pt dotted var(--border);
+    color: var(--stone);
+    font-size: 8.7pt;
+    display: flex;
+    justify-content: space-between;
+  }
+  .final-page h2 { margin-top: 11pt; }
+  .final-page h3 { margin-top: 8pt; }
+  .final-page p { margin-bottom: 6pt; line-height: 1.43; }
+  .final-page table { margin: 5pt 0; }
+  .final-page .analyst-box { margin: 7pt 0; padding: 7pt 11pt; }
+  .page-break { break-before: page; }
+</style>
+</head>
+<body>
+
+<div class="report-header">
+  <div class="ticker-block">
+    <div class="ticker-eyebrow">Equity Report · 私营公司权益价值观察</div>
+    <div class="ticker-name">字节跳动 <span style="font-size:14pt;color:var(--stone)">ByteDance</span></div>
+    <div class="ticker-sub">内容平台与 AI · 未上市 · 观察 / 未评级 · FY2025 员工权益专题</div>
+  </div>
+  <div class="price-block">
+    <div class="price-current">US$330-480bn</div>
+    <div class="price-change">基础估值观察带</div>
+    <div class="price-date">核验日：2026-05-23</div>
+  </div>
+</div>
+
+<div class="metrics">
+  <div class="metric">
+    <div class="metric-value">约 +20%</div>
+    <div class="metric-label">国内收入同比<br>FY2025 报道</div>
+  </div>
+  <div class="metric">
+    <div class="metric-value">约 +50%</div>
+    <div class="metric-label">海外收入同比<br>FY2025 报道</div>
+  </div>
+  <div class="metric">
+    <div class="metric-value">&gt;US$330bn</div>
+    <div class="metric-label">员工回购估值<br>2025.08</div>
+  </div>
+  <div class="metric">
+    <div class="metric-value">US$229.50</div>
+    <div class="metric-label">在职回购 / 股<br>2026.04</div>
+  </div>
+</div>
+
+<h2>结论：经营在扩张，利润口径与流动性价格在分叉</h2>
+<p>字节跳动的 FY2025 不能只用一个利润数字概括。财新报道公司向部分投资人沟通的全年经营情况显示，国内收入同比增长近 <span class="hl">20%</span>，海外收入同比增长近 <span class="hl">50%</span>，海外占比由约 25% 提升至超过 30%。但同一报道同时称，国际会计准则（IFRS）净利润同比下降超过 70%；抖音副总裁李亮回应称，其中含优先股和期权成本变动及新兴业务投入，并不直接代表运营实质。〔S05〕</p>
+<p>这与 Bloomberg 于 2025 年 12 月报道的“全年利润有望约 <span class="hl">US$50bn</span>，前三季度净利润约 US$40bn”构成需要解释的口径冲突，而非可直接拼接的业绩链条。字节未公开 FY2025 经审计年度报表，本文因此不对两组数字做未经披露的调节，也不将报道利润展望称为已实现净利润。〔S04-S05〕</p>
+
+<div class="callout">
+  <strong>核心判断：</strong>员工回购价格持续上调和二级份额交易报道，支持字节权益价值重估；但经营利润、IFRS 利润与各类权益报价尚未获得公开财务桥。基础观察带采用较可验证的 <strong>US$330-480bn</strong>，拟议出售的 US$550bn 仅作上行情景。
+</div>
+
+<table class="compact striped thesis-table">
+  <thead><tr><th>主线</th><th>可核查证据</th><th>投资含义</th></tr></thead>
+  <tbody>
+    <tr><td><strong>增长</strong></td><td>2025 国内收入近 +20%，海外近 +50%，海外占比超过 30%〔S05〕</td><td>全球化收入成为主要增量</td></tr>
+    <tr><td><strong>利润</strong></td><td>约 US$50bn 年末展望 vs IFRS 净利润下降超 70%〔S04-S05〕</td><td>须等待口径调节，盈利倍数不宜机械套用</td></tr>
+    <tr><td><strong>流动性</strong></td><td>2025 员工回购标记 &gt;US$330bn；二级交易报道 US$480bn〔S03, S13〕</td><td>权益需求存在，但交易类别不同</td></tr>
+    <tr><td><strong>兑现</strong></td><td>2026 在职/离职回购价 US$229.50 / US$201.96〔S12〕</td><td>员工可变现窗口增强，仍受资格和条款限制</td></tr>
+  </tbody>
+</table>
+
+<h3>口径边界</h3>
+<p><span class="tag">未上市</span><span class="tag">无公开审计 FY2025</span><span class="tag">无完全摊薄股本</span> 英文媒体多以 shares、RSU 或 options 描述员工权益，中文报道常称“期权回购”。本文统称员工权益回购；每股报价不等同于公开股票报价，也不被用于反推完全摊薄公司价值。</p>
+
+<div class="page-break"></div>
+
+<h2>业绩披露链：收入全球化成立，利润质量仍待对账</h2>
+<p>可比历史数据来自媒体获悉的私营公司数据而非年度申报。2022 至 2024 年，报道收入由约 US$80bn 升至 US$155bn；2023 年 EBITDA 超 US$40bn，而 2024 年报道净利润约 US$33bn。两类利润指标不能直接作同比序列，故下图以收入为连续主轴，把利润披露独立标注。〔S01-S02〕</p>
+
+<figure>
+  <svg viewBox="0 0 680 295" width="100%" height="295" role="img" aria-label="字节跳动收入与利润报道数据图">
+    <rect width="680" height="295" rx="8" fill="#faf9f5"/>
+    <text x="46" y="31" font-family="TsangerJinKai02, serif" font-size="17" fill="#141413">收入规模扩张，FY2025 只披露增速线索</text>
+    <text x="46" y="51" font-family="TsangerJinKai02, serif" font-size="11" fill="#6b6a64">单位：十亿美元；FY2025 无可公开复核的绝对收入或审计利润</text>
+    <g stroke="#e8e6dc" stroke-width="0.8">
+      <line x1="82" y1="222" x2="628" y2="222"/><line x1="82" y1="174" x2="628" y2="174"/>
+      <line x1="82" y1="126" x2="628" y2="126"/><line x1="82" y1="78" x2="628" y2="78"/>
+    </g>
+    <g font-family="TsangerJinKai02, serif" font-size="10" fill="#6b6a64">
+      <text x="56" y="226">0</text><text x="48" y="178">50</text><text x="42" y="130">100</text><text x="42" y="82">150</text>
+    </g>
+    <g fill="#1b365d">
+      <rect x="116" y="145" width="72" height="77" rx="2"/><rect x="267" y="107" width="72" height="115" rx="2"/>
+      <rect x="418" y="73" width="72" height="149" rx="2"/>
+    </g>
+    <rect x="552" y="176" width="72" height="46" rx="2" fill="#e4ecf5" stroke="#1b365d" stroke-width="1"/>
+    <g font-family="TsangerJinKai02, serif" text-anchor="middle">
+      <text x="152" y="137" font-size="12" fill="#1b365d">80</text><text x="152" y="244" font-size="11" fill="#504e49">FY2022</text>
+      <text x="303" y="99" font-size="12" fill="#1b365d">近 120</text><text x="303" y="244" font-size="11" fill="#504e49">FY2023</text>
+      <text x="454" y="65" font-size="12" fill="#1b365d">155</text><text x="454" y="244" font-size="11" fill="#504e49">FY2024</text>
+      <text x="588" y="166" font-size="11" fill="#1b365d">2Q: 48</text><text x="588" y="244" font-size="11" fill="#504e49">FY2025*</text>
+    </g>
+    <text x="82" y="269" font-family="TsangerJinKai02, serif" font-size="10" fill="#6b6a64">FY2022 EBITDA 约 25；FY2023 EBITDA &gt;40；FY2024 报道净利润约 33；*2Q2025 收入约 48、同比 +25%。〔S01-S03〕</text>
+  </svg>
+  <figcaption>绝对收入连续数据止于 FY2024；2Q2025 仅用作增长验证点，不外推全年收入。</figcaption>
+</figure>
+
+<table class="financial compact striped">
+  <thead><tr><th>期间 / 指标</th><th>数值</th><th>同比</th><th>披露性质与限制</th></tr></thead>
+  <tbody>
+    <tr><td>FY2022 收入 / EBITDA</td><td>US$80bn / 约 US$25bn</td><td>-</td><td>Bloomberg 据知情人士回溯〔S01〕</td></tr>
+    <tr><td>FY2023 收入 / EBITDA</td><td>近 US$120bn / &gt;US$40bn</td><td>收入约 +50%；EBITDA 约 +60%</td><td>Bloomberg 报道，不是公开申报〔S01〕</td></tr>
+    <tr><td>FY2024 收入 / 净利润</td><td>US$155bn / US$33bn</td><td>+29% / +6%</td><td>The Information 数字经 Reuters 转述〔S02〕</td></tr>
+    <tr><td>2Q2025 收入</td><td>约 US$48bn</td><td>+25%</td><td>Reuters 据消息人士报道〔S03〕</td></tr>
+    <tr class="total"><td>FY2025 地域收入</td><td>未提供绝对额</td><td>国内近 +20%；海外近 +50%</td><td>财新据部分投资人沟通〔S05〕</td></tr>
+  </tbody>
+</table>
+
+<h3>利润冲突不是脚注，而是估值变量</h3>
+<div class="two-col">
+  <div class="callout"><strong>经营/展望口径</strong><br>Bloomberg 2025.12 报道前三季度净利润约 US$40bn，全年利润有望约 US$50bn。此为年末前信息源展望。〔S04〕</div>
+  <div class="callout"><strong>IFRS 口径</strong><br>财新 2026.04 报道 FY2025 IFRS 净利润同比下降超过 70%，管理层回应涉及优先股、期权成本与新业务投入。〔S05〕</div>
+</div>
+<p>对于权益估值，合理动作不是选择较高利润，而是要求一张可审阅的调节表：经营利润、股份支付/优先股重估、AI 投入以及最终可归属普通股东的利润。公开材料尚未提供这张桥。</p>
+
+<div class="page-break"></div>
+
+<h2>估值迁移：回购低点已修复，二级交易推升上沿</h2>
+<p>字节的估值标记来自三类不同流动性事件：公司向投资人回购、公司向员工回购，以及股东之间的二级出售。它们能够说明买卖意愿与权益重估方向，但由于股份类别、规模、信息权及交易完成状态不同，并不构成一条连续公共市值曲线。</p>
+
+<figure>
+  <svg viewBox="0 0 680 310" width="100%" height="310" role="img" aria-label="字节跳动 2022 至 2026 年估值标记时间线">
+    <rect width="680" height="310" rx="8" fill="#faf9f5"/>
+    <text x="45" y="31" font-family="TsangerJinKai02, serif" font-size="17" fill="#141413">权益估值标记：回购、二级成交与拟议出售</text>
+    <text x="45" y="51" font-family="TsangerJinKai02, serif" font-size="11" fill="#6b6a64">单位：十亿美元；空心点为拟议交易，非已完成定价</text>
+    <g stroke="#e8e6dc" stroke-width="0.8">
+      <line x1="62" y1="234" x2="632" y2="234"/><line x1="62" y1="185" x2="632" y2="185"/>
+      <line x1="62" y1="136" x2="632" y2="136"/><line x1="62" y1="87" x2="632" y2="87"/>
+    </g>
+    <g font-family="TsangerJinKai02, serif" font-size="10" fill="#6b6a64">
+      <text x="32" y="238">250</text><text x="32" y="189">350</text><text x="32" y="140">450</text><text x="32" y="91">550</text>
+    </g>
+    <polyline points="90,209 174,225 258,209 342,202 426,194 510,121" fill="none" stroke="#1b365d" stroke-width="2"/>
+    <line x1="510" y1="121" x2="594" y2="87" stroke="#1b365d" stroke-width="2" stroke-dasharray="5 4"/>
+    <g fill="#1b365d">
+      <circle cx="90" cy="209" r="4"/><circle cx="174" cy="225" r="4"/><circle cx="258" cy="209" r="4"/>
+      <circle cx="342" cy="202" r="4"/><circle cx="426" cy="194" r="4"/><circle cx="510" cy="121" r="4"/>
+    </g>
+    <circle cx="594" cy="87" r="4.5" fill="#faf9f5" stroke="#1b365d" stroke-width="2"/>
+    <g font-family="TsangerJinKai02, serif" text-anchor="middle" font-size="10.5">
+      <text x="90" y="198" fill="#1b365d">300</text><text x="90" y="254" fill="#504e49">2022.09</text>
+      <text x="174" y="215" fill="#1b365d">268</text><text x="174" y="254" fill="#504e49">2023.12</text>
+      <text x="258" y="198" fill="#1b365d">300</text><text x="258" y="254" fill="#504e49">2024.11</text>
+      <text x="342" y="190" fill="#1b365d">315</text><text x="342" y="254" fill="#504e49">2025.03</text>
+      <text x="426" y="182" fill="#1b365d">&gt;330</text><text x="426" y="254" fill="#504e49">2025.08</text>
+      <text x="510" y="109" fill="#1b365d">480</text><text x="510" y="254" fill="#504e49">2025.11</text>
+      <text x="594" y="75" fill="#1b365d">550*</text><text x="594" y="254" fill="#504e49">2026.02</text>
+    </g>
+    <text x="62" y="283" font-family="TsangerJinKai02, serif" font-size="10" fill="#6b6a64">2022-2024 为投资人回购；2025.03/08 为员工回购；2025.11 为报道二级交易；*2026.02 为拟议出售。〔S06, S09-S11, S03, S13〕</text>
+  </svg>
+  <figcaption>估值从 2023 年 US$268bn 低点修复至 2025 年员工方案超过 US$330bn；US$480bn 和 US$550bn 属更高但性质不同的市场标记。</figcaption>
+</figure>
+
+<table class="financial compact striped">
+  <thead><tr><th>时点</th><th>估值标记</th><th>每股报价</th><th>事件类型 / 完成状态</th><th>可比性</th></tr></thead>
+  <tbody>
+    <tr><td>2022.09</td><td>约 US$300bn</td><td>略低于 US$177</td><td>投资人回购提议〔S06〕</td><td>投资人基准</td></tr>
+    <tr><td>2023.12</td><td>约 US$268bn</td><td>US$160</td><td>投资人回购提议〔S09〕</td><td>低点标记</td></tr>
+    <tr><td>2024.11</td><td>约 US$300bn</td><td>US$180.70</td><td>向投资人提出回购〔S10〕</td><td>修复标记</td></tr>
+    <tr><td>2025.03</td><td>约 US$315bn</td><td>US$189.90</td><td>美国员工回购〔S11〕</td><td>员工流动性</td></tr>
+    <tr><td>2025.08</td><td>&gt;US$330bn</td><td>US$200.41</td><td>员工回购计划〔S03〕</td><td>基础下锚</td></tr>
+    <tr><td>2025.11</td><td>US$480bn</td><td>未披露</td><td>Reuters 回溯二级交易〔S13〕</td><td>基础上锚</td></tr>
+    <tr class="total"><td>2026.02</td><td>US$550bn</td><td>未披露</td><td>General Atlantic 拟售股份〔S13〕</td><td>未完成上行情景</td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <strong>重要反例：</strong>2023 年员工与投资人计划都曾出现 US$160/股，但 Reuters 报道投资人回购对应约 US$268bn；同价并不足以证明同一权利类别或同一完全摊薄估值。〔S08-S09〕
+</div>
+
+<div class="page-break"></div>
+
+<h2>员工权益价格：上涨可验证，可交易性不可假设</h2>
+<p>用户所称“期权估值”在公开报道中覆盖多种措辞。Bloomberg 2022 年称每股 US$155 的 <em>restricted stock unit</em> 回购；Reuters 2023 年报道员工股份/RSU 或期权报价；2025 年 10 月和 2026 年 4 月中文媒体转述内部邮件时使用“期权回购”。本文保留其来源口径，不把不同授予批次视作法律上相同的证券。〔S07-S08, S12〕</p>
+
+<figure>
+  <svg viewBox="0 0 680 297" width="100%" height="297" role="img" aria-label="字节跳动员工权益回购价格变化图">
+    <rect width="680" height="297" rx="8" fill="#faf9f5"/>
+    <text x="45" y="31" font-family="TsangerJinKai02, serif" font-size="17" fill="#141413">员工回购报价：在职价格四年上升 48%</text>
+    <text x="45" y="51" font-family="TsangerJinKai02, serif" font-size="11" fill="#6b6a64">单位：美元 / 股；2024 标记为 Reuters 2025 年报道中的回溯数字</text>
+    <g stroke="#e8e6dc" stroke-width="0.8">
+      <line x1="74" y1="220" x2="629" y2="220"/><line x1="74" y1="170" x2="629" y2="170"/>
+      <line x1="74" y1="120" x2="629" y2="120"/><line x1="74" y1="70" x2="629" y2="70"/>
+    </g>
+    <g font-family="TsangerJinKai02, serif" font-size="10" fill="#6b6a64">
+      <text x="40" y="224">150</text><text x="40" y="174">180</text><text x="40" y="124">210</text><text x="40" y="74">240</text>
+    </g>
+    <polyline points="100,212 185,204 270,186 355,169 440,154 525,136 610,87" fill="none" stroke="#1b365d" stroke-width="2.3"/>
+    <line x1="525" y1="170" x2="610" y2="133" stroke="#6b6a64" stroke-width="2" stroke-dasharray="5 4"/>
+    <g fill="#1b365d">
+      <circle cx="100" cy="212" r="4"/><circle cx="185" cy="204" r="4"/><circle cx="270" cy="186" r="4"/>
+      <circle cx="355" cy="169" r="4"/><circle cx="440" cy="154" r="4"/><circle cx="525" cy="136" r="4"/><circle cx="610" cy="87" r="4"/>
+    </g>
+    <g fill="#faf9f5" stroke="#6b6a64" stroke-width="2"><circle cx="525" cy="170" r="4"/><circle cx="610" cy="133" r="4"/></g>
+    <g font-family="TsangerJinKai02, serif" text-anchor="middle" font-size="10">
+      <text x="100" y="200" fill="#1b365d">155</text><text x="100" y="245" fill="#504e49">22.10</text>
+      <text x="185" y="192" fill="#1b365d">160</text><text x="185" y="245" fill="#504e49">23.11</text>
+      <text x="270" y="174" fill="#1b365d">171</text><text x="270" y="245" fill="#504e49">24.03*</text>
+      <text x="355" y="157" fill="#1b365d">181</text><text x="355" y="245" fill="#504e49">24.09*</text>
+      <text x="440" y="142" fill="#1b365d">189.90</text><text x="440" y="245" fill="#504e49">25.03</text>
+      <text x="525" y="124" fill="#1b365d">200.41</text><text x="525" y="245" fill="#504e49">25.10</text>
+      <text x="610" y="75" fill="#1b365d">229.50</text><text x="610" y="245" fill="#504e49">26.04</text>
+    </g>
+    <g font-family="TsangerJinKai02, serif" font-size="10" fill="#504e49">
+      <rect x="92" y="270" width="16" height="4" fill="#1b365d"/><text x="115" y="276">在职/一般员工报价</text>
+      <line x1="286" y1="272" x2="302" y2="272" stroke="#6b6a64" stroke-width="2" stroke-dasharray="4 3"/><text x="310" y="276">离职员工报价：2025 US$180.37；2026 US$201.96</text>
+    </g>
+  </svg>
+  <figcaption>价格趋势清晰向上；但 2025-2026 的在职/离职分档也说明员工权益并非无条件可兑现股票。</figcaption>
+</figure>
+
+<table class="financial compact striped">
+  <thead><tr><th>日期</th><th>在职 / 员工价</th><th>离职价</th><th>来源用语及证据</th><th>变动</th></tr></thead>
+  <tbody>
+    <tr><td>2022.10</td><td>US$155.00</td><td>-</td><td>RSU，Bloomberg 内部备忘报道〔S07〕</td><td>基准</td></tr>
+    <tr><td>2023.11</td><td>US$160.00</td><td>-</td><td>shares / RSU or options，Reuters〔S08〕</td><td>+3.2%</td></tr>
+    <tr><td>2024.03 / 09</td><td>US$171 / US$181</td><td>-</td><td>Reuters 后续报道回溯〔S11〕</td><td>-</td></tr>
+    <tr><td>2025.03</td><td>US$189.90</td><td>-</td><td>美国员工回购，Reuters〔S11〕</td><td>较 2024.03 +11.1%</td></tr>
+    <tr><td>2025.10</td><td>US$200.41</td><td>US$180.37</td><td>中文媒体称期权回购〔S12〕</td><td>离职折价 10.0%</td></tr>
+    <tr class="total"><td>2026.04</td><td>US$229.50</td><td>US$201.96</td><td>中文媒体转述内部邮件〔S12〕</td><td>离职折价 12.0%</td></tr>
+  </tbody>
+</table>
+
+<div class="two-col">
+  <div class="callout"><strong>时间收益</strong><br>在职报价由 2022.10 的 US$155 升至 2026.04 的 US$229.50，累计提升 <span class="hl">48.1%</span>；由 2025.03 至 2026.04 提升 <span class="hl">20.9%</span>。</div>
+  <div class="callout"><strong>流动性折价</strong><br>2025.10 离职价格较在职低 <span class="hl">10.0%</span>；2026.04 折价扩大为 <span class="hl">12.0%</span>，说明身份条件会影响兑现值。</div>
+</div>
+<p>对员工而言，判断个人权益价值还需要授予文书、归属数量、行权或结算形式、回购资格、税务和汇兑处理。媒体所报“每股价上涨”只能回答公司提供的流动性窗口价格变化，不能替代个人可兑现测算。</p>
+
+<div class="page-break"></div>
+
+<h2>估值框架：交易锚与盈利敏感性必须同时过关</h2>
+<p>私营公司缺少连续成交市场；在没有审计现金流、净现金和完全摊薄资本结构的条件下，DCF 或每股目标价会制造精确幻觉。本文采用两个透明检验：以流动性事件标记观察已有定价，以可持续利润倍数检验上沿估值要求。</p>
+
+<div class="two-col">
+  <div>
+    <h3>方法一：流动性事件锚</h3>
+    <table class="financial compact striped">
+      <thead><tr><th>标记</th><th>权益值</th><th>用途</th></tr></thead>
+      <tbody>
+        <tr><td>2025 员工回购计划</td><td>&gt;330</td><td>内部报价下锚</td></tr>
+        <tr><td>2025 二级交易</td><td>480</td><td>报道完成交易上锚</td></tr>
+        <tr><td>2026 拟议出售</td><td>550</td><td>待确认上行情景</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:8.8pt;color:var(--stone)">单位：十亿美元；来源：Reuters〔S03, S13〕。</p>
+  </div>
+  <div>
+    <h3>方法二：利润要求</h3>
+    <table class="financial compact striped">
+      <thead><tr><th>权益值</th><th>US$40bn 利润</th><th>US$50bn 利润</th></tr></thead>
+      <tbody>
+        <tr><td>330</td><td>8.3x</td><td>6.6x</td></tr>
+        <tr><td>480</td><td>12.0x</td><td>9.6x</td></tr>
+        <tr><td>550</td><td>13.8x</td><td>11.0x</td></tr>
+      </tbody>
+    </table>
+    <p style="font-size:8.8pt;color:var(--stone)">US$40bn 为报道前三季度数字的压力测试参照；US$50bn 为报道全年展望，不代表已确认利润。</p>
+  </div>
+</div>
+
+<h3>可持续利润 / 权益倍数敏感性：单位为十亿美元</h3>
+<table class="financial striped">
+  <thead><tr><th>可持续利润情景</th><th>8x</th><th>10x</th><th>11x</th><th>读法</th></tr></thead>
+  <tbody>
+    <tr><td>US$30bn · 下行情景</td><td>240</td><td>300</td><td>330</td><td>11x 才触及员工回购标记</td></tr>
+    <tr><td>US$40bn · 中间检验</td><td>320</td><td>400</td><td>440</td><td>未覆盖 US$480bn 上锚</td></tr>
+    <tr class="total"><td>US$50bn · 报道展望</td><td>400</td><td>500</td><td>550</td><td>11x 对应拟议出售标记</td></tr>
+  </tbody>
+</table>
+
+<div class="callout">
+  <strong>观察带判定：</strong>US$330-480bn 覆盖已报道的员工流动性标记与二级交易标记。要支持 US$480bn 以上的稳定定价，市场需确认接近 US$50bn 的可持续普通股东盈利，或提供能解释 IFRS 净利润下滑的调节表。US$550bn 在交易完成前不进入基础区间。
+</div>
+
+<h3>上下行情景的量化纪律</h3>
+<table class="compact striped scenario-table">
+  <thead><tr><th>情景</th><th>触发信息</th><th>数值后果</th><th>研究动作</th></tr></thead>
+  <tbody>
+    <tr><td>下行</td><td>可持续利润仅约 US$30bn，或员工流动性恶化</td><td>8-10x 得 US$240-300bn，低于 &gt;US$330bn 标记</td><td>下修观察带并提高流动性折价</td></tr>
+    <tr><td>基准</td><td>重复交易验证 US$330-480bn，利润桥仍不完整</td><td>维持 US$330-480bn</td><td>观察 / 未评级</td></tr>
+    <tr><td>上行</td><td>拟售交易完成且利润调节支持 US$50bn 质量</td><td>US$550bn 可成为新验证点</td><td>重新设定基础上锚</td></tr>
+  </tbody>
+</table>
+
+<p>若从拟议 US$550bn 回落至 2025 员工标记 US$330bn，下降幅度为 <span class="hl">40.0%</span>；这正是把拟议报价提前视为“当前价值”所承担的可量化风险。</p>
+
+<div class="page-break"></div>
+
+<div class="final-page">
+<h2>验证节点：下一次重估取决于披露，而非标题数字</h2>
+<table class="compact striped validation-table">
+  <thead><tr><th>节点</th><th>目前状态</th><th>需获得的证据</th><th>估值影响</th></tr></thead>
+  <tbody>
+    <tr><td><strong>财务</strong></td><td>截至 2026.05.23 未检索到公开 FY2025 审计报表</td><td>收入、经营利润、IFRS 调节、SBC/优先股影响、现金流</td><td>决定利润倍数是否可用</td></tr>
+    <tr><td><strong>交易</strong></td><td>US$480bn 为报道二级交易；US$550bn 为拟议出售〔S13〕</td><td>完成状态、成交规模、股份类别与买方独立性</td><td>验证或收窄观察带</td></tr>
+    <tr><td><strong>员工</strong></td><td>2026.04 报道回购价 US$229.50 / US$201.96〔S12〕</td><td>参与范围、归属/结算、总金额、后续轮次</td><td>判断内部流动性可持续性</td></tr>
+    <tr><td><strong>美国</strong></td><td>TikTok USDS JV 已公告成立；字节保留 19.9%〔S14〕</td><td>经济权益、许可安排与对合并口径影响</td><td>影响海外增长可归属性</td></tr>
+  </tbody>
+</table>
+
+<h2>关键风险：四项都能影响员工与投资人兑现值</h2>
+<div class="risk-grid">
+  <div class="risk-item">
+    <div class="risk-label">利润口径风险 / 已显现</div>
+    <div class="risk-desc">约 US$50bn 的媒体展望与 IFRS 净利润同比下降超 70% 同时存在。没有调节表，盈利质量无法稳定定价。</div>
+  </div>
+  <div class="risk-item">
+    <div class="risk-label">交易完成风险 / 可量化</div>
+    <div class="risk-desc">US$550bn 拟议标记较 &gt;US$330bn 员工标记高约 67%；若未成交，上沿依据减弱。</div>
+  </div>
+  <div class="risk-item">
+    <div class="risk-label">员工流动性风险 / 可量化</div>
+    <div class="risk-desc">2026 年离职员工报价较在职低 12.0%。资格、归属与税务会令个人兑现价值进一步偏离标题报价。</div>
+  </div>
+  <div class="risk-item">
+    <div class="risk-label">海外结构风险 / 待量化</div>
+    <div class="risk-desc">美国 JV 使 TikTok 持股结构变化；官方公告未提供字节收入、利润或算法许可的财务衔接。</div>
+  </div>
+</div>
+
+<h2>结论与研究边界</h2>
+<p>字节 2025 年的可确认正面信号是收入全球化、员工流动性报价上行与更高二级交易标记；最重要的不确定性则是利润口径分裂。对于未上市公司，这一分裂直接限制盈利估值的置信度，也解释了为何员工回购、投资人回购和拟议股权出售需要分层读取。</p>
+<p>基于现有证据，本文将 <span class="hl">US$330-480bn</span> 作为基础权益估值观察带，将 US$550bn 保留为交易完成和盈利质量均得到验证后的上行情景。员工持有人应以自己的授予、归属、回购和税务文件为准，而不是用整体估值报道推算个人可兑现收益。</p>
+
+<div class="analyst-box">
+  <div class="analyst-label">分析师总结</div>
+  <strong>观察 / 未评级。</strong> 字节跳动未上市，不存在可公开执行的目标价。本报告以媒体报道和官方公告能支持的事实建立证据边界：经营增长成立，利润质量待调节，员工报价提供流动性信号但不等于公允市值。基础观察带 US$330-480bn；风险偏向披露不足、交易未完成和员工权益条款差异。
+</div>
+
+<h3>主要来源与用途</h3>
+<table class="compact striped">
+  <thead><tr><th>来源组</th><th>用于本文的事实</th><th>边界</th></tr></thead>
+  <tbody>
+    <tr><td>Bloomberg / Reuters〔S01-S04, S06-S11, S13〕</td><td>历史经营、回购和交易估值标记</td><td>私营公司知情人士或交易报道</td></tr>
+    <tr><td>财新〔S05〕</td><td>FY2025 地域增速、IFRS 利润及管理层回应</td><td>投资人沟通报道，非报表全文</td></tr>
+    <tr><td>IT之家经新浪转载〔S12〕</td><td>2025.10 / 2026.04 员工期权回购报价</td><td>内部邮件转述，证据降级</td></tr>
+    <tr><td>TikTok Newsroom〔S14〕</td><td>美国合资结构及字节 19.9% 持股</td><td>未披露字节财务贡献</td></tr>
+  </tbody>
+</table>
+
+<div class="report-footer">
+  <span>研究材料 · 私营公司信息受限 · 不构成投资、员工权益处置或税务建议</span>
+  <span>Winston · 2026-05-23</span>
+</div>
+</div>
+
+</body>
+</html>

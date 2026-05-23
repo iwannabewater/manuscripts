@@ -1,0 +1,10 @@
+sustainable_profit_usd_bn,multiple_x,implied_equity_value_usd_bn,scenario_purpose
+30,8,240,downside_if_IFRS_or_adjusted_profit_reconciles_lower
+30,10,300,downside_if_IFRS_or_adjusted_profit_reconciles_lower
+30,11,330,downside_reaches_employee_liquidity_marker
+40,8,320,nine_month_reported_income_reference_not_full_year_forecast
+40,10,400,mid_case_test
+40,11,440,mid_case_test
+50,8,400,Bloomberg_reported_FY2025_outlook_input
+50,10,500,Bloomberg_reported_FY2025_outlook_input
+50,11,550,Bloomberg_reported_FY2025_outlook_matches_proposed_sale_marker

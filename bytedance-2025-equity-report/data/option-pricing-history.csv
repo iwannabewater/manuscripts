@@ -1,0 +1,8 @@
+date,current_employee_usd,former_employee_usd,instrument_wording,scope,status,source_id,note
+2022-10,155.00,,restricted_stock_unit,employees,reported_offer,S07,Second employee buyback round in 2022
+2023-11,160.00,,restricted_stock_unit_or_options,non_US_and_US_employees,reported_offer,S08,Reuters describes RSUs and employee shares
+2024-03,171.00,,shares,employees,retrospective_marker,S11,Described one year later by Reuters
+2024-09,181.00,,shares,employees,retrospective_marker,S11,Described six months later by Reuters
+2025-03,189.90,,shares,US_employees,reported_offer,S11,Reuters US employee buyback
+2025-10,200.41,180.37,options,current_and_former_employees,media_reports_internal_email,S12,Chinese media terminology
+2026-04,229.50,201.96,options,current_and_former_employees,media_reports_internal_email,S12,Chinese media terminology
