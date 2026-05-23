@@ -1,0 +1,12 @@
+item,value,unit,source_or_method,notes
+current_price,94.52,USD/ADS,S07,close price on 2026-05-22
+price_target,115,USD/ADS,author estimate,weighted 60% P/E and 40% DCF
+gaap_eps_ads_2025,9.44,USD/ADS,S01,16.50 RMB per ordinary share x 4 / 6.9931
+base_case_eps_2026,9.72,USD/ADS,author estimate,3% growth from FY2025 GAAP EPS
+target_pe_multiple,11.0,x,author estimate,base case target multiple
+pe_method_target,107,USD/ADS,author estimate,FY2026E EPS x target P/E
+normalized_fcfe_start,780,亿元人民币,author estimate,below FY2025 free cash flow estimate
+wacc,12.0,%,author estimate,base DCF discount rate
+terminal_growth,2.5,%,author estimate,base DCF terminal growth
+net_financial_buffer,3841,亿元人民币,author estimate,cash/restricted cash/short-term investments/other noncurrent financial assets less total liabilities
+dcf_method_target,128,USD/ADS,author estimate,base DCF result

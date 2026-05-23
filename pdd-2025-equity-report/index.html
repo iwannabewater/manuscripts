@@ -8,16 +8,15 @@
 <head>
 <meta charset="UTF-8">
 <title>PDD Holdings · 2025 年报个股研报</title>
-<meta name="author" content="Kami">
+<meta name="author" content="Winston">
 <meta name="description" content="PDD Holdings 2025 年报显示收入仍增长，但成本、履约和营销投入使利润率回落；本报告给出增持评级与 US$115 目标价。">
 <meta name="keywords" content="PDD Holdings, 拼多多, 2025年报, 估值, 电商">
-<meta name="generator" content="Kami">
+<meta name="generator" content="Winston">
 <style>
   /* Regular weight */
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype"),
-       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
   }
@@ -25,8 +24,7 @@
   /* Bold weight - W05 for all bold variants */
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype"),
-       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
   }
@@ -213,15 +211,15 @@
     margin-right: 3pt;
   }
 
-  /* ========== TABLE (kami-table) ========== */
-  table, .kami-table {
+  /* ========== TABLE ========== */
+  table, .report-table {
     width: 100%;
     border-collapse: collapse;
     font-size: 9.5pt;
     margin: 8pt 0;
     break-inside: avoid;
   }
-  table th, .kami-table th {
+  table th, .report-table th {
     text-align: left;
     font-weight: 500;
     color: var(--dark-warm);
@@ -229,21 +227,21 @@
     border-bottom: 1pt solid var(--border);
     background: transparent;
   }
-  table td, .kami-table td {
+  table td, .report-table td {
     padding: 4pt 8pt;
     border-bottom: 0.3pt solid var(--border-soft);
     vertical-align: top;
   }
-  table.compact th, .kami-table.compact th { padding: 3pt 6pt; font-size: 8pt; }
-  table.compact td, .kami-table.compact td { padding: 2pt 6pt; font-size: 8pt; line-height: 1.4; }
-  table.financial td:not(:first-child), .kami-table.financial td:not(:first-child) {
+  table.compact th, .report-table.compact th { padding: 3pt 6pt; font-size: 8pt; }
+  table.compact td, .report-table.compact td { padding: 2pt 6pt; font-size: 8pt; line-height: 1.4; }
+  table.financial td:not(:first-child), .report-table.financial td:not(:first-child) {
     text-align: right; font-variant-numeric: tabular-nums;
   }
-  table.financial th:not(:first-child), .kami-table.financial th:not(:first-child) { text-align: right; }
-  table.striped tbody tr:nth-child(even) td, .kami-table.striped tbody tr:nth-child(even) td {
+  table.financial th:not(:first-child), .report-table.financial th:not(:first-child) { text-align: right; }
+  table.striped tbody tr:nth-child(even) td, .report-table.striped tbody tr:nth-child(even) td {
     background: var(--ivory);
   }
-  table .total td, .kami-table .total td {
+  table .total td, .report-table .total td {
     font-weight: 500; border-top: 1pt solid var(--brand); border-bottom: none; color: var(--near-black);
   }
 
@@ -625,52 +623,60 @@
 
 <h2>利润桥：2025 的利润下滑来自成本/费用斜率</h2>
 <figure>
-  <svg viewBox="0 0 680 318" width="100%" height="318" role="img" aria-label="PDD 2024 至 2025 经营利润累计瀑布图">
-    <rect x="0" y="0" width="680" height="318" fill="#faf9f5" rx="8"/>
-    <text x="46" y="36" font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="17" fill="#141413">从 2024 到 2025 的经营利润桥</text>
-    <text x="46" y="56" font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="12" fill="#6b6a64">单位：亿元人民币；柱形按累计经营利润连接</text>
-    <line x1="54" y1="246" x2="636" y2="246" stroke="#e8e6dc" stroke-width="1"/>
-    <line x1="54" y1="183" x2="636" y2="183" stroke="#e8e6dc" stroke-width="0.8"/>
-    <line x1="54" y1="120" x2="636" y2="120" stroke="#e8e6dc" stroke-width="0.8"/>
-    <g fill="none" stroke="#b8b5aa" stroke-width="0.8" stroke-dasharray="3 4">
-      <line x1="124" y1="132" x2="160" y2="132"/>
-      <line x1="224" y1="92" x2="260" y2="92"/>
-      <line x1="324" y1="129" x2="360" y2="129"/>
-      <line x1="424" y1="144" x2="460" y2="144"/>
-      <line x1="524" y1="144" x2="560" y2="144"/>
+  <svg viewBox="0 0 680 268" width="100%" height="268" role="img" aria-label="PDD 2024 至 2025 经营利润桥接算式图">
+    <rect x="0" y="0" width="680" height="268" fill="#faf9f5" rx="8"/>
+    <text x="42" y="34" font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="17" fill="#141413">从 2024 到 2025 的经营利润桥</text>
+    <text x="42" y="54" font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="12" fill="#6b6a64">单位：亿元人民币；OP = operating profit，经营利润</text>
+
+    <g font-family="TsangerJinKai02, Source Han Serif SC, serif" text-anchor="middle">
+      <rect x="34" y="88" width="84" height="76" fill="#1B365D" rx="4"/>
+      <text x="76" y="116" font-size="11" fill="#faf9f5">2024 OP</text>
+      <text x="76" y="141" font-size="19" fill="#faf9f5">1084</text>
+
+      <rect x="138" y="88" width="76" height="76" fill="#D0DCE9" rx="4"/>
+      <text x="176" y="114" font-size="11" fill="#1B365D">收入增量</text>
+      <text x="176" y="141" font-size="18" fill="#1B365D">+380</text>
+
+      <rect x="234" y="88" width="78" height="76" fill="#d8d5ca" stroke="#504e49" stroke-width="0.8" rx="4"/>
+      <text x="273" y="114" font-size="11" fill="#504e49">收入成本</text>
+      <text x="273" y="141" font-size="18" fill="#504e49">-349</text>
+
+      <rect x="332" y="88" width="70" height="76" fill="#d8d5ca" stroke="#504e49" stroke-width="0.8" rx="4"/>
+      <text x="367" y="114" font-size="11" fill="#504e49">营销</text>
+      <text x="367" y="141" font-size="18" fill="#504e49">-140</text>
+
+      <rect x="422" y="88" width="58" height="76" fill="#d8d5ca" stroke="#504e49" stroke-width="0.8" rx="4"/>
+      <text x="451" y="114" font-size="11" fill="#504e49">管理</text>
+      <text x="451" y="141" font-size="18" fill="#504e49">-6</text>
+
+      <rect x="500" y="88" width="58" height="76" fill="#d8d5ca" stroke="#504e49" stroke-width="0.8" rx="4"/>
+      <text x="529" y="114" font-size="11" fill="#504e49">研发</text>
+      <text x="529" y="141" font-size="18" fill="#504e49">-38</text>
+
+      <rect x="578" y="88" width="70" height="76" fill="#1B365D" rx="4"/>
+      <text x="613" y="116" font-size="11" fill="#faf9f5">2025 OP</text>
+      <text x="613" y="141" font-size="19" fill="#faf9f5">931</text>
     </g>
-    <rect x="70" y="132" width="54" height="114" fill="#1B365D"/>
-    <rect x="170" y="92" width="54" height="40" fill="#D0DCE9"/>
-    <rect x="270" y="92" width="54" height="37" fill="#d8d5ca" stroke="#504e49" stroke-width="0.8"/>
-    <rect x="370" y="129" width="54" height="15" fill="#d8d5ca" stroke="#504e49" stroke-width="0.8"/>
-    <rect x="470" y="144" width="54" height="1.2" fill="#d8d5ca" stroke="#504e49" stroke-width="0.8"/>
-    <rect x="570" y="144" width="54" height="4" fill="#d8d5ca" stroke="#504e49" stroke-width="0.8"/>
-    <rect x="620" y="148" width="42" height="98" fill="#1B365D"/>
-    <g font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="11" text-anchor="middle">
-      <text x="97" y="126" fill="#1B365D">1084</text>
-      <text x="197" y="86" fill="#1B365D">+380</text>
-      <text x="297" y="86" fill="#504e49">-349</text>
-      <text x="397" y="123" fill="#504e49">-140</text>
-      <text x="497" y="138" fill="#504e49">-6</text>
-      <text x="597" y="138" fill="#504e49">-38</text>
-      <text x="641" y="142" fill="#1B365D">931</text>
+
+    <g stroke="#b8b5aa" stroke-width="1.1" fill="none">
+      <path d="M118 126 H137"/>
+      <path d="M214 126 H233"/>
+      <path d="M312 126 H331"/>
+      <path d="M402 126 H421"/>
+      <path d="M480 126 H499"/>
+      <path d="M558 126 H577"/>
     </g>
-    <g font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="10.5" fill="#504e49" text-anchor="middle">
-      <text x="97" y="270">2024 OP</text>
-      <text x="197" y="270">收入</text>
-      <text x="297" y="270">收入成本</text>
-      <text x="397" y="270">营销</text>
-      <text x="497" y="270">管理</text>
-      <text x="597" y="270">研发</text>
-      <text x="641" y="270">2025 OP</text>
+    <g font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="20" fill="#6b6a64" text-anchor="middle">
+      <text x="128" y="132">+</text>
+      <text x="224" y="132">−</text>
+      <text x="322" y="132">−</text>
+      <text x="412" y="132">−</text>
+      <text x="490" y="132">−</text>
+      <text x="568" y="132">=</text>
     </g>
-    <g font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="10.5" fill="#6b6a64">
-      <text x="32" y="250">0</text>
-      <text x="20" y="187">600</text>
-      <text x="14" y="124">1200</text>
-      <rect x="156" y="292" width="12" height="4" fill="#D0DCE9"/><text x="174" y="298">利润增量</text>
-      <rect x="252" y="290" width="12" height="8" fill="#d8d5ca" stroke="#504e49" stroke-width="0.8"/><text x="270" y="298">利润拖累</text>
-    </g>
+
+    <rect x="42" y="194" width="596" height="34" fill="#f5f4ed" stroke="#e8e6dc" stroke-width="0.8" rx="3"/>
+    <text x="340" y="216" font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="14" fill="#141413" text-anchor="middle">1084 + 380 - 349 - 140 - 6 - 38 = 931</text>
   </svg>
   <figcaption>2025 收入增量几乎被收入成本增加抵消，营销与研发投入进一步压低经营利润率。</figcaption>
 </figure>
@@ -1044,7 +1050,7 @@
 <!-- ========== FOOTER ========== -->
 <div class="report-footer">
   <span>研究示例 · 非投资建议</span>
-  <span>Kami · 2026-05-23</span>
+  <span>Winston · 2026-05-23</span>
 </div>
 
 </body>

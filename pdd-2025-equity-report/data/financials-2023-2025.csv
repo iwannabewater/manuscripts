@@ -1,0 +1,19 @@
+metric,unit,FY2023,FY2024,FY2025,source,notes
+revenue,亿元人民币,2476,3938,4318,S01,audited revenue
+revenue_growth,%,,59.0,9.7,S01,calculated from audited revenue
+operating_profit,亿元人民币,587,1084,931,S01,audited operating profit
+operating_margin,%,23.7,27.5,21.6,S01,calculated from audited operating profit and revenue
+net_income,亿元人民币,600,1124,978,S01,audited net income
+net_margin,%,24.2,28.5,22.7,S01,calculated from audited net income and revenue
+operating_cash_flow,亿元人民币,942,1219,1069,S01,audited operating cash flow
+diluted_eps_per_ordinary_share,人民币,10.29,19.00,16.50,S01,ADS equals four ordinary shares
+online_marketing_services_and_others,亿元人民币,1535,1979,2178,S01,revenue split
+transaction_services,亿元人民币,941,1959,2141,S01,revenue split
+cost_of_revenues,亿元人民币,,1539,1888,S01,used in operating profit bridge
+sales_and_marketing_expenses,亿元人民币,,1113,1253,S01,used in operating profit bridge
+research_and_development_expenses,亿元人民币,,127,165,S01,used in operating profit bridge
+general_and_administrative_expenses,亿元人民币,,76,82,S01,used in operating profit bridge
+non_gaap_net_income,亿元人民币,,,1122,S02,unaudited non-GAAP result
+interest_and_investment_income_net,亿元人民币,,,256,S01,used for profit quality discussion
+effective_tax_rate,%,,,18.2,S01,calculated from income tax expense and profit before tax
+active_merchants,百万,,15.8,16.8,S01,active merchants disclosed in annual report
