@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<!-- ==================================================================
+     EQUITY REPORT TEMPLATE · parchment design system
+     2-3 页 A4 个股研报 / 估值分析 / 投资备忘
+     结构：标题区 -> 核心指标 -> 图表分析 -> 竞争格局 -> 风险 -> 总结
+     ================================================================== -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>小红书 · FY2025 业绩与期权估值观察</title>
+<meta name="author" content="Winston">
+<meta name="description" content="小红书尚未公开 FY2025 经审计报表；公开材料显示利润预测、二手股权估值与员工期权价格同步重估，但证据等级并不相同。">
+<meta name="keywords" content="小红书, FY2025, 期权回购, 二级份额估值, 私营公司估值">
+<meta name="generator" content="Kami">
+<style>
+  /* Regular weight */
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  /* Bold weight - W05 for all bold variants */
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 16mm 18mm 18mm 18mm;
+    background: #f5f4ed;
+
+    @bottom-center {
+      content: counter(page) "  ·  小红书 FY2025 估值观察";
+      font-family: "TsangerJinKai02", "Source Han Serif SC",
+                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 9pt;
+      color: #6b6a64;
+    }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #f5f4ed;
+    --ivory:     #faf9f5;
+    --near-black:#141413;
+    --dark-warm: #3d3d3a;
+    --olive:     #504e49;
+    --stone:     #6b6a64;
+    --brand:     #1B365D;
+    --border:    #e8e6dc;
+    --border-soft:#e5e3d8;
+    --tag-bg:    #E4ECF5;
+    --positive:  #1B365D;
+    --negative:  #6b6a64;
+    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --sans: var(--serif);
+
+    --rhythm-module:  14pt;
+    --rhythm-section: 18pt;
+  }
+
+  html, body { background: var(--parchment); }
+
+  @media screen {
+    body { max-width: 210mm; margin: 0 auto; padding: 16mm 18mm 18mm 18mm; }
+  }
+
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 10pt;
+    line-height: 1.5;
+    letter-spacing: 0.3pt;
+    widows: 3;
+    orphans: 3;
+  }
+
+  strong { font-weight: 500; }
+  .hl { color: var(--brand); font-weight: 500; }
+
+  /* ========== HEADER ========== */
+  .report-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: var(--rhythm-module);
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .ticker-block { flex: 1; }
+  .ticker-eyebrow {
+    font-size: 9pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+  .ticker-name {
+    font-family: var(--serif);
+    font-size: 24pt;
+    font-weight: 500;
+    color: var(--near-black);
+    line-height: 1.15;
+    margin-bottom: 4pt;
+  }
+  .ticker-sub {
+    font-size: 10pt;
+    color: var(--olive);
+    line-height: 1.4;
+  }
+  .price-block {
+    text-align: right;
+    padding-top: 4pt;
+  }
+  .price-current {
+    font-family: var(--serif);
+    font-size: 28pt;
+    font-weight: 500;
+    color: var(--near-black);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+  .price-change {
+    font-size: 10pt;
+    font-weight: 500;
+    margin-top: 2pt;
+    font-variant-numeric: tabular-nums;
+  }
+  .price-change.up { color: var(--positive); }
+  .price-change.down { color: var(--negative); }
+  .price-date {
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 2pt;
+  }
+
+  /* ========== METRICS ========== */
+  .metrics {
+    display: flex;
+    gap: 14pt;
+    margin-bottom: 16pt;
+    padding: 6pt 0;
+    border-top: 0.3pt dotted var(--border);
+    border-bottom: 0.3pt dotted var(--border);
+  }
+  .metric {
+    flex: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 4pt;
+  }
+  .metric-value {
+    font-family: var(--serif);
+    font-size: 16pt;
+    font-weight: 500;
+    color: var(--brand);
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .metric-label {
+    font-size: 9pt;
+    color: var(--olive);
+    line-height: 1.3;
+  }
+
+  /* ========== SECTIONS ========== */
+  h2 {
+    font-family: var(--serif);
+    font-size: 16pt;
+    font-weight: 500;
+    color: var(--near-black);
+    margin: 18pt 0 6pt 0;
+    break-after: avoid;
+  }
+
+  h3 {
+    font-size: 13pt;
+    font-weight: 500;
+    color: var(--dark-warm);
+    margin: 12pt 0 4pt 0;
+    break-after: avoid;
+  }
+
+  p { margin: 0 0 8pt 0; line-height: 1.5; widows: 2; orphans: 2; }
+
+  ul, ol {
+    margin: 4pt 0 8pt 0;
+    padding-left: 18pt;
+    line-height: 1.5;
+  }
+  ul li::marker { color: var(--brand); }
+  ol li::marker { color: var(--brand); font-weight: 500; }
+
+  /* ========== TAG ========== */
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--brand);
+    font-size: 9pt;
+    font-weight: 500;
+    padding: 1pt 6pt;
+    border-radius: 3pt;
+    margin-right: 3pt;
+  }
+
+  /* ========== TABLE (kami-table) ========== */
+  table, .kami-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin: 8pt 0;
+    break-inside: avoid;
+  }
+  table th, .kami-table th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--dark-warm);
+    padding: 5pt 8pt;
+    border-bottom: 1pt solid var(--border);
+    background: transparent;
+  }
+  table td, .kami-table td {
+    padding: 4pt 8pt;
+    border-bottom: 0.3pt solid var(--border-soft);
+    vertical-align: top;
+  }
+  table.compact th, .kami-table.compact th { padding: 3pt 6pt; font-size: 8pt; }
+  table.compact td, .kami-table.compact td { padding: 2pt 6pt; font-size: 8pt; line-height: 1.4; }
+  table.thesis-table th:first-child, table.thesis-table td:first-child {
+    width: 48pt;
+    white-space: nowrap;
+  }
+  table.validation-table th:first-child, table.validation-table td:first-child {
+    width: 42pt;
+    white-space: nowrap;
+  }
+  table.financial td:not(:first-child), .kami-table.financial td:not(:first-child) {
+    text-align: right; font-variant-numeric: tabular-nums;
+  }
+  table.financial th:not(:first-child), .kami-table.financial th:not(:first-child) { text-align: right; }
+  table.striped tbody tr:nth-child(even) td, .kami-table.striped tbody tr:nth-child(even) td {
+    background: var(--ivory);
+  }
+  table .total td, .kami-table .total td {
+    font-weight: 500; border-top: 1pt solid var(--brand); border-bottom: none; color: var(--near-black);
+  }
+
+  /* ========== CALLOUT ========== */
+  .callout {
+    background: var(--ivory);
+    border-left: 2pt solid var(--brand);
+    padding: 8pt 12pt;
+    border-radius: 3pt;
+    margin: 10pt 0;
+    line-height: 1.5;
+    break-inside: avoid;
+  }
+  .callout blockquote,
+  .callout .quote {
+    border-left: none;
+    padding-left: 0;
+    margin: 6pt 0;
+    color: var(--olive);
+  }
+  .callout blockquote:first-child,
+  .callout .quote:first-child { margin-top: 0; }
+  .callout blockquote:last-child,
+  .callout .quote:last-child  { margin-bottom: 0; }
+
+  /* ========== FIGURE ========== */
+  figure {
+    margin: 12pt 0;
+    break-inside: avoid;
+  }
+  figcaption {
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 4pt;
+    text-align: center;
+  }
+
+  /* ========== RISK MATRIX ========== */
+  .risk-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10pt;
+    margin: 8pt 0;
+  }
+  .risk-item {
+    padding: 6pt 10pt;
+    background: var(--ivory);
+    border-radius: 3pt;
+    break-inside: avoid;
+  }
+  .risk-label {
+    font-size: 9pt;
+    font-weight: 500;
+    color: var(--brand);
+    margin-bottom: 2pt;
+  }
+  .risk-desc {
+    font-size: 9pt;
+    color: var(--olive);
+    line-height: 1.4;
+  }
+
+  /* ========== TWO-COLUMN ========== */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16pt;
+  }
+
+  /* ========== ANALYST SUMMARY ========== */
+  .analyst-box {
+    background: var(--ivory);
+    border-left: 1.4pt solid var(--brand);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 12pt 0;
+    break-inside: avoid;
+  }
+
+  /* ========== CHART PLACEHOLDER ========== */
+  .chart-placeholder {
+    background: var(--ivory);
+    border-radius: 4pt;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--stone);
+    font-size: 9pt;
+  }
+  .analyst-label {
+    font-size: 9pt;
+    color: var(--brand);
+    letter-spacing: 0.5pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+
+  /* ========== FOOTER ========== */
+  .report-footer {
+    margin-top: 16pt;
+    padding-top: 6pt;
+    border-top: 0.3pt dotted var(--border);
+    font-size: 9pt;
+    color: var(--stone);
+    display: flex;
+    justify-content: space-between;
+  }
+  .final-page h2 { margin-top: 11pt; }
+  .final-page h3 { margin-top: 8pt; }
+  .final-page p { margin-bottom: 6pt; line-height: 1.42; }
+  .final-page table { margin: 5pt 0; }
+  .final-page .risk-grid { gap: 6pt; margin: 5pt 0; }
+  .final-page .risk-item { padding: 4pt 8pt; }
+  .final-page .analyst-box { margin: 8pt 0; padding: 7pt 12pt; }
+  .final-page .report-footer { margin-top: 9pt; }
+
+  .page-break { break-before: page; }
+</style>
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<div class="report-header">
+  <div class="ticker-block">
+    <div class="ticker-eyebrow">Equity Report · 私营公司权益价值观察</div>
+    <div class="ticker-name">小红书 <span style="font-size: 14pt; color: var(--stone);">rednote</span></div>
+    <div class="ticker-sub">内容社区与电商 · 未上市 · 观察 / 未评级 · FY2025 业绩及员工期权专题</div>
+  </div>
+  <div class="price-block">
+    <div class="price-current">US$31-50bn</div>
+    <div class="price-change up">报道估值标记区间</div>
+    <div class="price-date">核验日：2026-05-23</div>
+  </div>
+</div>
+
+<!-- ========== METRICS ========== -->
+<div class="metrics">
+  <div class="metric">
+    <div class="metric-value">US$3.0bn</div>
+    <div class="metric-label">FY2025 利润预测<br>彭博 · 2025.09</div>
+  </div>
+  <div class="metric">
+    <div class="metric-value">US$31bn</div>
+    <div class="metric-label">GSR 文件隐含估值<br>截至 2025.06</div>
+  </div>
+  <div class="metric">
+    <div class="metric-value">US$50bn</div>
+    <div class="metric-label">单笔老股出售报道<br>2025 年末</div>
+  </div>
+  <div class="metric">
+    <div class="metric-value">US$25.5</div>
+    <div class="metric-label">在职回购价 / 股<br>2026.05</div>
+  </div>
+</div>
+
+<!-- ========== INVESTMENT THESIS ========== -->
+<h2>结论：价格上行是真信号，财务确定性还未跟上</h2>
+<p>我们的差异化判断是：小红书的重估故事不能简化成“利润三倍、估值五百亿美元”。可核验材料显示三条曲线同时上行：彭博报道公司向投资者给出的 FY2025 利润预测为 <span class="hl">US$3.0bn</span>；基于金沙江创投基金文件的隐含权益估值从 2025 年 3 月的 US$26bn 升至 6 月的 <span class="hl">US$31bn</span>；媒体披露的在职员工期权回购价从 2025 年春季 US$11.5 升至 2026 年 5 月 <span class="hl">US$25.5</span>。〔S04-S06, S09-S10〕</p>
+<p>但小红书尚未上市，也未公开 FY2025 经审计报表、股本结构、现金流或分部收入。US$50bn 来自 2025 年末一笔老股出售的媒体报道，不等于融资定价，更不等于可随时成交的公共市值。我们不给出买卖评级或“目标价”，而将 <strong>US$31-42bn</strong> 作为在利润预测成立前提下、更能反映证据折价的基础观察区间；US$50bn 仅作为上行情景的交易标记。</p>
+
+<div class="callout">
+  一句话判断：商业化与员工流动性安排已经把估值预期推上台阶，但在正式报表或招股文件出现以前，期权价格的翻倍应被读作“信心和留才成本上升”，而非“可兑现股价已经翻倍”。
+</div>
+
+<table class="compact striped thesis-table">
+  <thead>
+    <tr>
+      <th>主线</th>
+      <th>已核查证据</th>
+      <th>研判含义</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>盈利</strong></td>
+      <td>2023 净利润 US$0.5bn；2024 预计超 US$1bn；2025 预测 US$3bn</td>
+      <td>盈利预期增强；后两年未审计</td>
+    </tr>
+    <tr>
+      <td><strong>需求</strong></td>
+      <td>2025.08 公司提供数据称 MAU 超 3.5 亿，每月寻求购买用户 1.7 亿</td>
+      <td>需求入口成立，仍缺 GMV / 费率</td>
+    </tr>
+    <tr>
+      <td><strong>重估</strong></td>
+      <td>2024.07 老股估值 US$17bn；2025.06 文件隐含 US$31bn；年底出售报道 US$50bn</td>
+      <td>流动性存在；证据等级不同</td>
+    </tr>
+    <tr>
+      <td><strong>折价</strong></td>
+      <td>无年度公开报表、无充分摊薄股数、无 IPO 时间表；2025.09 受网信处置</td>
+      <td>回购价不可等同股权公允值</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="page-break"></div>
+
+<!-- ========== PERFORMANCE DISCLOSURES ========== -->
+<h2>业绩披露链：2025 是预测跃迁年，不是已审计财年</h2>
+<p>小红书作为私营公司不承担上市公司式定期报告义务。公开材料中的“业绩”来自知情人士所见财务数据或公司向投资者给出的预测。能够稳健下结论的是盈利预期变化，而不是收入结构、自由现金流或单位经济模型。</p>
+
+<figure>
+  <svg viewBox="0 0 680 292" width="100%" height="292" role="img" aria-label="小红书 2022 至 2025 利润披露轨迹折线图">
+    <rect x="0" y="0" width="680" height="292" fill="#faf9f5" rx="8"/>
+    <text x="48" y="32" font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="17" fill="#141413">利润披露轨迹：从首次盈利到三十亿美元预测</text>
+    <text x="48" y="52" font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="11" fill="#6b6a64">单位：十亿美元；2022-2023 为媒体披露历史数，2024-2025 为报道的投资者预测/更新</text>
+    <g font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="10" fill="#6b6a64">
+      <line x1="80" y1="224" x2="628" y2="224" stroke="#e8e6dc" stroke-width="1"/>
+      <line x1="80" y1="176" x2="628" y2="176" stroke="#e8e6dc" stroke-width="0.8"/>
+      <line x1="80" y1="124" x2="628" y2="124" stroke="#e8e6dc" stroke-width="0.8"/>
+      <line x1="80" y1="76" x2="628" y2="76" stroke="#e8e6dc" stroke-width="0.8"/>
+      <text x="48" y="228">0</text><text x="36" y="180">1.0</text><text x="36" y="128">2.0</text><text x="36" y="80">3.0</text>
+    </g>
+    <polyline points="128,236 280,200" fill="none" stroke="#504e49" stroke-width="2"/>
+    <polyline points="280,200 432,176 584,76" fill="none" stroke="#1B365D" stroke-width="2" stroke-dasharray="5 4"/>
+    <g>
+      <circle cx="128" cy="236" r="4" fill="#504e49"/>
+      <circle cx="280" cy="200" r="4" fill="#504e49"/>
+      <circle cx="432" cy="176" r="4" fill="#faf9f5" stroke="#1B365D" stroke-width="2"/>
+      <circle cx="584" cy="76" r="4" fill="#1B365D"/>
+    </g>
+    <g font-family="TsangerJinKai02, Source Han Serif SC, serif" text-anchor="middle">
+      <text x="128" y="256" font-size="11" fill="#504e49">2022</text><text x="128" y="220" font-size="11" fill="#504e49">-0.2</text>
+      <text x="280" y="256" font-size="11" fill="#504e49">2023</text><text x="280" y="188" font-size="11" fill="#504e49">0.5</text>
+      <text x="432" y="256" font-size="11" fill="#504e49">2024E*</text><text x="432" y="164" font-size="11" fill="#1B365D">&gt;1.0</text>
+      <text x="584" y="256" font-size="11" fill="#504e49">2025E*</text><text x="584" y="64" font-size="12" fill="#1B365D">3.0</text>
+    </g>
+    <text x="80" y="280" font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="10" fill="#6b6a64">* E 表示报道中的预测或投资者更新数字，并非已公布审计结果。来源：FT / Bloomberg〔S01-S04〕</text>
+  </svg>
+  <figcaption>从 2023 首次盈利到 2025 利润预测提高至 US$3bn，重估有盈利叙事支点；是否实现仍需正式披露确认。</figcaption>
+</figure>
+
+<table class="financial compact striped">
+  <thead>
+    <tr>
+      <th>期间</th>
+      <th>收入</th>
+      <th>净利润</th>
+      <th>净利率</th>
+      <th>证据性质</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>FY2022</td>
+      <td>约 US$2.0bn</td>
+      <td>-US$0.2bn</td>
+      <td>n/m</td>
+      <td>FT 据获悉数据回溯披露〔S01〕</td>
+    </tr>
+    <tr>
+      <td>FY2023</td>
+      <td>US$3.7bn</td>
+      <td>US$0.5bn</td>
+      <td>13.5%</td>
+      <td>FT 据四名知情人士披露〔S01〕</td>
+    </tr>
+    <tr>
+      <td>1Q2024</td>
+      <td>&gt;US$1.0bn</td>
+      <td>US$0.2bn</td>
+      <td>&lt;20.0%</td>
+      <td>FT 据两名知情人士披露〔S02〕</td>
+    </tr>
+    <tr>
+      <td>FY2024E</td>
+      <td>未披露</td>
+      <td>&gt;US$1.0bn</td>
+      <td>不可算</td>
+      <td>彭博称公司告知投资者〔S03〕</td>
+    </tr>
+    <tr class="total">
+      <td>FY2025E</td>
+      <td>未披露</td>
+      <td>US$3.0bn</td>
+      <td>不可算</td>
+      <td>彭博称公司更新投资者预测〔S04〕</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>2025 的商业化支点：平台给出需求数据，尚未给出财务桥</h3>
+<table class="compact striped">
+  <thead><tr><th>日期</th><th>经营信号</th><th>能证明什么</th><th>未能证明什么</th></tr></thead>
+  <tbody>
+    <tr><td>2025.08</td><td>MAU 超 3.5 亿；每月寻求购买用户 1.7 亿</td><td>消费决策需求规模可见</td><td>广告收入、佣金率与 GMV 尚不可核验〔S11〕</td></tr>
+    <tr><td>2026.04</td><td>平台称 Rise100 商家 2025 GMV 同比增长超 2.6 倍</td><td>头部商家样本交易增长</td><td>不能代表全平台 GMV 或利润贡献〔S12〕</td></tr>
+    <tr><td>2026.04</td><td>公司提供数据称 2025 图书零售 GMV 增长超 30%</td><td>细分类目存在转化增量</td><td>不能外推至全部类目〔S13〕</td></tr>
+  </tbody>
+</table>
+<p>因此，2025 年的正确表述是“利润预测和商业化证据同步增强”，而不是“年报证明利润已经达到 US$3bn”。在报告中混用两者，会把预测当作业绩，把样本商家增长当作公司收入。</p>
+
+<div class="page-break"></div>
+
+<!-- ========== VALUATION HISTORY ========== -->
+<h2>权益估值迁移：谷底后的反弹已经超过上一轮高点</h2>
+<p>小红书的“估值”不是屏幕上连续成交的市值，而是不同交易时点的权益定价。2021 年融资给出超过 US$20bn 的投后估值；2023 年老股交易约 US$14bn，反映市场低点；到 2025 年末的单笔老股出售报道，标记值达到 US$50bn。交易类型与透明度必须与数字并列阅读。</p>
+<figure>
+  <svg viewBox="0 0 680 316" width="100%" height="316" role="img" aria-label="小红书 2021 至 2025 权益估值报道时间线">
+    <rect x="0" y="0" width="680" height="316" fill="#faf9f5" rx="8"/>
+    <text x="48" y="32" font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="17" fill="#141413">权益估值标记：融资、基金文件与老股交易</text>
+    <text x="48" y="52" font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="11" fill="#6b6a64">单位：十亿美元；末端 US$50bn 为单笔二手出售报道，证据强度低于 GSR 文件映射</text>
+    <g font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="10" fill="#6b6a64">
+      <line x1="72" y1="240" x2="632" y2="240" stroke="#e8e6dc" stroke-width="1"/>
+      <line x1="72" y1="200" x2="632" y2="200" stroke="#e8e6dc" stroke-width="0.8"/>
+      <line x1="72" y1="152" x2="632" y2="152" stroke="#e8e6dc" stroke-width="0.8"/>
+      <line x1="72" y1="112" x2="632" y2="112" stroke="#e8e6dc" stroke-width="0.8"/>
+      <line x1="72" y1="64" x2="632" y2="64" stroke="#e8e6dc" stroke-width="0.8"/>
+      <text x="40" y="244">10</text><text x="40" y="204">20</text><text x="40" y="160">30</text><text x="40" y="116">40</text><text x="40" y="72">50</text>
+    </g>
+    <polyline points="104,200 192,224 280,212 368,200 456,172 544,148" fill="none" stroke="#1B365D" stroke-width="2"/>
+    <line x1="544" y1="148" x2="608" y2="64" stroke="#1B365D" stroke-width="2" stroke-dasharray="5 4"/>
+    <g fill="#1B365D">
+      <circle cx="104" cy="200" r="4"/><circle cx="192" cy="224" r="4"/><circle cx="280" cy="212" r="4"/>
+      <circle cx="368" cy="200" r="4"/><circle cx="456" cy="172" r="4"/><circle cx="544" cy="148" r="4"/>
+    </g>
+    <circle cx="608" cy="64" r="4" fill="#faf9f5" stroke="#1B365D" stroke-width="2"/>
+    <g font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="10.5" text-anchor="middle">
+      <text x="104" y="188" fill="#1B365D">20+</text><text x="104" y="260" fill="#504e49">2021.11</text>
+      <text x="192" y="216" fill="#1B365D">14</text><text x="192" y="260" fill="#504e49">2023.09</text>
+      <text x="280" y="200" fill="#1B365D">17</text><text x="280" y="260" fill="#504e49">2024.07</text>
+      <text x="368" y="188" fill="#1B365D">≥20</text><text x="368" y="260" fill="#504e49">2025.01</text>
+      <text x="456" y="160" fill="#1B365D">26</text><text x="456" y="260" fill="#504e49">2025.03</text>
+      <text x="544" y="136" fill="#1B365D">31</text><text x="544" y="260" fill="#504e49">2025.06</text>
+      <text x="608" y="52" fill="#1B365D">50*</text><text x="608" y="260" fill="#504e49">2025 年末</text>
+    </g>
+    <text x="72" y="288" font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="10" fill="#6b6a64">* 单笔老股出售报道，不作融资或整体可成交价格认定。来源：FT / Bloomberg / Reuters / 投资界等〔S05-S08, S15〕</text>
+  </svg>
+  <figcaption>从 2024 年 7 月 US$17bn 到文件支持的 2025 年 6 月 US$31bn，升幅为 82%；US$50bn 标记需要更严格的流动性折价。</figcaption>
+</figure>
+
+<table class="financial compact striped">
+  <thead><tr><th>时点</th><th>权益估值</th><th>交易/披露口径</th><th>较前标记</th><th>可信层级</th></tr></thead>
+  <tbody>
+    <tr><td>2021.11</td><td>&gt;US$20bn</td><td>融资，媒体报道公司回应以老股东增持为主</td><td>基准</td><td>B</td></tr>
+    <tr><td>2023.09</td><td>约 US$14bn</td><td>红杉中国购买老股，后续媒体回溯</td><td>-30%</td><td>B-</td></tr>
+    <tr><td>2024.07</td><td>US$17bn</td><td>现有股份出售，FT 报道</td><td>+21%</td><td>B+</td></tr>
+    <tr><td>2025.01</td><td>至少 US$20bn</td><td>股东洽售股份，彭博报道并由 Reuters 转述</td><td>+18%</td><td>B</td></tr>
+    <tr><td>2025.03</td><td>US$26bn</td><td>GSR IV 截至 3 月文件隐含值</td><td>+30%</td><td>A-</td></tr>
+    <tr><td>2025.06</td><td>US$31bn</td><td>同一基金截至 6 月文件隐含值</td><td>+19%</td><td>A-</td></tr>
+    <tr class="total"><td>2025 年末</td><td>US$50bn</td><td>头部美元基金部分老股出售，投资界报道</td><td>+61%</td><td>C+</td></tr>
+  </tbody>
+</table>
+<p>可信层级为本文判断：A 表示存在基金文件映射；B 表示主流媒体据交易知情人士披露；C 表示单一媒体获悉单笔交易。层级衡量可复核程度，不评价交易真实性。</p>
+
+<div class="page-break"></div>
+
+<!-- ========== OPTIONS ========== -->
+<h2>期权价格：员工兑现窗口扩大，但与公司估值不可互换</h2>
+<p>2025 年以来的期权动作同时包含“授予参考价”和“回购价”。前者影响新授予权益的账面价差；后者是在职或离职员工实际获流动性的报价。媒体报道披露行权价维持 <span class="hl">US$2/股</span>，但未披露完全摊薄股份总数、各批次条款和回购总额，因此不能用每股期权价格反推出 US$31bn 或 US$50bn。</p>
+
+<figure>
+  <svg viewBox="0 0 680 296" width="100%" height="296" role="img" aria-label="小红书 2025 至 2026 员工期权授予参考价与回购价格变化">
+    <rect x="0" y="0" width="680" height="296" fill="#faf9f5" rx="8"/>
+    <text x="48" y="32" font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="17" fill="#141413">期权参考价与回购价同时上移</text>
+    <text x="48" y="52" font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="11" fill="#6b6a64">单位：美元 / 股；离散媒体披露，不构成统一时间序列的公司公告</text>
+    <g stroke="#e8e6dc" stroke-width="0.8">
+      <line x1="80" y1="220" x2="620" y2="220"/><line x1="80" y1="168" x2="620" y2="168"/>
+      <line x1="80" y1="120" x2="620" y2="120"/><line x1="80" y1="72" x2="620" y2="72"/>
+    </g>
+    <g font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="10" fill="#6b6a64">
+      <text x="52" y="224">0</text><text x="44" y="176">10</text><text x="44" y="124">20</text><text x="44" y="72">30</text>
+    </g>
+    <polyline points="120,152 280,132 432,96 580,72" fill="none" stroke="#1B365D" stroke-width="2"/>
+    <polyline points="120,164 432,116 580,92" fill="none" stroke="#504e49" stroke-width="2"/>
+    <polyline points="120,172 432,132 580,116" fill="none" stroke="#6b6a64" stroke-width="2" stroke-dasharray="5 4"/>
+    <g fill="#1B365D"><circle cx="120" cy="152" r="4"/><circle cx="280" cy="132" r="4"/><circle cx="432" cy="96" r="4"/><circle cx="580" cy="72" r="4"/></g>
+    <g fill="#504e49"><circle cx="120" cy="164" r="4"/><circle cx="432" cy="116" r="4"/><circle cx="580" cy="92" r="4"/></g>
+    <g fill="#faf9f5" stroke="#6b6a64" stroke-width="2"><circle cx="120" cy="172" r="4"/><circle cx="432" cy="132" r="4"/><circle cx="580" cy="116" r="4"/></g>
+    <g font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="10" fill="#504e49" text-anchor="middle">
+      <text x="120" y="244">2025.03/04</text><text x="280" y="244">2025.06</text><text x="432" y="244">2025.10/11</text><text x="580" y="244">2026.03/05</text>
+    </g>
+    <g font-family="TsangerJinKai02, Source Han Serif SC, serif" font-size="10.5" fill="#504e49">
+      <rect x="100" y="264" width="16" height="4" fill="#1B365D"/><text x="120" y="272">授予参考价</text>
+      <rect x="244" y="264" width="16" height="4" fill="#504e49"/><text x="264" y="272">在职回购价</text>
+      <line x1="392" y1="268" x2="408" y2="268" stroke="#6b6a64" stroke-width="2" stroke-dasharray="4 3"/><text x="416" y="272">离职回购价</text>
+    </g>
+  </svg>
+  <figcaption>回购价与授予参考价近似同幅提升，说明员工流动性安排跟随估值预期调整；折价和条款差异仍限制其外推能力。</figcaption>
+</figure>
+
+<table class="financial compact striped">
+  <thead><tr><th>类别</th><th>2025 春季</th><th>2025 年中/末</th><th>2026 春季</th><th>累计变化</th></tr></thead>
+  <tbody>
+    <tr><td>期权授予参考价</td><td>US$13.5 · 3 月</td><td>US$18 · 6 月；US$25 · 10 月</td><td>US$30 · 3 月</td><td>+122.2%</td></tr>
+    <tr><td>在职员工回购价</td><td>US$11.5 · 3/4 月</td><td>US$21.2 · 11 月</td><td>US$25.5 · 5 月</td><td>+121.7%</td></tr>
+    <tr><td>离职员工回购价</td><td>US$9.4 · 3/4 月</td><td>US$17.5 · 11 月</td><td>US$21.0 · 5 月</td><td>+123.4%</td></tr>
+  </tbody>
+</table>
+
+<table class="compact striped">
+  <thead><tr><th>对员工价值的读法</th><th>计算</th><th>约束</th></tr></thead>
+  <tbody>
+    <tr><td>最新授予价与行权价价差</td><td>US$30 - US$2 = <strong>US$28/股</strong></td><td>账面价差；须满足归属、行权和流动性条件</td></tr>
+    <tr><td>在职最新回购折价</td><td>US$25.5 / US$30 = <strong>85%</strong></td><td>相对授予参考价折价 15%</td></tr>
+    <tr><td>离职最新回购折价</td><td>US$21 / US$30 = <strong>70%</strong></td><td>相对授予参考价折价 30%，体现离职流动性约束</td></tr>
+  </tbody>
+</table>
+<p>媒体还报道新入职员工归属节奏由“50% / 25% / 25%”调整为四年“15% / 25% / 25% / 35%”。若该安排适用于有关批次，前期可兑现权益更少，期权价格上涨与留任约束是同一政策组合的两面。〔S09-S10〕</p>
+
+<div class="page-break"></div>
+
+<!-- ========== VALUATION ========== -->
+<h2>估值框架：交易锚与盈利敏感性应当交叉验证</h2>
+<p>私营公司的估值不能假装成可交易目标价。本文使用两种方法：第一种观察真实发生或被基金文件映射的老股定价；第二种把彭博报道的 FY2025 利润预测作为输入，测试利润兑现程度和权益倍数的组合结果。没有自由现金流、净现金和摊薄股本披露，本文不构造 DCF。</p>
+
+<div class="two-col">
+  <div>
+    <h3>方法一：交易标记</h3>
+    <table class="financial compact striped">
+      <thead><tr><th>证据</th><th>标记值</th><th>处理</th></tr></thead>
+      <tbody>
+        <tr><td>GSR 文件 · 2025.06</td><td>US$31bn</td><td>可复核基础锚</td></tr>
+        <tr><td>单笔老股报道 · 2025 年末</td><td>US$50bn</td><td>上行情景，不作基准</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div>
+    <h3>方法二：盈利倍数</h3>
+    <table class="financial compact striped">
+      <thead><tr><th>权益价值</th><th>FY2025E 利润</th><th>隐含 P/E</th></tr></thead>
+      <tbody>
+        <tr><td>US$31bn</td><td>US$3.0bn</td><td>10.3x</td></tr>
+        <tr><td>US$42bn</td><td>US$3.0bn</td><td>14.0x</td></tr>
+        <tr><td>US$50bn</td><td>US$3.0bn</td><td>16.7x</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<h3>盈利兑现 / P/E 敏感性：单位为十亿美元权益价值</h3>
+<table class="financial striped">
+  <thead><tr><th>FY2025 可确认净利润</th><th>10x</th><th>12x</th><th>14x</th><th>17x</th></tr></thead>
+  <tbody>
+    <tr><td>US$2.0bn · 下行情景</td><td>20</td><td>24</td><td>28</td><td>34</td></tr>
+    <tr><td>US$2.5bn · 中间情景</td><td>25</td><td>30</td><td>35</td><td>42.5</td></tr>
+    <tr class="total"><td>US$3.0bn · 报道预测</td><td>30</td><td>36</td><td>42</td><td>51</td></tr>
+  </tbody>
+</table>
+<p>倍数不是来自已上市同业的机械套用，而是用交易标记反推的观察区间：US$31bn 大致对应 10.3x 预测利润；US$50bn 大致对应 16.7x。考虑后者只由单笔二手交易报道支持，且 FY2025 利润尚未正式确认，我们以文件支持的 US$31bn 为下锚、14x 的 US$42bn 为上锚，形成 <span class="hl">US$31-42bn</span> 基础观察区间。</p>
+
+<div class="callout">
+  估值纪律：若未来公开材料确认 FY2025 净利润接近 US$3bn、并有多方交易验证 US$50bn，基础区间可以向上移；若可确认利润只有 US$2bn，则在同样 10-14x 框架下的权益值为 US$20-28bn。
+</div>
+
+<h3>为何不采用传统可比公司表</h3>
+<p>小红书没有公开收入拆分、现金流、股权激励费用和净现金；任何与上市社交或电商公司的 EV/Revenue、P/E 对比都会混入不可见的口径差。相比给出貌似精确的横向排名，本文仅采用能够回溯到小红书自身交易与利润预测的范围估值，并明确其不确定性。</p>
+
+<div class="page-break"></div>
+
+<!-- ========== CATALYSTS AND RISKS ========== -->
+<div class="final-page">
+<h2>验证节点：把传闻变成可投资信息，需要三道确认</h2>
+<table class="compact striped validation-table">
+  <thead><tr><th>节点</th><th>目前状态及日期</th><th>需要验证的量化项目</th><th>对区间的影响</th></tr></thead>
+  <tbody>
+    <tr><td><strong>财报</strong></td><td>截至 2026.05.23 未检索到公开报表或招股书；无公告日期</td><td>净利润是否接近 US$3bn；收入、现金流、SBC 和净现金</td><td>确认后才可建立可复核模型</td></tr>
+    <tr><td><strong>交易</strong></td><td>最近报道为 2025 年末部分老股出售，2026.02 披露</td><td>多买方、相近价位、交易规模与股份口径</td><td>重复验证 US$50bn 可提高上行情景可信度</td></tr>
+    <tr><td><strong>回购</strong></td><td>2026.05 报道：在职 US$25.5、离职 US$21</td><td>覆盖人数、金额、下一轮价位及归属条件</td><td>区分兑现能力与留才信号</td></tr>
+  </tbody>
+</table>
+
+<h2>风险：最重的风险不是竞争叙事，而是信息不可定价</h2>
+<div class="risk-grid">
+  <div class="risk-item">
+    <div class="risk-label">利润未兑现 / 可量化</div>
+    <div class="risk-desc">若可确认利润为 US$2bn 而非 US$3bn，10-14x 情景权益值降至 US$20-28bn，较基础区间下移约三分之一。</div>
+  </div>
+  <div class="risk-item">
+    <div class="risk-label">二手交易代表性 / 可量化</div>
+    <div class="risk-desc">US$50bn 与 GSR 文件支持的 US$31bn 相差 US$19bn；回落至后者即比最高标记低 38%。</div>
+  </div>
+  <div class="risk-item">
+    <div class="risk-label">内容监管 / 事件已发生</div>
+    <div class="risk-desc">2025.09.11 网信部门采取约谈、限期改正、警告等措施；无公开报表，影响无法量化。〔S14〕</div>
+  </div>
+  <div class="risk-item">
+    <div class="risk-label">期权流动性 / 条款折价</div>
+    <div class="risk-desc">2026.05 回购价相对 US$30 参考价，在职折价 15%、离职折价 30%；兑现受身份和条款限制。</div>
+  </div>
+</div>
+
+<h2>结论与研究边界</h2>
+<p>小红书从 2023 年盈利、2024 年利润过十亿美元预测，到 2025 年三十亿美元预测，已经改变了市场给私营内容平台定价的方式。能够用文件和多家媒体交叉支撑的证据，足以说明权益价值和员工回购价格显著上移；不足以说明 US$50bn 是稳定可成交市值，或 FY2025 预测已成为审计利润。</p>
+<p>本报告的结论因此保持克制：在公司正式披露财务报表、股本与交易安排前，<span class="hl">US$31-42bn</span> 是基于现有证据的观察区间，US$50bn 是需后续交易验证的上行情景。对于期权持有人，最关键的变量不是报道中的最高估值，而是回购可参与范围、归属安排、行权成本和税务处理。</p>
+
+<!-- ========== ANALYST SUMMARY ========== -->
+<div class="analyst-box">
+  <div class="analyst-label">分析师总结</div>
+  <strong>观察 / 未评级。</strong> 小红书为未上市公司，不存在可公开执行的目标价。我们的基础权益估值观察区间为 US$31-42bn，依赖 FY2025 净利润接近媒体所报 US$3bn、且业务风险未显著恶化的关键假设。上行情景为更多独立交易验证 US$50bn；下行情景为利润低于预测或监管、流动性折价扩大。本文不构成证券、私募份额或员工期权的交易建议。
+</div>
+
+<h3>主要来源与口径</h3>
+<table class="compact striped">
+  <thead><tr><th>来源组</th><th>用于本文的事实</th><th>边界</th></tr></thead>
+  <tbody>
+    <tr><td>FT / Bloomberg〔S01-S06〕</td><td>2022-2025 利润披露链；2024、2025 估值与预测</td><td>知情人士或基金文件，非公司财报</td></tr>
+    <tr><td>交易媒体〔S07-S08, S15〕</td><td>2021 融资、2025.01 洽售及年末老股出售报道</td><td>末端单笔交易标记单列处理</td></tr>
+    <tr><td>36氪 / IT之家〔S09-S10〕</td><td>期权参考价、行权价与员工回购价</td><td>未见公司公开方案全文</td></tr>
+    <tr><td>平台数据转述 / CAC〔S11-S14〕</td><td>商业化运营信号；内容监管处置</td><td>运营样本不代替财务报表</td></tr>
+  </tbody>
+</table>
+
+<!-- ========== FOOTER ========== -->
+<div class="report-footer">
+  <span>研究示例 · 私营公司信息受限 · 不构成投资或期权处置建议</span>
+  <span>Winston · 2026-05-23</span>
+</div>
+</div>
+
+</body>
+</html>

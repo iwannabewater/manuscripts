@@ -1,0 +1,17 @@
+period,metric,value,unit,status,disclosure_date,source,notes
+FY2022,revenue,2.0,USD_bn,reported_historical_approximately,2024-03-24,S01,FT retrospective figure via people briefed on non-public numbers
+FY2022,net_profit,-0.2,USD_bn,reported_historical_approximately,2024-03-24,S01,FT retrospective figure
+FY2023,revenue,3.7,USD_bn,reported_historical,2024-03-24,S01,FT figure from four people briefed on numbers
+FY2023,revenue_growth,85,percent,reported_historical,2024-03-24,S01,FT reported year-on-year growth
+FY2023,net_profit,0.5,USD_bn,reported_historical,2024-03-24,S01,First reported profitable year
+FY2023,net_margin,13.5,percent,author_calculation,2026-05-23,S01,0.5 divided by 3.7
+FY2023,monthly_active_users,312,million,reported_historical,2024-03-24,S01,Investor-shared number reported by FT
+1Q2024,revenue,1.0,USD_bn,reported_greater_than,2024-10-13,S02,Reported as just over US$1bn
+1Q2024,net_profit,0.2,USD_bn,reported_historical,2024-10-13,S02,Non-public number reported by FT
+1Q2024,net_margin,20.0,percent,author_upper_bound,2026-05-23,S02,Less than 20 percent because reported revenue exceeds US$1bn
+FY2024,net_profit,1.0,USD_bn,reported_projection_greater_than,2024-12-12,S03,Bloomberg reported company told investors profit was on track to exceed US$1bn
+FY2025,net_profit,3.0,USD_bn,reported_projection,2025-09-05,S04,Bloomberg reported updated full-year projection
+2025-08,monthly_active_users,350,million,company_data_reported_greater_than,2025-08-29,S11,Xiaohongshu supplied to Beijing Business Daily
+2025-08,monthly_shopping_seeking_users,170,million,company_data_reported,2025-08-29,S11,Xiaohongshu supplied to Beijing Business Daily
+FY2025,rise100_merchant_gmv_growth,2.6,times,company_sample_reported_greater_than,2026-04-10,S12,Representative merchant cohort rather than platform total
+FY2025,book_retail_gmv_growth,30,percent,company_category_reported_greater_than,2026-04-23,S13,Book category only

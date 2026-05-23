@@ -1,0 +1,15 @@
+scenario,confirmable_fy2025_net_profit_usd_bn,pe_multiple_x,implied_equity_value_usd_bn,source_or_method,notes
+downside_10x,2.0,10,20.0,author_sensitivity,Profit realization below media-reported projection
+downside_12x,2.0,12,24.0,author_sensitivity,Profit realization below media-reported projection
+downside_14x,2.0,14,28.0,author_sensitivity,Profit realization below media-reported projection
+downside_17x,2.0,17,34.0,author_sensitivity,Profit realization below media-reported projection
+mid_10x,2.5,10,25.0,author_sensitivity,Intermediate profit scenario
+mid_12x,2.5,12,30.0,author_sensitivity,Intermediate profit scenario
+mid_14x,2.5,14,35.0,author_sensitivity,Intermediate profit scenario
+mid_17x,2.5,17,42.5,author_sensitivity,Intermediate profit scenario
+reported_projection_10x,3.0,10,30.0,S04_and_author_sensitivity,Bloomberg profit projection multiplied by observation multiple
+reported_projection_12x,3.0,12,36.0,S04_and_author_sensitivity,Bloomberg profit projection multiplied by observation multiple
+reported_projection_14x,3.0,14,42.0,S04_and_author_sensitivity,Upper end of base observation range
+reported_projection_17x,3.0,17,51.0,S04_and_author_sensitivity,Approximately corroborates US$50bn reported mark
+gsr_mark_implied_pe,3.0,10.3,31.0,S04;S06,US$31bn divided by US$3bn forecast
+late_2025_mark_implied_pe,3.0,16.7,50.0,S04;S08,US$50bn divided by US$3bn forecast

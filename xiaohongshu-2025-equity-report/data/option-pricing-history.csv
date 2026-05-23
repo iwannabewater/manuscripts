@@ -1,0 +1,12 @@
+reference_date,price_type,employee_status,usd_per_share,source,status,change_from_first_percent,notes
+2025-03,grant_reference_price,not_applicable,13.5,S09,reported,0.0,Reported option grant/reference price
+2025-06,grant_reference_price,not_applicable,18.0,S09,reported,33.3,Reported option grant/reference price
+2025-10,grant_reference_price,not_applicable,25.0,S09,reported,85.2,Strike price reported unchanged at US$2
+2026-03,grant_reference_price,not_applicable,30.0,S10,reported,122.2,Latest reference price stated by media covering May repurchase
+2025-04,repurchase_price,current_employee,11.5,S10,reported,0.0,First large-scale repurchase reported as March/April by different retellings
+2025-11,repurchase_price,current_employee,21.2,S10,reported,84.3,Second large-scale repurchase
+2026-05,repurchase_price,current_employee,25.5,S10,reported,121.7,Reported as 85 percent of US$30 latest reference price
+2025-04,repurchase_price,former_employee,9.4,S10,reported,0.0,First large-scale repurchase
+2025-11,repurchase_price,former_employee,17.5,S10,reported,86.2,Second large-scale repurchase
+2026-05,repurchase_price,former_employee,21.0,S10,reported,123.4,Reported as 70 percent of US$30 latest reference price
+2025-10,strike_price,not_applicable,2.0,S09,reported,,Reported unchanged at the time of US$25 reference price

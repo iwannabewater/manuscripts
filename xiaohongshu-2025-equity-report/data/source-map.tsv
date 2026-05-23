@@ -1,0 +1,16 @@
+id	title	date	url	type	used_for
+S01	Financial Times: China's Instagram-like app Xiaohongshu makes first profit (reproduced by Chin@Strategy)	2024-03-24	https://www.chinastrategy.org/2024/03/24/chinas-instagram-like-app-xiaohongshu-makes-first-profit/	credible_media_reproduction	FY2022 and FY2023 revenue/net profit; MAU
+S02	Financial Times: China's Instagram-like Xiaohongshu hits $1bn in quarterly sales	2024-10-13	https://www.ftchinese.com/story/001104444	credible_media	1Q2024 revenue/net profit; July 2024 stake sale background
+S03	Bloomberg: China's Instagram-Style Xiaohongshu Crosses $1 Billion in Profit	2024-12-12	https://www.bloomberg.com/news/articles/2024-12-12/china-s-instagram-style-xiaohongshu-crosses-1-billion-in-profit	credible_media	FY2024 profit projection
+S04	Bloomberg: TikTok Rival Xiaohongshu Expects Profit to Triple to $3 Billion	2025-09-05	https://www.bloomberg.com/news/articles/2025-09-05/tiktok-rival-xiaohongshu-expects-profit-to-triple-to-3-billion	credible_media	FY2025 profit projection
+S05	Bloomberg: Chinese Social Media App Xiaohongshu's $26 Billion Valuation Bolsters GSR Fund	2025-06-04	https://www.bloomberg.com/news/articles/2025-06-04/chinese-social-media-app-xiaohongshu-s-26-billion-valuation-bolsters-gsr-fund	credible_media_fund_document	March 2025 implied valuation
+S06	Bloomberg: China's Xiaohongshu Hits $31 Billion Value in GSR Books	2025-09-04	https://www.bloomberg.com/news/articles/2025-09-04/instagram-style-xiaohongshu-hits-31-billion-value-in-gsr-books	credible_media_fund_document	June 2025 implied valuation
+S07	Reuters: Stake sale talks value China's TikTok-rival Xiaohongshu at $20 billion, Bloomberg News reports	2025-01-16	https://www.investing.com/news/stock-market-news/stake-sale-talks-value-chinas-tiktokrival-xiaohongshu-at-20-billion-bloomberg-news-reports-3815947	credible_media	January 2025 stake-sale talks
+S08	投资界: 独家｜小红书卖老股，估值3500亿	2026-02-04	https://news.pedaily.cn/202602/560768.shtml	industry_media	Late-2025 secondary share sale at reported US$50bn valuation
+S09	36氪: 小红书期权授予价上调，25美元/股	2025-10-18	https://www.36kr.com/newsflashes/3513416945769348	industry_media	Grant reference prices and strike price
+S10	IT之家: 消息称小红书启动新一轮期权回购	2026-05-11	https://www.ithome.com/0/948/609.htm	industry_media	Employee repurchase price history and latest reference price
+S11	北京商报经东方财富转载: 小红书月活跃用户已超过3.5亿	2025-08-29	https://finance.eastmoney.com/a/202508293499873555.html	company_data_reported_by_media	MAU and shopping-seeking users
+S12	亿邦动力经新浪科技转载: 小红书首次系统发布电商经营方法论	2026-04-10	https://finance.sina.com.cn/tech/roll/2026-04-10/doc-inhtxqkp8528843.shtml	company_data_reported_by_media	Rise100 merchant GMV growth in 2025
+S13	上海证券报: 1.84亿人在小红书读书	2026-04-23	https://www.cnstock.com/commonDetail/683057	company_data_reported_by_media	Book retail GMV growth in 2025
+S14	中央网信办: 网信部门依法查处小红书平台破坏网络生态案件	2025-09-11	https://www.cac.gov.cn/2025-09/11/c_1759309511257125.htm	government_notice	Content governance enforcement risk
+S15	新浪科技: 新一轮5亿美元融资后估值200亿美金 小红书：以老股东增持为主	2021-11-08	https://finance.sina.com.cn/tech/2021-11-08/doc-iktzscyy4363571.shtml	contemporaneous_media	November 2021 funding valuation and company response
