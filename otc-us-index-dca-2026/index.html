@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<!-- 场外定投美国宽基研究报告 · A4 阅读版 -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>场外定投美国宽基：纳斯达克 100 与标普 500</title>
+<meta name="author" content="Winston">
+<meta name="description" content="中国内地投资者通过人民币 QDII 场外份额定投纳斯达克 100 与标普 500 的产品筛选、期限策略与执行清单">
+<meta name="keywords" content="QDII, 纳斯达克100, 标普500, 场外定投, 基金筛选, Winston">
+<style>
+  /* Regular weight */
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  /* Bold weight - W05 for all bold variants */
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 20mm 22mm 22mm 22mm;
+    background: #f5f4ed;
+
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02", "Source Han Serif SC",
+                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+
+    @bottom-center {
+      content: counter(page) "  ·  场外定投美国宽基";
+      font-family: "TsangerJinKai02", "Source Han Serif SC",
+                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 9pt;
+      color: #6b6a64;
+    }
+  }
+
+  @page:first {
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #f5f4ed;
+    --ivory:     #faf9f5;
+    --near-black:#141413;
+    --dark-warm: #3d3d3a;
+    --olive:     #504e49;
+    --stone:     #6b6a64;
+    --brand:     #1B365D;
+    --border:    #e8e6dc;
+    --border-soft:#e5e3d8;
+    --tag-bg:    #E4ECF5;
+    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --sans: var(--serif);
+
+    --rhythm-module:  14pt;
+    --rhythm-section: 18pt;
+  }
+
+  html, body { background: var(--parchment); }
+
+  @media screen {
+    body { max-width: 210mm; margin: 0 auto; padding: 20mm 22mm 22mm 22mm; }
+  }
+
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 10.5pt;
+    line-height: 1.55;
+    letter-spacing: 0.3pt;
+    widows: 3;
+    orphans: 3;
+  }
+
+  .sans {
+    font-family: var(--sans);
+  }
+
+  /* ========== COVER ========== */
+  .cover {
+    min-height: 240mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40mm 0 0 0;
+    break-after: page;
+  }
+  .cover-eyebrow {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 18pt;
+  }
+  .cover-title {
+    font-size: 36pt;
+    font-weight: 500;
+    color: var(--near-black);
+    line-height: 1.15;
+    letter-spacing: 0.3pt;
+    margin-bottom: 16pt;
+  }
+  .cover-sub {
+    font-family: var(--sans);
+    font-size: 14pt;
+    color: var(--olive);
+    line-height: 1.5;
+    max-width: 85%;
+    margin-bottom: 30pt;
+  }
+  .cover-meta {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--stone);
+    line-height: 1.5;
+  }
+  .cover-meta strong {
+    color: var(--dark-warm);
+    font-weight: 500;
+  }
+
+  /* ========== TOC（目录）========== */
+  .toc { break-after: page; }
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: var(--rhythm-module);
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6pt 0;
+    border-bottom: 0.3pt dotted var(--border);
+    font-size: 11pt;
+  }
+  .toc-item:last-of-type { border-bottom: none; }
+  .toc-num {
+    color: var(--brand);
+    font-weight: 500;
+    min-width: 30pt;
+  }
+  .toc-title {
+    flex: 1;
+    color: var(--near-black);
+    padding-left: 6pt;
+  }
+  .toc-page {
+    color: var(--stone);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ========== HEADINGS ========== */
+  h1 {
+    font-size: 22pt;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 10pt 0;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    color: var(--near-black);
+    break-after: avoid;
+  }
+
+  h2 {
+    font-size: 16pt;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 24pt 0 8pt 0;
+    color: var(--near-black);
+    break-after: avoid;
+    string-set: section-title content();
+  }
+
+  h3 {
+    font-size: 13pt;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 18pt 0 6pt 0;
+    color: var(--dark-warm);
+    break-after: avoid;
+  }
+
+  .chapter-num {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+  }
+
+  /* ========== PARAGRAPHS ========== */
+  p {
+    margin: 0 0 10pt 0;
+    line-height: 1.55;
+    color: var(--near-black);
+    widows: 2;
+    orphans: 2;
+  }
+
+  .lead {
+    font-size: 12pt;
+    line-height: 1.55;
+    color: var(--dark-warm);
+    margin-bottom: var(--rhythm-module);
+  }
+
+  .hl { color: var(--brand); font-weight: 500; }
+  strong { font-weight: 500; }
+
+  /* ========== LISTS ========== */
+  ul, ol {
+    margin: 6pt 0 10pt 0;
+    padding-left: 20pt;
+    line-height: 1.55;
+  }
+  ul li::marker { color: var(--brand); }
+  ol li::marker { color: var(--brand); font-weight: 500; }
+
+  /* ========== QUOTE ========== */
+  blockquote, .quote {
+    border-left: 2pt solid var(--brand);
+    margin: 12pt 0;
+    padding: 4pt 0 4pt 16pt;
+    color: var(--olive);
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  blockquote .cite, .quote .cite {
+    display: block;
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 4pt;
+  }
+
+  /* ========== CODE ========== */
+  /* Mono first for English glyphs, then CJK fallback so Chinese comments
+     inside code/pre render correctly. A mono-only chain causes missing
+     glyphs rendered as "?" or missing-glyph boxes in WeasyPrint when the system lacks
+     a mono font with CJK coverage. */
+  code {
+    font-family: "JetBrains Mono", "SF Mono", Consolas,
+                 "TsangerJinKai02", "Source Han Serif SC",
+                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-size: 9pt;
+    background: var(--ivory);
+    padding: 1pt 4pt;
+    border-radius: 2pt;
+    color: var(--dark-warm);
+  }
+  pre {
+    font-family: "JetBrains Mono", "SF Mono", Consolas,
+                 "TsangerJinKai02", "Source Han Serif SC",
+                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-size: 9pt;
+    line-height: 1.5;
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 10pt 0;
+    white-space: pre-wrap;
+    color: var(--near-black);
+    break-inside: avoid;
+  }
+  pre code { background: transparent; padding: 0; font-size: inherit; }
+
+  /* ========== DATA TABLE ========== */
+  table, .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin: 12pt 0;
+    break-inside: avoid;
+  }
+  table th, .data-table th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--dark-warm);
+    padding: 6pt 8pt;
+    border-bottom: 1pt solid var(--border);
+    background: transparent;
+  }
+  table td, .data-table td {
+    padding: 5pt 8pt;
+    border-bottom: 0.3pt solid var(--border-soft);
+    vertical-align: top;
+  }
+  table.compact th, .data-table.compact th { padding: 3pt 6pt; font-size: 8pt; }
+  table.compact td, .data-table.compact td { padding: 2pt 6pt; font-size: 8pt; line-height: 1.4; }
+  table.financial td:not(:first-child), .data-table.financial td:not(:first-child) {
+    text-align: right; font-variant-numeric: tabular-nums;
+  }
+  table.financial th:not(:first-child), .data-table.financial th:not(:first-child) { text-align: right; }
+  table.striped tbody tr:nth-child(even) td, .data-table.striped tbody tr:nth-child(even) td {
+    background: var(--ivory);
+  }
+  table .total td, .data-table .total td {
+    font-weight: 500; border-top: 1pt solid var(--brand); border-bottom: none; color: var(--near-black);
+  }
+
+  /* ========== CALLOUT ========== */
+  .callout {
+    background: var(--ivory);
+    border-left: 2pt solid var(--brand);
+    padding: 10pt 14pt;
+    border-radius: 3pt;
+    margin: 12pt 0;
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  .callout blockquote,
+  .callout .quote {
+    border-left: none;
+    padding-left: 0;
+    margin: 6pt 0;
+    color: var(--olive);
+  }
+  .callout blockquote:first-child,
+  .callout .quote:first-child { margin-top: 0; }
+  .callout blockquote:last-child,
+  .callout .quote:last-child  { margin-bottom: 0; }
+
+  .takeaway {
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .takeaway-label {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--brand);
+    letter-spacing: 0.5pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+
+  /* ========== TAG ========== */
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--brand);
+    font-family: var(--sans);
+    font-size: 9pt;
+    font-weight: 500;
+    padding: 1pt 6pt;
+    border-radius: 3pt;
+    margin-right: 4pt;
+  }
+
+  /* ========== FIGURE ========== */
+  figure {
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  figure img {
+    max-width: 100%;
+    border-radius: 4pt;
+  }
+  figcaption {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 6pt;
+    text-align: center;
+  }
+
+  /* ========== EXECUTIVE SUMMARY ========== */
+  .exec-summary {
+    background: var(--ivory);
+    border-left: 1.4pt solid var(--brand);
+    border-radius: 6pt;
+    padding: 16pt 20pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .exec-summary h2 {
+    margin-top: 0;
+    font-size: 13pt;
+  }
+
+  .metrics {
+    display: flex;
+    gap: 10pt;
+    margin: 12pt 0 16pt;
+    break-inside: avoid;
+  }
+  .metric {
+    flex: 1;
+    background: var(--ivory);
+    border-top: 2pt solid var(--brand);
+    padding: 9pt 10pt 8pt;
+    border-radius: 2pt;
+  }
+  .metric .value {
+    color: var(--brand);
+    font-size: 20pt;
+    font-weight: 500;
+    line-height: 1.15;
+  }
+  .metric .label {
+    font-family: var(--sans);
+    color: var(--stone);
+    font-size: 8.5pt;
+    line-height: 1.35;
+    margin-top: 3pt;
+  }
+  .source {
+    color: var(--stone);
+    font-size: 8.5pt;
+    line-height: 1.45;
+  }
+  .small {
+    color: var(--stone);
+    font-size: 9pt;
+    line-height: 1.45;
+  }
+  .decision {
+    border: 1pt solid var(--border);
+    border-radius: 4pt;
+    padding: 10pt 13pt;
+    margin: 10pt 0;
+    break-inside: avoid;
+  }
+  .decision h3 { margin-top: 0; color: var(--brand); }
+  .bar-label {
+    font-family: var(--sans);
+    font-size: 12px;
+  }
+  .bar-value {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+  }
+  a { color: var(--brand); text-decoration: none; }
+
+  /* ========== CHAPTER BREAK ========== */
+  .chapter { break-before: page; }
+</style>
+</head>
+<body>
+<section class="cover">
+  <div>
+    <div class="cover-eyebrow">研究报告 · QDII 场外基金 · 2026</div>
+    <div class="cover-title">场外定投美国宽基<br>纳斯达克 100 与标普 500</div>
+    <div class="cover-sub">中国内地投资者的人民币份额筛选、长期积累与短期资金决策框架</div>
+  </div>
+  <div class="cover-meta">
+    <strong>Winston</strong><br>
+    第一版 · 资料核至 2026 年 5 月 25 日<br>
+    公开资料研究，不构成个性化投资建议或收益承诺
+  </div>
+</section>
+
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">先说结论：买什么，为什么</span><span class="toc-page">结论</span></div>
+  <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">边界：内地居民的合规场外通道</span><span class="toc-page">范围</span></div>
+  <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">指数：核心配置与成长倾斜</span><span class="toc-page">标的</span></div>
+  <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">产品筛选：限额、费用与可执行性</span><span class="toc-page">选择</span></div>
+  <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">长期持有：积累资金的方案</span><span class="toc-page">长期</span></div>
+  <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">短期持有：先管住用途风险</span><span class="toc-page">短期</span></div>
+  <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">执行清单与风险审阅</span><span class="toc-page">落地</span></div>
+  <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">来源、术语与研究限制</span><span class="toc-page">附录</span></div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">01 · Decision Brief</div>
+  <h1>先说结论：买什么，为什么</h1>
+  <p class="lead">在境内合规销售渠道买人民币场外 QDII 份额，产品是否还能按计划买入，比纸面上低几个基点更先决定策略能否执行。截至 <span class="hl">2026 年 5 月 25 日</span>，两只具备清晰标的和可核验日限额的主执行份额如下。</p>
+
+  <div class="metrics">
+    <div class="metric"><div class="value">3,000 元</div><div class="label">广发纳指 100ETF 联接人民币 F<br>021778 · 单账户单日定投/申购上限</div></div>
+    <div class="metric"><div class="value">2,000 元</div><div class="label">博时标普 500ETF 联接 E（人民币）<br>018738 · 单账户单日定投/申购上限</div></div>
+    <div class="metric"><div class="value">70 / 30</div><div class="label">长期基准示例<br>标普 500 / 纳斯达克 100</div></div>
+  </div>
+
+  <table class="striped">
+    <thead><tr><th>目标</th><th>主执行份额</th><th>选择依据</th><th>关键复核项</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>纳斯达克 100</td>
+        <td><strong>广发纳指 100ETF 联接（QDII）人民币 F</strong><br><code>021778</code></td>
+        <td>直接联接目标 ETF；自 2026-02-04 起日累计上限 3,000 元，额度可支撑一般月度投入。[R11-R12]</td>
+        <td>页面展示管理费 0.80%、托管费 0.20%、销售服务费 0.18%；下单前复核费率及限额公告。</td>
+      </tr>
+      <tr>
+        <td>标普 500</td>
+        <td><strong>博时标普 500ETF 联接 E（人民币）</strong><br><code>018738</code></td>
+        <td>自 2026-04-10 起日累计上限 2,000 元；高于同公告中 A、C 人民币份额的 100 元限额。[R14]</td>
+        <td>合同销售服务费 0.10%/年；年报及当前展示页披露优惠期折后 0.01%/年，优惠不可视为永久。[R15-R17]</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="exec-summary">
+    <h2>期限直接改变答案</h2>
+    <p><strong>长期积累资金</strong>：以标普 500 为核心、纳斯达克 100 为倾斜，基准示例为 <span class="hl">70% / 30%</span>，一年复核一次或偏离目标五个百分点时用新增资金校正。</p>
+    <p><strong>短期确定用途资金</strong>：若三年内要用于首付、学费或刚性支出，这两类股票 QDII 的合理配置比例为 <span class="hl">0%</span>。短期“最佳收益”首先要避免在用钱时同时承受权益回撤和美元兑人民币波动。</p>
+  </div>
+  <p class="source">限额证据：广发基金公告（生效日 2026-02-04）；博时基金公告转载全文（生效日 2026-04-10）。费率优惠依据：博时基金 2025 年年度报告。完整链接见第 08 章及 <code>sources.md</code>。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">02 · Legal Access</div>
+  <h1>边界：内地居民的合规场外通道</h1>
+  <p class="lead">本文的“场外”只指在境内获准销售的公募基金人民币份额，通过基金管理人或持牌销售机构申购、定投和赎回，不讨论境外券商开户或跨境汇款路径。</p>
+
+  <h2>为什么限定为 QDII</h2>
+  <p>证监会第 46 号令定义了合格境内机构投资者：经批准在境内募集资金，以资产组合方式投资境外证券市场的基金管理公司、证券公司等机构。基金资产由具有资格的银行托管，申购、赎回和资金汇出入处于监管和托管链路中。[R1]</p>
+  <p>2026 年 5 月 22 日，证监会等八部门发布整治非法跨境证券期货基金经营活动方案，明确引导境内投资者通过 <strong>QDII</strong>、港股通、跨境理财通等合法渠道开展境外投资，并对境外机构在境内非法营销、开户和资金划转服务提出处置要求。[R2]</p>
+
+  <div class="callout">
+    本报告选择人民币 QDII 场外份额，是合规与执行条件的前提，不是对任何跨境开户链接、换汇绕行方式或拆分申购方式的介绍。
+  </div>
+
+  <h2>三条不能越过的线</h2>
+  <table class="striped">
+    <thead><tr><th>事项</th><th>规则含义</th><th>本文处理方式</th></tr></thead>
+    <tbody>
+      <tr><td>个人购汇便利化额度</td><td>外汇局材料说明，个人对外投资应通过规定渠道如 QDII 实现；不得虚假申报或借用、出借额度拆分购汇。[R3]</td><td>全程选择人民币份额，不设计自行购汇路径。</td></tr>
+      <tr><td>产品日限额</td><td>公告所称单账户单日累计金额包括定投，部分公告还合并不同销售渠道。</td><td>执行示例按公告限额拆分到不同开放日，不通过多渠道规避限制。</td></tr>
+      <tr><td>交易开放日</td><td>境外主要市场节假日可暂停 QDII 申购、赎回和定投。招商官网列有 2026-05-25 的暂停公告。[R13]</td><td>研究日的推荐必须在下一可办理日复查状态。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>筛选方法</h2>
+  <p>先核标的和结构，再核公开法律文件中的限额、费率和报告期数据，最后判断月度计划能否实际成交。历史回报只作为风险和跟踪观察，不以某一段上涨期决定推荐。<code>data/fund-screen.csv</code> 保存了当前筛选字段。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">03 · Index Exposure</div>
+  <h1>指数：核心配置与成长倾斜</h1>
+  <p class="lead">纳斯达克 100 与标普 500 都提供美国股票风险暴露，但承担的集中程度不同。把二者写成同义替代品，会低估成长倾斜带来的波动。</p>
+
+  <h2>纳斯达克 100：集中、偏成长、排除金融</h2>
+  <p>Nasdaq 最新方法文本将该指数定义为 Nasdaq 上市的 100 家最大非金融公司，以修正市值加权。Nasdaq 于 2026 年 3 月 30 日宣布方法更新，自 <strong>2026 年 5 月 1 日</strong> 生效，因此本报告采用更新后的规则文本。[R4-R6]</p>
+  <p>事实表截至 2026 年 3 月 31 日显示，科技行业权重为 <span class="hl">59.77%</span>；英伟达、苹果、微软、亚马逊、特斯拉、Meta、沃尔玛、Alphabet 两类股和博通十项权重合计约 <span class="hl">46.91%</span>。近十年价格回报年化数值为 21.25%，它记录历史，不提供未来收益承诺。[R5]</p>
+
+  <h2>标普 500：更适合作为组合核心</h2>
+  <p>S&amp;P Dow Jones Indices 将标普 500 定位为美国大盘股指标，包含 500 家领先公司，按自由流通调整市值加权，覆盖美国可投资市值的大约 80%。行业跨度和公司数量使其更适合承担长期组合的核心暴露。[R7-R8]</p>
+
+  <table class="striped">
+    <thead><tr><th>比较项</th><th>标普 500</th><th>纳斯达克 100</th><th>配置含义</th></tr></thead>
+    <tbody>
+      <tr><td>成份范围</td><td>美国大盘公司，约 500 家</td><td>Nasdaq 上市最大非金融公司，约 100 家</td><td>前者为核心，后者为倾斜</td></tr>
+      <tr><td>加权方式</td><td>自由流通调整市值加权</td><td>修正市值加权</td><td>两者都会向大型公司集中</td></tr>
+      <tr><td>行业特征</td><td>横跨更多行业</td><td>科技权重 59.77%，不含金融</td><td>纳指份额越高，集中风险越高</td></tr>
+      <tr><td>共同风险</td><td colspan="2">美国股票价格、人民币兑美元变动、QDII 跟踪偏离、申购限制与境外休市</td><td>两只基金并不消除这些风险</td></tr>
+    </tbody>
+  </table>
+
+  <div class="takeaway">
+    <div class="takeaway-label">组合判断</div>
+    标普 500 与纳斯达克 100 会共同持有部分大型成长公司。加入纳斯达克 100 的作用是增加成长和科技倾斜，不是获得一组独立于标普 500 的分散资产。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">04 · Fund Selection</div>
+  <h1>产品筛选：限额、费用与可执行性</h1>
+  <p class="lead">长期成本需要控制，但目前 QDII 场外定投更现实的第一道筛选是额度：不能稳定买入的低费率份额，无法承担既定月度计划。</p>
+
+  <h2>当前公告下的可执行额度</h2>
+  <figure>
+    <svg viewBox="0 0 700 190" width="100%" role="img" aria-label="候选份额单账户单日人民币申购及定投上限">
+      <text x="0" y="20" fill="#3d3d3a" class="bar-label">单账户单日累计申购及定投上限（元）</text>
+      <text x="0" y="62" fill="#3d3d3a" class="bar-label">广发纳指 F · 021778</text>
+      <rect x="190" y="43" width="420" height="26" fill="#1B365D" rx="3"></rect>
+      <text x="622" y="62" fill="#1B365D" class="bar-value">3,000</text>
+      <text x="0" y="111" fill="#3d3d3a" class="bar-label">博时标普 E · 018738</text>
+      <rect x="190" y="92" width="280" height="26" fill="#52749a" rx="3"></rect>
+      <text x="482" y="111" fill="#1B365D" class="bar-value">2,000</text>
+      <text x="0" y="160" fill="#3d3d3a" class="bar-label">博时标普 A/C</text>
+      <rect x="190" y="141" width="14" height="26" fill="#a7b8c8" rx="3"></rect>
+      <text x="216" y="160" fill="#1B365D" class="bar-value">100</text>
+    </svg>
+    <figcaption>图 1 · 按已读取公告列示；广发生效日 2026-02-04，博时生效日 2026-04-10。[R11, R14]</figcaption>
+  </figure>
+
+  <h2>纳斯达克 100：为何选择广发人民币 F</h2>
+  <div class="decision">
+    <h3>主执行份额 · 广发纳指 100ETF 联接（QDII）人民币 F <code>021778</code></h3>
+    <p>广发公告明确，人民币 F 类自 2026 年 2 月 4 日起，单日单个基金账户申购、定期定额和不定额投资及转换转入累计上限为 <strong>3,000 元</strong>，多家销售渠道的多笔申请累计计算。[R11]</p>
+    <p>官方产品页说明其投资于目标 ETF 的比例不低于基金资产净值的 90%，目标指数为 Nasdaq-100；页面检索信息展示管理费 0.80%、托管费 0.20%、销售服务费 0.18%，F 类不收取申购费。[R12]</p>
+  </div>
+  <p>招商纳斯达克 100ETF 发起式联接（QDII）A（<code>019547</code>）作为观察项：官网显示管理费 0.50%、托管费 0.15%，净值资产 16.52 亿元（2026-03-31），但页面同时标记“限额”，本次未从公告正文独立确认可投入金额。因此它可在交易日前核验额度后作为成本比较对象，不能替代当前主执行份额。[R13]</p>
+
+  <h2>标普 500：为何选择博时人民币 E</h2>
+  <div class="decision">
+    <h3>主执行份额 · 博时标普 500ETF 联接 E（人民币） <code>018738</code></h3>
+    <p>博时公告全文显示，自 2026 年 4 月 10 日起，E 类人民币份额单账户单日申购、转换转入与定期定额投资累计不得超过 <strong>2,000 元</strong>；同一公告列示 A 类和 C 类人民币份额各为 100 元。[R14]</p>
+    <p>2025 年年度报告披露：E 类约定销售服务费为 <strong>0.10%/年</strong>，自 2024 年 7 月 4 日起在优惠活动期间折后为 <strong>0.01%/年</strong>。当前展示页列示管理费 0.60%、托管费 0.20% 和折后销售服务费 0.01%。优惠期可能结束，长期计划按合同费率留出余量更稳妥。[R15, R17]</p>
+  </div>
+  <p>博时 2026 年第一季度报告同时提供跟踪观察：E 类过去一年收益为 12.14%，同期业绩比较基准为 12.54%，偏离为 -0.40 个百分点。该数据用于检查跟踪表现，不能用来预测下一年收益。[R16]</p>
+
+  <h2>费用读法</h2>
+  <table class="striped compact">
+    <thead><tr><th>份额</th><th>管理费</th><th>托管费</th><th>销售服务费</th><th>申购费</th><th>读法</th></tr></thead>
+    <tbody>
+      <tr><td>广发纳指 F<br><code>021778</code></td><td>0.80%</td><td>0.20%</td><td>0.18%</td><td>0%</td><td>无前端申购费，持续持有会承担销售服务费；申购日复核页面及法律文件。</td></tr>
+      <tr><td>博时标普 E<br><code>018738</code></td><td>0.60%</td><td>0.20%</td><td>合同 0.10%<br>优惠期 0.01%</td><td>0%</td><td>优惠降低当前持有成本，但不能假定永久有效。</td></tr>
+      <tr><td>招商纳指 A<br><code>019547</code></td><td>0.50%</td><td>0.15%</td><td>无</td><td>标准最高 1.20%</td><td>长期费率结构较轻；限额未独立确认前只作观察项。</td></tr>
+    </tbody>
+  </table>
+  <p class="small">表中为产品页面或报告列示费率，不将简单相加结果等同于每位投资者最终实际成本；平台折扣、目标 ETF 相关费用处理、赎回持有期限和优惠期均须查阅有效法律文件。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">05 · Long Horizon</div>
+  <h1>长期持有：积累资金的方案</h1>
+  <p class="lead">这里的长期资金指至少五年内无确定用途、能够承受股票明显回撤和人民币兑美元波动的积累资金。策略目标是保持投入纪律和合理集中度，不是猜测下一个领涨行业。</p>
+
+  <h2>基准方案：标普 500 为核心，纳指为倾斜</h2>
+  <table class="striped">
+    <thead><tr><th>风险承受特征</th><th>目标配比</th><th>月投 5,000 元的执行示例</th><th>适用判断</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>中高风险，至少五年</td>
+        <td><strong>标普 500 70%</strong><br>纳斯达克 100 30%</td>
+        <td>博时 <code>018738</code>：1,750 元 × 两个可办理日<br>广发 <code>021778</code>：1,500 元 × 一个可办理日</td>
+        <td>优先广泛大盘暴露，保留适度成长倾斜。</td>
+      </tr>
+      <tr>
+        <td>高风险，至少七年</td>
+        <td>标普 500 60%<br>纳斯达克 100 40%</td>
+        <td>博时 <code>018738</code>：1,500 元 × 两个可办理日<br>广发 <code>021778</code>：2,000 元 × 一个可办理日</td>
+        <td>能够接受更强科技集中和更大波动时才考虑。</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>定投、已有现金与再平衡</h2>
+  <p>Investor.gov 将定投定义为不论市场涨跌、在固定间隔投入等额资金。它适合工资结余逐月进入组合，也有助于避免临时判断市场方向。[R9]</p>
+  <p>如果投资者已经拥有一笔计划长期配置的现金，研究结论不同。Vanguard 对全球市场历史和模拟路径的研究显示，一次性投入相对常见的三个月分批方案约有 <span class="hl">三分之二</span> 的时期获得更高期末价值；延后投资会放弃部分风险溢价机会。高度厌恶一次投入后短期亏损、否则会长期持币不投的人，仍可选择短期分批以换取可坚持性。[R10]</p>
+
+  <div class="callout">
+    工资形成的新现金：按月定投。已经存在且确定属于长期风险资金的一笔现金：期望回报角度倾向尽早投入；行为承受能力不足时，可限定为三个月内分批完成，而非无限等待低点。
+  </div>
+
+  <h2>纪律规则</h2>
+  <ol>
+    <li>每年固定一次复核目标比例、限购状态和费用；组合任一侧偏离目标超过五个百分点时，优先用新增投入校正。</li>
+    <li>不因纳斯达克 100 近期上涨而提高目标比例；它已是主动选择的集中倾斜。</li>
+    <li>限额使某月无法完成目标时，保留未成交资金至下一可办理日，按原比例补投，不通过多账户或多渠道规避公告限制。</li>
+    <li>距离资金用途不足三年时，逐步退出权益风险，转为与用途期限匹配的人民币低波动资产。</li>
+  </ol>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">06 · Short Horizon</div>
+  <h1>短期持有：先管住用途风险</h1>
+  <p class="lead">短期持有若定义为三年内需要人民币支付的资金，纳斯达克 100 与标普 500 都不能合理地称为“最佳收益”资产。时间越短，回撤恢复时间和汇率缓冲越不足。</p>
+
+  <h2>短期资金的结论</h2>
+  <div class="exec-summary">
+    <h2>三年内有确定支出：两类权益 QDII 配置为 0%</h2>
+    <p>首付、学费、应急金、税款或即将发生的人民币支出，不应依赖美国股票上涨才能按期完成。适合的工具应以本金稳定、流动性和到期匹配为先，具体人民币现金管理或短久期产品不在本文的基金筛选范围内。</p>
+  </div>
+
+  <h2>仍坚持承担风险时</h2>
+  <p>只有一笔可以承受完全损失、与生活用途隔离的独立小额资金，才有讨论短期权益仓的前提。该情况下，若必须在本文两个标的中选一个，采用行业分布更广的 <strong>标普 500</strong>，执行份额仍为博时 <code>018738</code>；不叠加纳斯达克 100 的集中倾斜。</p>
+  <table class="striped">
+    <thead><tr><th>短期情境</th><th>本文结论</th><th>执行方式</th><th>主要失效方式</th></tr></thead>
+    <tbody>
+      <tr><td>一年内确定付款</td><td>不配置两类权益 QDII</td><td>保留用途资金的人民币流动性</td><td>权益回撤或人民币升值导致用款缺口</td></tr>
+      <tr><td>一至三年目标支出</td><td>不以其作为目标资金主体</td><td>目标资金与风险尝试仓严格分账</td><td>临近用款日被迫亏损赎回</td></tr>
+      <tr><td>可全部损失的小额风险仓</td><td>仅考虑标普 500 小仓</td><td>在公告限额内一次投入；预设退出日期</td><td>仍可能本金亏损，且不存在收益保证</td></tr>
+    </tbody>
+  </table>
+
+  <h2>为何不提供“短线择时买点”</h2>
+  <p>本文核得的是指数规则、基金费用和可交易约束，不是可重复验证的短期预测信号。用短期涨跌判断纳指或标普下一阶段收益，会把研究结论变成市场猜测，并使确定用途资金承担无法补救的时间风险。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">07 · Execution &amp; Review</div>
+  <h1>执行清单与风险审阅</h1>
+  <p class="lead">公告、优惠费率和开放状态都会变化。可执行策略必须把复核动作放在申购之前，而不是在成交失败或赎回受限之后补查。</p>
+
+  <h2>下单前的八项检查</h2>
+  <table class="striped compact">
+    <thead><tr><th>顺序</th><th>检查项</th><th>合格条件</th><th>本报告中的已知状态</th></tr></thead>
+    <tbody>
+      <tr><td>01</td><td>渠道</td><td>境内持牌销售渠道的人民币 QDII 份额</td><td>仅研究此范围</td></tr>
+      <tr><td>02</td><td>份额代码</td><td>与公告和订单页面一致</td><td>纳指 <code>021778</code>；标普 <code>018738</code></td></tr>
+      <tr><td>03</td><td>是否开放</td><td>申购及定投当日可办理</td><td>2026-05-25 有境外节假日暂停提示，下一开放日复核</td></tr>
+      <tr><td>04</td><td>当日限额</td><td>计划金额不超过最新公告累计额度</td><td>3,000 元 / 2,000 元，可能调整</td></tr>
+      <tr><td>05</td><td>运作费用</td><td>管理费、托管费、销售服务费与法律文件相符</td><td>博时 E 有优惠期与合同费率之分</td></tr>
+      <tr><td>06</td><td>交易费用</td><td>申购及赎回持有期限费用已读取</td><td>不以短期频繁赎回设计策略</td></tr>
+      <tr><td>07</td><td>配比</td><td>本次投入后仍符合目标比例</td><td>长期基准示例为 70 / 30</td></tr>
+      <tr><td>08</td><td>用途期限</td><td>三年内支出资金未进入权益 QDII</td><td>短期用途资金结论为 0%</td></tr>
+    </tbody>
+  </table>
+
+  <h2>风险清单</h2>
+  <table class="striped">
+    <thead><tr><th>风险</th><th>如何发生</th><th>控制动作</th></tr></thead>
+    <tbody>
+      <tr><td>权益回撤</td><td>美国大盘或成长公司估值、盈利预期下调</td><td>只使用长期风险资金；短期用途资金隔离</td></tr>
+      <tr><td>集中度</td><td>纳斯达克 100 科技与大型成长暴露较高</td><td>以标普为核心；设定倾斜上限并复核</td></tr>
+      <tr><td>汇率</td><td>基金人民币净值承受人民币兑美元变化</td><td>人民币短期用途资金不暴露其中</td></tr>
+      <tr><td>跟踪偏离</td><td>费用、现金、交易时差、目标 ETF 运作造成偏离</td><td>读季度/年度报告，不只看指数涨跌</td></tr>
+      <tr><td>限购与暂停</td><td>额度管理或境外节假日改变申购安排</td><td>每次定投日前查看公告；不规避限额</td></tr>
+      <tr><td>费用优惠终止</td><td>销售服务费优惠活动结束</td><td>以合同费率评估长期承受力，复核页面</td></tr>
+    </tbody>
+  </table>
+
+  <div class="takeaway">
+    <div class="takeaway-label">一页执行规则</div>
+    长期资金：按目标比例投入，年度复核，限额内分日成交。短期用途资金：不进入本文两类股票 QDII。交易日前：核代码、核开放状态、核限额、核有效费率。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">08 · Sources &amp; Limits</div>
+  <h1>来源、术语与研究限制</h1>
+  <p class="lead">本报告以监管文件、指数机构方法文本、基金公告和定期报告为主。详细链接与证据口径保存在同目录 <code>sources.md</code>；完整读取缓存仅用于本地核验，不随公开作品重复分发。</p>
+
+  <h2>核心来源索引</h2>
+  <table class="striped compact">
+    <thead><tr><th>编号</th><th>来源</th><th>用于支持的判断</th></tr></thead>
+    <tbody>
+      <tr><td>R1-R3</td><td>中国证监会 QDII 办法、八部门整治方案、国家外汇管理局 FAQ</td><td>人民币 QDII 场外份额的合规边界</td></tr>
+      <tr><td>R4-R6</td><td>Nasdaq 方法文本、事实表、2026 年方法更新通知</td><td>纳斯达克 100 的构成、集中度与现行方法</td></tr>
+      <tr><td>R7-R8</td><td>S&amp;P Dow Jones Indices 方法文本和指数页</td><td>标普 500 的大盘核心属性</td></tr>
+      <tr><td>R9-R10</td><td>Investor.gov、Vanguard Research</td><td>定投定义；已有现金的一次性投入与分批投入取舍</td></tr>
+      <tr><td>R11-R13</td><td>广发与招商产品页面、广发限额公告</td><td>纳斯达克 100 主执行份额及观察项</td></tr>
+      <tr><td>R14-R17</td><td>博时限额公告、年报、季报及展示页</td><td>标普 500 主执行份额、限额与优惠费率解释</td></tr>
+    </tbody>
+  </table>
+
+  <h2>术语</h2>
+  <p><strong>QDII</strong>：经批准在境内募集资金并投资境外证券市场的合格境内机构投资者产品。</p>
+  <p><strong>ETF 联接基金</strong>：主要投资目标 ETF、以紧密跟踪目标指数为目的的场外基金；本报告所列两只主选均为 ETF 联接人民币份额。</p>
+  <p><strong>销售服务费</strong>：从对应基金份额资产中计提的持续费用；优惠期费率可能变更。</p>
+  <p><strong>定期定额投资</strong>：按固定间隔投入固定金额的申购安排；遇限购或暂停业务时仍受公告约束。</p>
+
+  <h2>研究限制与声明</h2>
+  <ul>
+    <li>研究截面为 2026 年 5 月 25 日，限额、开放状态、费用优惠和基金销售页面可能在其后变化。</li>
+    <li>S&amp;P 官方站点允许在线核读，但阻止本次文本归档；结论仅使用其方法与产品页的稳定定义，不复制受限页面内容。</li>
+    <li>未基于个人收入、负债、税务居民身份、风险测评和既有资产进行适当性评估。本报告不是购买、持有或赎回指令。</li>
+    <li>基金历史表现、指数历史回报及研究中的概率统计，都不保证未来回报。</li>
+  </ul>
+
+  <p class="source">研究、撰写与署名：Winston · 资料核验日期：2026 年 5 月 25 日 · 附件：<code>sources.md</code>、<code>data/fund-screen.csv</code>、<code>data/strategy-scenarios.csv</code>。</p>
+</section>
+
+</body>
+</html>

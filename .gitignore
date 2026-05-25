@@ -1,3 +1,5 @@
 .DS_Store
 *.tmp
 *.log
+otc-us-index-dca-2026/research/**/*.md
+!otc-us-index-dca-2026/research/README.md
