@@ -22,6 +22,7 @@
 | AI Inference Frameworks 2026 | 大模型、多模态大模型与生成模型推理框架技术图谱 | `ai-inference-frameworks-2026/index.html` / `ai-inference-frameworks-2026/ai-inference-frameworks-2026.pdf` |
 | Generative Recommendation 2026 | 生成式推荐的发展史、主流算法、产业落地与趋势判断 | `generative-recommendation-2026/index.html` / `generative-recommendation-2026/generative-recommendation-2026.pdf` |
 | E-commerce Generative Algorithms 2026 | 七类电商平台在多模态大模型、后训练、生成式推荐、智能搜索与图像检索方向的公开技术路线研究 | `ecommerce-generative-algorithms-2026/index.html` / `ecommerce-generative-algorithms-2026/ecommerce-generative-algorithms-2026.pdf` |
+| Multi-stage Ranking Algorithms 2026 | 国内外头部平台在召回、粗排、精排、混排与重排阶段的公开算法路线及工程经验 | `multi-stage-ranking-algorithms-2026/index.html` / `multi-stage-ranking-algorithms-2026/multi-stage-ranking-algorithms-2026.pdf` |
 | World Models 2026 | 世界模型的发展史、主流算法、产业落地与趋势判断 | `world-models-2026/index.html` / `world-models-2026/world-models-2026.pdf` |
 | slime RL Scaling Guide | THUDM/slime 上手实操与源码级技术详解 | `slime-rl-scaling-guide/index.html` / `slime-rl-scaling-guide/slime-rl-scaling-guide.pdf` |
 | Claude Code Project Workflow | 面向工程团队的 Claude Code 项目工作流手册 | `claude-code-project-workflow/index.html` / `claude-code-project-workflow/claude-code-project-workflow.pdf` |

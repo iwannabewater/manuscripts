@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>多阶段排序算法技术路线 2026</title>
+<meta name="author" content="Winston">
+<meta name="description" content="基于公开一手证据研究国内外头部平台在召回、粗排、精排、混排与重排阶段的算法路线和工程经验。">
+<meta name="keywords" content="推荐系统, 搜索排序, 召回, 粗排, 精排, 重排">
+<style>
+@font-face { font-family:"TsangerJinKai02"; src:url("fonts/TsangerJinKai02-W04.ttf") format("truetype"); font-weight:400; font-style:normal; }
+@font-face { font-family:"TsangerJinKai02"; src:url("fonts/TsangerJinKai02-W05.ttf") format("truetype"); font-weight:500; font-style:normal; }
+@page {
+  size:A4; margin:19mm 21mm 21mm; background:#f5f4ed;
+  @top-right { content:string(section-title); font-family:"TsangerJinKai02","Source Han Serif SC","Noto Serif CJK SC","Songti SC",serif; font-size:8pt; color:#6b6a64; }
+  @bottom-center { content:counter(page) "  ·  多阶段排序算法技术路线 2026"; font-family:"TsangerJinKai02","Source Han Serif SC","Noto Serif CJK SC","Songti SC",serif; font-size:8.5pt; color:#6b6a64; }
+}
+@page:first { @top-right { content:""; } @bottom-center { content:""; } }
+* { box-sizing:border-box; margin:0; padding:0; }
+:root {
+  --paper:#f5f4ed; --ivory:#faf9f5; --ink:#141413; --dark:#3d3d3a; --olive:#504e49; --stone:#6b6a64;
+  --brand:#1b365d; --brand2:#2d5a8a; --tint:#eef2f7; --line:#e8e6dc; --line2:#d8d4c7;
+  --serif:"TsangerJinKai02","Source Han Serif SC","Noto Serif CJK SC","Songti SC","STSong",Georgia,serif;
+}
+html,body { background:var(--paper); }
+@media screen { body { max-width:210mm; margin:0 auto; padding:19mm 21mm 21mm; } }
+body { color:var(--ink); font-family:var(--serif); font-size:9.65pt; line-height:1.54; letter-spacing:.16pt; widows:3; orphans:3; }
+.cover { min-height:244mm; display:flex; flex-direction:column; justify-content:space-between; padding-top:32mm; break-after:page; }
+.cover-eyebrow { color:var(--brand); font-size:9.4pt; letter-spacing:1.2pt; margin-bottom:19pt; }
+.cover-rule { height:2pt; width:45mm; background:var(--brand); border-radius:2pt; margin-bottom:18pt; }
+.cover-title { font-size:31pt; font-weight:500; line-height:1.15; letter-spacing:.12pt; margin-bottom:18pt; }
+.cover-sub { color:var(--olive); font-size:12.6pt; line-height:1.58; max-width:94%; }
+.cover-meta { color:var(--stone); font-size:9.6pt; line-height:1.65; }
+.cover-meta strong { color:var(--dark); font-size:11pt; font-weight:500; }
+.toc { break-after:page; }
+.toc h2 { font-size:22pt; font-weight:500; margin-bottom:15pt; border-left:2.5pt solid var(--brand); border-radius:1.5pt; padding-left:8pt; }
+.toc-item { display:flex; align-items:baseline; gap:8pt; padding:5.6pt 0; border-bottom:.35pt dotted var(--line2); font-size:10.5pt; }
+.toc-num { min-width:27pt; color:var(--brand); font-weight:500; }
+.toc-title { flex:1; }
+.toc-note { color:var(--stone); font-size:8.2pt; }
+.chapter { break-before:page; }
+.chapter.flow { break-before:auto; margin-top:23pt; }
+.chapter-num { color:var(--brand); font-size:9pt; letter-spacing:1pt; margin-bottom:6pt; }
+h1 { font-size:21.5pt; font-weight:500; line-height:1.2; border-left:2.5pt solid var(--brand); border-radius:1.5pt; padding-left:8pt; margin-bottom:10pt; break-after:avoid; }
+h2 { font-size:15.3pt; font-weight:500; line-height:1.28; margin:21pt 0 8pt; string-set:section-title content(); break-after:avoid; }
+h3 { color:var(--dark); font-size:12pt; font-weight:500; line-height:1.32; margin:14pt 0 6pt; break-after:avoid; }
+p { margin:0 0 8.2pt; line-height:1.54; }
+.lead { color:var(--dark); font-size:11.15pt; line-height:1.56; margin-bottom:12pt; }
+strong { font-weight:500; } .hl { color:var(--brand); font-weight:500; }
+ul { margin:6pt 0 10pt; padding-left:18pt; line-height:1.5; } li { margin-bottom:2.5pt; } li::marker { color:var(--brand); }
+code { font-family:"JetBrains Mono","SF Mono",Consolas,"TsangerJinKai02","Source Han Serif SC",monospace; font-size:8.35pt; background:var(--ivory); padding:1pt 3pt; border-radius:2pt; }
+table { width:100%; border-collapse:collapse; margin:10.5pt 0 12pt; font-size:8.25pt; break-inside:avoid; }
+th { text-align:left; color:var(--dark); font-weight:500; padding:4.7pt 5.2pt; border-bottom:1pt solid var(--line2); }
+td { padding:3.8pt 5.2pt; border-bottom:.3pt solid var(--line); vertical-align:top; }
+tbody tr:nth-child(even) td { background:var(--ivory); }
+table.compact th { font-size:7.35pt; padding:3pt 4pt; } table.compact td { font-size:7.35pt; line-height:1.34; padding:2.7pt 4pt; }
+table.sources { break-inside:auto; } table.sources tr { break-inside:avoid; }
+.note { background:var(--ivory); border-left:1.5pt solid var(--brand); border-radius:5pt; padding:9pt 12pt; margin:11pt 0; break-inside:avoid; }
+.note-label { color:var(--brand); font-size:8pt; letter-spacing:.65pt; margin-bottom:4pt; }
+.tag { display:inline-block; background:var(--tint); color:var(--brand); font-size:7.8pt; font-weight:500; padding:1pt 5pt; border-radius:3pt; white-space:nowrap; }
+.tier { display:inline-block; width:16pt; height:16pt; line-height:16pt; text-align:center; border-radius:50%; background:var(--brand); color:var(--paper); font-size:8pt; margin-right:3pt; }
+.tier.b { background:var(--brand2); } .tier.c { background:#6b6a64; }
+.summary-grid { display:grid; grid-template-columns:1fr 1fr; gap:9pt; margin:11pt 0 14pt; }
+.card { background:var(--ivory); border:.5pt solid var(--line); border-radius:6pt; padding:8.5pt 10pt; break-inside:avoid; }
+.card .label { color:var(--brand); font-size:7.8pt; letter-spacing:.55pt; margin-bottom:3pt; }
+.card h3 { margin-top:0; font-size:11.5pt; color:var(--ink); }
+figure { margin:12pt 0; break-inside:avoid; } svg { width:100%; height:auto; display:block; }
+figcaption { color:var(--stone); font-size:8.2pt; text-align:center; margin-top:5pt; }
+.small { color:var(--stone); font-size:8pt; }
+.source-ref { color:var(--brand); font-size:8.4pt; white-space:nowrap; }
+</style>
+</head>
+<body>
+<section class="cover">
+  <div>
+    <div class="cover-eyebrow">TECHNICAL SURVEY · PUBLIC EVIDENCE · 2026</div>
+    <div class="cover-rule"></div>
+    <div class="cover-title">多阶段排序算法<br>技术路线</div>
+    <div class="cover-sub">国内外头部互联网平台在召回、粗排、精排、混排与重排阶段的公开算法路线和工程经验总结</div>
+  </div>
+  <div class="cover-meta">
+    <strong>Winston</strong><br>
+    资料核验截至 2026-05-27<br>
+    Industrial papers · official engineering disclosures · production evidence
+  </div>
+</section>
+
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">执行摘要：漏斗仍是工业系统的骨架</span><span class="toc-note">结论、证据边界与阅读方式</span></div>
+  <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">为什么在线排序必须分阶段</span><span class="toc-note">规模、延迟、特征与目标</span></div>
+  <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">召回：先保证候选有机会进入比赛</span><span class="toc-note">多路、双塔、图与生成检索</span></div>
+  <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">粗排：以有限计算保存精排上限</span><span class="toc-note">蒸馏、成本约束与一致性</span></div>
+  <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">精排：高价值特征进入逐项决策</span><span class="toc-note">兴趣、长序列与多目标</span></div>
+  <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">混排与重排：最终页面是一项列表决策</span><span class="toc-note">多样性、约束与生成重排</span></div>
+  <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">训练、评测与在线学习</span><span class="toc-note">偏差、跨阶段对齐与护栏</span></div>
+  <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">国内平台公开路线</span><span class="toc-note">淘宝、京东、字节、快手、美团、腾讯</span></div>
+  <div class="toc-item"><span class="toc-num">09</span><span class="toc-title">海外平台公开路线</span><span class="toc-note">Google、Meta、Pinterest、LinkedIn 等</span></div>
+  <div class="toc-item"><span class="toc-num">10</span><span class="toc-title">实施路线与常见误区</span><span class="toc-note">从诊断到全量的决策门禁</span></div>
+  <div class="toc-item"><span class="toc-num">11</span><span class="toc-title">附录与进一步阅读</span><span class="toc-note">术语、证据地图与阅读入口</span></div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">01 · EXECUTIVE SUMMARY</div>
+  <h1>执行摘要：漏斗仍是工业系统的骨架</h1>
+  <p class="lead">从数十亿物品或内容中在毫秒级交付一个页面，算法团队无法把最重的模型施加于所有候选。公开资料显示，头部平台仍把在线决策分成召回、粗排、精排与最终重排，区别在于每一层都在吸收更强的序列建模、多目标学习与生成能力。</p>
+  <div class="summary-grid">
+    <div class="card"><div class="label">FUNNEL</div><h3>分阶段来自计算边界</h3><p>YouTube 把百万候选缩为数百再精排；Instagram Explore 明确公开 retrieval、first-stage ranking、second-stage ranking 和 final reranking 四层。<span class="source-ref">[S01][S04]</span></p></div>
+    <div class="card"><div class="label">RETRIEVAL</div><h3>召回开始表达更深意图</h3><p>MIND、KuaiFormer、PinRec 与 LinkedIn LLM 双编码器分别展示多兴趣、短视频序列、生成检索与语义向量路线。<span class="source-ref">[S09][S11][S22][S31]</span></p></div>
+    <div class="card"><div class="label">RANKING</div><h3>精排在扩容，也在守时延</h3><p>DIN、DIEN 与 SIM 处理目标相关兴趣和长行为，RankMixer、MTGR 及 Meta GEM 扩大模型容量或迁移知识，同时保留在线成本约束。<span class="source-ref">[S05][S20-S21][S23][S30][S34]</span></p></div>
+    <div class="card"><div class="label">SLATE</div><h3>末端决定整页效用</h3><p>淘宝、快手、美团与 Airbnb 的公开工作把多目标、多样性或上下文交互留在重排层处理，生成模型先进入小候选、高价值决策位置。<span class="source-ref">[S17][S26-S27][S32-S35]</span></p></div>
+  </div>
+  <h2>公开证据能说明到哪里</h2>
+  <table>
+    <thead><tr><th>证据强度</th><th>代表材料</th><th>可使用的结论</th><th>不能外推的内容</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tier">A</span>论文或官方架构</td><td>YouTube、Instagram、淘宝、Pinterest、LinkedIn、Airbnb</td><td>阶段分工、方法、部署说明与所报实验范围</td><td>未公布特征、流量分配与跨业务复用</td></tr>
+      <tr><td><span class="tier b">B</span>公开预印本</td><td>RankMixer、快手、美团、腾讯广告</td><td>作者报告的架构、场景和线上结果</td><td>经外部复核的长期经营结论</td></tr>
+      <tr><td><span class="tier c">C</span>产品说明</td><td>Netflix 排序说明、Amazon 科学历史稿</td><td>产品层排序行为或方法演进</td><td>未公开的漏斗模型实现</td></tr>
+    </tbody>
+  </table>
+  <div class="note">
+    <div class="note-label">研究结论</div>
+    新模型更可能沿着漏斗逐层替换能力：召回获得更强的语义覆盖，粗排学习如何保留精排会选中的对象，精排扩大序列和交互建模，重排负责整页目标与显式约束。可复用的经验来自这种分工以及相应的验证方法。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">02 · SYSTEM CONSTRAINTS</div>
+  <h1>为什么在线排序必须分阶段</h1>
+  <p class="lead">一个在线请求同时面对巨大物品库、极短响应时间、昂贵特征和相互冲突的产品目标。漏斗把计算花在越来越少、越来越值得精确判断的候选上，并让每一层拥有可以验证的责任。</p>
+  <h2>候选数下降，单个候选可用的计算上升</h2>
+  <figure>
+    <svg viewBox="0 0 1000 456" xmlns="http://www.w3.org/2000/svg">
+      <defs><pattern id="dots1" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".9" fill="#e3e2dc"/></pattern></defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots1)" opacity=".55"/>
+      <text x="48" y="38" fill="#1b365d" font-size="14" letter-spacing="3">FIGURE  1</text>
+      <text x="184" y="38" fill="#504e49" font-size="14" letter-spacing="3">多阶段在线漏斗的职责与计算分配</text>
+      <line x1="48" y1="54" x2="952" y2="54" stroke="#1b365d" stroke-width="1"/>
+      <text x="48" y="88" fill="#6b6a64" font-size="15">候选规模</text>
+      <text x="952" y="88" text-anchor="end" fill="#6b6a64" font-size="15">特征成本与列表责任</text>
+      <rect x="48" y="112" width="192" height="100" rx="8" fill="#faf9f5" stroke="#b2b1ac"/>
+      <text x="72" y="143" fill="#1b365d" font-size="15" letter-spacing="2">RETRIEVAL</text><text x="72" y="175" fill="#141413" font-size="24">召回</text><text x="72" y="198" fill="#504e49" font-size="14">十亿级 → 千级 · 覆盖</text>
+      <path d="M240 160 L268 160 M260 154 L268 160 L260 166" fill="none" stroke="#504e49" stroke-width="2"/>
+      <rect x="268" y="112" width="192" height="100" rx="8" fill="#faf9f5" stroke="#b2b1ac"/>
+      <text x="292" y="143" fill="#1b365d" font-size="15" letter-spacing="2">PRE-RANK</text><text x="292" y="175" fill="#141413" font-size="24">粗排</text><text x="292" y="198" fill="#504e49" font-size="14">千级 → 百级 · 保真</text>
+      <path d="M460 160 L488 160 M480 154 L488 160 L480 166" fill="none" stroke="#504e49" stroke-width="2"/>
+      <rect x="488" y="112" width="192" height="100" rx="8" fill="#eef2f7" stroke="#1b365d" stroke-width="2"/>
+      <text x="512" y="143" fill="#1b365d" font-size="15" letter-spacing="2">FINE RANK</text><text x="512" y="175" fill="#141413" font-size="24">精排</text><text x="512" y="198" fill="#504e49" font-size="14">百级 · 精确价值预测</text>
+      <path d="M680 160 L708 160 M700 154 L708 160 L700 166" fill="none" stroke="#1b365d" stroke-width="2"/>
+      <rect x="708" y="112" width="244" height="100" rx="8" fill="#eef2f7" stroke="#1b365d" stroke-width="2"/>
+      <text x="732" y="143" fill="#1b365d" font-size="15" letter-spacing="2">BLEND / RERANK</text><text x="732" y="175" fill="#141413" font-size="24">混排与重排</text><text x="732" y="198" fill="#504e49" font-size="14">页面级 · 约束与体验</text>
+      <rect x="48" y="268" width="904" height="108" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="72" y="302" fill="#1b365d" font-size="15" letter-spacing="2">SHARED CONTROL PLANE</text>
+      <text x="72" y="336" fill="#141413" font-size="21">日志与曝光校正 · 特征新鲜度 · 在线实验 · 策略和安全护栏</text>
+      <text x="72" y="360" fill="#504e49" font-size="14">每层优化自己的目标，同时保留对下游结果的可测贡献</text>
+    </svg>
+    <figcaption>漏斗为同一请求分配不同计算强度；末端候选最少，却承担最完整的页面责任。</figcaption>
+  </figure>
+  <h2>四项分层理由</h2>
+  <table>
+    <thead><tr><th>现实约束</th><th>对算法的要求</th><th>公开例证</th></tr></thead>
+    <tbody>
+      <tr><td>候选空间巨大</td><td>召回使用可索引、可近邻查找或可约束生成的表示，优先保证覆盖。</td><td>YouTube 近邻候选生成；Instagram 多路来源；淘宝多通道商品召回。<span class="source-ref">[S01][S04][S25]</span></td></tr>
+      <tr><td>延迟与计算有硬上限</td><td>昂贵交互和长序列留给缩小后的候选；粗排防止好候选过早丢失。</td><td>Google Play 报告毫秒级服务；COLD 联合优化粗排效果与成本。<span class="source-ref">[S02][S24]</span></td></tr>
+      <tr><td>目标不止点击</td><td>精排估计多个行为价值，重排处理整页目标、配额和多样性。</td><td>YouTube 多目标排名；淘宝 CMR、SORT-Gen；Airbnb 多样性排序。<span class="source-ref">[S03][S17][S26-S27]</span></td></tr>
+      <tr><td>反馈受曝光影响</td><td>上游筛掉的候选没有下游反馈，训练和评测要处理选择偏差。</td><td>LinkedIn 用小流量随机化近似二阶排序反馈；Airbnb 以流量回放评测召回。<span class="source-ref">[S10][S18]</span></td></tr>
+    </tbody>
+  </table>
+  <p>阶段名称在不同团队中并不完全一致。搜索论文常写 retrieval、coarse ranking、fine-grained ranking 和 mixed ranking；内容推荐更常写 retrieval、first-stage ranking、ranking 与 reranking。本文按工程职责统一术语，不把名称差异写成架构差异。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">03 · RETRIEVAL</div>
+  <h1>召回：先保证候选有机会进入比赛</h1>
+  <p class="lead">召回层的失误无法被下游挽救：没有进入候选集的商品、帖子或广告，不会被精排重新发现。因此召回评估关注覆盖和增量贡献，也必须把索引更新、过滤和服务延迟视作模型的一部分。</p>
+  <h2>从多路候选到更强表示</h2>
+  <table>
+    <thead><tr><th>技术路线</th><th>输出与优势</th><th>代表公开实践</th><th>上线观察项</th></tr></thead>
+    <tbody>
+      <tr><td>规则、热度与多路检索</td><td>不同来源提供实时性、稳定性、探索或安全保底。</td><td>Instagram 融合实时与预生成来源；LinkedIn 旧结构由多种 first-pass ranker 供给二阶排序。<span class="source-ref">[S04][S10]</span></td><td>去重后贡献、来源偏置与新鲜度。</td></tr>
+      <tr><td>双塔与近似近邻</td><td>离线计算物品向量，在线计算用户或查询侧，适合大库存。</td><td>YouTube、Amazon 商品语义搜索、Airbnb EBR 与 Instagram 都公开过这一类服务路线。<span class="source-ref">[S01][S04][S13][S18]</span></td><td>Recall@K、索引更新、过滤后延迟和冷启动。</td></tr>
+      <tr><td>多兴趣与图召回</td><td>一个用户或对象由多个局部兴趣表示，扩展覆盖与多样性。</td><td>Tmall MIND 以多个兴趣向量检索；Pinterest PinSage、PinnerSage 用图和多模态兴趣表示服务推荐。<span class="source-ref">[S06-S07][S22]</span></td><td>冗余候选、热门集中与缓存成本。</td></tr>
+      <tr><td>序列或生成式召回</td><td>下一动作预测或生成候选标识，表达短期意图与目标条件。</td><td>KuaiFormer 作者报告已用于快手召回；PinRec 探索生成检索；LinkedIn 使用共享 LLM 双编码检索。<span class="source-ref">[S09][S11-S12][S31]</span></td><td>无效候选、生成延迟、多样性与回退渠道。</td></tr>
+    </tbody>
+  </table>
+  <h2>电商召回展示了多目标并非末端专属</h2>
+  <p>淘宝搜索公开架构包含多通道召回、级联排序和异构结果混排。MOPPR 在检索阶段同时优化相关性、曝光、点击与购买，论文报告其自 2021 年双十一后替换既有向量召回模型，并在 28 天在线实验中报告交易及 GMV 提升。京东论文也将语义召回和 pairwise 深度重排作为商品搜索的两个关键阶段。<span class="source-ref">[S25][S28]</span></p>
+  <p>这一经验适用于多数交易场景：召回不只追求相似。对于有价格、库存和转化目标的市场，过早只以点击或语义近邻筛选，会让后续排序看不到可能成交的候选。召回层可以接受下游目标监督，同时仍需保持多路覆盖和可承受的服务成本。</p>
+  <div class="note">
+    <div class="note-label">召回层的工程检查</div>
+    按来源报告去重后覆盖、长尾覆盖、新物品覆盖以及与精排 top-K 的重合率，再观察线上点击、购买或观看的增量。双塔服务还要记录物品索引更新滞后、过滤后候选不足和 ANN 查询尾延迟；生成召回另加无效标识、重复生成与回退触发率。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">04 · PRE-RANKING</div>
+  <h1>粗排：以有限计算保存精排上限</h1>
+  <p class="lead">粗排位于候选已经可控、精排仍然太贵的位置。它的质量不宜只用自身点击标签衡量，更应看它是否把精排和最终页面会需要的候选保留下来。</p>
+  <h2>三条公开路线</h2>
+  <table>
+    <thead><tr><th>问题</th><th>路线</th><th>公开实践</th><th>判断</th></tr></thead>
+    <tbody>
+      <tr><td>轻模型过早丢掉好候选</td><td>以较重排序器输出作为监督，让粗排拟合下游选择。</td><td>Instagram 的 first-stage ranker 学习 second-stage top-K 标签，将其表述为知识蒸馏。<span class="source-ref">[S04]</span></td><td>粗排老师来自下游价值，比重复曝光标签更合理。</td></tr>
+      <tr><td>简化模型牺牲交互能力</td><td>在计算预算内保留交叉特征，以系统优化承载更强模型。</td><td>Alibaba COLD 将模型和计算成本联合优化，自 2019 年起用于涉及预排序模块的展示广告产品。<span class="source-ref">[S24]</span></td><td>粗排是独立的成本约束学习问题。</td></tr>
+      <tr><td>候选选择造成训练偏差</td><td>随机暴露少量候选，测量与二阶排名 top-K 的重合。</td><td>LinkedIn first-pass candidate selection 以 recall 对 second-pass 结果评估，并报告项目中 recall 翻倍。<span class="source-ref">[S10]</span></td><td>需要探索或校正样本看见被历史策略遮住的候选。</td></tr>
+    </tbody>
+  </table>
+  <p>粗排还要把来自不同召回源的候选带入统一比较空间。召回源的分值通常不可直接比较，YouTube 早期论文已经指出精排需要整合不同来源；Instagram 与 LinkedIn 则公开了来源融合后再排序的在线结构。<span class="source-ref">[S01][S04][S10]</span></p>
+  <div class="note">
+    <div class="note-label">粗排验收口径</div>
+    主指标包括对精排或最终列表 top-K 的 Recall@K、各召回源的保留率以及尾延迟，不只是一项独立 AUC。粗排换模时同时观察长尾、新内容、低曝光商家或创作者，避免系统在早期失去探索空间。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">05 · FINE RANKING</div>
+  <h1>精排：高价值特征进入逐项决策</h1>
+  <p class="lead">候选降到百级后，系统才有余量计算目标相关兴趣、长序列、交叉特征和多个行为目标。精排通常仍以单个候选的价值预测为中心，为末端列表决策提供可靠的逐项估值。</p>
+  <h2>精排模型能力沿三条方向扩展</h2>
+  <table>
+    <thead><tr><th>扩展方向</th><th>算法含义</th><th>平台证据</th><th>落地经验</th></tr></thead>
+    <tbody>
+      <tr><td>候选相关兴趣</td><td>按当前候选激活历史中有关部分，再刻画兴趣演化。</td><td>Alibaba DIN 部署于展示广告主流量；DIEN 报告经工程优化将服务延迟由 38.2 ms 降至 6.6 ms，并服务主流量。<span class="source-ref">[S20-S21]</span></td><td>效果和延迟优化应同时验收。</td></tr>
+      <tr><td>超长行为序列</td><td>先从长期行为检索相关片段，再在可控范围精细交互。</td><td>Alibaba SIM 报告自 2019 年部署于展示广告，处理长期序列并报告 CTR 与 RPM 提升。<span class="source-ref">[S23]</span></td><td>序列价值依赖检索压缩和在线存储。</td></tr>
+      <tr><td>可扩展主干与序列 ranker</td><td>使用硬件友好结构或用户级压缩，把更大模型放进排名请求。</td><td>RankMixer 作者报告在抖音推荐全流量运行；MTGR 作者报告承载美团外卖主流量；Pinterest TransAct 已部署于多个推荐面。<span class="source-ref">[S08][S30][S34]</span></td><td>扩参前核算请求组织、GPU 利用和近实时特征。</td></tr>
+    </tbody>
+  </table>
+  <h2>多目标需要保留拆解能力</h2>
+  <p>YouTube 排名工作从观看时间目标进一步公开多任务排序，处理多种行为目标和反馈选择偏差。Google Play 的 Wide & Deep 表明，在生产排序中记忆已发生的特征组合与泛化到新组合都重要。Meta GEM 官方稿描述了另一条路径：训练更大的广告基础模型，以知识迁移增强对延迟敏感的下游模型，并报告 Facebook 和 Instagram 广告转化的上线效果。<span class="source-ref">[S02-S03][S05]</span></p>
+  <p>这些系统没有要求把所有业务目标压入同一在线巨型模型。精排可以输出点击、观看、购买和负反馈等预测，由价值函数或重排层决定特定页面与流量条件下的组合。这样安排使业务调整不必每次重新训练最昂贵的在线部分。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">06 · BLENDING AND RERANKING</div>
+  <h1>混排与重排：最终页面是一项列表决策</h1>
+  <p class="lead">精排逐项估值仍不足以交付页面。重复内容、同类扎堆、库存与广告约束、创作者或商家覆盖，以及位置间相互影响，都要在看到候选列表时处理。</p>
+  <h2>末端处理的三类冲突</h2>
+  <table>
+    <thead><tr><th>冲突</th><th>重排任务</th><th>公开实践</th><th>不能省略的护栏</th></tr></thead>
+    <tbody>
+      <tr><td>逐项价值与列表效用</td><td>考虑候选交互，选择整页顺序。</td><td>SORT-Gen 将点击、转化和 GMV 的列表级目标写为生成重排，论文报告在淘宝百亿补贴场景的 CLICK 与 GMV 改善。<span class="source-ref">[S27]</span></td><td>库存、去重、合规和回退要在输出后复核。</td></tr>
+      <tr><td>固定权重与时段变化</td><td>同一模型在服务时接受目标偏好，减少反复训练。</td><td>Taobao CMR 使用 policy hypernetwork 控制多目标权重，并报告在线 A/B 验证。<span class="source-ref">[S26]</span></td><td>偏好范围和监控阈值应预设。</td></tr>
+      <tr><td>准确率与多样性</td><td>避免高分相似项占满列表，为不同选择留下空间。</td><td>Airbnb 从启发式走到 RNN 上下文列表方案；Instagram final reranking 明确加入最终规则控制。<span class="source-ref">[S04][S17]</span></td><td>多样性要连同预订、满意度或负反馈实验。</td></tr>
+    </tbody>
+  </table>
+  <h2>生成式重排先在小集合内成立</h2>
+  <p>生成列表能够表达候选之间的关联，也会引入解码延迟和约束失配。快手 NAR4Rec 使用非自回归生成降低实时重排成本，作者称已部署于快手；其 Dual-Rerank 预印本继续以自回归教师、非自回归学生和在线强化学习处理质量与延迟。美团 NSGR 以树状逐级生成处理局部和全局关系，作者报告已部署于外卖平台。<span class="source-ref">[S32-S33][S35]</span></p>
+  <p>这些工作支持一项稳健实施选择：生成式排序从候选已缩小、约束可检查、失败可回滚的重排层切入。判别式精排给出稳定逐项价值，生成或组合优化处理列表结构，两者无需互相取代。</p>
+  <div class="note">
+    <div class="note-label">混排与重排指标</div>
+    除 CTR、观看、转化和 GMV 外，记录重复率、来源集中度、负反馈、广告或自然结果约束违例、库存失效与页面响应尾延迟。短期点击改善而供给多样性明显退化，不能视作稳定升级。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">07 · TRAINING AND EVALUATION</div>
+  <h1>训练、评测与在线学习</h1>
+  <p class="lead">多阶段系统的主要风险来自目标错配：召回以历史点击训练，粗排保留自己熟悉的候选，精排只能在已有曝光上学习，重排再把短期高收益推到更靠前的位置。工程上需要为每层建立目标、教师、随机样本和护栏的对应关系。</p>
+  <h2>阶段之间如何传递监督</h2>
+  <figure>
+    <svg viewBox="0 0 1000 456" xmlns="http://www.w3.org/2000/svg">
+      <defs><pattern id="dots2" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".9" fill="#e3e2dc"/></pattern></defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots2)" opacity=".55"/>
+      <text x="48" y="38" fill="#1b365d" font-size="14" letter-spacing="3">FIGURE  2</text>
+      <text x="184" y="38" fill="#504e49" font-size="14" letter-spacing="3">跨阶段监督、曝光偏差与线上验证</text>
+      <line x1="48" y1="54" x2="952" y2="54" stroke="#1b365d"/>
+      <rect x="48" y="104" width="196" height="92" rx="8" fill="#faf9f5" stroke="#b2b1ac"/>
+      <text x="72" y="134" fill="#1b365d" font-size="14" letter-spacing="2">LOGGED EXPOSURE</text><text x="72" y="166" fill="#141413" font-size="21">曝光与行为日志</text><text x="72" y="187" fill="#504e49" font-size="13">含随机探索切片</text>
+      <path d="M244 150 L276 150 M268 144 L276 150 L268 156" fill="none" stroke="#504e49" stroke-width="2"/>
+      <rect x="276" y="104" width="196" height="92" rx="8" fill="#faf9f5" stroke="#b2b1ac"/>
+      <text x="300" y="134" fill="#1b365d" font-size="14" letter-spacing="2">TEACHER</text><text x="300" y="166" fill="#141413" font-size="21">精排 / 列表价值</text><text x="300" y="187" fill="#504e49" font-size="13">完整特征与目标</text>
+      <path d="M472 150 L504 150 M496 144 L504 150 L496 156" fill="none" stroke="#1b365d" stroke-width="2"/>
+      <rect x="504" y="104" width="196" height="92" rx="8" fill="#eef2f7" stroke="#1b365d" stroke-width="2"/>
+      <text x="528" y="134" fill="#1b365d" font-size="14" letter-spacing="2">STUDENT</text><text x="528" y="166" fill="#141413" font-size="21">召回 / 粗排</text><text x="528" y="187" fill="#504e49" font-size="13">成本内保留上限</text>
+      <path d="M700 150 L732 150 M724 144 L732 150 L724 156" fill="none" stroke="#1b365d" stroke-width="2"/>
+      <rect x="732" y="104" width="220" height="92" rx="8" fill="#eef2f7" stroke="#1b365d" stroke-width="2"/>
+      <text x="756" y="134" fill="#1b365d" font-size="14" letter-spacing="2">ONLINE TEST</text><text x="756" y="166" fill="#141413" font-size="21">流量实验与护栏</text><text x="756" y="187" fill="#504e49" font-size="13">增量收益 · 尾风险</text>
+      <rect x="48" y="264" width="904" height="112" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="72" y="298" fill="#1b365d" font-size="14" letter-spacing="2">MEASUREMENT SURFACES</text>
+      <text x="72" y="331" fill="#141413" font-size="20">Recall@K 对下游结果 · 多目标价值 · 多样性与公平 · P95/P99 延迟</text>
+      <text x="72" y="356" fill="#504e49" font-size="14">训练样本记录由哪一层获得曝光，实验才能定位收益来源</text>
+    </svg>
+    <figcaption>上游模型学习保留下游需要的候选，线上实验检验收益与风险；随机探索用于观察历史策略没有展示过的选项。</figcaption>
+  </figure>
+  <h2>评测口径按层拆开</h2>
+  <table>
+    <thead><tr><th>阶段</th><th>离线指标</th><th>线上结果与护栏</th><th>典型偏差</th></tr></thead>
+    <tbody>
+      <tr><td>召回</td><td>Recall@K、coverage、新物品和长尾覆盖、增量重合</td><td>下游点击、观看或购买增量；索引新鲜度和 P99</td><td>未曝光候选没有标签，热门偏置加深</td></tr>
+      <tr><td>粗排</td><td>对精排 top-K 的 recall、各来源保留率、校准</td><td>精排输入质量、吞吐和尾延迟</td><td>以自身点击标签训练，提前淘汰下游高值项</td></tr>
+      <tr><td>精排</td><td>AUC/GAUC、NDCG、多任务损失与切片稳定性</td><td>观看、点击、交易、负反馈和算力</td><td>位置偏差、稀疏转化、短期目标支配</td></tr>
+      <tr><td>混排/重排</td><td>列表效用、多样性、约束违例与重复率</td><td>整页效用、供给分布、投诉和服务成本</td><td>局部指标改善而页面体验或治理受损</td></tr>
+    </tbody>
+  </table>
+  <h2>实时更新依赖可追踪的服务面</h2>
+  <p>ByteDance Monolith 关注稀疏嵌入的实时训练和参数同步，为快速变化的反馈提供系统背景，并不是一份抖音完整漏斗说明。LinkedIn Feed 工程稿详细描述特征跟踪、数据包部署与异步日志汇总，模型发布速度由三天缩至三十分钟。两者都说明，更新频率的价值依赖训练与在线特征的一致记录。<span class="source-ref">[S10][S29]</span></p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">08 · CHINA PLATFORMS</div>
+  <h1>国内平台公开路线</h1>
+  <p class="lead">国内工业论文在淘宝广告和搜索、短视频推荐以及本地生活推荐上形成了密集的公开链路。它们分属不同业务面，不能拼成某家公司唯一的线上架构，却能准确展示各阶段的工程选择。</p>
+  <h2>Alibaba：从匹配到重排的公开纵深</h2>
+  <table>
+    <thead><tr><th>阶段</th><th>系统与位置</th><th>公开陈述</th><th>可迁移经验</th></tr></thead>
+    <tbody>
+      <tr><td>召回</td><td>MIND 在 Tmall 首页学习多个兴趣向量；MOPPR 位于淘宝搜索多通道召回。</td><td>MIND 论文说明已处理主要线上流量；MOPPR 报告移动淘宝搜索部署及 28 天实验结果。<span class="source-ref">[S22][S25]</span></td><td>召回可接受购买目标监督，同时保持多路覆盖。</td></tr>
+      <tr><td>粗排</td><td>COLD 面向展示广告 pre-ranking。</td><td>论文称自 2019 年部署于涉及预排序模块的多项展示广告产品。<span class="source-ref">[S24]</span></td><td>预算内保留交互能力优于机械截小精排。</td></tr>
+      <tr><td>精排</td><td>DIN、DIEN、SIM 形成兴趣激活、演化和长期行为检索路线。</td><td>三篇论文均报告在线部署或主流量服务，DIEN 还披露服务延迟降低。<span class="source-ref">[S20-S21][S23]</span></td><td>模型创新和服务优化应同时说明。</td></tr>
+      <tr><td>重排</td><td>CMR 动态控制多目标偏好，SORT-Gen 直接生成列表。</td><td>CMR 为 KDD 2023 工业论文；SORT-Gen 为 SIGIR 2025 论文并报告多场景部署。<span class="source-ref">[S26-S27]</span></td><td>促销和目标冲突适合在末端管理。</td></tr>
+    </tbody>
+  </table>
+  <h2>京东、ByteDance、快手、美团与腾讯</h2>
+  <table>
+    <thead><tr><th>平台</th><th>公开阶段</th><th>关键材料与事实范围</th><th>证据限制</th></tr></thead>
+    <tbody>
+      <tr><td>京东</td><td>召回、精排</td><td>商品搜索论文分别设计语义召回和 pairwise 深度重排，并报告线上核心指标改善。<span class="source-ref">[S28]</span></td><td>覆盖搜索，不外推首页推荐。</td></tr>
+      <tr><td>ByteDance / 抖音推荐</td><td>实时系统、精排</td><td>Monolith 公开实时训练基础设施；RankMixer 作者报告十亿参数版本在抖音 Feed Ranking 全流量服务。<span class="source-ref">[S29-S30]</span></td><td>RankMixer 以预印本作者声明使用。</td></tr>
+      <tr><td>快手</td><td>召回、重排</td><td>KuaiFormer 作者报告 2024 年 5 月接入短视频召回；NAR4Rec 和 Dual-Rerank 描述低延迟生成重排演进。<span class="source-ref">[S31-S33]</span></td><td>新重排结果不作长期效果证明。</td></tr>
+      <tr><td>美团</td><td>排序、重排</td><td>MTGR 保留交叉特征并扩大序列模型，作者称服务外卖主流量；NSGR 报告树状生成重排部署。<span class="source-ref">[S34-S35]</span></td><td>部署结论来自作者预印本。</td></tr>
+      <tr><td>腾讯广告</td><td>召回、评测</td><td>GPU feature-interaction 双塔论文报告广告召回部署；TencentGR 提供全模态生成推荐数据和基线。<span class="source-ref">[S36-S37]</span></td><td>数据集不证明完整线上漏斗。</td></tr>
+    </tbody>
+  </table>
+  <div class="note">
+    <div class="note-label">国内路线的共同点</div>
+    电商、广告、内容流和本地生活的目标不同，却都把实时反馈、新鲜度与多目标留在系统设计中心。更大的序列模型或生成方法进入生产时，公开论文最常讨论的仍是候选截断、延迟、成本、反馈偏差和最终列表约束。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">09 · GLOBAL PLATFORMS</div>
+  <h1>海外平台公开路线</h1>
+  <p class="lead">海外材料的优势在于架构叙述清楚：YouTube 和 Instagram 给出了漏斗，Pinterest 与 LinkedIn 说明检索和排名如何随表示模型更新，Airbnb 展示市场约束如何改变检索与列表，Amazon 与 Netflix 则划定商品和页面层的公开边界。</p>
+  <h2>内容流与社交推荐</h2>
+  <table>
+    <thead><tr><th>平台</th><th>漏斗演进</th><th>工程要点</th><th>来源</th></tr></thead>
+    <tbody>
+      <tr><td>Google / YouTube</td><td>深度候选生成缩到数百项，再以丰富特征按预期观看时间精排；后续扩展至多目标。</td><td>离线指标与实时 A/B 未必一致；召回和精排分别训练和验收。</td><td><span class="source-ref">[S01-S03]</span></td></tr>
+      <tr><td>Meta / Instagram</td><td>官方稿明确四层 Explore 漏斗；Ads 的 GEM 将大模型知识迁移至下游模型。</td><td>缓存、预计算和蒸馏使重模型进入不同阶段；Explore 与 Ads 分开归因。</td><td><span class="source-ref">[S04-S05]</span></td></tr>
+      <tr><td>Pinterest</td><td>PinSage 图召回、PinnerSage 多兴趣、TransAct 实时序列精排，再到 PinRec 生成召回探索。</td><td>短期实时行为和长期批量表示可以组合，生产模型同时控制成本和多样性。</td><td><span class="source-ref">[S06-S09]</span></td></tr>
+      <tr><td>LinkedIn</td><td>two-pass Feed 从候选选择到二阶排序；新系统以 LLM 双编码检索并引入生成序列排名。</td><td>官方稿报告近线 embedding 更新和 sub-50ms 检索；候选选择仍管理公平与新鲜度。</td><td><span class="source-ref">[S10-S12]</span></td></tr>
+    </tbody>
+  </table>
+  <h2>市场、商品与页面型系统</h2>
+  <table>
+    <thead><tr><th>平台</th><th>直接证据</th><th>可确认的经验</th><th>边界</th></tr></thead>
+    <tbody>
+      <tr><td>Amazon</td><td>商品语义搜索与官方推荐历史说明</td><td>商品检索需区别曝光未购买和购买信号；item-to-item 是早期大规模推荐路线。<span class="source-ref">[S13-S14]</span></td><td>不据研究稿复原当前商城全链路。</td></tr>
+      <tr><td>Airbnb</td><td>embedding personalization、深度排名、多样性及 EBR 官方稿</td><td>供给按日期可售，召回索引承受价格、可用性更新和地域过滤；最终搜索管理多样性。<span class="source-ref">[S15-S18]</span></td><td>两边市场目标不同于内容流。</td></tr>
+      <tr><td>Netflix</td><td>官方推荐说明</td><td>主页对行和行内标题均作个性化排序，并考虑观看、时间、语言和设备等输入。</td><td>未公开召回、粗排或具体模型，只作产品行为证据。<span class="source-ref">[S19]</span></td></tr>
+    </tbody>
+  </table>
+  <div class="note">
+    <div class="note-label">海外路线的共同点</div>
+    可持续改造都把模型能力放进既有服务约束：近线更新改善新鲜度，蒸馏或缓存控制延迟，多目标与列表规则留在可审计位置。业务差异决定优化对象，观看、购买、预订、广告转化和职业对话不能混写为同一种奖励。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">10 · IMPLEMENTATION PLAYBOOK</div>
+  <h1>实施路线与常见误区</h1>
+  <p class="lead">多阶段系统的升级从可诊断的问题出发：缺候选、早截断、价值预测不准，或最终列表不合适。新模型安放在错误层位，常会获得漂亮的离线数值，却找不到线上收益来源。</p>
+  <h2>从问题到首个实验</h2>
+  <table>
+    <thead><tr><th>症状</th><th>先改阶段</th><th>最小可行试验</th><th>成功门槛</th></tr></thead>
+    <tbody>
+      <tr><td>长尾、新内容或新商品进不了后续层</td><td>召回</td><td>新增一条双塔、图或生成候选源，与旧源去重融合。</td><td>对精排 top-K 的增量 recall 与线上增量为正，尾延迟可控。</td></tr>
+      <tr><td>精排会选的高值项在前层被过滤</td><td>粗排</td><td>以精排 top-K 蒸馏粗排，加入随机曝光评测切片。</td><td>候选保留率提升，精排吞吐与整体延迟不恶化。</td></tr>
+      <tr><td>实时兴趣或长行为未被利用</td><td>精排</td><td>在有限流量接入候选相关兴趣或压缩后的序列模型。</td><td>多目标线上收益成立，GPU/CPU 和服务 P99 在预算内。</td></tr>
+      <tr><td>高分结果重复或页面规则复杂</td><td>混排/重排</td><td>固定上游候选，仅替换列表优化器，保留规则回退。</td><td>页面效用改善，且多样性、投诉和约束违例不恶化。</td></tr>
+    </tbody>
+  </table>
+  <h2>分层发布门禁</h2>
+  <figure>
+    <svg viewBox="0 0 1000 472" xmlns="http://www.w3.org/2000/svg">
+      <defs><pattern id="dots3" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".9" fill="#e3e2dc"/></pattern></defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots3)" opacity=".55"/>
+      <text x="48" y="38" fill="#1b365d" font-size="14" letter-spacing="3">FIGURE  3</text>
+      <text x="184" y="38" fill="#504e49" font-size="14" letter-spacing="3">多阶段模型替换的六项发布门禁</text>
+      <line x1="48" y1="54" x2="952" y2="54" stroke="#1b365d"/>
+      <rect x="52" y="108" width="136" height="84" rx="7" fill="#faf9f5" stroke="#b2b1ac"/><text x="72" y="136" fill="#1b365d" font-size="14">01</text><text x="72" y="164" fill="#141413" font-size="19">基线与切片</text>
+      <path d="M188 150 L208 150 M200 144 L208 150 L200 156" fill="none" stroke="#504e49" stroke-width="2"/>
+      <rect x="208" y="108" width="136" height="84" rx="7" fill="#faf9f5" stroke="#b2b1ac"/><text x="228" y="136" fill="#1b365d" font-size="14">02</text><text x="228" y="164" fill="#141413" font-size="19">阶段离线值</text>
+      <path d="M344 150 L364 150 M356 144 L364 150 L356 156" fill="none" stroke="#504e49" stroke-width="2"/>
+      <rect x="364" y="108" width="136" height="84" rx="7" fill="#eef2f7" stroke="#1b365d"/><text x="384" y="136" fill="#1b365d" font-size="14">03</text><text x="384" y="164" fill="#141413" font-size="19">下游保留率</text>
+      <path d="M500 150 L520 150 M512 144 L520 150 L512 156" fill="none" stroke="#1b365d" stroke-width="2"/>
+      <rect x="520" y="108" width="136" height="84" rx="7" fill="#eef2f7" stroke="#1b365d"/><text x="540" y="136" fill="#1b365d" font-size="14">04</text><text x="540" y="164" fill="#141413" font-size="19">影子流量</text>
+      <path d="M656 150 L676 150 M668 144 L676 150 L668 156" fill="none" stroke="#504e49" stroke-width="2"/>
+      <rect x="676" y="108" width="136" height="84" rx="7" fill="#faf9f5" stroke="#b2b1ac"/><text x="696" y="136" fill="#1b365d" font-size="14">05</text><text x="696" y="164" fill="#141413" font-size="19">小流量实验</text>
+      <path d="M812 150 L832 150 M824 144 L832 150 L824 156" fill="none" stroke="#504e49" stroke-width="2"/>
+      <rect x="832" y="108" width="120" height="84" rx="7" fill="#faf9f5" stroke="#b2b1ac"/><text x="852" y="136" fill="#1b365d" font-size="14">06</text><text x="852" y="164" fill="#141413" font-size="19">扩量/回退</text>
+      <rect x="52" y="260" width="900" height="116" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="76" y="294" fill="#1b365d" font-size="14" letter-spacing="2">GO / HOLD</text>
+      <text x="76" y="326" fill="#141413" font-size="20">覆盖与保留率 · 多目标收益 · 长尾和供给 · 约束违例 · P99 与成本</text>
+      <text x="76" y="352" fill="#504e49" font-size="14">一层变更只声称自己能够解释的增量，并保持旧模型或规则的即时回退通路</text>
+    </svg>
+    <figcaption>每个阶段先证明没有破坏下游选择空间，再用线上实验确认产品价值。</figcaption>
+  </figure>
+  <h2>五种高频误区</h2>
+  <table>
+    <thead><tr><th>误区</th><th>为什么失败</th><th>修正办法</th></tr></thead>
+    <tbody>
+      <tr><td>只提高召回自身点击</td><td>召回迎合历史曝光，减少新物品和精排可能偏好的候选。</td><td>以精排或最终列表 top-K 为老师，保留探索切片。</td></tr>
+      <tr><td>把粗排视为缩水精排</td><td>候选数和预算不同，简单删特征会丢失交互信息。</td><td>采用成本感知建模、蒸馏与专门服务优化。</td></tr>
+      <tr><td>用离线 AUC 取代线上判断</td><td>曝光、位置和产品目标使离线排序无法代表真实选择。</td><td>预注册线上主指标、护栏和回退阈值。</td></tr>
+      <tr><td>让生成模型接管全链路</td><td>目录覆盖、延迟、约束和故障范围同时扩大。</td><td>从生成候选通道或小集合列表重排起步。</td></tr>
+      <tr><td>跨平台搬运指标</td><td>观看、购买、预订、广告转化与对话贡献不是同一目标。</td><td>迁移结构经验，重新定义本业务数据和效用函数。</td></tr>
+    </tbody>
+  </table>
+  <p>交付系统还应固定审计面：候选来源、模型版本、训练和服务特征时间戳、策略过滤原因、实验分桶、延迟预算以及回退动作。没有这些记录，即使观察到收益，也难以定位收益来自表示提升、流量偏差还是规则变化。</p>
+</section>
+
+<section class="chapter flow">
+  <div class="chapter-num">11 · APPENDIX</div>
+  <h1>附录与进一步阅读</h1>
+  <p class="lead">本文可以独立建立多阶段系统的技术坐标；需要继续进入实现细节时，下列论文和官方工程稿是合适的原始入口。编号与 <code>sources.md</code>、<code>data/source-map.tsv</code> 一致。</p>
+  <h2>首选深读材料</h2>
+  <table>
+    <thead><tr><th>入口</th><th>材料</th><th>重点阅读问题</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag">漏斗起点</span></td><td>YouTube DNN <span class="source-ref">[S01]</span></td><td>候选生成和精排为何拆开，观看时长目标怎样进入排名。</td></tr>
+      <tr><td><span class="tag">全阶段</span></td><td>Instagram Explore 官方工程稿 <span class="source-ref">[S04]</span></td><td>四层生产漏斗、蒸馏式粗排和末端规则。</td></tr>
+      <tr><td><span class="tag">国内纵深</span></td><td>MIND、COLD、SIM、CMR <span class="source-ref">[S22-S26]</span></td><td>召回、粗排、长行为精排和可控多目标重排的连续演进。</td></tr>
+      <tr><td><span class="tag">实时排名</span></td><td>Pinterest TransAct <span class="source-ref">[S08]</span></td><td>在线短期行为与离线长期表示如何组合进入生产。</td></tr>
+      <tr><td><span class="tag">市场约束</span></td><td>Airbnb EBR 与 diversity <span class="source-ref">[S17-S18]</span></td><td>库存更新、过滤和列表多样性如何改变推荐设计。</td></tr>
+    </tbody>
+  </table>
+  <h2>术语表</h2>
+  <table>
+    <thead><tr><th>术语</th><th>本文所指含义</th></tr></thead>
+    <tbody>
+      <tr><td>召回 / Retrieval</td><td>从全库取得有限候选，侧重覆盖、速度和可索引表示；也称 matching 或 candidate generation。</td></tr>
+      <tr><td>粗排 / Pre-ranking</td><td>以低于精排的成本进一步压缩候选，目标是尽量保留下游会选择的对象。</td></tr>
+      <tr><td>精排 / Ranking</td><td>对较小候选集使用丰富特征与模型，估计逐项行为价值或多目标价值。</td></tr>
+      <tr><td>混排 / Blending</td><td>将不同来源或类型结果放在统一页面比较、组合并施加策略。</td></tr>
+      <tr><td>重排 / Reranking</td><td>在最终候选上利用上下文、多样性、配额或列表目标决定呈现顺序。</td></tr>
+      <tr><td>阶段一致性</td><td>上游筛选目标与下游或最终页面目标之间的对齐程度，常以 top-K 重合或蒸馏监督衡量。</td></tr>
+    </tbody>
+  </table>
+  <h2>来源映射摘要</h2>
+  <table class="sources compact">
+    <thead><tr><th>编号</th><th>来源组</th><th>类型</th><th>正文用途</th></tr></thead>
+    <tbody>
+      <tr><td>S01-S05</td><td>Google/YouTube；Meta/Instagram/Ads</td><td>工业论文 / 官方稿</td><td>两层与四层漏斗、多目标排名、知识迁移</td></tr>
+      <tr><td>S06-S12</td><td>Pinterest；LinkedIn</td><td>工业论文 / 官方稿</td><td>图召回、实时序列排名、LLM 检索、two-pass Feed</td></tr>
+      <tr><td>S13-S19</td><td>Amazon；Airbnb；Netflix</td><td>论文 / 官方稿</td><td>商品语义搜、市场排序、多样性与披露边界</td></tr>
+      <tr><td>S20-S27</td><td>Alibaba / Taobao</td><td>工业论文</td><td>国内公开覆盖最完整的召回至重排路线</td></tr>
+      <tr><td>S28-S37</td><td>京东；ByteDance；快手；美团；腾讯广告</td><td>论文 / 预印本 / 数据集</td><td>搜索两阶段、实时系统、扩展排名与生成重排</td></tr>
+    </tbody>
+  </table>
+  <p class="small">完整来源标题、链接、阶段分类、用途与核验日期见同目录 <code>sources.md</code> 及 <code>data/source-map.tsv</code>。预印本涉及线上结果时，正文均以作者报告口径陈述。</p>
+</section>
+</body>
+</html>
