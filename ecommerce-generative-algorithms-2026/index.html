@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>电商平台生成式算法技术路线 2026</title>
+<meta name="author" content="Winston">
+<meta name="description" content="基于公开一手证据研究七类电商平台在多模态大模型、后训练、生成式推荐、智能搜索与图像检索方向的技术路线。">
+<meta name="keywords" content="电商算法, 多模态大模型, 后训练, 生成式推荐, 智能搜索, 图像检索">
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @page {
+    size: A4;
+    margin: 19mm 21mm 21mm 21mm;
+    background: #f5f4ed;
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+    @bottom-center {
+      content: counter(page) "  ·  电商平台生成式算法技术路线 2026";
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8.5pt;
+      color: #6b6a64;
+    }
+  }
+  @page:first { @top-right { content: ""; } @bottom-center { content: ""; } }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper: #f5f4ed;
+    --ivory: #faf9f5;
+    --near-black: #141413;
+    --dark-warm: #3d3d3a;
+    --olive: #504e49;
+    --stone: #6b6a64;
+    --brand: #1b365d;
+    --brand-2: #2d5a8a;
+    --brand-tint: #eef2f7;
+    --border: #e8e6dc;
+    --border-strong: #d8d4c7;
+    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+  }
+  html, body { background: var(--paper); }
+  @media screen { body { max-width: 210mm; margin: 0 auto; padding: 19mm 21mm 21mm; } }
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 9.65pt;
+    line-height: 1.54;
+    letter-spacing: 0.16pt;
+    widows: 3;
+    orphans: 3;
+  }
+  .cover {
+    min-height: 244mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 32mm;
+    break-after: page;
+  }
+  .cover-eyebrow {
+    color: var(--brand);
+    font-size: 9.4pt;
+    letter-spacing: 1.2pt;
+    text-transform: uppercase;
+    margin-bottom: 19pt;
+  }
+  .cover-rule {
+    height: 2pt;
+    width: 45mm;
+    background: var(--brand);
+    border-radius: 2pt;
+    margin-bottom: 18pt;
+  }
+  .cover-title {
+    font-size: 31pt;
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: .12pt;
+    margin-bottom: 18pt;
+    max-width: 98%;
+  }
+  .cover-sub {
+    color: var(--olive);
+    font-size: 12.6pt;
+    line-height: 1.58;
+    max-width: 93%;
+  }
+  .cover-meta { color: var(--stone); font-size: 9.6pt; line-height: 1.65; }
+  .cover-meta strong { color: var(--dark-warm); font-weight: 500; font-size: 11pt; }
+  .toc { break-after: page; }
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: 15pt;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    gap: 8pt;
+    padding: 5.6pt 0;
+    border-bottom: .35pt dotted var(--border-strong);
+    font-size: 10.5pt;
+  }
+  .toc-num { min-width: 27pt; color: var(--brand); font-weight: 500; }
+  .toc-title { flex: 1; }
+  .toc-note { color: var(--stone); font-size: 8.2pt; }
+  .chapter { break-before: page; }
+  .chapter.flow { break-before: auto; margin-top: 23pt; }
+  .chapter-num {
+    color: var(--brand);
+    font-size: 9pt;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+  }
+  h1 {
+    font-size: 21.5pt;
+    font-weight: 500;
+    line-height: 1.2;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    margin-bottom: 10pt;
+    break-after: avoid;
+  }
+  h2 {
+    font-size: 15.3pt;
+    font-weight: 500;
+    line-height: 1.28;
+    margin: 21pt 0 8pt;
+    string-set: section-title content();
+    break-after: avoid;
+  }
+  h3 {
+    color: var(--dark-warm);
+    font-size: 12pt;
+    font-weight: 500;
+    line-height: 1.32;
+    margin: 14pt 0 6pt;
+    break-after: avoid;
+  }
+  p { margin: 0 0 8.2pt; line-height: 1.54; }
+  .lead {
+    color: var(--dark-warm);
+    font-size: 11.15pt;
+    line-height: 1.56;
+    margin-bottom: 12pt;
+  }
+  strong { font-weight: 500; }
+  .hl { color: var(--brand); font-weight: 500; }
+  ul, ol { margin: 6pt 0 10pt; padding-left: 18pt; line-height: 1.5; }
+  li { margin-bottom: 2.5pt; }
+  li::marker { color: var(--brand); }
+  a { color: var(--brand); text-decoration: none; }
+  code {
+    font-family: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+    font-size: 8.35pt;
+    background: var(--ivory);
+    padding: 1pt 3pt;
+    border-radius: 2pt;
+  }
+  pre {
+    font-family: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+    font-size: 8.15pt;
+    line-height: 1.43;
+    background: var(--ivory);
+    border: .35pt solid var(--border);
+    border-radius: 5pt;
+    padding: 8pt 10pt;
+    margin: 10pt 0 12pt;
+    white-space: pre-wrap;
+    break-inside: avoid;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10.5pt 0 12pt;
+    font-size: 8.25pt;
+    break-inside: avoid;
+  }
+  th {
+    text-align: left;
+    color: var(--dark-warm);
+    font-weight: 500;
+    padding: 4.7pt 5.2pt;
+    border-bottom: 1pt solid var(--border-strong);
+  }
+  td {
+    padding: 3.8pt 5.2pt;
+    border-bottom: .3pt solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) td { background: var(--ivory); }
+  table.compact th { font-size: 7.35pt; padding: 3pt 4pt; }
+  table.compact td { font-size: 7.35pt; line-height: 1.34; padding: 2.7pt 4pt; }
+  table.sources { break-inside: auto; }
+  table.sources tr { break-inside: avoid; }
+  .note, .callout {
+    background: var(--ivory);
+    border-left: 1.5pt solid var(--brand);
+    border-radius: 5pt;
+    padding: 9pt 12pt;
+    margin: 11pt 0;
+    break-inside: avoid;
+  }
+  .note-label {
+    color: var(--brand);
+    font-size: 8pt;
+    letter-spacing: .65pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+  .tag {
+    display: inline-block;
+    background: var(--brand-tint);
+    color: var(--brand);
+    font-size: 7.8pt;
+    font-weight: 500;
+    padding: 1pt 5pt;
+    border-radius: 3pt;
+    white-space: nowrap;
+  }
+  .tier {
+    display: inline-block;
+    width: 16pt;
+    height: 16pt;
+    line-height: 16pt;
+    text-align: center;
+    border-radius: 50%;
+    background: var(--brand);
+    color: var(--paper);
+    font-size: 8pt;
+    margin-right: 3pt;
+  }
+  .tier.b { background: var(--brand-2); }
+  .tier.c { background: #6b6a64; }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9pt;
+    margin: 11pt 0 14pt;
+  }
+  .card {
+    background: var(--ivory);
+    border: .5pt solid var(--border);
+    border-radius: 6pt;
+    padding: 8.5pt 10pt;
+    break-inside: avoid;
+  }
+  .card .label {
+    color: var(--brand);
+    font-size: 7.8pt;
+    letter-spacing: .55pt;
+    text-transform: uppercase;
+    margin-bottom: 3pt;
+  }
+  .card h3 { margin-top: 0; font-size: 11.5pt; color: var(--near-black); }
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10pt;
+    margin: 10pt 0;
+  }
+  figure { margin: 12pt 0; break-inside: avoid; }
+  figcaption { color: var(--stone); font-size: 8.2pt; text-align: center; margin-top: 5pt; }
+  svg { width: 100%; height: auto; display: block; }
+  .small { color: var(--stone); font-size: 8pt; }
+  .source-ref { color: var(--brand); font-size: 8.4pt; white-space: nowrap; }
+</style>
+</head>
+<body>
+
+<section class="cover">
+  <div>
+    <div class="cover-eyebrow">TECHNICAL SURVEY · PUBLIC EVIDENCE · 2026</div>
+    <div class="cover-rule"></div>
+    <div class="cover-title">电商平台生成式算法<br>技术路线</div>
+    <div class="cover-sub">Alibaba、京东、PDD（拼多多/Temu）、抖音电商、Amazon、Shopee 与 SHEIN 的多模态大模型、后训练、生成式推荐、智能搜索和图像检索公开证据研究</div>
+  </div>
+  <div class="cover-meta">
+    <strong>Winston</strong><br>
+    资料核验截至 2026-05-27<br>
+    Industrial papers · official disclosures · regulator releases
+  </div>
+</section>
+
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">执行摘要：成熟路线与公开空白</span><span class="toc-note">证据分级与主要判断</span></div>
+  <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">电商算法的约束决定模型形态</span><span class="toc-note">商品、意图、反馈、延迟与治理</span></div>
+  <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">多模态大模型与图像检索</span><span class="toc-note">内容理解如何接入召回和排序</span></div>
+  <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">后训练：让生成模型服从交易目标</span><span class="toc-note">SFT、偏好优化、奖励与检索增强</span></div>
+  <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">生成式推荐与列表决策</span><span class="toc-note">语义 ID、序列模型与重排</span></div>
+  <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">AI 搜索：从查询理解到购物助手</span><span class="toc-note">改写、查询生成、语义匹配、对话</span></div>
+  <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">中国平台公开路线</span><span class="toc-note">淘宝、京东、PDD 与抖音电商</span></div>
+  <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">跨境与国际平台公开路线</span><span class="toc-note">Amazon、Shopee 与 SHEIN</span></div>
+  <div class="toc-item"><span class="toc-num">09</span><span class="toc-title">工程实施路径与经验</span><span class="toc-note">数据、训练、服务、实验</span></div>
+  <div class="toc-item"><span class="toc-num">10</span><span class="toc-title">评估、风险与研究议程</span><span class="toc-note">可复现结论与开放问题</span></div>
+  <div class="toc-item"><span class="toc-num">11</span><span class="toc-title">附录：阅读路径、术语与来源映射</span><span class="toc-note">进一步阅读</span></div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">01 · Executive Summary</div>
+  <h1>执行摘要：成熟路线与公开空白</h1>
+  <p class="lead">七个平台公开材料呈现的技术图景并不整齐。淘宝、京东、抖音电商相关团队、Amazon 与 Shopee 已公开能落到具体链路的系统工作；PDD 与 SHEIN 可核验的资料更多涉及平台披露和推荐治理。<span class="hl">证据不对称意味着比较必须先比较公开程度，再比较算法方向。</span></p>
+
+  <div class="summary-grid">
+    <div class="card"><div class="label">SEARCH</div><h3>生成能力先进入搜索</h3><p>查询改写、查询推荐、语义匹配和购物问答有明确输入、相关性评价与回退链路，较适合承载大模型。淘宝、京东和 Amazon 都给出了直接证据。<span class="source-ref">[S02][S04][S07][S12-S13]</span></p></div>
+    <div class="card"><div class="label">VISION</div><h3>多模态的价值在商品 grounding</h3><p>图搜和个性化搜索要求图像、标题、属性与行为落到可检索商品。京东实时图搜、Amazon 产品搜索、淘宝 KARMA 分别覆盖索引、训练与个性化对齐。<span class="source-ref">[S03][S05][S14]</span></p></div>
+    <div class="card"><div class="label">RECOMMENDATION</div><h3>主链路仍讲吞吐与约束</h3><p>淘宝 SORT-Gen 在重排层生成列表，抖音 ADS 在排序模型中处理跨域序列；两者都保留实时系统与业务约束，而非以通用聊天模型替换整条推荐链路。<span class="source-ref">[S01][S08]</span></p></div>
+    <div class="card"><div class="label">ALIGNMENT</div><h3>后训练需要业务奖励闭环</h3><p>京东把相关性引入多阶段训练及归一化 GRPO；Shopee 研究排序器指导的对齐；Rufus 使用反馈改进回答。业务目标必须进入训练或评价。<span class="source-ref">[S07][S12][S20][S27]</span></p></div>
+  </div>
+
+  <h2>证据等级</h2>
+  <table>
+    <thead><tr><th>级别</th><th>使用方式</th><th>本文对应材料</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tier">A</span>工业论文/官方工程稿</td><td>可以陈述指定场景、方法和论文或官方公布的结果。</td><td>淘宝 SORT-Gen、京东图搜、抖音 ADS、Amazon Rufus、Shopee LightSAGE。</td></tr>
+      <tr><td><span class="tier b">B</span>作者技术报告/预印本</td><td>可以记录作者报告的部署与提升，不当作独立复核后的经营事实。</td><td>AIGQ、KARMA、京东 LLM 改写、Compass-v3、RGAlign-Rec。</td></tr>
+      <tr><td><span class="tier c">C</span>官方或监管披露</td><td>确认能力或治理义务存在，不能推断模型结构。</td><td>PDD Form 20-F、SHEIN 排序政策与欧盟委员会公告。</td></tr>
+      <tr><td><span class="tag">METHOD</span></td><td>解释方法设计，不用来证明任一平台部署。</td><td>TIGER、HSTU、DPO、GRPO。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>七个平台的公开落点</h2>
+  <table class="compact">
+    <thead><tr><th>平台</th><th>多模态/图搜</th><th>后训练/LLM</th><th>生成推荐</th><th>AI 搜索</th><th>证据判断</th></tr></thead>
+    <tbody>
+      <tr><td>Alibaba 淘宝</td><td>KARMA</td><td>AIGQ、BEQUE</td><td>SORT-Gen</td><td>HintQ/改写/个性化检索</td><td>A/B 并存，2026 项需按作者报告引用</td></tr>
+      <tr><td>京东</td><td>实时视觉搜索</td><td>多阶段 LLM + GRPO</td><td>未见主链路公开</td><td>个性化搜索、查询改写</td><td>图搜与搜索直接，生成推荐留空</td></tr>
+      <tr><td>PDD（拼多多/Temu）</td><td>未披露</td><td>未披露</td><td>未披露</td><td>未披露实现</td><td>母公司披露确认治理表面，不确认产品架构</td></tr>
+      <tr><td>抖音电商</td><td>相关搜广 SUMMA</td><td>相关多模态 SFT/RL</td><td>ADS 序列排序</td><td>搜广证据不可等同电商搜索</td><td>ADS 直接覆盖电商服务平台</td></tr>
+      <tr><td>Amazon</td><td>MML-TP、GENIUS 研究</td><td>Rufus 反馈学习</td><td>未以商城部署公开</td><td>Rufus、语义商品搜索</td><td>官方工程稿与研究工作界线清楚</td></tr>
+      <tr><td>Shopee</td><td>EcomEval 覆盖</td><td>Compass-v3、RGAlign</td><td>对话式推荐</td><td>领域 LLM 能力</td><td>广告召回最强，新路线属技术报告/预印本</td></tr>
+      <tr><td>SHEIN</td><td>未披露</td><td>未披露</td><td>未披露</td><td>排序因素披露</td><td>仅能确认个性化与治理要求</td></tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <div class="note-label">本文的核心判断</div>
+    可落地的电商生成式系统通常从一项可度量任务切入：视觉检索、查询改写、重排、广告内容摘要或购物问答。它们把大模型的语义能力接到既有索引、排序、库存、合规与实验系统中；公开材料没有支持“一个通用模型接管整个电商决策链路”的结论。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">02 · Constraints and Architecture</div>
+  <h1>电商算法的约束决定模型形态</h1>
+  <p class="lead">商品系统同时面对意图表达不完整、目录高速变动、图文信息不一致、转化反馈稀疏和强业务约束。大模型能够改善语义表示与生成决策，但只有被压入低延迟、可回退、可实验的系统边界后，才具备线上意义。</p>
+
+  <h2>五项工程约束</h2>
+  <table>
+    <thead><tr><th>约束</th><th>电商中的表现</th><th>模型设计含义</th><th>公开证据</th></tr></thead>
+    <tbody>
+      <tr><td>查询不完整</td><td>短 query、口语化需求、长尾表达无法准确命中商品。</td><td>查询改写与查询推荐需要相关性守门和商品 grounding。</td><td>淘宝 BEQUE/AIGQ；京东 LLM 改写 <span class="source-ref">[S02][S04][S07]</span></td></tr>
+      <tr><td>商品是多模态对象</td><td>图片、标题、规格、属性、评论共同决定可购性。</td><td>内容编码器须保留可检索、可解释的产品语义。</td><td>京东图搜；Amazon MML-TP；淘宝 KARMA <span class="source-ref">[S03][S05][S14]</span></td></tr>
+      <tr><td>目录与库存会变</td><td>上新、下架、价格与履约状态持续变化。</td><td>离线语义模型仍需实时索引、过滤和服务更新。</td><td>京东图搜的增量索引 <span class="source-ref">[S05]</span></td></tr>
+      <tr><td>反馈带偏差</td><td>曝光位置、促销、广告与历史推荐共同改变点击及成交。</td><td>奖励不能只追点击；列表生成需处理多目标与反事实偏差。</td><td>SORT-Gen、ADS <span class="source-ref">[S01][S08]</span></td></tr>
+      <tr><td>延迟与治理硬约束</td><td>大流量服务、广告标识、个性化设置、内容与商品安全。</td><td>蒸馏、缓存、分阶段服务、审计与回退不可省略。</td><td>Amazon 商品搜索/Rufus；SHEIN 政策 <span class="source-ref">[S12-S13][S22-S23]</span></td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <svg viewBox="0 0 1000 405" xmlns="http://www.w3.org/2000/svg" aria-label="电商生成式算法系统分层">
+      <rect width="1000" height="405" rx="10" fill="#faf9f5"/>
+      <text x="48" y="39" fill="#1b365d" font-size="13" font-family="serif" letter-spacing="2">FIGURE 01  ·  PRODUCTION STACK</text>
+      <line x1="48" y1="55" x2="952" y2="55" stroke="#d8d4c7"/>
+      <g font-family="serif">
+        <rect x="55" y="83" width="170" height="77" rx="7" fill="#eef2f7" stroke="#1b365d"/>
+        <text x="140" y="112" text-anchor="middle" fill="#1b365d" font-size="19">请求与上下文</text>
+        <text x="140" y="139" text-anchor="middle" fill="#504e49" font-size="14">query · 图像 · 行为</text>
+        <rect x="270" y="83" width="198" height="77" rx="7" fill="#f5f4ed" stroke="#d8d4c7"/>
+        <text x="369" y="112" text-anchor="middle" fill="#141413" font-size="19">多模态表征</text>
+        <text x="369" y="139" text-anchor="middle" fill="#504e49" font-size="14">商品 grounding · SID</text>
+        <rect x="513" y="83" width="202" height="77" rx="7" fill="#eef2f7" stroke="#1b365d"/>
+        <text x="614" y="112" text-anchor="middle" fill="#1b365d" font-size="19">生成 / 排序模型</text>
+        <text x="614" y="139" text-anchor="middle" fill="#504e49" font-size="14">召回 · 改写 · 重排</text>
+        <rect x="760" y="83" width="187" height="77" rx="7" fill="#f5f4ed" stroke="#d8d4c7"/>
+        <text x="853" y="112" text-anchor="middle" fill="#141413" font-size="19">页面与交互</text>
+        <text x="853" y="139" text-anchor="middle" fill="#504e49" font-size="14">搜索 · Feed · 对话</text>
+        <path d="M225 121 H260 M468 121 H503 M715 121 H750" stroke="#1b365d" stroke-width="1.2"/>
+        <path d="M254 116 L262 121 L254 126 M497 116 L505 121 L497 126 M744 116 L752 121 L744 126" fill="none" stroke="#1b365d" stroke-width="1.2"/>
+        <rect x="55" y="208" width="892" height="72" rx="7" fill="#f5f4ed" stroke="#d8d4c7"/>
+        <text x="84" y="237" fill="#1b365d" font-size="17">约束层</text>
+        <text x="195" y="237" fill="#3d3d3a" font-size="15">库存 / 价格 / 广告标识 / 安全 / 多样性 / 商家公平 / 个性化设置 / 延迟预算</text>
+        <text x="84" y="263" fill="#6b6a64" font-size="13">生成结果通过约束层校验、过滤、回退后才能曝光</text>
+        <rect x="55" y="314" width="892" height="55" rx="7" fill="#1b365d"/>
+        <text x="84" y="347" fill="#f5f4ed" font-size="17">反馈闭环</text>
+        <text x="215" y="347" fill="#f5f4ed" font-size="15">曝光 → 点击 / 加购 / 成交 / 负反馈 → 评估、训练、索引更新与治理审计</text>
+        <path d="M875 314 C 920 285 920 194 870 170" fill="none" stroke="#2d5a8a" stroke-width="1.4"/>
+      </g>
+    </svg>
+    <figcaption>图 1　电商生成式系统应保留约束与反馈层。示意重绘，归纳自公开系统材料 <span class="source-ref">[S01][S05][S08][S12-S13]</span>。</figcaption>
+  </figure>
+
+  <h2>判断路线成熟度的尺度</h2>
+  <p>一项工作若只展示生成样例，尚不能回答电商落地问题。更有信息量的材料会同时说明输入是什么、怎样关联真实商品或广告、在线服务是否有延迟边界、如何与旧召回或排序合并，以及实验究竟改善了相关性、点击、成交还是收入。本文的公司比较按这五个问题展开。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">03 · Multimodal and Visual Retrieval</div>
+  <h1>多模态大模型与图像检索</h1>
+  <p class="lead">电商图像检索的难处不在看懂一张图，而在把视觉相似、商品属性、用户意图和实时可售目录对齐。公开路线经历了从大规模图像索引、图文表征学习，到把语义保持写入个性化训练目标的推进。</p>
+
+  <h2>三层问题与代表证据</h2>
+  <table>
+    <thead><tr><th>层次</th><th>要解决的问题</th><th>公开实现</th><th>可迁移经验</th></tr></thead>
+    <tbody>
+      <tr><td>索引与检索</td><td>商品图更新频繁，检索结果必须跟随上下架与新图变化。</td><td>京东实时视觉搜索论文描述百亿级以上商品图与增量更新要求。<span class="source-ref">[S05]</span></td><td>先把特征抽取、分布式索引、增量刷新和过滤做稳，再引入更重的模型。</td></tr>
+      <tr><td>图文表示</td><td>标题含促销噪声，图像与文本并非干净配对。</td><td>Amazon MML-TP 以 token pruning 清理训练中的文本噪声，在超过 71 万 Amazon 商品组成的数据集上评价视觉检索。<span class="source-ref">[S14]</span></td><td>商品数据清洗是表示学习的一部分，不能完全依赖离线人工规则。</td></tr>
+      <tr><td>个性化对齐</td><td>行为目标优化可能侵蚀预训练模型保有的商品语义。</td><td>淘宝 KARMA 将多模态语义可恢复性作为训练期正则，作者报告线上 GMV 增长 <span class="hl">0.9%</span>。<span class="source-ref">[S03]</span></td><td>个性化损失与内容保持损失需要共同监控，防止表示只记热门共现。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>生成式多模态检索的边界</h2>
+  <p>Amazon 参与的 GENIUS 将图像、文本或图文对象量化为层次化离散标识，再由生成模型预测目标标识；推理时使用 trie 约束输出为有效条目。CVPR 2025 工作在多模态基准上显示了生成检索相对既有生成方法的提升，并不等价于 Amazon 商城已经用该方案替换在线商品检索。<span class="source-ref">[S15]</span></p>
+
+  <div class="two-col">
+    <div class="card">
+      <div class="label">EMBED AND RETRIEVE</div>
+      <h3>向量检索</h3>
+      <p>编码查询和商品，利用近似最近邻搜索取候选。索引工程成熟，新增商品可快速写入；检索目标仍受表征质量制约。</p>
+    </div>
+    <div class="card">
+      <div class="label">GENERATE AND VALIDATE</div>
+      <h3>生成检索</h3>
+      <p>将商品表示为离散代码，模型按条件生成代码，再以合法前缀树和库存规则验证。统一建模能力增强，同时引入解码成本和无效候选风险。</p>
+    </div>
+  </div>
+
+  <h2>适用于商品图搜的实施顺序</h2>
+  <ol>
+    <li>建设稳定的商品图、主图版本、类目、属性、库存及上下架流水线，建立图搜点击和成交的可回溯日志。</li>
+    <li>以图像到商品的向量召回作为基线，分别测同款、相似款、搭配意图与长尾新品的召回质量和更新延迟。</li>
+    <li>引入图文联合编码和噪声清洗，对商品标题中的促销语、模板词和冲突属性做训练期处理。</li>
+    <li>只有在长尾泛化或跨模态查询成为主要短板时，才验证离散语义标识或生成式检索；保留 ANN 和规则候选作为回退。</li>
+  </ol>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">04 · Post-training</div>
+  <h1>后训练：让生成模型服从交易目标</h1>
+  <p class="lead">电商中的模型输出会改变检索曝光、转化路径与商家收益。通用语言能力不足以约束相关性、价格事实、库存有效性和促销合规；后训练的任务是把这些可验证约束转化为训练样本、偏好关系、奖励和上线门槛。</p>
+
+  <h2>从 SFT 到业务奖励</h2>
+  <table>
+    <thead><tr><th>阶段</th><th>数据与目标</th><th>适合任务</th><th>风险控制</th></tr></thead>
+    <tbody>
+      <tr><td>领域继续训练</td><td>商品属性、类目知识、查询与多语种交易表达。</td><td>属性理解、客服问答、检索语义基础。</td><td>去重、时效标签、禁售和敏感属性过滤。</td></tr>
+      <tr><td>监督微调 SFT</td><td>高质量 query-rewrite、问答、摘要、推荐解释配对。</td><td>查询改写、视频广告摘要、购物助手响应。</td><td>答案必须可回指商品目录、政策或检索证据。</td></tr>
+      <tr><td>偏好优化</td><td>同一输入下的优劣输出对，训练模型偏向更合适响应。</td><td>对话答案、解释风格、商品比较。</td><td>DPO 简化训练，但偏好标签仍可能忽略成交相关性。<span class="source-ref">[S26]</span></td></tr>
+      <tr><td>奖励优化</td><td>相关性、点击/成交、合规、列表价值或下游 ranker 信号。</td><td>查询生成、主动推荐、列表策略。</td><td>防止奖励投机，使用离线守门与小流量实验。GRPO 提供无需 critic 的组内相对优化思路。<span class="source-ref">[S27]</span></td></tr>
+      <tr><td>检索增强与工具</td><td>实时目录、评论、问答、库存与政策 API。</td><td>购物问答、比较和决策辅助。</td><td>回答引用证据、库存价格临出答案前刷新、调用审计。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>公开系统如何选择奖励</h2>
+  <p><strong>淘宝 AIGQ</strong> 将首页搜索前查询推荐改为混合生成架构，论文描述了由在线点击率提供的模型奖励和近线/在线组合服务。这里的关键并非生成更自然的查询，而是生成 query 能否进入检索并改善用户行动。<span class="source-ref">[S02]</span></p>
+  <p><strong>京东查询重写</strong> 使用多任务 SFT 与 Query-Based Normalized GRPO，将 query 与检索商品之间的相关性纳入优化；论文称该方法自 2025 年 8 月在京东实施，并报告在线实验改善相关性和每用户购买转化。该结论按作者声明引用。<span class="source-ref">[S07]</span></p>
+  <p><strong>Shopee RGAlign-Rec</strong> 面向聊天入口的零查询主动推荐，把既有排序模型作为大模型推理器的奖励信号；作者报告初始 query-enhanced 推荐与后续对齐阶段的在线增益。这提供了一个实用结构：语义推理产生意图，成熟 ranker 负责判断商品价值。<span class="source-ref">[S20]</span></p>
+  <p><strong>Amazon Rufus</strong> 的官方说明将专门训练的购物 LLM、检索增强生成、客户反馈学习、连续批处理和流式响应放在同一系统叙述中。这表明购物助手的后训练无法脱离证据检索和服务工程独立讨论。<span class="source-ref">[S12]</span></p>
+
+  <figure>
+    <svg viewBox="0 0 1000 382" xmlns="http://www.w3.org/2000/svg" aria-label="电商后训练和上线闭环">
+      <rect width="1000" height="382" rx="10" fill="#faf9f5"/>
+      <text x="48" y="38" fill="#1b365d" font-size="13" font-family="serif" letter-spacing="2">FIGURE 02  ·  ALIGNMENT LOOP</text>
+      <line x1="48" y1="54" x2="952" y2="54" stroke="#d8d4c7"/>
+      <g font-family="serif">
+        <rect x="54" y="91" width="153" height="70" rx="7" fill="#f5f4ed" stroke="#d8d4c7"/>
+        <text x="130" y="119" text-anchor="middle" font-size="18" fill="#141413">日志与目录</text>
+        <text x="130" y="143" text-anchor="middle" font-size="13" fill="#6b6a64">query · item · action</text>
+        <rect x="251" y="91" width="153" height="70" rx="7" fill="#eef2f7" stroke="#1b365d"/>
+        <text x="327" y="119" text-anchor="middle" font-size="18" fill="#1b365d">SFT 数据</text>
+        <text x="327" y="143" text-anchor="middle" font-size="13" fill="#504e49">grounded examples</text>
+        <rect x="448" y="91" width="153" height="70" rx="7" fill="#eef2f7" stroke="#1b365d"/>
+        <text x="524" y="119" text-anchor="middle" font-size="18" fill="#1b365d">偏好 / 奖励</text>
+        <text x="524" y="143" text-anchor="middle" font-size="13" fill="#504e49">DPO · GRPO · ranker</text>
+        <rect x="645" y="91" width="153" height="70" rx="7" fill="#f5f4ed" stroke="#d8d4c7"/>
+        <text x="721" y="119" text-anchor="middle" font-size="18" fill="#141413">离线门槛</text>
+        <text x="721" y="143" text-anchor="middle" font-size="13" fill="#6b6a64">相关性 · 安全 · 成本</text>
+        <rect x="835" y="91" width="113" height="70" rx="7" fill="#1b365d"/>
+        <text x="891" y="119" text-anchor="middle" font-size="18" fill="#f5f4ed">实验</text>
+        <text x="891" y="143" text-anchor="middle" font-size="13" fill="#f5f4ed">A/B</text>
+        <path d="M207 126 H241 M404 126 H438 M601 126 H635 M798 126 H825" stroke="#1b365d" stroke-width="1.2"/>
+        <rect x="54" y="218" width="894" height="88" rx="7" fill="#f5f4ed" stroke="#d8d4c7"/>
+        <text x="82" y="248" font-size="17" fill="#1b365d">上线审计</text>
+        <text x="195" y="248" font-size="15" fill="#3d3d3a">无效商品率 · 事实错误 · 负反馈 · 长尾覆盖 · 延迟 / GPU 成本 · 公平与合规</text>
+        <text x="82" y="277" font-size="14" fill="#6b6a64">失败样本进入标注和奖励更新；策略问题进入过滤规则与回退链路，而非只靠再训练。</text>
+        <path d="M891 171 V207 M891 306 C891 340 130 340 130 170" fill="none" stroke="#2d5a8a" stroke-width="1.3"/>
+      </g>
+    </svg>
+    <figcaption>图 2　后训练闭环将语义质量、交易目标和治理约束放到同一评价通路；图为方法归纳，不代表单一公司的完整架构。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter flow">
+  <div class="chapter-num">05 · Generative Recommendation</div>
+  <h1>生成式推荐与列表决策</h1>
+  <p class="lead">推荐场景要生成的对象未必是自然语言。它可以是商品的离散标识、下一次行为、完整曝光列表或列表编辑动作。生成方式改变之后，库存合法性、多目标收益和在线吞吐仍由推荐系统承担。</p>
+
+  <h2>语义 ID 与序列建模</h2>
+  <p>TIGER 先用残差量化将商品表示为语义 ID，再训练序列到序列模型依据用户历史生成下一个物品 ID；该方法为冷启动商品共享语义 token 提供了清楚接口。HSTU 则把工业推荐描述为大规模行为序列转导问题，公开论文报告了生成推荐模型在在线实验中的观察结果。这两篇方法论文说明生成式推荐为何可行，不能作为本文七家公司已部署某种系统的证据。<span class="source-ref">[S24-S25]</span></p>
+
+  <h2>生产系统中的两种落点</h2>
+  <table>
+    <thead><tr><th>落点</th><th>模型承担的决策</th><th>公开案例</th><th>仍需保留的工程部件</th></tr></thead>
+    <tbody>
+      <tr><td>列表级重排</td><td>从已有候选产生兼顾点击、转化和 GMV 的顺序列表。</td><td>淘宝 SORT-Gen 报告在百亿补贴场景带来 <span class="hl">+4.13%</span> CLICK 与 <span class="hl">+8.10%</span> GMV，并称已部署于多个淘宝场景。<span class="source-ref">[S01]</span></td><td>多路召回、候选过滤、预算/库存/合规策略与 A/B 实验。</td></tr>
+      <tr><td>跨域序列排序</td><td>在不同业务域下解释同一用户的序列行为并给候选打分。</td><td>抖音 ADS 在线表报告电商场景 <span class="hl">GMV/U +0.79%</span>，并称部署于多个 ByteDance 推荐服务。<span class="source-ref">[S08]</span></td><td>实时行为流、特征一致性、排序服务容量和域间干扰监控。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>生成召回不应被写成全面替代</h2>
+  <p>向量召回对超大目录的服务路径、增量索引与回退机制已经成熟。生成式候选在冷启动、长尾与统一建模上有吸引力，却会带来无效代码、重复候选、解码延迟和目录变更同步问题。更稳健的实验路线是新增一条生成候选通道，与关键词、向量、图和运营召回融合，再由相同精排与约束层衡量增量价值。</p>
+
+  <pre><code>候选 = lexical ∪ vector ∪ graph ∪ generative_SID ∪ operations
+候选 = 过滤(可售状态, 合规, 去重, 预算, 已曝光, 延迟上限)
+列表 = 重排(候选, CTR, CVR, GMV, 多样性, 长期价值)
+上线条件 = 相关性不退化 ∧ 无效商品率受控 ∧ 延迟/成本可承受</code></pre>
+
+  <div class="note">
+    <div class="note-label">经验判断</div>
+    生成式推荐的首个可靠收益往往来自候选增量或列表重排，而不是移除已有召回和排序。前者可隔离效果、限定失败范围并保留回退；后者需要一次性承担目录覆盖、服务容量和策略治理，证据门槛高得多。
+  </div>
+</section>
+
+<section class="chapter flow">
+  <div class="chapter-num">06 · AI Search</div>
+  <h1>AI 搜索：从查询理解到购物助手</h1>
+  <p class="lead">搜索给生成模型提供了清晰的验证对象：一条生成 query 是否检索到相关且可购的商品，一段回答是否基于目录和评论证据，一次交互是否推动用户完成决策。因此，搜索是公开材料中最密集的生成式电商落点。</p>
+
+  <h2>四类产品能力</h2>
+  <table>
+    <thead><tr><th>能力</th><th>用户请求</th><th>模型输出</th><th>验收指标</th><th>证据</th></tr></thead>
+    <tbody>
+      <tr><td>长尾查询改写</td><td>表述模糊、少结果 query。</td><td>可检索且保留意图的 rewrite。</td><td>相关性、少结果率、成交。</td><td>淘宝 BEQUE、京东 LLM 改写 <span class="source-ref">[S04][S07]</span></td></tr>
+      <tr><td>搜索前查询推荐</td><td>尚未输入，结合会话与兴趣提示。</td><td>可点击的个性化 query 列表。</td><td>点击、后续检索和交易贡献。</td><td>淘宝 AIGQ <span class="source-ref">[S02]</span></td></tr>
+      <tr><td>语义商品匹配</td><td>自然语言需求寻找商品。</td><td>query/product embedding 与候选。</td><td>检索相关性、在线替代品命中、延迟。</td><td>Amazon 蒸馏模型 <span class="source-ref">[S13]</span></td></tr>
+      <tr><td>购物对话</td><td>比较、推荐、细节问答和决策辅助。</td><td>有来源支撑的答案及商品入口。</td><td>有用反馈、事实性、点击/转化、响应延迟。</td><td>Amazon Rufus；Shopee 对话推荐研究 <span class="source-ref">[S12][S20]</span></td></tr>
+    </tbody>
+  </table>
+
+  <h2>两种上线方式</h2>
+  <p><strong>生成内容进入旧引擎</strong>，适合查询改写与查询推荐。模型生成文字，既有搜索系统执行召回、过滤与排序；相关性模型能够拒绝偏离原意的改写。淘宝与京东论文都沿着这一路径构造反馈。<span class="source-ref">[S02][S04][S07]</span></p>
+  <p><strong>大模型协调检索与界面</strong>，适合购物问答。Rufus 官方工程稿描述了购物专用 LLM、来自商品目录/评论/社区问答及 Stores API 的检索增强、客户反馈学习，以及连续批处理与流式呈现。回答生成和证据刷新、组件渲染、延迟服务必须联动。<span class="source-ref">[S12]</span></p>
+
+  <h2>搜索相关性的防线</h2>
+  <p>搜索任务中最危险的生成错误，是生成一个看似合理、实际改变购物约束的 query：颜色、尺寸、兼容型号、价格上限、禁用成分或配送承诺被省略，都会把流畅的建议变成错误商品入口。训练数据需要保留约束属性，奖励模型需要重罚约束丢失，线上还要用结构化商品属性和库存过滤做最终校验。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">07 · China Platforms</div>
+  <h1>中国平台公开路线</h1>
+  <p class="lead">中国平台的公开材料中，淘宝覆盖的生成式环节最连续，京东在搜索和图搜上证据清楚，抖音电商已有直接线上论文，PDD 则尚不能从官方披露推出具体模型路线。这里呈现的是公开可验证范围，而非平台能力排名。</p>
+
+  <h2>Alibaba 淘宝/天猫：生成能力覆盖搜索与重排</h2>
+  <table>
+    <thead><tr><th>系统</th><th>问题</th><th>方法要点</th><th>公开状态</th></tr></thead>
+    <tbody>
+      <tr><td>BEQUE</td><td>长尾 query 召回不足。</td><td>LLM 生成多个改写，并借助淘宝离线系统的排序反馈对齐在线目标。</td><td>工业论文记录线上 A/B 提升 GMV 与交易数。<span class="source-ref">[S04]</span></td></tr>
+      <tr><td>SORT-Gen</td><td>最终列表需同时优化点击、转化与 GMV。</td><td>生成式列表重排，避免逐步推断的在线代价。</td><td>SIGIR 2025；报告百亿补贴及多场景部署。<span class="source-ref">[S01]</span></td></tr>
+      <tr><td>AIGQ</td><td>首页 HintQ 需提前捕获个性化购物意图。</td><td>近线个性化生成与在线轻量路径结合，使用点击反馈奖励。</td><td>2026 预印本；线上结果为作者报告。<span class="source-ref">[S02]</span></td></tr>
+      <tr><td>KARMA</td><td>行为优化导致多模态语义坍缩。</td><td>以图文语义可恢复性作为训练期正则，服务阶段不增加同类解码负担。</td><td>2026 材料；作者报告线上 GMV <span class="hl">+0.9%</span>。<span class="source-ref">[S03]</span></td></tr>
+    </tbody>
+  </table>
+  <p>这些工作形成的共同路线是：生成模型没有绕过检索与交易指标，而是被放入查询入口、个性化表示和最终列表三个能单独做实验的节点。对团队而言，这种拆解比“训练电商通用大模型后再找场景”更容易建立指标闭环。</p>
+
+  <h2>京东：实时图搜打底，LLM 改写进入搜索</h2>
+  <p>京东 2019 年公开的实时视觉搜索系统明确了电商图搜的硬问题：大量商品图片与高频变更要求分布式特征抽取、实时增量索引和快速检索。JDsearch 又公开了来自真实查询与完整交互的个性化商品搜索数据集，包含约 <span class="hl">17 万</span> 用户、<span class="hl">1200 万</span> 商品、<span class="hl">940 万</span> 次真实搜索与 <span class="hl">2600 万</span> 条用户商品交互。<span class="source-ref">[S05-S06]</span></p>
+  <p>2026 年查询重写预印本把 LLM 推进一步：多任务 SFT 生成改写及相关性标记，后续以 Query-Based Normalized GRPO 优化；作者称方法自 2025 年 8 月在京东实施。公开链路支持“京东将后训练用于电商搜索改写”的陈述，尚不支持其生成模型已经取代推荐主链路。<span class="source-ref">[S07]</span></p>
+
+  <h2>抖音电商：跨域序列排序已有直接证据</h2>
+  <p>ADS 研究的是超级应用中多业务域用户序列的不同含义。论文包含 Douyin-Ecom 数据和线上实验，在线结果表报告电商场景 <span class="hl">GMV/U +0.79%</span>，并称方法已部署于多个 ByteDance 推荐服务。这是一条直接属于抖音电商推荐排序的公开证据。<span class="source-ref">[S08]</span></p>
+  <p>Monolith 较早公开了 ByteDance 面对动态稀疏特征的在线训练基础设施，并声明落于 BytePlus Recommend 产品；它说明实时推荐的系统背景，不构成抖音电商直接部署证明。RankMixer 关注更大排序模型如何在高 QPS 与延迟约束下使用 GPU，报告将模型利用率从 <span class="hl">4.5%</span> 提升到 <span class="hl">45%</span> 并在抖音推荐系统部署；SUMMA 则以多模态大模型摘要视频广告内容，论文报告搜索广告收入增长 <span class="hl">1.5%</span>。这三项材料提供相关基础与搜广方向，ADS 仍是本文用于抖音电商部署判断的直接证据。<span class="source-ref">[S09-S11]</span></p>
+
+  <h2>PDD（拼多多/Temu）：公开披露不足以归纳模型路线</h2>
+  <p>PDD Holdings 2025 Form 20-F 提及竞争者采用人工智能方案，并披露 Temu 的推荐系统受到欧盟监管审查等风险；文件没有说明拼多多或 Temu 的多模态模型、后训练算法、生成式推荐或图搜架构。对该集团的严谨结论限于：推荐系统处在平台合规与竞争语境内，本文未找到足以还原具体产品技术路线的一手公开论文或工程稿。<span class="source-ref">[S21]</span></p>
+</section>
+
+<section class="chapter flow">
+  <div class="chapter-num">08 · Global Platforms</div>
+  <h1>跨境与国际平台公开路线</h1>
+  <p class="lead">Amazon 的证据从在线语义匹配延伸到购物对话，Shopee 将东南亚多语种电商能力与推荐对齐并行推进，SHEIN 则通过政策披露呈现排序因素和治理压力。三者展示了产品形态、语言市场和公开义务对技术叙事的影响。</p>
+
+  <h2>Amazon：检索、图文表示与购物对话</h2>
+  <p>Amazon 的 web-scale 语义商品搜索使用大型教师模型训练并蒸馏到 <span class="hl">75M</span> 参数 BERT 类在线模型，论文报告在相近推理延迟下离线相关性相对 DSSM 基线最高提升 <span class="hl">23%</span>，线上 A/B 对精确与替代商品检索各报告 <span class="hl">2%</span> 提升。这里最可迁移的经验是用大模型提供训练信号，让服务模型满足实时检索预算。<span class="source-ref">[S13]</span></p>
+  <p>MML-TP 针对图文商品搜索中标题噪声进行在线 token 清理；GENIUS 则研究把多模态目标量化成代码后生成检索。前者直接以 Amazon 商品数据评测，后者是由 Amazon 研究者参与的通用多模态检索成果，部署含义不同。<span class="source-ref">[S14-S15]</span></p>
+  <p>Rufus 是产品工程证据最完整的生成式购物入口：官方技术稿写明专用购物 LLM 使用目录、评论、社区问答及公开网页信息训练，并通过 RAG 调用可靠数据源和 Stores API；反馈学习、Inferentia/Trainium、连续批处理和流式 hydration 共同服务在线体验。<span class="source-ref">[S12]</span></p>
+
+  <h2>Shopee：多语种领域模型与排序反馈对齐</h2>
+  <p>LightSAGE 是稳固基线：RecSys 2023 论文描述它在 Shopee 广告推荐中以图神经网络产生 item embedding 并进行向量检索，经在线 A/B 后部署到主流量。后续 Compass 系列把问题扩到东南亚语言与电商工作流；Compass-v3 技术报告描述了多语种、多模态电商训练，以及基于最优传输的直接偏好优化。<span class="source-ref">[S16-S18]</span></p>
+  <p>EcomEval 给出了六大类、<span class="hl">37</span> 个任务、其中 <span class="hl">8</span> 个多模态任务的领域评价设计；RGAlign-Rec 面向聊天入口的主动推荐，用排序模型反馈约束 LLM 生成的潜在查询，并报告在线实验。把领域评测先建立起来，再将生成推理接到已有 ranker，是 Shopee 材料中最清楚的工程次序。<span class="source-ref">[S19-S20]</span></p>
+
+  <h2>SHEIN：可确认排序因素，无法确认模型实现</h2>
+  <p>SHEIN Marketplace User Ranking Policy 声明搜索与商品列表会考虑查询匹配、浏览历史、点击、加购、购买、位置和个性化设置，并向用户提供调整个性化的入口。这份政策能确认排序及推荐因素存在，不披露算法模型、训练方式或线上收益。<span class="source-ref">[S22]</span></p>
+  <p>欧盟委员会于 2026 年 2 月 17 日公告启动针对 SHEIN 的《数字服务法》调查，其中包括推荐系统透明度，并指出超大型在线平台必须披露推荐系统主要参数且提供不基于画像的选项。对于 SHEIN，算法团队最先能从一手材料得出的路线问题是可解释与用户控制，而非某种未公开模型的优劣。<span class="source-ref">[S23]</span></p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">09 · Engineering Playbook</div>
+  <h1>工程实施路径与经验</h1>
+  <p class="lead">公开实践支持一条稳健路线：建立可审计数据和成熟检索/排序基线，在边界明确的节点加入生成能力，再以业务与治理指标决定是否扩大范围。以下路径面向要实际建设电商算法能力的团队。</p>
+
+  <h2>路线图：四阶段而非一次替换</h2>
+  <figure>
+    <svg viewBox="0 0 1000 410" xmlns="http://www.w3.org/2000/svg" aria-label="电商生成式算法四阶段路线图">
+      <rect width="1000" height="410" rx="10" fill="#faf9f5"/>
+      <text x="48" y="39" fill="#1b365d" font-size="13" font-family="serif" letter-spacing="2">FIGURE 03  ·  IMPLEMENTATION ROADMAP</text>
+      <line x1="48" y1="55" x2="952" y2="55" stroke="#d8d4c7"/>
+      <line x1="92" y1="200" x2="914" y2="200" stroke="#1b365d" stroke-width="1.2"/>
+      <g font-family="serif">
+        <circle cx="135" cy="200" r="13" fill="#1b365d"/><text x="135" y="205" text-anchor="middle" fill="#f5f4ed" font-size="12">1</text>
+        <circle cx="365" cy="200" r="13" fill="#1b365d"/><text x="365" y="205" text-anchor="middle" fill="#f5f4ed" font-size="12">2</text>
+        <circle cx="595" cy="200" r="13" fill="#1b365d"/><text x="595" y="205" text-anchor="middle" fill="#f5f4ed" font-size="12">3</text>
+        <circle cx="825" cy="200" r="13" fill="#1b365d"/><text x="825" y="205" text-anchor="middle" fill="#f5f4ed" font-size="12">4</text>
+        <rect x="56" y="83" width="172" height="82" rx="7" fill="#eef2f7" stroke="#1b365d"/>
+        <text x="72" y="111" fill="#1b365d" font-size="18">基线与数据</text>
+        <text x="72" y="136" fill="#504e49" font-size="13">索引 · 日志 · 标签</text>
+        <rect x="286" y="235" width="172" height="92" rx="7" fill="#f5f4ed" stroke="#d8d4c7"/>
+        <text x="302" y="264" fill="#141413" font-size="18">语义增强</text>
+        <text x="302" y="288" fill="#504e49" font-size="13">图文表征 · rewrite</text>
+        <text x="302" y="307" fill="#504e49" font-size="13">蒸馏在线模型</text>
+        <rect x="516" y="83" width="172" height="82" rx="7" fill="#eef2f7" stroke="#1b365d"/>
+        <text x="532" y="111" fill="#1b365d" font-size="18">生成决策</text>
+        <text x="532" y="136" fill="#504e49" font-size="13">候选 · 重排 · 对话</text>
+        <rect x="746" y="235" width="172" height="92" rx="7" fill="#f5f4ed" stroke="#d8d4c7"/>
+        <text x="762" y="264" fill="#141413" font-size="18">规模与治理</text>
+        <text x="762" y="288" fill="#504e49" font-size="13">延迟 · 回退 · 审计</text>
+        <text x="762" y="307" fill="#504e49" font-size="13">用户控制</text>
+        <text x="56" y="369" fill="#6b6a64" font-size="14">每阶段出口：离线守门通过、在线增量可归因、成本可承受、违规与事实错误不升高</text>
+      </g>
+    </svg>
+    <figcaption>图 3　可归因的渐进上线顺序。路线由七个平台材料综合归纳，未将其归属于单一公司。</figcaption>
+  </figure>
+
+  <h2>不同业务切入口</h2>
+  <table>
+    <thead><tr><th>业务症状</th><th>优先实验</th><th>训练/服务设计</th><th>不应先做的事</th></tr></thead>
+    <tbody>
+      <tr><td>图片找同款或相似款体验弱</td><td>图文编码 + 增量向量检索。</td><td>清洗图文噪声，单独测新品和上下架延迟。</td><td>未经索引基线即投入生成 ID 全量替换。</td></tr>
+      <tr><td>长尾搜索少结果、搜索词表达差</td><td>约束保留的 query rewrite。</td><td>SFT 后以相关性/成交守门，小流量接入原搜索引擎。</td><td>只优化语言流畅度或生成多样性。</td></tr>
+      <tr><td>推荐候选充足但列表目标冲突</td><td>列表级重排。</td><td>候选固定，评价点击、转化、GMV、多样性及约束违例。</td><td>把列表问题包装成开放式聊天生成。</td></tr>
+      <tr><td>用户需要比较和决策辅助</td><td>检索增强购物助手。</td><td>目录/评论/政策检索，工具调用，事实评价和流式服务。</td><td>依赖模型记忆给价格、库存或适配结论。</td></tr>
+      <tr><td>跨场景行为割裂</td><td>域感知序列排序。</td><td>分域评价，监测一个域的优化是否牺牲另一个域。</td><td>直接混合所有日志当成同一偏好信号。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>团队需要掌握的经验</h2>
+  <p><strong>数据先被定义为决策证据</strong>，商品目录、图片版本、搜索日志、曝光位置、价格库存和负反馈需要能沿一次推荐或搜索请求回溯。否则后训练会把历史偏差写进模型，却无法判断错误来自数据、模型还是策略。</p>
+  <p><strong>奖励接近实际目标，也要比实际目标更可诊断</strong>，点击或成交可以用于线上判断，但训练中还需相关性、约束保留、无效商品、事实错误和多样性等分解指标。单一收益信号容易奖励误导 query 或过度曝光热门商品。</p>
+  <p><strong>重模型放在有价值的位置</strong>，Amazon 的蒸馏语义搜索和 Rufus 服务工程、淘宝混合查询生成、抖音排序模型的服务优化，都指向相同实践：昂贵语义能力用于提供信息增量，稳定低延迟路径承担大规模曝光。</p>
+  <p><strong>治理是模型接口的一部分</strong>，广告标识、个性化设置、申诉、内容和商品安全需要成为请求、输出或日志中的结构化字段。SHEIN 与 PDD 的公开材料虽然不能回答模型结构，却提示团队：推荐系统需要说明它对用户做了什么。</p>
+</section>
+
+<section class="chapter flow">
+  <div class="chapter-num">10 · Evaluation and Research Agenda</div>
+  <h1>评估、风险与研究议程</h1>
+  <p class="lead">生成式电商算法的评价必须把语言质量压回交易真实性与系统责任中。能写出合理文本的模型，只有在相关商品可售、约束不丢、长尾不被压制、延迟可控且用户有选择权时，才形成生产价值。</p>
+
+  <h2>评价矩阵</h2>
+  <table>
+    <thead><tr><th>环节</th><th>离线核心指标</th><th>线上指标</th><th>失败警报</th></tr></thead>
+    <tbody>
+      <tr><td>图搜/多模态召回</td><td>Recall@K、类目/属性一致、冷启动覆盖。</td><td>点击、加购、成交、响应和索引更新延迟。</td><td>视觉相似却规格错误；已下架商品返回。</td></tr>
+      <tr><td>查询改写/生成</td><td>相关性、约束保留、少结果率、去重。</td><td>检索成功、点击、购买转化、负反馈。</td><td>品牌/尺寸/价格限制消失；诱导式 query。</td></tr>
+      <tr><td>生成召回/重排</td><td>NDCG、覆盖、多样性、无效 ID、约束违例。</td><td>CTR/CVR/GMV、长期留存、商家分布。</td><td>热门坍缩、重复曝光、利益冲突。</td></tr>
+      <tr><td>购物助手</td><td>grounded QA、引用正确、安全和拒答。</td><td>有用反馈、商品入口行为、延迟与成本。</td><td>错误库存/价格/兼容性建议；不可解释来源。</td></tr>
+      <tr><td>治理</td><td>规则覆盖、审计可还原、敏感属性隔离。</td><td>申诉、设置切换、违规率、监管响应。</td><td>无法提供非画像路径或主要排序因素解释。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>常见误判</h2>
+  <table>
+    <thead><tr><th>误判</th><th>问题所在</th><th>更严谨的做法</th></tr></thead>
+    <tbody>
+      <tr><td>论文有线上数字，因此可以横向给平台排能力名次。</td><td>各论文的场景、流量、基线、指标和统计检验不同。</td><td>只在同一论文的对照内读提升，跨平台比较路线与证据而非数值。</td></tr>
+      <tr><td>公司研究者发表生成检索，即商城已上线该检索。</td><td>研究基准与生产部署是两种证据。</td><td>没有部署表述时写为研究方向，Amazon GENIUS 即如此。</td></tr>
+      <tr><td>相关业务线模型可代表目标产品。</td><td>广告、Feed、商城搜索和电商推荐有不同目标及规则。</td><td>抖音章节将 ADS 直接证据与 SUMMA 相关证据分列。</td></tr>
+      <tr><td>没有论文就说明没有技术能力。</td><td>企业可能选择不公开。</td><td>写为公开证据不足。PDD 与 SHEIN 不作负面能力推断。</td></tr>
+      <tr><td>生成回复自然即可上线。</td><td>电商错误会直接改变购买决策。</td><td>对目录 grounding、约束保留、库存价格刷新、回退与申诉设硬门槛。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>仍值得推进的研究问题</h2>
+  <p><strong>可变目录下的生成标识</strong>，新品、变价和下架频繁发生，语义 ID 或生成索引怎样快速更新且不破坏已有表示，仍需要更完整的工业证据。</p>
+  <p><strong>多模态语义与行为收益的冲突</strong>，KARMA 已将语义坍缩问题明确提出；未来系统需要监测内容相似、个体偏好和商家生态之间的长期平衡。</p>
+  <p><strong>奖励与合规联合建模</strong>，相关性、成交、广告透明、用户控制和公平约束如何进入同一优化流程，公开工作仍多在单任务或局部场景。</p>
+  <p><strong>平台可解释性的技术标准</strong>，SHEIN 受到的透明度审视提示一个普遍问题：生成系统越能主动推断与组织商品，平台越需要给用户可理解、可关闭、可审计的控制面。</p>
+
+  <div class="callout">
+    <div class="note-label">结论</div>
+    电商大模型路线的技术判断，应从可核验的购买决策节点开始，继而确认数据、奖励、服务与治理边界；生成能力只有带来可归因的增量，才值得扩大范围。这一顺序与公开工业证据最相符。
+  </div>
+</section>
+
+<section class="chapter flow">
+  <div class="chapter-num">11 · Appendix</div>
+  <h1>附录：阅读路径、术语与来源映射</h1>
+  <p class="lead">附录为继续研究和工程复核提供入口。正文仅在证据支持范围内作判断；更细的文献元数据和边界说明见同目录 <code>sources.md</code> 与 <code>data/source-map.tsv</code>。</p>
+
+  <h2>A. Further Reading</h2>
+  <table>
+    <thead><tr><th>优先级</th><th>资料</th><th>适合读者</th><th>阅读理由</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag">起点</span></td><td>TIGER <span class="source-ref">[S24]</span></td><td>要理解生成式推荐的工程师</td><td>语义 ID 与生成召回问题定义最清楚，可先建立方法坐标。</td></tr>
+      <tr><td><span class="tag">起点</span></td><td>SORT-Gen <span class="source-ref">[S01]</span></td><td>电商推荐负责人</td><td>直接展示列表级多目标优化如何落入淘宝业务节点。</td></tr>
+      <tr><td><span class="tag">深入</span></td><td>京东 LLM Query Rewriting <span class="source-ref">[S07]</span></td><td>搜索与后训练团队</td><td>相关性、SFT、GRPO 和线上实施串在同一任务中。</td></tr>
+      <tr><td><span class="tag">深入</span></td><td>Amazon Rufus engineering article <span class="source-ref">[S12]</span></td><td>购物助手与平台工程团队</td><td>说明 LLM、RAG、反馈学习和推理服务必须一起设计。</td></tr>
+      <tr><td><span class="tag">深入</span></td><td>ADS on Douyin E-commerce <span class="source-ref">[S08]</span></td><td>排序和多业务域团队</td><td>提供直接的抖音电商序列建模和在线实验陈述。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>B. 术语表</h2>
+  <table>
+    <thead><tr><th>术语</th><th>本文含义</th></tr></thead>
+    <tbody>
+      <tr><td>MLLM</td><td>Multimodal Large Language Model，多模态大语言模型，能够共同处理图像、视频和文字等输入。</td></tr>
+      <tr><td>后训练</td><td>基础训练之后以领域数据、指令、偏好或奖励继续调整模型，使其符合具体任务目标。</td></tr>
+      <tr><td>语义 ID</td><td>将商品或内容量化为可由序列模型生成的离散代码序列，代码结构承载部分语义相似性。</td></tr>
+      <tr><td>生成式召回</td><td>模型生成目标商品标识作为候选，而非仅以向量近邻或关键词匹配检索候选。</td></tr>
+      <tr><td>重排</td><td>对已经召回和排序过的候选作列表级决策，处理整体收益、多样性与策略约束。</td></tr>
+      <tr><td>Grounding</td><td>将生成内容约束到可核验的商品、属性、目录、评论、政策或工具返回结果。</td></tr>
+      <tr><td>DPO / GRPO</td><td>分别指直接偏好优化与组相对策略优化；本文只在有材料明确使用时关联到公司任务。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>C. 核心来源映射</h2>
+  <table class="compact sources">
+    <thead><tr><th>ID</th><th>来源</th><th>类型</th><th>正文用途</th></tr></thead>
+    <tbody>
+      <tr><td>S01</td><td>SORT-Gen at Taobao, SIGIR 2025</td><td>工业论文</td><td>生成式列表重排与线上结果</td></tr>
+      <tr><td>S02-S04</td><td>AIGQ；KARMA；BEQUE, Taobao</td><td>预印本/工业论文</td><td>查询生成、多模态对齐、长尾改写</td></tr>
+      <tr><td>S05-S07</td><td>JD Visual Search；JDsearch；Relevance Matters</td><td>工业论文/预印本</td><td>实时图搜、数据集、LLM 改写</td></tr>
+      <tr><td>S08-S11</td><td>ADS；RankMixer；SUMMA；Monolith, ByteDance</td><td>论文/预印本</td><td>抖音电商直接证据与相关基础</td></tr>
+      <tr><td>S12-S15</td><td>Rufus；Semantic Product Search；MML-TP；GENIUS</td><td>官方稿/论文</td><td>Amazon 对话、搜索与多模态路线</td></tr>
+      <tr><td>S16-S20</td><td>LightSAGE；Compass 系列；EcomEval；RGAlign-Rec</td><td>论文/技术报告</td><td>Shopee 召回、领域模型、评估与对齐</td></tr>
+      <tr><td>S21</td><td>PDD Holdings 2025 Form 20-F</td><td>公司披露</td><td>公开技术证据边界</td></tr>
+      <tr><td>S22-S23</td><td>SHEIN Ranking Policy；European Commission DSA notice</td><td>政策/监管公告</td><td>排序披露与透明度要求</td></tr>
+      <tr><td>S24-S27</td><td>TIGER；HSTU；DPO；DeepSeekMath/GRPO</td><td>方法论文</td><td>方法解释，不证明公司部署</td></tr>
+    </tbody>
+  </table>
+
+  <h2>D. 引用与复核边界</h2>
+  <p>文中指标原样归属于相应论文或官方材料的特定实验场景，不用于平台间绩效比较。对 2026 年预印本，正文使用“作者报告”表述。没有公开系统论文的平台保留空白，不以推测填充。材料链接、类型与访问日期完整记录在 <code>sources.md</code> 和结构化来源表中。</p>
+</section>
+
+</body>
+</html>
