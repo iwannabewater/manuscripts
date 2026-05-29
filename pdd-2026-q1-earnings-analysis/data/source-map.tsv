@@ -1,0 +1,19 @@
+ID	Source	URL	Use
+S01	PDD Holdings Q1 2026 earnings release, investor relations	https://investor.pddholdings.com/news-releases/news-release-details/pdd-holdings-announces-first-quarter-2026-unaudited-financial	Primary financial statements, management quotes, cash flow and balance sheet
+S02	PDD Holdings Q1 2026 Form 6-K Exhibit 99.1, SEC	https://www.sec.gov/Archives/edgar/data/1737806/000110465926067186/tm2615739d1_ex99-1.htm	SEC-filed version of the Q1 release
+S03	PDD Holdings FY2025 Form 20-F	https://investor.pddholdings.com/static-files/e15edea4-5e6d-4740-808a-63a3dd1b2ce4	Business model, merchant base, revenue drivers, risk disclosures
+S04	PDD Q1 2026 earnings call transcript, The Motley Fool	https://www.fool.com/earnings/call-transcripts/2026/05/27/pdd-pdd-q1-2026-earnings-call-transcript/	Management commentary and analyst Q&A; used with transcript-quality caveat
+S05	Reuters via MarketScreener on PDD Q1 miss	https://www.marketscreener.com/news/china-s-pdd-misses-quarterly-revenue-estimates-ce7f5ad2d08cf720	Consensus revenue miss, stock move, competition and regulatory framing
+S06	Investing.com China on Goldman Sachs target cut	https://cn.investing.com/news/analyst-ratings/article-93CH-3389643	Goldman Sachs reaction and revised forecasts as publicly reported
+S07	Investing.com on Barclays downgrade	https://www.investing.com/news/analyst-ratings/barclays-cuts-pinduoduo-stock-rating-on-china-weakness-temu-losses-93CH-4714038	Barclays downgrade, target cut and rationale as publicly reported
+S08	Investing.com Nigeria on Macquarie downgrade	https://ng.investing.com/news/stock-market-news/macquarie-downgrades-pinduoduo-stock-rating-on-weak-earnings-outlook-93CH-2532609	Macquarie downgrade, target cut and rationale as publicly reported
+S09	Investing.com Philippines historical price page	https://ph.investing.com/equities/pinduoduo-historical-data	PDD close, intraday range and volume around earnings
+S10	National Bureau of Statistics of China, Q1 2026 retail sales	https://www.stats.gov.cn/english/PressRelease/202604/t20260417_1963351.html	China retail and online goods retail backdrop
+S11	China government/Xinhua on Q1 2026 e-commerce sector	https://english.www.gov.cn/archive/statistics/202604/29/content_WS69f1fdd1c6d00ca5f9a0ab36.html	E-commerce category growth and agricultural online retail context
+S12	JD.com Q1 2026 official results	https://ir.jd.com/zh-hans/news-releases/news-release-details/jdcom-announces-first-quarter-2026-results	China e-commerce peer comparison
+S13	Alibaba March quarter/FY2026 results, BusinessWire	https://www.businesswire.com/news/home/20260512841182/en/Alibaba-Group-Announces-March-Quarter-2026-and-Fiscal-Year-2026-Results	China commerce, AIDC and quick commerce peer comparison
+S14	U.S. Customs and Border Protection de minimis enforcement release	https://www.cbp.gov/newsroom/national-media-release/cbp-ready-enforce-end-de-minimis-loophole-securing-borders-and	U.S. low-value parcel policy context
+S15	White House de minimis fact sheet	https://www.whitehouse.gov/fact-sheets/2025/04/fact-sheet-president-donald-j-trump-closes-de-minimis-exemptions-to-combat-chinas-role-in-americas-synthetic-opioid-crisis/	U.S. China/Hong Kong de minimis removal details
+S16	CNBC on Temu U.S. local-warehouse shift	https://www.cnbc.com/2025/05/02/temu-halts-shipments-direct-from-china-as-de-minimis-tariff-rule-ends-.html	Temu operational response to U.S. de minimis removal
+S17	Council of the EU small-parcel customs duty release	https://www.consilium.europa.eu/en/press/press-releases/2026/02/11/council-gives-final-green-light-to-new-customs-duty-rules-for-small-parcels/	EU small-parcel duty context; verified via web search/open, local extractor failed
+S18	经济观察网：拼多多启动“新拼姆”专项公司	https://www.eeo.com.cn/2026/0403/825883.shtml	RMB100 billion three-year New Pinmu initiative, RMB15 billion initial capital injection, supply-chain and self-operated-brand context

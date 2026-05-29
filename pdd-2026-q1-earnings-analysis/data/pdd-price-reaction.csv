@@ -1,0 +1,5 @@
+date,close_usd,open_usd,high_usd,low_usd,volume_m,change_pct,notes
+2026-05-26,96.64,95.00,97.97,94.50,9.27,2.24,Last close before Q1 2026 earnings release
+2026-05-27,86.61,88.69,88.69,83.61,40.36,-10.38,Earnings release day
+2026-05-28,83.03,84.30,84.48,81.56,27.54,-4.13,Second-day follow-through selloff
+2026-05-29,84.24,83.03,84.42,82.21,4.78,1.46,Partial rebound during current session/source timestamp

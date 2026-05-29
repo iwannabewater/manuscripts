@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>PDD Holdings 2026 Q1 财报深度分析</title>
+<meta name="author" content="Codex">
+<meta name="description" content="PDD Holdings 2026 年一季度财报分析：财务桥接、股价暴跌原因、Goldman Sachs 等券商反应、Temu 与新拼姆战略、长期竞争判断。">
+<meta name="keywords" content="PDD Holdings, 拼多多, Temu, 新拼姆, 2026 Q1, 财报分析, Goldman Sachs">
+<meta name="generator" content="Kami">
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 16mm 17mm 17mm 17mm;
+    background: #f5f4ed;
+
+    @bottom-center {
+      content: counter(page) " · PDD Holdings 2026 Q1 财报分析";
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8.5pt;
+      color: #6b6a64;
+    }
+  }
+
+  * { box-sizing: border-box; }
+
+  :root {
+    --paper: #f5f4ed;
+    --ivory: #fbfaf5;
+    --ink: #151514;
+    --muted: #686861;
+    --soft: #8a877d;
+    --brand: #1B365D;
+    --steel: #315b7c;
+    --teal: #2b6f6b;
+    --rust: #8b4a34;
+    --sand: #d8c8a8;
+    --line: #dfddd2;
+    --line-dark: #cbc7b8;
+    --blue-bg: #e7edf4;
+    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+  }
+
+  html, body { background: var(--paper); }
+
+  @media screen {
+    body {
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 16mm 17mm 17mm 17mm;
+      box-shadow: 0 12px 42px rgba(0, 0, 0, 0.12);
+    }
+  }
+
+  body {
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 10pt;
+    line-height: 1.55;
+    letter-spacing: 0;
+    margin: 0;
+    font-variant-numeric: tabular-nums;
+    widows: 3;
+    orphans: 3;
+  }
+
+  a { color: var(--brand); text-decoration: none; }
+  strong { font-weight: 500; }
+  .hl { color: var(--brand); font-weight: 500; }
+  .muted { color: var(--muted); }
+  .small { font-size: 8.8pt; color: var(--muted); line-height: 1.45; }
+  .nowrap { white-space: nowrap; }
+
+  .report-header {
+    display: grid;
+    grid-template-columns: 1fr 49mm;
+    gap: 12pt;
+    align-items: start;
+    border-left: 3pt solid var(--brand);
+    padding-left: 9pt;
+    margin-bottom: 12pt;
+  }
+
+  .eyebrow {
+    color: var(--brand);
+    font-size: 8.8pt;
+    letter-spacing: 0;
+    margin-bottom: 4pt;
+  }
+
+  h1 {
+    font-size: 27pt;
+    line-height: 1.08;
+    font-weight: 500;
+    margin: 0 0 5pt 0;
+  }
+
+  .subtitle {
+    color: #454541;
+    font-size: 10pt;
+    line-height: 1.42;
+  }
+
+  .price-box {
+    text-align: right;
+    padding-top: 3pt;
+  }
+
+  .price {
+    font-size: 26pt;
+    line-height: 1;
+    font-weight: 500;
+  }
+
+  .price-down {
+    color: var(--rust);
+    font-size: 10pt;
+    font-weight: 500;
+    margin-top: 4pt;
+  }
+
+  .date {
+    color: var(--muted);
+    font-size: 8.6pt;
+    margin-top: 3pt;
+  }
+
+  .metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10pt;
+    border-top: 0.5pt solid var(--line);
+    border-bottom: 0.5pt solid var(--line);
+    padding: 7pt 0;
+    margin: 10pt 0 12pt 0;
+  }
+
+  .metric-value {
+    color: var(--brand);
+    font-size: 15pt;
+    font-weight: 500;
+    line-height: 1.05;
+    white-space: nowrap;
+  }
+
+  .metric-label {
+    color: var(--muted);
+    font-size: 8.6pt;
+    line-height: 1.25;
+    margin-top: 2pt;
+  }
+
+  h2 {
+    font-size: 16pt;
+    line-height: 1.2;
+    font-weight: 500;
+    margin: 16pt 0 6pt 0;
+    break-after: avoid;
+  }
+
+  h3 {
+    font-size: 12.6pt;
+    line-height: 1.25;
+    font-weight: 500;
+    color: #343431;
+    margin: 11pt 0 4pt 0;
+    break-after: avoid;
+  }
+
+  p { margin: 0 0 7pt 0; }
+
+  ul, ol {
+    margin: 4pt 0 7pt 0;
+    padding-left: 16pt;
+  }
+
+  li { margin-bottom: 3pt; }
+  li::marker { color: var(--brand); }
+
+  .callout {
+    background: var(--blue-bg);
+    border-left: 2pt solid var(--brand);
+    padding: 8pt 9pt;
+    margin: 8pt 0 10pt 0;
+    break-inside: avoid;
+  }
+
+  .callout-title {
+    color: var(--brand);
+    font-size: 11.5pt;
+    font-weight: 500;
+    margin-bottom: 3pt;
+  }
+
+  .note {
+    border-top: 0.5pt solid var(--line);
+    border-bottom: 0.5pt solid var(--line);
+    padding: 7pt 0;
+    color: #44443f;
+    margin: 9pt 0;
+  }
+
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14pt;
+    align-items: start;
+  }
+
+  .three-col {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 9pt;
+  }
+
+  .panel {
+    background: rgba(255, 255, 255, 0.38);
+    border: 0.5pt solid var(--line);
+    padding: 7pt;
+    break-inside: avoid;
+  }
+
+  .panel h3 {
+    margin-top: 0;
+    color: var(--brand);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8pt 0 10pt 0;
+    font-size: 8.9pt;
+    line-height: 1.38;
+    break-inside: avoid;
+  }
+
+  th {
+    text-align: left;
+    color: var(--brand);
+    font-weight: 500;
+    border-bottom: 0.8pt solid var(--brand);
+    padding: 4pt 4pt 4pt 0;
+    vertical-align: bottom;
+  }
+
+  td {
+    padding: 4pt 4pt 4pt 0;
+    border-bottom: 0.4pt solid var(--line);
+    vertical-align: top;
+  }
+
+  td.num, th.num { text-align: right; white-space: nowrap; }
+
+  .striped tr:nth-child(even) td { background: rgba(255, 255, 255, 0.26); }
+  .tight td { padding-top: 3pt; padding-bottom: 3pt; }
+
+  figure {
+    margin: 10pt 0 10pt 0;
+    break-inside: avoid;
+  }
+
+  figcaption {
+    color: var(--muted);
+    font-size: 8.4pt;
+    line-height: 1.35;
+    margin-top: 3pt;
+  }
+
+  svg text {
+    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+    letter-spacing: 0;
+  }
+
+  .tag {
+    display: inline-block;
+    color: var(--brand);
+    background: var(--blue-bg);
+    border: 0.4pt solid #d5e0ec;
+    padding: 1pt 5pt;
+    margin: 0 3pt 3pt 0;
+    font-size: 8.4pt;
+    line-height: 1.25;
+  }
+
+  .signal-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8pt;
+    margin-top: 7pt;
+  }
+
+  .signal {
+    border-left: 2pt solid var(--line-dark);
+    padding: 0 0 0 7pt;
+    break-inside: avoid;
+  }
+
+  .signal strong {
+    display: block;
+    color: var(--brand);
+    margin-bottom: 2pt;
+  }
+
+  .page-break { break-before: page; }
+  .avoid-break { break-inside: avoid; }
+
+  .source-list {
+    columns: 2;
+    column-gap: 16pt;
+    font-size: 8.4pt;
+    line-height: 1.35;
+  }
+
+  .source-list p {
+    break-inside: avoid;
+    margin-bottom: 5pt;
+  }
+</style>
+</head>
+<body>
+  <header class="report-header">
+    <div>
+      <div class="eyebrow">个股研报 · 2026 Q1 财报复盘 · 数据核验至 2026-05-29</div>
+      <h1>PDD Holdings<br>拼多多集团财报深度分析</h1>
+      <div class="subtitle">
+        主题：增长没有消失，盈利可见度被重估。本文拆解 2026 年一季度财报、股价两日下跌、Goldman Sachs 等公开券商反应、Temu 政策压力与“新拼姆”供应链战略。
+      </div>
+    </div>
+    <div class="price-box">
+      <div class="price">US$84.24</div>
+      <div class="price-down">财报后两日 -14.1%</div>
+      <div class="date">价格源：Investing.com<br>2026-05-29 源检查</div>
+    </div>
+  </header>
+
+  <section class="metrics">
+    <div>
+      <div class="metric-value">RMB1,062亿</div>
+      <div class="metric-label">Q1 总收入<br>同比 +11.0%</div>
+    </div>
+    <div>
+      <div class="metric-value">RMB141亿</div>
+      <div class="metric-label">non-GAAP 净利润<br>同比 -16.8%</div>
+    </div>
+    <div>
+      <div class="metric-value">+2.5%</div>
+      <div class="metric-label">在线营销服务增速<br>主站变现压力信号</div>
+    </div>
+    <div>
+      <div class="metric-value">US$145</div>
+      <div class="metric-label">Goldman Sachs 新目标价<br>维持 Buy</div>
+    </div>
+  </section>
+
+  <section class="callout">
+    <div class="callout-title">一句话结论</div>
+    <p>
+      PDD 2026 Q1 的经营利润没有崩。市场重定价的是它的故事：过去是“高增长、高利润率、Temu 可选项”，现在变成“主站变现放缓、Temu 政策摩擦上升、公司主动进入重投入周期”。收入仍同比增长 11.0%，经营利润同比增长 21.6%；但在线营销服务收入只增 2.5%，non-GAAP EPS 低于公开一致预期约 43%，管理层没有安抚短期利润，反而强调三年 RMB1000 亿级供应链/新拼姆投入。这是股价暴跌的触发器。
+    </p>
+  </section>
+
+  <section>
+    <h2>1. 发生了什么：收入不是灾难，盈利锚被打掉</h2>
+    <p>
+      PDD 在 2026-05-27 美股盘前发布截至 2026-03-31 的一季度业绩。官方数据给出的画面并不单调：收入保持双位数增长，经营利润率还提高；但市场关注的广告/营销变现几乎停滞，净利润与 EPS 同比下行，且明显低于公开一致预期。财报之后，股价从 2026-05-26 的 US$96.64 跌至 2026-05-28 的 US$83.03，两日累计跌幅约 14.1%。[S01][S05][S09]
+    </p>
+
+    <figure>
+      <svg viewBox="0 0 700 260" width="100%" height="260" role="img" aria-label="PDD 2026 Q1 financial snapshot">
+        <rect x="0" y="0" width="700" height="260" fill="#fbfaf5" stroke="#dfddd2"/>
+        <text x="18" y="26" fill="#1B365D" font-size="18" font-weight="500">2026 Q1：收入继续增长，利润质量转弱</text>
+        <text x="18" y="47" fill="#686861" font-size="12">单位：人民币十亿元；净利润为 non-GAAP 口径</text>
+
+        <line x1="58" y1="206" x2="640" y2="206" stroke="#cbc7b8" stroke-width="1"/>
+        <line x1="58" y1="72" x2="58" y2="206" stroke="#cbc7b8" stroke-width="1"/>
+
+        <rect x="95" y="84" width="44" height="122" fill="#315b7c"/>
+        <rect x="147" y="70" width="44" height="136" fill="#1B365D"/>
+        <text x="117" y="223" text-anchor="middle" fill="#454541" font-size="11">2025</text>
+        <text x="169" y="223" text-anchor="middle" fill="#454541" font-size="11">2026</text>
+        <text x="132" y="239" text-anchor="middle" fill="#686861" font-size="11">总收入</text>
+        <text x="117" y="78" text-anchor="middle" fill="#315b7c" font-size="11">95.7</text>
+        <text x="169" y="64" text-anchor="middle" fill="#1B365D" font-size="11">106.2</text>
+        <text x="132" y="57" text-anchor="middle" fill="#1B365D" font-size="11">+11.0%</text>
+
+        <rect x="270" y="144" width="44" height="62" fill="#6e8cac"/>
+        <rect x="322" y="142" width="44" height="64" fill="#315b7c"/>
+        <text x="292" y="223" text-anchor="middle" fill="#454541" font-size="11">2025</text>
+        <text x="344" y="223" text-anchor="middle" fill="#454541" font-size="11">2026</text>
+        <text x="318" y="239" text-anchor="middle" fill="#686861" font-size="11">在线营销</text>
+        <text x="292" y="138" text-anchor="middle" fill="#315b7c" font-size="11">48.7</text>
+        <text x="344" y="136" text-anchor="middle" fill="#1B365D" font-size="11">49.9</text>
+        <text x="318" y="129" text-anchor="middle" fill="#1B365D" font-size="11">+2.5%</text>
+
+        <rect x="450" y="146" width="44" height="60" fill="#9c8060"/>
+        <rect x="502" y="133" width="44" height="73" fill="#8b4a34"/>
+        <text x="472" y="223" text-anchor="middle" fill="#454541" font-size="11">2025</text>
+        <text x="524" y="223" text-anchor="middle" fill="#454541" font-size="11">2026</text>
+        <text x="498" y="239" text-anchor="middle" fill="#686861" font-size="11">交易服务</text>
+        <text x="472" y="140" text-anchor="middle" fill="#8b4a34" font-size="11">47.0</text>
+        <text x="524" y="127" text-anchor="middle" fill="#8b4a34" font-size="11">56.3</text>
+        <text x="498" y="120" text-anchor="middle" fill="#8b4a34" font-size="11">+19.9%</text>
+
+        <text x="610" y="88" text-anchor="middle" fill="#1B365D" font-size="22" font-weight="500">19.9%</text>
+        <text x="610" y="108" text-anchor="middle" fill="#686861" font-size="11">non-GAAP</text>
+        <text x="610" y="124" text-anchor="middle" fill="#686861" font-size="11">经营利润率</text>
+        <text x="610" y="164" text-anchor="middle" fill="#8b4a34" font-size="22" font-weight="500">-16.8%</text>
+        <text x="610" y="184" text-anchor="middle" fill="#686861" font-size="11">non-GAAP</text>
+        <text x="610" y="200" text-anchor="middle" fill="#686861" font-size="11">净利润同比</text>
+      </svg>
+      <figcaption>来源：PDD 官方 Q1 2026 财报和 SEC 6-K 附件。PDD 不披露 Temu 或国内主站独立收入，因此图中收入分项按公司披露口径呈现。[S01][S02]</figcaption>
+    </figure>
+  </section>
+
+  <section class="page-break">
+    <h2>2. 财务桥接：经营利润向上，净利润向下</h2>
+    <p>
+      这季最容易被误读的是净利润。PDD 的 GAAP 经营利润从 RMB160.86 亿增至 RMB195.66 亿，增加 RMB34.80 亿；但税前利润从 RMB193.28 亿降至 RMB167.58 亿，减少 RMB25.70 亿。差异主要来自非经营项，尤其是“其他收入/损失”由正转负。
+    </p>
+
+    <table class="striped tight">
+      <thead>
+        <tr>
+          <th>桥接项</th>
+          <th class="num">2025 Q1</th>
+          <th class="num">2026 Q1</th>
+          <th class="num">变化</th>
+          <th>含义</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>经营利润</td>
+          <td class="num">RMB160.86亿</td>
+          <td class="num">RMB195.66亿</td>
+          <td class="num">+RMB34.80亿</td>
+          <td>经营层面仍扩张。</td>
+        </tr>
+        <tr>
+          <td>利息及投资收益/损失</td>
+          <td class="num">+RMB2.23亿</td>
+          <td class="num">-RMB6.32亿</td>
+          <td class="num">-RMB8.55亿</td>
+          <td>现金与投资组合收益波动。</td>
+        </tr>
+        <tr>
+          <td>汇兑损失</td>
+          <td class="num">-RMB2.42亿</td>
+          <td class="num">-RMB1.45亿</td>
+          <td class="num">+RMB0.97亿</td>
+          <td>负面影响同比收窄。</td>
+        </tr>
+        <tr>
+          <td>其他收入/损失</td>
+          <td class="num">+RMB32.61亿</td>
+          <td class="num">-RMB20.31亿</td>
+          <td class="num">-RMB52.92亿</td>
+          <td>当季净利润下行的主要放大器。</td>
+        </tr>
+        <tr>
+          <td>税前利润</td>
+          <td class="num">RMB193.28亿</td>
+          <td class="num">RMB167.58亿</td>
+          <td class="num">-RMB25.70亿</td>
+          <td>经营增长被非经营项反转抵消。</td>
+        </tr>
+        <tr>
+          <td>净利润</td>
+          <td class="num">RMB147.42亿</td>
+          <td class="num">RMB125.47亿</td>
+          <td class="num">-RMB21.95亿</td>
+          <td>GAAP 口径同比 -14.9%。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="two-col">
+      <figure>
+        <svg viewBox="0 0 340 230" width="100%" height="230" role="img" aria-label="Profit bridge">
+          <rect x="0" y="0" width="340" height="230" fill="#fbfaf5" stroke="#dfddd2"/>
+          <text x="14" y="24" fill="#1B365D" font-size="16" font-weight="500">经营利润与税前利润的分叉</text>
+          <line x1="36" y1="188" x2="312" y2="188" stroke="#cbc7b8"/>
+          <rect x="48" y="86" width="34" height="102" fill="#315b7c"/>
+          <rect x="102" y="64" width="34" height="124" fill="#1B365D"/>
+          <rect x="168" y="56" width="34" height="132" fill="#8b4a34"/>
+          <rect x="222" y="74" width="34" height="114" fill="#9c8060"/>
+          <text x="65" y="201" text-anchor="middle" fill="#686861" font-size="10">25Q1</text>
+          <text x="119" y="201" text-anchor="middle" fill="#686861" font-size="10">26Q1</text>
+          <text x="185" y="201" text-anchor="middle" fill="#686861" font-size="10">25Q1</text>
+          <text x="239" y="201" text-anchor="middle" fill="#686861" font-size="10">26Q1</text>
+          <text x="92" y="217" text-anchor="middle" fill="#454541" font-size="10">经营利润</text>
+          <text x="212" y="217" text-anchor="middle" fill="#454541" font-size="10">税前利润</text>
+          <text x="119" y="50" text-anchor="middle" fill="#1B365D" font-size="11">+21.6%</text>
+          <text x="239" y="64" text-anchor="middle" fill="#8b4a34" font-size="11">-13.3%</text>
+          <text x="65" y="80" text-anchor="middle" fill="#315b7c" font-size="10">16.1</text>
+          <text x="119" y="84" text-anchor="middle" fill="#ffffff" font-size="10">19.6</text>
+          <text x="185" y="50" text-anchor="middle" fill="#8b4a34" font-size="10">19.3</text>
+          <text x="239" y="94" text-anchor="middle" fill="#ffffff" font-size="10">16.8</text>
+        </svg>
+        <figcaption>单位：人民币十亿元。经营利润增长，税前利润下滑，说明当季冲击不只来自经营费用。</figcaption>
+      </figure>
+
+      <div class="note">
+        <p><strong>读法：</strong>如果只看 GAAP 净利润 -14.9%，容易得出“业务突然恶化”的结论；但经营利润和现金流仍为正增长。令市场不安的是另一件事：公司同时进入更重的供应链、合规、本地履约和第一方品牌投入周期，投资者不确定利润率下修会持续多久。</p>
+        <p class="small">经营现金流为 RMB164.45 亿，同比 +6.0%；现金、短期投资、受限现金及其他非流动金融资产合计约 RMB6074.63 亿，总负债 RMB2142.77 亿，账面缓冲仍厚。[S01]</p>
+      </div>
+    </div>
+
+    <h3>收入结构的信号：交易服务超过在线营销</h3>
+    <p>
+      交易服务收入占比从 49.1% 升至 53.0%，在线营销服务及其他占比从 50.9% 降至 47.0%。交易服务增长 19.9%，说明交易活动没有断；在线营销只增长 2.5%，才是关键压力点。在线营销更接近商家广告预算、平台流量分配和 take rate。中国 Q1 网上商品和服务零售额同比增长 8.0%，网上商品零售额同比增长 7.5%；在这个背景下，PDD 在线营销只增 2.5%，市场会优先怀疑平台变现能力和商家 ROI，而不只是宏观消费疲弱。[S10][S11]
+    </p>
+  </section>
+
+  <section class="page-break">
+    <h2>3. 股价为什么暴跌：四个触发点叠加</h2>
+
+    <div class="three-col">
+      <div class="panel">
+        <h3>预期差</h3>
+        <p>Reuters/LSEG 收入共识约 RMB1093.3 亿，实际 RMB1062.3 亿，差距约 2.8%。Investing.com 口径下，non-GAAP EPS 预期 RMB16.77，实际 RMB9.51，约低 43%。收入 miss 不大，EPS miss 很大。[S05][S06]</p>
+      </div>
+      <div class="panel">
+        <h3>叙事重置</h3>
+        <p>市场原本买的是中国主站利润、Temu 全球增长和高现金缓冲组合。Q1 之后，投资者要重新估主站 take rate、Temu 政策成本和新拼姆投入回报。</p>
+      </div>
+      <div class="panel">
+        <h3>利润底线缺席</h3>
+        <p>管理层强调供应链、第一方品牌、质检、仓配、合规和客服责任。方向可能长期正确，但短期会让模型里的利润率假设下移。[S04][S18]</p>
+      </div>
+    </div>
+
+    <figure>
+      <svg viewBox="0 0 700 245" width="100%" height="245" role="img" aria-label="PDD stock reaction after Q1 2026 earnings">
+        <rect x="0" y="0" width="700" height="245" fill="#fbfaf5" stroke="#dfddd2"/>
+        <text x="18" y="26" fill="#1B365D" font-size="18" font-weight="500">财报前后股价反应</text>
+        <text x="18" y="47" fill="#686861" font-size="12">收盘价，单位：美元；财报日为 2026-05-27</text>
+        <line x1="58" y1="198" x2="650" y2="198" stroke="#cbc7b8"/>
+        <line x1="58" y1="62" x2="58" y2="198" stroke="#cbc7b8"/>
+
+        <polyline points="90,75 245,124 400,142 555,136" fill="none" stroke="#8b4a34" stroke-width="3"/>
+        <circle cx="90" cy="75" r="4" fill="#1B365D"/>
+        <circle cx="245" cy="124" r="4" fill="#8b4a34"/>
+        <circle cx="400" cy="142" r="4" fill="#8b4a34"/>
+        <circle cx="555" cy="136" r="4" fill="#2b6f6b"/>
+
+        <text x="90" y="67" text-anchor="middle" fill="#1B365D" font-size="12">96.64</text>
+        <text x="245" y="116" text-anchor="middle" fill="#8b4a34" font-size="12">86.61</text>
+        <text x="400" y="134" text-anchor="middle" fill="#8b4a34" font-size="12">83.03</text>
+        <text x="555" y="128" text-anchor="middle" fill="#2b6f6b" font-size="12">84.24</text>
+
+        <text x="90" y="218" text-anchor="middle" fill="#454541" font-size="11">5/26</text>
+        <text x="245" y="218" text-anchor="middle" fill="#454541" font-size="11">5/27</text>
+        <text x="400" y="218" text-anchor="middle" fill="#454541" font-size="11">5/28</text>
+        <text x="555" y="218" text-anchor="middle" fill="#454541" font-size="11">5/29</text>
+
+        <rect x="202" y="160" width="88" height="22" fill="#e7edf4" stroke="#d5e0ec"/>
+        <text x="246" y="175" text-anchor="middle" fill="#1B365D" font-size="11">-10.38%</text>
+        <rect x="354" y="164" width="92" height="22" fill="#efe4dd" stroke="#e0cdbf"/>
+        <text x="400" y="179" text-anchor="middle" fill="#8b4a34" font-size="11">两日 -14.1%</text>
+        <text x="600" y="84" fill="#686861" font-size="11">5/27 成交量</text>
+        <text x="600" y="101" fill="#1B365D" font-size="16" font-weight="500">4036万股</text>
+      </svg>
+      <figcaption>来源：Investing.com 历史价格页。5/29 为源检查时价格，盘中/实时价格可能变化。[S09]</figcaption>
+    </figure>
+
+    <h3>市场问题不是“这季少赚了多少”，而是“以后该给什么倍数”</h3>
+    <p>
+      PDD 过去的估值框架接近“高效率 marketplace + Temu 全球增长期权 + 巨额现金”。Q1 把这个组合拆成了三项待验证假设：在线营销是否永久降速，交易服务增长是否带来足够利润，供应链/新拼姆投入能否形成更高门槛。只要披露仍停留在合并报表层面，市场就会用更高折价处理 Temu 和第一方品牌的不确定性。
+    </p>
+  </section>
+
+  <section class="page-break">
+    <h2>4. Goldman Sachs 等券商反应</h2>
+    <p>
+      公开渠道可核验到的券商反应如下。需要强调：除公开报道外，本文没有取得完整卖方研报原文；下表为公开媒体转述，不把其中任何目标价视为本文结论。
+    </p>
+
+    <table class="striped">
+      <thead>
+        <tr>
+          <th>机构</th>
+          <th>动作</th>
+          <th class="num">目标价变化</th>
+          <th>公开理由</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Goldman Sachs</strong></td>
+          <td>维持 Buy</td>
+          <td class="num">US$158 -> US$145</td>
+          <td>Q1 低于预期；在线营销服务收入同比仅约 +2%；EPS 同比下降。仍看重交易服务 +20% 对 Temu GMV 动能的指示，但下调 FY2026-2028 收入预测 2%-5%、调整后净利润预测 11%-12%。公开报道显示其预计 FY2026 调整后净利润约 RMB1050 亿、FY2027 约 RMB1260 亿。[S06]</td>
+        </tr>
+        <tr>
+          <td><strong>Barclays</strong></td>
+          <td>Overweight -> Equalweight</td>
+          <td class="num">US$165 -> US$89</td>
+          <td>中国核心业务弱于预期，take rate 面临压力；商家支持基金和监管保护小商家可能压低变现；私有品牌可能与商家发生摩擦；Temu 增长重新加速但近中期仍可能亏损。[S07]</td>
+        </tr>
+        <tr>
+          <td><strong>Macquarie</strong></td>
+          <td>Outperform -> Neutral</td>
+          <td class="num">US$151 -> US$87</td>
+          <td>短期盈利复苏困难；在线营销服务增速从 FY2025 Q4 的约 5%降至 Q1 的约 2%；销售营销费用率仍高；消费偏弱、竞争激烈、供应链和海外投入继续构成压力。[S08]</td>
+        </tr>
+        <tr>
+          <td><strong>Morgan Stanley</strong></td>
+          <td>维持 Overweight</td>
+          <td class="num">US$148 -> US$129</td>
+          <td>公开报道显示其下调未来 EPS 预测，但仍保留增持/Overweight 判断。[S06]</td>
+        </tr>
+        <tr>
+          <td><strong>Jefferies</strong></td>
+          <td>维持 Buy</td>
+          <td class="num">US$146 -> US$121</td>
+          <td>公开报道显示其承认业绩弱于预期，但仍保留买入判断。[S06]</td>
+        </tr>
+        <tr>
+          <td><strong>US Tiger</strong></td>
+          <td>维持 Hold</td>
+          <td class="num">US$110 -> US$100</td>
+          <td>公开报道将季度表现定义为 mixed，目标价小幅下调。[S06]</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <div class="callout-title">怎样读高盛的反应</div>
+      <p>
+        高盛没有放弃长期看多，但承认短期盈利被重置。它的目标价下调不是因为 PDD 失去价值，而是把同一个长期价值放进更低的利润预测和更谨慎的折现框架。Barclays 与 Macquarie 的降级更激进，它们担心平台向供应链/第一方品牌迁移后，利润率、商家关系和估值倍数都需要重估。
+      </p>
+    </div>
+  </section>
+
+  <section class="page-break">
+    <h2>5. Temu 与新拼姆：增长还在，政策套利空间变窄</h2>
+    <p>
+      Temu 的战略风险不在需求端，而在新政策环境下能否继续保持低成本供给。美国已结束中国/香港低价值包裹的 de minimis 免税待遇，并推进更广泛的低值包裹执法安排；欧盟也推进小包裹关税规则。CNBC 报道称，Temu 在美国转向展示本地仓/本地卖家商品，并曾对中国直发商品增加高额进口费用。Reuters 对 PDD Q1 的报道也把 Temu 的低值包裹政策风险列为重要背景。[S05][S14][S15][S16][S17]
+    </p>
+
+    <div class="two-col">
+      <div>
+        <h3>为什么新拼姆出现</h3>
+        <p>
+          公开中文报道显示，拼多多在 2026-03-25 启动“新拼姆”专项公司，计划未来三年总计投入 RMB1000 亿，首期现金注资 RMB150 亿，用于整合拼多多与 Temu 供应链资源，开启自营品牌模式，并面向全球市场孵化品牌。[S18]
+        </p>
+        <p>
+          若跨境直发的税费和合规成本上升，平台必须更深地参与商品开发、质量标准、仓配、合规和本地履约。这是从轻资产 marketplace 走向 supply-chain operator 的关键一步。
+        </p>
+      </div>
+      <figure>
+        <svg viewBox="0 0 330 235" width="100%" height="235" role="img" aria-label="Strategic shift">
+          <rect x="0" y="0" width="330" height="235" fill="#fbfaf5" stroke="#dfddd2"/>
+          <text x="16" y="27" fill="#1B365D" font-size="16" font-weight="500">跨境低价模型的迁移</text>
+          <rect x="28" y="55" width="112" height="46" fill="#e7edf4" stroke="#d5e0ec"/>
+          <text x="84" y="75" text-anchor="middle" fill="#1B365D" font-size="12">中国直发</text>
+          <text x="84" y="92" text-anchor="middle" fill="#686861" font-size="10">小包裹 + 低税费</text>
+          <path d="M145 78 L184 78" stroke="#8b4a34" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <rect x="190" y="55" width="112" height="46" fill="#efe4dd" stroke="#e0cdbf"/>
+          <text x="246" y="75" text-anchor="middle" fill="#8b4a34" font-size="12">本地履约</text>
+          <text x="246" y="92" text-anchor="middle" fill="#686861" font-size="10">关税 + 合规 + 仓配</text>
+
+          <rect x="28" y="132" width="112" height="46" fill="#e9efec" stroke="#d2dedb"/>
+          <text x="84" y="152" text-anchor="middle" fill="#2b6f6b" font-size="12">第三方商家</text>
+          <text x="84" y="169" text-anchor="middle" fill="#686861" font-size="10">平台分配流量</text>
+          <path d="M145 155 L184 155" stroke="#8b4a34" stroke-width="2" marker-end="url(#arrow)"/>
+
+          <rect x="190" y="132" width="112" height="46" fill="#e7edf4" stroke="#d5e0ec"/>
+          <text x="246" y="152" text-anchor="middle" fill="#1B365D" font-size="12">第一方品牌</text>
+          <text x="246" y="169" text-anchor="middle" fill="#686861" font-size="10">商品能力 + 风险</text>
+
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
+              <path d="M0,0 L7,3 L0,6 Z" fill="#8b4a34"/>
+            </marker>
+          </defs>
+          <text x="165" y="212" text-anchor="middle" fill="#686861" font-size="10">从流量效率，进入供应链和组织能力竞争</text>
+        </svg>
+        <figcaption>示意图。PDD 未披露 Temu 分部利润，本图表达经营模型迁移逻辑，不是分部财务数据。</figcaption>
+      </figure>
+    </div>
+
+    <h3>战略的两面</h3>
+    <p>
+      长期看，新拼姆和第一方品牌可能提高质量控制、合规确定性、履约效率和供给端门槛；短期看，它们会降低利润可见度，并带来库存、售后、商家冲突和组织复杂度。市场下跌的核心不是“PDD 没有钱投”，而是“投完之后的单位经济模型还没有证据”。
+    </p>
+  </section>
+
+  <section class="page-break">
+    <h2>6. 同业背景：电商行业都在用利润换新战场</h2>
+    <table class="striped">
+      <thead>
+        <tr>
+          <th>公司</th>
+          <th>最近季度信号</th>
+          <th>对 PDD 的含义</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>JD.com</strong></td>
+          <td>2026 Q1 收入同比 +4.9%；GAAP 净利润从 RMB109 亿降至 RMB51 亿，non-GAAP 净利润从 RMB128 亿降至 RMB74 亿；JD Retail 经营利润率从 4.9%升至 5.6%。[S12]</td>
+          <td>利润被新业务、即时零售、物流和海外投入重分配。核心零售仍能改善，但集团利润表承压。</td>
+        </tr>
+        <tr>
+          <td><strong>Alibaba</strong></td>
+          <td>2026 年 3 月季度收入同比 +3%；中国电商集团收入同比 +6%；调整后 EBITA 同比 -84%，主要受技术业务、即时零售和用户体验投入影响。AIDC 接近盈亏平衡，云收入 +38%。[S13]</td>
+          <td>行业正在从货架广告走向即时履约、AI、跨境、本地生活和供应链品牌化，短期都牺牲利润确定性。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>7. 长期战略判断：方向正确，但资本市场不会先给信用</h2>
+    <p>
+      我对 PDD 长期战略的判断是：方向正确，执行难度显著上升。国内主站的流量红利和商家广告 ROI 都在变钝，海外 Temu 又遇到税费、合规、本地履约和品牌信任问题。向供应链深处走，帮助工厂做品牌、标准、质检、仓配和全球分销，是少数能同时解决主站商家同质化和 Temu 合规升级的路径。
+    </p>
+    <p>
+      难点在于，第一方品牌会改变平台权力结构。PDD 若自己定义产品、承担销量确定性和更多合规风险，就会获得更强控制力，也会承担库存、质量、售后和商家冲突风险。平台原本用算法和流量分配连接供需，现在要用组织能力和商品能力承担供给端责任。多投钱只能买时间，买不到商品能力。
+    </p>
+
+    <div class="callout">
+      <div class="callout-title">我的结论</div>
+      <p>
+        短期股价暴跌有合理性，因为市场原先给了 PDD 太多“盈利可见度”和“轻资产平台”的信用。长期我仍认为 PDD 是中国互联网里少数有战略进攻性的公司。它愿意用现金流和组织压力换供给端控制权，这比单纯买流量更有长期价值。但资本市场不会为“可能很大”付高价；它需要看到新拼姆不破坏商家生态，Temu 不依赖政策套利，且主站广告/交易变现没有永久下台阶。
+      </p>
+    </div>
+
+    <h3>后续必须盯的五个信号</h3>
+    <div class="signal-grid">
+      <div class="signal"><strong>在线营销服务收入</strong>能否重新跑赢中国网上商品零售增速。若持续低个位数增长，说明主站变现压力仍在。</div>
+      <div class="signal"><strong>交易服务质量</strong>交易服务增长能否转化为毛利率和经营利润，而不是只带来履约、支付和合规成本。</div>
+      <div class="signal"><strong>新拼姆披露</strong>投入节奏、品类、库存/退货风险和商家关系机制是否更清晰。</div>
+      <div class="signal"><strong>Temu 本地化</strong>美国和欧洲的本地履约、费用转嫁、广告强度和合规成本是否稳定。</div>
+      <div class="signal"><strong>分部透明度</strong>管理层是否改善 Temu、国内主站、第一方品牌的披露；只给 consolidated 数字会继续导致估值折价。</div>
+      <div class="signal"><strong>现金使用纪律</strong>巨额现金是优势，但若投入回报不可测，现金也会被市场当成未来亏损的资金池。</div>
+    </div>
+  </section>
+
+  <section class="page-break">
+    <h2>来源与边界</h2>
+    <p>
+      本文优先使用公司官方披露、SEC 文件、官方统计、政府政策文件和主流财经新闻。券商观点只采用公开媒体转述；未取得 Goldman Sachs、Barclays、Macquarie 等完整卖方研报原文。本文不构成投资建议、证券买卖推荐、招揽或收益承诺。
+    </p>
+
+    <div class="source-list">
+      <p><strong>S01</strong> PDD Holdings Q1 2026 earnings release, investor relations. <a href="https://investor.pddholdings.com/news-releases/news-release-details/pdd-holdings-announces-first-quarter-2026-unaudited-financial">link</a></p>
+      <p><strong>S02</strong> PDD Q1 2026 Form 6-K Exhibit 99.1, SEC. <a href="https://www.sec.gov/Archives/edgar/data/1737806/000110465926067186/tm2615739d1_ex99-1.htm">link</a></p>
+      <p><strong>S03</strong> PDD FY2025 Form 20-F. <a href="https://investor.pddholdings.com/static-files/e15edea4-5e6d-4740-808a-63a3dd1b2ce4">link</a></p>
+      <p><strong>S04</strong> PDD Q1 2026 earnings call transcript, The Motley Fool. <a href="https://www.fool.com/earnings/call-transcripts/2026/05/27/pdd-pdd-q1-2026-earnings-call-transcript/">link</a></p>
+      <p><strong>S05</strong> Reuters via MarketScreener on PDD Q1 miss. <a href="https://www.marketscreener.com/news/china-s-pdd-misses-quarterly-revenue-estimates-ce7f5ad2d08cf720">link</a></p>
+      <p><strong>S06</strong> Investing.com China on Goldman Sachs and other target changes. <a href="https://cn.investing.com/news/analyst-ratings/article-93CH-3389643">link</a></p>
+      <p><strong>S07</strong> Investing.com on Barclays downgrade. <a href="https://www.investing.com/news/analyst-ratings/barclays-cuts-pinduoduo-stock-rating-on-china-weakness-temu-losses-93CH-4714038">link</a></p>
+      <p><strong>S08</strong> Investing.com Nigeria on Macquarie downgrade. <a href="https://ng.investing.com/news/stock-market-news/macquarie-downgrades-pinduoduo-stock-rating-on-weak-earnings-outlook-93CH-2532609">link</a></p>
+      <p><strong>S09</strong> Investing.com Philippines historical prices. <a href="https://ph.investing.com/equities/pinduoduo-historical-data">link</a></p>
+      <p><strong>S10</strong> National Bureau of Statistics of China, Q1 2026 retail sales. <a href="https://www.stats.gov.cn/english/PressRelease/202604/t20260417_1963351.html">link</a></p>
+      <p><strong>S11</strong> China government/Xinhua Q1 2026 e-commerce statistics. <a href="https://english.www.gov.cn/archive/statistics/202604/29/content_WS69f1fdd1c6d00ca5f9a0ab36.html">link</a></p>
+      <p><strong>S12</strong> JD.com Q1 2026 official results. <a href="https://ir.jd.com/zh-hans/news-releases/news-release-details/jdcom-announces-first-quarter-2026-results">link</a></p>
+      <p><strong>S13</strong> Alibaba March quarter/FY2026 results, BusinessWire. <a href="https://www.businesswire.com/news/home/20260512841182/en/Alibaba-Group-Announces-March-Quarter-2026-and-Fiscal-Year-2026-Results">link</a></p>
+      <p><strong>S14</strong> U.S. CBP de minimis enforcement release. <a href="https://www.cbp.gov/newsroom/national-media-release/cbp-ready-enforce-end-de-minimis-loophole-securing-borders-and">link</a></p>
+      <p><strong>S15</strong> White House de minimis fact sheet. <a href="https://www.whitehouse.gov/fact-sheets/2025/04/fact-sheet-president-donald-j-trump-closes-de-minimis-exemptions-to-combat-chinas-role-in-americas-synthetic-opioid-crisis/">link</a></p>
+      <p><strong>S16</strong> CNBC on Temu U.S. local-warehouse shift. <a href="https://www.cnbc.com/2025/05/02/temu-halts-shipments-direct-from-china-as-de-minimis-tariff-rule-ends-.html">link</a></p>
+      <p><strong>S17</strong> Council of the EU small-parcel customs duty release. <a href="https://www.consilium.europa.eu/en/press/press-releases/2026/02/11/council-gives-final-green-light-to-new-customs-duty-rules-for-small-parcels/">link</a></p>
+      <p><strong>S18</strong> 经济观察网关于“新拼姆”专项公司的公开报道。<a href="https://www.eeo.com.cn/2026/0403/825883.shtml">link</a></p>
+    </div>
+
+    <div class="note">
+      <p><strong>方法边界：</strong>PDD 不披露 Temu、拼多多主站、新拼姆的独立收入、GMV、利润或区域单位经济模型。本文涉及 Temu、主站和新拼姆的判断，均为基于收入结构、管理层公开表述、政策变化和公开券商摘要的推断。</p>
+    </div>
+  </section>
+</body>
+</html>
