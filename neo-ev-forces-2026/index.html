@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<!-- ==================================================================
+     LONG DOCUMENT TEMPLATE · parchment design system
+     多页 A4 白皮书/技术报告/年度总结
+     结构：封面 -> 目录 -> 执行摘要 -> 正文章节 -> 附录
+     ================================================================== -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>蔚小理 2026：三种长期战略赌注</title>
+<meta name="author" content="Winston">
+<meta name="description" content="蔚来、小鹏、理想汽车发展现状、困境、优势与长期战略前景分析。">
+<meta name="keywords" content="蔚来, 小鹏, 理想汽车, 新能源汽车, 战略分析">
+<meta name="generator" content="Kami">
+<style>
+  /* Regular weight */
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  /* Bold weight - W05 for all bold variants */
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 20mm 22mm 22mm 22mm;
+    background: #f5f4ed;
+
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02", "Source Han Serif SC",
+                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+
+    @bottom-center {
+      content: counter(page) "  ·  蔚小理 2026";
+      font-family: "TsangerJinKai02", "Source Han Serif SC",
+                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 9pt;
+      color: #6b6a64;
+    }
+  }
+
+  @page:first {
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #f5f4ed;
+    --ivory:     #faf9f5;
+    --near-black:#141413;
+    --dark-warm: #3d3d3a;
+    --olive:     #504e49;
+    --stone:     #6b6a64;
+    --brand:     #1B365D;
+    --border:    #e8e6dc;
+    --border-soft:#e5e3d8;
+    --tag-bg:    #E4ECF5;
+    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --sans: var(--serif);
+
+    --rhythm-module:  14pt;
+    --rhythm-section: 18pt;
+  }
+
+  html, body { background: var(--parchment); }
+
+  @media screen {
+    body { max-width: 210mm; margin: 0 auto; padding: 20mm 22mm 22mm 22mm; }
+  }
+
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 10.5pt;
+    line-height: 1.55;
+    letter-spacing: 0;
+    widows: 3;
+    orphans: 3;
+  }
+
+  .sans {
+    font-family: var(--sans);
+  }
+
+  /* ========== COVER ========== */
+  .cover {
+    min-height: 240mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40mm 0 0 0;
+    break-after: page;
+  }
+  .cover-eyebrow {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 0;
+    text-transform: uppercase;
+    margin-bottom: 18pt;
+  }
+  .cover-title {
+    font-size: 36pt;
+    font-weight: 500;
+    color: var(--near-black);
+    line-height: 1.15;
+    letter-spacing: 0;
+    margin-bottom: 16pt;
+  }
+  .cover-sub {
+    font-family: var(--sans);
+    font-size: 14pt;
+    color: var(--olive);
+    line-height: 1.5;
+    max-width: 85%;
+    margin-bottom: 30pt;
+  }
+  .cover-meta {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--stone);
+    line-height: 1.5;
+  }
+  .cover-meta strong {
+    color: var(--dark-warm);
+    font-weight: 500;
+  }
+
+  /* ========== TOC（目录）========== */
+  .toc { break-after: page; }
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: var(--rhythm-module);
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6pt 0;
+    border-bottom: 0.3pt dotted var(--border);
+    font-size: 11pt;
+  }
+  .toc-item:last-of-type { border-bottom: none; }
+  .toc-num {
+    color: var(--brand);
+    font-weight: 500;
+    min-width: 30pt;
+  }
+  .toc-title {
+    flex: 1;
+    color: var(--near-black);
+    padding-left: 6pt;
+  }
+  .toc-page {
+    color: var(--stone);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ========== HEADINGS ========== */
+  h1 {
+    font-size: 22pt;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 10pt 0;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    color: var(--near-black);
+    break-after: avoid;
+  }
+
+  h2 {
+    font-size: 16pt;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 24pt 0 8pt 0;
+    color: var(--near-black);
+    break-after: avoid;
+    string-set: section-title content();
+  }
+
+  h3 {
+    font-size: 13pt;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 18pt 0 6pt 0;
+    color: var(--dark-warm);
+    break-after: avoid;
+  }
+
+  .chapter-num {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 0;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+  }
+
+  /* ========== PARAGRAPHS ========== */
+  p {
+    margin: 0 0 10pt 0;
+    line-height: 1.55;
+    color: var(--near-black);
+    widows: 2;
+    orphans: 2;
+  }
+
+  .lead {
+    font-size: 12pt;
+    line-height: 1.55;
+    color: var(--dark-warm);
+    margin-bottom: var(--rhythm-module);
+  }
+
+  .hl { color: var(--brand); font-weight: 500; }
+  strong { font-weight: 500; }
+
+  /* ========== LISTS ========== */
+  ul, ol {
+    margin: 6pt 0 10pt 0;
+    padding-left: 20pt;
+    line-height: 1.55;
+  }
+  ul li::marker { color: var(--brand); }
+  ol li::marker { color: var(--brand); font-weight: 500; }
+
+  /* ========== QUOTE ========== */
+  blockquote, .quote {
+    border-left: 2pt solid var(--brand);
+    margin: 12pt 0;
+    padding: 4pt 0 4pt 16pt;
+    color: var(--olive);
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  blockquote .cite, .quote .cite {
+    display: block;
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 4pt;
+  }
+
+  /* ========== CODE ========== */
+  /* Mono first for English glyphs, then CJK fallback so Chinese comments
+     inside code/pre render correctly. A mono-only chain causes missing
+     glyphs rendered as "?" or missing-glyph boxes in WeasyPrint when the system lacks
+     a mono font with CJK coverage. */
+  code {
+    font-family: "JetBrains Mono", "SF Mono", Consolas,
+                 "TsangerJinKai02", "Source Han Serif SC",
+                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-size: 9pt;
+    background: var(--ivory);
+    padding: 1pt 4pt;
+    border-radius: 2pt;
+    color: var(--dark-warm);
+  }
+  pre {
+    font-family: "JetBrains Mono", "SF Mono", Consolas,
+                 "TsangerJinKai02", "Source Han Serif SC",
+                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-size: 9pt;
+    line-height: 1.5;
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 10pt 0;
+    white-space: pre-wrap;
+    color: var(--near-black);
+    break-inside: avoid;
+  }
+  pre code { background: transparent; padding: 0; font-size: inherit; }
+
+  /* ========== TABLE (kami-table) ========== */
+  table, .kami-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin: 12pt 0;
+    break-inside: avoid;
+  }
+  table th, .kami-table th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--dark-warm);
+    padding: 6pt 8pt;
+    border-bottom: 1pt solid var(--border);
+    background: transparent;
+  }
+  table td, .kami-table td {
+    padding: 5pt 8pt;
+    border-bottom: 0.3pt solid var(--border-soft);
+    vertical-align: top;
+  }
+  table.compact th, .kami-table.compact th { padding: 3pt 6pt; font-size: 8pt; }
+  table.compact td, .kami-table.compact td { padding: 2pt 6pt; font-size: 8pt; line-height: 1.4; }
+  table.financial td:not(:first-child), .kami-table.financial td:not(:first-child) {
+    text-align: right; font-variant-numeric: tabular-nums;
+  }
+  table.financial th:not(:first-child), .kami-table.financial th:not(:first-child) { text-align: right; }
+  table.striped tbody tr:nth-child(even) td, .kami-table.striped tbody tr:nth-child(even) td {
+    background: var(--ivory);
+  }
+  table .total td, .kami-table .total td {
+    font-weight: 500; border-top: 1pt solid var(--brand); border-bottom: none; color: var(--near-black);
+  }
+
+  /* ========== CALLOUT ========== */
+  .callout {
+    background: var(--ivory);
+    border-left: 2pt solid var(--brand);
+    padding: 10pt 14pt;
+    border-radius: 3pt;
+    margin: 12pt 0;
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  .callout blockquote,
+  .callout .quote {
+    border-left: none;
+    padding-left: 0;
+    margin: 6pt 0;
+    color: var(--olive);
+  }
+  .callout blockquote:first-child,
+  .callout .quote:first-child { margin-top: 0; }
+  .callout blockquote:last-child,
+  .callout .quote:last-child  { margin-bottom: 0; }
+
+  .takeaway {
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .takeaway-label {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--brand);
+    letter-spacing: 0;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+
+  /* ========== TAG ========== */
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--brand);
+    font-family: var(--sans);
+    font-size: 9pt;
+    font-weight: 500;
+    padding: 1pt 6pt;
+    border-radius: 3pt;
+    margin-right: 4pt;
+  }
+
+  /* ========== FIGURE ========== */
+  figure {
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  figure img {
+    max-width: 100%;
+    border-radius: 4pt;
+  }
+  figcaption {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 6pt;
+    text-align: center;
+  }
+
+  /* ========== EXECUTIVE SUMMARY ========== */
+  .exec-summary {
+    background: var(--ivory);
+    border-left: 1.4pt solid var(--brand);
+    border-radius: 6pt;
+    padding: 16pt 20pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .exec-summary h2 {
+    margin-top: 0;
+    font-size: 13pt;
+  }
+
+  /* ========== CHAPTER BREAK ========== */
+  .chapter { break-before: page; }
+</style>
+</head>
+<body>
+
+<!-- ═════════════ COVER ═════════════ -->
+<section class="cover">
+  <div>
+    <div class="cover-eyebrow">Research Paper · 2026</div>
+    <div class="cover-title">蔚小理 2026<br>三种长期战略赌注</div>
+    <div class="cover-sub">蔚来、小鹏、理想汽车的发展现状、困境、优势与长期前景分析</div>
+  </div>
+  <div class="cover-meta">
+    <strong>Winston</strong><br>
+    V1.0 · 2026-05-30<br>
+    数据来源：公司公告、SEC 20-F、官方政策与行业数据
+  </div>
+</section>
+
+<!-- ═════════════ 目录 ═════════════ -->
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item">
+    <span class="toc-num">01</span>
+    <span class="toc-title">执行摘要</span>
+    <span class="toc-page">03</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">02</span>
+    <span class="toc-title">行业换挡</span>
+    <span class="toc-page">04</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">03</span>
+    <span class="toc-title">横向快照</span>
+    <span class="toc-page">05</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">04</span>
+    <span class="toc-title">三家公司拆解</span>
+    <span class="toc-page">06</span>
+  </div>
+  <div class="toc-item">
+    <span class="toc-num">05</span>
+    <span class="toc-title">前景与来源</span>
+    <span class="toc-page">09</span>
+  </div>
+</section>
+
+<!-- ═════════════ Chapter 01：执行摘要 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">01 · Executive Summary</div>
+  <h1>执行摘要</h1>
+
+  <p class="lead">
+    到 2026 年，蔚小理已经不再是同一种“新势力”。蔚来押注<span class="hl">高端纯电、多品牌和换电网络</span>，
+    小鹏押注 <span class="hl">AI 驱动的智能汽车和平台化输出</span>，理想押注<span class="hl">家庭用户、增程现金流和纯电再证明</span>。
+  </p>
+
+  <h2>核心 Takeaways</h2>
+  <ul>
+    <li>中国新能源车已经进入成熟竞争：2025 年新能源汽车销量 1649 万辆，2026 年 4 月新车销量占比 53.2%[S20][S21]。</li>
+    <li>Q1 2026 三家公司状态分化：蔚来整车毛利率修复到 18.8%，小鹏毛利率 20.6% 但交付同比下降 33.3%，理想现金最多但整车毛利率降至 6.1%[S01][S08][S15]。</li>
+    <li>长期胜负不再只看交付量，而是看差异化资产能否转化为持续现金流：蔚来的补能和服务，小鹏的 AI 和平台，理想的家庭用户与组织效率。</li>
+  </ul>
+
+  <div class="exec-summary">
+    <h2>一句话判断</h2>
+    <p>理想的现金安全垫最厚，小鹏的智能化期权最尖，蔚来的体验差异化最强但最吃资本。三家公司都还有机会，成功条件已经完全不同。</p>
+    <p>本文为产业与战略研究，不构成投资建议。财务数据以公司披露口径为准，交付量未用保险或上牌数据重算。</p>
+  </div>
+</section>
+
+<!-- ═════════════ Chapter 02：背景 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">02 · Market Regime</div>
+  <h1>行业换挡：渗透率过半之后</h1>
+
+  <p class="lead">
+    中国新能源车市场仍然很大，但竞争逻辑已经变了。企业面对的问题，从“有没有增长”转向“增长有没有利润”。
+  </p>
+
+  <h2>规模仍在扩大</h2>
+  <p>2025 年中国汽车产销均超过 3400 万辆，新能源汽车产量 1662.6 万辆、销量 1649 万辆，销量同比增长 28.2%[S20]。2026 年 4 月，新能源汽车销量 134.4 万辆，同比增长 9.7%，新车销量占比达到 53.2%；2026 年 1-4 月新能源汽车出口 138.4 万辆，同比增长 120%[S21]。</p>
+
+  <h2>红利在变薄</h2>
+  <p>渗透率过半后，早期教育、补贴和牌照带来的增量红利下降。用户买车时开始更直接比较价格、空间、续航、补能、智能驾驶、品牌可信度和二手残值。对蔚小理而言，这意味着每一轮产品换代都必须同时解决销量和利润。</p>
+
+  <div class="callout">
+    购置税政策也在换挡。新能源车购置税优惠延续至 2027 年，但 2026-2027 年从免征转为减半征收，单车减免上限由 3 万元降至 1.5 万元[S22]。
+  </div>
+
+  <h2>政策从普惠转向托底</h2>
+  <table class="striped">
+    <colgroup>
+      <col style="width:18%">
+      <col style="width:47%">
+      <col style="width:35%">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>项目</th>
+        <th>2026 口径</th>
+        <th>对车企的含义</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>以旧换新</td>
+        <td>报废后买新能源车补贴车价 12%，最高 2 万元；置换后买新能源车补贴车价 8%，最高 1.5 万元[S23]</td>
+        <td>稳定换购需求，但不能替弱产品创造长期竞争力。</td>
+      </tr>
+      <tr>
+        <td>两新政策</td>
+        <td>第一批超长期特别国债资金 625 亿元用于消费品以旧换新[S24]</td>
+        <td>需求端仍有托底，竞争重心回到产品结构和利润纪律。</td>
+      </tr>
+      <tr>
+        <td>出口增长</td>
+        <td>2026 年 1-4 月新能源车出口 138.4 万辆，同比增长 120%[S21]</td>
+        <td>海外是增量，但要重新建设渠道、售后、法规合规和品牌信任。</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ═════════════ Chapter 03：方法 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">03 · Snapshot</div>
+  <h1>三家公司横向快照</h1>
+
+  <p class="lead">Q1 2026 的数据说明，三家公司都没有掉队，但压力点已经明显分化。</p>
+
+  <table class="financial striped">
+    <thead>
+      <tr>
+        <th>公司</th>
+        <th>Q1 交付</th>
+        <th>总收入</th>
+        <th>整车毛利率</th>
+        <th>净利润 / 亏损</th>
+        <th>现金储备</th>
+        <th>Q2 指引</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>蔚来</td>
+        <td>83,465</td>
+        <td>255.33 亿元</td>
+        <td>18.8%</td>
+        <td>-3.32 亿元</td>
+        <td>482 亿元</td>
+        <td>11.0-11.5 万辆</td>
+      </tr>
+      <tr>
+        <td>小鹏</td>
+        <td>62,682</td>
+        <td>130.34 亿元</td>
+        <td>12.1%</td>
+        <td>-17.84 亿元</td>
+        <td>420.9 亿元</td>
+        <td>10.0-10.6 万辆</td>
+      </tr>
+      <tr>
+        <td>理想</td>
+        <td>95,142</td>
+        <td>229.83 亿元</td>
+        <td>6.1%</td>
+        <td>-22.76 亿元</td>
+        <td>943 亿元</td>
+        <td>9.5-10.0 万辆</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <svg viewBox="0 0 640 250" width="100%" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Q1 2026 整车毛利率对比">
+      <rect x="0" y="0" width="640" height="250" fill="#faf9f5"/>
+      <text x="30" y="32" font-size="18" font-family="TsangerJinKai02, serif" fill="#141413">Q1 2026 整车毛利率对比</text>
+      <text x="30" y="56" font-size="12" font-family="TsangerJinKai02, serif" fill="#6b6a64">数据来源：S01、S08、S15</text>
+      <line x1="130" y1="205" x2="590" y2="205" stroke="#e8e6dc" stroke-width="1"/>
+      <line x1="130" y1="80" x2="130" y2="205" stroke="#e8e6dc" stroke-width="1"/>
+      <text x="42" y="108" font-size="14" font-family="TsangerJinKai02, serif" fill="#3d3d3a">蔚来</text>
+      <rect x="130" y="92" width="432" height="26" fill="#1B365D"/>
+      <text x="572" y="111" font-size="14" font-family="TsangerJinKai02, serif" fill="#1B365D">18.8%</text>
+      <text x="42" y="151" font-size="14" font-family="TsangerJinKai02, serif" fill="#3d3d3a">小鹏</text>
+      <rect x="130" y="135" width="278" height="26" fill="#5f7f99"/>
+      <text x="418" y="154" font-size="14" font-family="TsangerJinKai02, serif" fill="#1B365D">12.1%</text>
+      <text x="42" y="194" font-size="14" font-family="TsangerJinKai02, serif" fill="#3d3d3a">理想</text>
+      <rect x="130" y="178" width="140" height="26" fill="#9aa7ad"/>
+      <text x="280" y="197" font-size="14" font-family="TsangerJinKai02, serif" fill="#1B365D">6.1%</text>
+    </svg>
+    <figcaption>图 1：同一季度内，蔚来的整车毛利率修复最明显，理想受到产品结构切换冲击最大。</figcaption>
+  </figure>
+
+  <div class="takeaway">
+    <div class="takeaway-label">读表方式</div>
+    交付量只能说明规模，毛利率和现金流才能说明质量。Q1 2026 的三家公司，分别处在利润修复、销量反弹和产品结构重置的阶段。
+  </div>
+</section>
+
+<!-- ═════════════ Chapter 04：结论 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">04 · NIO</div>
+  <h1>蔚来：换电网络进入规模验证期</h1>
+
+  <p class="lead">蔚来的 2026 年关键词是修复。销量、毛利率和现金储备都有改善，但换电网络和多品牌扩张仍需要证明经济性。</p>
+
+  <h2>现状</h2>
+  <p>Q1 2026，蔚来交付 83,465 辆，同比增长 98.3%；总收入 255.33 亿元，同比增长 112.2%；整车毛利率 18.8%，连续四个季度环比改善；非 GAAP 口径实现 4350 万元净利润[S01]。4 月交付 29,356 辆，同比增长 22.8%，其中 NIO 品牌 19,024 辆，ONVO 5,352 辆，firefly 4,980 辆[S02]。</p>
+
+  <h2>优势</h2>
+  <p>蔚来的差异化主要来自高端品牌、服务体验和换电网络。截至 2026 年 2 月，公司累计完成 1 亿次换电，全球换电站 3,790 座，其中中国高速沿线 1,020 座；公司计划 2026 年新增 1,000 座换电站，并推进第五代换电站[S05]。ES9 等旗舰产品继续维持高端锚定，BaaS 方案降低入门支付门槛[S06]。</p>
+
+  <h2>困境</h2>
+  <p>换电网络是体验资产，也是重资产。蔚来 20-F 披露，2023-2025 年资本开支分别为 147.63 亿元、95.35 亿元、66.31 亿元，主要用于充换电设备、生产设施、门店和研发设备等[S04]。如果销量增长和站点利用率跟不上，换电会从差异化优势变成利润负担。</p>
+
+  <h2>长期看法</h2>
+  <p>蔚来会成败于换电经济性。NIO 品牌需要守住高端心智，ONVO 需要成为家庭纯电主力，firefly 不能严重稀释组织资源。只要保有量、BaaS、外部合作和站点利用率形成正循环，蔚来会拥有中国高端纯电市场最难复制的服务网络。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">05 · XPENG</div>
+  <h1>小鹏：把 AI 变成订单和利润</h1>
+
+  <p class="lead">小鹏的技术叙事最强，但 Q1 2026 也提醒市场，技术领先必须转化为稳定销量和可持续利润。</p>
+
+  <h2>现状</h2>
+  <p>小鹏 2025 年交付 429,445 辆，同比增长 125.9%；全年毛利率 18.9%，高于 2024 年的 14.3%[S09]。Q1 2026 交付 62,682 辆，同比下降 33.3%；总收入 130.34 亿元，净亏损 17.84 亿元；毛利率 20.6%，整车毛利率 12.1%[S08]。公司给出的 Q2 交付指引为 10.0-10.6 万辆，环比增长 59.54%-69.11%[S08]。</p>
+
+  <h2>优势</h2>
+  <p>小鹏的核心优势是智能化系统能力。公司披露，X-World 世界模型将仿真场景从 3 万个扩展到超过 50 万个，每日仿真测试里程等效 3000 万公里；VLA 2.0 已于 2026 年 4 月向用户推送[S12]。4 月交付更新中，公司称 VLA 2.0 推出后试驾满意度提升，试驾后决策时间环比缩短 44.7%[S10]。</p>
+
+  <h2>平台化期权</h2>
+  <p>小鹏与大众围绕电子电气架构达成合作，双方共同开发的架构预计自 2026 年起用于大众在中国生产的电动车型[S14]。首款量产 Robotaxi 已在广州下线，采用四颗图灵 AI 芯片、3000 TOPS 算力，计划 2026 年下半年试点运营[S13]。这些业务的意义，是把智能化能力从“卖车功能”延展为平台收入和数据闭环。</p>
+
+  <h2>长期看法</h2>
+  <p>小鹏是三家公司里战略期权最强的一家。成功条件也更苛刻：季度交付要回到并维持 10 万辆级别，整车毛利率要守住，大众合作和海外收入要变成可重复业务，Robotaxi 不能拖累现金流。小鹏需要用普通用户能感知的产品体验，把技术领先变成订单。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">06 · Li Auto</div>
+  <h1>理想：现金最厚，但利润模型被重测</h1>
+
+  <p class="lead">理想过去的强项是家庭场景、增程 SUV 和高效率 SKU。2026 年的关键，是在纯电和 AI 转型中修复毛利率。</p>
+
+  <h2>现状</h2>
+  <p>2025 年理想总收入 1123.13 亿元，同比下降 22.3%；净利润 11.39 亿元，同比下降 85.8%；自由现金流为负 128 亿元[S16]。Q1 2026 交付 95,142 辆，同比增长 2.5%；总收入 229.83 亿元，同比下降 11.4%；整车毛利率降至 6.1%；净亏损 22.76 亿元，自由现金流为负 73.88 亿元[S15]。</p>
+
+  <h2>优势</h2>
+  <p>理想最大的安全垫是现金。Q1 2026 末现金、定期存款和短期投资合计 943 亿元，是三家公司中最高[S15]。截至 2026 年 4 月底，理想在中国拥有 511 家零售中心、550 家服务中心及授权钣喷中心，超充站 4,077 座、充电桩 22,509 根[S17]。这些资产让理想有时间调整产品。</p>
+
+  <h2>困境</h2>
+  <p>理想仍有销量，问题在于销量质量和单车利润被产品结构拉低。公司解释 Q1 收入和毛利率下降主要与产品结构变化有关[S15]。20-F 显示，理想产品线已经包括四款 Li L 增程 SUV、两款 Li i 纯电 SUV 和一款 MPV，并开始进入部分海外市场[S18]。多线并行扩大机会，也会削弱原来少 SKU、高效率的组织优势。</p>
+
+  <h2>长期看法</h2>
+  <p>理想仍是抗风险能力最强的一家，但原来的成功公式正在变窄。它需要证明纯电车型能吸引新客群，增程车型不会被同价位插混和纯电玩家挤压，AI-native 能提高转化率而不是只增加成本。若整车毛利率不能修复，理想会从高利润产品公司，变成高现金储备但利润承压的综合车企。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">07 · Outlook</div>
+  <h1>未来三年的方向判断</h1>
+
+  <p class="lead">蔚小理下一阶段的核心，会从单季度交付名次转向差异化资产的现金流能力。</p>
+
+  <h2>共同困境</h2>
+  <ol>
+    <li>价格战常态化。产品结构比总销量更重要，低价放量如果不能换来规模经济，会直接压低毛利率。</li>
+    <li>智能化投入越来越像军备竞赛。VLA、世界模型、自研芯片和 Robotaxi 都需要长期投入，商业闭环还要靠订单、软件收入或技术授权验证。</li>
+    <li>补能网络从体验资产变成资本纪律测试。蔚来换电、理想超充都能提升用户信心，但价值取决于利用率和服务收入。</li>
+    <li>海外市场有增长，也有合规、关税、售后、本地化和地缘政治阻力[S04][S11][S18]。</li>
+  </ol>
+
+  <h2>三种成功条件</h2>
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>公司</th>
+        <th>未来方向</th>
+        <th>必须验证的指标</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>蔚来</td>
+        <td>高端品牌、能源网络、多品牌规模</td>
+        <td>NIO 高端价格带、ONVO 放量、换电利用率、BaaS 渗透率</td>
+      </tr>
+      <tr>
+        <td>小鹏</td>
+        <td>AI 汽车和平台化输出</td>
+        <td>季度 10 万辆级别交付、两位数整车毛利率、外部合作和海外收入</td>
+      </tr>
+      <tr>
+        <td>理想</td>
+        <td>家庭场景、纯电补能、AI-native</td>
+        <td>i 系列和新 L 系列结构修复、15% 以上整车毛利率、自由现金流转正</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="takeaway">
+    <div class="takeaway-label">长期判断</div>
+    如果只看 2026-2027 年抗风险能力，理想因为现金和渠道更稳；如果看战略期权，小鹏因为 AI 平台化最具上行弹性；如果看体验差异化，蔚来仍有最独特的资产。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">08 · Appendix</div>
+  <h1>附录：来源与口径</h1>
+
+  <h2>A. 参考资料</h2>
+  <table class="compact striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>来源</th>
+        <th>用途</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>S01</td><td>NIO Q1 2026 Financial Results</td><td>蔚来交付、收入、毛利率、现金和 Q2 指引</td></tr>
+      <tr><td>S02</td><td>NIO April 2026 Delivery Update</td><td>蔚来 4 月交付和品牌结构</td></tr>
+      <tr><td>S04</td><td>NIO Form 20-F 2025</td><td>蔚来资本开支、换电网络和风险披露</td></tr>
+      <tr><td>S05</td><td>NIO Achieves 100 Million Battery Swaps</td><td>蔚来换电网络规模与 2026 计划</td></tr>
+      <tr><td>S08</td><td>XPENG Q1 2026 Financial Results</td><td>小鹏交付、收入、毛利率、现金和 Q2 指引</td></tr>
+      <tr><td>S09</td><td>XPENG FY2025 Results</td><td>小鹏全年交付、毛利率和现金储备</td></tr>
+      <tr><td>S12-S14</td><td>XPENG VLA、Robotaxi、Volkswagen collaboration</td><td>小鹏智能化和平台化证据</td></tr>
+      <tr><td>S15</td><td>Li Auto Q1 2026 Financial Results</td><td>理想交付、收入、毛利率、现金、自由现金流和指引</td></tr>
+      <tr><td>S16-S18</td><td>Li Auto FY2025、April Delivery、Form 20-F</td><td>理想全年财务、渠道、超充、产品线和风险披露</td></tr>
+      <tr><td>S20-S24</td><td>China NEV market and policy sources</td><td>中国新能源车市场、购置税和以旧换新政策</td></tr>
+    </tbody>
+  </table>
+
+  <h2>B. 术语表</h2>
+  <p><strong>整车毛利率</strong>：公司披露的车辆销售收入与车辆销售成本之间的毛利率，不等于公司整体毛利率。</p>
+  <p><strong>现金储备</strong>：本文按公司公告中现金、受限制现金、定期存款和短期投资等披露口径归纳，各家公司细分项目略有不同。</p>
+  <p><strong>BaaS</strong>：Battery as a Service，蔚来的电池租用方案，降低购车时一次性支付门槛，但会改变单车收入结构。</p>
+  <p><strong>VLA</strong>：Vision-Language-Action，小鹏用于智能驾驶的视觉、语言、动作一体化模型方向。</p>
+
+  <h2>C. 文件说明</h2>
+  <p>完整来源映射见 <code>data/source-map.tsv</code>，结构化数据见 <code>data/company-q1-2026-snapshot.csv</code>、<code>data/april-2026-deliveries.csv</code> 和 <code>data/industry-policy-snapshot.csv</code>。原始抓取 Markdown 快照保存在 <code>sources/</code>。</p>
+</section>
+
+</body>
+</html>

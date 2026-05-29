@@ -1,0 +1,25 @@
+id	file	title	url	used_for
+S01	sources/nio-q1-2026.md	NIO Inc. Reports Unaudited First Quarter 2026 Financial Results	https://ir.nio.com/zh-hans/news-releases/news-release-details/nio-inc-reports-unaudited-first-quarter-2026-financial-results?mobile=1	NIO Q1 2026 deliveries, revenue, margins, cash, Q2 guidance
+S02	sources/nio-april-2026-deliveries.md	NIO April 2026 Delivery Update	https://www.nio.com/news/20260501001	NIO April 2026 deliveries, brand mix, cumulative deliveries
+S03	sources/nio-fy2025-results.md	NIO FY2025 Results	https://www.nio.com/news/20260310001	NIO 2025 background and profitability transition
+S04	sources/nio-2025-20f.md	NIO Form 20-F 2025	https://www.sec.gov/Archives/edgar/data/1736541/000110465926041765/nio-20251231x20f.htm	NIO risks, capital expenditure, swap network scale, going-concern context
+S05	sources/nio-power-100m-swaps.md	NIO Achieves 100 Million Battery Swaps	https://www.nio.com/news/20260206001	NIO battery-swap network, user-time savings, 2026 station plan
+S06	sources/nio-es9-launch.md	NIO ES9 Launch	https://www.nio.com/news/20260527001	NIO 2026 flagship product cycle, BaaS pricing, smart-driving hardware
+S07	sources/nio-auto-china-2026.md	NIO Three Brands at Auto China 2026	https://www.nio.com/news/20260424001	NIO multi-brand architecture and product roadmap
+S08	sources/xpeng-q1-2026.md	XPENG Q1 2026 Financial Results	https://ir.xiaopeng.com/news-releases/news-release-details/xpeng-reports-first-quarter-2026-unaudited-financial-results	XPENG Q1 2026 deliveries, revenue, margins, cash, Q2 guidance
+S09	sources/xpeng-fy2025-results.md	XPENG FY2025 Results	https://ir.xiaopeng.com/news-releases/news-release-details/xpeng-reports-fourth-quarter-and-fiscal-year-2025-unaudited/	XPENG 2025 deliveries, full-year margin, cash, product cycle context
+S10	sources/xpeng-april-2026-deliveries.md	XPENG April 2026 Delivery Update	https://ir.xiaopeng.com/news-releases/news-release-details/xpeng-announces-vehicle-delivery-results-april-2026	XPENG April deliveries and VLA 2.0 conversion signal
+S11	sources/xpeng-2025-20f.md	XPENG Form 20-F 2025	https://www.sec.gov/Archives/edgar/data/1810997/000119312526157849/d36361d20f.htm	XPENG risks, financial background, Volkswagen investment context
+S12	sources/xpeng-world-model-vla.md	XPENG X-World and VLA 2.0 Technical Report	https://www.xpeng.com/pressroom/news/019dd72da86c9dd703de8a0282290002	XPENG world model, simulation scale, VLA 2.0 rollout
+S13	sources/xpeng-robotaxi-rolloff.md	XPENG Mass-Produced Robotaxi Rollout	https://www.xpeng.com/pressroom/news/019e3ad2f9789dd703de8a0282290180	XPENG Robotaxi architecture, pilot timeline, 3000 TOPS compute
+S14	sources/xpeng-vw-ee-architecture.md	XPENG and Volkswagen E/E Architecture Collaboration	https://ir.xiaopeng.com/news-releases/news-release-details/xpeng-and-volkswagen-group-announce-entry-framework-agreement-ee/	XPENG platform monetization and software-defined vehicle collaboration
+S15	sources/li-auto-q1-2026.md	Li Auto Q1 2026 Financial Results	https://ir.lixiang.com/news-releases/news-release-details/li-auto-inc-announces-unaudited-first-quarter-2026-financial	Li Auto Q1 2026 deliveries, revenue, margins, cash, free cash flow, Q2 guidance
+S16	sources/li-auto-fy2025-results.md	Li Auto FY2025 Results	https://ir.lixiang.com/news-releases/news-release-details/li-auto-inc-announces-unaudited-fourth-quarter-and-full-year-4/	Li Auto 2025 revenue, net income, cash, FCF, network scale
+S17	sources/li-auto-april-2026-deliveries.md	Li Auto April 2026 Delivery Update	https://ir.lixiang.com/news-releases/news-release-details/li-auto-inc-april-2026-delivery-update	Li Auto April deliveries, cumulative deliveries, retail/service/charging network
+S18	sources/li-auto-2025-20f.md	Li Auto Form 20-F 2025	https://www.sec.gov/Archives/edgar/data/1791706/000110465926041705/li-20251231x20f.htm	Li Auto risks, product lineup, overseas introductions, open-source OS, supply constraints
+S19	sources/li-auto-l9-product.md	Li Auto L9 Product Page	https://www.liauto.com/L9	Li Auto flagship technology and product feature context
+S20	sources/china-2025-auto-nev-caam.md	China Auto Output and Sales in 2025	https://english.www.gov.cn/archive/statistics/202601/14/content_WS6967432ec6d00ca5f9a088ff.html	China 2025 vehicle and NEV sales from CAAM/Gov source
+S21	sources/china-nev-april-2026-caam.md	China April 2026 NEV Sales Share	https://cn.chinadaily.com.cn/a/202605/11/WS6a01a8f6a310942cc49abb5d.html	China April 2026 NEV production, sales, penetration, exports
+S22	sources/china-nev-purchase-tax-policy.md	China NEV Purchase Tax Policy	https://english.www.gov.cn/news/202306/21/content_WS64929394c6d0868f4e8dd11c.html	NEV purchase-tax exemption/reduction timeline and caps
+S23	sources/china-2026-auto-trade-in-rules.md	2026 Auto Trade-In Subsidy Rules	https://www.ndrc.gov.cn/xwdt/ztzl/tddgmsbgxhxfpyjhx/gzdt/202601/t20260108_1403127.html	2026 scrappage and replacement subsidy rules
+S24	sources/china-2026-two-new-policy-explainer.md	2026 "Two New" Policy Explainer	https://www.ndrc.gov.cn/xxgk/jd/jd/202512/t20251231_1402891.html	Policy intent, funding tranche, demand-stabilization framing
