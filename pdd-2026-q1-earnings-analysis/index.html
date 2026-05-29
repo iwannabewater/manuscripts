@@ -52,6 +52,7 @@
     --line-dark: #cbc7b8;
     --blue-bg: #e7edf4;
     --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --chart-font: "Noto Sans", "AR PL UMing CN", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", Arial, sans-serif;
   }
 
   html, body { background: var(--paper); }
@@ -227,9 +228,9 @@
   }
 
   .panel {
-    background: rgba(255, 255, 255, 0.38);
+    background: #f8f7f1;
     border: 0.5pt solid var(--line);
-    padding: 7pt;
+    padding: 8pt;
     break-inside: avoid;
   }
 
@@ -264,7 +265,7 @@
 
   td.num, th.num { text-align: right; white-space: nowrap; }
 
-  .striped tr:nth-child(even) td { background: rgba(255, 255, 255, 0.26); }
+  .striped tr:nth-child(even) td { background: #f8f7f1; }
   .tight td { padding-top: 3pt; padding-bottom: 3pt; }
 
   figure {
@@ -280,8 +281,9 @@
   }
 
   svg text {
-    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+    font-family: var(--chart-font);
     letter-spacing: 0;
+    font-weight: 400;
   }
 
   .tag {
@@ -336,7 +338,7 @@
       <div class="eyebrow">个股研报 · 2026 Q1 财报复盘 · 数据核验至 2026-05-29</div>
       <h1>PDD Holdings<br>拼多多集团财报深度分析</h1>
       <div class="subtitle">
-        主题：增长没有消失，盈利可见度被重估。本文拆解 2026 年一季度财报、股价两日下跌、Goldman Sachs 等公开券商反应、Temu 政策压力与“新拼姆”供应链战略。
+        主题：经营层面没有失速，市场下修的是中期盈利可见度和估值框架。本文拆解 2026 年一季度财报、股价两日下跌、Goldman Sachs 等公开券商反应、Temu 政策压力与“新拼姆”供应链战略。
       </div>
     </div>
     <div class="price-box">
@@ -368,20 +370,20 @@
   <section class="callout">
     <div class="callout-title">一句话结论</div>
     <p>
-      PDD 2026 Q1 的经营利润没有崩。市场重定价的是它的故事：过去是“高增长、高利润率、Temu 可选项”，现在变成“主站变现放缓、Temu 政策摩擦上升、公司主动进入重投入周期”。收入仍同比增长 11.0%，经营利润同比增长 21.6%；但在线营销服务收入只增 2.5%，non-GAAP EPS 低于公开一致预期约 43%，管理层没有安抚短期利润，反而强调三年 RMB1000 亿级供应链/新拼姆投入。这是股价暴跌的触发器。
+      PDD 2026 Q1 的经营层面没有失速，市场下修的是中期盈利可见度和估值框架。公司收入同比增长 11.0%，GAAP 经营利润同比增长 21.6%；但在线营销服务收入只增长 2.5%，non-GAAP EPS 低于公开一致预期约 43%，管理层也没有给出短期利润率底线，而是继续强调三年 RMB1000 亿级供应链和新拼姆投入。股价下跌的核心，不是单季收入缺口，而是投资者开始重新评估主站变现、Temu 政策成本和第一方供应链模式的长期利润率。
     </p>
   </section>
 
   <section>
-    <h2>1. 发生了什么：收入不是灾难，盈利锚被打掉</h2>
+    <h2>1. 发生了什么：收入缺口有限，盈利可见度被重估</h2>
     <p>
-      PDD 在 2026-05-27 美股盘前发布截至 2026-03-31 的一季度业绩。官方数据给出的画面并不单调：收入保持双位数增长，经营利润率还提高；但市场关注的广告/营销变现几乎停滞，净利润与 EPS 同比下行，且明显低于公开一致预期。财报之后，股价从 2026-05-26 的 US$96.64 跌至 2026-05-28 的 US$83.03，两日累计跌幅约 14.1%。[S01][S05][S09]
+      PDD 在 2026-05-27 美股盘前发布截至 2026-03-31 的一季度业绩。官方数据给出的画面并不单调：收入保持双位数增长，经营利润率提高；但市场关注的广告和商家变现几乎停滞，净利润与 EPS 同比下行，且明显低于公开一致预期。财报之后，股价从 2026-05-26 的 US$96.64 跌至 2026-05-28 的 US$83.03，两日累计跌幅约 14.1%。这个价格动作无法只用“收入低于共识约 3%”解释，更合理的理解是盈利预测和估值倍数被同步下修。[S01][S05][S09]
     </p>
 
     <figure>
       <svg viewBox="0 0 700 260" width="100%" height="260" role="img" aria-label="PDD 2026 Q1 financial snapshot">
         <rect x="0" y="0" width="700" height="260" fill="#fbfaf5" stroke="#dfddd2"/>
-        <text x="18" y="26" fill="#1B365D" font-size="18" font-weight="500">2026 Q1：收入继续增长，利润质量转弱</text>
+        <text x="18" y="26" fill="#1B365D" font-size="18" font-weight="600">2026 Q1：收入继续增长，利润质量转弱</text>
         <text x="18" y="47" fill="#686861" font-size="12">单位：人民币十亿元；净利润为 non-GAAP 口径</text>
 
         <line x1="58" y1="206" x2="640" y2="206" stroke="#cbc7b8" stroke-width="1"/>
@@ -392,32 +394,32 @@
         <text x="117" y="223" text-anchor="middle" fill="#454541" font-size="11">2025</text>
         <text x="169" y="223" text-anchor="middle" fill="#454541" font-size="11">2026</text>
         <text x="132" y="239" text-anchor="middle" fill="#686861" font-size="11">总收入</text>
-        <text x="117" y="78" text-anchor="middle" fill="#315b7c" font-size="11">95.7</text>
-        <text x="169" y="64" text-anchor="middle" fill="#1B365D" font-size="11">106.2</text>
-        <text x="132" y="57" text-anchor="middle" fill="#1B365D" font-size="11">+11.0%</text>
+        <text x="117" y="102" text-anchor="middle" fill="#ffffff" font-size="11">95.7</text>
+        <text x="169" y="88" text-anchor="middle" fill="#ffffff" font-size="11">106.2</text>
+        <text x="132" y="59" text-anchor="middle" fill="#1B365D" font-size="11">+11.0%</text>
 
         <rect x="270" y="144" width="44" height="62" fill="#6e8cac"/>
         <rect x="322" y="142" width="44" height="64" fill="#315b7c"/>
         <text x="292" y="223" text-anchor="middle" fill="#454541" font-size="11">2025</text>
         <text x="344" y="223" text-anchor="middle" fill="#454541" font-size="11">2026</text>
         <text x="318" y="239" text-anchor="middle" fill="#686861" font-size="11">在线营销</text>
-        <text x="292" y="138" text-anchor="middle" fill="#315b7c" font-size="11">48.7</text>
-        <text x="344" y="136" text-anchor="middle" fill="#1B365D" font-size="11">49.9</text>
-        <text x="318" y="129" text-anchor="middle" fill="#1B365D" font-size="11">+2.5%</text>
+        <text x="292" y="164" text-anchor="middle" fill="#ffffff" font-size="11">48.7</text>
+        <text x="344" y="162" text-anchor="middle" fill="#ffffff" font-size="11">49.9</text>
+        <text x="318" y="132" text-anchor="middle" fill="#1B365D" font-size="11">+2.5%</text>
 
         <rect x="450" y="146" width="44" height="60" fill="#9c8060"/>
         <rect x="502" y="133" width="44" height="73" fill="#8b4a34"/>
         <text x="472" y="223" text-anchor="middle" fill="#454541" font-size="11">2025</text>
         <text x="524" y="223" text-anchor="middle" fill="#454541" font-size="11">2026</text>
         <text x="498" y="239" text-anchor="middle" fill="#686861" font-size="11">交易服务</text>
-        <text x="472" y="140" text-anchor="middle" fill="#8b4a34" font-size="11">47.0</text>
-        <text x="524" y="127" text-anchor="middle" fill="#8b4a34" font-size="11">56.3</text>
-        <text x="498" y="120" text-anchor="middle" fill="#8b4a34" font-size="11">+19.9%</text>
+        <text x="472" y="166" text-anchor="middle" fill="#ffffff" font-size="11">47.0</text>
+        <text x="524" y="153" text-anchor="middle" fill="#ffffff" font-size="11">56.3</text>
+        <text x="498" y="122" text-anchor="middle" fill="#8b4a34" font-size="11">+19.9%</text>
 
-        <text x="610" y="88" text-anchor="middle" fill="#1B365D" font-size="22" font-weight="500">19.9%</text>
+        <text x="610" y="88" text-anchor="middle" fill="#1B365D" font-size="22" font-weight="600">19.9%</text>
         <text x="610" y="108" text-anchor="middle" fill="#686861" font-size="11">non-GAAP</text>
         <text x="610" y="124" text-anchor="middle" fill="#686861" font-size="11">经营利润率</text>
-        <text x="610" y="164" text-anchor="middle" fill="#8b4a34" font-size="22" font-weight="500">-16.8%</text>
+        <text x="610" y="164" text-anchor="middle" fill="#8b4a34" font-size="22" font-weight="600">-16.8%</text>
         <text x="610" y="184" text-anchor="middle" fill="#686861" font-size="11">non-GAAP</text>
         <text x="610" y="200" text-anchor="middle" fill="#686861" font-size="11">净利润同比</text>
       </svg>
@@ -491,7 +493,7 @@
       <figure>
         <svg viewBox="0 0 340 230" width="100%" height="230" role="img" aria-label="Profit bridge">
           <rect x="0" y="0" width="340" height="230" fill="#fbfaf5" stroke="#dfddd2"/>
-          <text x="14" y="24" fill="#1B365D" font-size="16" font-weight="500">经营利润与税前利润的分叉</text>
+          <text x="14" y="24" fill="#1B365D" font-size="16" font-weight="600">经营利润与税前利润的分叉</text>
           <line x1="36" y1="188" x2="312" y2="188" stroke="#cbc7b8"/>
           <rect x="48" y="86" width="34" height="102" fill="#315b7c"/>
           <rect x="102" y="64" width="34" height="124" fill="#1B365D"/>
@@ -521,7 +523,7 @@
 
     <h3>收入结构的信号：交易服务超过在线营销</h3>
     <p>
-      交易服务收入占比从 49.1% 升至 53.0%，在线营销服务及其他占比从 50.9% 降至 47.0%。交易服务增长 19.9%，说明交易活动没有断；在线营销只增长 2.5%，才是关键压力点。在线营销更接近商家广告预算、平台流量分配和 take rate。中国 Q1 网上商品和服务零售额同比增长 8.0%，网上商品零售额同比增长 7.5%；在这个背景下，PDD 在线营销只增 2.5%，市场会优先怀疑平台变现能力和商家 ROI，而不只是宏观消费疲弱。[S10][S11]
+      交易服务收入占比从 49.1% 升至 53.0%，在线营销服务及其他占比从 50.9% 降至 47.0%。交易服务增长 19.9%，说明交易相关活动仍有韧性；在线营销只增长 2.5%，则直接指向平台广告和商家变现压力。在线营销更接近商家广告预算、平台流量分配和 take rate。中国 Q1 网上商品和服务零售额同比增长 8.0%，网上商品零售额同比增长 7.5%；在这个背景下，PDD 在线营销只增 2.5%，市场会优先怀疑平台变现能力和商家 ROI，而不只是宏观消费疲弱。[S10][S11]
     </p>
   </section>
 
@@ -531,22 +533,22 @@
     <div class="three-col">
       <div class="panel">
         <h3>预期差</h3>
-        <p>Reuters/LSEG 收入共识约 RMB1093.3 亿，实际 RMB1062.3 亿，差距约 2.8%。Investing.com 口径下，non-GAAP EPS 预期 RMB16.77，实际 RMB9.51，约低 43%。收入 miss 不大，EPS miss 很大。[S05][S06]</p>
+        <p>Reuters/LSEG 收入共识约 RMB1093.3 亿，实际 RMB1062.3 亿，差距约 2.8%。Investing.com 口径下，non-GAAP EPS 预期 RMB16.77，实际 RMB9.51，约低 43%。收入缺口有限，EPS 缺口显著。[S05][S06]</p>
       </div>
       <div class="panel">
         <h3>叙事重置</h3>
-        <p>市场原本买的是中国主站利润、Temu 全球增长和高现金缓冲组合。Q1 之后，投资者要重新估主站 take rate、Temu 政策成本和新拼姆投入回报。</p>
+        <p>市场原本看重中国主站利润、Temu 全球增长和高现金缓冲组合。Q1 之后，投资者需要重新估计主站 take rate、Temu 政策成本和新拼姆投入回报。</p>
       </div>
       <div class="panel">
         <h3>利润底线缺席</h3>
-        <p>管理层强调供应链、第一方品牌、质检、仓配、合规和客服责任。方向可能长期正确，但短期会让模型里的利润率假设下移。[S04][S18]</p>
+        <p>管理层强调供应链、第一方品牌、质检、仓配、合规和客服责任。方向有长期产业逻辑，但短期会推动模型里的利润率假设下移。[S04][S18]</p>
       </div>
     </div>
 
     <figure>
       <svg viewBox="0 0 700 245" width="100%" height="245" role="img" aria-label="PDD stock reaction after Q1 2026 earnings">
         <rect x="0" y="0" width="700" height="245" fill="#fbfaf5" stroke="#dfddd2"/>
-        <text x="18" y="26" fill="#1B365D" font-size="18" font-weight="500">财报前后股价反应</text>
+        <text x="18" y="26" fill="#1B365D" font-size="18" font-weight="600">财报前后股价反应</text>
         <text x="18" y="47" fill="#686861" font-size="12">收盘价，单位：美元；财报日为 2026-05-27</text>
         <line x1="58" y1="198" x2="650" y2="198" stroke="#cbc7b8"/>
         <line x1="58" y1="62" x2="58" y2="198" stroke="#cbc7b8"/>
@@ -572,12 +574,12 @@
         <rect x="354" y="164" width="92" height="22" fill="#efe4dd" stroke="#e0cdbf"/>
         <text x="400" y="179" text-anchor="middle" fill="#8b4a34" font-size="11">两日 -14.1%</text>
         <text x="600" y="84" fill="#686861" font-size="11">5/27 成交量</text>
-        <text x="600" y="101" fill="#1B365D" font-size="16" font-weight="500">4036万股</text>
+        <text x="600" y="101" fill="#1B365D" font-size="16" font-weight="600">4036万股</text>
       </svg>
       <figcaption>来源：Investing.com 历史价格页。5/29 为源检查时价格，盘中/实时价格可能变化。[S09]</figcaption>
     </figure>
 
-    <h3>市场问题不是“这季少赚了多少”，而是“以后该给什么倍数”</h3>
+    <h3>定价焦点从单季利润转向中期利润率</h3>
     <p>
       PDD 过去的估值框架接近“高效率 marketplace + Temu 全球增长期权 + 巨额现金”。Q1 把这个组合拆成了三项待验证假设：在线营销是否永久降速，交易服务增长是否带来足够利润，供应链/新拼姆投入能否形成更高门槛。只要披露仍停留在合并报表层面，市场就会用更高折价处理 Temu 和第一方品牌的不确定性。
     </p>
@@ -641,7 +643,7 @@
     <div class="callout">
       <div class="callout-title">怎样读高盛的反应</div>
       <p>
-        高盛没有放弃长期看多，但承认短期盈利被重置。它的目标价下调不是因为 PDD 失去价值，而是把同一个长期价值放进更低的利润预测和更谨慎的折现框架。Barclays 与 Macquarie 的降级更激进，它们担心平台向供应链/第一方品牌迁移后，利润率、商家关系和估值倍数都需要重估。
+        高盛没有放弃长期看多，但承认短期盈利预测需要重置。换言之，高盛仍认为 PDD 具备长期价值，只是这个价值要通过更低的利润预测和更谨慎的目标价表达。Barclays 与 Macquarie 的降级更激进，它们担心平台向供应链/第一方品牌迁移后，利润率、商家关系和估值倍数都需要重估。
       </p>
     </div>
   </section>
@@ -665,7 +667,7 @@
       <figure>
         <svg viewBox="0 0 330 235" width="100%" height="235" role="img" aria-label="Strategic shift">
           <rect x="0" y="0" width="330" height="235" fill="#fbfaf5" stroke="#dfddd2"/>
-          <text x="16" y="27" fill="#1B365D" font-size="16" font-weight="500">跨境低价模型的迁移</text>
+          <text x="16" y="27" fill="#1B365D" font-size="16" font-weight="600">跨境低价模型的迁移</text>
           <rect x="28" y="55" width="112" height="46" fill="#e7edf4" stroke="#d5e0ec"/>
           <text x="84" y="75" text-anchor="middle" fill="#1B365D" font-size="12">中国直发</text>
           <text x="84" y="92" text-anchor="middle" fill="#686861" font-size="10">小包裹 + 低税费</text>
@@ -697,7 +699,7 @@
 
     <h3>战略的两面</h3>
     <p>
-      长期看，新拼姆和第一方品牌可能提高质量控制、合规确定性、履约效率和供给端门槛；短期看，它们会降低利润可见度，并带来库存、售后、商家冲突和组织复杂度。市场下跌的核心不是“PDD 没有钱投”，而是“投完之后的单位经济模型还没有证据”。
+      长期看，新拼姆和第一方品牌可能提高质量控制、合规确定性、履约效率和供给端门槛；短期看，它们会降低利润可见度，并带来库存、售后、商家冲突和组织复杂度。市场下跌的核心不在于 PDD 是否有资金投入，而在于投入后的单位经济模型还缺少证据。
     </p>
   </section>
 
@@ -725,18 +727,18 @@
       </tbody>
     </table>
 
-    <h2>7. 长期战略判断：方向正确，但资本市场不会先给信用</h2>
+    <h2>7. 长期战略判断：方向有逻辑，执行难度显著上升</h2>
     <p>
-      我对 PDD 长期战略的判断是：方向正确，执行难度显著上升。国内主站的流量红利和商家广告 ROI 都在变钝，海外 Temu 又遇到税费、合规、本地履约和品牌信任问题。向供应链深处走，帮助工厂做品牌、标准、质检、仓配和全球分销，是少数能同时解决主站商家同质化和 Temu 合规升级的路径。
+      我对 PDD 长期战略的判断是：方向有产业逻辑，资本市场短期不会轻易给信用。国内主站的流量红利和商家广告 ROI 都在变钝，海外 Temu 又遇到税费、合规、本地履约和品牌信任问题。向供应链深处走，帮助工厂做品牌、标准、质检、仓配和全球分销，是少数能同时解决主站商家同质化和 Temu 合规升级的路径。
     </p>
     <p>
-      难点在于，第一方品牌会改变平台权力结构。PDD 若自己定义产品、承担销量确定性和更多合规风险，就会获得更强控制力，也会承担库存、质量、售后和商家冲突风险。平台原本用算法和流量分配连接供需，现在要用组织能力和商品能力承担供给端责任。多投钱只能买时间，买不到商品能力。
+      难点在于，第一方品牌会改变平台权力结构。PDD 若自己定义产品、承担销量确定性和更多合规风险，就会获得更强控制力，也会承担库存、质量、售后和商家冲突风险。平台原本用算法和流量分配连接供需，现在要用组织能力和商品能力承担供给端责任。资金投入可以换取时间和规模，不能直接替代商品能力。
     </p>
 
     <div class="callout">
       <div class="callout-title">我的结论</div>
       <p>
-        短期股价暴跌有合理性，因为市场原先给了 PDD 太多“盈利可见度”和“轻资产平台”的信用。长期我仍认为 PDD 是中国互联网里少数有战略进攻性的公司。它愿意用现金流和组织压力换供给端控制权，这比单纯买流量更有长期价值。但资本市场不会为“可能很大”付高价；它需要看到新拼姆不破坏商家生态，Temu 不依赖政策套利，且主站广告/交易变现没有永久下台阶。
+        短期股价下跌有合理性，因为市场原先给了 PDD 较高的“盈利可见度”和“轻资产平台”信用。长期我仍认为 PDD 是中国互联网里少数有战略进攻性的公司。它愿意用现金流和组织压力换供给端控制权，这比单纯买流量更有长期价值。但资本市场不会为“可能很大”付高价；它需要看到新拼姆不破坏商家生态，Temu 不依赖政策套利，且主站广告/交易变现没有永久下台阶。
       </p>
     </div>
 
