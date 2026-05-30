@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>算法 / 开发工程师 Git 与 GitHub 协作编码标准流程手册</title>
+<meta name="author" content="Winston">
+<meta name="description" content="面向算法与开发工程师的 Git/GitHub 协作编码标准流程手册，覆盖从 0 到 1 上手、分支、Issue、PR、review、发布、回滚和 contributor 管理。">
+<meta name="keywords" content="Git, GitHub, Code Review, Pull Request, Branch, Issue, Contributor, 软件工程">
+<meta name="generator" content="Kami">
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+  @page {
+    size: A4 landscape;
+    margin: 13mm 15mm 12mm 15mm;
+    background: #f5f4ed;
+    @top-left {
+      content: string(section-title);
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+    @bottom-right {
+      content: counter(page) "  ·  Git / GitHub 协作编码标准流程手册";
+      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8.3pt;
+      color: #6b6a64;
+    }
+  }
+  @page:first { @top-left { content: ""; } @bottom-right { content: ""; } }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --paper: #f5f4ed;
+    --ivory: #faf9f5;
+    --near-black: #141413;
+    --dark-warm: #3d3d3a;
+    --olive: #504e49;
+    --stone: #6b6a64;
+    --brand: #1B365D;
+    --brand-soft: #EEF2F7;
+    --brand-line: #D0DCE9;
+    --border: #e8e6dc;
+    --border-strong: #d8d4c7;
+    --warn-bg: #f0e0d8;
+    --warn-fg: #8b4513;
+    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+  }
+  html, body { background: var(--paper); }
+  @media screen { body { max-width: 297mm; margin: 0 auto; padding: 13mm 15mm 12mm 15mm; } }
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 8.8pt;
+    line-height: 1.42;
+    letter-spacing: 0.1pt;
+    widows: 3;
+    orphans: 3;
+  }
+  strong { font-weight: 500; }
+  code {
+    font-family: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+    font-size: 7.3pt;
+    background: var(--ivory);
+    border: 0.3pt solid var(--border);
+    border-radius: 2pt;
+    padding: 0.4pt 2pt;
+  }
+  pre {
+    background: var(--ivory);
+    border: 0.5pt solid var(--border);
+    border-radius: 6pt;
+    padding: 6pt 8pt;
+    margin: 5pt 0 7pt;
+    white-space: pre-wrap;
+    line-height: 1.28;
+    break-inside: avoid;
+  }
+  pre code { background: transparent; border: none; padding: 0; font-size: 6.7pt; line-height: 1.28; }
+  .sheet {
+    min-height: 184mm;
+    break-after: page;
+    position: relative;
+  }
+  .sheet:last-child { break-after: auto; }
+  .cover {
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    gap: 16mm;
+    align-items: stretch;
+  }
+  .cover-main { padding-top: 20mm; }
+  .eyebrow {
+    color: var(--brand);
+    font-size: 8.2pt;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 8pt;
+  }
+  .rule {
+    width: 46mm;
+    height: 2pt;
+    background: var(--brand);
+    border-radius: 2pt;
+    margin-bottom: 14pt;
+  }
+  .cover-title {
+    font-size: 28.5pt;
+    line-height: 1.12;
+    font-weight: 500;
+    letter-spacing: 0.035em;
+    margin-bottom: 13pt;
+  }
+  .cover-sub {
+    color: var(--olive);
+    font-size: 11.4pt;
+    line-height: 1.5;
+    max-width: 120mm;
+  }
+  .cover-meta {
+    position: absolute;
+    left: 0;
+    bottom: 2mm;
+    color: var(--stone);
+    font-size: 8.2pt;
+    line-height: 1.5;
+  }
+  .cover-panel {
+    background: var(--ivory);
+    border: 0.6pt solid var(--border);
+    border-radius: 8pt;
+    padding: 12mm 11mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .cover-panel h2 {
+    font-size: 14pt;
+    margin-bottom: 8pt;
+    string-set: section-title content();
+  }
+  .cover-panel p { color: var(--dark-warm); font-size: 8.9pt; margin-bottom: 8pt; }
+  .title-row {
+    display: grid;
+    grid-template-columns: 20mm 1fr 48mm;
+    gap: 7mm;
+    align-items: end;
+    margin-bottom: 9pt;
+  }
+  .page-no {
+    color: var(--brand);
+    font-size: 18pt;
+    line-height: 1;
+    font-weight: 500;
+  }
+  h1 {
+    font-size: 18pt;
+    line-height: 1.18;
+    font-weight: 500;
+    border-left: 2.4pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 7pt;
+    string-set: section-title content();
+  }
+  .page-kicker {
+    color: var(--stone);
+    font-size: 7.8pt;
+    text-align: right;
+    line-height: 1.35;
+  }
+  h2 {
+    font-size: 12.3pt;
+    line-height: 1.24;
+    font-weight: 500;
+    margin: 9pt 0 4.5pt;
+    break-after: avoid;
+  }
+  h3 {
+    font-size: 9.8pt;
+    line-height: 1.25;
+    font-weight: 500;
+    color: var(--dark-warm);
+    margin: 7pt 0 3pt;
+    break-after: avoid;
+  }
+  p { margin: 0 0 5pt; }
+  ul, ol { margin: 3.5pt 0 6pt 0; padding-left: 13pt; }
+  li { margin-bottom: 2pt; }
+  li::marker { color: var(--brand); }
+  .lead {
+    color: var(--dark-warm);
+    font-size: 10.1pt;
+    line-height: 1.46;
+    margin-bottom: 7pt;
+  }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 7mm; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5mm; }
+  .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4mm; }
+  .grid-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 3.2mm; }
+  .card, .note {
+    background: var(--ivory);
+    border: 0.5pt solid var(--border);
+    border-radius: 7pt;
+    padding: 7pt 8.5pt;
+    break-inside: avoid;
+  }
+  .note { border-left: 1.6pt solid var(--brand); }
+  .warn { background: var(--warn-bg); border-color: #dfc7ba; color: var(--warn-fg); }
+  .label {
+    color: var(--brand);
+    font-size: 7.1pt;
+    letter-spacing: 0.75pt;
+    text-transform: uppercase;
+    margin-bottom: 2.6pt;
+  }
+  .metric {
+    color: var(--brand);
+    font-size: 15.5pt;
+    line-height: 1.08;
+    font-weight: 500;
+    margin-bottom: 3pt;
+  }
+  .small { color: var(--stone); font-size: 7.5pt; line-height: 1.36; }
+  .muted { color: var(--stone); }
+  .hl { color: var(--brand); font-weight: 500; }
+  .toc-row {
+    display: grid;
+    grid-template-columns: 15mm 1fr 47mm;
+    gap: 5mm;
+    align-items: baseline;
+    padding: 4pt 0;
+    border-bottom: 0.35pt dotted var(--border-strong);
+  }
+  .toc-no { color: var(--brand); font-weight: 500; }
+  .toc-title { font-size: 9.8pt; }
+  .toc-note { color: var(--stone); font-size: 7.4pt; text-align: right; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 6pt 0 8pt;
+    font-size: 7.35pt;
+    break-inside: avoid;
+  }
+  th {
+    text-align: left;
+    color: var(--dark-warm);
+    font-weight: 500;
+    padding: 3.6pt 4.4pt;
+    border-bottom: 0.8pt solid var(--border-strong);
+  }
+  td {
+    padding: 3pt 4.4pt;
+    border-bottom: 0.25pt solid var(--border);
+    vertical-align: top;
+  }
+  tbody tr:nth-child(even) td { background: var(--ivory); }
+  .dense td, .dense th { font-size: 6.65pt; padding: 2.3pt 3.4pt; line-height: 1.28; }
+  .phase-rail {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 2.8mm;
+    margin: 8pt 0 9pt;
+  }
+  .phase {
+    background: var(--ivory);
+    border: 0.5pt solid var(--border);
+    border-top: 1.8pt solid var(--brand);
+    border-radius: 6pt;
+    padding: 5.6pt 6.2pt;
+    min-height: 34mm;
+  }
+  .phase .n { color: var(--brand); font-size: 13pt; line-height: 1; font-weight: 500; margin-bottom: 3pt; }
+  .phase .t { font-size: 8.6pt; font-weight: 500; margin-bottom: 2pt; }
+  .phase .d { color: var(--olive); font-size: 6.85pt; line-height: 1.33; }
+  .swimlane {
+    display: grid;
+    grid-template-columns: 26mm repeat(6, 1fr);
+    border: 0.5pt solid var(--border);
+    border-radius: 7pt;
+    overflow: hidden;
+    margin: 7pt 0;
+    break-inside: avoid;
+  }
+  .swimlane div {
+    padding: 4.6pt 5.5pt;
+    border-right: 0.25pt solid var(--border);
+    border-bottom: 0.25pt solid var(--border);
+    min-height: 16mm;
+    background: var(--ivory);
+    font-size: 6.75pt;
+    line-height: 1.28;
+  }
+  .swimlane .head { background: var(--brand-soft); color: var(--brand); font-weight: 500; }
+  .swimlane .role { color: var(--dark-warm); font-weight: 500; }
+  .cmd-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3.2mm;
+  }
+  .cmd {
+    background: var(--ivory);
+    border: 0.45pt solid var(--border);
+    border-radius: 6pt;
+    padding: 5.5pt 6.5pt;
+    break-inside: avoid;
+  }
+  .cmd h3 { margin-top: 0; font-size: 8.8pt; }
+  .cmd pre { margin-bottom: 0; padding: 5pt 6pt; }
+  .pill {
+    display: inline-block;
+    background: var(--brand-soft);
+    color: var(--brand);
+    border: 0.35pt solid var(--brand-line);
+    border-radius: 10pt;
+    padding: 1pt 5pt;
+    font-size: 7pt;
+    margin: 0 1.5pt 2pt 0;
+  }
+  .artifact-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3.5mm;
+    margin-top: 6pt;
+  }
+  .artifact {
+    background: var(--ivory);
+    border: 0.5pt solid var(--border);
+    border-radius: 6pt;
+    padding: 5.8pt 6.5pt;
+    min-height: 27mm;
+  }
+  .artifact h3 { margin: 0 0 3pt; font-size: 8.8pt; }
+  .artifact p { color: var(--olive); font-size: 6.85pt; line-height: 1.32; margin-bottom: 0; }
+  .source-list li { font-size: 7.15pt; line-height: 1.32; margin-bottom: 1.8pt; }
+  .score td:first-child { color: var(--brand); font-weight: 500; }
+</style>
+</head>
+<body>
+
+<section class="sheet cover">
+  <div class="cover-main">
+    <div class="eyebrow">Engineering Playbook · Git / GitHub · 2026</div>
+    <div class="rule"></div>
+    <div class="cover-title">算法 / 开发工程师 Git 与 GitHub 协作编码标准流程手册</div>
+    <div class="cover-sub">从 0 到 1 上手，到专业团队协作：分支、Issue、PR、review、CI、merge queue、release、回滚、contributor 与工程健康门禁。</div>
+  </div>
+  <aside class="cover-panel">
+    <div>
+      <h2>手册定位</h2>
+      <p>这是一套面向工程交付的 SOP，而不是命令速查表。它把 Git 的本地历史管理、GitHub 的协作机制、Code Review 的工程标准和开源 contributor 流程放在同一个闭环里。</p>
+      <p>参考对象只取公开可验证资料：Git/GitHub 官方文档、Google Engineering Practices、Meta Engineering、OpenAI 官方仓库贡献说明、CloudWeGo / ByteDance 开源项目贡献说明，以及 SemVer、Conventional Commits 等公开规范。</p>
+    </div>
+    <div class="small">
+      Winston<br>
+      资料口径截至 2026-05-30<br>
+      Git · GitHub · Google · Meta · OpenAI · CloudWeGo
+    </div>
+  </aside>
+  <div class="cover-meta">Manuscripts · Git & GitHub Collaboration Handbook</div>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">00</div>
+    <h1>目录与阅读路径</h1>
+    <div class="page-kicker">先学闭环<br>再学命令</div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="toc-row"><span class="toc-no">01</span><span class="toc-title">总原则：专业协作不是会用 Git</span><span class="toc-note">目标与质量观</span></div>
+      <div class="toc-row"><span class="toc-no">02</span><span class="toc-title">Git 心智模型</span><span class="toc-note">worktree · index · commit</span></div>
+      <div class="toc-row"><span class="toc-no">03</span><span class="toc-title">从 0 到 1 环境准备</span><span class="toc-note">config · SSH · gh</span></div>
+      <div class="toc-row"><span class="toc-no">04</span><span class="toc-title">日常开发循环</span><span class="toc-note">status · diff · commit</span></div>
+      <div class="toc-row"><span class="toc-no">05</span><span class="toc-title">分支策略</span><span class="toc-note">trunk · GitHub Flow · release</span></div>
+      <div class="toc-row"><span class="toc-no">06</span><span class="toc-title">Issue 工作流</span><span class="toc-note">intake · triage · planning</span></div>
+      <div class="toc-row"><span class="toc-no">07</span><span class="toc-title">小变更与提交规范</span><span class="toc-note">atomic · conventional</span></div>
+      <div class="toc-row"><span class="toc-no">08</span><span class="toc-title">同步、rebase 与冲突</span><span class="toc-note">fetch · merge · rebase</span></div>
+      <div class="toc-row"><span class="toc-no">09</span><span class="toc-title">Pull Request 标准流程</span><span class="toc-note">draft · template · CI</span></div>
+      <div class="toc-row"><span class="toc-no">10</span><span class="toc-title">Code Review 标准</span><span class="toc-note">author · reviewer</span></div>
+      <div class="toc-row"><span class="toc-no">11</span><span class="toc-title">分支保护与 merge queue</span><span class="toc-note">required checks</span></div>
+      <div class="toc-row"><span class="toc-no">12</span><span class="toc-title">合并、发布与回滚</span><span class="toc-note">SemVer · tag · changelog</span></div>
+    </div>
+    <div>
+      <div class="toc-row"><span class="toc-no">13</span><span class="toc-title">外部 Contributor 流程</span><span class="toc-note">fork · maintainer</span></div>
+      <div class="toc-row"><span class="toc-no">14</span><span class="toc-title">算法工程特殊规范</span><span class="toc-note">data · model · experiment</span></div>
+      <div class="toc-row"><span class="toc-no">15</span><span class="toc-title">恢复与排障</span><span class="toc-note">reflog · revert · bisect</span></div>
+      <div class="toc-row"><span class="toc-no">16</span><span class="toc-title">高级 Git 操作</span><span class="toc-note">worktree · cherry-pick · patch</span></div>
+      <div class="toc-row"><span class="toc-no">17</span><span class="toc-title">安全与合规</span><span class="toc-note">secret · signing · access</span></div>
+      <div class="toc-row"><span class="toc-no">18</span><span class="toc-title">AI 协作编码边界</span><span class="toc-note">agent · generated code</span></div>
+      <div class="toc-row"><span class="toc-no">19</span><span class="toc-title">角色、RACI 与团队制度</span><span class="toc-note">author · owner · release</span></div>
+      <div class="toc-row"><span class="toc-no">20</span><span class="toc-title">模板与 Checklist</span><span class="toc-note">issue · PR · review</span></div>
+      <div class="toc-row"><span class="toc-no">21</span><span class="toc-title">命令速查</span><span class="toc-note">高频与危险命令</span></div>
+      <div class="toc-row"><span class="toc-no">22</span><span class="toc-title">成熟度评分</span><span class="toc-note">团队自检</span></div>
+      <div class="toc-row"><span class="toc-no">23</span><span class="toc-title">来源与边界</span><span class="toc-note">公开资料口径</span></div>
+    </div>
+  </div>
+  <div class="note" style="margin-top: 11pt;">
+    <div class="label">Reading Contract</div>
+    <p>如果只想立刻能协作，读 01 到 12。如果你是开源维护者，追加 13、17、19、20。如果你做算法、推荐、搜索、LLM 或数据密集型研发，必须读 14。遇到事故或历史错乱，先读 15，再碰危险命令。</p>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">01</div>
+    <h1>总原则：专业协作不是会用 Git</h1>
+    <div class="page-kicker">Git 管历史<br>GitHub 管协作证据</div>
+  </div>
+  <p class="lead">专业工程师使用 Git/GitHub 的目标，不是把代码推上去，而是让每一次变更都有清楚的目的、足够小的审查面、可重复的验证证据、明确的责任人和可执行的回滚路径。</p>
+  <div class="grid-4">
+    <div class="card"><div class="label">Principle 01</div><div class="metric">小而完整</div><p>每个 PR 只解决一个问题，包含必要测试和文档。Google 的公开 code review 文档强调小变更更快、更彻底、更易回滚。</p></div>
+    <div class="card"><div class="label">Principle 02</div><div class="metric">事实优先</div><p>争议按数据、测试、规范、现有架构和用户影响判断。纯偏好不应阻塞合并，风格以项目 style guide 为准。</p></div>
+    <div class="card"><div class="label">Principle 03</div><div class="metric">主干健康</div><p>默认分支始终可构建、可测试、可发布。保护主干比保护个人分支重要，所有合并都要经过自动化和人工门禁。</p></div>
+    <div class="card"><div class="label">Principle 04</div><div class="metric">证据闭环</div><p>PR 描述、CI、review、commit、release notes 和 issue link 共同构成工程证据链。没有证据，不叫完成。</p></div>
+  </div>
+  <h2>大厂公开实践抽象成四条团队规范</h2>
+  <table>
+    <thead><tr><th>公开实践来源</th><th>可迁移原则</th><th>落地到 GitHub</th></tr></thead>
+    <tbody>
+      <tr><td>Google Engineering Practices</td><td>Code review 服务于长期 code health，小变更、测试和清晰命名优先。</td><td>PR 小于一个概念变更，review checklist 覆盖设计、功能、复杂度、测试、文档。</td></tr>
+      <tr><td>Meta Engineering</td><td>大规模仓库需要高信号工具链、可恢复历史和 stacked changes 支撑并行开发。</td><td>允许 stacked PR，但每层必须独立可审查；用 CI 和 merge queue 降低主干破坏概率。</td></tr>
+      <tr><td>OpenAI 官方仓库</td><td>贡献说明要明确环境、生成代码边界、测试、lint 和发布管线。</td><td><code>CONTRIBUTING.md</code> 写清 bootstrap、test、lint、generated files、release automation。</td></tr>
+      <tr><td>CloudWeGo / ByteDance 开源项目</td><td>先 issue 后大改，PR 要有测试、commit 约定、清晰标题和安全报告路径。</td><td>Issue 模板、PR 模板、labels、security policy、维护者 triage 规则进入仓库。</td></tr>
+    </tbody>
+  </table>
+  <div class="note">
+    <div class="label">Professional Bar</div>
+    <p>一名合格工程师会写代码；一名专业协作工程师能解释为什么这个改动属于这个 issue、为什么拆成这个 PR、为什么这些测试足够、为什么现在可以合并、合并失败时怎么退回。</p>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">02</div>
+    <h1>Git 心智模型：先理解对象，再记命令</h1>
+    <div class="page-kicker">大多数 Git 事故<br>来自把层级混在一起</div>
+  </div>
+  <p class="lead">Git 的日常操作围绕四层状态展开：工作区、暂存区、本地仓库、远端仓库。理解这四层，才能判断一个命令是在改文件、改下一次提交、改本地历史，还是改远端共享历史。</p>
+  <div class="grid-4">
+    <div class="card"><div class="label">Working Tree</div><h3>工作区</h3><p>你正在编辑的文件。<code>git status</code> 显示它相对 index 和 HEAD 的差异。</p></div>
+    <div class="card"><div class="label">Index</div><h3>暂存区</h3><p>下一次 commit 的候选快照。<code>git add</code> 改 index，不是“上传”。</p></div>
+    <div class="card"><div class="label">Local Repo</div><h3>本地提交图</h3><p>commit、branch、tag、HEAD 都在这里。<code>commit</code> 只写本地历史。</p></div>
+    <div class="card"><div class="label">Remote</div><h3>远端引用</h3><p><code>origin/main</code> 是你上次 fetch 看到的远端状态，不等于实时 GitHub 状态。</p></div>
+  </div>
+  <h2>关键对象</h2>
+  <table>
+    <thead><tr><th>对象</th><th>含义</th><th>常见误区</th><th>检查命令</th></tr></thead>
+    <tbody>
+      <tr><td><code>HEAD</code></td><td>当前检出的提交。</td><td>以为 HEAD 一定等于分支名。detached HEAD 时不是。</td><td><code>git rev-parse --abbrev-ref HEAD</code></td></tr>
+      <tr><td>branch</td><td>指向某个 commit 的可移动名字。</td><td>以为 branch 存一份代码副本。它只是引用。</td><td><code>git branch -vv</code></td></tr>
+      <tr><td>commit</td><td>一次完整快照，含父提交、作者、消息。</td><td>以为 commit 是文件 diff。diff 是两个快照的比较结果。</td><td><code>git show --stat</code></td></tr>
+      <tr><td>tag</td><td>指向特定提交的发布标记。</td><td>发布后改 tag，会破坏可追溯性。</td><td><code>git tag --sort=-version:refname</code></td></tr>
+      <tr><td>upstream</td><td>本地分支跟踪的远端分支。</td><td><code>pull</code> / <code>push</code> 目标不清。</td><td><code>git status -sb</code></td></tr>
+    </tbody>
+  </table>
+  <div class="note"><div class="label">Safety Rule</div><p>会重写历史的命令只允许作用在自己的未合并分支上。凡是会影响远端共享历史的动作，先确认分支、上游、PR 状态和团队约定。</p></div>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">03</div>
+    <h1>从 0 到 1 环境准备</h1>
+    <div class="page-kicker">先让身份、认证、远端<br>全部可解释</div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <p class="lead">初学者最容易跳过身份和认证配置，后续会在 commit 作者、push 权限、SSH key、多个账号和 GPG 签名上反复出错。准备阶段的目标，是让本机、GitHub 账号、仓库远端和 CLI 都能稳定配合。</p>
+      <h2>一次性配置</h2>
+      <pre><code>git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+git config --global init.defaultBranch main
+git config --global pull.ff only
+git config --global push.default simple
+git config --global fetch.prune true</code></pre>
+      <table>
+        <thead><tr><th>配置</th><th>推荐值</th><th>原因</th></tr></thead>
+        <tbody>
+          <tr><td><code>init.defaultBranch</code></td><td><code>main</code></td><td>与 GitHub 默认主分支一致。</td></tr>
+          <tr><td><code>pull.ff</code></td><td><code>only</code></td><td>避免无意识 merge commit。</td></tr>
+          <tr><td><code>fetch.prune</code></td><td><code>true</code></td><td>自动清理远端已删除分支引用。</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div>
+      <h2>认证与仓库获取</h2>
+      <pre><code>ssh-keygen -t ed25519 -C "you@example.com"
+ssh -T git@github.com
+gh auth login
+gh auth status
+
+git clone git@github.com:OWNER/REPO.git
+cd REPO
+git remote -v
+git status -sb</code></pre>
+      <div class="note">
+        <div class="label">Multi Account</div>
+        <p>公司账号、个人账号和开源账号分开时，优先用 SSH host alias 或 per-repo <code>user.email</code>。不要在一个仓库里混用多个身份，后续审计和贡献统计都会变乱。</p>
+      </div>
+      <h2>新仓库初始化</h2>
+      <pre><code>mkdir my-project && cd my-project
+git init
+git add README.md
+git commit -m "docs: add project readme"
+git remote add origin git@github.com:OWNER/my-project.git
+git push -u origin main</code></pre>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">04</div>
+    <h1>日常开发循环：每次动手都走同一条线</h1>
+    <div class="page-kicker">固定循环<br>降低认知负担</div>
+  </div>
+  <p class="lead">日常开发的标准循环是：更新基线，创建任务分支，编辑，检查 diff，分块暂存，提交，推送，开 PR。不要在 main 上直接写功能，不要在没看 diff 时 commit，不要把无关格式化混进业务改动。</p>
+  <div class="phase-rail">
+    <div class="phase"><div class="n">1</div><div class="t">Sync</div><div class="d">确认 main 最新，工作树干净。</div></div>
+    <div class="phase"><div class="n">2</div><div class="t">Branch</div><div class="d">按 issue 创建任务分支。</div></div>
+    <div class="phase"><div class="n">3</div><div class="t">Edit</div><div class="d">只改目标范围内文件。</div></div>
+    <div class="phase"><div class="n">4</div><div class="t">Inspect</div><div class="d">用 diff 自审每一行。</div></div>
+    <div class="phase"><div class="n">5</div><div class="t">Stage</div><div class="d">按逻辑分块暂存。</div></div>
+    <div class="phase"><div class="n">6</div><div class="t">Commit</div><div class="d">提交一个原子改动。</div></div>
+    <div class="phase"><div class="n">7</div><div class="t">Verify</div><div class="d">跑相关测试和 lint。</div></div>
+    <div class="phase"><div class="n">8</div><div class="t">Push</div><div class="d">推送并创建 PR。</div></div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd"><h3>开始任务</h3><pre><code>git switch main
+git fetch origin
+git pull --ff-only
+git switch -c feat/123-ranking-cache</code></pre></div>
+    <div class="cmd"><h3>提交前自审</h3><pre><code>git status -sb
+git diff
+git diff --cached
+git add -p
+git commit</code></pre></div>
+    <div class="cmd"><h3>推送分支</h3><pre><code>git push -u origin HEAD
+gh pr create --draft
+gh pr view --web</code></pre></div>
+  </div>
+  <h2>本地开发纪律</h2>
+  <table>
+    <thead><tr><th>纪律</th><th>为什么</th><th>违反后的处理</th></tr></thead>
+    <tbody>
+      <tr><td>工作树脏时不切任务。</td><td>避免把上一个任务的残留带入新 PR。</td><td>提交、stash、worktree 或放弃，必须显式选择。</td></tr>
+      <tr><td>提交前必须看 <code>git diff</code>。</td><td>防止调试日志、密钥、临时文件进入历史。</td><td>若已提交但未推送，用 <code>commit --amend</code> 修正。</td></tr>
+      <tr><td>不要用 <code>git add .</code> 替代思考。</td><td>它会把无关文件一起放进 commit。</td><td>用 <code>git restore --staged</code> 退回 index。</td></tr>
+      <tr><td>所有本地验证写入 PR。</td><td>reviewer 需要知道你验证了什么。</td><td>PR 描述补充命令与结果。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">05</div>
+    <h1>分支策略：默认短分支，必要时 release 分支</h1>
+    <div class="page-kicker">分支是隔离工作<br>不是长期存货</div>
+  </div>
+  <p class="lead">GitHub Flow 的公开文档给出了一条轻量路径：从默认分支创建分支，提交，打开 PR，review，合并，删除分支。专业团队通常以短生命周期 feature branch 加 protected main 为默认，只有在发布节奏、客户支持或兼容窗口需要时才增加 release branch。</p>
+  <div class="grid-3">
+    <div class="card"><div class="label">Default</div><h3>Trunk based + PR</h3><p>所有变更通过短分支 PR 合入 <code>main</code>。适合持续集成、频繁发布和小团队。</p></div>
+    <div class="card"><div class="label">When Needed</div><h3>Release Branch</h3><p>从稳定点切出 <code>release/1.8</code>，只接收修复和发布准备。适合客户端、SDK、企业部署。</p></div>
+    <div class="card"><div class="label">Avoid by Default</div><h3>Long-lived Develop</h3><p>长期 <code>develop</code> 会推迟集成风险。只有明确多环境发布制度时才保留。</p></div>
+  </div>
+  <h2>分支命名标准</h2>
+  <table>
+    <thead><tr><th>类型</th><th>格式</th><th>例子</th><th>使用场景</th></tr></thead>
+    <tbody>
+      <tr><td>feature</td><td><code>feat/&lt;issue&gt;-&lt;slug&gt;</code></td><td><code>feat/128-vector-cache</code></td><td>新增功能。</td></tr>
+      <tr><td>fix</td><td><code>fix/&lt;issue&gt;-&lt;slug&gt;</code></td><td><code>fix/233-empty-response</code></td><td>缺陷修复。</td></tr>
+      <tr><td>docs</td><td><code>docs/&lt;slug&gt;</code></td><td><code>docs/contributor-guide</code></td><td>文档。</td></tr>
+      <tr><td>chore</td><td><code>chore/&lt;slug&gt;</code></td><td><code>chore/ruff-upgrade</code></td><td>工具、依赖、CI。</td></tr>
+      <tr><td>release</td><td><code>release/&lt;major.minor&gt;</code></td><td><code>release/2.4</code></td><td>发布稳定分支。</td></tr>
+      <tr><td>hotfix</td><td><code>hotfix/&lt;version&gt;-&lt;slug&gt;</code></td><td><code>hotfix/2.4.1-auth-timeout</code></td><td>生产紧急修复。</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><div class="label">Branch Rule</div><p>一个分支只服务一个任务。分支超过 3 到 5 天仍不能开 PR，通常说明任务拆分失败。先切出最小可合并单元，再继续后续工作。</p></div>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">06</div>
+    <h1>Issue 工作流：把需求入口变成工程事实</h1>
+    <div class="page-kicker">Issue 不是留言板<br>它是变更合同</div>
+  </div>
+  <p class="lead">GitHub Issues 可以跟踪 bug、功能、想法、任务和计划。专业流程的关键，是让 issue 在进入开发前具备可复现、可验收、可排期、可分派的结构，而不是靠 PR 阶段再补上下文。</p>
+  <div class="grid-4">
+    <div class="card"><div class="label">Intake</div><h3>收集</h3><p>模板要求背景、现象、期望、复现、影响面、版本、截图或日志。</p></div>
+    <div class="card"><div class="label">Triage</div><h3>分诊</h3><p>维护者判断类型、优先级、范围、owner、是否需要设计讨论。</p></div>
+    <div class="card"><div class="label">Plan</div><h3>计划</h3><p>明确验收标准、非目标、拆分子任务、依赖和目标 milestone。</p></div>
+    <div class="card"><div class="label">Link</div><h3>闭环</h3><p>PR 使用 <code>Fixes #123</code> 或 <code>Refs #123</code> 连接 issue。</p></div>
+  </div>
+  <h2>Label 体系</h2>
+  <table>
+    <thead><tr><th>维度</th><th>标签例子</th><th>用途</th></tr></thead>
+    <tbody>
+      <tr><td>类型</td><td><span class="pill">type:bug</span><span class="pill">type:feature</span><span class="pill">type:docs</span><span class="pill">type:refactor</span></td><td>决定处理流程和模板。</td></tr>
+      <tr><td>优先级</td><td><span class="pill">p0</span><span class="pill">p1</span><span class="pill">p2</span><span class="pill">p3</span></td><td>决定排期，不等于严重程度。</td></tr>
+      <tr><td>状态</td><td><span class="pill">needs-info</span><span class="pill">accepted</span><span class="pill">blocked</span><span class="pill">in-progress</span></td><td>让队列可扫描。</td></tr>
+      <tr><td>新人入口</td><td><span class="pill">good first issue</span><span class="pill">help wanted</span></td><td>给外部 contributor 清晰入口。</td></tr>
+      <tr><td>风险域</td><td><span class="pill">security</span><span class="pill">performance</span><span class="pill">breaking</span><span class="pill">data</span></td><td>触发额外 reviewer 或门禁。</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><div class="label">Triage Rule</div><p>缺少复现信息的 bug 不进入实现；缺少成功标准的 feature 不进入开发；涉及安全漏洞的报告不放在公开 issue 里处理，应转入安全披露渠道。</p></div>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">07</div>
+    <h1>小变更与提交规范</h1>
+    <div class="page-kicker">commit 给机器和未来的人读<br>PR 给 reviewer 读</div>
+  </div>
+  <p class="lead">Google 的公开实践强调一个 CL 应当是 self-contained change，并包含相关测试。GitHub Flow 也建议每个 commit 包含独立完整的变化，便于 revert。这里的核心不是“行数崇拜”，而是每个变更单元能被理解、验证、撤销。</p>
+  <div class="grid-2">
+    <div>
+      <h2>原子提交规则</h2>
+      <ul>
+        <li>一个 commit 只表达一个原因：功能、修复、重构、测试、文档、CI 中的一类。</li>
+        <li>重命名和行为修改分开提交，避免 reviewer 看不清真实 diff。</li>
+        <li>格式化整文件和逻辑修改分开提交。</li>
+        <li>生产代码改变和相关测试应在同一个 PR 中，通常在同一个或相邻 commit 中。</li>
+        <li>提交消息说明“为什么”和“影响”，不写空泛的 <code>update code</code>。</li>
+      </ul>
+      <h2>Conventional Commits 推荐格式</h2>
+      <pre><code>&lt;type&gt;[optional scope]: &lt;description&gt;
+
+[optional body]
+
+[optional footer(s)]</code></pre>
+    </div>
+    <div>
+      <h2>类型与 SemVer 对应</h2>
+      <table>
+        <thead><tr><th>类型</th><th>含义</th><th>版本影响</th><th>例子</th></tr></thead>
+        <tbody>
+          <tr><td><code>fix</code></td><td>缺陷修复。</td><td>PATCH</td><td><code>fix(api): handle empty batch result</code></td></tr>
+          <tr><td><code>feat</code></td><td>新增能力。</td><td>MINOR</td><td><code>feat(rank): add vector cache</code></td></tr>
+          <tr><td><code>!</code> 或 <code>BREAKING CHANGE</code></td><td>不兼容修改。</td><td>MAJOR</td><td><code>feat(api)!: rename search endpoint</code></td></tr>
+          <tr><td><code>docs</code></td><td>文档。</td><td>无默认版本影响</td><td><code>docs: add contributor guide</code></td></tr>
+          <tr><td><code>test</code></td><td>测试。</td><td>无默认版本影响</td><td><code>test(auth): cover token refresh</code></td></tr>
+          <tr><td><code>ci</code></td><td>CI 配置。</td><td>无默认版本影响</td><td><code>ci: require linux smoke test</code></td></tr>
+        </tbody>
+      </table>
+      <div class="warn card"><div class="label">Danger</div><p>已推送并被别人基于其开发的 commit 不要随意 rewrite。只有在个人 PR 分支、团队允许且使用 <code>--force-with-lease</code> 时，才改远端历史。</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">08</div>
+    <h1>同步、rebase 与冲突处理</h1>
+    <div class="page-kicker">同步不是机械 pull<br>它是在选择历史形状</div>
+  </div>
+  <p class="lead">团队协作中，最常见的历史问题来自混用 pull、merge、rebase 和 force push。默认建议：更新远端状态用 <code>fetch</code>，主干更新用 <code>pull --ff-only</code>，个人 PR 分支可用 <code>rebase</code> 整理，公共分支禁止改写历史。</p>
+  <div class="cmd-grid">
+    <div class="cmd"><h3>更新 main</h3><pre><code>git switch main
+git fetch origin
+git pull --ff-only</code></pre></div>
+    <div class="cmd"><h3>让个人分支追上 main</h3><pre><code>git switch feat/123-x
+git fetch origin
+git rebase origin/main</code></pre></div>
+    <div class="cmd"><h3>安全推送重写后的个人分支</h3><pre><code>git push --force-with-lease</code></pre></div>
+  </div>
+  <h2>merge 与 rebase 的选择</h2>
+  <table>
+    <thead><tr><th>场景</th><th>推荐</th><th>理由</th><th>禁止</th></tr></thead>
+    <tbody>
+      <tr><td>更新本地 main</td><td><code>pull --ff-only</code></td><td>main 应保持远端线性一致。</td><td>在 main 上产生本地 merge commit。</td></tr>
+      <tr><td>个人 PR 分支追上 main</td><td><code>rebase origin/main</code></td><td>PR 历史更清楚，冲突提前解决。</td><td>多人共享分支上 rebase 后强推。</td></tr>
+      <tr><td>集成长期 release 分支</td><td>按团队策略 merge 或 cherry-pick</td><td>需要保留发布历史和修复来源。</td><td>无记录地复制代码。</td></tr>
+      <tr><td>Stacked PR</td><td>每层 rebase 到上一层最新提交</td><td>保持依赖链可审查。</td><td>把多层变化压成一个巨大 PR。</td></tr>
+    </tbody>
+  </table>
+  <h2>冲突处理 SOP</h2>
+  <ol>
+    <li>先读冲突文件上下文，确认两边改动意图。</li>
+    <li>只解决语义冲突，不盲目接受 ours 或 theirs。</li>
+    <li>解决后运行最小相关测试。</li>
+    <li>如果冲突来自架构方向分歧，停下来找 reviewer 或 owner 对齐。</li>
+    <li>rebase 中用 <code>git rebase --continue</code>，不能继续时用 <code>git rebase --abort</code> 回到起点。</li>
+  </ol>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">09</div>
+    <h1>Pull Request 标准流程</h1>
+    <div class="page-kicker">PR 是可审查变更包<br>不是代码上传窗口</div>
+  </div>
+  <p class="lead">GitHub 官方文档把 PR 放在协作反馈和合并门禁中心。专业 PR 应当让 reviewer 不需要猜：改了什么、为什么改、怎么验证、风险在哪里、哪些问题不在本 PR 解决。</p>
+  <div class="grid-3">
+    <div class="card"><div class="label">Draft</div><h3>早开 draft PR</h3><p>需要方向反馈、架构讨论或 CI 预跑时，用 draft PR。不要等全部写完才暴露方向风险。</p></div>
+    <div class="card"><div class="label">Ready</div><h3>转 ready 的门槛</h3><p>scope 收敛、测试通过、描述完整、无明显 debug 代码、无 secret、reviewer 能开始判断。</p></div>
+    <div class="card"><div class="label">Merge</div><h3>合并前条件</h3><p>必需检查通过、必要 reviewer 批准、conversation resolved、风险和回滚已说明。</p></div>
+  </div>
+  <h2>PR 描述模板</h2>
+  <pre><code>## Summary
+- What changed:
+- Why now:
+- Linked issue: Fixes #123
+
+## Verification
+- [ ] unit tests:
+- [ ] integration / e2e:
+- [ ] manual check:
+
+## Risk
+- User impact:
+- Rollback:
+- Out of scope:
+
+## Reviewer notes
+- Files to read first:
+- Generated files:
+- Migration / release notes:</code></pre>
+  <h2>PR 规模门禁</h2>
+  <table>
+    <thead><tr><th>规模</th><th>默认处理</th><th>review 要求</th></tr></thead>
+    <tbody>
+      <tr><td>&lt; 200 行概念 diff</td><td>标准 PR。</td><td>1 名 owner 或熟悉模块的 reviewer。</td></tr>
+      <tr><td>200 到 600 行</td><td>解释为什么不能再拆。</td><td>至少 1 名模块 owner，必要时补设计说明。</td></tr>
+      <tr><td>&gt; 600 行或跨 5 个模块</td><td>优先拆 PR 或 stacked PR。</td><td>架构 review、测试证据、回滚方案。</td></tr>
+      <tr><td>迁移、权限、安全、数据</td><td>不按行数判断，直接高风险。</td><td>owner、security / infra / data reviewer 和发布门禁。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">10</div>
+    <h1>Code Review 标准：提高 code health，而不是找茬</h1>
+    <div class="page-kicker">review 的产物<br>是更健康的主干</div>
+  </div>
+  <p class="lead">Google 的 code review 标准可以压缩成一句工程原则：当变更整体上明确提升系统 code health 时，reviewer 应倾向批准，即使它并不完美。专业 review 既不能用个人偏好阻塞进展，也不能让会降低长期可维护性的改动进入主干。</p>
+  <div class="grid-2">
+    <div>
+      <h2>Reviewer 检查顺序</h2>
+      <ol>
+        <li><strong>Scope</strong>，这个 PR 是否解决了声明的问题，是否混入无关改动。</li>
+        <li><strong>Design</strong>，模块边界、抽象、依赖方向、数据流是否合理。</li>
+        <li><strong>Functionality</strong>，功能是否符合用户和开发者需求，边界条件是否覆盖。</li>
+        <li><strong>Complexity</strong>，有没有过度设计、难懂控制流、未来需求猜测。</li>
+        <li><strong>Tests</strong>，测试是否会在代码坏掉时失败，是否覆盖关键路径。</li>
+        <li><strong>Security / Privacy / Data</strong>，输入、权限、敏感数据、外部调用是否安全。</li>
+        <li><strong>Documentation</strong>，构建、使用、发布、配置行为改变是否同步文档。</li>
+      </ol>
+    </div>
+    <div>
+      <h2>Author 回应规则</h2>
+      <ul>
+        <li>先判断 reviewer 是否指出了真实 code health 问题。</li>
+        <li>能通过改代码澄清的，不用评论解释替代。</li>
+        <li>不同意时写 tradeoff：选择 A 的原因、B 的代价、你希望 reviewer 判断的点。</li>
+        <li>对 nit 可选择处理，但不要让小修饰掩盖重大问题。</li>
+        <li>review 来回超过两轮仍卡住，转同步讨论，并把结论写回 PR。</li>
+      </ul>
+      <div class="note"><div class="label">Comment Style</div><p>评论应指向具体代码和具体后果。用“这里在空列表时会返回 500，因为下游没有处理 None”替代“这里感觉不够优雅”。</p></div>
+    </div>
+  </div>
+  <table>
+    <thead><tr><th>评论等级</th><th>含义</th><th>作者义务</th><th>Reviewer 义务</th></tr></thead>
+    <tbody>
+      <tr><td>Blocking</td><td>不修会导致 bug、风险或 code health 下降。</td><td>修复或给出可验证反证。</td><td>说明触发条件和后果。</td></tr>
+      <tr><td>Suggestion</td><td>更好但不必阻塞。</td><td>接受、拒绝或解释。</td><td>不要伪装成必须项。</td></tr>
+      <tr><td>Nit</td><td>小风格、命名、排版。</td><td>可处理。</td><td>不能据此 request changes。</td></tr>
+      <tr><td>Question</td><td>需要理解意图。</td><td>优先让代码或文档更清楚。</td><td>如果只是学习问题，标明非阻塞。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">11</div>
+    <h1>分支保护、CODEOWNERS 与 merge queue</h1>
+    <div class="page-kicker">主干稳定性<br>靠制度不是靠自觉</div>
+  </div>
+  <p class="lead">GitHub branch protection 可以要求 PR review、状态检查、conversation resolution、签名提交、线性历史、merge queue 和部署成功。成熟团队应把这些规则固化在默认分支上，让主干健康成为默认路径。</p>
+  <div class="grid-3">
+    <div class="card"><div class="label">Protection</div><h3>主干保护</h3><p>禁止直接 push，要求 PR、至少 1 到 2 个审批、必需状态检查和 conversation resolved。</p></div>
+    <div class="card"><div class="label">Ownership</div><h3>CODEOWNERS</h3><p>把关键目录映射到 owner。修改对应文件时自动请求 owner review，并可作为必需审批。</p></div>
+    <div class="card"><div class="label">Queue</div><h3>Merge queue</h3><p>高频合并时，queue 会在最新主干和队列前序 PR 上重新验证，减少“单独都绿，合并后变红”。</p></div>
+  </div>
+  <h2>推荐规则矩阵</h2>
+  <table>
+    <thead><tr><th>仓库类型</th><th>主干规则</th><th>CI</th><th>Review</th><th>补充</th></tr></thead>
+    <tbody>
+      <tr><td>个人学习仓库</td><td>建议保护 main。</td><td>至少 lint 或 test。</td><td>可自审。</td><td>练习 PR 流程。</td></tr>
+      <tr><td>团队业务仓库</td><td>禁止直推，Require PR。</td><td>unit、lint、typecheck、build。</td><td>1 owner。</td><td>启用 auto delete branch。</td></tr>
+      <tr><td>核心服务 / SDK</td><td>必需检查、签名、线性历史。</td><td>跨平台、集成、兼容性。</td><td>2 reviewer 或 CODEOWNERS。</td><td>发布前 smoke / staging。</td></tr>
+      <tr><td>高频合并 monorepo</td><td>merge queue。</td><td>queue context 重新跑。</td><td>owner + area specialist。</td><td>按目录 owner 和影响面分级。</td></tr>
+    </tbody>
+  </table>
+  <h2>CODEOWNERS 示例</h2>
+  <pre><code># Default owners
+* @org/core-maintainers
+
+# Critical surfaces
+/.github/ @org/release-engineering
+/infra/ @org/infra
+/security/ @org/security
+/models/ @org/ml-platform
+/docs/ @org/docs-maintainers</code></pre>
+  <div class="warn card"><div class="label">Hard Rule</div><p>保护 CODEOWNERS 文件本身。否则攻击者或误操作可以先改 owner，再绕过关键目录审批。</p></div>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">12</div>
+    <h1>合并、发布与回滚</h1>
+    <div class="page-kicker">发布不是 merge 后的附属动作<br>它是交付合同的一部分</div>
+  </div>
+  <p class="lead">合并策略决定历史形状，版本策略决定用户如何理解变化，回滚策略决定事故成本。团队应在仓库级别明确 merge method、版本规则、release notes、tag、hotfix 和 rollback。</p>
+  <div class="grid-3">
+    <div class="card"><div class="label">Squash Merge</div><h3>默认推荐</h3><p>把 PR 压成一个语义 commit，适合 GitHub Flow 和外部 contributor。maintainer 可整理 commit message。</p></div>
+    <div class="card"><div class="label">Rebase Merge</div><h3>线性历史</h3><p>保留每个 commit，要求作者提交质量高。适合内部团队和精心组织的 commit 链。</p></div>
+    <div class="card"><div class="label">Merge Commit</div><h3>保留分支语义</h3><p>适合 release branch、长期分支和需要保留集成点的仓库。主干会出现非线性历史。</p></div>
+  </div>
+  <h2>发布 SOP</h2>
+  <ol>
+    <li>确认 main 绿，release blocker 为 0。</li>
+    <li>核对版本号：SemVer 中 MAJOR 表示不兼容 API，MINOR 表示向下兼容功能，PATCH 表示向下兼容修复。</li>
+    <li>从 commit / PR / issue 生成 changelog，面向用户写影响，不只是列 commit。</li>
+    <li>创建 tag 和 release，产物、校验和、镜像、包管理器版本保持一致。</li>
+    <li>发布后验证安装、启动、关键路径和回滚命令。</li>
+  </ol>
+  <table>
+    <thead><tr><th>场景</th><th>动作</th><th>命令</th><th>注意</th></tr></thead>
+    <tbody>
+      <tr><td>普通回滚</td><td>revert PR 或 commit。</td><td><code>git revert &lt;sha&gt;</code></td><td>保留历史，适合已推送主干。</td></tr>
+      <tr><td>热修复</td><td>从 release branch 切 hotfix。</td><td><code>git switch -c hotfix/1.8.1-x release/1.8</code></td><td>修复后回合 main。</td></tr>
+      <tr><td>误发 tag</td><td>优先发新版本。</td><td><code>git tag v1.8.1</code></td><td>已公开 tag 不应静默改写。</td></tr>
+      <tr><td>feature flag 回滚</td><td>关闭配置。</td><td>按系统配置执行</td><td>仍需补代码层修复。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">13</div>
+    <h1>外部 Contributor 流程</h1>
+    <div class="page-kicker">开源协作靠清晰入口<br>不是靠维护者临场解释</div>
+  </div>
+  <p class="lead">GitHub 官方 contributing guide 以 fork、clone、branch、commit、push、pull request 为基础路径。ByteDance / CloudWeGo 项目贡献说明还强调：先查重 issue / PR，大改先讨论，提交测试，遵守 commit 约定，安全漏洞不要走公开 issue。</p>
+  <div class="swimlane">
+    <div class="head">角色 / 阶段</div><div class="head">找任务</div><div class="head">准备环境</div><div class="head">开发</div><div class="head">PR</div><div class="head">Review</div><div class="head">合并后</div>
+    <div class="role">Contributor</div><div>读 README、CONTRIBUTING、good first issue。</div><div>fork、clone、安装依赖、跑测试。</div><div>创建分支，小改动，补测试。</div><div>填写模板，链接 issue。</div><div>回应评论，更新分支。</div><div>删除分支，关注 release。</div>
+    <div class="role">Maintainer</div><div>维护标签、分诊、说明期望。</div><div>保证 bootstrap 文档可用。</div><div>必要时提前设计评审。</div><div>检查范围、CI、许可证。</div><div>给可执行反馈。</div><div>merge、close issue、release note。</div>
+  </div>
+  <h2>仓库必须提供的 contributor 资产</h2>
+  <div class="artifact-grid">
+    <div class="artifact"><h3><code>CONTRIBUTING.md</code></h3><p>环境准备、开发命令、测试、lint、PR 规则、generated code 边界、发布规则。</p></div>
+    <div class="artifact"><h3><code>CODE_OF_CONDUCT.md</code></h3><p>社区行为边界和升级渠道。大型开源项目建议提供。</p></div>
+    <div class="artifact"><h3><code>SECURITY.md</code></h3><p>安全漏洞报告邮箱、响应预期、不要公开 issue 的说明。</p></div>
+    <div class="artifact"><h3>Issue / PR Templates</h3><p>标准化收集复现、动机、验证和风险，减少维护者来回询问。</p></div>
+  </div>
+  <h2>Maintainer 处理 PR 的规则</h2>
+  <ul>
+    <li>方向正确但实现不达标，优先帮助 contributor 收敛，而不是静默重写后关闭。</li>
+    <li>需要 maintainer 修改 contributor 分支时，确认 maintainer edits 是否允许。</li>
+    <li>不接受的 PR 要给明确原因：范围不符、已有实现、风险过高、缺少 issue 讨论或违反兼容性。</li>
+    <li>外部贡献者不一定熟悉内部偏好，反馈应落在可执行动作上。</li>
+  </ul>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">14</div>
+    <h1>算法工程特殊规范：代码、数据、模型、实验分开管</h1>
+    <div class="page-kicker">算法 PR 最大风险<br>是不可复现和资产污染</div>
+  </div>
+  <p class="lead">算法、推荐、搜索、LLM、CV 和数据工程的 Git 协作，不只管理代码，还涉及数据口径、特征、配置、模型权重、实验指标和离线 / 在线一致性。默认原则：Git 管代码和小型文本资产，大数据和权重进入专门系统，实验结果要能复现。</p>
+  <div class="grid-3">
+    <div class="card"><div class="label">Code</div><h3>训练 / 推理代码</h3><p>正常进入 Git，必须有单测、配置示例、最小可运行命令和版本约束。</p></div>
+    <div class="card"><div class="label">Config</div><h3>实验配置</h3><p>可进入 Git。记录数据集版本、随机种子、模型版本、指标口径和资源规格。</p></div>
+    <div class="card"><div class="label">Artifacts</div><h3>数据与权重</h3><p>不要直接提交大文件。使用对象存储、artifact registry、model registry、DVC 或 Git LFS 的受控路径。</p></div>
+  </div>
+  <h2>算法 PR 必填信息</h2>
+  <table>
+    <thead><tr><th>字段</th><th>必填内容</th><th>Reviewer 关注点</th></tr></thead>
+    <tbody>
+      <tr><td>实验目的</td><td>要验证的假设，不是“尝试新模型”。</td><td>假设是否能被指标证伪。</td></tr>
+      <tr><td>数据口径</td><td>数据集版本、时间窗、过滤规则、泄漏防护。</td><td>训练 / 验证 / 测试是否污染。</td></tr>
+      <tr><td>指标</td><td>离线指标、线上指标、置信度或样本量。</td><td>是否只挑好看的单点结果。</td></tr>
+      <tr><td>复现命令</td><td>环境、配置、seed、硬件或近似资源。</td><td>别人是否能重跑关键结论。</td></tr>
+      <tr><td>上线风险</td><td>延迟、成本、召回率、偏置、回滚。</td><td>线上失败时能否降级。</td></tr>
+    </tbody>
+  </table>
+  <div class="warn card"><div class="label">Hard Rule</div><p>不要把真实用户数据、密钥、私有模型权重、商业数据快照、未脱敏日志或许可证不明数据提交到 Git。即使之后删除，历史里仍然可能存在。</p></div>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">15</div>
+    <h1>恢复与排障：先定位根因，再修历史</h1>
+    <div class="page-kicker">Git 出错不要急着 reset<br>先保存证据</div>
+  </div>
+  <p class="lead">排障的专业顺序是：观察状态，保护当前工作，定位问题，选择最小恢复命令。不要把 <code>reset --hard</code> 当成万能修复。它会丢弃工作区和 index 里的改动，只有在明确要丢弃时才用。</p>
+  <div class="cmd-grid">
+    <div class="cmd"><h3>撤回工作区改动</h3><pre><code>git restore path/to/file
+git restore --staged path/to/file</code></pre></div>
+    <div class="cmd"><h3>找回历史位置</h3><pre><code>git reflog
+git switch -c rescue &lt;sha&gt;</code></pre></div>
+    <div class="cmd"><h3>回滚已合并问题</h3><pre><code>git revert &lt;bad-sha&gt;
+git revert -m 1 &lt;merge-sha&gt;</code></pre></div>
+  </div>
+  <h2>事故场景表</h2>
+  <table>
+    <thead><tr><th>症状</th><th>先做什么</th><th>常用命令</th><th>不要做什么</th></tr></thead>
+    <tbody>
+      <tr><td>误删文件但未提交</td><td>看 <code>git status</code>。</td><td><code>git restore &lt;file&gt;</code></td><td>不要全局 hard reset。</td></tr>
+      <tr><td>commit 到错分支</td><td>记录 commit sha。</td><td><code>git cherry-pick</code> 后回错分支 <code>reset</code></td><td>不要直接复制文件。</td></tr>
+      <tr><td>push 后发现 bug</td><td>判断是否已合并。</td><td>未合并 amend / rebase，已合并 revert。</td><td>不要改写主干历史。</td></tr>
+      <tr><td>找不到丢失提交</td><td>查 reflog。</td><td><code>git reflog</code>，<code>git branch rescue &lt;sha&gt;</code></td><td>不要继续清理 GC。</td></tr>
+      <tr><td>不知道哪个提交引入 bug</td><td>定义可重复测试。</td><td><code>git bisect</code></td><td>不要凭印象猜。</td></tr>
+    </tbody>
+  </table>
+  <h2>bisect 标准流程</h2>
+  <pre><code>git bisect start
+git bisect bad HEAD
+git bisect good &lt;known-good-sha-or-tag&gt;
+./repro-test.sh
+git bisect good   # or: git bisect bad
+git bisect reset</code></pre>
+  <div class="note"><div class="label">Hunt Discipline</div><p>同一个症状修了一次还在，说明假设不完整。重新从状态、日志、diff、测试和复现路径定位根因，不要连续堆补丁。</p></div>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">16</div>
+    <h1>高级 Git 操作：只在知道代价时使用</h1>
+    <div class="page-kicker">高级命令不是炫技<br>是降低协作成本的工具</div>
+  </div>
+  <p class="lead">Git 的高级命令应服务于清晰历史、并行工作、精确回滚和跨分支移植。每个命令都有适用范围。团队应在文档里说明哪些操作允许、哪些需要 maintainer 审批。</p>
+  <table>
+    <thead><tr><th>命令</th><th>用途</th><th>安全边界</th><th>例子</th></tr></thead>
+    <tbody>
+      <tr><td><code>git worktree</code></td><td>同一仓库多工作区并行开发。</td><td>避免 stash 混乱，适合 release hotfix。</td><td><code>git worktree add ../repo-hotfix release/1.8</code></td></tr>
+      <tr><td><code>git cherry-pick</code></td><td>把某个 commit 移植到另一分支。</td><td>适合 hotfix 回合主干或 release branch。</td><td><code>git cherry-pick -x &lt;sha&gt;</code></td></tr>
+      <tr><td><code>git stash</code></td><td>临时保存未提交工作。</td><td>只作短期停车场，不作任务管理。</td><td><code>git stash push -m "wip ranking"</code></td></tr>
+      <tr><td><code>git range-diff</code></td><td>比较 rebase 前后 patch 系列。</td><td>stacked PR 或重写历史后给 reviewer 看。</td><td><code>git range-diff old..new</code></td></tr>
+      <tr><td><code>git clean</code></td><td>删除未跟踪文件。</td><td>危险，先 dry-run。</td><td><code>git clean -nd</code> 后再 <code>-fd</code></td></tr>
+      <tr><td><code>git filter-repo</code></td><td>重写仓库历史。</td><td>高风险，需团队公告和迁移窗口。</td><td>删除误提交大文件或密钥历史。</td></tr>
+    </tbody>
+  </table>
+  <div class="grid-2">
+    <div class="note"><div class="label">Patch Workflow</div><p>没有仓库权限或需要邮件协作时，可以用 <code>git format-patch</code> 和 <code>git am</code>。GitHub 场景下，优先 PR，因为 review、CI、讨论和合并状态都在同一处。</p></div>
+    <div class="note"><div class="label">LFS / Submodule</div><p>Git LFS 适合受控大二进制，submodule 适合把独立版本库挂入父项目。两者都会增加 contributor 成本，必须在 README 和 CI 中写清。</p></div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">17</div>
+    <h1>安全与合规：协作流程必须默认防事故</h1>
+    <div class="page-kicker">安全不是发布前补丁<br>它在 Git 流程里</div>
+  </div>
+  <p class="lead">Git 历史具有传播性。密钥、用户数据、许可证不明代码和供应链配置一旦进入公开或共享历史，清理成本很高。安全规范必须放在开发前、PR 中和发布门禁里。</p>
+  <div class="grid-4">
+    <div class="card"><div class="label">Secrets</div><h3>密钥</h3><p>禁止提交 <code>.env</code>、token、私钥、cookie、生产配置。使用 secret scanning 和 pre-commit 检查。</p></div>
+    <div class="card"><div class="label">Signing</div><h3>签名</h3><p>关键仓库启用 signed commits 或 signed tags，提升发布与来源可追溯性。</p></div>
+    <div class="card"><div class="label">Access</div><h3>权限</h3><p>最小权限、定期审计 collaborator、离职或外包结束立即移除访问。</p></div>
+    <div class="card"><div class="label">Supply Chain</div><h3>依赖</h3><p>新增依赖要说明必要性、许可证、维护状态、锁文件和安全扫描结果。</p></div>
+  </div>
+  <h2>安全 PR 额外检查</h2>
+  <table>
+    <thead><tr><th>变更类型</th><th>必须检查</th><th>推荐 reviewer</th></tr></thead>
+    <tbody>
+      <tr><td>认证 / 授权</td><td>权限绕过、token 生命周期、失败默认行为、审计日志。</td><td>security + module owner。</td></tr>
+      <tr><td>命令执行 / 文件操作</td><td>路径穿越、shell 注入、symlink、dry-run、确认提示。</td><td>security + platform。</td></tr>
+      <tr><td>数据处理</td><td>PII、脱敏、保留期、导出范围、访问控制。</td><td>data owner + privacy。</td></tr>
+      <tr><td>CI / Actions</td><td>第三方 action pin、secret 暴露、fork PR 权限、OIDC。</td><td>infra / release engineering。</td></tr>
+      <tr><td>依赖变更</td><td>许可证、transitive deps、漏洞、维护者风险。</td><td>security 或 package owner。</td></tr>
+    </tbody>
+  </table>
+  <div class="warn card"><div class="label">Incident Rule</div><p>密钥一旦提交到远端，不是删 commit 就结束。必须立刻吊销和轮换密钥，再清理历史，并检查日志中是否出现异常使用。</p></div>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">18</div>
+    <h1>AI 协作编码边界：生成代码也要走工程门禁</h1>
+    <div class="page-kicker">AI 可以加速产出<br>不能替代责任归属</div>
+  </div>
+  <p class="lead">AI coding agent 能读代码、改文件、跑命令和生成 PR，但责任仍属于提交者和 reviewer。团队应把 AI 当成工程执行者，而不是绕过需求、设计、测试和 review 的理由。</p>
+  <div class="grid-3">
+    <div class="card"><div class="label">Instructions</div><h3>项目规则</h3><p>在 <code>AGENTS.md</code>、<code>CLAUDE.md</code> 或等价文件中写清构建、测试、禁止区、提交规则和安全边界。</p></div>
+    <div class="card"><div class="label">Review</div><h3>人类审查</h3><p>AI 生成的 diff 仍按同等标准 review。尤其关注过度抽象、虚构 API、未运行测试和无关重构。</p></div>
+    <div class="card"><div class="label">Evidence</div><h3>验证证据</h3><p>要求 agent 在 PR 描述中列出实际运行的命令和失败项。未运行就不能写“已验证”。</p></div>
+  </div>
+  <h2>AI PR 特殊风险</h2>
+  <table>
+    <thead><tr><th>风险</th><th>表现</th><th>门禁</th></tr></thead>
+    <tbody>
+      <tr><td>虚构 API</td><td>引用不存在函数、配置或依赖。</td><td>grep 或类型检查证明存在。</td></tr>
+      <tr><td>范围膨胀</td><td>顺手重构、格式化大面积文件。</td><td>PR scope 检查，拆分或退回。</td></tr>
+      <tr><td>验证幻觉</td><td>声称测试通过但没有命令输出。</td><td>PR 必填 verification output。</td></tr>
+      <tr><td>安全边界绕过</td><td>直接执行发布、删除、迁移、force push。</td><td>高风险命令人工确认。</td></tr>
+      <tr><td>上下文污染</td><td>把一次性事故报告写入长期规则。</td><td>只沉淀稳定约束，不沉淀临时事实。</td></tr>
+    </tbody>
+  </table>
+  <div class="note"><div class="label">Ownership</div><p>提交者必须能解释 AI 生成的每一处关键逻辑。不能解释的代码不应该合并，哪怕测试暂时是绿的。</p></div>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">19</div>
+    <h1>角色、RACI 与团队制度</h1>
+    <div class="page-kicker">协作混乱常常不是工具问题<br>而是责任未定义</div>
+  </div>
+  <p class="lead">GitHub 的权限、review、issue、merge 和 release 都需要角色边界。团队应明确谁负责提出变更、谁拥有代码、谁能合并、谁负责发布、谁处理安全和外部贡献。</p>
+  <table class="dense">
+    <thead><tr><th>活动</th><th>Author</th><th>Reviewer</th><th>Code Owner</th><th>Maintainer</th><th>Release Manager</th><th>Security / Infra</th></tr></thead>
+    <tbody>
+      <tr><td>Issue 分诊</td><td>C</td><td>I</td><td>C</td><td>A/R</td><td>I</td><td>C</td></tr>
+      <tr><td>实现与测试</td><td>A/R</td><td>C</td><td>C</td><td>I</td><td>I</td><td>C</td></tr>
+      <tr><td>PR 描述与验证</td><td>A/R</td><td>C</td><td>C</td><td>I</td><td>I</td><td>C</td></tr>
+      <tr><td>Code Review</td><td>C</td><td>A/R</td><td>A/R</td><td>C</td><td>I</td><td>C</td></tr>
+      <tr><td>Merge</td><td>C</td><td>C</td><td>C</td><td>A/R</td><td>I</td><td>I</td></tr>
+      <tr><td>Release</td><td>I</td><td>I</td><td>C</td><td>C</td><td>A/R</td><td>C</td></tr>
+      <tr><td>Security incident</td><td>I</td><td>I</td><td>C</td><td>C</td><td>C</td><td>A/R</td></tr>
+    </tbody>
+  </table>
+  <div class="small">R = Responsible，A = Accountable，C = Consulted，I = Informed。</div>
+  <h2>团队制度最低集</h2>
+  <div class="artifact-grid">
+    <div class="artifact"><h3>Branch Policy</h3><p>默认分支、保护规则、merge method、release branch、hotfix 分支。</p></div>
+    <div class="artifact"><h3>Review SLA</h3><p>普通 PR 首轮响应目标、紧急修复路径、卡住时升级机制。</p></div>
+    <div class="artifact"><h3>Ownership Map</h3><p>CODEOWNERS、模块 owner、领域 specialist 和替补机制。</p></div>
+    <div class="artifact"><h3>Verification Contract</h3><p>每类改动必须跑的测试、CI、人工验收和证据格式。</p></div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">20</div>
+    <h1>模板与 Checklist</h1>
+    <div class="page-kicker">模板的目的<br>是减少遗漏和来回询问</div>
+  </div>
+  <div class="grid-2">
+    <div>
+      <h2>Bug Issue 模板</h2>
+      <pre><code>## Symptom
+
+## Expected behavior
+
+## Reproduction
+1.
+2.
+3.
+
+## Environment
+- Version:
+- OS / runtime:
+- Config:
+
+## Evidence
+- Logs:
+- Screenshot:
+- Minimal repro:
+
+## Impact
+- Severity:
+- Workaround:</code></pre>
+    </div>
+    <div>
+      <h2>Feature Issue 模板</h2>
+      <pre><code>## Problem
+
+## User / developer impact
+
+## Proposed behavior
+
+## Acceptance criteria
+- [ ]
+- [ ]
+
+## Non-goals
+
+## Risks
+
+## References</code></pre>
+    </div>
+  </div>
+  <h2>Review Checklist</h2>
+  <table>
+    <thead><tr><th>维度</th><th>问题</th><th>硬阻塞示例</th></tr></thead>
+    <tbody>
+      <tr><td>Scope</td><td>是否只解决声明问题。</td><td>混入无关重构或依赖升级。</td></tr>
+      <tr><td>Design</td><td>是否符合模块边界和现有模式。</td><td>绕过唯一数据源或引入循环依赖。</td></tr>
+      <tr><td>Correctness</td><td>边界、失败路径、并发、时序是否处理。</td><td>空输入、重试、超时、并发下错误。</td></tr>
+      <tr><td>Tests</td><td>测试是否能捕获本次行为变化。</td><td>逻辑变化无测试且无合理说明。</td></tr>
+      <tr><td>Docs</td><td>命令、配置、API、release notes 是否同步。</td><td>公共接口变更无文档。</td></tr>
+      <tr><td>Security</td><td>输入、权限、secret、依赖是否安全。</td><td>命令注入、密钥提交、权限绕过。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">21</div>
+    <h1>命令速查：高频与危险命令</h1>
+    <div class="page-kicker">先看作用层级<br>再敲命令</div>
+  </div>
+  <div class="cmd-grid">
+    <div class="cmd"><h3>查看</h3><pre><code>git status -sb
+git diff
+git diff --cached
+git log --oneline --graph -20
+git show --stat &lt;sha&gt;</code></pre></div>
+    <div class="cmd"><h3>分支</h3><pre><code>git branch -vv
+git switch main
+git switch -c feat/123-x
+git branch -d feat/123-x
+git push origin --delete feat/123-x</code></pre></div>
+    <div class="cmd"><h3>暂存与提交</h3><pre><code>git add -p
+git restore --staged &lt;file&gt;
+git commit -m "fix(api): handle empty result"
+git commit --amend</code></pre></div>
+    <div class="cmd"><h3>同步</h3><pre><code>git fetch origin
+git pull --ff-only
+git rebase origin/main
+git merge --no-ff release/1.8</code></pre></div>
+    <div class="cmd"><h3>恢复</h3><pre><code>git restore &lt;file&gt;
+git revert &lt;sha&gt;
+git reflog
+git reset --soft HEAD~1</code></pre></div>
+    <div class="cmd"><h3>PR with gh</h3><pre><code>gh issue list
+gh pr create --draft
+gh pr view --web
+gh pr checks
+gh pr merge --squash</code></pre></div>
+  </div>
+  <h2>危险命令红线</h2>
+  <table>
+    <thead><tr><th>命令</th><th>风险</th><th>替代或保护</th></tr></thead>
+    <tbody>
+      <tr><td><code>git reset --hard</code></td><td>丢弃工作区和暂存区改动。</td><td>先 <code>git status</code>，必要时备份分支或 stash。</td></tr>
+      <tr><td><code>git clean -fd</code></td><td>删除未跟踪文件。</td><td>先 <code>git clean -nd</code> 预览。</td></tr>
+      <tr><td><code>git push --force</code></td><td>覆盖远端历史。</td><td>用 <code>--force-with-lease</code>，仅限个人未合并分支。</td></tr>
+      <tr><td><code>git filter-branch / filter-repo</code></td><td>重写大量历史。</td><td>团队公告、备份、迁移计划。</td></tr>
+      <tr><td>删除远端分支 / tag</td><td>破坏他人引用和发布追溯。</td><td>确认 PR 已合并或 tag 未发布。</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">22</div>
+    <h1>成熟度评分：团队自检</h1>
+    <div class="page-kicker">评分不是为了好看<br>而是找下一步改进点</div>
+  </div>
+  <p class="lead">一个团队的 Git/GitHub 成熟度，不看使用了多少高级功能，而看变更是否小、主干是否稳、review 是否有效、发布是否可追溯、事故是否能快速恢复。</p>
+  <table class="score">
+    <thead><tr><th>维度</th><th>0 到 2 分</th><th>3 到 4 分</th><th>5 分</th></tr></thead>
+    <tbody>
+      <tr><td>分支纪律</td><td>main 直推，长期分支混乱。</td><td>大部分走 PR，但偶尔绕过。</td><td>短分支、保护主干、release 分支清晰。</td></tr>
+      <tr><td>Issue 质量</td><td>口头需求，issue 缺复现和验收。</td><td>有模板但执行不稳定。</td><td>intake、triage、labels、milestones 和 PR link 完整。</td></tr>
+      <tr><td>PR 可审查性</td><td>大 PR、混合改动、描述空。</td><td>多数 PR 可审查，偶有范围漂移。</td><td>小而完整，描述、验证、风险和回滚齐全。</td></tr>
+      <tr><td>Code Review</td><td>只看风格或只点 approve。</td><td>能发现问题，但标准不稳定。</td><td>设计、功能、复杂度、测试、安全、文档都有检查。</td></tr>
+      <tr><td>CI / 门禁</td><td>无自动化或 CI 常红。</td><td>有测试但覆盖不足。</td><td>required checks、merge queue 或等效机制保护主干。</td></tr>
+      <tr><td>发布 / 回滚</td><td>手工发布，无 tag 或 notes。</td><td>有 tag 和 release notes，但回滚不清。</td><td>SemVer、changelog、产物、回滚和 hotfix 路径可执行。</td></tr>
+      <tr><td>安全</td><td>密钥和权限靠自觉。</td><td>有扫描和权限管理。</td><td>secret、签名、依赖、CI 权限、安全披露都有制度。</td></tr>
+    </tbody>
+  </table>
+  <div class="grid-3">
+    <div class="note"><div class="label">0-15</div><p>先建立主干保护、PR 模板和最小 CI。不要急着引入复杂分支模型。</p></div>
+    <div class="note"><div class="label">16-25</div><p>重点提升 PR 规模、review 标准、issue triage 和发布证据链。</p></div>
+    <div class="note"><div class="label">26-35</div><p>进入工程效率优化：merge queue、owner map、自动 release notes、审查指标和培训机制。</p></div>
+  </div>
+</section>
+
+<section class="sheet">
+  <div class="title-row">
+    <div class="page-no">23</div>
+    <h1>来源与边界</h1>
+    <div class="page-kicker">公开资料可验证<br>内部制度不猜测</div>
+  </div>
+  <p class="lead">本手册不是任何公司的内部流程复刻。它只提炼公开材料中可迁移、可执行、可审查的工程原则，并落到 Git/GitHub 协作流程中。</p>
+  <div class="grid-2">
+    <div>
+      <h2>主要来源</h2>
+      <ul class="source-list">
+        <li>Git 官方参考与 Pro Git 分支工作流。</li>
+        <li>GitHub Docs：GitHub Flow、Issues、PR reviews、branch protection、merge queue、CODEOWNERS、Actions、contributing to a project。</li>
+        <li>Google Engineering Practices：Code Review Standard、Small CLs、What to Look For、Handling Comments。</li>
+        <li>Google Research：Modern Code Review, A Case Study at Google。</li>
+        <li>Meta Engineering：Sapling source control、developer tools working at scale。</li>
+        <li>OpenAI openai-python 与 OpenAI Cookbook 的 CONTRIBUTING 说明。</li>
+        <li>CloudWeGo / ByteDance 开源项目 Kitex、Hertz 的 CONTRIBUTING 说明。</li>
+        <li>Conventional Commits、Semantic Versioning、Keep a Changelog。</li>
+      </ul>
+    </div>
+    <div>
+      <h2>使用边界</h2>
+      <ul>
+        <li>本文给出的是标准流程和判断框架，具体命令应以目标仓库文档和 CI 为准。</li>
+        <li>涉及安全、隐私、发布、许可证、数据治理和合规时，组织制度优先于本文建议。</li>
+        <li>不同团队可调整 PR 大小、review 人数、merge method 和 release cadence，但不能取消主干健康、可验证和可回滚原则。</li>
+        <li>算法工程中的数据、模型权重和实验资产必须结合组织的数据平台、模型注册表和合规要求落地。</li>
+      </ul>
+      <div class="note"><div class="label">Final Standard</div><p>一次专业变更应能回答六个问题：为什么做、改了什么、如何验证、谁审查、如何合并、如何回滚。任何答不上来的环节，都是流程缺口。</p></div>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+source	use
+https://git-scm.com/docs	Git 常用命令、恢复、调试、高级操作命令索引
+https://git-scm.com/book/en/v2/Git-Branching-Branching-Workflows	分支工作流、长期分支与稳定分支口径
+https://git-scm.com/docs/git-rebase	rebase、历史整理与上游同步注意事项
+https://docs.github.com/en/get-started/using-github/github-flow	GitHub Flow、分支、PR、review、merge、删除分支流程
+https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project	fork workflow、外部贡献者从 0 到 PR 的路径
+https://docs.github.com/en/issues/tracking-your-work-with-issues/about-issues	Issue 作为需求、缺陷、任务和计划入口
+https://docs.github.com/articles/about-issue-and-pull-request-templates	Issue / PR 模板与标准化信息收集
+https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/reviewing-changes-in-pull-requests/about-pull-request-reviews	PR review 状态、评论、审批和变更请求
+https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches/about-protected-branches	分支保护、必需 review、必需检查、签名、线性历史、force push 风险
+https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/configuring-pull-request-merges/managing-a-merge-queue	merge queue 在高频合并分支上的用途
+https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners	CODEOWNERS、代码所有权和自动请求 reviewer
+https://docs.github.com/en/actions/	CI/CD、workflow、PR 检查与自动化入口
+https://google.github.io/eng-practices/review/reviewer/standard.html	code review 总原则、持续改善 code health
+https://google.github.io/eng-practices/review/developer/small-cls.html	小变更、拆分 CL、测试同变更提交
+https://google.github.io/eng-practices/review/reviewer/looking-for.html	reviewer 检查维度、设计、功能、复杂度、测试、文档
+https://google.github.io/eng-practices/review/developer/handling-comments.html	review 评论处理、协作式回应和冲突升级
+https://research.google/pubs/modern-code-review-a-case-study-at-google/	现代轻量 code review 的研究背景
+https://engineering.fb.com/2022/11/15/open-source/sapling-source-control-scalable/	Meta 大规模源码管理、stacked changes、恢复和可用性启发
+https://engineering.fb.com/2023/06/27/developer-tools/meta-developer-tools-open-source/	Meta 大规模开发工具、高信号快速反馈和 stacked diffs
+https://github.com/openai/openai-python/blob/main/CONTRIBUTING.md	OpenAI 官方 SDK 的环境、生成代码边界、测试、lint、发布口径
+https://github.com/openai/openai-cookbook/blob/main/CONTRIBUTING.md	OpenAI Cookbook 的社区贡献 review 口径
+https://www.cloudwego.io/about/	CloudWeGo / ByteDance 开源项目背景
+https://github.com/cloudwego/kitex/blob/develop/CONTRIBUTING.md	ByteDance 开源项目的 Issue、PR、测试、commit 和安全报告规范
+https://github.com/cloudwego/hertz/blob/develop/CONTRIBUTING.md	ByteDance 开源项目的 main/develop、forward compatibility、PR 规范
+https://www.conventionalcommits.org/en/v1.0.0/	Conventional Commits 格式、类型、breaking change 和自动化用途
+https://semver.org/lang/zh-CN/spec/v2.0.0.html	SemVer 主版本、次版本、修订号和发布不可变规则
+https://keepachangelog.com/en/1.1.0/	面向人的 changelog 分类和发布记录写法
