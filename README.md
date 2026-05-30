@@ -20,6 +20,7 @@
 | LLM RL Algorithms 2026 | 大模型强化学习算法全景，覆盖 RLHF、RLAIF、RLVR、DPO、PPO、GRPO、DAPO、GSPO 等主流算法 | `llm-rl-algorithms-2026/index.html` / `llm-rl-algorithms-2026/llm-rl-algorithms-2026.pdf` |
 | AI Training Frameworks 2026 | 大模型、多模态大模型与生成模型训练框架技术图谱 | `ai-training-frameworks-2026/index.html` / `ai-training-frameworks-2026/ai-training-frameworks-2026.pdf` |
 | AI Inference Frameworks 2026 | 大模型、多模态大模型与生成模型推理框架技术图谱 | `ai-inference-frameworks-2026/index.html` / `ai-inference-frameworks-2026/ai-inference-frameworks-2026.pdf` |
+| Algorithm Engineer CS Skill Pack 2026 | 面向大模型、搜索、广告、推荐与算法平台工程师的 CS / 软件工程技能包，覆盖生产链路、工具矩阵、标准流程、岗位能力和训练路线 | `algorithm-engineer-cs-skill-pack-2026/index.html` / `algorithm-engineer-cs-skill-pack-2026/algorithm-engineer-cs-skill-pack-2026.pdf` |
 | Generative Recommendation 2026 | 生成式推荐的发展史、主流算法、产业落地与趋势判断 | `generative-recommendation-2026/index.html` / `generative-recommendation-2026/generative-recommendation-2026.pdf` |
 | E-commerce Generative Algorithms 2026 | 七类电商平台在多模态大模型、后训练、生成式推荐、智能搜索与图像检索方向的公开技术路线研究 | `ecommerce-generative-algorithms-2026/index.html` / `ecommerce-generative-algorithms-2026/ecommerce-generative-algorithms-2026.pdf` |
 | Multi-stage Ranking Algorithms 2026 | 国内外头部平台在召回、粗排、精排、混排与重排阶段的公开算法路线及工程经验 | `multi-stage-ranking-algorithms-2026/index.html` / `multi-stage-ranking-algorithms-2026/multi-stage-ranking-algorithms-2026.pdf` |
