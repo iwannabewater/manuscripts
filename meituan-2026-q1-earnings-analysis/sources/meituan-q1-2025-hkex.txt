@@ -1,0 +1,1285 @@
+Hong Kong Exchanges and Clearing Limited and The Stock Exchange of Hong Kong Limited take no responsibility
+for the contents of this announcement, make no representation as to its accuracy or completeness and expressly
+disclaim any liability whatsoever for any loss howsoever arising from or in reliance upon the whole or any part of the
+contents of this announcement.
+
+
+
+
+    (A company controlled through weighted voting rights and incorporated in the Cayman Islands with limited liability)
+                       Stock Codes: 3690 (HKD counter) and 83690 (RMB counter)
+
+                          ANNOUNCEMENT OF THE RESULTS
+                    FOR THE THREE MONTHS ENDED MARCH 31, 2025
+The Board of Directors (the “Board”) of Meituan 美团(the “Company”) is pleased to announce
+the unaudited consolidated results of the Company for the three months ended March 31, 2025.
+
+In this announcement, “we”, “us” or “our” refers to the Company.
+
+HIGHLIGHTS
+
+Financial Summary
+
+                                                          Unaudited
+                                                     Three Months Ended
+                                           March 31, 2025            March 31, 2024
+                                                          As a                       As a                   Year-over
+                                                   percentage                  percentage                       -year
+                                          Amount of revenues       Amount of revenues                         change
+                                                 (RMB in thousands, except for percentages)
+
+Revenues                               86,557,126           100.0%       73,275,884           100.0%            18.1%
+Operating profit                       10,566,110            12.2%        5,209,392             7.1%           102.8%
+Profit for the period                  10,056,880            11.6%        5,368,979             7.3%            87.3%
+Non-IFRS Accounting
+  Standards measures1:
+  Adjusted EBITDA                      12,301,686            14.2%        8,070,343             11.0%           52.4%
+  Adjusted net profit                  10,948,504            12.6%        7,488,394             10.2%           46.2%
+
+
+
+
+1
+         See the section entitled “Reconciliation of Non-IFRS Accounting Standards Measures to the Nearest IFRS
+         Accounting Standards Measures” for more information about the non-IFRS Accounting Standards measures.
+
+                                                             1
+Financial Information by Segment
+
+                                                                   Unaudited
+                                                      Three Months Ended March 31, 2025
+                                              Core local           New    Unallocated
+                                              commerce       initiatives       items2                             Total
+                                                              (RMB in thousands)
+
+Revenues:
+Delivery services                            25,722,683                    –                       –       25,722,683
+Commission                                   24,051,420            1,155,584                       –       25,207,004
+Online marketing services                    11,862,473               84,548                       –       11,947,021
+Other services and sales
+  (including interest revenue)                 2,688,138          20,992,280                       –       23,680,418
+
+Total revenues                               64,324,714           22,232,412                       –       86,557,126
+
+Cost of revenues, operating
+  expenses and unallocated
+  items                                     (50,833,234)         (24,505,679)            (652,103)        (75,991,016)
+
+Operating profit/(loss)                      13,491,480           (2,273,267)            (652,103)         10,566,110
+
+                                                                     Unaudited
+                                                       Three Months Ended March 31, 2024
+                                              Core local            New      Unallocated
+                                              commerce        initiatives          items                          Total
+                                                               (RMB in thousands)
+
+Revenues:
+Delivery services                            21,065,057                     –                      –       21,065,057
+Commission                                   20,034,039               623,234                      –       20,657,273
+Online marketing services                    10,307,416                83,482                      –       10,390,898
+Other services and sales
+  (including interest revenue)                 3,219,195          17,943,461                       –       21,162,656
+
+Total revenues                               54,625,707           18,650,177                       –       73,275,884
+
+Cost of revenues, operating
+  expenses and unallocated
+  items                                     (44,926,860)         (21,407,076)          (1,732,556)        (68,066,492)
+
+Operating profit/(loss)                        9,698,847          (2,756,899)          (1,732,556)          5,209,392
+
+
+
+2
+     Unallocated items mainly include (i) share-based compensation expenses, (ii) amortisation of intangible assets
+     resulting from acquisitions, (iii) fair value changes of other financial investments at fair value through profit or
+     loss, (iv) certain items in other gains/(losses), net, and (v) certain corporate administrative expenses and other
+     items. They are not allocated to individual segments.
+
+                                                          2
+                                              Year-over-year change
+                                 Core local         New     Unallocated
+                                 commerce     initiatives         items    Total
+                                                 (Percentages %)
+
+Revenues:
+Delivery services                     22.1          NA             NA       22.1
+Commission                            20.1         85.4            NA       22.0
+Online marketing services             15.1          1.3            NA       15.0
+Other services and sales
+  (including interest revenue)       (16.5)        17.0            NA       11.9
+
+Total revenues                        17.8         19.2            NA       18.1
+
+Cost of revenues, operating
+  expenses and unallocated
+  items                               13.1         14.5           (62.4)    11.6
+
+Operating profit/(loss)               39.1        (17.5)          (62.4)   102.8
+
+
+
+
+                                          3
+BUSINESS REVIEW AND OUTLOOK
+
+Company Financial Highlights
+
+During the first quarter of 2025, our revenues increased by 18.1% to RMB86.6 billion from
+RMB73.3 billion for the same period of 2024. Our Core local commerce segment achieved an
+operating profit of RMB13.5 billion for the first quarter of this year, which increased by 39.1%
+from RMB9.7 billion for the same period of last year. Meanwhile, the operating loss for our New
+initiatives segment narrowed to RMB2.3 billion from RMB2.8 billion for the same period of last
+year. Our adjusted EBITDA and adjusted net profit for this period both increased year over year to
+RMB12.3 billion and RMB10.9 billion, respectively. We also achieved an operating cash inflow of
+RMB10.1 billion for the first quarter of this year. We held cash and cash equivalents of RMB115.0
+billion and short-term treasury investments of RMB65.4 billion as of March 31, 2025.
+
+Company Business Highlights
+
+Core Local Commerce
+
+For the first quarter of 2025, segment revenue increased by 17.8% year over year to RMB64.3
+billion. Operating profit increased by 39.1% year over year to RMB13.5 billion, and operating
+margin improved by 3.2 percentage points year over year to 21.0%.
+
+During the first quarter of 2025, our food delivery business maintained healthy growth. Through
+refined operational strategies, we further enhanced user stickiness and elevated purchase
+frequency, especially among medium- to high-frequency users. On the supply side, we continued to
+iterate Pin Hao Fan (“ 拼好飯 ”) and Shen Qiang Shou (“ 神搶手 ”) to address the varied consumer
+demand in value-for-money products for different price-bands. Additionally, we continued to help
+restaurant merchants explore new growth opportunities within the evolving business landscape.
+Through our innovative Branded Satellite Stores (“ 品牌衛星店 ”), we enabled chain restaurants
+to expand geographically with a more cost-effective structure. We also iterated other offline store
+formats to customize growth strategies and operational solutions for chain restaurant merchants.
+To help small- and medium-sized merchants on our platform acquire customers and drive
+business growth, we implemented a comprehensive suite of supportive measures, including traffic
+support, free digital tools and online services. Food safety and quality remain central to our food
+delivery business. We launched the Bright Kitchen (“ 明廚亮灶 ”) program to enhance food safety
+transparency, and introduced other measures to help high-quality supplies gain more exposure on
+our platform. We also provided subsidies to merchants for hardware procurement and installation
+to facilitate the participation in the Bright Kitchen program. We have announced to invest RMB100
+billion over the next three years to fuel the industry’s high-quality growth. Going forward, we will
+continue to support merchants in achieving business growth and navigating industry cycles while
+offering consumers a diverse range of high-quality products.
+
+
+
+
+                                                 4
+Couriers are an indispensable part of our ecosystem. We have consistently increased our efforts to
+protect couriers’ rights and interests and improve their working conditions. Since July 2022, we
+have provided over RMB1.5 billion in occupational injury insurance for all the couriers in seven
+pilot provinces. This year, we plan to expand the occupational injury insurance to more provinces
+and aim for nationwide implementation by the end of next year. In April, we launched a new
+pension pilot program for couriers, which will be gradually rolled out nationwide. We also provide
+talent development programs and career advancement opportunities for couriers. We have enabled
+couriers to progress into management roles within our delivery network, provided internal job
+transfer opportunities on our platform, and sponsored their enrollment in universities for further
+education. Beyond work-related support, we provide assistance in living and healthcare for couriers
+and their families, including RMB100 million in critical illness aid, dedicated medical assistance
+funds for couriers’ children, and educational support for couriers’ children. We will continue to
+solicit feedback from couriers and enhance their benefits, ensuring that their hard work is properly
+recognized and rewarded.
+
+In the first quarter of 2025, Meituan Instashopping maintained robust growth trajectory,
+winning increasing consumer recognition and showcasing the immense potential of on-demand
+retail. Several consumption categories posted remarkable growth, including beverages, snacks,
+3C products, home appliances, beauty and personal care, and other non-food categories. On
+Valentine’s Day, daily order volume nearly doubled year over year, with flowers, small appliances,
+jewelry, and beauty products emerging as favorites among younger consumers. On the supply front,
+we continued to make progress on Meituan InstaMart ( “ 美团閃電倉 ”). Both the number of Meituan
+InstaMart and their order contribution continued to increase, especially in the lower-tier markets. In
+response to the surging popularity of on-demand retail, we officially launched our on-demand retail
+brand, “Meituan Instashopping”, in April. Consumers can access the Instashopping page directly
+from the Meituan App’s homepage and enjoy reliable 30-minute delivery of a diverse range of
+products. We aim to provide consumers with more high-quality products in the most convenient
+manner possible. We will also support more merchants across all categories in expanding their
+presence in Meituan InstaMart. We are committed to helping merchants grow their business,
+enhance online operations, and seize the incremental opportunities from industry transformation
+and supply chain upgrades.
+
+Our in-store business has proactively expanded product categories and service offerings to meet
+the varied consumer demand in the new market environment. For example, in line with the
+evolving consumption trend, we introduced platform guarantees for prepaid services for certain
+categories to restore consumer confidence and enhance consumption flexibility. Initiatives such
+as Safe Learning ( “ 安心學 ”) and Safe Training ( “ 安心練 ”) allow consumers to place orders,
+redeem services in installments, and request refunds with ease on our platform. We also leveraged
+efficient, user-friendly online tools and diverse marketing programs to help merchants extend their
+customer reach with improving conversion rates, enabling them capitalize on digital transformation
+and drive business growth. Beyond traditional offline merchants, our platform has also partnered
+with independent artisans. Through a comprehensive suite of services, we help these artisans
+build their online personal brands, streamline their collaborations with merchants, and expand
+their customer reach. As a result, consumers can now easily access a wider array of high-quality,
+value-for-money, and unique services on our platform. In addition, our business has maintained
+strong growth momentum in lower-tier markets, characterized by an expanded in-store product
+selection, accelerated transaction volume growth, and improved operational efficiency.
+
+
+
+
+                                                  5
+In hotel and travel, we proactively responded to the evolving consumption trends and emerging
+market opportunities. We strengthened our operational capabilities, deepened merchant
+partnerships, improved our service quality, and expanded value-for-money offerings. Since we
+launched Meituan Membership (“ 美团會員 ”), we have enhanced the benefits available to members
+in the hotel and travel vertical. These include room upgrades, complimentary breakfasts, and late
+check-out options. These enhancements have effectively strengthened our brand presence in the
+hotel and travel domain and driven increased cross-selling.
+
+Following organizational integration, our medical and health business has deepened its presence
+in the industry supply chain, enhanced cross-selling across various services, and provided
+consumers with comprehensive solutions. During the peak flu season, we collaborated directly
+with pharmaceutical companies to ensure adequate supply of medications. While solidifying our
+competitive advantages and consumer mindshare in on-demand medicine delivery, we expanded
+our product offerings to include chronic disease medications and medical equipment, effectively
+increasing user purchase frequency. By extending our partnerships with medical aesthetics
+providers, dental clinics, ophthalmology clinics, specialty clinics, and traditional Chinese medicine
+hospitals, we managed to cross-sell more medical and healthcare services to our on-demand
+medicine delivery user base. Looking ahead, we remain committed to continuously innovating
+our products and services, aiming to fully meet consumers’ demand for one-stop medical and
+healthcare solutions.
+
+In late March, we launched the Meituan Membership program (“ 美团會員 ”), which encompasses
+all our business categories and covers every aspect of consumers’ daily lives. It features Shen
+Quan (“ 神券 ”) as a universal benefit, with different additional benefits for different membership
+tier. The program encourages members to progress through higher membership tiers with more
+transactions on our platform, unlocking more membership benefits. Currently, the membership
+benefits mainly cover on-demand delivery, hotel, travel, and other local service categories, with
+plans to expand further to more categories. We intend to introduce tier-specific privileges as
+well to elevate the membership experience even more. Through the new “Meituan Membership”
+program, we aim to increase transaction frequency, improve cross-sell efficiency, and solidify the
+consumer mindshare in Meituan as the top choice for consumers seeking local stores and deals
+across all categories and scenarios.
+
+
+
+
+                                                 6
+New Initiatives
+
+For the first quarter of 2025, revenues from the New initiatives segment increased by 19.2% year
+over year to RMB22.2 billion. Operating loss for the segment narrowed by 17.5% year over year
+to RMB2.3 billion, and operating margin improved by 4.6 percentage points year over year to
+negative 10.2%.
+
+For the grocery retail as well as software and hardware services, we made further refinements to
+our operations, achieving notable year-over-year efficiency enhancements. Moreover, through our
+grocery retail businesses including Xiaoxiang Supermarket and Meituan Select, we have initiated
+comprehensive support for export enterprises. This support encompasses marketing efforts,
+channel expansion strategies and brand collaborations, all aimed at facilitating the distribution
+of high-quality export products in the domestic market. Our overseas business also achieved
+remarkable breakthroughs. Keeta has showcased its product capabilities and technological
+advantages in Saudi Arabia, providing consumers with an enhanced experience in both transactions
+and deliveries. We have already received positive feedback from local consumers, enabling us to
+rapidly emerge as one of the preferred food delivery platforms in the region.
+
+For the remainder of 2025, our commitment to cultivate a thriving ecosystem remains unwavering.
+We will expand our support measures for the merchants, improving the online business
+environment and helping merchants innovate new supply models. For the couriers, we will try our
+best to provide a more comprehensive set of safeguards for their rights and enhanced benefits,
+alongside efforts to promote social recognition of their contributions. For consumers, we are
+dedicated to providing more extensive services, products, and membership benefits, especially
+for our long-term loyal customers. By leveraging AI technologies, we will continuously refine
+the user experience and boost merchant operational efficiency. Moreover, we will actively align
+with national strategies focused on invigorating consumption and expanding domestic demand.
+We aim to promote consumption growth and industry transformation, thereby making meaningful
+contributions to the overall economic development.
+
+
+
+
+                                               7
+MANAGEMENT DISCUSSION AND ANALYSIS
+
+The First Quarter of 2025 Compared to the First Quarter of 2024
+
+The following table sets forth the comparative figures for the first quarter of 2025 and 2024:
+
+                                                                           Unaudited
+                                                                      Three Months Ended
+                                                                      March 31,        March 31,
+                                                                          2025             2024
+                                                                       (RMB in thousands)
+
+Revenues                                                              86,557,126         73,275,884
+  Including: Interest revenue                                            371,518            487,572
+
+  Cost of revenues                                                   (54,143,437)       (47,579,144)
+
+Gross profit                                                          32,413,689         25,696,740
+
+  Selling and marketing expenses                                     (15,550,016)       (13,888,302)
+  Research and development expenses                                   (5,772,030)        (5,000,153)
+  General and administrative expenses                                 (2,627,017)        (2,298,323)
+  Net provisions for impairment losses on financial and
+    contract assets                                                     (121,474)          (175,386)
+  Fair value changes of other financial investments at fair
+    value through profit or loss                                         804,820           (517,116)
+  Other gains, net                                                     1,418,138          1,391,932
+
+Operating profit                                                      10,566,110          5,209,392
+
+  Finance income                                                         491,358            279,755
+  Finance costs                                                         (475,120)          (321,863)
+  Share of profits of investments accounted for using the
+    equity method                                                         18,453            314,197
+
+Profit before income tax                                              10,600,801          5,481,481
+
+  Income tax expenses                                                   (543,921)          (112,502)
+
+Profit for the period                                                 10,056,880          5,368,979
+
+Non-IFRS Accounting Standards measures:
+  Adjusted EBITDA                                                     12,301,686          8,070,343
+  Adjusted net profit                                                 10,948,504          7,488,394
+
+
+
+
+                                                 8
+Revenues
+
+Our revenues increased by 18.1% to RMB86.6 billion for the first quarter of 2025 from RMB73.3
+billion for the same period of 2024. We achieved revenue growth in both reportable segments.
+
+The following table sets forth our revenues by segment and type for the first quarter of 2025 and
+2024:
+
+                                                                  Unaudited
+                                                      Three Months Ended March 31, 2025
+                                                      Core local          New
+                                                      commerce      initiatives       Total
+                                                               (RMB in thousands)
+Revenues
+  Delivery services                                  25,722,683                –      25,722,683
+  Commission                                         24,051,420        1,155,584      25,207,004
+  Online marketing services                          11,862,473           84,548      11,947,021
+  Other services and sales
+    (including interest revenue)                       2,688,138      20,992,280      23,680,418
+
+Total                                                64,324,714       22,232,412      86,557,126
+
+                                                                   Unaudited
+                                                       Three Months Ended March 31, 2024
+                                                      Core local           New
+                                                      commerce       initiatives        Total
+                                                               (RMB in thousands)
+Revenues
+  Delivery services                                  21,065,057                –      21,065,057
+  Commission                                         20,034,039          623,234      20,657,273
+  Online marketing services                          10,307,416           83,482      10,390,898
+  Other services and sales
+    (including interest revenue)                       3,219,195      17,943,461      21,162,656
+
+Total                                                54,625,707       18,650,177      73,275,884
+
+
+
+
+                                               9
+Our revenues from the Core local commerce segment increased by 17.8% to RMB64.3 billion for
+the first quarter of 2025 from RMB54.6 billion for the same period of 2024. The revenue growth in
+delivery services was mainly due to the increased Number of On-demand Delivery transactions and
+the decreased incentives deducted from delivery services revenue as a result of the national rollout
+of membership program. The revenue growth in commission was mainly driven by the increased
+GTV. The revenue growth in online marketing services was mainly attributable to the increased
+number of online marketing Active Merchants.
+
+Our revenues from the New initiatives segment increased by 19.2% to RMB22.2 billion for the
+first quarter of 2025 from RMB18.7 billion for the same period of 2024, mainly due to the revenue
+growth in our grocery retail businesses and the development of our overseas business.
+
+Costs and Expenses
+
+The following table sets forth a breakdown of our costs and expenses by function for the periods
+indicated:
+
+                                                                Unaudited
+                                                           Three Months Ended
+                                                 March 31, 2025             March 31, 2024
+                                                                As a                        As a
+                                                         percentage                   percentage
+                                                Amount of revenues        Amount of revenues
+                                                 (RMB in thousands, except for percentages)
+
+Costs and Expenses:
+  Cost of revenues                           54,143,437         62.6%     47,579,144         64.9%
+  Selling and marketing expenses             15,550,016         18.0%     13,888,302         19.0%
+  Research and development expenses           5,772,030          6.7%      5,000,153          6.8%
+  General and administrative expenses         2,627,017          3.0%      2,298,323          3.1%
+
+Cost of Revenues
+
+Our cost of revenues increased by 13.8% to RMB54.1 billion for the first quarter of 2025 from
+RMB47.6 billion for the same period of 2024, and decreased by 2.3 percentage points to 62.6%
+from 64.9% as a percentage of revenues on a year-over-year basis. The increase in amount was
+primarily driven by the increases in cost of revenues of our on-demand delivery business and
+grocery retail businesses, as well as the increased costs related to overseas business. The decrease
+in cost of revenues as a percentage of revenues was mainly due to our efforts in improving
+operating leverage and the improved gross margin of our grocery retail businesses, partially offset
+by the increased costs related to overseas business.
+
+
+
+
+                                                10
+Selling and Marketing Expenses
+
+Our selling and marketing expenses increased by 12.0% to RMB15.6 billion for the first quarter of
+2025 from RMB13.9 billion for the same period of 2024, which was mainly due to the increases in
+expenses related to promotion, advertising and user incentives as business scale further increased.
+The percentage of revenues decreased by 1.0 percentage points to 18.0% from 19.0% on a
+year-over-year basis, mainly due to the improved operating leverage and marketing efficiency.
+
+Research and Development Expenses
+
+Our research and development expenses increased by 15.4% to RMB5.8 billion for the first quarter
+of 2025 from RMB5.0 billion for the same period of 2024, which was primarily attributable to the
+increased investments at corporate level for AI. The percentage of revenues was 6.7% for the first
+quarter of 2025, remaining stable on a year-over-year basis.
+
+General and Administrative Expenses
+
+Our general and administrative expenses increased by 14.3% to RMB2.6 billion for the first
+quarter of 2025 from RMB2.3 billion for the same period of 2024, which was primarily driven by
+the increases in employee benefits expenses and tax surcharge expenses as a result of growth in
+business scale. The percentage of revenues was 3.0% for the first quarter of 2025, remaining stable
+on a year-over-year basis.
+
+Net Provisions for Impairment Losses on Financial and Contract Assets
+
+Our net provisions for impairment losses on financial and contract assets decreased to RMB121.5
+million for the first quarter of 2025 from RMB175.4 million for the same period of 2024, which
+reflected the changes in expected credit losses for financial assets.
+
+Fair Value Changes of Other Financial Investments at Fair Value Through Profit or Loss
+
+Our fair value changes of other financial investments at fair value through profit or loss changed
+to a gain of RMB804.8 million for the first quarter of 2025 from a loss of RMB517.1 million for
+the same period of 2024, which was driven by the fluctuation in the fair value of our investment
+portfolios.
+
+Other Gains, Net
+
+Our other gains, net was RMB1.4 billion in the first quarter of 2025, which remained stable on a
+year-over-year basis.
+
+Operating Profit
+
+As a result of the foregoing, our operating profit and operating margin for the first quarter of 2025
+was RMB10.6 billion and 12.2% respectively, compared to operating profit of RMB5.2 billion and
+operating margin of 7.1% for the same period of 2024.
+
+
+
+
+                                                 11
+Operating profit/(loss) and operating margin by segment are set forth in the table below:
+
+                                                                       Unaudited
+                                                                  Three Months Ended
+                                                    March 31, 2025                    March 31, 2024
+                                                                     As a                                As a
+                                                               percentage                          percentage
+                                                   Amount     of revenues           Amount        of revenues
+                                                       (RMB in thousands, except for percentages)
+
+Core local commerce                              13,491,480          21.0%         9,698,847           17.8%
+New initiatives                                  (2,273,267)        (10.2%)       (2,756,899)         (14.8%)
+Unallocated items                                  (652,103)            NA        (1,732,556)             NA
+  Including: Share-based compensation expenses   (1,707,846)            NA        (1,851,012)             NA
+
+Total operating profit                           10,566,110         12.2%          5,209,392            7.1%
+
+Our operating profit from the Core local commerce segment increased to RMB13.5 billion for the
+first quarter of 2025 from RMB9.7 billion for the same period of 2024 and the operating margin
+increased by 3.2 percentage points to 21.0% from 17.8% on a year-over-year basis. The increase
+in operating profit was mainly attributable to both the revenue growth, and the increased operating
+margin resulting from our efforts in improving operating efficiency.
+
+Our operating loss from the New initiatives segment narrowed to RMB2.3 billion for the first
+quarter of 2025 from RMB2.8 billion for the same period of 2024, and the operating margin
+for this segment improved by 4.6 percentage points to negative 10.2% from negative 14.8% on
+a year-over-year basis. The improvements in both operating loss and operating margin were
+primarily attributable to our efforts in improving operating efficiency and marketing efficiency in
+our grocery retail businesses, partially offset by the increased costs related to overseas business.
+
+Our operating loss from the unallocated items decreased to RMB652.1 million for the first
+quarter of 2025 from RMB1.7 billion for the same period of 2024, which was primarily due to
+the fluctuation in the fair value of our investment portfolios, partially offset by the increased
+investments at corporate level for AI and others.
+
+Share of Profits of Investments Accounted for Using the Equity Method
+
+Our share of profits of investments accounted for using the equity method decreased to RMB18.5
+million for the first quarter of 2025 from RMB314.2 million for the same period of 2024, as a
+result of the fluctuation in financial results of our investees.
+
+Income Tax Expenses
+
+Our income tax expenses increased to RMB543.9 million for the first quarter of 2025 from
+RMB112.5 million for the same period of 2024, which was primarily attributable to the profit
+growth from some of our entities.
+
+Profit for the Period
+
+As a result of the foregoing, we recorded a profit of RMB10.1 billion for the first quarter of 2025,
+compared to a profit of RMB5.4 billion for the same period of 2024.
+
+
+                                                   12
+The First Quarter of 2025 Compared to the Fourth Quarter of 2024
+
+The following table sets forth the comparative figures for the first quarter of 2025 and the fourth
+quarter of 2024:
+
+                                                                          Unaudited
+                                                                     Three Months Ended
+                                                                     March 31,     December 31,
+                                                                         2025             2024
+                                                                      (RMB in thousands)
+
+Revenues                                                            86,557,126          88,487,296
+  Including: Interest revenue                                          371,518             394,119
+
+  Cost of revenues                                                 (54,143,437)        (55,043,149)
+
+Gross profit                                                        32,413,689          33,444,147
+
+  Selling and marketing expenses                                   (15,550,016)        (17,301,322)
+  Research and development expenses                                 (5,772,030)         (5,420,285)
+  General and administrative expenses                               (2,627,017)         (2,938,189)
+  Net provisions for impairment losses on financial and
+    contract assets                                                   (121,474)           (170,390)
+  Fair value changes of other financial investments at fair
+    value through profit or loss                                       804,820              12,835
+  Other gains/(losses), net                                          1,418,138            (933,297)
+
+Operating profit                                                    10,566,110           6,693,499
+
+  Finance income                                                       491,358             354,470
+  Finance costs                                                       (475,120)           (468,151)
+  Share of profits of investments accounted for using the
+    equity method                                                        18,453            316,482
+
+Profit before income tax                                            10,600,801           6,896,300
+
+  Income tax expenses                                                 (543,921)           (674,249)
+
+Profit for the period                                               10,056,880           6,222,051
+
+Non-IFRS Accounting Standards measures:
+  Adjusted EBITDA                                                   12,301,686          11,522,592
+  Adjusted net profit                                               10,948,504           9,848,538
+
+
+
+
+                                                 13
+Revenues
+
+Our revenues decreased by 2.2% to RMB86.6 billion for the first quarter of 2025 from RMB88.5
+billion for the fourth quarter of 2024, which was primarily due to seasonality.
+
+The following table sets forth our revenues by segment and type for the first quarter of 2025 and
+the fourth quarter of 2024:
+
+                                                                  Unaudited
+                                                      Three Months Ended March 31, 2025
+                                                      Core local          New
+                                                      commerce      initiatives       Total
+                                                               (RMB in thousands)
+Revenues
+  Delivery services                                   25,722,683               –       25,722,683
+  Commission                                          24,051,420       1,155,584       25,207,004
+  Online marketing services                           11,862,473          84,548       11,947,021
+  Other services and sales
+    (including interest revenue)                       2,688,138      20,992,280       23,680,418
+
+Total                                                 64,324,714      22,232,412       86,557,126
+
+                                                                    Unaudited
+                                                      Three Months Ended December 31, 2024
+                                                       Core local           New
+                                                       commerce       initiatives       Total
+                                                                (RMB in thousands)
+Revenues
+  Delivery services                                   26,194,820               –       26,194,820
+  Commission                                          24,066,077         902,420       24,968,497
+  Online marketing services                           12,842,276         108,230       12,950,506
+  Other services and sales
+    (including interest revenue)                       2,463,659      21,909,814       24,373,473
+
+Total                                                 65,566,832      22,920,464       88,487,296
+
+Our revenues from the Core local commerce segment decreased by 1.9% to RMB64.3 billion for
+the first quarter of 2025 from RMB65.6 billion for the fourth quarter of 2024, which was primarily
+due to the decline in the Number of On-demand Delivery transactions and the reduced marketing
+spending by merchants during the Spring Festival holiday season.
+
+Our revenues from the New initiatives segment decreased by 3.0% to RMB22.2 billion for the first
+quarter of 2025 from RMB22.9 billion for the fourth quarter of 2024, mainly due to the seasonality
+of our certain new initiatives, partially offset by the revenue growth in our overseas business.
+
+
+
+
+                                               14
+Costs and Expenses
+
+The following table sets forth a breakdown of our costs and expenses by function for the periods
+indicated:
+
+                                                               Unaudited
+                                                          Three Months Ended
+                                                March 31, 2025           December 31, 2024
+                                                               As a                        As a
+                                                        percentage                   percentage
+                                               Amount of revenues        Amount of revenues
+                                                (RMB in thousands, except for percentages)
+
+Costs and Expenses:
+  Cost of revenues                          54,143,437         62.6%    55,043,149         62.2%
+  Selling and marketing expenses            15,550,016         18.0%    17,301,322         19.6%
+  Research and development expenses          5,772,030          6.7%     5,420,285          6.1%
+  General and administrative expenses        2,627,017          3.0%     2,938,189          3.3%
+
+Cost of Revenues
+
+Our cost of revenues decreased by 1.6% to RMB54.1 billion for the first quarter of 2025 from
+RMB55.0 billion for the fourth quarter of 2024, and the percentage of revenues was 62.6% which
+remained stable on a quarter-over-quarter basis. The decrease in amount was in line with our
+revenue decrease due to seasonality, partially offset by the increased costs related to overseas
+business.
+
+Selling and Marketing Expenses
+
+Our selling and marketing expenses decreased by 10.1% to RMB15.6 billion for the first quarter
+of 2025 from RMB17.3 billion for the fourth quarter of 2024, and decreased by 1.6 percentage
+points to 18.0% from 19.6% as a percentage of revenues on a quarter-over-quarter basis. Both the
+decreases in amount and the percentage of revenues were primarily attributable to the decreases in
+expenses related to promotion, advertising and user incentives, resulting from seasonality.
+
+
+
+
+                                               15
+Research and Development Expenses
+
+Our research and development expenses increased by 6.5% to RMB5.8 billion for the first quarter
+of 2025 from RMB5.4 billion for the fourth quarter of 2024, and increased by 0.6 percentage points
+to 6.7% from 6.1% as a percentage of revenues on a quarter-over-quarter basis. Both the increases
+in amount and the percentage of revenues were primarily attributable to the increased investments
+at corporate level for AI.
+
+General and Administrative Expenses
+
+Our general and administrative expenses decreased by 10.6% to RMB2.6 billion for the first
+quarter of 2025 from RMB2.9 billion for the fourth quarter of 2024, primarily due to the reduced
+tax and surcharges resulting predominantly from seasonal revenues declines. The percentage of
+revenues was 3.0%, remaining stable on a quarter-over-quarter basis.
+
+Net Provisions for Impairment Losses on Financial and Contract Assets
+
+Our net provisions for impairment losses on financial and contract assets decreased to RMB121.5
+million for the first quarter of 2025 from RMB170.4 million for the fourth quarter of 2024, which
+reflected the changes in expected credit losses for financial assets.
+
+Fair Value Changes of Other Financial Investments at Fair Value Through Profit or Loss
+
+Our fair value changes of other financial investments at fair value through profit or loss increased
+to a gain of RMB804.8 million for the first quarter of 2025 from a gain of RMB12.8 million for
+the fourth quarter of 2024, which was driven by the fluctuation in the fair value of our investment
+portfolios.
+
+Other Gains/(Losses), Net
+
+Our other gains/(losses), net changed to a gain of RMB1.4 billion for the first quarter of 2025
+from a loss of RMB933.3 million for the fourth quarter of 2024, which was primarily due to the
+fluctuation in unrealised foreign exchange gains/(losses) from intercompany balances.
+
+Operating Profit
+
+As a result of the foregoing, our operating profit and operating margin for the first quarter of 2025
+was RMB10.6 billion and 12.2% respectively, compared to operating profit of RMB6.7 billion and
+operating margin of 7.6% for the fourth quarter of 2024.
+
+
+
+
+                                                 16
+Operating profit/(loss) and operating margin by segment are set forth in the table below:
+
+                                                                       Unaudited
+                                                                  Three Months Ended
+                                                    March 31, 2025                   December 31, 2024
+                                                                     As a                                As a
+                                                               percentage                          percentage
+                                                   Amount     of revenues           Amount        of revenues
+                                                       (RMB in thousands, except for percentages)
+
+Core local commerce                              13,491,480          21.0%        12,900,327           19.7%
+New initiatives                                  (2,273,267)        (10.2%)       (2,176,014)          (9.5%)
+Unallocated items                                  (652,103)            NA        (4,030,814)             NA
+  Including: Share-based compensation expenses   (1,707,846)            NA        (1,772,332)             NA
+
+Total operating profit                           10,566,110         12.2%          6,693,499            7.6%
+
+Our operating profit from the Core local commerce segment increased to RMB13.5 billion for the
+first quarter of 2025 from RMB12.9 billion for the fourth quarter of 2024. The operating margin
+for this segment increased by 1.3 percentage points to 21.0% from 19.7% on a quarter-over-quarter
+basis. The increases in operating profit and operating margin were mainly attributable to the lower
+Transacting User incentives and less promotion and advertising expenses, partially offset by the
+higher courier incentives due to seasonality.
+
+Our operating loss from the New initiatives segment was RMB2.3 billion for the first quarter of
+2025, remaining stable on a quarter-over-quarter basis. The operating margin for this segment
+was negative 10.2% for the first quarter of 2025, representing a 0.7 percentage points decline
+from negative 9.5% for the fourth quarter of 2024. The higher operating loss ratio was primarily
+due to the increased costs related to overseas business and the adverse seasonality for certain new
+initiatives.
+
+Our operating loss from the unallocated items decreased to RMB652.1 million for the first quarter
+of 2025 from RMB4.0 billion for the fourth quarter of 2024, which was primarily due to the
+fluctuations in unrealised foreign exchange gains/(losses) from intercompany balances and in fair
+value of our investment portfolios.
+
+Share of Profits of Investments Accounted for Using the Equity Method
+
+Our share of profits of investments accounted for using the equity method decreased to RMB18.5
+million for the first quarter of 2025 from RMB316.5 million for the fourth quarter of 2024, as a
+result of the fluctuation in financial results of our investees.
+
+Income Tax Expenses
+
+Our income tax expenses decreased to RMB543.9 million for the first quarter of 2025 from
+RMB674.2 million for the fourth quarter of 2024, which was primarily attributable to the
+recognition of deferred tax assets based on the taxable income forecast of certain entities.
+
+Profit for the Period
+
+As a result of the foregoing, we recorded a profit of RMB10.1 billion for the first quarter of 2025,
+compared to a profit of RMB6.2 billion for the fourth quarter of 2024.
+                                                   17
+Reconciliation of Non-IFRS Accounting Standards Measures to the Nearest IFRS Accounting
+Standards Measures
+
+To supplement our consolidated results which are prepared and presented in accordance with IFRS
+Accounting Standards, we also use adjusted EBITDA and adjusted net profit as additional financial
+measures, which are not required by, or presented in accordance with IFRS Accounting Standards.
+We believe that these non-IFRS Accounting Standards measures facilitate comparisons of operating
+performance from period to period and company to company by eliminating potential impacts of
+items that our management does not consider to be indicative of our operating performance such as
+certain non-cash or one-off items and certain investment transactions. The use of these non-IFRS
+Accounting Standards measures has limitations as an analytical tool, and one should not consider
+them in isolation from, or as a substitute for analysis of, our results of operations or financial
+conditions as reported under IFRS Accounting Standards. In addition, these non-IFRS Accounting
+Standards measures may be defined differently from similar terms used by other companies.
+
+Adjusted EBITDA represents profit/(loss) for the period adjusted for (i) fair value changes of
+other financial investments at fair value through profit or loss, certain items in other gains/(losses),
+net, finance income, finance costs, share of profits/(losses) of investments accounted for using
+the equity method and income tax credits/(expenses); and (ii) certain non-cash or one-off items,
+consisting of share-based compensation expenses, amortisation of intangible assets, depreciation of
+property, plant and equipment, and certain impairment and expense reversal/(provision).
+
+Adjusted net profit represents profit/(loss) for the period adjusted for (i) certain non-cash or one-off
+items, consisting of share-based compensation expenses, foreign exchange gains/(losses) from
+intercompany balances, amortisation of intangible assets resulting from acquisitions, and certain
+impairment and expense reversal/(provision); (ii) net gains/(losses) from certain investments; and
+(iii) related income tax effects.
+
+
+
+
+                                                  18
+The following table sets forth the reconciliations of our non-IFRS Accounting Standards measures
+for the three months ended March 31, 2025 and 2024, and the three months ended December 31,
+2024 to the nearest measures prepared in accordance with IFRS Accounting Standards.
+
+                                                                                Unaudited
+                                                                           Three Months Ended
+                                                                    March 31,     March 31, December 31,
+                                                                        2025           2024        2024
+                                                                            (RMB in thousands)
+
+Profit for the period                                              10,056,880            5,368,979           6,222,051
+Adjusted for:
+  Share-based compensation expenses                                  1,707,846           1,851,012           1,772,332
+  Foreign exchange (gains)/losses from
+     intercompany balances                                            (265,904)                  –           1,668,043
+  Net (gains)/losses from investments (Note (i))                      (777,438)            359,322              78,069
+  Impairment and expense provision                                           –                   –              73,327
+  Amortisation of intangible assets resulting
+     from acquisitions                                                  45,187              42,840               42,605
+  Tax effects (Note (ii))                                              181,933            (133,759)              (7,889)
+
+Adjusted net profit                                                10,948,504            7,488,394           9,848,538
+
+Adjusted for:
+  Income tax expenses not adjusted for
+    adjusted net profit                                                361,988             246,261              682,138
+  Share of profits of investments accounted
+    for using the equity method not adjusted for
+    adjusted net profit                                                (30,765)           (143,376)           (311,725)
+  Finance income                                                      (491,358)           (279,755)           (354,470)
+  Finance costs                                                        475,120             321,863             468,151
+  Certain items in other gains, net                                 (1,145,115)         (1,404,959)         (1,046,580)
+  Amortisation of software and others                                   14,047              14,384              18,124
+  Depreciation of property, plant and equipment                      2,169,265           1,827,531           2,218,416
+
+Adjusted EBITDA                                                    12,301,686            8,070,343          11,522,592
+
+Note (i) Mainly include fair value changes related to certain investments, gains or losses on disposal of investees or
+         subsidiaries, dilution gains or losses, and certain share of profits or losses of investments accounted for using
+         the equity method.
+
+Note (ii) Tax effects primarily comprise tax effects relating to share-based compensation expenses, foreign exchange
+          gains/(losses) from intercompany balances, net gains/(losses) from investments, impairment and expense
+          reversal/(provision), and amortisation of intangible assets resulting from acquisitions.
+
+
+
+
+                                                           19
+Liquidity and Capital Resources
+
+Historically, our demand for cash was principally funded by capital contribution from Shareholders
+and financing through issuance and sale of equity and debt securities. We held cash and cash
+equivalents of RMB115.0 billion and short-term treasury investments of RMB65.4 billion as of
+March 31, 2025.
+
+The following table sets forth our cash flows for the period indicated:
+
+                                                                                       Unaudited
+                                                                                   Three Months
+                                                                                           Ended
+                                                                                  March 31, 2025
+                                                                               (RMB in thousands)
+
+Net cash flows generated from operating activities                                      10,131,128
+Net cash flows generated from investing activities                                      34,751,320
+Net cash flows used in financing activities                                               (506,469)
+
+Net increase in cash and cash equivalents                                               44,375,979
+Cash and cash equivalents at the beginning of the period                                70,834,097
+Exchange losses on cash and cash equivalents                                              (194,616)
+
+Cash and cash equivalents at the end of the period                                     115,015,460
+
+Net Cash Flows Generated from Operating Activities
+
+Net cash flows generated from operating activities represents the cash generated from our
+operations minus the income tax paid. Cash generated from our operations primarily consisted of
+our profit before income tax, as adjusted by non-cash items and changes in working capital.
+
+For the first quarter of 2025, net cash flows generated from operating activities was RMB10.1
+billion, which was primarily attributable to our profit before income tax, as adjusted by (i)
+depreciation and amortisation, share-based compensation expenses and fair value changes and
+gains related to treasury investments and other investments, and (ii) the changes in working capital,
+which primarily consisted of decreases in certain current liabilities driven by seasonality.
+
+
+
+
+                                                 20
+Net Cash Flows Generated from Investing Activities
+
+For the first quarter of 2025, net cash flows generated from investing activities was RMB34.8
+billion, which was principally derived from net cash inflows from treasury investments, partially
+offset by capital expenditures and some other investments.
+
+Net Cash Flows Used in Financing Activities
+
+For the first quarter of 2025, net cash flows used in financing activities was RMB506.5 million,
+which was mainly attributable to the payments of lease liabilities.
+
+Gearing Ratio
+
+As of March 31, 2025, our gearing ratio, calculated as total borrowings and notes payable divided
+by total equity attributable to equity holders of the Company, was approximately 30%.
+
+
+
+
+                                               21
+FINANCIAL INFORMATION
+
+CONDENSED CONSOLIDATED INCOME STATEMENT
+
+                                                                  Unaudited
+                                                             Three Months Ended
+                                                      March 31,     March 31, December 31,
+                                                          2025           2024        2024
+                                                              (RMB in thousands)
+
+Revenues                                             86,557,126     73,275,884     88,487,296
+Including: Interest revenue                             371,518        487,572        394,119
+
+Cost of revenues                                     (54,143,437)   (47,579,144)   (55,043,149)
+
+Gross profit                                         32,413,689     25,696,740     33,444,147
+
+Selling and marketing expenses                       (15,550,016)   (13,888,302)   (17,301,322)
+Research and development expenses                     (5,772,030)    (5,000,153)    (5,420,285)
+General and administrative expenses                   (2,627,017)    (2,298,323)    (2,938,189)
+Net provisions for impairment losses on financial
+  and contract assets                                  (121,474)      (175,386)      (170,390)
+Fair value changes of other financial investments
+  at fair value through profit or loss                   804,820       (517,116)       12,835
+Other gains/(losses), net                              1,418,138      1,391,932      (933,297)
+
+Operating profit                                     10,566,110       5,209,392      6,693,499
+
+Finance income                                          491,358        279,755        354,470
+Finance costs                                          (475,120)      (321,863)      (468,151)
+Share of profits of investments accounted for
+  using the equity method                                18,453        314,197        316,482
+
+Profit before income tax                             10,600,801       5,481,481      6,896,300
+
+Income tax expenses                                    (543,921)      (112,502)      (674,249)
+
+Profit for the period                                10,056,880       5,368,979      6,222,051
+
+Profit for the period attributable to:
+  Equity holders of the Company                      10,056,827       5,368,538      6,222,021
+  Non-controlling interests                                  53             441             30
+
+                                                     10,056,880       5,368,979      6,222,051
+
+
+
+
+                                                22
+CONDENSED CONSOLIDATED STATEMENT OF FINANCIAL POSITION
+
+                                                                     Unaudited           Audited
+                                                                         As of             As of
+                                                                     March 31,      December 31,
+                                                                         2025              2024
+                                                                      (RMB in thousands)
+
+ASSETS
+Non-current assets
+Property, plant and equipment                                       32,134,464        30,238,782
+Intangible assets                                                   30,360,784        30,230,342
+Deferred tax assets                                                  2,212,422         1,925,046
+Long-term treasury investments                                       3,387,779         7,528,508
+Other financial investments at fair value through profit or loss    18,889,253        17,776,330
+Investments accounted for using the equity method                   19,752,315        19,800,129
+Other financial investments at fair value through other
+  comprehensive income                                                3,355,432        3,732,341
+Prepayments, deposits and other assets                                3,198,399        3,388,578
+
+                                                                   113,290,848       114,620,056
+Current assets
+Inventories                                                          1,901,133         1,734,124
+Trade receivables                                                    2,898,096         2,653,046
+Prepayments, deposits and other assets                              18,159,606        17,554,813
+Short-term treasury investments                                     65,367,503        97,409,161
+Restricted cash                                                     17,299,328        19,549,620
+Cash and cash equivalents                                          115,015,460        70,834,097
+
+                                                                   220,641,126       209,734,861
+
+Total assets                                                       333,931,974       324,354,917
+
+EQUITY
+Share capital                                                               409              404
+Share premium                                                       312,430,051      308,861,196
+Shares held for shares award scheme                                          (2)               –
+Other reserves                                                        1,509,315        3,603,145
+Accumulated losses                                                 (129,744,958)    (139,801,785)
+
+Equity attributable to equity holders of the Company               184,194,815       172,662,960
+Non-controlling interests                                              (58,829)          (58,882)
+
+Total equity                                                       184,135,986       172,604,078
+
+
+
+
+                                                    23
+CONDENSED CONSOLIDATED STATEMENT OF FINANCIAL POSITION (CONTINUED)
+
+                                             Unaudited           Audited
+                                                 As of             As of
+                                             March 31,     December 31,
+                                                 2025              2024
+                                              (RMB in thousands)
+
+LIABILITIES
+Non-current liabilities
+Deferred tax liabilities                      1,575,347        1,480,825
+Borrowings                                    1,456,088        1,175,045
+Notes payable                                37,803,914       38,009,069
+Lease liabilities                             3,301,246        3,134,776
+Other non-current liabilities                    55,637           15,484
+
+                                             44,192,232       43,815,199
+Current liabilities
+Trade payables                               25,372,957       25,193,149
+Payables to merchants                        24,794,040       25,131,850
+Advances from transacting users              10,122,022       11,147,206
+Other payables and accruals                  19,927,729       21,340,998
+Borrowings                                        1,322            1,079
+Notes payable                                16,806,301       16,567,532
+Deferred revenues                             5,669,262        5,724,688
+Lease liabilities                             2,686,634        2,622,066
+Income tax liabilities                          223,489          207,072
+
+                                            105,603,756      107,935,640
+
+Total liabilities                           149,795,988      151,750,839
+
+Total equity and liabilities                333,931,974      324,354,917
+
+
+
+
+                                  24
+OTHER INFORMATION
+
+Purchase, Sale or Redemption of the Company’s Listed Securities or Sale of Treasury Shares
+
+Neither the Company nor any of its subsidiaries has purchased, sold or redeemed any of the
+Company’s securities listed on the Stock Exchange (including sale of treasury shares (as defined
+under the Listing Rules)) during the three months ended March 31, 2025.
+
+Audit Committee
+
+The Audit Committee has reviewed the Company ’ s unaudited interim condensed financial
+information for the three months ended March 31, 2025. It meets regularly with the management,
+the Auditor and the internal audit personnel to discuss the accounting principles and practices
+adopted by the Company and internal control and financial reporting matters.
+
+Basis of Preparation and Presentation
+
+The accounting policies used in preparation of the unaudited interim financial information are
+consistent with those adopted in preparing the Company’s annual audited financial statements for
+the year ended December 31, 2024 (the “2024 Financial Statements”), except for the estimation
+of income tax and the adoption of new and amended standards as set out in the 2024 Financial
+Statements.
+
+The unaudited interim financial information for the three months ended March 31, 2025 does
+not include all the information and disclosures required in the annual financial statements, and
+should be read in conjunction with the 2024 Financial Statements, which have been prepared in
+accordance with the IFRS Accounting standards.
+
+Compliance with the Corporate Governance Code
+
+The Company is committed to maintaining and promoting stringent corporate governance
+standards. The principle of the Company ’ s corporate governance is to promote effective
+internal control measures and to enhance the transparency and accountability of the Board to all
+Shareholders.
+
+The Company has adopted the principles and code provisions of the CG Code as the basis of the
+Company’s corporate governance practices.
+
+
+
+
+                                              25
+Save for code provision C.2.1, the Company has complied with all the code provisions as set out
+in the CG Code where applicable during the three months ended March 31, 2025. Pursuant to
+code provision C.2.1 of the CG Code, companies listed on the Stock Exchange are expected to
+comply with, but may choose to deviate from the requirement that the responsibilities between
+the chairman and the chief executive officer should be segregated and should not be performed by
+the same individual. The Company does not have separate chairman and chief executive officer
+and Mr. Wang Xing currently performs these two roles. The Board believes that vesting the
+roles of both chairman and chief executive officer in the same person has the benefit of ensuring
+consistent leadership within the Company and enables more effective and efficient overall strategic
+planning for the Company. The Board considers that the balance of power and authority for the
+present arrangement will not be impaired and this structure will enable the Company to make and
+implement decisions promptly and effectively. The Board will continue to review and consider
+segregating the roles of chairman of the Board and the chief executive officer of the Company at
+an appropriate time by taking into account the circumstances of the Company as a whole.
+
+Compliance with the Model Code for Securities Transactions by Directors
+
+The Company has adopted the Model Code as its own code of conduct regarding Directors ’
+securities transactions. Having made specific enquiries of all Directors, the Directors have
+respectively confirmed their compliance with the required standards as set out in the Model Code
+during the three months ended March 31, 2025.
+
+Events after the Reporting Period
+
+References are made to the announcements of the Company dated April 20, 2021, April 27, 2021,
+April 28, 2021 and April 29, 2025. An aggregate principal amount of US$1,461,300,000 of the
+zero coupon convertible bonds due 2027 (the “2027 Bonds”) has been redeemed by the Company
+on April 27, 2025 pursuant to the terms and conditions of the 2027 Bonds.
+
+Save as disclosed above, there were no other significant events that might affect the Company
+since March 31, 2025 and up to the date of this announcement.
+
+                                                                           By Order of the Board
+                                                                                 Meituan
+                                                                               Wang Xing
+                                                                                Chairman
+
+Hong Kong, May 26, 2025
+
+
+
+
+                                                26
+As at the date of this announcement, the Board comprises Mr. Wang Xing and Mr. Mu Rongjun as
+executive Directors; and Mr. Orr Gordon Robert Halyburton, Mr. Leng Xuesong, Dr. Shum Heung
+Yeung Harry and Ms. Yang Marjorie Mun Tak as independent non-executive Directors.
+
+The Shareholders and potential investors should note that the information in this announcement
+is based on the management accounts of the Company which have not been audited or reviewed
+by the Auditor. This announcement contains forward-looking statements relating to the business
+outlook, estimates of financial performance, forecast business plans and growth strategies of the
+Company. These forward-looking statements are based on information currently available to the
+Company and are stated herein on the basis of the outlook at the time of this announcement. They
+are based on certain expectations, assumptions and premises, some of which are subjective or
+beyond our control. These forward-looking statements may prove to be incorrect and may not be
+realised in future. Underlying these forward-looking statements are a large number of risks and
+uncertainties. In light of the risks and uncertainties, the inclusion of forward-looking statements
+in this announcement should not be regarded as representations by the Board or the Company that
+the plans and objectives will be achieved, and investors should not place undue reliance on such
+statements.
+
+
+
+
+                                                27
+DEFINITIONS
+
+In this announcement, unless the context otherwise requires, the following expressions shall have
+the following meanings:
+
+Term                            Definition
+
+“Articles” or “Articles of      the eighth amended and restated articles of association of the
+  Association”                  Company adopted by special resolution passed on June 14, 2024
+
+“Audit Committee”               the audit committee of the Board
+
+“Auditor”                       PricewaterhouseCoopers, the external auditor of the Company
+
+“Board”                         the Board of Directors
+
+“CG Code”                       the corporate governance code as set out in Appendix C1 to the
+                                Listing Rules
+
+“Class A Shares”                Class A ordinary shares of the share capital of the Company with
+                                a par value of US$0.00001 each, conferring weighted voting
+                                rights in the Company such that a holder of a Class A Share is
+                                entitled to ten votes per share on any resolution tabled at the
+                                Company’s general meeting, save for resolutions with respect to
+                                any Reserved Matters, in which case they shall be entitled to one
+                                vote per share
+
+“Class B Shares”                Class B ordinary shares of the share capital of the Company
+                                with a par value of US$0.00001 each, conferring a holder of a
+                                Class B Share one vote per share on any resolution tabled at the
+                                Company’s general meeting
+
+“Companies Ordinance”           the Companies Ordinance (Chapter 622 of the Laws of Hong
+                                Kong), as amended, supplemented or otherwise modified from
+                                time to time
+
+“Company”,                      Meituan (美团), an exempted company with limited liability
+  “our Company”,                incorporated under the laws of the Cayman Islands on September
+  “the Company”                 25, 2015, or Meituan (美团) and its subsidiaries and Consolidated
+                                Affiliated Entities, as the case may be
+
+“Consolidated                   the entities we control through contractual arrangements
+  Affiliated Entities”
+
+“Director(s)”                   the director(s) of the Company
+
+“IFRS Accounting                International Financial Reporting Standards, as issued from time
+  Standards”                    to time by the International Accounting Standards Board
+
+
+
+
+                                               28
+“Listing Rules”       the Rules Governing the Listing of Securities on The Stock
+                      Exchange of Hong Kong Limited, as amended, supplemented or
+                      otherwise modified from time to time
+
+“Model Code”          the Model Code for Securities Transactions by Directors of Listed
+                      Issuers as set out in Appendix C3 to the Listing Rules
+
+“Reserved Matters”    those matters resolutions with respect to which each Share is
+                      entitled to one vote at general meetings of the Company pursuant
+                      to the Articles of Association, being (i) any amendment to
+                      the memorandum of association of the Company and Articles,
+                      including the variation of the rights attached to any class
+                      of shares, (ii) the appointment, election or removal of any
+                      independent non-executive Director, (iii) the appointment or
+                      removal of the Company ’ s auditors, and (iv) the voluntary
+                      liquidation or winding-up of the Company
+
+“RMB” or “Renminbi”   Renminbi, the lawful currency of China
+
+“Share(s)”            the Class A Shares and Class B Shares in the share capital of the
+                      Company, as the context so requires
+
+“Shareholder(s)”      holder(s) of the Share(s)
+
+“Stock Exchange”      The Stock Exchange of Hong Kong Limited
+
+“subsidiary(ies)”     has the meaning ascribed to it in section 15 of the Companies
+                      Ordinance
+
+“United States”,      the United States of America, its territories, its possessions and
+  “U.S.” or “US”      all areas subject to its jurisdiction
+
+“US$”                 U.S. dollar, the lawful currency of the United States
+
+“%”                   per cent
+
+
+
+
+                                     29
+GLOSSARY
+
+“Active Merchant”          a merchant that meets any of the following conditions in a given
+                           period: (i) completed at least one transaction on our platform, (ii)
+                           purchased any online marketing services from us, (iii) processed
+                           offline payment at least once through our integrated payment
+                           systems, or (iv) generated any order through our enterprise
+                           resource planning (ERP) systems
+
+“Gross Transaction         the value of paid transactions of products and services on our
+  Volume” or “GTV”         platform by consumers, regardless of whether the consumers are
+                           subsequently refunded. This includes delivery charges and value-
+                           added tax (VAT), but excludes any payment-only transactions,
+                           such as QR code scan payments and point-of-sale (POS) payments
+
+“Number of On-demand       include number of transactions from food delivery and Meituan
+  Delivery transactions”   Instashopping businesses
+
+“Transacting User”         a user account that paid for transactions of products and services
+                           on our platform in a given period, regardless of whether the
+                           account is subsequently refunded
+
+”transaction”              the number of transactions is generally recognised based on
+                           the number of payments made. (i) With respect to our in-store
+                           business, one transaction is recognised if a user purchases
+                           multiple vouchers with a single payment; (ii) with respect to our
+                           hotel-booking business, one transaction is recognised if a user
+                           books multiple room nights with a single payment; (iii) with
+                           respect to our attraction, movie, air and train ticketing businesses,
+                           one transaction is recognised if a user purchases multiple tickets
+                           with a single payment; (iv) with respect to our bike sharing and
+                           e-moped sharing businesses, if a user uses monthly pass, then
+                           one transaction is recognised only when the user purchases or
+                           claims the monthly pass, and subsequent rides are not recognised
+                           as transactions; if a user does not use monthly pass, then one
+                           transaction is recognised for every ride
+
+
+
+
+                                          30
+

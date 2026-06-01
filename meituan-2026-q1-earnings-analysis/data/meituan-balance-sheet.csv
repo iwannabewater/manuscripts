@@ -1,0 +1,12 @@
+metric,2025-12-31,2026-03-31,change,unit,source_note
+Cash and cash equivalents,106.771366,117.029369,10.258003,RMB bn,S01
+Short-term treasury investments,60.062338,63.340786,3.278448,RMB bn,S01
+Cash plus short-term treasury investments,166.833704,180.370155,13.536451,RMB bn,calculated from S01
+Restricted cash,21.631575,19.868723,-1.762852,RMB bn,S01
+Current and non-current borrowings,22.257128,48.067745,25.810617,RMB bn,S01
+Current and non-current notes payable,58.025971,58.038028,0.012057,RMB bn,S01
+Borrowings plus notes payable,80.283099,106.105773,25.822674,RMB bn,calculated from S01
+Net liquid resources before restricted cash,86.550605,74.264382,-12.286223,RMB bn,calculated from S01
+Total assets,346.910280,366.888088,19.977808,RMB bn,S01
+Total equity,150.987852,149.881761,-1.106091,RMB bn,S01
+Gearing ratio,,71,,percent,S01
