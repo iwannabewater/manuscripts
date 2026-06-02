@@ -1,8 +1,7 @@
 # mise Complete Guide 2026
 
-署名：Winston
-资料口径：截至 2026-06-02
-交付形态：Kami 中文技术长文，A4 PDF
+- 资料口径：截至 2026-06-02
+- 交付形态：中文技术长文，A4 PDF
 
 本目录收录《mise 完整使用指南：开发环境、工具链与工程任务的统一管理》。手册面向需要管理多语言运行时、项目环境变量、常用工程任务和 CI 工具链的开发者，也适合正在从 `asdf`、`nvm`、`pyenv`、`direnv` 或零散脚本迁移的团队。
 
@@ -33,5 +32,3 @@ cd mise-complete-guide-2026
 python3 build_paper.py
 weasyprint index.html mise-complete-guide-2026.pdf
 ```
-
-`index.html` 和 PDF 成品保持自足。修改 Markdown 后重新生成 HTML 时，额外需要本地 Kami 长文模板。
