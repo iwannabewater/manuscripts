@@ -8,7 +8,7 @@ from pypdf import PdfReader
 
 
 ROOT = Path(__file__).resolve().parent
-TEMPLATE = Path("/home/winston/.agents/skills/kami/assets/templates/long-doc.html")
+TEMPLATE = Path.home() / ".agents/skills/kami/assets/templates/long-doc.html"
 TITLE = "mise 完整使用指南：开发环境、工具链与工程任务的统一管理"
 
 
