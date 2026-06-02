@@ -1,0 +1,1839 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>mise 完整使用指南：开发环境、工具链与工程任务的统一管理</title>
+<meta name="author" content="Winston">
+<meta name="description" content="mise 完整中文使用指南，覆盖安装、工具版本、环境变量、任务、锁文件、CI、安全边界、迁移、排障与 Cheatsheet。">
+<meta name="keywords" content="mise, mise-en-place, 开发环境, 工具链, CI, Cheatsheet">
+<meta name="generator" content="Kami">
+<style>
+  /* Regular weight */
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  /* Bold weight - W05 for all bold variants */
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 20mm 22mm 22mm 22mm;
+    background: #f5f4ed;
+
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02", "Source Han Serif SC",
+                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+
+    @bottom-center {
+      content: counter(page) "  ·  mise 完整使用指南：开发环境、工具链与工程任务的统一管理";
+      font-family: "TsangerJinKai02", "Source Han Serif SC",
+                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-size: 9pt;
+      color: #6b6a64;
+    }
+  }
+
+  @page:first {
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #f5f4ed;
+    --ivory:     #faf9f5;
+    --near-black:#141413;
+    --dark-warm: #3d3d3a;
+    --olive:     #504e49;
+    --stone:     #6b6a64;
+    --brand:     #1B365D;
+    --border:    #e8e6dc;
+    --border-soft:#e5e3d8;
+    --tag-bg:    #E4ECF5;
+    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --sans: var(--serif);
+
+    --rhythm-module:  14pt;
+    --rhythm-section: 18pt;
+  }
+
+  html, body { background: var(--parchment); }
+
+  @media screen {
+    body { max-width: 210mm; margin: 0 auto; padding: 20mm 22mm 22mm 22mm; }
+  }
+
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 10.5pt;
+    line-height: 1.55;
+    letter-spacing: 0.3pt;
+    widows: 3;
+    orphans: 3;
+  }
+
+  .sans {
+    font-family: var(--sans);
+  }
+
+  /* ========== COVER ========== */
+  .cover {
+    min-height: 240mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40mm 0 0 0;
+    break-after: page;
+  }
+  .cover-eyebrow {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 18pt;
+  }
+  .cover-title {
+    font-size: 36pt;
+    font-weight: 500;
+    color: var(--near-black);
+    line-height: 1.15;
+    letter-spacing: 0.3pt;
+    margin-bottom: 16pt;
+  }
+  .cover-sub {
+    font-family: var(--sans);
+    font-size: 14pt;
+    color: var(--olive);
+    line-height: 1.5;
+    max-width: 85%;
+    margin-bottom: 30pt;
+  }
+  .cover-meta {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--stone);
+    line-height: 1.5;
+  }
+  .cover-meta strong {
+    color: var(--dark-warm);
+    font-weight: 500;
+  }
+
+  /* ========== TOC（目录）========== */
+  .toc { break-after: page; }
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: var(--rhythm-module);
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6pt 0;
+    border-bottom: 0.3pt dotted var(--border);
+    font-size: 11pt;
+  }
+  .toc-item:last-of-type { border-bottom: none; }
+  .toc-num {
+    color: var(--brand);
+    font-weight: 500;
+    min-width: 30pt;
+  }
+  .toc-title {
+    flex: 1;
+    color: var(--near-black);
+    padding-left: 6pt;
+  }
+  .toc-page {
+    color: var(--stone);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ========== HEADINGS ========== */
+  h1 {
+    font-size: 22pt;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 10pt 0;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    color: var(--near-black);
+    break-after: avoid;
+  }
+
+  h2 {
+    font-size: 16pt;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 24pt 0 8pt 0;
+    color: var(--near-black);
+    break-after: avoid;
+    string-set: section-title content();
+  }
+
+  h3 {
+    font-size: 13pt;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 18pt 0 6pt 0;
+    color: var(--dark-warm);
+    break-after: avoid;
+  }
+
+  .chapter-num {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+  }
+
+  /* ========== PARAGRAPHS ========== */
+  p {
+    margin: 0 0 10pt 0;
+    line-height: 1.55;
+    color: var(--near-black);
+    widows: 2;
+    orphans: 2;
+  }
+
+  .lead {
+    font-size: 12pt;
+    line-height: 1.55;
+    color: var(--dark-warm);
+    margin-bottom: var(--rhythm-module);
+  }
+
+  .hl { color: var(--brand); font-weight: 500; }
+  strong { font-weight: 500; }
+
+  /* ========== LISTS ========== */
+  ul, ol {
+    margin: 6pt 0 10pt 0;
+    padding-left: 20pt;
+    line-height: 1.55;
+  }
+  ul li::marker { color: var(--brand); }
+  ol li::marker { color: var(--brand); font-weight: 500; }
+
+  /* ========== QUOTE ========== */
+  blockquote, .quote {
+    border-left: 2pt solid var(--brand);
+    margin: 12pt 0;
+    padding: 4pt 0 4pt 16pt;
+    color: var(--olive);
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  blockquote .cite, .quote .cite {
+    display: block;
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 4pt;
+  }
+
+  /* ========== CODE ========== */
+  /* Mono first for English glyphs, then CJK fallback so Chinese comments
+     inside code/pre render correctly. A mono-only chain causes missing
+     glyphs rendered as "?" or missing-glyph boxes in WeasyPrint when the system lacks
+     a mono font with CJK coverage. */
+  code {
+    font-family: "JetBrains Mono", "SF Mono", Consolas,
+                 "TsangerJinKai02", "Source Han Serif SC",
+                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-size: 9pt;
+    background: var(--ivory);
+    padding: 1pt 4pt;
+    border-radius: 2pt;
+    color: var(--dark-warm);
+  }
+  pre {
+    font-family: "JetBrains Mono", "SF Mono", Consolas,
+                 "TsangerJinKai02", "Source Han Serif SC",
+                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-size: 9pt;
+    line-height: 1.5;
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 10pt 0;
+    white-space: pre-wrap;
+    color: var(--near-black);
+    break-inside: avoid;
+  }
+  pre code { background: transparent; padding: 0; font-size: inherit; }
+
+  /* ========== TABLE (kami-table) ========== */
+  table, .kami-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin: 12pt 0;
+    break-inside: avoid;
+  }
+  table th, .kami-table th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--dark-warm);
+    padding: 6pt 8pt;
+    border-bottom: 1pt solid var(--border);
+    background: transparent;
+  }
+  table td, .kami-table td {
+    padding: 5pt 8pt;
+    border-bottom: 0.3pt solid var(--border-soft);
+    vertical-align: top;
+  }
+  table.compact th, .kami-table.compact th { padding: 3pt 6pt; font-size: 8pt; }
+  table.compact td, .kami-table.compact td { padding: 2pt 6pt; font-size: 8pt; line-height: 1.4; }
+  table.financial td:not(:first-child), .kami-table.financial td:not(:first-child) {
+    text-align: right; font-variant-numeric: tabular-nums;
+  }
+  table.financial th:not(:first-child), .kami-table.financial th:not(:first-child) { text-align: right; }
+  table.striped tbody tr:nth-child(even) td, .kami-table.striped tbody tr:nth-child(even) td {
+    background: var(--ivory);
+  }
+  table .total td, .kami-table .total td {
+    font-weight: 500; border-top: 1pt solid var(--brand); border-bottom: none; color: var(--near-black);
+  }
+
+  /* ========== CALLOUT ========== */
+  .callout {
+    background: var(--ivory);
+    border-left: 2pt solid var(--brand);
+    padding: 10pt 14pt;
+    border-radius: 3pt;
+    margin: 12pt 0;
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  .callout blockquote,
+  .callout .quote {
+    border-left: none;
+    padding-left: 0;
+    margin: 6pt 0;
+    color: var(--olive);
+  }
+  .callout blockquote:first-child,
+  .callout .quote:first-child { margin-top: 0; }
+  .callout blockquote:last-child,
+  .callout .quote:last-child  { margin-bottom: 0; }
+
+  .takeaway {
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .takeaway-label {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--brand);
+    letter-spacing: 0.5pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+
+  /* ========== TAG ========== */
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--brand);
+    font-family: var(--sans);
+    font-size: 9pt;
+    font-weight: 500;
+    padding: 1pt 6pt;
+    border-radius: 3pt;
+    margin-right: 4pt;
+  }
+
+  /* ========== FIGURE ========== */
+  figure {
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  figure img {
+    max-width: 100%;
+    border-radius: 4pt;
+  }
+  figcaption {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 6pt;
+    text-align: center;
+  }
+
+  /* ========== EXECUTIVE SUMMARY ========== */
+  .exec-summary {
+    background: var(--ivory);
+    border-left: 1.4pt solid var(--brand);
+    border-radius: 6pt;
+    padding: 16pt 20pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .exec-summary h2 {
+    margin-top: 0;
+    font-size: 13pt;
+  }
+
+  /* ========== CHAPTER BREAK ========== */
+  .chapter { break-before: page; }
+
+  a { color: var(--brand); text-decoration: none; }
+  h1 { string-set: section-title content(); }
+  figure svg { width: 100%; height: auto; display: block; }
+  .cover-logo { width: 52pt; height: auto; margin-bottom: 18pt; }
+  .source-list { font-size: 9pt; }
+</style>
+</head>
+<body>
+<section class="cover">
+  <div>
+    <img class="cover-logo" src="assets/mise-logo.svg" alt="mise logo">
+    <div class="cover-eyebrow">ENGINEERING HANDBOOK · 2026</div>
+    <div class="cover-title">mise 完整使用指南<br>开发环境、工具链与工程任务的统一管理</div>
+    <div class="cover-sub">从安装、工具版本、环境变量和任务，到锁文件、CI、安全边界与团队落地。</div>
+  </div>
+  <div class="cover-meta"><strong>Winston</strong><br>版本 V1.0 · 2026-06-02<br>基于 mise v2026.5.18 官方资料</div>
+</section><section class="toc"><h2>目录</h2><div class="toc-item"><span class="toc-num">01</span><span class="toc-title">执行摘要</span><span class="toc-page" data-section="1">03</span></div><div class="toc-item"><span class="toc-num">02</span><span class="toc-title">1. mise 解决的不是一个问题</span><span class="toc-page" data-section="2">04</span></div><div class="toc-item"><span class="toc-num">03</span><span class="toc-title">2. 15 分钟上手</span><span class="toc-page" data-section="3">05</span></div><div class="toc-item"><span class="toc-num">04</span><span class="toc-title">3. mise use、mise install、mise exec 和 mise run</span><span class="toc-page" data-section="4">08</span></div><div class="toc-item"><span class="toc-num">05</span><span class="toc-title">4. 三种接入方式</span><span class="toc-page" data-section="5">09</span></div><div class="toc-item"><span class="toc-num">06</span><span class="toc-title">5. mise.toml：项目级入口</span><span class="toc-page" data-section="6">10</span></div><div class="toc-item"><span class="toc-num">07</span><span class="toc-title">6. 工具、Registry 与后端</span><span class="toc-page" data-section="7">13</span></div><div class="toc-item"><span class="toc-num">08</span><span class="toc-title">7. 环境变量：把依赖写成契约</span><span class="toc-page" data-section="8">15</span></div><div class="toc-item"><span class="toc-num">09</span><span class="toc-title">8. 任务系统：给项目一个标准入口</span><span class="toc-page" data-section="9">17</span></div><div class="toc-item"><span class="toc-num">10</span><span class="toc-title">9. 锁文件：可读范围与可复现安装同时存在</span><span class="toc-page" data-section="10">19</span></div><div class="toc-item"><span class="toc-num">11</span><span class="toc-title">10. CI：让本地和流水线读同一份配置</span><span class="toc-page" data-section="11">21</span></div><div class="toc-item"><span class="toc-num">12</span><span class="toc-title">11. 安全：默认配置要克制</span><span class="toc-page" data-section="12">23</span></div><div class="toc-item"><span class="toc-num">13</span><span class="toc-title">12. 最佳食用方式</span><span class="toc-page" data-section="13">25</span></div><div class="toc-item"><span class="toc-num">14</span><span class="toc-title">13. 从 asdf 与 direnv 迁移</span><span class="toc-page" data-section="14">27</span></div><div class="toc-item"><span class="toc-num">15</span><span class="toc-title">14. 排障顺序</span><span class="toc-page" data-section="15">28</span></div><div class="toc-item"><span class="toc-num">16</span><span class="toc-title">15. 常见误区</span><span class="toc-page" data-section="16">30</span></div><div class="toc-item"><span class="toc-num">17</span><span class="toc-title">16. 一份可以直接采用的项目模板</span><span class="toc-page" data-section="17">31</span></div><div class="toc-item"><span class="toc-num">18</span><span class="toc-title">17. Further Reading</span><span class="toc-page" data-section="18">33</span></div><div class="toc-item"><span class="toc-num">19</span><span class="toc-title">附录：mise Cheatsheet</span><span class="toc-page" data-section="19">34</span></div><div class="toc-item"><span class="toc-num">20</span><span class="toc-title">附录：资料来源与边界</span><span class="toc-page" data-section="20">44</span></div></section><section class="chapter" data-section="1"><div class="chapter-num">01 · CHAPTER</div><h1>执行摘要</h1><p>一个项目常常同时依赖 Node.js、Python、Go、Terraform、<code>ripgrep</code>、<code>shellcheck</code>、环境变量和若干脚本。每项依赖单独管理时，新成员需要先读一页安装说明，CI 还要再写一套初始化逻辑。过几个月后，本地、文档和 CI 往往已经不是同一套版本。</p>
+<p><code>mise</code> 把这些约定收回项目目录。官方 README 对它的定位很直接：<strong>dev tools、env vars、tasks in one CLI</strong>。你可以在一个 <code>mise.toml</code> 中声明工具、环境变量和任务，让新 Shell、新 checkout 和 CI job 从同一份配置开始工作。</p>
+<p>这份教程给出一条偏保守的落地路线：</p>
+<ol>
+<li>个人电脑使用 <code>mise activate</code> 接入交互 Shell。</li>
+<li>用 <code>mise use</code> 安装工具并把版本写入 <code>mise.toml</code>。</li>
+<li>用 <code>mise exec</code> 和 <code>mise run</code> 处理脚本、任务与 CI。</li>
+<li>团队项目启用并提交 <code>mise.lock</code>，保留版本范围的可读性，同时锁定真实安装结果。</li>
+<li>secret 不进 <code>mise.toml</code>，实验性 hooks 不放进默认配置。</li>
+</ol>
+
+<figure>
+  <svg viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse">
+      <circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="#f5f4ed"/>
+  <rect width="100%" height="100%" fill="url(#dots)" opacity="0.55"/>
+  <text x="48" y="36" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  1</text>
+  <text x="184" y="36" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="3">MISE PROJECT MODEL</text>
+  <line x1="48" y1="52" x2="912" y2="52" stroke="#1B365D" stroke-width="1"/>
+
+  <line x1="208" y1="208" x2="288" y2="208" stroke="#504e49" stroke-width="2"/>
+  <path d="M280 204 L288 208 L280 212" fill="none" stroke="#504e49" stroke-width="2" stroke-linecap="round"/>
+  <line x1="448" y1="208" x2="528" y2="112" stroke="#1B365D" stroke-width="2"/>
+  <path d="M520 116 L528 112 L524 120" fill="none" stroke="#1B365D" stroke-width="2" stroke-linecap="round"/>
+  <line x1="448" y1="208" x2="528" y2="208" stroke="#1B365D" stroke-width="2"/>
+  <path d="M520 204 L528 208 L520 212" fill="none" stroke="#1B365D" stroke-width="2" stroke-linecap="round"/>
+  <line x1="448" y1="208" x2="528" y2="304" stroke="#1B365D" stroke-width="2"/>
+  <path d="M524 296 L528 304 L520 300" fill="none" stroke="#1B365D" stroke-width="2" stroke-linecap="round"/>
+  <line x1="688" y1="112" x2="768" y2="112" stroke="#504e49" stroke-width="2"/>
+  <path d="M760 108 L768 112 L760 116" fill="none" stroke="#504e49" stroke-width="2" stroke-linecap="round"/>
+  <line x1="688" y1="208" x2="768" y2="208" stroke="#504e49" stroke-width="2"/>
+  <path d="M760 204 L768 208 L760 212" fill="none" stroke="#504e49" stroke-width="2" stroke-linecap="round"/>
+  <line x1="688" y1="304" x2="768" y2="304" stroke="#504e49" stroke-width="2"/>
+  <path d="M760 300 L768 304 L760 308" fill="none" stroke="#504e49" stroke-width="2" stroke-linecap="round"/>
+
+  <rect x="48" y="176" width="160" height="64" rx="8" fill="#E9E8E1" stroke="#6b6a64" stroke-width="1.5"/>
+  <text x="68" y="198" fill="#6b6a64" font-size="14" font-family="monospace" letter-spacing="2">PROJECT</text>
+  <text x="128" y="224" fill="#141413" font-size="24" font-weight="600" text-anchor="middle">项目目录</text>
+
+  <rect x="288" y="168" width="160" height="80" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="2"/>
+  <text x="308" y="192" fill="#1B365D" font-size="14" font-family="monospace" letter-spacing="2">CONFIG</text>
+  <text x="368" y="224" fill="#141413" font-size="24" font-weight="600" text-anchor="middle">mise.toml</text>
+
+  <rect x="528" y="80" width="160" height="64" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1.5"/>
+  <text x="548" y="102" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="2">TOOLS</text>
+  <text x="608" y="128" fill="#141413" font-size="24" font-weight="600" text-anchor="middle">运行时与 CLI</text>
+
+  <rect x="528" y="176" width="160" height="64" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1.5"/>
+  <text x="548" y="198" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="2">ENV</text>
+  <text x="608" y="224" fill="#141413" font-size="24" font-weight="600" text-anchor="middle">环境变量</text>
+
+  <rect x="528" y="272" width="160" height="64" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1.5"/>
+  <text x="548" y="294" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="2">TASKS</text>
+  <text x="608" y="320" fill="#141413" font-size="24" font-weight="600" text-anchor="middle">工程任务</text>
+
+  <rect x="768" y="80" width="144" height="64" rx="8" fill="#EEEDE6" stroke="#B2B1AC" stroke-width="1.5"/>
+  <text x="840" y="106" fill="#141413" font-size="22" font-weight="600" text-anchor="middle">activate</text>
+  <text x="840" y="128" fill="#504e49" font-size="15" text-anchor="middle">交互 Shell</text>
+
+  <rect x="768" y="176" width="144" height="64" rx="8" fill="#EEEDE6" stroke="#B2B1AC" stroke-width="1.5"/>
+  <text x="840" y="202" fill="#141413" font-size="22" font-weight="600" text-anchor="middle">exec</text>
+  <text x="840" y="224" fill="#504e49" font-size="15" text-anchor="middle">脚本与 CI</text>
+
+  <rect x="768" y="272" width="144" height="64" rx="8" fill="#EEEDE6" stroke="#B2B1AC" stroke-width="1.5"/>
+  <text x="840" y="298" fill="#141413" font-size="22" font-weight="600" text-anchor="middle">run</text>
+  <text x="840" y="320" fill="#504e49" font-size="15" text-anchor="middle">标准动作</text>
+
+  <text x="48" y="388" fill="#504e49" font-size="17">一份项目配置同时约束工具、环境变量和任务。交互 Shell、脚本和 CI 只是不同入口。</text>
+</svg>
+
+  <figcaption>Figure 1. 团队只需维护一份项目契约，差异留在入口，不留在安装说明里。</figcaption>
+</figure>
+</section><section class="chapter" data-section="2"><div class="chapter-num">02 · CHAPTER</div><h1>1. mise 解决的不是一个问题</h1><p>mise 发音接近 “meez”，名字来自法语 mise en place，也就是在开始做饭前把工具和材料放到位。这个比喻与工程实践很贴切：你进入项目目录时，运行时、CLI、环境变量和常用任务已经准备好。</p>
+<h3>1.1 工具版本</h3>
+<p>不同项目可以使用不同版本的 Node.js、Python、Ruby、Go、Java、Terraform 和其他 CLI。进入目录后，mise 根据当前配置切换 PATH。一个项目可以用 Node.js 24，另一个项目用 Node.js 26，不需要手工切换。</p>
+<h3>1.2 环境变量</h3>
+<p>项目级环境变量可以写入 <code>[env]</code>，也可以从 <code>.env</code>、JSON 或 YAML 文件载入。mise 支持 required variables、PATH 扩展和 redaction，适合把“项目运行需要哪些变量”写成显式契约。</p>
+<h3>1.3 任务</h3>
+<p><code>mise run</code> 可以执行构建、测试、lint、部署前检查和本地开发任务。任务能声明依赖关系、输入输出文件和确认提示。多个无依赖任务默认最多并发执行 4 个 job。</p>
+<div class="callout">
+对新项目，先把 mise 当成一个项目入口：<code>mise install</code> 准备工具，<code>mise run</code> 执行标准动作。熟悉之后，再逐步使用锁文件、环境分层和安全设置。
+</div></section><section class="chapter" data-section="3"><div class="chapter-num">03 · CHAPTER</div><h1>2. 15 分钟上手</h1><h3>2.1 安装</h3>
+<p>官方安装页给出的推荐方式因平台而异：</p>
+<table>
+<thead>
+<tr>
+<th>平台</th>
+<th>推荐方式</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>macOS</td>
+<td>Homebrew</td>
+<td><code>brew install mise</code></td>
+</tr>
+<tr>
+<td>Debian / Ubuntu</td>
+<td>apt</td>
+<td>先添加官方源，再执行 <code>sudo apt install mise</code></td>
+</tr>
+<tr>
+<td>Fedora / RHEL</td>
+<td>dnf</td>
+<td><code>sudo dnf copr enable jdxcode/mise &amp;&amp; sudo dnf install mise</code></td>
+</tr>
+<tr>
+<td>Arch Linux</td>
+<td>pacman</td>
+<td><code>sudo pacman -S mise</code></td>
+</tr>
+<tr>
+<td>Alpine Linux</td>
+<td>apk</td>
+<td><code>apk add mise</code></td>
+</tr>
+<tr>
+<td>Windows</td>
+<td>Scoop</td>
+<td><code>scoop install mise</code></td>
+</tr>
+<tr>
+<td>CI / Docker</td>
+<td>mise.run</td>
+<td><code>curl https://mise.run | sh</code></td>
+</tr>
+</tbody>
+</table>
+<p>Linux 和 macOS 想快速试用，可以直接运行：</p>
+<pre><code class="language-bash">curl https://mise.run | sh
+~/.local/bin/mise --version
+</code></pre>
+<p><code>mise.run</code> 默认把可执行文件放到 <code>~/.local/bin/mise</code>。如果你通过包管理器安装，后续升级优先交给包管理器；如果你通过 <code>mise.run</code> 安装，可以使用 <code>mise self-update</code>。</p>
+<h3>2.2 激活交互 Shell</h3>
+<p><code>mise exec</code> 不依赖 Shell 激活，安装完成后已经可以使用。日常开发更适合启用 <code>mise activate</code>，让 mise 在目录变化和 Shell prompt 刷新时更新 PATH 与环境变量。</p>
+<pre><code class="language-bash"># bash
+echo 'eval &quot;$(~/.local/bin/mise activate bash)&quot;' &gt;&gt; ~/.bashrc
+
+# zsh
+echo 'eval &quot;$(~/.local/bin/mise activate zsh)&quot;' &gt;&gt; ~/.zshrc
+
+# fish
+echo '~/.local/bin/mise activate fish | source' &gt;&gt; ~/.config/fish/config.fish
+</code></pre>
+<p>通过 Homebrew 或其他包管理器安装时，通常可以省略绝对路径：</p>
+<pre><code class="language-bash">echo 'eval &quot;$(mise activate zsh)&quot;' &gt;&gt; ~/.zshrc
+</code></pre>
+<p>重启 Shell 后检查：</p>
+<pre><code class="language-bash">mise doctor
+</code></pre>
+<h3>2.3 在项目里安装工具</h3>
+<p>新建一个目录：</p>
+<pre><code class="language-bash">mkdir demo-mise
+cd demo-mise
+mise use node@26
+node -v
+</code></pre>
+<p>mise 会安装当前 Node.js 26 系列的最新匹配版本，并创建 <code>mise.toml</code>：</p>
+<pre><code class="language-toml">[tools]
+node = &quot;26&quot;
+</code></pre>
+<p>再加一个 Python：</p>
+<pre><code class="language-bash">mise use python@3.14
+python --version
+</code></pre>
+<p>此时 <code>mise.toml</code> 类似：</p>
+<pre><code class="language-toml">[tools]
+node = &quot;26&quot;
+python = &quot;3.14&quot;
+</code></pre>
+<h3>2.4 运行一次性命令</h3>
+<p>不想写配置，只想临时跑一个版本时，用 <code>mise exec</code>：</p>
+<pre><code class="language-bash">mise exec node@26 -- node -v
+mise exec python@3.14 -- python -c 'print(&quot;hello&quot;)'
+</code></pre>
+<p><code>mise exec</code> 会在需要时下载工具，然后只在当前命令中注入 mise 环境。</p>
+<h3>2.5 添加第一个任务</h3>
+<p>在 <code>mise.toml</code> 中加入：</p>
+<pre><code class="language-toml">[tasks.hello]
+description = &quot;Print runtime versions&quot;
+run = &quot;&quot;&quot;
+node -v
+python --version
+&quot;&quot;&quot;
+</code></pre>
+<p>运行：</p>
+<pre><code class="language-bash">mise run hello
+</code></pre>
+<p>任务会自动带上当前项目的工具和环境变量。到这里，你已经完成了最小闭环。</p>
+</section><section class="chapter" data-section="4"><div class="chapter-num">04 · CHAPTER</div><h1>3. mise use、mise install、mise exec 和 mise run</h1><p>这 4 个命令承担不同职责。理解它们的边界，可以避开大部分新手问题。</p>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>做什么</th>
+<th>是否写配置</th>
+<th>典型场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mise use node@26</code></td>
+<td>安装并激活工具</td>
+<td>是</td>
+<td>为项目新增或调整工具</td>
+</tr>
+<tr>
+<td><code>mise install</code></td>
+<td>安装配置中声明的工具</td>
+<td>否</td>
+<td>clone 项目后的初始化</td>
+</tr>
+<tr>
+<td><code>mise exec -- &lt;cmd&gt;</code></td>
+<td>在 mise 环境中执行命令</td>
+<td>否</td>
+<td>脚本、CI、一次性命令</td>
+</tr>
+<tr>
+<td><code>mise run &lt;task&gt;</code></td>
+<td>运行项目任务</td>
+<td>否</td>
+<td>构建、测试、lint、部署前检查</td>
+</tr>
+</tbody>
+</table>
+<p>官方 Walkthrough 特别提醒：<code>mise install node@26</code> 只安装工具，不会让它进入项目 PATH。日常开发新增工具时，优先使用：</p>
+<pre><code class="language-bash">mise use node@26
+</code></pre>
+<p>团队成员拉取已有项目后，运行：</p>
+<pre><code class="language-bash">mise install
+</code></pre>
+<p>脚本或 CI 中不要假设 prompt 会刷新 PATH。使用：</p>
+<pre><code class="language-bash">mise install
+mise exec -- npm test
+</code></pre>
+<p>或把标准动作定义为任务：</p>
+<pre><code class="language-bash">mise install
+mise run ci
+</code></pre>
+</section><section class="chapter" data-section="5"><div class="chapter-num">05 · CHAPTER</div><h1>4. 三种接入方式</h1><p>mise 提供 PATH activation、shims 和显式执行三种接入方式。它们适合不同环境。</p>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐方式</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>个人交互 Shell</td>
+<td><code>mise activate</code></td>
+<td>目录变化时自动更新 PATH 和环境变量</td>
+</tr>
+<tr>
+<td>CI、IDE、非交互脚本</td>
+<td><code>mise exec</code>、<code>mise run</code> 或 shims</td>
+<td>不依赖 Shell prompt</td>
+</tr>
+<tr>
+<td>只在单个项目里使用 mise</td>
+<td><code>mise exec</code> 和 <code>mise run</code></td>
+<td>无需修改 Shell rc 文件</td>
+</tr>
+</tbody>
+</table>
+<h3>4.1 PATH activation</h3>
+<p><code>mise activate</code> 会在 prompt 显示或目录变化时更新环境。执行 <code>which node</code> 时，你会看到真实安装路径，而不是 shim：</p>
+<pre><code class="language-bash">which node
+# ~/.local/share/mise/installs/node/26/bin/node
+</code></pre>
+<p>官方文档建议交互场景优先使用这种方式。</p>
+<h3>4.2 Shims</h3>
+<p>shims 是位于 <code>~/.local/share/mise/shims</code> 的轻量入口。它们适合没有交互 prompt 的环境：</p>
+<pre><code class="language-bash">export PATH=&quot;$HOME/.local/share/mise/shims:$PATH&quot;
+</code></pre>
+<p>shims 有明确限制：</p>
+<ul>
+<li><code>[env]</code> 中的变量只会在调用 mise 管理的工具时可用。</li>
+<li>多数 <code>cd</code>、<code>enter</code>、<code>leave</code> 和 <code>watch_files</code> hooks 不会触发。</li>
+<li><code>which node</code> 会指向 shim，需要使用 <code>mise which node</code> 查看真实路径。</li>
+</ul>
+<h3>4.3 显式执行</h3>
+<p><code>mise exec</code> 和 <code>mise run</code> 会在执行前加载工具与环境变量。对于 CI 和脚本，这种方式最容易读懂：</p>
+<pre><code class="language-bash">mise exec -- npm test
+mise run lint
+</code></pre>
+</section><section class="chapter" data-section="6"><div class="chapter-num">06 · CHAPTER</div><h1>5. mise.toml：项目级入口</h1><p>一个典型项目配置可以从下面这份文件开始：</p>
+<pre><code class="language-toml">min_version = &quot;2026.5.18&quot;
+
+[tools]
+node = &quot;26&quot;
+python = &quot;3.14&quot;
+uv = &quot;latest&quot;
+ripgrep = &quot;latest&quot;
+
+[env]
+NODE_ENV = &quot;development&quot;
+_.path = &quot;./node_modules/.bin&quot;
+
+[tasks.install]
+description = &quot;Install project dependencies&quot;
+run = [
+  &quot;npm install&quot;,
+  &quot;uv sync&quot;,
+]
+
+[tasks.test]
+description = &quot;Run tests&quot;
+run = [
+  &quot;npm test&quot;,
+  &quot;uv run pytest&quot;,
+]
+
+[tasks.lint]
+description = &quot;Run linters&quot;
+run = [
+  &quot;npm run lint&quot;,
+  &quot;uv run ruff check .&quot;,
+]
+
+[tasks.ci]
+description = &quot;Run CI checks&quot;
+depends = [&quot;lint&quot;, &quot;test&quot;]
+</code></pre>
+<p><code>min_version</code> 很适合团队项目。配置使用了新字段时，旧版 mise 会明确报错或提醒升级，避免默默忽略行为差异。</p>
+<h3>5.1 配置会向父目录递归</h3>
+<p>mise 从当前目录向上查找配置，并把它们合并起来。更接近当前目录的配置覆盖上层配置。</p>
+<pre><code class="language-text">~/.config/mise/config.toml
+~/work/mise.toml
+~/work/project/mise.toml
+~/work/project/mise.local.toml
+~/work/project/backend/mise.toml
+</code></pre>
+<p>进入 <code>backend/</code> 时，mise 会同时读取这些层级。你可以用下面的命令查看实际生效文件：</p>
+<pre><code class="language-bash">mise config
+</code></pre>
+<p>或：</p>
+<pre><code class="language-bash">mise config ls
+</code></pre>
+<h3>5.2 共享配置和本地覆盖分开</h3>
+<p>提交到仓库：</p>
+<pre><code class="language-text">mise.toml
+mise.lock
+</code></pre>
+<p>加入 <code>.gitignore</code>：</p>
+<pre><code class="language-text">mise.local.toml
+mise.local.lock
+mise.*.local.toml
+mise.*.local.lock
+</code></pre>
+<p>本机 secret、个人工具和临时设置放在 local 文件里，不要污染共享配置。</p>
+<h3>5.3 环境专用配置</h3>
+<p>需要区分开发、测试和生产工具时，可以使用 <code>MISE_ENV</code>：</p>
+<pre><code class="language-bash">MISE_ENV=test mise install
+mise -E test run test
+</code></pre>
+<p>mise 会按环境加载：</p>
+<pre><code class="language-text">mise.toml
+mise.test.toml
+mise.local.toml
+mise.test.local.toml
+</code></pre>
+<p>多个环境可以组合：</p>
+<pre><code class="language-bash">MISE_ENV=ci,test mise run test
+</code></pre>
+<p>后出现的环境优先级更高。</p>
+<h3>5.4 <code>.tool-versions</code> 和 idiomatic version files</h3>
+<p>mise 可以读取 asdf 使用的 <code>.tool-versions</code>。已有 asdf 项目可以先直接使用，再逐步迁移到 <code>mise.toml</code>。</p>
+<p>mise 也支持语言生态常见的版本文件，例如：</p>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>常见文件</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Node.js</td>
+<td><code>.nvmrc</code>、<code>.node-version</code>、<code>package.json</code></td>
+</tr>
+<tr>
+<td>Python</td>
+<td><code>.python-version</code>、<code>.python-versions</code></td>
+</tr>
+<tr>
+<td>Ruby</td>
+<td><code>.ruby-version</code></td>
+</tr>
+<tr>
+<td>Go</td>
+<td><code>go.mod</code></td>
+</tr>
+<tr>
+<td>Java</td>
+<td><code>.java-version</code></td>
+</tr>
+</tbody>
+</table>
+<p>按工具开启读取：</p>
+<pre><code class="language-bash">mise settings add idiomatic_version_file_enable_tools node
+mise settings add idiomatic_version_file_enable_tools python
+</code></pre>
+<p>这适合协作方不统一使用 mise 的仓库：项目继续保留生态通用文件，mise 用户仍能获得自动切换。</p>
+</section><section class="chapter" data-section="7"><div class="chapter-num">07 · CHAPTER</div><h1>6. 工具、Registry 与后端</h1><h3>6.1 Registry 提供 shorthand</h3>
+<p>输入：</p>
+<pre><code class="language-bash">mise use aws-cli
+</code></pre>
+<p>Registry 会把 shorthand 映射到实际后端，例如：</p>
+<pre><code class="language-bash">mise use aqua:aws/aws-cli
+</code></pre>
+<p>查看可用工具：</p>
+<pre><code class="language-bash">mise registry
+mise search ripgrep
+mise tool ripgrep
+</code></pre>
+<h3>6.2 后端是什么</h3>
+<p>后端负责发现版本、下载、安装和配置工具。官方后端列表包括：</p>
+<pre><code class="language-text">asdf, aqua, cargo, conda, dotnet, forgejo, gem,
+github, gitlab, go, http, npm, pipx, s3, spm,
+ubi, vfox, custom backends
+</code></pre>
+<p>部分后端带实验性标记。Registry 文档给出的新 entry 优先级很有参考价值：</p>
+<ol>
+<li>优先使用 <code>aqua</code>。</li>
+<li>工具不在 aqua registry 时，考虑 <code>github</code> 或 <code>gitlab</code>。</li>
+<li>只有工具无法合理通过前两类后端支持时，再考虑 <code>conda</code>、<code>pipx</code>、<code>npm</code>、<code>gem</code>、<code>go</code>、<code>cargo</code> 或 <code>dotnet</code>。</li>
+<li>新 <code>vfox</code> 与 <code>asdf</code> registry entry 不再接受，原因是供应链风险。</li>
+</ol>
+<p>用户仍可显式使用任何后端：</p>
+<pre><code class="language-bash">mise use github:BurntSushi/ripgrep
+mise use npm:prettier
+mise use pipx:black
+mise use cargo:starship
+</code></pre>
+<h3>6.3 版本范围与升级</h3>
+<p>项目配置通常写可读范围：</p>
+<pre><code class="language-toml">[tools]
+node = &quot;26&quot;
+python = &quot;3.14&quot;
+</code></pre>
+<p>安装当前范围内最新版本：</p>
+<pre><code class="language-bash">mise install
+</code></pre>
+<p>查看过期工具：</p>
+<pre><code class="language-bash">mise outdated
+</code></pre>
+<p>在现有范围内升级：</p>
+<pre><code class="language-bash">mise upgrade
+mise upgrade node
+</code></pre>
+<p>提升主版本范围：</p>
+<pre><code class="language-bash">mise upgrade --bump node
+</code></pre>
+<p>例如，<code>mise.toml</code> 写着 <code>node = &quot;24&quot;</code> 时，如果解析结果升级到 Node.js 26，<code>mise upgrade --bump node</code> 会把配置改到 <code>node = &quot;26&quot;</code>。</p>
+</section><section class="chapter" data-section="8"><div class="chapter-num">08 · CHAPTER</div><h1>7. 环境变量：把依赖写成契约</h1><h3>7.1 基础变量</h3>
+<pre><code class="language-toml">[env]
+NODE_ENV = &quot;development&quot;
+RUST_BACKTRACE = &quot;1&quot;
+</code></pre>
+<p>也可以用 CLI：</p>
+<pre><code class="language-bash">mise set NODE_ENV=development
+mise set
+mise unset NODE_ENV
+</code></pre>
+<h3>7.2 PATH 扩展</h3>
+<p>项目脚本经常需要把本地目录加入 PATH：</p>
+<pre><code class="language-toml">[env]
+_.path = &quot;./node_modules/.bin&quot;
+</code></pre>
+<p>相对路径以项目的 <code>config_root</code> 为准。即使你在子目录运行任务，路径仍然稳定。</p>
+<h3>7.3 读取 <code>.env</code>、JSON 和 YAML</h3>
+<pre><code class="language-toml">[env]
+_.file = &quot;.env&quot;
+</code></pre>
+<p>多个文件：</p>
+<pre><code class="language-toml">[env]
+_.file = [
+  &quot;.env&quot;,
+  &quot;.env.local&quot;,
+  { path = &quot;.secrets.yaml&quot;, redact = true },
+]
+</code></pre>
+<p><code>env._.file</code> 支持 dotenv、JSON 和 YAML。它适合载入文件，不代表这些文件应该提交到仓库。</p>
+<h3>7.4 Required variables</h3>
+<p>共享配置可以声明必须由用户提供的变量：</p>
+<pre><code class="language-toml">[env]
+DATABASE_URL = { required = &quot;Set DATABASE_URL in mise.local.toml&quot; }
+API_KEY = { required = &quot;Get API_KEY from the team secret manager&quot; }
+</code></pre>
+<p>当变量缺失时，常规命令会报错。Shell activation 会提示警告，但不会直接破坏 Shell 启动。</p>
+<h3>7.5 Redaction</h3>
+<pre><code class="language-toml">redactions = [&quot;SECRET_*&quot;, &quot;*_TOKEN&quot;, &quot;PASSWORD&quot;]
+
+[env]
+API_TOKEN = { value = &quot;token-value&quot;, redact = true }
+</code></pre>
+<p>redaction 通过拦截任务输出实现。<code>raw = true</code> 的任务直接连接标准输入输出，无法应用 redaction。GitHub Actions 中如果直接使用 mise，可以把 redacted values 加入 mask：</p>
+<pre><code class="language-bash">for value in $(mise env --redacted --values); do
+  echo &quot;::add-mask::$value&quot;
+done
+</code></pre>
+<p><code>jdx/mise-action</code> 会自动处理标记为 redacted 的值。</p>
+<div class="callout">
+redaction 只降低日志泄漏概率。secret 仍应来自本机 local 文件、系统环境变量或组织 secret manager。不要把真实密钥提交进 <code>mise.toml</code>。
+</div></section><section class="chapter" data-section="9"><div class="chapter-num">09 · CHAPTER</div><h1>8. 任务系统：给项目一个标准入口</h1><h3>8.1 TOML 任务</h3>
+<p>简单任务可以写成一行：</p>
+<pre><code class="language-toml">[tasks]
+build = &quot;npm run build&quot;
+test = &quot;npm test&quot;
+lint = &quot;npm run lint&quot;
+</code></pre>
+<p>复杂任务使用独立表：</p>
+<pre><code class="language-toml">[tasks.test]
+description = &quot;Run unit and integration tests&quot;
+run = [
+  &quot;npm test&quot;,
+  &quot;uv run pytest&quot;,
+]
+</code></pre>
+<p>运行：</p>
+<pre><code class="language-bash">mise run test
+</code></pre>
+<p>脚本和文档中始终写完整的 <code>mise run &lt;task&gt;</code>。虽然 <code>mise test</code> 可能可用，但未来 mise 新增同名 CLI 命令时会遮蔽任务。</p>
+<h3>8.2 文件任务</h3>
+<p>逻辑复杂时，把任务写成可执行脚本：</p>
+<pre><code class="language-bash">mkdir -p mise-tasks
+touch mise-tasks/build
+chmod +x mise-tasks/build
+</code></pre>
+<pre><code class="language-bash">#!/usr/bin/env bash
+#MISE description=&quot;Build the project&quot;
+set -euo pipefail
+npm run build
+</code></pre>
+<p>文件任务保留 Shell 高亮、lint 和调试体验，适合多行流程。</p>
+<h3>8.3 依赖图与并发</h3>
+<pre><code class="language-toml">[tasks.lint]
+run = &quot;npm run lint&quot;
+
+[tasks.test]
+run = &quot;npm test&quot;
+
+[tasks.build]
+run = &quot;npm run build&quot;
+
+[tasks.ci]
+depends = [&quot;lint&quot;, &quot;test&quot;, &quot;build&quot;]
+</code></pre>
+<p><code>lint</code>、<code>test</code> 和 <code>build</code> 之间没有依赖，mise 会在 job 限制内并发执行。默认最大并发数是 4。</p>
+<pre><code class="language-bash">mise run --jobs 2 ci
+MISE_JOBS=2 mise run ci
+</code></pre>
+<h3>8.4 只在输入变化时重跑</h3>
+<pre><code class="language-toml">[tasks.build]
+description = &quot;Build TypeScript&quot;
+run = &quot;npm run build&quot;
+sources = [
+  &quot;src/**/*.ts&quot;,
+  &quot;!src/**/*.test.ts&quot;,
+  &quot;tsconfig.json&quot;,
+]
+outputs = [&quot;dist/**/*.js&quot;]
+</code></pre>
+<p>当输出比输入新时，mise 会跳过任务。<code>sources</code> 也会被 <code>mise watch</code> 使用：</p>
+<pre><code class="language-bash">mise use --global watchexec@latest
+mise watch build
+</code></pre>
+<h3>8.5 危险任务加确认</h3>
+<pre><code class="language-toml">[tasks.deploy]
+description = &quot;Deploy production&quot;
+confirm = { message = &quot;Deploy production?&quot;, default = &quot;no&quot; }
+run = &quot;./scripts/deploy.sh&quot;
+</code></pre>
+<p>注意：<code>confirm</code> 只保护当前任务自己的 <code>run</code>。<code>depends</code> 会在确认前执行。如果依赖也有副作用，需要给依赖任务单独加确认，或改成结构化 <code>run</code>。</p>
+</section><section class="chapter" data-section="10"><div class="chapter-num">10 · CHAPTER</div><h1>9. 锁文件：可读范围与可复现安装同时存在</h1><h3>9.1 为什么要用 <code>mise.lock</code></h3>
+<p><code>mise.toml</code> 适合表达意图：</p>
+<pre><code class="language-toml">[tools]
+node = &quot;26&quot;
+python = &quot;3.14&quot;
+</code></pre>
+<p><code>mise.lock</code> 适合表达一次已经解析过的真实结果。官方 lockfile 文档列出 4 个作用：</p>
+<ul>
+<li>固定团队和 CI 实际安装的版本。</li>
+<li>在后端支持时保存 checksum。</li>
+<li>保留 URL，减少重复查询 GitHub 等服务。</li>
+<li>在支持的后端上记录 provenance 信息。</li>
+</ul>
+<h3>9.2 启用和生成</h3>
+<pre><code class="language-bash">mise settings lockfile=true
+mise lock
+mise install
+git add mise.toml mise.lock
+git commit -m &quot;chore: lock mise toolchain&quot;
+</code></pre>
+<p>也可以在项目配置中启用：</p>
+<pre><code class="language-toml">[settings]
+lockfile = true
+</code></pre>
+<p>一旦锁文件存在，<code>mise install</code>、<code>mise use</code> 和 <code>mise upgrade</code> 会维护它。</p>
+<h3>9.3 团队日常流程</h3>
+<p>新增或调整工具：</p>
+<pre><code class="language-bash">mise use node@26
+mise install
+git add mise.toml mise.lock
+</code></pre>
+<p>范围内升级：</p>
+<pre><code class="language-bash">mise upgrade
+git add mise.lock
+</code></pre>
+<p>提升主版本：</p>
+<pre><code class="language-bash">mise upgrade --bump node
+git add mise.toml mise.lock
+</code></pre>
+<h3>9.4 Strict lockfile mode</h3>
+<p>CI 需要避免临时解析外部 API 时，可以使用：</p>
+<pre><code class="language-bash">MISE_LOCKED=1 mise install
+</code></pre>
+<p>或：</p>
+<pre><code class="language-toml">[settings]
+locked = true
+</code></pre>
+<p>strict mode 会要求当前平台的工具已经在 lockfile 中有可用 URL。多平台项目可以预先生成平台条目：</p>
+<pre><code class="language-bash">mise lock --platform linux-x64,macos-arm64
+</code></pre>
+<h3>9.5 锁文件不是万能的</h3>
+<p>后端能力不同。官方文档把支持程度分成多个层次：</p>
+<table>
+<thead>
+<tr>
+<th>后端</th>
+<th>lockfile 能力概览</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>aqua</code>、<code>http</code>、<code>github</code>、<code>gitlab</code></td>
+<td>version、checksum、size、URL</td>
+</tr>
+<tr>
+<td><code>vfox</code></td>
+<td>version、URL、provenance 的部分支持</td>
+</tr>
+<tr>
+<td><code>ubi</code></td>
+<td>version、checksum、size 的部分支持</td>
+</tr>
+<tr>
+<td>部分 <code>core</code> 工具</td>
+<td>version、checksum</td>
+</tr>
+<tr>
+<td><code>asdf</code>、<code>npm</code>、<code>cargo</code>、<code>pipx</code></td>
+<td>version 为主</td>
+</tr>
+</tbody>
+</table>
+<p>锁文件能提高复现性，但不会自动抹平后端差异。</p>
+</section><section class="chapter" data-section="11"><div class="chapter-num">11 · CHAPTER</div><h1>10. CI：让本地和流水线读同一份配置</h1><h3>10.1 通用 CI</h3>
+<pre><code class="language-yaml">script: |
+  curl https://mise.run | sh
+  mise install
+  mise exec -- npm test
+</code></pre>
+<p>如果仓库提交了 bootstrap script，也可以避免每次动态下载：</p>
+<pre><code class="language-bash">mise generate bootstrap -l -w
+</code></pre>
+<p>CI 中执行：</p>
+<pre><code class="language-yaml">script: |
+  ./bin/mise install
+  ./bin/mise exec -- npm test
+</code></pre>
+<h3>10.2 GitHub Actions</h3>
+<p>截至 2026-06-02，<code>jdx/mise-action</code> 最新 release 是 <code>v4.0.1</code>。action 仓库 README 使用 <code>@v4</code>：</p>
+<pre><code class="language-yaml">name: test
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: jdx/mise-action@v4
+      - run: mise run ci
+</code></pre>
+<p>当仓库中存在 <code>mise.lock</code> 时，action 会自动执行 <code>mise install --locked</code>。它也会默认启用缓存，并使用 <code>${{ github.token }}</code> 处理 GitHub API 认证。</p>
+<p>对供应链要求更严格的组织，第三方 action 版本应按组织策略 pin 到 commit SHA，并由依赖更新工具持续维护。</p>
+<h3>10.3 缓存边界</h3>
+<p>GitHub Actions 官方文档把缓存定位为重复使用不常变化的文件。mise-action 会基于平台、版本与配置文件 hash 生成缓存键。<code>mise.lock</code> 稳定之后，CI 不需要为每次安装重复解析远端版本，失败面也更小。</p>
+</section><section class="chapter" data-section="12"><div class="chapter-num">12 · CHAPTER</div><h1>11. 安全：默认配置要克制</h1><h3>11.1 配置信任</h3>
+<p><code>mise.toml</code> 可以影响环境，也可能包含执行代码的配置。mise 会检查配置文件是否已信任：</p>
+<pre><code class="language-bash">mise trust
+mise trust --show
+mise untrust
+</code></pre>
+<p>在正常模式下，检测到 CI 时配置通常会被视为可信；paranoid mode 会收紧这一行为。</p>
+<h3>11.2 Paranoid mode</h3>
+<pre><code class="language-bash">mise settings paranoid=1
+</code></pre>
+<p>或：</p>
+<pre><code class="language-bash">MISE_PARANOID=1 mise install
+</code></pre>
+<p>paranoid mode 会要求更严格的配置 trust，强制 HTTPS，并在安装时重新验证 lockfile 中已有的 provenance。它适合高要求环境，不必作为所有开发者的默认设置。</p>
+<h3>11.3 Minimum release age</h3>
+<p>刚发布的软件版本留给供应链攻击和误发布的观察时间：</p>
+<pre><code class="language-toml">[settings]
+minimum_release_age = &quot;7d&quot;
+</code></pre>
+<p>显式 pin 的版本可以绕过 fuzzy resolution 的等待窗口。对紧急安全修复，可以在工具级配置更短窗口。</p>
+<h3>11.4 Hooks 保持审慎</h3>
+<p>hooks 在官方文档中带实验性标记。它们可以在进入目录、离开目录、安装工具或文件变化时执行脚本：</p>
+<pre><code class="language-toml">[hooks]
+enter = &quot;mise install -q&quot;
+</code></pre>
+<p>这很方便，也意味着进入目录可能触发代码执行。团队默认配置应保持克制：</p>
+<ul>
+<li>优先使用显式 <code>mise run setup</code>。</li>
+<li>hook 只做耗时短、可预期、无破坏性的动作。</li>
+<li>不把部署、数据库迁移或 secret 写入放进 hook。</li>
+</ul>
+</section><section class="chapter" data-section="13"><div class="chapter-num">13 · CHAPTER</div><h1>12. 最佳食用方式</h1><h3>12.1 个人开发者</h3>
+<p>先装 mise 并启用 <code>mise activate</code>。全局只保留少量通用工具：</p>
+<pre><code class="language-bash">mise use --global node@26 python@3.14 uv@latest ripgrep@latest
+</code></pre>
+<p>项目工具尽量写进项目的 <code>mise.toml</code>。版本差异属于项目事实，不属于个人偏好。</p>
+<h3>12.2 团队项目</h3>
+<p>团队仓库至少提交：</p>
+<pre><code class="language-text">mise.toml
+mise.lock
+</code></pre>
+<p>把常见动作整理成：</p>
+<pre><code class="language-bash">mise install
+mise run test
+mise run lint
+mise run ci
+</code></pre>
+<p>README 只需要解释入口，不需要再维护一页按操作系统分叉的工具安装说明。</p>
+<h3>12.3 多语言仓库</h3>
+<p>父目录放共享工具，子目录放服务差异：</p>
+<pre><code class="language-text">repo/
+  mise.toml
+  frontend/
+    mise.toml
+  backend/
+    mise.toml
+</code></pre>
+<p>父目录：</p>
+<pre><code class="language-toml">[tools]
+ripgrep = &quot;latest&quot;
+shellcheck = &quot;latest&quot;
+</code></pre>
+<p><code>frontend/mise.toml</code>：</p>
+<pre><code class="language-toml">[tools]
+node = &quot;26&quot;
+</code></pre>
+<p><code>backend/mise.toml</code>：</p>
+<pre><code class="language-toml">[tools]
+python = &quot;3.14&quot;
+uv = &quot;latest&quot;
+</code></pre>
+<h3>12.4 不统一使用 mise 的协作项目</h3>
+<p>保留生态通用版本文件，例如 <code>.nvmrc</code> 和 <code>.python-version</code>，本机开启 idiomatic version files。这样 mise 用户可以自动切换，其他开发者继续使用熟悉工具。</p>
+</section><section class="chapter" data-section="14"><div class="chapter-num">14 · CHAPTER</div><h1>13. 从 asdf 与 direnv 迁移</h1><h3>13.1 从 asdf 迁移</h3>
+<p>mise 可以读取 <code>.tool-versions</code>，也能在需要时使用 asdf plugins。迁移不必一步到位：</p>
+<ol>
+<li>安装 mise。</li>
+<li>保留已有 <code>.tool-versions</code>。</li>
+<li>运行 <code>mise install</code>。</li>
+<li>新增工具时逐步改用 <code>mise use</code>。</li>
+<li>需要更完整配置时，迁移到 <code>mise.toml</code>。</li>
+</ol>
+<p>生成配置：</p>
+<pre><code class="language-bash">mise config generate
+</code></pre>
+<p>asdf 官方文档说明 asdf 通过 shims 在执行时解析 <code>.tool-versions</code>。mise 交互模式更偏向直接更新 PATH，同时保留 shims 给非交互环境使用。迁移时不要假设两个工具的数据目录可以直接复用。</p>
+<h3>13.2 direnv 边界</h3>
+<p>direnv 与 mise 都会通过 Shell hook 管理环境变量。mise 官方文档的建议很明确：不要让两者同时管理同一套 PATH。简单的无关变量可能可以共存，PATH、Python virtualenv 和工具版本容易产生覆盖顺序问题。</p>
+<p>已有 direnv 项目可以先做两件事：</p>
+<ol>
+<li>让 mise 管理工具版本。</li>
+<li>逐步把可迁移环境变量移入 <code>[env]</code>，减少 <code>.envrc</code> 中的 PATH 操作。</li>
+</ol>
+</section><section class="chapter" data-section="15"><div class="chapter-num">15 · CHAPTER</div><h1>14. 排障顺序</h1><h3>14.1 先跑 doctor</h3>
+<pre><code class="language-bash">mise doctor
+mise --version
+mise config
+mise ls --current
+</code></pre>
+<h3>14.2 工具版本不对</h3>
+<pre><code class="language-bash">which -a node
+mise which node
+mise ls node
+</code></pre>
+<p>如果 <code>node</code> 的第一个路径不在 mise installs 或 shims 下，检查 Shell rc 文件和 PATH 顺序。脚本中直接用：</p>
+<pre><code class="language-bash">mise exec -- node -v
+</code></pre>
+<h3>14.3 新版本看不到</h3>
+<pre><code class="language-bash">mise cache clear
+mise ls-remote node
+</code></pre>
+<p>mise 会缓存版本列表，刚发布的版本可能暂时不可见。必要时再检查 GitHub token、网络与后端状态。</p>
+<h3>14.4 Prompt 变慢</h3>
+<pre><code class="language-bash">mise deactivate
+MISE_TIMINGS=1 mise hook-env -s bash 2&gt;&amp;1 &gt;/dev/null
+</code></pre>
+<p>常见原因包括昂贵的 <code>_.source</code> 脚本、工具数量过多和依赖网络的环境指令。</p>
+<h3>14.5 CI 中工具找不到</h3>
+<p>不要依赖 <code>mise activate</code> 等待 prompt 刷新。使用：</p>
+<pre><code class="language-bash">mise install
+mise exec -- my-tool --version
+</code></pre>
+<p>或：</p>
+<pre><code class="language-bash">export PATH=&quot;$HOME/.local/share/mise/shims:$PATH&quot;
+</code></pre>
+</section><section class="chapter" data-section="16"><div class="chapter-num">16 · CHAPTER</div><h1>15. 常见误区</h1><table>
+<thead>
+<tr>
+<th>误区</th>
+<th>修正</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>执行 <code>mise install node@26</code> 后期待项目自动切换</td>
+<td>新增项目工具使用 <code>mise use node@26</code></td>
+</tr>
+<tr>
+<td>在 CI 中只写 <code>mise activate</code></td>
+<td>使用 <code>mise exec</code>、<code>mise run</code> 或 shims</td>
+</tr>
+<tr>
+<td>把 secret 写进共享 <code>mise.toml</code></td>
+<td>使用 local 文件、系统环境变量或 secret manager</td>
+</tr>
+<tr>
+<td>看到 <code>redact = true</code> 就认为 secret 已安全</td>
+<td>redaction 只降低日志暴露风险</td>
+</tr>
+<tr>
+<td>同时让 direnv 和 mise 管理 Python PATH</td>
+<td>只保留一个 PATH owner</td>
+</tr>
+<tr>
+<td>在脚本中用 <code>mise test</code></td>
+<td>写完整的 <code>mise run test</code></td>
+</tr>
+<tr>
+<td>把 hooks 当成默认初始化方式</td>
+<td>先用显式 <code>mise run setup</code></td>
+</tr>
+<tr>
+<td>只提交 <code>mise.toml</code>，忽略团队复现</td>
+<td>团队项目生成并提交 <code>mise.lock</code></td>
+</tr>
+</tbody>
+</table>
+</section><section class="chapter" data-section="17"><div class="chapter-num">17 · CHAPTER</div><h1>16. 一份可以直接采用的项目模板</h1><pre><code class="language-toml">min_version = &quot;2026.5.18&quot;
+
+[settings]
+lockfile = true
+minimum_release_age = &quot;7d&quot;
+
+[tools]
+node = &quot;26&quot;
+python = &quot;3.14&quot;
+uv = &quot;latest&quot;
+ripgrep = &quot;latest&quot;
+
+[env]
+NODE_ENV = &quot;development&quot;
+DATABASE_URL = { required = &quot;Set DATABASE_URL in mise.local.toml&quot; }
+_.path = &quot;./node_modules/.bin&quot;
+
+[tasks.setup]
+description = &quot;Install dependencies&quot;
+run = [
+  &quot;npm install&quot;,
+  &quot;uv sync&quot;,
+]
+
+[tasks.lint]
+description = &quot;Run linters&quot;
+run = [
+  &quot;npm run lint&quot;,
+  &quot;uv run ruff check .&quot;,
+]
+
+[tasks.test]
+description = &quot;Run tests&quot;
+run = [
+  &quot;npm test&quot;,
+  &quot;uv run pytest&quot;,
+]
+
+[tasks.ci]
+description = &quot;Run CI checks&quot;
+depends = [&quot;lint&quot;, &quot;test&quot;]
+</code></pre>
+<p>初始化：</p>
+<pre><code class="language-bash">mise trust
+mise lock
+mise install
+mise run setup
+mise run ci
+</code></pre>
+<p>本机 secret：</p>
+<pre><code class="language-toml"># mise.local.toml
+[env]
+DATABASE_URL = &quot;postgres://localhost/example&quot;
+</code></pre>
+<p><code>.gitignore</code>：</p>
+<pre><code class="language-text">mise.local.toml
+mise.local.lock
+mise.*.local.toml
+mise.*.local.lock
+</code></pre>
+</section><section class="chapter" data-section="18"><div class="chapter-num">18 · CHAPTER</div><h1>17. Further Reading</h1><p>下面 5 份官方资料最值得继续读：</p>
+<ol>
+<li><a href="https://mise.jdx.dev/getting-started.html">Getting Started</a>：最短上手路径，第一次安装从这里开始。</li>
+<li><a href="https://mise.jdx.dev/walkthrough.html">Walkthrough</a>：把 tools、env 和 tasks 连起来看，适合完整走一遍。</li>
+<li><a href="https://mise.jdx.dev/dev-tools/mise-lock.html"><code>mise.lock</code> Lockfile</a>：团队复现、checksum、URL 与 provenance 的核心资料。</li>
+<li><a href="https://mise.jdx.dev/tasks/task-configuration.html">Task Configuration</a>：任务系统的完整字段参考。</li>
+<li><a href="https://mise.jdx.dev/troubleshooting.html">Troubleshooting</a>：PATH、缓存、CI 和 Shell 问题的官方排查清单。</li>
+</ol>
+<p>完整来源、文档漂移和边界说明见 <code>sources.md</code>。日常命令速查见 <code>CHEATSHEET.md</code>。</p>
+</section><section class="chapter" data-section="19"><div class="chapter-num">19 · APPENDIX</div><h1>附录：mise Cheatsheet</h1><p class="lead">这一章可以独立打印。第一次接入按顺序执行，日常使用按问题查命令。</p><h2>1. 安装</h2>
+<pre><code class="language-bash"># macOS
+brew install mise
+
+# Linux/macOS quick install
+curl https://mise.run | sh
+
+# Windows
+scoop install mise
+
+# Verify
+mise --version
+# 或 ~/.local/bin/mise --version
+</code></pre>
+<h2>2. Shell 激活</h2>
+<pre><code class="language-bash"># bash
+echo 'eval &quot;$(mise activate bash)&quot;' &gt;&gt; ~/.bashrc
+
+# zsh
+echo 'eval &quot;$(mise activate zsh)&quot;' &gt;&gt; ~/.zshrc
+
+# fish
+echo 'mise activate fish | source' &gt;&gt; ~/.config/fish/config.fish
+
+# Verify setup
+mise doctor
+</code></pre>
+<p>交互 Shell 优先 <code>mise activate</code>。CI、IDE 和脚本优先 <code>mise exec</code>、<code>mise run</code> 或 shims。</p>
+<h2>3. 最常用命令</h2>
+<table>
+<thead>
+<tr>
+<th>目标</th>
+<th>命令</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>为项目安装并启用 Node.js</td>
+<td><code>mise use node@26</code></td>
+</tr>
+<tr>
+<td>设置全局默认 Node.js</td>
+<td><code>mise use --global node@26</code></td>
+</tr>
+<tr>
+<td>安装项目声明的所有工具</td>
+<td><code>mise install</code></td>
+</tr>
+<tr>
+<td>临时运行特定 Python</td>
+<td><code>mise exec python@3.14 -- python</code></td>
+</tr>
+<tr>
+<td>在项目环境中执行命令</td>
+<td><code>mise exec -- npm test</code></td>
+</tr>
+<tr>
+<td>运行任务</td>
+<td><code>mise run test</code></td>
+</tr>
+<tr>
+<td>查看当前工具</td>
+<td><code>mise ls --current</code></td>
+</tr>
+<tr>
+<td>查看工具详情</td>
+<td><code>mise tool ripgrep</code></td>
+</tr>
+<tr>
+<td>查找真实可执行文件</td>
+<td><code>mise which node</code></td>
+</tr>
+<tr>
+<td>查看可用远端版本</td>
+<td><code>mise ls-remote node</code></td>
+</tr>
+<tr>
+<td>查看可升级工具</td>
+<td><code>mise outdated</code></td>
+</tr>
+<tr>
+<td>范围内升级</td>
+<td><code>mise upgrade</code></td>
+</tr>
+<tr>
+<td>提升主版本范围</td>
+<td><code>mise upgrade --bump node</code></td>
+</tr>
+<tr>
+<td>查看加载的配置</td>
+<td><code>mise config</code></td>
+</tr>
+<tr>
+<td>诊断安装</td>
+<td><code>mise doctor</code></td>
+</tr>
+<tr>
+<td>清除版本缓存</td>
+<td><code>mise cache clear</code></td>
+</tr>
+</tbody>
+</table>
+<h2>4. 新项目最小配置</h2>
+<pre><code class="language-toml"># mise.toml
+[tools]
+node = &quot;26&quot;
+python = &quot;3.14&quot;
+
+[env]
+NODE_ENV = &quot;development&quot;
+
+[tasks.test]
+run = &quot;npm test&quot;
+</code></pre>
+<pre><code class="language-bash">mise trust
+mise install
+mise run test
+</code></pre>
+<h2>5. <code>use</code>、<code>install</code>、<code>exec</code>、<code>run</code></h2>
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>安装工具</th>
+<th>写 <code>mise.toml</code></th>
+<th>加载项目环境</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>mise use node@26</code></td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td><code>mise install</code></td>
+<td>是</td>
+<td>否</td>
+<td>安装阶段</td>
+</tr>
+<tr>
+<td><code>mise exec -- &lt;cmd&gt;</code></td>
+<td>按需</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td><code>mise run &lt;task&gt;</code></td>
+<td>按需</td>
+<td>否</td>
+<td>是</td>
+</tr>
+</tbody>
+</table>
+<p>新增工具用 <code>mise use</code>。clone 项目后用 <code>mise install</code>。脚本和 CI 用 <code>mise exec</code> 或 <code>mise run</code>。</p>
+<h2>6. 配置层级</h2>
+<pre><code class="language-text">~/.config/mise/config.toml      # 用户全局
+~/work/mise.toml                # 工作目录共享
+~/work/project/mise.toml        # 项目共享
+~/work/project/mise.local.toml  # 项目本地，不提交
+</code></pre>
+<p>查看真实加载顺序：</p>
+<pre><code class="language-bash">mise config
+mise config ls
+</code></pre>
+<p>环境专用配置：</p>
+<pre><code class="language-text">mise.toml
+mise.test.toml
+mise.local.toml
+mise.test.local.toml
+</code></pre>
+<pre><code class="language-bash">MISE_ENV=test mise run test
+mise -E test run test
+</code></pre>
+<h2>7. 工具版本</h2>
+<pre><code class="language-toml">[tools]
+node = &quot;26&quot;              # 允许 26.x
+python = &quot;3.14&quot;          # 允许 3.14.x
+ruby = &quot;latest&quot;          # 每次解析最新可用版本
+go = &quot;prefix:1.25&quot;       # 允许 1.25.x
+</code></pre>
+<p>常用后端显式写法：</p>
+<pre><code class="language-bash">mise use github:BurntSushi/ripgrep
+mise use aqua:aws/aws-cli
+mise use npm:prettier
+mise use pipx:black
+mise use cargo:starship
+</code></pre>
+<p>默认使用 Registry shorthand；需要显式选择后端时，使用 <code>aqua:</code>、<code>github:</code> 或 <code>gitlab:</code>。对 <code>asdf:</code> 插件保持审慎。</p>
+<h2>8. 环境变量</h2>
+<pre><code class="language-toml">[env]
+NODE_ENV = &quot;development&quot;
+_.path = &quot;./node_modules/.bin&quot;
+_.file = &quot;.env&quot;
+</code></pre>
+<p>多个文件：</p>
+<pre><code class="language-toml">[env]
+_.file = [
+  &quot;.env&quot;,
+  &quot;.env.local&quot;,
+  { path = &quot;.secrets.yaml&quot;, redact = true },
+]
+</code></pre>
+<p>Required variables：</p>
+<pre><code class="language-toml">[env]
+DATABASE_URL = { required = &quot;Set DATABASE_URL in mise.local.toml&quot; }
+API_KEY = { required = &quot;Get API_KEY from the team secret manager&quot; }
+</code></pre>
+<p>Redaction：</p>
+<pre><code class="language-toml">redactions = [&quot;SECRET_*&quot;, &quot;*_TOKEN&quot;, &quot;PASSWORD&quot;]
+
+[env]
+API_TOKEN = { value = &quot;token-value&quot;, redact = true }
+</code></pre>
+<p>CLI：</p>
+<pre><code class="language-bash">mise set NODE_ENV=development
+mise set
+mise env
+mise env --redacted
+mise unset NODE_ENV
+</code></pre>
+<h2>9. Secret 边界</h2>
+<p>共享 <code>mise.toml</code> 不写真实 secret。</p>
+<pre><code class="language-text">推荐来源：
+1. mise.local.toml
+2. 系统环境变量
+3. 组织 secret manager
+4. CI 平台 secret
+</code></pre>
+<p><code>.gitignore</code>：</p>
+<pre><code class="language-text">mise.local.toml
+mise.local.lock
+mise.*.local.toml
+mise.*.local.lock
+.env
+.env.local
+</code></pre>
+<h2>10. 任务</h2>
+<p>简单任务：</p>
+<pre><code class="language-toml">[tasks]
+build = &quot;npm run build&quot;
+test = &quot;npm test&quot;
+lint = &quot;npm run lint&quot;
+</code></pre>
+<p>详细任务：</p>
+<pre><code class="language-toml">[tasks.test]
+description = &quot;Run tests&quot;
+run = [
+  &quot;npm test&quot;,
+  &quot;uv run pytest&quot;,
+]
+</code></pre>
+<p>依赖并发：</p>
+<pre><code class="language-toml">[tasks.ci]
+description = &quot;Run CI checks&quot;
+depends = [&quot;lint&quot;, &quot;test&quot;, &quot;build&quot;]
+</code></pre>
+<p>输入输出缓存：</p>
+<pre><code class="language-toml">[tasks.build]
+run = &quot;npm run build&quot;
+sources = [&quot;src/**/*.ts&quot;, &quot;!src/**/*.test.ts&quot;, &quot;tsconfig.json&quot;]
+outputs = [&quot;dist/**/*.js&quot;]
+</code></pre>
+<p>监视文件：</p>
+<pre><code class="language-bash">mise use --global watchexec@latest
+mise watch build
+</code></pre>
+<p>危险任务确认：</p>
+<pre><code class="language-toml">[tasks.deploy]
+confirm = { message = &quot;Deploy production?&quot;, default = &quot;no&quot; }
+run = &quot;./scripts/deploy.sh&quot;
+</code></pre>
+<p>注意：<code>confirm</code> 不会阻止 <code>depends</code> 在提示前执行。</p>
+<h2>11. <code>mise.lock</code></h2>
+<p>启用：</p>
+<pre><code class="language-bash">mise settings lockfile=true
+mise lock
+mise install
+git add mise.toml mise.lock
+</code></pre>
+<p>项目配置：</p>
+<pre><code class="language-toml">[settings]
+lockfile = true
+</code></pre>
+<p>Strict mode：</p>
+<pre><code class="language-bash">MISE_LOCKED=1 mise install
+</code></pre>
+<p>多平台：</p>
+<pre><code class="language-bash">mise lock --platform linux-x64,macos-arm64
+</code></pre>
+<p>团队提交：</p>
+<pre><code class="language-text">提交：mise.toml、mise.lock、mise.&lt;env&gt;.toml、mise.&lt;env&gt;.lock
+忽略：mise.local.toml、mise.local.lock、mise.&lt;env&gt;.local.toml、mise.&lt;env&gt;.local.lock
+</code></pre>
+<h2>12. GitHub Actions</h2>
+<p>截至 2026-06-02，<code>jdx/mise-action</code> 最新 release 是 <code>v4.0.1</code>：</p>
+<pre><code class="language-yaml">name: test
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: jdx/mise-action@v4
+      - run: mise run ci
+</code></pre>
+<p>仓库存在 <code>mise.lock</code> 时，mise-action 会自动执行 <code>mise install --locked</code>。</p>
+<h2>13. CI 和脚本</h2>
+<p>推荐：</p>
+<pre><code class="language-bash">mise install
+mise exec -- npm test
+mise run ci
+</code></pre>
+<p>Shims：</p>
+<pre><code class="language-bash">export PATH=&quot;$HOME/.local/share/mise/shims:$PATH&quot;
+</code></pre>
+<p>不要在非交互脚本中依赖 prompt 刷新 PATH。</p>
+<h2>14. 安全设置</h2>
+<p>Trust：</p>
+<pre><code class="language-bash">mise trust
+mise trust --show
+mise untrust
+</code></pre>
+<p>Paranoid mode：</p>
+<pre><code class="language-bash">mise settings paranoid=1
+MISE_PARANOID=1 mise install
+</code></pre>
+<p>最小发布时间：</p>
+<pre><code class="language-toml">[settings]
+minimum_release_age = &quot;7d&quot;
+</code></pre>
+<p>Hooks 带实验性标记。默认优先显式任务：</p>
+<pre><code class="language-bash">mise run setup
+</code></pre>
+<h2>15. asdf 迁移</h2>
+<pre><code class="language-bash"># 保留现有 .tool-versions
+mise install
+
+# 需要时生成 mise 配置
+mise config generate
+
+# 启用 lockfile
+mise settings lockfile=true
+mise lock
+</code></pre>
+<p>mise 能读 <code>.tool-versions</code>，但不会直接复用 asdf 数据目录。</p>
+<h2>16. direnv 边界</h2>
+<p>direnv 和 mise 都会通过 Shell hook 管理环境。不要让两者同时管理同一套 PATH，尤其是 Python virtualenv 和运行时版本。</p>
+<h2>17. 排障</h2>
+<pre><code class="language-bash"># 总体诊断
+mise doctor
+mise --version
+mise config
+mise ls --current
+
+# PATH
+which -a node
+mise which node
+mise ls node
+
+# 缓存
+mise cache clear
+mise ls-remote node
+
+# 调试日志
+MISE_DEBUG=1 mise install
+MISE_TRACE=1 mise install
+
+# Prompt 性能
+mise deactivate
+MISE_TIMINGS=1 mise hook-env -s bash 2&gt;&amp;1 &gt;/dev/null
+</code></pre>
+<h2>18. 推荐项目模板</h2>
+<pre><code class="language-toml">min_version = &quot;2026.5.18&quot;
+
+[settings]
+lockfile = true
+minimum_release_age = &quot;7d&quot;
+
+[tools]
+node = &quot;26&quot;
+python = &quot;3.14&quot;
+uv = &quot;latest&quot;
+ripgrep = &quot;latest&quot;
+
+[env]
+NODE_ENV = &quot;development&quot;
+DATABASE_URL = { required = &quot;Set DATABASE_URL in mise.local.toml&quot; }
+_.path = &quot;./node_modules/.bin&quot;
+
+[tasks.setup]
+run = [
+  &quot;npm install&quot;,
+  &quot;uv sync&quot;,
+]
+
+[tasks.lint]
+run = [
+  &quot;npm run lint&quot;,
+  &quot;uv run ruff check .&quot;,
+]
+
+[tasks.test]
+run = [
+  &quot;npm test&quot;,
+  &quot;uv run pytest&quot;,
+]
+
+[tasks.ci]
+depends = [&quot;lint&quot;, &quot;test&quot;]
+</code></pre>
+</section><section class="chapter" data-section="20"><div class="chapter-num">20 · APPENDIX</div><h1>附录：资料来源与边界</h1><p class="lead">教程中的版本、命令与边界以 mise 官方仓库、官方文档和 GitHub Releases API 为准。交叉验证只使用对应项目的官方文档。</p><div class="source-list"><h2>Method</h2>
+<p>本手册优先使用 mise 官方仓库、mise 官方文档站和 GitHub Releases API。为了核对迁移、PATH 与 CI 相关判断，补充使用 asdf、direnv 和 GitHub Actions 官方文档。正文中的建议分为三类：</p>
+<ul>
+<li><strong>官方事实</strong>：命令行为、配置字段、文件优先级、实验性状态和 release 版本。</li>
+<li><strong>工程建议</strong>：基于官方事实整理出的推荐顺序，例如交互 Shell 用 <code>mise activate</code>，脚本和 CI 优先用 <code>mise exec</code>、<code>mise run</code> 或 shims。</li>
+<li><strong>边界提醒</strong>：不能从工具文档推出的结论，例如组织内部 secret 管理、合规要求和发布权限。</li>
+</ul>
+<p>官网页面快照保存在 <code>sources/raw/</code>，从官方仓库复制的 Markdown 原稿保存在 <code>sources/official-docs/</code>。正文中的命令以官方仓库提交 <code>310e325909893b6af5fb1aa6a42653eaa7f35131</code> 和 GitHub API 在 2026-06-02 返回的信息为准。</p>
+<h2>Current Versions</h2>
+<ul>
+<li>mise 最新稳定版：<code>v2026.5.18</code>，发布于 <code>2026-05-31T21:43:15Z</code></li>
+<li><code>jdx/mise-action</code> 最新 release：<code>v4.0.1</code>，发布于 <code>2026-03-22T16:06:57Z</code></li>
+</ul>
+<h2>Documentation Drift</h2>
+<p>mise 官网 CI 页面仍展示 <code>jdx/mise-action@v3</code>，而 <code>jdx/mise-action</code> 仓库 README 已展示 <code>jdx/mise-action@v4</code>。本文以 action 仓库为准。</p>
+<p><code>tips-and-tricks.md</code> 仍出现通过 <code>touch mise.lock</code> 启用锁文件的旧式示例。当前专门的 lockfile 文档提供 <code>mise lock</code>，本文采用 <code>mise lock</code>。</p>
+<h2>Primary Sources: mise</h2>
+<ul>
+<li>GitHub repository: https://github.com/jdx/mise</li>
+<li>Latest release API: https://api.github.com/repos/jdx/mise/releases/latest</li>
+<li>Official documentation: https://mise.jdx.dev/</li>
+<li>Getting Started: https://mise.jdx.dev/getting-started.html</li>
+<li>Installing mise: https://mise.jdx.dev/installing-mise.html</li>
+<li>Walkthrough: https://mise.jdx.dev/walkthrough.html</li>
+<li>About: https://mise.jdx.dev/about.html</li>
+<li>Configuration: https://mise.jdx.dev/configuration.html</li>
+<li>Configuration Environments: https://mise.jdx.dev/configuration/environments.html</li>
+<li>Dev Tools: https://mise.jdx.dev/dev-tools/</li>
+<li>Backends: https://mise.jdx.dev/dev-tools/backends/</li>
+<li>Registry: https://mise.jdx.dev/registry.html</li>
+<li><code>mise.lock</code>: https://mise.jdx.dev/dev-tools/mise-lock.html</li>
+<li>Shims: https://mise.jdx.dev/dev-tools/shims.html</li>
+<li>Environments: https://mise.jdx.dev/environments/</li>
+<li>Secrets: https://mise.jdx.dev/environments/secrets/</li>
+<li>Tasks: https://mise.jdx.dev/tasks/</li>
+<li>TOML Tasks: https://mise.jdx.dev/tasks/toml-tasks.html</li>
+<li>Running Tasks: https://mise.jdx.dev/tasks/running-tasks.html</li>
+<li>Task Configuration: https://mise.jdx.dev/tasks/task-configuration.html</li>
+<li>Continuous Integration: https://mise.jdx.dev/continuous-integration.html</li>
+<li>Hooks: https://mise.jdx.dev/hooks.html</li>
+<li>Trust CLI: https://mise.jdx.dev/cli/trust.html</li>
+<li>Paranoid mode: https://mise.jdx.dev/paranoid.html</li>
+<li>Tips &amp; Tricks: https://mise.jdx.dev/tips-and-tricks.html</li>
+<li>Troubleshooting: https://mise.jdx.dev/troubleshooting.html</li>
+<li>Comparison to asdf: https://mise.jdx.dev/dev-tools/comparison-to-asdf.html</li>
+<li>Security policy: https://github.com/jdx/mise/blob/main/SECURITY.md</li>
+</ul>
+<h2>Primary Sources: CI and Cross-checks</h2>
+<ul>
+<li><code>jdx/mise-action</code>: https://github.com/jdx/mise-action</li>
+<li><code>jdx/mise-action</code> latest release API: https://api.github.com/repos/jdx/mise-action/releases/latest</li>
+<li>asdf Introduction: https://asdf-vm.com/guide/introduction.html</li>
+<li>asdf Getting Started: https://asdf-vm.com/guide/getting-started.html</li>
+<li>direnv Shell Hook Setup: https://direnv.net/docs/hook.html</li>
+<li>GitHub Actions dependency caching: https://docs.github.com/en/actions/concepts/workflows-and-actions/dependency-caching</li>
+<li>GitHub Actions security: https://docs.github.com/en/actions/how-tos/security-for-github-actions</li>
+</ul>
+<h2>Boundaries</h2>
+<p>本文不是 mise 官方文档的替代品，也不承诺覆盖每个后端、插件和实验性配置。正式接入前，应复核目标操作系统、Shell、CI 平台、网络环境、组织 secret 管理规则和供应链策略。</p>
+<p><code>hooks</code>、monorepo root、SOPS 和 direct age encryption 在官方文档中带有实验性标记。本文会解释它们的用途，但不把它们放进默认配置。</p>
+</div></section>
+</body>
+</html>

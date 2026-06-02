@@ -1,0 +1,27 @@
+section	source_url	use
+项目定位	https://github.com/jdx/mise	README 对 mise 三项能力的定义
+安装	https://mise.jdx.dev/installing-mise.html	各平台推荐安装方式、mise.run、Shell 配置
+快速上手	https://mise.jdx.dev/getting-started.html	exec、use、activate、doctor 主路径
+上手路线	https://mise.jdx.dev/walkthrough.html	use 与 install 差异、常用命令、任务示例
+配置层级	https://mise.jdx.dev/configuration.html	mise.toml、父目录递归、优先级、idiomatic version files
+配置环境	https://mise.jdx.dev/configuration/environments.html	MISE_ENV、mise.<env>.toml、本地覆盖文件
+工具管理	https://mise.jdx.dev/dev-tools/	工具解析、PATH、use、升级
+后端	https://mise.jdx.dev/dev-tools/backends/	后端列表与职责
+Registry	https://mise.jdx.dev/registry.html	shorthand、后端接受层级、供应链建议
+锁文件	https://mise.jdx.dev/dev-tools/mise-lock.html	mise.lock 生成、更新、strict mode、provenance
+Shims	https://mise.jdx.dev/dev-tools/shims.html	activate、shims、exec、run 的使用边界
+环境变量	https://mise.jdx.dev/environments/	[env]、_.file、_.path、required、redact
+Secret	https://mise.jdx.dev/environments/secrets/	secret 管理入口、fnox、SOPS、age
+任务	https://mise.jdx.dev/tasks/	TOML 与文件任务、并发、sources/outputs
+任务运行	https://mise.jdx.dev/tasks/running-tasks.html	run、并发、watch、wildcards
+任务配置	https://mise.jdx.dev/tasks/task-configuration.html	depends、confirm、raw、interactive、sources
+CI	https://mise.jdx.dev/continuous-integration.html	通用 CI、GitHub Actions、GitLab CI
+mise-action	https://github.com/jdx/mise-action	GitHub Actions v4 示例、缓存、lock 文件自动检测
+Hooks	https://mise.jdx.dev/hooks.html	experimental hooks、安全边界
+Paranoid	https://mise.jdx.dev/paranoid.html	配置 trust、HTTPS、provenance 复验
+Trust	https://mise.jdx.dev/cli/trust.html	配置文件信任模型
+排障	https://mise.jdx.dev/troubleshooting.html	PATH、缓存、调试、doctor、非交互 Shell
+asdf 迁移	https://mise.jdx.dev/dev-tools/comparison-to-asdf.html	mise 官方迁移与差异说明
+asdf 交叉验证	https://asdf-vm.com/guide/introduction.html	asdf shim 与 .tool-versions 心智模型
+direnv 交叉验证	https://direnv.net/docs/hook.html	direnv Shell hook 心智模型
+GitHub 缓存	https://docs.github.com/en/actions/concepts/workflows-and-actions/dependency-caching	CI 缓存作用与边界
