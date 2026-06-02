@@ -126,7 +126,7 @@ def main(public_html: bool = False) -> None:
     <div class="cover-title">macOS 开发者工作站手册<br>从新机上手到可复现工程环境</div>
     <div class="cover-sub">系统快捷操作、软件分层、Homebrew 与 Brewfile、终端、运行时、容器、权限、备份、维护 SOP 和独立 Cheatsheet。</div>
   </div>
-  <div class="cover-meta">{author_line}版本 V1.0 · 2026-06-02<br>资料口径：macOS Tahoe 26.5 与公开资料，截至 2026-06-02</div>
+  <div class="cover-meta">{Winston}版本 V1.0 · 2026-06-02<br>资料口径：macOS Tahoe 26.5 与公开资料，截至 2026-06-02</div>
 </section>""",
         '<section class="toc"><h2>目录</h2>' + "".join(toc) + "</section>",
     ]
