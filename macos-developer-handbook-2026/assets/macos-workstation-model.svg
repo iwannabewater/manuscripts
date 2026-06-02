@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 430" role="img" aria-labelledby="title desc">
+  <title id="title">macOS 开发者工作站四层模型</title>
+  <desc id="desc">从系统层到工作站层、项目层和语言层的职责划分。</desc>
+  <style>
+    text { font-family: "TsangerJinKai02"; fill: #1b365d; }
+    .heading { font-size: 25px; font-weight: 500; }
+    .body { font-size: 18px; }
+    .small { font-size: 16px; }
+  </style>
+  <rect x="0" y="0" width="980" height="430" rx="24" fill="#f5f4ed"/>
+  <rect x="38" y="42" width="210" height="344" rx="18" fill="#d9e3ea"/>
+  <rect x="270" y="42" width="210" height="344" rx="18" fill="#e2e9e8"/>
+  <rect x="502" y="42" width="210" height="344" rx="18" fill="#e9e4d7"/>
+  <rect x="734" y="42" width="210" height="344" rx="18" fill="#dedce8"/>
+  <path d="M248 214h22M480 214h22M712 214h22" stroke="#1b365d" stroke-width="5" stroke-linecap="round"/>
+  <path d="M262 205l9 9-9 9M494 205l9 9-9 9M726 205l9 9-9 9" fill="none" stroke="#1b365d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="62" y="94" class="heading">系统层</text>
+  <text x="62" y="141" class="body">更新 · 加密</text>
+  <text x="62" y="177" class="body">权限 · 备份</text>
+  <text x="62" y="213" class="body">窗口 · 输入</text>
+  <text x="62" y="319" class="small">macOS 原生能力</text>
+  <text x="294" y="94" class="heading">工作站层</text>
+  <text x="294" y="141" class="body">Homebrew</text>
+  <text x="294" y="177" class="body">Brewfile</text>
+  <text x="294" y="213" class="body">终端 · 容器</text>
+  <text x="294" y="319" class="small">机器安装契约</text>
+  <text x="526" y="94" class="heading">项目层</text>
+  <text x="526" y="141" class="body">mise.toml</text>
+  <text x="526" y="177" class="body">mise.lock</text>
+  <text x="526" y="213" class="body">任务 · 环境变量</text>
+  <text x="526" y="319" class="small">项目运行时契约</text>
+  <text x="758" y="94" class="heading">语言层</text>
+  <text x="758" y="141" class="body">uv.lock</text>
+  <text x="758" y="177" class="body">package lock</text>
+  <text x="758" y="213" class="body">依赖 · 工具</text>
+  <text x="758" y="319" class="small">项目依赖契约</text>
+</svg>

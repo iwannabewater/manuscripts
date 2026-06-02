@@ -30,6 +30,7 @@
 | Git & GitHub Collaboration Handbook | 面向算法 / 开发工程师的 Git 与 GitHub 协作编码标准流程手册，覆盖分支、Issue、PR、review、发布、回滚与 contributor 管理 | `git-github-collaboration-handbook/index.html` / `git-github-collaboration-handbook/git-github-collaboration-handbook.pdf` |
 | Zero to GitHub Pages Website | 从 0 构建网站并部署到 GitHub Pages 的完整工程链路 | `zero-to-github-pages-website/index.html` / `zero-to-github-pages-website/zero-to-github-pages-website.pdf` |
 | mise Complete Guide 2026 | mise 完整中文教程，覆盖工具版本、环境变量、任务、锁文件、CI、安全边界、迁移、排障与独立 Cheatsheet | `mise-complete-guide-2026/index.html` / `mise-complete-guide-2026/mise-complete-guide-2026.pdf` |
+| macOS Developer Handbook 2026 | 面向开发者的新机上手与长期维护手册，覆盖原生快捷操作、软件分层、Homebrew、Brewfile、运行时、容器、权限、备份、维护 SOP 与独立 Cheatsheet | `macos-developer-handbook-2026/index.html` / `macos-developer-handbook-2026/macos-developer-handbook-2026.pdf` |
 | 小红书 FY2025 Equity Report | 小红书 2025 年业绩披露、历史估值与员工期权回购价格的证据分层研究 | `xiaohongshu-2025-equity-report/index.html` / `xiaohongshu-2025-equity-report/xiaohongshu-2025-equity-report.pdf` |
 | 字节跳动 FY2025 Equity Report | 字节跳动 2025 年业绩口径、员工权益回购价格与二级交易估值的证据分层研究 | `bytedance-2025-equity-report/index.html` / `bytedance-2025-equity-report/bytedance-2025-equity-report.pdf` |
 | 蔚小理 2026 | 蔚来、小鹏、理想汽车的发展现状、困境、优势和长期战略前景分析 | `neo-ev-forces-2026/index.html` / `neo-ev-forces-2026/neo-ev-forces-2026.pdf` |

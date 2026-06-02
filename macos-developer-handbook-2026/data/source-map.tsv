@@ -1,0 +1,68 @@
+category	key	url	role
+apple	macos-updates	https://support.apple.com/en-us/109033	current macOS release context
+apple	keyboard-shortcuts	https://support.apple.com/en-us/102650	system keyboard shortcuts
+apple	spotlight-actions	https://support.apple.com/guide/mac-help/take-actions-and-shortcuts-in-spotlight-mchl4953dfeb/mac	Spotlight actions
+apple	spotlight-shortcuts	https://support.apple.com/guide/mac-help/spotlight-keyboard-shortcuts-mh26783/mac	Spotlight shortcuts
+apple	trackpad-gestures	https://support.apple.com/guide/mac-help/mh35869/mac	trackpad gestures
+apple	three-finger-drag	https://support.apple.com/en-us/102482	three finger drag
+apple	hot-corners	https://support.apple.com/guide/mac-help/use-hot-corners-mchlp3000/mac	hot corners
+apple	window-tiling	https://support.apple.com/guide/mac-help/change-window-tiling-settings-mchl118087b0/mac	native window tiling
+apple	filevault	https://support.apple.com/guide/mac-help/mh11785/mac	FileVault
+apple	time-machine	https://support.apple.com/en-us/102307	Time Machine backup
+apple	software-update	https://support.apple.com/en-us/HT201541	macOS updates
+apple	privacy-security	https://support.apple.com/guide/mac-help/mchl211c911f/mac	privacy and security settings
+apple	accessibility-permission	https://support.apple.com/guide/mac-help/mh43185/mac	Accessibility permission
+apple	screen-recording-permission	https://support.apple.com/guide/mac-help/mchld6aa7d23/mac	screen recording permission
+homebrew	home	https://brew.sh/	Homebrew entry point
+homebrew	installation	https://docs.brew.sh/Installation	installation, prefix and requirements
+homebrew	brewfile	https://docs.brew.sh/Brew-Bundle-and-Brewfile	Brewfile and bundle workflow
+homebrew	manpage	https://docs.brew.sh/Manpage	command reference
+homebrew	analytics	https://docs.brew.sh/Analytics	analytics control
+terminal	ghostty-install	https://ghostty.org/docs/install/binary	macOS installation
+terminal	ghostty-config	https://ghostty.org/docs/config	configuration files
+terminal	ghostty-shell-integration	https://ghostty.org/docs/features/shell-integration	shell integration
+containers	orbstack-quick-start	https://docs.orbstack.dev/quick-start	installation and first run
+containers	orbstack-docker	https://docs.orbstack.dev/docker/	Docker behavior
+containers	orbstack-machines	https://docs.orbstack.dev/machines/	Linux machines
+containers	orbstack-kubernetes	https://docs.orbstack.dev/kubernetes/	local Kubernetes
+containers	orbstack-efficiency	https://docs.orbstack.dev/efficiency	resource use guidance
+containers	orbstack-licensing	https://docs.orbstack.dev/licensing	licensing boundary
+maintenance	mole-readme	https://github.com/tw93/mole/blob/main/README.md	commands and safety model
+maintenance	mole-security	https://github.com/tw93/mole/blob/main/SECURITY.md	security policy
+launcher	raycast-window-management	https://manual.raycast.com/window-management	window commands
+launcher	raycast-clipboard-history	https://manual.raycast.com/clipboard-history	clipboard behavior
+launcher	raycast-quicklinks	https://manual.raycast.com/quicklinks	quicklinks
+launcher	raycast-snippets	https://manual.raycast.com/snippets	snippets
+launcher	raycast-security	https://manual.raycast.com/security-and-privacy	permission boundary
+runtimes	mise-getting-started	https://mise.jdx.dev/getting-started.html	runtime workflow
+runtimes	mise-installation	https://mise.jdx.dev/installing-mise.html	mise installation
+runtimes	mise-configuration	https://mise.jdx.dev/configuration.html	project and user config
+runtimes	mise-tasks	https://mise.jdx.dev/tasks/	task workflow
+runtimes	mise-lock	https://mise.jdx.dev/dev-tools/mise-lock.html	lock files
+python	uv-installation	https://docs.astral.sh/uv/getting-started/installation/	uv installation
+python	uv-projects	https://docs.astral.sh/uv/guides/projects/	Python project workflow
+python	uv-tools	https://docs.astral.sh/uv/guides/tools/	Python CLI tools
+github	gh-auth-login	https://cli.github.com/manual/gh_auth_login	GitHub CLI authentication
+dotfiles	chezmoi-install	https://www.chezmoi.io/install/	chezmoi installation
+dotfiles	chezmoi-quick-start	https://www.chezmoi.io/quick-start/	dotfiles onboarding
+appstore	mas	https://github.com/mas-cli/mas	App Store CLI
+optional	ice	https://github.com/jordanbaird/Ice	menu bar manager
+optional	stats	https://github.com/exelban/stats	system monitor
+optional	iina	https://github.com/iina/iina	media player
+optional	keka	https://www.keka.io/en/	archive utility
+optional	localsend	https://github.com/localsend/localsend	local file transfer
+optional	maccy	https://github.com/p0deje/Maccy	clipboard manager
+optional	betterdisplay	https://github.com/waydabber/BetterDisplay	external display utility
+optional	rectangle	https://github.com/rxhanson/Rectangle	window manager
+optional	loop	https://github.com/MrKai77/Loop	window manager
+optional	aerospace	https://github.com/nikitabobko/AeroSpace	tiling window manager
+optional	pearcleaner	https://github.com/alienator88/Pearcleaner	GUI app cleaner
+optional	applite	https://github.com/milanvarady/Applite	Homebrew cask GUI
+community	linux-do-2293064	https://linux.do/t/topic/2293064	current macOS software discussion
+community	linux-do-878250	https://linux.do/t/topic/878250	curated macOS software recommendations
+community	linux-do-3528	https://linux.do/t/topic/3528	broad macOS app discussion
+community	linux-do-1381877	https://linux.do/t/topic/1381877	efficiency and app discussion
+community	linux-do-1470285	https://linux.do/t/topic/1470285	developer migration pain points
+community	linux-do-1407819	https://linux.do/t/topic/1407819	one click setup discussion
+community	linux-do-2193673	https://linux.do/t/topic/2193673	first MacBook app discussion
+community	linux-do-244759	https://linux.do/t/topic/244759	macOS app discussion

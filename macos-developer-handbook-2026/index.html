@@ -1,0 +1,2489 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>macOS 开发者工作站手册：从新机上手到可复现工程环境</title>
+
+<meta name="description" content="macOS 开发者工作站手册，覆盖快捷操作、软件分层、Homebrew、Brewfile、Ghostty、mise、uv、OrbStack、Mole、权限、备份、维护 SOP 与 Cheatsheet。">
+<meta name="keywords" content="macOS, developer workstation, Homebrew, Brewfile, Ghostty, mise, uv, OrbStack, Mole, Cheatsheet">
+<style>
+  /* Regular weight */
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/paper@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  /* Bold weight - W05 for all bold variants */
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/paper@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 20mm 22mm 22mm 22mm;
+    background: #f5f4ed;
+
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02";
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+
+    @bottom-center {
+      content: counter(page) "  ·  macOS 开发者工作站手册：从新机上手到可复现工程环境";
+      font-family: "TsangerJinKai02";
+      font-size: 9pt;
+      color: #6b6a64;
+    }
+  }
+
+  @page:first {
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #f5f4ed;
+    --ivory:     #faf9f5;
+    --near-black:#141413;
+    --dark-warm: #3d3d3a;
+    --olive:     #504e49;
+    --stone:     #6b6a64;
+    --brand:     #1B365D;
+    --border:    #e8e6dc;
+    --border-soft:#e5e3d8;
+    --tag-bg:    #E4ECF5;
+    --serif: "TsangerJinKai02";
+    --sans: var(--serif);
+
+    --rhythm-module:  14pt;
+    --rhythm-section: 18pt;
+  }
+
+  html, body { background: var(--parchment); }
+
+  @media screen {
+    body { max-width: 210mm; margin: 0 auto; padding: 20mm 22mm 22mm 22mm; }
+  }
+
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 10.5pt;
+    line-height: 1.55;
+    letter-spacing: 0.3pt;
+    widows: 3;
+    orphans: 3;
+  }
+
+  .sans {
+    font-family: var(--sans);
+  }
+
+  /* ========== COVER ========== */
+  .cover {
+    min-height: 240mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40mm 0 0 0;
+    break-after: page;
+  }
+  .cover-eyebrow {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 18pt;
+  }
+  .cover-title {
+    font-size: 36pt;
+    font-weight: 500;
+    color: var(--near-black);
+    line-height: 1.15;
+    letter-spacing: 0.3pt;
+    margin-bottom: 16pt;
+  }
+  .cover-sub {
+    font-family: var(--sans);
+    font-size: 14pt;
+    color: var(--olive);
+    line-height: 1.5;
+    max-width: 85%;
+    margin-bottom: 30pt;
+  }
+  .cover-meta {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--stone);
+    line-height: 1.5;
+  }
+  .cover-meta strong {
+    color: var(--dark-warm);
+    font-weight: 500;
+  }
+
+  /* ========== TOC（目录）========== */
+  .toc { break-after: page; }
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: var(--rhythm-module);
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6pt 0;
+    border-bottom: 0.3pt dotted var(--border);
+    font-size: 11pt;
+  }
+  .toc-item:last-of-type { border-bottom: none; }
+  .toc-num {
+    color: var(--brand);
+    font-weight: 500;
+    min-width: 30pt;
+  }
+  .toc-title {
+    flex: 1;
+    color: var(--near-black);
+    padding-left: 6pt;
+  }
+  .toc-page {
+    color: var(--stone);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ========== HEADINGS ========== */
+  h1 {
+    font-size: 22pt;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 10pt 0;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    color: var(--near-black);
+    break-after: avoid;
+  }
+
+  h2 {
+    font-size: 16pt;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 24pt 0 8pt 0;
+    color: var(--near-black);
+    break-after: avoid;
+    string-set: section-title content();
+  }
+
+  h3 {
+    font-size: 13pt;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 18pt 0 6pt 0;
+    color: var(--dark-warm);
+    break-after: avoid;
+  }
+
+  .chapter-num {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+  }
+
+  /* ========== PARAGRAPHS ========== */
+  p {
+    margin: 0 0 10pt 0;
+    line-height: 1.55;
+    color: var(--near-black);
+    widows: 2;
+    orphans: 2;
+  }
+
+  .lead {
+    font-size: 12pt;
+    line-height: 1.55;
+    color: var(--dark-warm);
+    margin-bottom: var(--rhythm-module);
+  }
+
+  .hl { color: var(--brand); font-weight: 500; }
+  strong { font-weight: 500; }
+
+  /* ========== LISTS ========== */
+  ul, ol {
+    margin: 6pt 0 10pt 0;
+    padding-left: 20pt;
+    line-height: 1.55;
+  }
+  ul li::marker { color: var(--brand); }
+  ol li::marker { color: var(--brand); font-weight: 500; }
+
+  /* ========== QUOTE ========== */
+  blockquote, .quote {
+    border-left: 2pt solid var(--brand);
+    margin: 12pt 0;
+    padding: 4pt 0 4pt 16pt;
+    color: var(--olive);
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  blockquote .cite, .quote .cite {
+    display: block;
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 4pt;
+  }
+
+  /* ========== CODE ========== */
+  /* Mono first for English glyphs, then CJK fallback so Chinese comments
+     inside code/pre render correctly. A mono-only chain causes missing
+     glyphs rendered as "?" or missing-glyph boxes in WeasyPrint when the system lacks
+     a mono font with CJK coverage. */
+  code {
+    font-family: "JetBrains Mono", "SF Mono", Consolas,
+                 "TsangerJinKai02", "Source Han Serif SC",
+                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-size: 9pt;
+    background: var(--ivory);
+    padding: 1pt 4pt;
+    border-radius: 2pt;
+    color: var(--dark-warm);
+  }
+  pre {
+    font-family: "JetBrains Mono", "SF Mono", Consolas,
+                 "TsangerJinKai02", "Source Han Serif SC",
+                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-size: 9pt;
+    line-height: 1.5;
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 10pt 0;
+    white-space: pre-wrap;
+    color: var(--near-black);
+    break-inside: avoid;
+  }
+  pre code { background: transparent; padding: 0; font-size: inherit; }
+
+  /* ========== TABLE (paper-table) ========== */
+  table, .paper-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin: 12pt 0;
+    break-inside: avoid;
+  }
+  table th, .paper-table th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--dark-warm);
+    padding: 6pt 8pt;
+    border-bottom: 1pt solid var(--border);
+    background: transparent;
+  }
+  table td, .paper-table td {
+    padding: 5pt 8pt;
+    border-bottom: 0.3pt solid var(--border-soft);
+    vertical-align: top;
+  }
+  table.compact th, .paper-table.compact th { padding: 3pt 6pt; font-size: 8pt; }
+  table.compact td, .paper-table.compact td { padding: 2pt 6pt; font-size: 8pt; line-height: 1.4; }
+  table.financial td:not(:first-child), .paper-table.financial td:not(:first-child) {
+    text-align: right; font-variant-numeric: tabular-nums;
+  }
+  table.financial th:not(:first-child), .paper-table.financial th:not(:first-child) { text-align: right; }
+  table.striped tbody tr:nth-child(even) td, .paper-table.striped tbody tr:nth-child(even) td {
+    background: var(--ivory);
+  }
+  table .total td, .paper-table .total td {
+    font-weight: 500; border-top: 1pt solid var(--brand); border-bottom: none; color: var(--near-black);
+  }
+
+  /* ========== CALLOUT ========== */
+  .callout {
+    background: var(--ivory);
+    border-left: 2pt solid var(--brand);
+    padding: 10pt 14pt;
+    border-radius: 3pt;
+    margin: 12pt 0;
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  .callout blockquote,
+  .callout .quote {
+    border-left: none;
+    padding-left: 0;
+    margin: 6pt 0;
+    color: var(--olive);
+  }
+  .callout blockquote:first-child,
+  .callout .quote:first-child { margin-top: 0; }
+  .callout blockquote:last-child,
+  .callout .quote:last-child  { margin-bottom: 0; }
+
+  .takeaway {
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .takeaway-label {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--brand);
+    letter-spacing: 0.5pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+
+  /* ========== TAG ========== */
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--brand);
+    font-family: var(--sans);
+    font-size: 9pt;
+    font-weight: 500;
+    padding: 1pt 6pt;
+    border-radius: 3pt;
+    margin-right: 4pt;
+  }
+
+  /* ========== FIGURE ========== */
+  figure {
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  figure img {
+    max-width: 100%;
+    border-radius: 4pt;
+  }
+  figcaption {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 6pt;
+    text-align: center;
+  }
+
+  /* ========== EXECUTIVE SUMMARY ========== */
+  .exec-summary {
+    background: var(--ivory);
+    border-left: 1.4pt solid var(--brand);
+    border-radius: 6pt;
+    padding: 16pt 20pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .exec-summary h2 {
+    margin-top: 0;
+    font-size: 13pt;
+  }
+
+  /* ========== CHAPTER BREAK ========== */
+  .chapter { break-before: page; }
+
+  @font-face {
+    font-family: "JetBrains Mono";
+    src: url("fonts/JetBrainsMono.woff2") format("woff2");
+    font-weight: 400;
+    font-style: normal;
+  }
+  :root {
+    --serif: "TsangerJinKai02";
+    --sans: "TsangerJinKai02";
+  }
+  body { font-family: "TsangerJinKai02"; }
+  code, pre, pre code { font-family: "JetBrains Mono", "TsangerJinKai02"; }
+  a { color: var(--brand); text-decoration: none; }
+  h1 { string-set: section-title content(); }
+  figure svg { width: 100%; height: auto; display: block; }
+  .cover-rule { width: 90pt; height: 5pt; background: var(--brand); margin-bottom: 24pt; }
+  .source-list { font-size: 8.8pt; }
+  .chapter[data-section="9"] h3,
+  .chapter[data-section="12"] h3 { margin-top: 14pt; }
+  .chapter[data-section="9"] p,
+  .chapter[data-section="12"] p { margin-bottom: 7pt; line-height: 1.48; }
+  .chapter[data-section="9"] pre,
+  .chapter[data-section="12"] pre { margin: 7pt 0; padding: 8pt 12pt; line-height: 1.4; }
+  .chapter[data-section="9"] ul,
+  .chapter[data-section="9"] ol,
+  .chapter[data-section="12"] ul,
+  .chapter[data-section="12"] ol { margin: 4pt 0 7pt 0; line-height: 1.48; }
+</style>
+</head>
+<body>
+<section class="cover">
+  <div>
+    <div class="cover-rule"></div>
+    <div class="cover-eyebrow">ENGINEERING HANDBOOK · 2026</div>
+    <div class="cover-title">macOS 开发者工作站手册<br>从新机上手到可复现工程环境</div>
+    <div class="cover-sub">系统快捷操作、软件分层、Homebrew 与 Brewfile、终端、运行时、容器、权限、备份、维护 SOP 和独立 Cheatsheet。</div>
+  </div>
+  <div class="cover-meta">{author_line}版本 V1.0 · 2026-06-02<br>资料口径：macOS Tahoe 26.5 与公开资料，截至 2026-06-02</div>
+</section><section class="toc"><h2>目录</h2><div class="toc-item"><span class="toc-num">01</span><span class="toc-title">执行摘要</span><span class="toc-page" data-section="1">03</span></div><div class="toc-item"><span class="toc-num">02</span><span class="toc-title">1. 先建立工作站心智模型</span><span class="toc-page" data-section="2">04</span></div><div class="toc-item"><span class="toc-num">03</span><span class="toc-title">2. 新机开箱前 15 分钟</span><span class="toc-page" data-section="3">06</span></div><div class="toc-item"><span class="toc-num">04</span><span class="toc-title">3. 60 分钟落地路径</span><span class="toc-page" data-section="4">08</span></div><div class="toc-item"><span class="toc-num">05</span><span class="toc-title">4. macOS 快捷操作：先掌握高频路径</span><span class="toc-page" data-section="5">12</span></div><div class="toc-item"><span class="toc-num">06</span><span class="toc-title">5. 触控板、窗口与桌面</span><span class="toc-page" data-section="6">15</span></div><div class="toc-item"><span class="toc-num">07</span><span class="toc-title">6. 软件推荐矩阵：默认、按需、谨慎</span><span class="toc-page" data-section="7">17</span></div><div class="toc-item"><span class="toc-num">08</span><span class="toc-title">7. Homebrew 与 Brewfile：把新机安装变成契约</span><span class="toc-page" data-section="8">19</span></div><div class="toc-item"><span class="toc-num">09</span><span class="toc-title">8. Ghostty 与 shell：少配一点</span><span class="toc-page" data-section="9">21</span></div><div class="toc-item"><span class="toc-num">10</span><span class="toc-title">9. mise 与 uv：让项目环境回到项目</span><span class="toc-page" data-section="10">22</span></div><div class="toc-item"><span class="toc-num">11</span><span class="toc-title">10. OrbStack：容器、Linux 与本地 Kubernetes</span><span class="toc-page" data-section="11">25</span></div><div class="toc-item"><span class="toc-num">12</span><span class="toc-title">11. Mole：维护先观察，删除要预演</span><span class="toc-page" data-section="12">27</span></div><div class="toc-item"><span class="toc-num">13</span><span class="toc-title">12. 日常 SOP：每天、每周、每月</span><span class="toc-page" data-section="13">28</span></div><div class="toc-item"><span class="toc-num">14</span><span class="toc-title">13. 权限、安全与隐私</span><span class="toc-page" data-section="14">30</span></div><div class="toc-item"><span class="toc-num">15</span><span class="toc-title">14. 社区推荐如何转化为可靠方案</span><span class="toc-page" data-section="15">32</span></div><div class="toc-item"><span class="toc-num">16</span><span class="toc-title">15. 三种工作站配置</span><span class="toc-page" data-section="16">34</span></div><div class="toc-item"><span class="toc-num">17</span><span class="toc-title">16. 排障手册</span><span class="toc-page" data-section="17">36</span></div><div class="toc-item"><span class="toc-num">18</span><span class="toc-title">17. 最佳食用方式</span><span class="toc-page" data-section="18">38</span></div><div class="toc-item"><span class="toc-num">19</span><span class="toc-title">18. 发布前自检</span><span class="toc-page" data-section="19">39</span></div><div class="toc-item"><span class="toc-num">20</span><span class="toc-title">附录：macOS Developer Workstation Cheatsheet</span><span class="toc-page" data-section="20">40</span></div><div class="toc-item"><span class="toc-num">21</span><span class="toc-title">附录：资料来源与边界</span><span class="toc-page" data-section="21">49</span></div></section><section class="chapter" data-section="1"><div class="chapter-num">01 · CHAPTER</div><h1>执行摘要</h1><p>一台真正好用的 Mac，不是安装了最多软件的 Mac，而是摩擦足够少、行为足够稳定、出了问题能够恢复的 Mac。</p>
+<p>这份手册给出一套保守但高效的开发者工作站方案。核心思路只有五条：</p>
+<ol>
+<li><strong>先学会原生能力，再引入增强工具。</strong> Spotlight、Finder、Quick Look、原生窗口平铺、触控板和系统快捷键已经能覆盖大量高频动作。</li>
+<li><strong>把安装清单写成契约。</strong> Homebrew 负责工作站级应用和命令行工具，Brewfile 进入版本控制。新机不再依赖记忆。</li>
+<li><strong>把项目运行时放回项目。</strong> mise 负责 Node、Python、Java 等运行时和任务入口，uv 负责 Python 项目依赖。全局环境只保留薄薄一层。</li>
+<li><strong>有容器需求再安装容器工具。</strong> OrbStack 适合在 macOS 上运行 Docker、Linux machines 和本地 Kubernetes，但商业使用要先确认许可。</li>
+<li><strong>清理、权限和升级都要有刹车。</strong> Mole 默认先用 <code>mo status</code> 和 <code>mo analyze</code>；删除动作先 <code>--dry-run</code>。权限按需授予，备份先于优化。</li>
+</ol>
+<p>本手册没有把所有口碑软件都列为“必装”。Linux.do 的长期讨论说明，真正的痛点集中在窗口管理、启动器、剪贴板、菜单栏、压缩、媒体播放、跨平台传输、外接显示器、容器和多语言环境。对每类痛点，先给原生方案，再给一个受控的增强路径。</p>
+<p>建议把本文当成三份文档使用：</p>
+<ul>
+<li>第一次拿到新机：按第 2 章和第 3 章执行。</li>
+<li>日常维护：按第 12 章和第 13 章执行。</li>
+<li>临时查找：直接打印附录 Cheatsheet。</li>
+</ul>
+
+<figure>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 430" role="img" aria-labelledby="title desc">
+  <title id="title">macOS 开发者工作站四层模型</title>
+  <desc id="desc">从系统层到工作站层、项目层和语言层的职责划分。</desc>
+  <style>
+    text { font-family: "TsangerJinKai02"; fill: #1b365d; }
+    .heading { font-size: 25px; font-weight: 500; }
+    .body { font-size: 18px; }
+    .small { font-size: 16px; }
+  </style>
+  <rect x="0" y="0" width="980" height="430" rx="24" fill="#f5f4ed"/>
+  <rect x="38" y="42" width="210" height="344" rx="18" fill="#d9e3ea"/>
+  <rect x="270" y="42" width="210" height="344" rx="18" fill="#e2e9e8"/>
+  <rect x="502" y="42" width="210" height="344" rx="18" fill="#e9e4d7"/>
+  <rect x="734" y="42" width="210" height="344" rx="18" fill="#dedce8"/>
+  <path d="M248 214h22M480 214h22M712 214h22" stroke="#1b365d" stroke-width="5" stroke-linecap="round"/>
+  <path d="M262 205l9 9-9 9M494 205l9 9-9 9M726 205l9 9-9 9" fill="none" stroke="#1b365d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="62" y="94" class="heading">系统层</text>
+  <text x="62" y="141" class="body">更新 · 加密</text>
+  <text x="62" y="177" class="body">权限 · 备份</text>
+  <text x="62" y="213" class="body">窗口 · 输入</text>
+  <text x="62" y="319" class="small">macOS 原生能力</text>
+  <text x="294" y="94" class="heading">工作站层</text>
+  <text x="294" y="141" class="body">Homebrew</text>
+  <text x="294" y="177" class="body">Brewfile</text>
+  <text x="294" y="213" class="body">终端 · 容器</text>
+  <text x="294" y="319" class="small">机器安装契约</text>
+  <text x="526" y="94" class="heading">项目层</text>
+  <text x="526" y="141" class="body">mise.toml</text>
+  <text x="526" y="177" class="body">mise.lock</text>
+  <text x="526" y="213" class="body">任务 · 环境变量</text>
+  <text x="526" y="319" class="small">项目运行时契约</text>
+  <text x="758" y="94" class="heading">语言层</text>
+  <text x="758" y="141" class="body">uv.lock</text>
+  <text x="758" y="177" class="body">package lock</text>
+  <text x="758" y="213" class="body">依赖 · 工具</text>
+  <text x="758" y="319" class="small">项目依赖契约</text>
+</svg>
+
+  <figcaption>Figure 1. 把工作站拆成四层：机器只维护工作站入口，项目自己携带运行时和依赖契约。</figcaption>
+</figure>
+</section><section class="chapter" data-section="2"><div class="chapter-num">02 · CHAPTER</div><h1>1. 先建立工作站心智模型</h1><p>macOS 的优势不是某一个单点功能，而是系统动作、应用动作、文件动作和 Unix 工具链能够连成一条较短的路径。好的配置应当减少上下文切换，而不是增加更多后台常驻进程。</p>
+<h3>1.1 四层职责</h3>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>负责什么</th>
+<th>典型工具</th>
+<th>不负责什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>系统层</td>
+<td>更新、加密、权限、备份、窗口、输入</td>
+<td>macOS 原生设置</td>
+<td>项目依赖</td>
+</tr>
+<tr>
+<td>工作站层</td>
+<td>通用 CLI、桌面应用、容器入口</td>
+<td>Homebrew、Brewfile、Ghostty、OrbStack</td>
+<td>每个项目的运行时版本</td>
+</tr>
+<tr>
+<td>项目层</td>
+<td>运行时、环境变量、任务</td>
+<td>mise、<code>mise.toml</code>、<code>mise.lock</code></td>
+<td>全局安装所有语言工具</td>
+</tr>
+<tr>
+<td>语言层</td>
+<td>项目依赖与锁文件</td>
+<td>uv、npm、pnpm、Cargo 等</td>
+<td>修改系统 Python</td>
+</tr>
+</tbody>
+</table>
+<p>当职责混在一起时，新机会变得不可恢复：Node 装在 Homebrew，另一个版本装在 nvm，Python 混用系统解释器、Conda 和随机 <code>pip install</code>，Java 散落在多个目录，Docker 与本机依赖又各自维护一份说明。短期能运行，长期难以解释。</p>
+<p>更好的方向是让每一层都足够薄：</p>
+<ul>
+<li>Homebrew 安装少量稳定的工作站级工具。</li>
+<li>Brewfile 记录“这台机器需要什么”。</li>
+<li>mise 记录“这个项目需要什么版本”。</li>
+<li>uv 或其他语言包管理器记录“这个项目依赖什么库”。</li>
+<li>容器记录“哪些服务应该隔离运行”。</li>
+</ul>
+<h3>1.2 原生优先不是拒绝第三方</h3>
+<p>原生优先的价值在于建立基线。只有知道原生方案的上限，才能判断某个第三方工具是否真的减少摩擦。</p>
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>先用什么</th>
+<th>什么时候升级</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>搜索与打开应用</td>
+<td>Spotlight</td>
+<td>需要动作、Quicklinks、Snippets、扩展时再用 Raycast</td>
+</tr>
+<tr>
+<td>窗口排列</td>
+<td>原生平铺</td>
+<td>需要键盘驱动布局或自动平铺时再选 Loop、Rectangle、AeroSpace</td>
+</tr>
+<tr>
+<td>文件预览</td>
+<td>Finder + <code>Space</code></td>
+<td>原生无法打开特定格式时再补工具</td>
+</tr>
+<tr>
+<td>文件传输</td>
+<td>AirDrop</td>
+<td>有 Windows、Linux、Android 设备时再用 LocalSend</td>
+</tr>
+<tr>
+<td>状态观察</td>
+<td>活动监视器</td>
+<td>需要长期菜单栏观察时再用 Stats</td>
+</tr>
+</tbody>
+</table>
+<p>第三方工具应解决明确痛点。不能回答“它替代了哪一步”的工具，不必进入基线。</p>
+</section><section class="chapter" data-section="3"><div class="chapter-num">03 · CHAPTER</div><h1>2. 新机开箱前 15 分钟</h1><p>不要从安装软件开始。先完成系统更新、磁盘加密、备份和权限基线。这些动作不显眼，但决定了后续升级、迁移和事故恢复的成本。</p>
+<h3>2.1 确认系统版本</h3>
+<p>打开 <code>Apple 菜单 &gt; 关于本机</code>，确认 macOS 名称、版本和硬件信息。Apple 在 <code>2026-05-11</code> 更新的版本页中列出 <code>macOS Tahoe 26.5</code> 为 Tahoe 最新版本；在 <code>2026-06-02</code> 新建工作站时，应先通过 <code>系统设置 &gt; 通用 &gt; 软件更新</code> 检查实际可用更新。</p>
+<p>Homebrew 官方安装文档当前将 <code>macOS Sonoma 14</code> 或更高版本列为受支持基线。旧系统可能仍能运行部分软件，但不要把“可能工作”当成团队标准。</p>
+<h3>2.2 开启 FileVault</h3>
+<p>路径：<code>系统设置 &gt; 隐私与安全性 &gt; FileVault</code>。</p>
+<p>FileVault 用于加密启动磁盘。开启前先确定恢复密钥的保存方式：个人设备可保存在可靠的密码管理器中；公司设备遵循组织 MDM 和密钥托管规则。不要把恢复密钥只放在这台 Mac 上。</p>
+<p>验收问题：</p>
+<ul>
+<li>FileVault 是否已开启？</li>
+<li>恢复密钥是否存在于设备之外？</li>
+<li>公司设备是否满足组织托管要求？</li>
+</ul>
+<h3>2.3 建立 Time Machine</h3>
+<p>路径：<code>系统设置 &gt; 通用 &gt; Time Machine</code>。</p>
+<p>Time Machine 是迁移和恢复的第一道保险。它不能替代 Git、云同步和项目级备份，但能显著降低系统升级、磁盘故障和误删后的恢复成本。</p>
+<p>首次备份完成后，至少确认一次：</p>
+<ol>
+<li>菜单栏或系统设置能看到最近备份时间。</li>
+<li>能进入 Time Machine 浏览历史文件。</li>
+<li>外接盘或网络目标有足够空间。</li>
+<li>恢复目标不是唯一一份重要数据。</li>
+</ol>
+<h3>2.4 权限从最小集开始</h3>
+<p>路径：<code>系统设置 &gt; 隐私与安全性</code>。</p>
+<p>重点观察：</p>
+<ul>
+<li>辅助功能</li>
+<li>屏幕与系统音频录制</li>
+<li>完全磁盘访问权限</li>
+<li>文件与文件夹</li>
+<li>输入监控</li>
+<li>自动化</li>
+<li>登录项与扩展</li>
+</ul>
+<p>窗口管理器、剪贴板工具、截图工具、终端和自动化工具都可能请求额外权限。原则是：<strong>先理解用途，再授予；不再使用，立即回收。</strong></p>
+<h3>2.5 先别执行这些动作</h3>
+<ul>
+<li>不运行来源不明的一键初始化脚本。</li>
+<li>不粘贴大段未经解释的 <code>defaults write</code>。</li>
+<li>不关闭系统安全机制来换取几秒便利。</li>
+<li>不急着安装多个同类工具。</li>
+<li>不在完成备份前运行深度清理。</li>
+</ul>
+</section><section class="chapter" data-section="4"><div class="chapter-num">04 · CHAPTER</div><h1>3. 60 分钟落地路径</h1><p>这一章是一条最短可用路径。完成后，你会得到一台可开发、可复查、可迁移的 Mac。没有容器需求的用户可以跳过 OrbStack。</p>
+<h3>3.1 安装 Command Line Tools</h3>
+<pre><code class="language-bash">xcode-select --install
+xcode-select -p
+</code></pre>
+<p>Command Line Tools 提供编译器、Git 和基础开发工具。Homebrew 官方文档将其列为 macOS 安装要求之一。</p>
+<h3>3.2 安装 Homebrew</h3>
+<p>从 <a href="https://brew.sh/">brew.sh</a> 阅读并复制官方安装命令。不要从博客、论坛回帖或随机脚本镜像安装。</p>
+<p>Homebrew 官方文档说明：</p>
+<ul>
+<li>Apple Silicon 默认前缀为 <code>/opt/homebrew</code>。</li>
+<li>Intel Mac 默认前缀为 <code>/usr/local</code>。</li>
+<li>默认前缀可以使用多数预编译 bottles。</li>
+<li>初次安装后，日常 <code>brew install</code> 通常不需要 <code>sudo</code>。</li>
+</ul>
+<p>Apple Silicon 常见 shell 初始化：</p>
+<pre><code class="language-zsh">eval &quot;$(/opt/homebrew/bin/brew shellenv)&quot;
+</code></pre>
+<p>如果安装器输出了不同提示，以安装器为准。不要机械复制别人的 PATH。</p>
+<p>验收：</p>
+<pre><code class="language-bash">brew --version
+brew doctor
+</code></pre>
+<h3>3.3 用 Brewfile 安装基础工具</h3>
+<p>在一个受版本控制的工作站配置仓库中创建 <code>Brewfile</code>：</p>
+<pre><code class="language-ruby">brew &quot;bat&quot;
+brew &quot;eza&quot;
+brew &quot;fd&quot;
+brew &quot;fzf&quot;
+brew &quot;gh&quot;
+brew &quot;git-delta&quot;
+brew &quot;jq&quot;
+brew &quot;mise&quot;
+brew &quot;mole&quot;
+brew &quot;ripgrep&quot;
+brew &quot;uv&quot;
+brew &quot;zoxide&quot;
+
+cask &quot;ghostty&quot;
+# cask &quot;orbstack&quot; # 有容器或 Linux 需求时启用
+# cask &quot;raycast&quot;  # 原生 Spotlight 不够用时启用
+</code></pre>
+<p>应用契约：</p>
+<pre><code class="language-bash">brew bundle check --file=./Brewfile || brew bundle install --file=./Brewfile
+</code></pre>
+<p>这里故意没有塞入几十个软件。基线越小，越容易解释、迁移和升级。</p>
+<h3>3.4 配置 Git 与 GitHub CLI</h3>
+<pre><code class="language-bash">git config --global --edit
+git config --global init.defaultBranch main
+git config --global pull.ff only
+git config --global fetch.prune true
+
+gh auth login
+gh auth status
+</code></pre>
+<p>在编辑器中填写真实的 <code>user.name</code> 和 <code>user.email</code>。不要把示例身份复制进自己的配置。</p>
+<p>如果团队使用 SSH，再验证：</p>
+<pre><code class="language-bash">ssh -T git@github.com
+</code></pre>
+<h3>3.5 配置最小 zsh</h3>
+<p>不要在第一小时安装大型 shell 框架。先保留一个能解释的 <code>.zshrc</code>：</p>
+<pre><code class="language-zsh">if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval &quot;$(/opt/homebrew/bin/brew shellenv)&quot;
+fi
+
+eval &quot;$(mise activate zsh)&quot;
+eval &quot;$(zoxide init zsh)&quot;
+
+alias ll='eza -lah --group-directories-first'
+alias cat='bat --paging=never'
+</code></pre>
+<p>关闭并重新打开终端，然后验收：</p>
+<pre><code class="language-bash">which brew
+which mise
+which uv
+which rg
+mise doctor
+</code></pre>
+<h3>3.6 有容器需求时安装 OrbStack</h3>
+<pre><code class="language-bash">brew install orbstack
+docker context show
+docker run --rm hello-world
+</code></pre>
+<p>OrbStack 官方 quick start 说明它包含 Docker engine、Compose 和 Linux machines。默认即可工作，不要先进入复杂配置。</p>
+<p>商业、非营利组织、政府实体或专业自由职业用途需要按官方 licensing 页面确认许可。团队推广前由负责人统一处理。</p>
+<h3>3.7 一小时验收清单</h3>
+<table>
+<thead>
+<tr>
+<th>检查</th>
+<th>命令或路径</th>
+<th>通过标准</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>系统</td>
+<td><code>系统设置 &gt; 通用 &gt; 软件更新</code></td>
+<td>无待处理关键更新</td>
+</tr>
+<tr>
+<td>加密</td>
+<td><code>系统设置 &gt; 隐私与安全性 &gt; FileVault</code></td>
+<td>已开启并保存恢复方式</td>
+</tr>
+<tr>
+<td>备份</td>
+<td><code>系统设置 &gt; 通用 &gt; Time Machine</code></td>
+<td>能看到最近备份</td>
+</tr>
+<tr>
+<td>Homebrew</td>
+<td><code>brew doctor</code></td>
+<td>无需立即处理的关键错误</td>
+</tr>
+<tr>
+<td>工具链</td>
+<td><code>brew bundle check --file=./Brewfile</code></td>
+<td>契约满足</td>
+</tr>
+<tr>
+<td>GitHub</td>
+<td><code>gh auth status</code></td>
+<td>已登录正确账户</td>
+</tr>
+<tr>
+<td>mise</td>
+<td><code>mise doctor</code></td>
+<td>环境无明显错误</td>
+</tr>
+<tr>
+<td>uv</td>
+<td><code>uv --version</code></td>
+<td>命令可用</td>
+</tr>
+<tr>
+<td>Docker</td>
+<td><code>docker run --rm hello-world</code></td>
+<td>仅容器用户需要通过</td>
+</tr>
+</tbody>
+</table>
+</section><section class="chapter" data-section="5"><div class="chapter-num">05 · CHAPTER</div><h1>4. macOS 快捷操作：先掌握高频路径</h1><p>macOS 的快捷键不是 Windows 快捷键的一对一翻译。最重要的变化是：<code>Command</code> 承担大部分应用级动作，<code>Option</code> 经常表示替代动作或细粒度动作，<code>Control</code> 更多参与系统级动作和终端动作。</p>
+<h3>4.1 五个修饰键</h3>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>名称</th>
+<th>建议理解</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>⌘</code></td>
+<td>Command</td>
+<td>应用主修饰键，复制、保存、切换、退出</td>
+</tr>
+<tr>
+<td><code>⌥</code></td>
+<td>Option / Alt</td>
+<td>替代动作、按词移动、打开额外设置</td>
+</tr>
+<tr>
+<td><code>⌃</code></td>
+<td>Control</td>
+<td>Mission Control、锁屏、终端组合键</td>
+</tr>
+<tr>
+<td><code>⇧</code></td>
+<td>Shift</td>
+<td>反向、范围和组合</td>
+</tr>
+<tr>
+<td><code>fn</code> / <code>Globe</code></td>
+<td>Function / Globe</td>
+<td>功能键、输入源和系统入口</td>
+</tr>
+</tbody>
+</table>
+<h3>4.2 应用与窗口不是一回事</h3>
+<p>macOS 中关闭窗口通常不会退出应用。</p>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>⌘ Tab</code></td>
+<td>切换应用</td>
+</tr>
+<tr>
+<td><code>⌘ ` </code></td>
+<td>切换当前应用内的窗口</td>
+</tr>
+<tr>
+<td><code>⌘ W</code></td>
+<td>关闭当前窗口或标签</td>
+</tr>
+<tr>
+<td><code>⌘ Q</code></td>
+<td>退出当前应用</td>
+</tr>
+<tr>
+<td><code>⌘ H</code></td>
+<td>隐藏当前应用</td>
+</tr>
+<tr>
+<td><code>⌥ ⌘ Esc</code></td>
+<td>强制退出应用</td>
+</tr>
+<tr>
+<td><code>⌘ ,</code></td>
+<td>打开当前应用设置</td>
+</tr>
+</tbody>
+</table>
+<p>这是从其他桌面系统迁移时最值得先建立的肌肉记忆。</p>
+<h3>4.3 Spotlight 是默认入口</h3>
+<p>使用 <code>⌘ Space</code> 打开 Spotlight。先把它用于：</p>
+<ul>
+<li>搜索并打开应用</li>
+<li>查找文件</li>
+<li>简单计算</li>
+<li>单位换算</li>
+<li>查找系统设置</li>
+<li>执行 Spotlight 支持的动作</li>
+</ul>
+<p>Spotlight 足够时，不需要立刻安装启动器。只有当你反复遇到以下需求时，Raycast 才值得进入工作站：</p>
+<ul>
+<li>用快捷键执行窗口动作</li>
+<li>维护 Quicklinks</li>
+<li>维护 Snippets</li>
+<li>需要扩展生态</li>
+<li>需要受控的剪贴板历史</li>
+</ul>
+<h3>4.4 Finder 是文件操作中枢</h3>
+<p>开发者常把 Finder 当成“图形化文件浏览器”，但它的 Quick Look、路径跳转和文件移动动作很适合高频使用。</p>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Space</code></td>
+<td>Quick Look 预览</td>
+</tr>
+<tr>
+<td><code>⇧ ⌘ G</code></td>
+<td>前往文件夹</td>
+</tr>
+<tr>
+<td><code>⇧ ⌘ H</code></td>
+<td>用户目录</td>
+</tr>
+<tr>
+<td><code>⌥ ⌘ L</code></td>
+<td>下载目录</td>
+</tr>
+<tr>
+<td><code>⇧ ⌘ U</code></td>
+<td>实用工具目录</td>
+</tr>
+<tr>
+<td><code>⌥ ⌘ P</code></td>
+<td>显示或隐藏路径栏</td>
+</tr>
+<tr>
+<td><code>⌥ ⌘ V</code></td>
+<td>将复制的文件移动到当前位置</td>
+</tr>
+<tr>
+<td><code>⌘ ↑</code></td>
+<td>上级目录</td>
+</tr>
+<tr>
+<td><code>⌘ Delete</code></td>
+<td>移到废纸篓</td>
+</tr>
+</tbody>
+</table>
+<p>建议打开路径栏。它能减少在 Finder 与终端之间来回确认目录的成本。</p>
+<h3>4.5 截图、录屏和演示</h3>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>⇧ ⌘ 3</code></td>
+<td>截取全屏</td>
+</tr>
+<tr>
+<td><code>⇧ ⌘ 4</code></td>
+<td>截取选区</td>
+</tr>
+<tr>
+<td><code>⇧ ⌘ 5</code></td>
+<td>截图与录屏面板</td>
+</tr>
+</tbody>
+</table>
+<p>需要屏幕录制的应用可能请求 <code>屏幕与系统音频录制</code> 权限。完成临时任务后，应回收不再需要的权限。</p>
+<h3>4.6 文本编辑是效率放大器</h3>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>⌥ ←</code> / <code>⌥ →</code></td>
+<td>按词移动</td>
+</tr>
+<tr>
+<td><code>⌘ ←</code> / <code>⌘ →</code></td>
+<td>行首 / 行尾</td>
+</tr>
+<tr>
+<td><code>⌘ ↑</code> / <code>⌘ ↓</code></td>
+<td>文首 / 文末</td>
+</tr>
+<tr>
+<td><code>⌥ Delete</code></td>
+<td>删除左侧一个词</td>
+</tr>
+<tr>
+<td><code>fn Delete</code></td>
+<td>向右删除</td>
+</tr>
+<tr>
+<td><code>⇧</code> 加移动键</td>
+<td>扩展选择范围</td>
+</tr>
+</tbody>
+</table>
+<p>这些动作在编辑器、浏览器输入框、聊天工具和系统表单中普遍可用，比堆叠更多编辑器插件更先产生收益。</p>
+</section><section class="chapter" data-section="6"><div class="chapter-num">06 · CHAPTER</div><h1>5. 触控板、窗口与桌面</h1><p>鼠标和键盘不是唯一入口。macOS 的触控板、Mission Control、Hot Corners 和原生窗口平铺能够形成一套低负担桌面工作流。</p>
+<h3>5.1 先调触控板</h3>
+<p>路径：<code>系统设置 &gt; 触控板</code>。</p>
+<p>建议逐项试用：</p>
+<ul>
+<li>轻点来点按</li>
+<li>双指滚动</li>
+<li>双指辅助点按</li>
+<li>三指或四指上推进入 Mission Control</li>
+<li>三指或四指左右滑动切换桌面</li>
+<li>放大、旋转和智能缩放</li>
+</ul>
+<p>拖移窗口时，可按 Apple 文档在辅助功能设置中启用三指拖移。是否启用取决于个人习惯，不需要强求统一。</p>
+<h3>5.2 Mission Control 与桌面</h3>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>⌃ ↑</code></td>
+<td>Mission Control</td>
+</tr>
+<tr>
+<td><code>⌃ ↓</code></td>
+<td>当前应用的所有窗口</td>
+</tr>
+<tr>
+<td><code>⌃ ←</code> / <code>⌃ →</code></td>
+<td>切换桌面</td>
+</tr>
+</tbody>
+</table>
+<p>桌面不宜过多。通常按工作上下文分为三到五个即可，例如沟通、编辑器、浏览器、终端和临时演示。</p>
+<h3>5.3 原生窗口平铺优先</h3>
+<p>在较新的 macOS 中，先通过 <code>系统设置 &gt; 桌面与程序坞 &gt; 窗口</code> 查看原生平铺设置。原生方案适合：</p>
+<ul>
+<li>左右二分</li>
+<li>将窗口拖到屏幕边缘</li>
+<li>使用系统提供的平铺动作</li>
+<li>低权限、低维护的基础布局</li>
+</ul>
+<p>只有当你明确需要更多键盘动作、自动布局或复杂多显示器规则时，再安装一个增强工具。</p>
+<h3>5.4 窗口增强工具只选一个</h3>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>适合什么人</th>
+<th>代价</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Loop</td>
+<td>喜欢直观布局与快捷操作</td>
+<td>多一个常驻工具与权限面</td>
+</tr>
+<tr>
+<td>Rectangle</td>
+<td>想要传统、轻量的键盘窗口动作</td>
+<td>仍需记忆一套快捷键</td>
+</tr>
+<tr>
+<td>AeroSpace</td>
+<td>需要自动平铺和更强键盘驱动</td>
+<td>学习成本更高，不适合作为默认</td>
+</tr>
+</tbody>
+</table>
+<p>同时安装多个窗口管理器只会制造快捷键冲突和排障成本。</p>
+<h3>5.5 Hot Corners 慎用</h3>
+<p>Hot Corners 适合屏幕保护、锁屏、桌面等低风险动作。不要把高频误触会打断工作的动作放在最常经过的角落。配置完成后至少使用一天，再决定是否保留。</p>
+</section><section class="chapter" data-section="7"><div class="chapter-num">07 · CHAPTER</div><h1>6. 软件推荐矩阵：默认、按需、谨慎</h1><p>“必装软件”容易演变为不受控制的购物清单。更稳妥的做法是按职责分层。</p>
+<h3>6.1 默认安装</h3>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>作用</th>
+<th>为什么进入默认层</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Homebrew</td>
+<td>工作站包管理</td>
+<td>建立统一安装入口</td>
+</tr>
+<tr>
+<td>Brewfile</td>
+<td>安装契约</td>
+<td>支持复查、迁移和差异对比</td>
+</tr>
+<tr>
+<td><code>gh</code></td>
+<td>GitHub CLI</td>
+<td>登录、仓库和协作入口</td>
+</tr>
+<tr>
+<td><code>rg</code>、<code>fd</code>、<code>fzf</code>、<code>jq</code></td>
+<td>查找与处理数据</td>
+<td>高频、轻量、可组合</td>
+</tr>
+<tr>
+<td><code>bat</code>、<code>eza</code>、<code>zoxide</code></td>
+<td>更顺手的浏览与跳转</td>
+<td>增强终端但不改变系统职责</td>
+</tr>
+<tr>
+<td>mise</td>
+<td>项目运行时与任务</td>
+<td>避免运行时散落</td>
+</tr>
+<tr>
+<td>uv</td>
+<td>Python 项目和工具</td>
+<td>避免项目依赖污染全局</td>
+</tr>
+<tr>
+<td>Mole</td>
+<td>状态观察与受控维护</td>
+<td>先读后删，保留安全边界</td>
+</tr>
+</tbody>
+</table>
+<p>Ghostty 可以与默认层一起安装，但 Terminal.app 本身已是可靠兜底。</p>
+<h3>6.2 有明确痛点再安装</h3>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>安装条件</th>
+<th>注意事项</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ghostty</td>
+<td>终端使用频繁，希望更现代的原生体验</td>
+<td>先零配置使用</td>
+</tr>
+<tr>
+<td>OrbStack</td>
+<td>有 Docker、Linux 或本地 Kubernetes 需求</td>
+<td>商业许可先确认</td>
+</tr>
+<tr>
+<td>Raycast</td>
+<td>Spotlight 不足以覆盖动作、Quicklinks、Snippets</td>
+<td>复核权限和扩展来源</td>
+</tr>
+<tr>
+<td>Ice</td>
+<td>菜单栏拥挤</td>
+<td>先减少不必要常驻项</td>
+</tr>
+<tr>
+<td>Stats</td>
+<td>需要长期观察 CPU、内存、磁盘、网络</td>
+<td>Sensors、Bluetooth 模块可能提高资源消耗</td>
+</tr>
+<tr>
+<td>IINA</td>
+<td>需要更强媒体播放</td>
+<td>从官方渠道获取</td>
+</tr>
+<tr>
+<td>Keka</td>
+<td>需要更多压缩格式</td>
+<td>从官网、App Store 或 Homebrew 获取</td>
+</tr>
+<tr>
+<td>LocalSend</td>
+<td>经常与非 Apple 设备传文件</td>
+<td>适合局域网跨平台传输</td>
+</tr>
+<tr>
+<td>BetterDisplay</td>
+<td>外接显示器存在缩放、亮度等问题</td>
+<td>问题存在时再装</td>
+</tr>
+<tr>
+<td>Maccy</td>
+<td>需要独立剪贴板历史且未使用 Raycast Clipboard</td>
+<td>复核敏感内容边界</td>
+</tr>
+<tr>
+<td>Pearcleaner</td>
+<td>偏好 GUI 卸载和残留查看</td>
+<td>与 Mole 不必同时作为默认</td>
+</tr>
+<tr>
+<td>Applite</td>
+<td>希望图形化安装 Homebrew cask</td>
+<td>开发者基线仍以 Brewfile 为准</td>
+</tr>
+<tr>
+<td>chezmoi</td>
+<td>已有稳定 dotfiles，准备跨机器维护</td>
+<td>不要在首日过度抽象</td>
+</tr>
+<tr>
+<td>mas</td>
+<td>需要记录 App Store 应用</td>
+<td>只能覆盖 App Store 范围</td>
+</tr>
+</tbody>
+</table>
+<h3>6.3 谨慎处理</h3>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>风险</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>代理、VPN、网络过滤</td>
+<td>地域、组织合规、证书和流量边界复杂</td>
+<td>按组织策略单独评审</td>
+</tr>
+<tr>
+<td>电池控制工具</td>
+<td>习惯、硬件和收益因人而异</td>
+<td>先用系统优化充电</td>
+</tr>
+<tr>
+<td>商业清理工具</td>
+<td>可能与系统能力、Mole、Pearcleaner 重叠</td>
+<td>不设为统一基线</td>
+</tr>
+<tr>
+<td>一键安装器</td>
+<td>容易隐藏脚本、权限和来源</td>
+<td>只在逐项审阅后使用</td>
+</tr>
+<tr>
+<td>非官方安装包</td>
+<td>完整性、更新和许可不可控</td>
+<td>不进入工作站</td>
+</tr>
+</tbody>
+</table>
+</section><section class="chapter" data-section="8"><div class="chapter-num">08 · CHAPTER</div><h1>7. Homebrew 与 Brewfile：把新机安装变成契约</h1><p>Homebrew 的价值不只是“能安装软件”，而是让机器状态有一个可检查的入口。</p>
+<h3>7.1 工作站级工具才进入 Brewfile</h3>
+<p>适合写入 Brewfile：</p>
+<ul>
+<li>高频通用 CLI</li>
+<li>桌面应用</li>
+<li>团队明确统一的基础工具</li>
+<li>容器入口</li>
+</ul>
+<p>不适合写入 Brewfile：</p>
+<ul>
+<li>单个项目的 Node、Python、Java 版本</li>
+<li>Python 项目的库依赖</li>
+<li>临时实验工具</li>
+<li>未验证来源的 tap</li>
+</ul>
+<h3>7.2 最小 Brewfile</h3>
+<pre><code class="language-ruby">brew &quot;bat&quot;
+brew &quot;eza&quot;
+brew &quot;fd&quot;
+brew &quot;fzf&quot;
+brew &quot;gh&quot;
+brew &quot;git-delta&quot;
+brew &quot;jq&quot;
+brew &quot;mise&quot;
+brew &quot;mole&quot;
+brew &quot;ripgrep&quot;
+brew &quot;uv&quot;
+brew &quot;zoxide&quot;
+
+cask &quot;ghostty&quot;
+</code></pre>
+<p>按需附加：</p>
+<pre><code class="language-ruby">cask &quot;orbstack&quot;
+cask &quot;raycast&quot;
+cask &quot;jordanbaird-ice&quot;
+cask &quot;stats&quot;
+cask &quot;iina&quot;
+cask &quot;keka&quot;
+cask &quot;localsend&quot;
+</code></pre>
+<p>这不是让所有人取消注释。它是候选清单，提交前应审阅。</p>
+<h3>7.3 日常命令</h3>
+<pre><code class="language-bash">brew search &lt;name&gt;
+brew info &lt;name&gt;
+brew list
+brew outdated
+
+brew bundle check --file=./Brewfile
+brew bundle install --file=./Brewfile
+
+brew update
+brew upgrade
+brew cleanup
+brew doctor
+</code></pre>
+<h3>7.4 导出与清理要分开</h3>
+<p>Homebrew 官方文档提供：</p>
+<pre><code class="language-bash">brew bundle dump --global --force --describe
+</code></pre>
+<p>它适合导出现状，但导出后必须审阅 diff。机器上临时安装过的软件，不一定值得进入长期契约。</p>
+<p>更需要谨慎的是：</p>
+<pre><code class="language-bash">brew bundle cleanup --file=./Brewfile
+</code></pre>
+<p>先运行不带 <code>--force</code> 的预览，阅读要移除的内容。不要在不了解差异时执行强制清理。</p>
+<h3>7.5 Analytics 是可见的选择</h3>
+<p>Homebrew 官方文档说明其匿名 analytics 会在首次相关操作时提示，用户可关闭：</p>
+<pre><code class="language-bash">brew analytics off
+</code></pre>
+<p>这不是必须执行的初始化命令。团队应根据隐私政策做明确选择，而不是默默改变用户设置。</p>
+</section><section class="chapter" data-section="9"><div class="chapter-num">09 · CHAPTER</div><h1>8. Ghostty 与 shell：少配一点</h1><p>终端是开发工作站的入口，但终端配置不应成为一项长期维护工程。</p>
+<h3>8.1 为什么推荐 Ghostty</h3>
+<p>Ghostty 官方文档强调零配置理念：应用开箱即用，内置默认字体 JetBrains Mono 和常见能力。macOS 官方分发的 <code>.dmg</code> 经过签名与 notarization；Homebrew cask 重新打包官方 <code>.dmg</code>。</p>
+<p>安装：</p>
+<pre><code class="language-bash">brew install --cask ghostty
+</code></pre>
+<p>第一周建议不写配置文件。只有遇到明确偏好时再调整。</p>
+<h3>8.2 配置文件位置</h3>
+<p>Ghostty 官方文档列出 XDG 和 macOS 专用路径。建议使用 XDG 路径，便于 dotfiles 管理：</p>
+<pre><code class="language-text">~/.config/ghostty/config.ghostty
+</code></pre>
+<p>最小示例：</p>
+<pre><code class="language-ini"># 只保留确实需要的主观偏好
+font-family = JetBrains Mono
+</code></pre>
+<p>macOS 默认可用 <code>cmd+shift+,</code> 重新加载配置。配置项较多时，先通过官方 option reference 核验，不要复制多年累积的配置包。</p>
+<h3>8.3 shell 只保留可解释入口</h3>
+<p>推荐 <code>.zshrc</code>：</p>
+<pre><code class="language-zsh">if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval &quot;$(/opt/homebrew/bin/brew shellenv)&quot;
+fi
+
+eval &quot;$(mise activate zsh)&quot;
+eval &quot;$(zoxide init zsh)&quot;
+
+alias ll='eza -lah --group-directories-first'
+alias cat='bat --paging=never'
+</code></pre>
+<p>如果 shell 启动变慢，先诊断：</p>
+<pre><code class="language-bash">zsh -xlic exit
+</code></pre>
+<p>处理顺序是移除不必要插件、缩减同步网络调用、确认 PATH，再考虑更复杂的缓存策略。</p>
+</section><section class="chapter" data-section="10"><div class="chapter-num">10 · CHAPTER</div><h1>9. mise 与 uv：让项目环境回到项目</h1><p>Linux.do 的开发环境迁移讨论反复提到同一个痛点：JDK、Python、Node、包管理器和工具散落在不同入口，时间久了没人知道哪个版本正在生效。mise 与 uv 的组合可以把职责重新整理清楚。</p>
+<h3>9.1 分工</h3>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>负责什么</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Homebrew</td>
+<td>安装 mise 与 uv 本身</td>
+<td><code>brew install mise uv</code></td>
+</tr>
+<tr>
+<td>mise</td>
+<td>管理项目运行时、环境变量、任务</td>
+<td>Node、Python、Java、<code>mise run test</code></td>
+</tr>
+<tr>
+<td>uv</td>
+<td>管理 Python 项目依赖和 Python CLI 工具</td>
+<td><code>uv add</code>、<code>uv run</code>、<code>uv tool install</code></td>
+</tr>
+</tbody>
+</table>
+<h3>9.2 mise 的最小使用</h3>
+<p>交互 shell 激活：</p>
+<pre><code class="language-zsh">eval &quot;$(mise activate zsh)&quot;
+</code></pre>
+<p>全局只保留少量默认值：</p>
+<pre><code class="language-bash">mise use --global node@lts
+</code></pre>
+<p>项目内写入 <code>mise.toml</code>：</p>
+<pre><code class="language-bash">cd &lt;project&gt;
+mise use node@lts
+mise use python@3.12
+mise install
+</code></pre>
+<p>典型 <code>mise.toml</code>：</p>
+<pre><code class="language-toml">[tools]
+node = &quot;lts&quot;
+python = &quot;3.12&quot;
+
+[tasks.test]
+run = &quot;pytest&quot;
+
+[tasks.lint]
+run = &quot;ruff check .&quot;
+</code></pre>
+<p>运行：</p>
+<pre><code class="language-bash">mise run test
+mise run lint
+</code></pre>
+<h3>9.3 陌生项目先审阅再信任</h3>
+<p>mise 会在拉取别人编写的配置后提示信任。原因很直接：配置可能包含环境变量、任务和 hooks。正确做法不是机械接受，而是：</p>
+<ol>
+<li>阅读 <code>mise.toml</code>。</li>
+<li>检查任务脚本和 hooks。</li>
+<li>确认来源仓库。</li>
+<li>再执行信任与安装。</li>
+</ol>
+<h3>9.4 锁文件用于团队复现</h3>
+<p>mise 官方文档说明 <code>mise.lock</code> 用于锁定精确版本和 checksums。锁文件不会自动首次创建，需要显式启用并生成：</p>
+<pre><code class="language-bash">mise settings lockfile=true
+mise lock
+git add mise.toml mise.lock
+</code></pre>
+<p>更新流程：</p>
+<pre><code class="language-bash">mise use node@lts
+mise install
+git diff -- mise.toml mise.lock
+</code></pre>
+<p>团队成员拉取后：</p>
+<pre><code class="language-bash">mise install
+</code></pre>
+<h3>9.5 uv 的项目工作流</h3>
+<p>安装：</p>
+<pre><code class="language-bash">brew install uv
+</code></pre>
+<p>新项目：</p>
+<pre><code class="language-bash">uv init hello-world
+cd hello-world
+uv add requests
+uv run python -c 'import requests; print(requests.__version__)'
+</code></pre>
+<p>已有项目：</p>
+<pre><code class="language-bash">uv sync
+uv run pytest
+</code></pre>
+<p>Python CLI 工具：</p>
+<pre><code class="language-bash">uv tool install ruff
+</code></pre>
+<p>uv 会把项目依赖记录在 <code>pyproject.toml</code> 和 <code>uv.lock</code>。不要习惯性把项目包安装到系统 Python 或全局环境。</p>
+</section><section class="chapter" data-section="11"><div class="chapter-num">11 · CHAPTER</div><h1>10. OrbStack：容器、Linux 与本地 Kubernetes</h1><p>OrbStack 不是每台 Mac 的必装项。它适合明确需要 Docker、Linux machines 或本地 Kubernetes 的开发者。</p>
+<h3>10.1 从默认配置开始</h3>
+<pre><code class="language-bash">brew install orbstack
+docker context show
+docker run --rm hello-world
+</code></pre>
+<p>OrbStack 会创建名为 <code>orbstack</code> 的 Docker context，并在终端中自动使用。Compose 也已包含：</p>
+<pre><code class="language-bash">docker compose up -d
+docker compose ps
+docker compose down
+</code></pre>
+<h3>10.2 文件与 volume</h3>
+<p>容器持久数据优先使用 volume。OrbStack quick start 建议使用 <code>~/OrbStack/docker</code> 以获得合适的文件系统行为。不要把大型依赖目录无意识地放到跨边界 bind mount 中，再把性能问题归因于容器本身。</p>
+<h3>10.3 Apple Silicon 与 x86</h3>
+<p>OrbStack 官方 Docker 文档说明，在 Apple Silicon 上可使用 Rosetta 运行 Intel <code>x86_64/amd64</code> 镜像。确有兼容性需求时显式指定：</p>
+<pre><code class="language-bash">docker run --platform linux/amd64 &lt;image&gt;
+</code></pre>
+<p>默认仍应优先使用原生 ARM 镜像。跨架构运行是兼容路径，不是默认路径。</p>
+<h3>10.4 Linux machines</h3>
+<p>创建 Linux machine：</p>
+<pre><code class="language-bash">orb create ubuntu devbox
+orb -m devbox uname -a
+orb logs devbox
+</code></pre>
+<p>文件边界：</p>
+<table>
+<thead>
+<tr>
+<th>方向</th>
+<th>路径</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Linux 中访问 Mac 文件</td>
+<td><code>/mnt/mac</code></td>
+</tr>
+<tr>
+<td>Mac 中访问 Linux 文件</td>
+<td><code>~/OrbStack</code> 或 Finder 集成</td>
+</tr>
+</tbody>
+</table>
+<p>OrbStack 默认会为 Linux machine 创建与 macOS 同名的用户，并配置 passwordless <code>sudo</code>。这适合本地开发，但不要误认为是生产服务器安全模型。</p>
+<h3>10.5 Docker TCP 不要裸露</h3>
+<p>OrbStack 官方 Docker 文档明确提醒：把 Docker TCP 暴露到 <code>0.0.0.0:2375</code> 非常危险。需要远程访问时，使用 SSH 或带客户端认证的 TLS。</p>
+<h3>10.6 本地 Kubernetes</h3>
+<p>有 Kubernetes 开发需求时再启用。OrbStack 提供轻量单节点集群、GUI、网络集成和 <code>kubectl</code>。端口默认只对 localhost 可访问；在不可信网络上不要随意开放到局域网。</p>
+<h3>10.7 商业许可</h3>
+<p>OrbStack 官方 licensing 页面说明，专业自由职业、商业、非营利组织和政府实体用途需要购买许可。个人非商业用途和非商业教育用途边界不同。团队部署前必须让负责人阅读当前许可页，而不是依赖旧印象。</p>
+</section><section class="chapter" data-section="12"><div class="chapter-num">12 · CHAPTER</div><h1>11. Mole：维护先观察，删除要预演</h1><p>社区讨论里，Mole 经常作为 macOS 清理工具出现，也有用户反馈深度清理影响了 VPN。这个反例很重要：清理工具不是越激进越好。</p>
+<h3>11.1 默认从只读动作开始</h3>
+<pre><code class="language-bash">brew install mole
+mo status
+mo analyze
+</code></pre>
+<p><code>mo status</code> 用于观察系统健康状态。<code>mo analyze</code> 用于可视化磁盘占用；官方 README 说明，它通过 Finder 把临时处理的文件移到废纸篓，而不是直接删除。</p>
+<h3>11.2 删除动作先 <code>--dry-run</code></h3>
+<pre><code class="language-bash">mo clean --dry-run
+mo uninstall --dry-run
+mo purge --dry-run
+</code></pre>
+<p>Mole 官方 README 将 <code>clean</code>、<code>uninstall</code>、<code>purge</code>、<code>installer</code> 和 <code>remove</code> 归为破坏性操作。先预演，再逐项阅读。</p>
+<p>回看日志：</p>
+<pre><code class="language-bash">mo history
+mo history --json
+</code></pre>
+<p>操作日志路径：</p>
+<pre><code class="language-text">~/Library/Logs/mole/operations.log
+</code></pre>
+<h3>11.3 不要自动化深度清理</h3>
+<p>不要把 <code>mo clean</code>、<code>mo purge</code> 或任何类似工具写进无人值守定时任务。开发机器里常见的模拟器、SDK、VPN、证书、缓存、构建产物和挂载卷都需要上下文判断。</p>
+<p>更稳妥的月度流程：</p>
+<ol>
+<li>确认最近 Time Machine 备份。</li>
+<li>运行 <code>mo status</code>。</li>
+<li>使用 <code>mo analyze</code> 查看大目录。</li>
+<li>必要时运行对应 <code>--dry-run</code>。</li>
+<li>阅读删除列表。</li>
+<li>只处理明确知道用途的内容。</li>
+</ol>
+</section><section class="chapter" data-section="13"><div class="chapter-num">13 · CHAPTER</div><h1>12. 日常 SOP：每天、每周、每月</h1><p>工作站维护不需要成为一项爱好。固定少量节奏，比偶尔进行一次大扫除更可靠。</p>
+<h3>12.1 每天：开始工作</h3>
+<p>项目目录内：</p>
+<pre><code class="language-bash">git status --short --branch
+mise current
+</code></pre>
+<p>有容器时：</p>
+<pre><code class="language-bash">docker compose ps
+</code></pre>
+<p>目的不是制造仪式，而是尽早发现错误分支、未提交改动、版本漂移和异常服务。</p>
+<h3>12.2 每周：查看变化</h3>
+<pre><code class="language-bash">brew update
+brew outdated
+brew bundle check --file=./Brewfile
+mo status
+</code></pre>
+<p>每周只查看，不要求立即升级所有工具。关键项目发布期或出差前，稳定性优先。</p>
+<h3>12.3 每月：受控升级</h3>
+<pre><code class="language-bash">brew upgrade
+brew cleanup
+brew doctor
+mo analyze
+</code></pre>
+<p>同时检查：</p>
+<ul>
+<li>Time Machine 最近备份时间</li>
+<li>登录项</li>
+<li>辅助功能、录屏、完全磁盘访问权限</li>
+<li>菜单栏常驻模块</li>
+<li>磁盘余量</li>
+<li>不再使用的容器、镜像和 volume</li>
+<li>dotfiles 是否已经提交</li>
+</ul>
+<h3>12.4 大版本升级前</h3>
+<ol>
+<li>完成一次 Time Machine 备份。</li>
+<li>导出并审阅 Brewfile。</li>
+<li>提交 dotfiles 与重要项目变更。</li>
+<li>记录 VPN、证书、组织策略和关键应用许可。</li>
+<li>检查容器与本地数据库是否有独立备份。</li>
+<li>暂停深度清理和批量系统修改。</li>
+<li>阅读关键开发工具的兼容性说明。</li>
+</ol>
+<h3>12.5 换机或重装</h3>
+<p>恢复顺序：</p>
+<ol>
+<li>系统更新与 FileVault。</li>
+<li>Time Machine 恢复必要数据。</li>
+<li>Command Line Tools。</li>
+<li>Homebrew。</li>
+<li>Brewfile。</li>
+<li>GitHub CLI 和 SSH。</li>
+<li>dotfiles。</li>
+<li>mise 与项目锁文件。</li>
+<li>uv 与项目依赖。</li>
+<li>OrbStack、容器、Linux machines。</li>
+<li>按痛点补充 GUI 工具。</li>
+</ol>
+<p>不要一开始就恢复所有旧软件。换机也是清理工作站契约的机会。</p>
+</section><section class="chapter" data-section="14"><div class="chapter-num">14 · CHAPTER</div><h1>13. 权限、安全与隐私</h1><p>macOS 上的便利工具经常需要系统权限。权限不是“点一下允许”这么简单，它决定了应用能观察或控制什么。</p>
+<h3>13.1 常见权限与原因</h3>
+<table>
+<thead>
+<tr>
+<th>权限</th>
+<th>常见用途</th>
+<th>复核问题</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>辅助功能</td>
+<td>窗口控制、自动粘贴、全局快捷键</td>
+<td>仍在使用该工具吗？</td>
+</tr>
+<tr>
+<td>屏幕与系统音频录制</td>
+<td>截图、录屏、会议、演示</td>
+<td>临时任务结束后还需要吗？</td>
+</tr>
+<tr>
+<td>完全磁盘访问权限</td>
+<td>备份、终端、索引、清理</td>
+<td>是否有更小权限可用？</td>
+</tr>
+<tr>
+<td>输入监控</td>
+<td>键盘增强、自动化</td>
+<td>来源和用途是否可信？</td>
+</tr>
+<tr>
+<td>自动化</td>
+<td>控制其他应用</td>
+<td>被控制应用范围是否合理？</td>
+</tr>
+<tr>
+<td>登录项</td>
+<td>常驻启动</td>
+<td>是否值得每次登录都启动？</td>
+</tr>
+</tbody>
+</table>
+<h3>13.2 剪贴板工具要单独评审</h3>
+<p>剪贴板历史很方便，也可能收集敏感片段。Raycast 官方文档说明其 Clipboard History 在本地加密，并对密码管理器复制内容做排除；Maccy 官方 README 也说明默认忽略一组被视为 confidential 的类型，包括 1Password 相关类型。</p>
+<p>即便如此，仍要遵守三条规则：</p>
+<ol>
+<li>Raycast Clipboard 与 Maccy 二选一。</li>
+<li>检查排除规则是否符合自己的密码管理器和工作应用。</li>
+<li>不在高敏感环境默认开启长期历史。</li>
+</ol>
+<h3>13.3 下载渠道</h3>
+<p>优先顺序：</p>
+<ol>
+<li>App Store</li>
+<li>项目官网</li>
+<li>Homebrew 官方 formula 或 cask</li>
+<li>项目官方 GitHub Releases</li>
+</ol>
+<p>社区帖子可以帮你发现软件，但不要从回帖中的第三方存储链接下载旧版安装包。来源、签名、更新渠道和许可都更难确认。</p>
+<h3>13.4 不盲目执行 shell 命令</h3>
+<p>看到任何一键安装、系统优化或权限修改命令时，先回答：</p>
+<ul>
+<li>它从哪里下载内容？</li>
+<li>是否有 <code>sudo</code>？</li>
+<li>是否修改 PATH、shell profile、系统设置或安全机制？</li>
+<li>是否能预演？</li>
+<li>是否能回滚？</li>
+<li>是否有独立备份？</li>
+</ul>
+<p>无法回答时，不执行。</p>
+</section><section class="chapter" data-section="15"><div class="chapter-num">15 · CHAPTER</div><h1>14. 社区推荐如何转化为可靠方案</h1><p>Linux.do 的讨论很有价值，因为它呈现了真实工作流：有人需要更好的播放器和解压工具，有人迁移到 uv 与 mise，有人希望新机安装不再遗漏 Docker 和 Node，也有人遇到清理工具影响 VPN 的反例。</p>
+<p>但社区口碑需要经过三步转化。</p>
+<h3>14.1 第一步：识别痛点</h3>
+<table>
+<thead>
+<tr>
+<th>社区信号</th>
+<th>背后痛点</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Raycast 高频出现</td>
+<td>启动、动作、窗口、快捷链接、片段</td>
+</tr>
+<tr>
+<td>OrbStack 高频出现</td>
+<td>macOS 容器和 Linux 开发体验</td>
+</tr>
+<tr>
+<td>Mole 与 Pearcleaner</td>
+<td>磁盘观察、卸载残留、维护</td>
+</tr>
+<tr>
+<td>Keka 与 IINA</td>
+<td>原生压缩、媒体能力不足</td>
+</tr>
+<tr>
+<td>LocalSend</td>
+<td>非 Apple 设备之间传文件</td>
+</tr>
+<tr>
+<td>mise 与 uv</td>
+<td>多语言版本和 Python 依赖分散</td>
+</tr>
+<tr>
+<td>Loop、Rectangle、AeroSpace</td>
+<td>原生窗口动作不足</td>
+</tr>
+</tbody>
+</table>
+<h3>14.2 第二步：回到官方来源</h3>
+<p>对每个候选检查：</p>
+<ul>
+<li>官方安装路径</li>
+<li>当前支持系统</li>
+<li>权限要求</li>
+<li>网络行为</li>
+<li>商业许可</li>
+<li>是否与现有工具重复</li>
+<li>是否存在可解释的卸载路径</li>
+</ul>
+<p>例如：</p>
+<ul>
+<li>OrbStack 的许可边界必须看官方 licensing 页面。</li>
+<li>Ghostty 推荐先零配置使用，因为官方文档明确这样设计。</li>
+<li>Stats 的 Sensors 和 Bluetooth 模块可能增加资源消耗，官方 README 给出了关闭建议。</li>
+<li>Maccy 支持 confidential 类型排除，但仍要理解剪贴板风险。</li>
+</ul>
+<h3>14.3 第三步：进入分层清单</h3>
+<p>不是所有好软件都进入默认层。一个候选只有在以下条件成立时才值得成为基线：</p>
+<ol>
+<li>大多数开发者都会遇到这个问题。</li>
+<li>工具职责清晰。</li>
+<li>来源稳定。</li>
+<li>权限和许可可控。</li>
+<li>卸载与迁移成本可接受。</li>
+</ol>
+<p>其余工具放在按需层，遇到痛点再安装。</p>
+</section><section class="chapter" data-section="16"><div class="chapter-num">16 · CHAPTER</div><h1>15. 三种工作站配置</h1><p>不同角色不应该共享一份无限增长的安装清单。下面给出三套组合。</p>
+<h3>15.1 轻量通用开发</h3>
+<p>适合前端、后端、脚本和文档工作：</p>
+<pre><code class="language-ruby">brew &quot;bat&quot;
+brew &quot;eza&quot;
+brew &quot;fd&quot;
+brew &quot;fzf&quot;
+brew &quot;gh&quot;
+brew &quot;git-delta&quot;
+brew &quot;jq&quot;
+brew &quot;mise&quot;
+brew &quot;mole&quot;
+brew &quot;ripgrep&quot;
+brew &quot;uv&quot;
+brew &quot;zoxide&quot;
+cask &quot;ghostty&quot;
+</code></pre>
+<p>特点：工具少、恢复快、终端体验完整。容器和启动器按需添加。</p>
+<h3>15.2 容器与云原生开发</h3>
+<p>在轻量通用开发基础上添加：</p>
+<pre><code class="language-ruby">cask &quot;orbstack&quot;
+</code></pre>
+<p>再按项目需要使用 Docker Compose 或本地 Kubernetes。不要把 Kubernetes 当作所有项目默认入口。</p>
+<p>特点：容器、Linux 和 Mac 文件系统边界清晰；需要额外关注许可、volume 和跨架构镜像。</p>
+<h3>15.3 效率增强桌面</h3>
+<p>在通用开发基础上，按痛点选择：</p>
+<pre><code class="language-ruby">cask &quot;raycast&quot;
+cask &quot;jordanbaird-ice&quot;
+cask &quot;stats&quot;
+cask &quot;iina&quot;
+cask &quot;keka&quot;
+cask &quot;localsend&quot;
+</code></pre>
+<p>窗口工具只选一个：</p>
+<pre><code class="language-ruby">cask &quot;loop&quot;
+# 或 cask &quot;rectangle&quot;
+</code></pre>
+<p>特点：桌面动作更短，但权限、后台常驻和快捷键冲突需要定期复核。</p>
+</section><section class="chapter" data-section="17"><div class="chapter-num">17 · CHAPTER</div><h1>16. 排障手册</h1><p>排障时先确认层级，不要一上来重装系统或复制更多配置。</p>
+<h3>16.1 <code>brew</code> 找不到</h3>
+<pre><code class="language-bash">which brew
+echo &quot;$PATH&quot;
+</code></pre>
+<p>Apple Silicon 常见修复：</p>
+<pre><code class="language-bash">eval &quot;$(/opt/homebrew/bin/brew shellenv)&quot;
+</code></pre>
+<p>确认后把正确语句写入 <code>.zshrc</code>。Intel Mac 路径不同。</p>
+<h3>16.2 项目工具版本错误</h3>
+<pre><code class="language-bash">mise current
+mise doctor
+</code></pre>
+<p>检查：</p>
+<ul>
+<li>当前目录是否有 <code>mise.toml</code></li>
+<li>上级目录是否有覆盖配置</li>
+<li>是否存在 <code>mise.lock</code></li>
+<li>shell 是否已激活 mise</li>
+<li>拉取的新配置是否已经审阅和信任</li>
+</ul>
+<h3>16.3 Python 包找不到</h3>
+<pre><code class="language-bash">uv run python -V
+uv sync
+uv run python -c 'import sys; print(sys.executable)'
+</code></pre>
+<p>优先通过 <code>uv run</code> 执行项目命令，不要先回到全局 <code>pip install</code>。</p>
+<h3>16.4 Docker 异常</h3>
+<pre><code class="language-bash">docker context show
+docker compose ps
+docker volume ls
+</code></pre>
+<p>检查：</p>
+<ul>
+<li>OrbStack 是否已启动</li>
+<li>context 是否为预期值</li>
+<li>是否混用多个 Docker 实现</li>
+<li>bind mount 是否跨越了不合适的文件系统边界</li>
+<li>Apple Silicon 是否正在运行只提供 x86 的镜像</li>
+</ul>
+<h3>16.5 菜单栏工具不显示</h3>
+<p>Stats 官方 README 特别提醒，macOS 26 引入了菜单栏隐私控制。如果 Stats 已启动、模块已开启，但图标不显示，先查看 <code>系统设置 &gt; 菜单栏</code>。</p>
+<h3>16.6 快捷键冲突</h3>
+<p>按顺序排查：</p>
+<ol>
+<li>系统键盘快捷键</li>
+<li>输入法切换</li>
+<li>Spotlight</li>
+<li>Raycast</li>
+<li>窗口管理器</li>
+<li>剪贴板工具</li>
+<li>编辑器快捷键</li>
+</ol>
+<p>不要同时修改多个工具。一次只改一处，使用一天再判断。</p>
+<h3>16.7 磁盘空间紧张</h3>
+<pre><code class="language-bash">mo analyze
+</code></pre>
+<p>先观察，再处理。大目录不等于垃圾目录。容器 volume、模拟器、SDK、模型文件和项目缓存都可能很大，但删除策略不同。</p>
+</section><section class="chapter" data-section="18"><div class="chapter-num">18 · CHAPTER</div><h1>17. 最佳食用方式</h1><p>这套工作流的价值，不在于第一天把系统打磨到极致，而在于每次变化都有入口。</p>
+<h3>第一天</h3>
+<ul>
+<li>完成第 2 章和第 3 章。</li>
+<li>学会 <code>⌘ Space</code>、<code>⌘ Tab</code>、<code>⌘ ` </code>、<code>Space</code>、<code>⇧ ⌘ G</code>、<code>⇧ ⌘ 5</code>。</li>
+<li>保留最小 Brewfile 和 <code>.zshrc</code>。</li>
+<li>不安装窗口管理器、剪贴板工具和菜单栏工具，除非痛点已经明确。</li>
+</ul>
+<h3>第一周</h3>
+<ul>
+<li>记录每天重复出现的摩擦。</li>
+<li>只针对最高频痛点补一个工具。</li>
+<li>对新权限做一次复核。</li>
+<li>使用一个真实项目验证 mise 与 uv。</li>
+<li>有容器需求时，用一个 Compose 项目验证 OrbStack。</li>
+</ul>
+<h3>第一个月</h3>
+<ul>
+<li>执行一次每月 SOP。</li>
+<li>确认 Time Machine 真的有备份。</li>
+<li>用 <code>brew bundle dump</code> 对比现状与契约。</li>
+<li>用 <code>mo analyze</code> 理解磁盘分布。</li>
+<li>把稳定的 dotfiles 纳入 chezmoi 或普通 Git 仓库。</li>
+</ul>
+<h3>长期</h3>
+<ul>
+<li>工具更新从“追新”变为“受控升级”。</li>
+<li>软件推荐从“别人说好用”变为“它减少了哪一步”。</li>
+<li>机器迁移从“手工回忆”变为“按契约恢复”。</li>
+<li>系统优化从“批量执行”变为“备份、预演、审阅、再执行”。</li>
+</ul>
+</section><section class="chapter" data-section="19"><div class="chapter-num">19 · CHAPTER</div><h1>18. 发布前自检</h1><p>如果要把这套工作站配置交给团队，至少完成以下检查。</p>
+<h3>系统</h3>
+<ul>
+<li>[ ] 系统版本已记录。</li>
+<li>[ ] FileVault 已开启，恢复方式已保存。</li>
+<li>[ ] Time Machine 已完成首次备份。</li>
+<li>[ ] 权限列表已复核。</li>
+</ul>
+<h3>安装契约</h3>
+<ul>
+<li>[ ] Brewfile 已进入版本控制。</li>
+<li>[ ] <code>brew bundle check --file=./Brewfile</code> 通过。</li>
+<li>[ ] 没有未经审阅的 tap 或脚本。</li>
+<li>[ ] GUI 工具都有明确职责。</li>
+</ul>
+<h3>开发环境</h3>
+<ul>
+<li>[ ] <code>.zshrc</code> 保持最小且可解释。</li>
+<li>[ ] <code>mise doctor</code> 通过。</li>
+<li>[ ] 项目包含 <code>mise.toml</code>，需要复现时包含 <code>mise.lock</code>。</li>
+<li>[ ] Python 项目使用 <code>pyproject.toml</code> 和 <code>uv.lock</code>。</li>
+<li>[ ] 容器项目有明确的 Compose 文件、volume 策略和架构说明。</li>
+</ul>
+<h3>维护</h3>
+<ul>
+<li>[ ] 清理命令默认先 <code>--dry-run</code>。</li>
+<li>[ ] 没有无人值守深度清理任务。</li>
+<li>[ ] 大版本升级前有备份与恢复清单。</li>
+<li>[ ] 不再使用的权限、登录项和常驻模块已回收。</li>
+</ul>
+<p>一台成熟的 Mac 工作站不需要显得复杂。它应该让日常路径更短，让故障边界更清楚，让下一台机器更容易恢复。</p>
+</section><section class="chapter" data-section="20"><div class="chapter-num">20 · APPENDIX</div><h1>附录：macOS Developer Workstation Cheatsheet</h1><p class="lead">这一章可以独立打印。第一次接入按顺序执行，日常使用按问题查动作和命令。</p><h2>1. 新机 60 分钟</h2>
+<table>
+<thead>
+<tr>
+<th>时间</th>
+<th>动作</th>
+<th>验收</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0 - 10 分钟</td>
+<td>系统更新、登录账户、开启 FileVault</td>
+<td><code>系统设置 &gt; 通用 &gt; 软件更新</code> 无待处理更新</td>
+</tr>
+<tr>
+<td>10 - 20 分钟</td>
+<td>连接 Time Machine，确认恢复密钥保存位置</td>
+<td>备份菜单能看到最近备份时间</td>
+</tr>
+<tr>
+<td>20 - 30 分钟</td>
+<td>安装 Command Line Tools 与 Homebrew</td>
+<td><code>xcode-select -p</code>、<code>brew --version</code></td>
+</tr>
+<tr>
+<td>30 - 40 分钟</td>
+<td>应用基础 Brewfile</td>
+<td><code>brew bundle check --file=./Brewfile</code></td>
+</tr>
+<tr>
+<td>40 - 50 分钟</td>
+<td>配置 Git、GitHub CLI、zsh、mise、uv</td>
+<td><code>gh auth status</code>、<code>mise doctor</code>、<code>uv --version</code></td>
+</tr>
+<tr>
+<td>50 - 60 分钟</td>
+<td>按需安装 Ghostty、OrbStack，完成冒烟测试</td>
+<td><code>docker run --rm hello-world</code></td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash">xcode-select --install
+
+# Homebrew 安装完成后，根据安装器提示执行 shellenv。
+eval &quot;$(/opt/homebrew/bin/brew shellenv)&quot;
+
+brew bundle check --file=./Brewfile || brew bundle install --file=./Brewfile
+gh auth login
+</code></pre>
+<h2>2. 键位图例</h2>
+<table>
+<thead>
+<tr>
+<th>符号</th>
+<th>名称</th>
+<th>常见语义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>⌘</code></td>
+<td>Command</td>
+<td>应用级主修饰键</td>
+</tr>
+<tr>
+<td><code>⌥</code></td>
+<td>Option / Alt</td>
+<td>替代动作、按词移动、显示细粒度选项</td>
+</tr>
+<tr>
+<td><code>⌃</code></td>
+<td>Control</td>
+<td>系统动作、终端动作、桌面切换</td>
+</tr>
+<tr>
+<td><code>⇧</code></td>
+<td>Shift</td>
+<td>反向、范围选择、组合动作</td>
+</tr>
+<tr>
+<td><code>fn</code> / <code>Globe</code></td>
+<td>Function / Globe</td>
+<td>功能键、输入源和系统动作</td>
+</tr>
+</tbody>
+</table>
+<h2>3. 每天都值得记住的快捷键</h2>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>⌘ Space</code></td>
+<td>Spotlight 搜索</td>
+</tr>
+<tr>
+<td><code>⌘ Tab</code></td>
+<td>切换应用</td>
+</tr>
+<tr>
+<td><code>⌘ ` </code></td>
+<td>切换当前应用的窗口</td>
+</tr>
+<tr>
+<td><code>⌘ W</code></td>
+<td>关闭窗口或标签</td>
+</tr>
+<tr>
+<td><code>⌘ Q</code></td>
+<td>退出应用</td>
+</tr>
+<tr>
+<td><code>⌘ ,</code></td>
+<td>打开当前应用设置</td>
+</tr>
+<tr>
+<td><code>⌥ ⌘ Esc</code></td>
+<td>强制退出应用</td>
+</tr>
+<tr>
+<td><code>⌃ ⌘ Q</code></td>
+<td>锁定屏幕</td>
+</tr>
+<tr>
+<td><code>Space</code></td>
+<td>Finder 中 Quick Look 预览</td>
+</tr>
+<tr>
+<td><code>⇧ ⌘ 3</code></td>
+<td>截取全屏</td>
+</tr>
+<tr>
+<td><code>⇧ ⌘ 4</code></td>
+<td>截取选区</td>
+</tr>
+<tr>
+<td><code>⇧ ⌘ 5</code></td>
+<td>截图与录屏面板</td>
+</tr>
+<tr>
+<td><code>⌃ ↑</code></td>
+<td>Mission Control</td>
+</tr>
+<tr>
+<td><code>⌃ ↓</code></td>
+<td>当前应用的所有窗口</td>
+</tr>
+</tbody>
+</table>
+<h2>4. Finder</h2>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>⇧ ⌘ G</code></td>
+<td>前往文件夹</td>
+</tr>
+<tr>
+<td><code>⇧ ⌘ H</code></td>
+<td>打开用户目录</td>
+</tr>
+<tr>
+<td><code>⌥ ⌘ L</code></td>
+<td>打开下载目录</td>
+</tr>
+<tr>
+<td><code>⇧ ⌘ U</code></td>
+<td>打开实用工具目录</td>
+</tr>
+<tr>
+<td><code>⇧ ⌘ N</code></td>
+<td>新建文件夹</td>
+</tr>
+<tr>
+<td><code>⌘ I</code></td>
+<td>显示简介</td>
+</tr>
+<tr>
+<td><code>⌘ Delete</code></td>
+<td>移到废纸篓</td>
+</tr>
+<tr>
+<td><code>⌥ ⌘ V</code></td>
+<td>将剪贴板中的文件移动到当前位置</td>
+</tr>
+<tr>
+<td><code>⌥ ⌘ P</code></td>
+<td>显示或隐藏路径栏</td>
+</tr>
+<tr>
+<td><code>⌘ 1 / 2 / 3 / 4</code></td>
+<td>图标、列表、分栏、画廊视图</td>
+</tr>
+<tr>
+<td><code>⌘ ↑</code></td>
+<td>上级目录</td>
+</tr>
+<tr>
+<td><code>⌘ ↓</code></td>
+<td>打开所选项目</td>
+</tr>
+<tr>
+<td><code>⌘ [</code> / <code>⌘ ]</code></td>
+<td>后退 / 前进</td>
+</tr>
+</tbody>
+</table>
+<h2>5. 文本编辑</h2>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>动作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>⌥ ←</code> / <code>⌥ →</code></td>
+<td>按词移动</td>
+</tr>
+<tr>
+<td><code>⌘ ←</code> / <code>⌘ →</code></td>
+<td>行首 / 行尾</td>
+</tr>
+<tr>
+<td><code>⌘ ↑</code> / <code>⌘ ↓</code></td>
+<td>文首 / 文末</td>
+</tr>
+<tr>
+<td><code>⌥ Delete</code></td>
+<td>删除左侧一个词</td>
+</tr>
+<tr>
+<td><code>fn Delete</code></td>
+<td>向右删除</td>
+</tr>
+<tr>
+<td><code>⇧</code> 加移动键</td>
+<td>扩展选择范围</td>
+</tr>
+<tr>
+<td><code>⌘ Z</code></td>
+<td>撤销</td>
+</tr>
+<tr>
+<td><code>⇧ ⌘ Z</code></td>
+<td>重做</td>
+</tr>
+</tbody>
+</table>
+<h2>6. Homebrew 与 Brewfile</h2>
+<pre><code class="language-bash"># 日常查询
+brew search &lt;name&gt;
+brew info &lt;name&gt;
+brew list
+brew outdated
+
+# 应用契约
+brew bundle check --file=./Brewfile
+brew bundle install --file=./Brewfile
+
+# 维护
+brew update
+brew upgrade
+brew cleanup
+brew doctor
+
+# 导出现状，必须审阅 diff
+brew bundle dump --global --force --describe
+
+# 危险：只看差异，不要直接加 --force
+brew bundle cleanup --file=./Brewfile
+</code></pre>
+<p>Apple Silicon 默认 Homebrew 前缀为 <code>/opt/homebrew</code>，Intel Mac 默认前缀为 <code>/usr/local</code>。</p>
+<h2>7. 推荐基础 Brewfile</h2>
+<pre><code class="language-ruby">brew &quot;bat&quot;
+brew &quot;eza&quot;
+brew &quot;fd&quot;
+brew &quot;fzf&quot;
+brew &quot;gh&quot;
+brew &quot;git-delta&quot;
+brew &quot;jq&quot;
+brew &quot;mise&quot;
+brew &quot;mole&quot;
+brew &quot;ripgrep&quot;
+brew &quot;uv&quot;
+brew &quot;zoxide&quot;
+
+cask &quot;ghostty&quot;
+# cask &quot;orbstack&quot; # 有容器或 Linux 需求时启用
+# cask &quot;raycast&quot;  # 原生 Spotlight 不够用时启用
+</code></pre>
+<h2>8. zsh 最小配置</h2>
+<pre><code class="language-zsh"># ~/.zshrc
+if [[ -x /opt/homebrew/bin/brew ]]; then
+  eval &quot;$(/opt/homebrew/bin/brew shellenv)&quot;
+fi
+
+eval &quot;$(mise activate zsh)&quot;
+eval &quot;$(zoxide init zsh)&quot;
+
+alias ll='eza -lah --group-directories-first'
+alias cat='bat --paging=never'
+</code></pre>
+<h2>9. Git 与 GitHub CLI</h2>
+<pre><code class="language-bash">git config --global --edit
+git config --global init.defaultBranch main
+git config --global pull.ff only
+git config --global fetch.prune true
+
+gh auth login
+gh auth status
+ssh -T git@github.com
+</code></pre>
+<h2>10. mise</h2>
+<pre><code class="language-bash"># 交互 shell 已在 ~/.zshrc 中激活
+mise doctor
+mise ls
+mise current
+
+# 全局默认，只保留少量通用项
+mise use --global node@lts
+
+# 项目内写入 mise.toml
+mise use node@lts
+mise use python@3.12
+mise install
+mise run test
+
+# 团队可复现
+mise settings lockfile=true
+mise lock
+git add mise.toml mise.lock
+</code></pre>
+<p>拉取陌生项目后，先审阅 <code>mise.toml</code>、任务和 hooks，再执行信任操作。</p>
+<h2>11. uv</h2>
+<pre><code class="language-bash">brew install uv
+
+uv init hello-world
+cd hello-world
+uv add requests
+uv run python -c 'import requests; print(requests.__version__)'
+
+uv lock
+uv sync
+uv tool install ruff
+</code></pre>
+<p>Python 项目依赖写入 <code>pyproject.toml</code> 与 <code>uv.lock</code>。不要把项目依赖堆到全局 Python。</p>
+<h2>12. OrbStack</h2>
+<pre><code class="language-bash">brew install orbstack
+
+docker context show
+docker run --rm hello-world
+docker compose up -d
+docker compose ps
+docker compose down
+
+orb create ubuntu devbox
+orb -m devbox uname -a
+orb logs devbox
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>容器持久数据</td>
+<td>优先 volume；需要从 Mac 观察时使用 <code>~/OrbStack/docker</code></td>
+</tr>
+<tr>
+<td>Apple Silicon 运行 x86 镜像</td>
+<td>显式使用 <code>--platform linux/amd64</code>，只在确有需要时启用</td>
+</tr>
+<tr>
+<td>Linux 中访问 Mac 文件</td>
+<td>使用 <code>/mnt/mac</code></td>
+</tr>
+<tr>
+<td>Mac 中访问 Linux 文件</td>
+<td>使用 <code>~/OrbStack</code> 或 Finder 集成</td>
+</tr>
+<tr>
+<td>商业使用</td>
+<td>先阅读官方 licensing 页面</td>
+</tr>
+<tr>
+<td>Docker TCP</td>
+<td>不开放未认证的 <code>0.0.0.0:2375</code></td>
+</tr>
+</tbody>
+</table>
+<h2>13. Mole</h2>
+<pre><code class="language-bash">brew install mole
+
+# 默认从只读动作开始
+mo status
+mo analyze
+
+# 删除动作先预演
+mo clean --dry-run
+mo uninstall --dry-run
+mo purge --dry-run
+
+# 回看日志
+mo history
+mo history --json
+</code></pre>
+<p>不要把深度清理写进定时任务。删除前先备份，阅读列表，确认 VPN、开发缓存、模拟器和挂载卷等工作资产不会受影响。</p>
+<h2>14. 按痛点安装</h2>
+<table>
+<thead>
+<tr>
+<th>痛点</th>
+<th>先试原生</th>
+<th>第三方候选</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>启动、动作、Quicklinks、Snippets</td>
+<td>Spotlight</td>
+<td>Raycast</td>
+</tr>
+<tr>
+<td>窗口排列</td>
+<td>macOS 原生平铺</td>
+<td>Loop / Rectangle / AeroSpace 三选一</td>
+</tr>
+<tr>
+<td>菜单栏拥挤</td>
+<td>系统设置精简</td>
+<td>Ice</td>
+</tr>
+<tr>
+<td>剪贴板历史</td>
+<td>无</td>
+<td>Raycast Clipboard 或 Maccy 二选一</td>
+</tr>
+<tr>
+<td>系统状态</td>
+<td>活动监视器</td>
+<td>Stats</td>
+</tr>
+<tr>
+<td>媒体播放</td>
+<td>QuickTime Player</td>
+<td>IINA</td>
+</tr>
+<tr>
+<td>压缩解压</td>
+<td>Finder</td>
+<td>Keka</td>
+</tr>
+<tr>
+<td>跨平台局域网传输</td>
+<td>AirDrop</td>
+<td>LocalSend</td>
+</tr>
+<tr>
+<td>外接显示器</td>
+<td>系统显示器设置</td>
+<td>BetterDisplay</td>
+</tr>
+<tr>
+<td>GUI 卸载</td>
+<td>手工移除</td>
+<td>Pearcleaner</td>
+</tr>
+<tr>
+<td>GUI 安装 Homebrew cask</td>
+<td>Brewfile</td>
+<td>Applite</td>
+</tr>
+</tbody>
+</table>
+<h2>15. 日常 SOP</h2>
+<h3>每天</h3>
+<pre><code class="language-bash">git status --short --branch
+mise current
+docker compose ps
+</code></pre>
+<h3>每周</h3>
+<pre><code class="language-bash">brew update
+brew outdated
+brew bundle check --file=./Brewfile
+mo status
+</code></pre>
+<h3>每月</h3>
+<pre><code class="language-bash">brew upgrade
+brew cleanup
+brew doctor
+mo analyze
+</code></pre>
+<p>同时检查 Time Machine 最近备份、权限列表、登录项、磁盘余量和不再使用的菜单栏模块。</p>
+<h3>大版本升级前</h3>
+<ol>
+<li>完成一次 Time Machine 备份。</li>
+<li>导出并审阅 Brewfile。</li>
+<li>提交 dotfiles 与项目变更。</li>
+<li>记录关键应用许可、VPN、证书和组织策略。</li>
+<li>暂停高风险清理与批量修改。</li>
+</ol>
+<h2>16. 排障顺序</h2>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>第一检查</th>
+<th>第二检查</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>brew</code> 找不到</td>
+<td><code>which brew</code></td>
+<td><code>eval &quot;$(/opt/homebrew/bin/brew shellenv)&quot;</code></td>
+</tr>
+<tr>
+<td>项目工具版本错</td>
+<td><code>mise current</code></td>
+<td>审阅 <code>mise.toml</code> 与 <code>mise.lock</code></td>
+</tr>
+<tr>
+<td>Python 包找不到</td>
+<td><code>uv run python -V</code></td>
+<td><code>uv sync</code></td>
+</tr>
+<tr>
+<td>Docker 命令异常</td>
+<td><code>docker context show</code></td>
+<td>打开 OrbStack，检查容器与 volume</td>
+</tr>
+<tr>
+<td>菜单栏监控不显示</td>
+<td>模块是否开启</td>
+<td><code>系统设置 &gt; 菜单栏</code> 权限</td>
+</tr>
+<tr>
+<td>快捷键失效</td>
+<td>系统快捷键冲突</td>
+<td>启动器、输入法和窗口工具冲突</td>
+</tr>
+<tr>
+<td>磁盘空间紧张</td>
+<td><code>mo analyze</code></td>
+<td>审阅大目录，再决定是否删除</td>
+</tr>
+<tr>
+<td>shell 变慢</td>
+<td><code>zsh -xlic exit</code></td>
+<td>暂时移除插件，保留最小配置</td>
+</tr>
+</tbody>
+</table>
+</section><section class="chapter" data-section="21"><div class="chapter-num">21 · APPENDIX</div><h1>附录：资料来源与边界</h1><p class="lead">事实优先来自 Apple 支持文档和各项目官方文档；社区讨论用于发现真实痛点、候选工具和反例。</p><div class="source-list"><h2>Method</h2>
+<p>本手册在 <code>2026-06-02</code> 完成资料收集与核验。事实优先来自 Apple 支持文档和各项目官方文档；Homebrew API 用于确认 Brewfile 标识；Linux.do 公开讨论用于发现候选工具、使用场景和反例。社区内容不作为安全边界或高风险命令的唯一依据。</p>
+<p>逐条链接保存在 <code>data/source-map.tsv</code>。以下为正文使用频率最高的来源。</p>
+<h2>Apple</h2>
+<ul>
+<li><a href="https://support.apple.com/en-us/109033">Find out which macOS your Mac is using</a>：系统版本口径。Apple 在 <code>2026-05-11</code> 发布的页面中列出 <code>macOS Tahoe 26.5</code>。</li>
+<li><a href="https://support.apple.com/en-us/102650">Mac keyboard shortcuts</a>：修饰键、应用切换、Finder、截图、锁屏和文本编辑快捷键。</li>
+<li><a href="https://support.apple.com/guide/mac-help/take-actions-and-shortcuts-in-spotlight-mchl4953dfeb/mac">Take actions and shortcuts in Spotlight</a>：Spotlight 能力。</li>
+<li><a href="https://support.apple.com/guide/mac-help/mh35869/mac">Trackpad gestures</a>、<a href="https://support.apple.com/en-us/102482">three finger drag</a> 与 <a href="https://support.apple.com/guide/mac-help/use-hot-corners-mchlp3000/mac">Hot Corners</a>：触控板和桌面动作。</li>
+<li><a href="https://support.apple.com/guide/mac-help/change-window-tiling-settings-mchl118087b0/mac">Window tiling settings</a>：原生窗口平铺设置。</li>
+<li><a href="https://support.apple.com/guide/mac-help/mh11785/mac">FileVault</a> 与 <a href="https://support.apple.com/en-us/102307">Time Machine</a>：磁盘加密和备份。</li>
+<li><a href="https://support.apple.com/guide/mac-help/mchl211c911f/mac">Privacy &amp; Security</a>、<a href="https://support.apple.com/guide/mac-help/mh43185/mac">Accessibility</a> 与 <a href="https://support.apple.com/guide/mac-help/mchld6aa7d23/mac">screen recording</a>：权限治理。</li>
+</ul>
+<h2>Workstation Contract</h2>
+<ul>
+<li><a href="https://docs.brew.sh/Installation">Homebrew Installation</a>：默认前缀、Command Line Tools 和支持系统。</li>
+<li><a href="https://docs.brew.sh/Brew-Bundle-and-Brewfile">Brew Bundle and Brewfile</a>：<code>brew bundle check</code>、<code>dump</code>、<code>cleanup</code> 与版本控制工作流。</li>
+<li><a href="https://docs.brew.sh/Analytics">Homebrew Analytics</a>：匿名统计说明和关闭命令。</li>
+<li><a href="https://ghostty.org/docs/install/binary">Ghostty binary install</a>、<a href="https://ghostty.org/docs/config">configuration</a> 与 <a href="https://ghostty.org/docs/features/shell-integration">shell integration</a>：安装、零配置理念和配置文件路径。</li>
+<li><a href="https://mise.jdx.dev/getting-started.html">mise getting started</a>、<a href="https://mise.jdx.dev/configuration.html">configuration</a>、<a href="https://mise.jdx.dev/tasks/">tasks</a> 与 <a href="https://mise.jdx.dev/dev-tools/mise-lock.html">lockfile</a>：运行时、任务与锁文件。</li>
+<li><a href="https://docs.astral.sh/uv/getting-started/installation/">uv installation</a>、<a href="https://docs.astral.sh/uv/guides/projects/">projects</a> 与 <a href="https://docs.astral.sh/uv/guides/tools/">tools</a>：Python 项目工作流。</li>
+<li><a href="https://cli.github.com/manual/gh_auth_login">GitHub CLI auth login</a>：GitHub CLI 登录。</li>
+<li><a href="https://www.chezmoi.io/install/">chezmoi install</a> 与 <a href="https://www.chezmoi.io/quick-start/">quick start</a>：dotfiles 管理。</li>
+</ul>
+<h2>Containers and Maintenance</h2>
+<ul>
+<li><a href="https://docs.orbstack.dev/quick-start">OrbStack quick start</a>、<a href="https://docs.orbstack.dev/docker/">Docker</a>、<a href="https://docs.orbstack.dev/machines/">Linux machines</a>、<a href="https://docs.orbstack.dev/kubernetes/">Kubernetes</a>、<a href="https://docs.orbstack.dev/efficiency">efficiency</a> 与 <a href="https://docs.orbstack.dev/licensing">licensing</a>：容器、Linux、资源行为、安全和商业许可。</li>
+<li><a href="https://github.com/tw93/mole/blob/main/README.md">Mole README</a> 与 <a href="https://github.com/tw93/mole/blob/main/SECURITY.md">security policy</a>：清理命令、<code>--dry-run</code>、操作日志和保护边界。</li>
+</ul>
+<h2>Optional Tools</h2>
+<ul>
+<li><a href="https://manual.raycast.com/window-management">Raycast window management</a>、<a href="https://manual.raycast.com/clipboard-history">clipboard history</a>、<a href="https://manual.raycast.com/quicklinks">Quicklinks</a>、<a href="https://manual.raycast.com/snippets">Snippets</a> 与 <a href="https://manual.raycast.com/security-and-privacy">security and privacy</a>。</li>
+<li><a href="https://github.com/jordanbaird/Ice">Ice</a>、<a href="https://github.com/exelban/stats">Stats</a>、<a href="https://github.com/iina/iina">IINA</a>、<a href="https://www.keka.io/en/">Keka</a>、<a href="https://github.com/localsend/localsend">LocalSend</a>、<a href="https://github.com/p0deje/Maccy">Maccy</a>。</li>
+<li><a href="https://github.com/waydabber/BetterDisplay">BetterDisplay</a>、<a href="https://github.com/rxhanson/Rectangle">Rectangle</a>、<a href="https://github.com/MrKai77/Loop">Loop</a>、<a href="https://github.com/nikitabobko/AeroSpace">AeroSpace</a>。</li>
+<li><a href="https://github.com/alienator88/Pearcleaner">Pearcleaner</a>、<a href="https://github.com/milanvarady/Applite">Applite</a>、<a href="https://github.com/mas-cli/mas">mas</a>。</li>
+</ul>
+<h2>Linux.do Community Reading</h2>
+<ul>
+<li><a href="https://linux.do/t/topic/2293064">macOS 软件与配置讨论</a></li>
+<li><a href="https://linux.do/t/topic/878250">沉淀数月使用，我推荐的 Mac 软件</a></li>
+<li><a href="https://linux.do/t/topic/3528">Mac 软件推荐分享</a></li>
+<li><a href="https://linux.do/t/topic/1381877">Mac 效率与软件讨论</a></li>
+<li><a href="https://linux.do/t/topic/1470285">开发环境管理迁移讨论</a></li>
+<li><a href="https://linux.do/t/topic/1407819">新机一键安装讨论</a></li>
+<li><a href="https://linux.do/t/topic/2193673">第一台 MacBook 软件讨论</a></li>
+<li><a href="https://linux.do/t/topic/244759">Mac App 推荐讨论</a></li>
+</ul>
+<h2>Boundaries</h2>
+<ul>
+<li>本手册不是 Apple、Homebrew 或任何第三方项目的官方出版物。</li>
+<li>推荐项不等于永久安装项。团队许可、组织 MDM、合规要求和实际工作负载优先。</li>
+<li>软件界面、价格、许可和系统菜单会变化。安装前应再次阅读对应官方页面。</li>
+<li>文中示例不会替代备份、权限复核和代码审阅。</li>
+</ul>
+</div></section>
+</body>
+</html>
