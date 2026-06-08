@@ -14,5 +14,3 @@
 ```bash
 python3 -c "from weasyprint import HTML; HTML('index.html', base_url='.').write_pdf('embodied-intelligence-2026.pdf')"
 ```
-
-字体文件已随目录放在 `fonts/`，用于稳定中文 PDF 渲染。

@@ -12,7 +12,6 @@
 - `data/source-map.tsv`: 正文来源编号与 URL 映射。
 - `data/pdd-q1-2026-financials.csv`: Q1 2026 与 Q1 2025 财务拆解。
 - `data/pdd-price-reaction.csv`: 财报前后股价反应。
-- `fonts/`: PDF 使用的本地中文字体。
 
 ## Rebuild
 

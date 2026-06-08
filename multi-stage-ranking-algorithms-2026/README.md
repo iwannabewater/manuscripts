@@ -17,7 +17,6 @@
 | `multi-stage-ranking-algorithms-2026.pdf` | 正式阅读版报告。 |
 | `sources.md` | 研究方法、证据等级、平台覆盖范围与一手来源索引。 |
 | `data/source-map.tsv` | 引用编号、平台、阶段、来源类型、用途与核验日期的结构化映射。 |
-| `fonts/` | 为复现 PDF 排版保留的中文字体文件。 |
 
 ## 覆盖范围
 

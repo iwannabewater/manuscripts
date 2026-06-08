@@ -8,7 +8,6 @@ DeepSeek V4 官方 technical report 的中文深度解读报告，覆盖模型�
 - `deepseek-v4-technical-report-2026.pdf`: PDF 成品。
 - `sources.md`: 一手来源、核验口径与边界。
 - `data/source-map.tsv`: 正文来源编号与 URL 映射。
-- `fonts/`: PDF 使用的本地中文字体。
 
 ## Scope
 

@@ -12,7 +12,6 @@
 - `data/valuation-history.csv`: 权益估值标记时间线。
 - `data/option-pricing-history.csv`: 员工期权 / RSU / 股份回购报价历史。
 - `data/valuation-sensitivity.csv`: 可持续盈利倍数情景的可复算输入与结果。
-- `fonts/`: PDF 使用的本地中文字体。
 
 ## Rebuild
 

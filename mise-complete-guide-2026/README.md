@@ -19,7 +19,6 @@
 | `sources/official-docs/` | mise 官方仓库 Markdown 快照 |
 | `sources/raw/` | 官网、GitHub API 与交叉验证页面快照 |
 | `assets/mise-logo.svg` | mise 官方 logo |
-| `fonts/` | PDF 使用的本地中文与等宽字体 |
 
 ## Scope
 

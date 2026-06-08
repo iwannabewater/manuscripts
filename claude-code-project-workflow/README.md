@@ -14,7 +14,6 @@
 | `claude-code-project-workflow.pdf` | PDF 成品 |
 | `sources.md` | 官方来源、资料口径与边界说明 |
 | `data/source-map.tsv` | 来源页面与正文用途映射 |
-| `fonts/` | PDF 使用的本地中文字体 |
 
 ## Scope
 

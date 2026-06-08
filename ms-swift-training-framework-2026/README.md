@@ -14,7 +14,6 @@
 | `ms-swift-training-framework-2026.pdf` | PDF 成品 |
 | `sources.md` | 资料来源、口径与边界说明 |
 | `data/source-map.tsv` | 来源映射与核对口径 |
-| `fonts/` | 中文排版字体 |
 
 ## Rebuild
 

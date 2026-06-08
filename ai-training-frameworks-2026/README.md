@@ -14,7 +14,6 @@
 | `ai-training-frameworks-2026.pdf` | PDF 成品 |
 | `sources.md` | 资料来源、口径与边界说明 |
 | `data/repository-metadata.tsv` | 代表性项目公开仓库元数据 |
-| `fonts/` | 中文排版字体 |
 
 ## Rebuild
 

@@ -8,11 +8,9 @@
 - `verl-rl-training-framework-2026.pdf`：正式 PDF 成品。
 - `sources.md`：资料来源、版本口径与事实边界。
 - `data/source-map.tsv`：来源映射表。
-- `fonts/`：本作品自足渲染所需字体。
 
 ## 版本口径
 
 资料核对日期：2026-05-18。
 
 主要技术事实来自 `verl-project/verl` 官方仓库、官方 ReadTheDocs 文档、当前 `main` 分支源码浅克隆，以及 HybridFlow / DAPO / DeepSeekMath 等论文页面。文档中凡涉及“当前主线”均按本次核对的 `main` commit `657cfa5` 表述；凡涉及发布标签，按远端标签列表中最新的 `v0.7.1` 表述。
-

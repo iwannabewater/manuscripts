@@ -10,7 +10,6 @@
 - `data/source-map.tsv`: 正文来源编号与 URL 映射。
 - `data/financials-2023-2025.csv`: 年报核心财务数据。
 - `data/valuation-assumptions.csv`: 估值模型关键输入。
-- `fonts/`: PDF 使用的本地中文字体。
 
 ## Rebuild
 

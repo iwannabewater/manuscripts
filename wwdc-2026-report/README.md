@@ -10,7 +10,6 @@
 - `sources.md`：官方与媒体来源、使用边界。
 - `data/claim-map.tsv`：核心主张、证据与置信度映射。
 - `assets/`：Apple 官方页面视觉素材。
-- `fonts/`：离线排版字体。
 
 ## 时间边界
 

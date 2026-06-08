@@ -17,7 +17,6 @@
 | `ecommerce-generative-algorithms-2026.pdf` | 正式阅读版报告。 |
 | `sources.md` | 研究方法、证据等级、边界与一手来源索引。 |
 | `data/source-map.tsv` | 引用编号、来源类型、访问日期和正文用途的结构化映射。 |
-| `fonts/` | 为复现 PDF 排版保留的中文字体文件。 |
 
 ## 覆盖范围
 

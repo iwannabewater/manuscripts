@@ -9,7 +9,6 @@
 - `index.html`: 可读与可打印源文件。
 - `algorithm-engineer-cs-skill-pack-2026.pdf`: PDF 成品。
 - `sources.md`: 资料来源、口径与边界。
-- `fonts/`: PDF 复现所需字体。
 
 ## Scope
 

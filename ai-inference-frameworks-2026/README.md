@@ -8,7 +8,6 @@
 - `ai-inference-frameworks-2026.pdf`: PDF 成品。
 - `sources.md`: 一手来源、方法说明与边界。
 - `data/repository-metadata.tsv`: 公开仓库元数据，用于辅助判断项目活跃度、许可与维护状态。
-- `fonts/`: PDF 使用的本地中文字体。
 
 ## Scope
 

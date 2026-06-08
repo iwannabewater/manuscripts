@@ -7,7 +7,6 @@
 - `index.html`: 可读与可打印的报告源码。
 - `generative-recommendation-2026.pdf`: PDF 成品。
 - `sources.md`: 一手来源、方法说明与边界。
-- `fonts/`: PDF 使用的本地中文字体。
 
 ## Scope
 

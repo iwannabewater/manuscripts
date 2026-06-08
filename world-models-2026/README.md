@@ -8,7 +8,6 @@
 - `world-models-2026.pdf`: PDF 成品。
 - `sources.md`: 一手来源、方法说明与边界。
 - `data/source-map.tsv`: 正文来源编号与 URL 映射。
-- `fonts/`: PDF 使用的本地中文字体。
 
 ## Scope
 

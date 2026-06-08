@@ -8,7 +8,6 @@
 - `slime-rl-scaling-guide.pdf`: PDF 成品。
 - `sources.md`: 资料来源、口径和不覆盖范围。
 - `data/source-map.tsv`: 主要资料映射表。
-- `fonts/`: PDF 复现所需中文字体。
 
 ## Scope
 
