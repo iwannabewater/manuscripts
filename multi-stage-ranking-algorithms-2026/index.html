@@ -7,19 +7,21 @@
 <meta name="description" content="基于公开一手证据研究国内外头部平台在召回、粗排、精排、混排与重排阶段的算法路线和工程经验。">
 <meta name="keywords" content="推荐系统, 搜索排序, 召回, 粗排, 精排, 重排">
 <style>
-@font-face { font-family:"TsangerJinKai02"; src:url("fonts/TsangerJinKai02-W04.ttf") format("truetype"); font-weight:400; font-style:normal; }
-@font-face { font-family:"TsangerJinKai02"; src:url("fonts/TsangerJinKai02-W05.ttf") format("truetype"); font-weight:500; font-style:normal; }
+@font-face { font-family:"TsangerJinKai02"; src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"); font-weight:400; font-style:normal; }
+@font-face { font-family:"TsangerJinKai02"; src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"); font-weight:500; font-style:normal; }
 @page {
   size:A4; margin:19mm 21mm 21mm; background:#f5f4ed;
-  @top-right { content:string(section-title); font-family:"TsangerJinKai02","Source Han Serif SC","Noto Serif CJK SC","Songti SC",serif; font-size:8pt; color:#6b6a64; }
-  @bottom-center { content:counter(page) "  ·  多阶段排序算法技术路线 2026"; font-family:"TsangerJinKai02","Source Han Serif SC","Noto Serif CJK SC","Songti SC",serif; font-size:8.5pt; color:#6b6a64; }
+  @top-right { content:string(section-title); font-family: "TsangerJinKai02"; font-size:8pt; color:#6b6a64; }
+  @bottom-center { content:counter(page) "  ·  多阶段排序算法技术路线 2026"; font-family: "TsangerJinKai02"; font-size:8.5pt; color:#6b6a64; }
 }
 @page:first { @top-right { content:""; } @bottom-center { content:""; } }
 * { box-sizing:border-box; margin:0; padding:0; }
 :root {
   --paper:#f5f4ed; --ivory:#faf9f5; --ink:#141413; --dark:#3d3d3a; --olive:#504e49; --stone:#6b6a64;
   --brand:#1b365d; --brand2:#2d5a8a; --tint:#eef2f7; --line:#e8e6dc; --line2:#d8d4c7;
-  --serif:"TsangerJinKai02","Source Han Serif SC","Noto Serif CJK SC","Songti SC","STSong",Georgia,serif;
+  --serif: "TsangerJinKai02";
 }
 html,body { background:var(--paper); }
 @media screen { body { max-width:210mm; margin:0 auto; padding:19mm 21mm 21mm; } }
@@ -47,7 +49,7 @@ p { margin:0 0 8.2pt; line-height:1.54; }
 .lead { color:var(--dark); font-size:11.15pt; line-height:1.56; margin-bottom:12pt; }
 strong { font-weight:500; } .hl { color:var(--brand); font-weight:500; }
 ul { margin:6pt 0 10pt; padding-left:18pt; line-height:1.5; } li { margin-bottom:2.5pt; } li::marker { color:var(--brand); }
-code { font-family:"JetBrains Mono","SF Mono",Consolas,"TsangerJinKai02","Source Han Serif SC",monospace; font-size:8.35pt; background:var(--ivory); padding:1pt 3pt; border-radius:2pt; }
+code { font-family: "JetBrains Mono", "TsangerJinKai02"; font-size:8.35pt; background:var(--ivory); padding:1pt 3pt; border-radius:2pt; }
 table { width:100%; border-collapse:collapse; margin:10.5pt 0 12pt; font-size:8.25pt; break-inside:avoid; }
 th { text-align:left; color:var(--dark); font-weight:500; padding:4.7pt 5.2pt; border-bottom:1pt solid var(--line2); }
 td { padding:3.8pt 5.2pt; border-bottom:.3pt solid var(--line); vertical-align:top; }
@@ -68,6 +70,7 @@ figcaption { color:var(--stone); font-size:8.2pt; text-align:center; margin-top:
 .small { color:var(--stone); font-size:8pt; }
 .source-ref { color:var(--brand); font-size:8.4pt; white-space:nowrap; }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 <section class="cover">
@@ -133,26 +136,26 @@ figcaption { color:var(--stone); font-size:8.2pt; text-align:center; margin-top:
     <svg viewBox="0 0 1000 456" xmlns="http://www.w3.org/2000/svg">
       <defs><pattern id="dots1" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".9" fill="#e3e2dc"/></pattern></defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots1)" opacity=".55"/>
-      <text x="48" y="38" fill="#1b365d" font-size="14" letter-spacing="3">FIGURE  1</text>
-      <text x="184" y="38" fill="#504e49" font-size="14" letter-spacing="3">多阶段在线漏斗的职责与计算分配</text>
+      <text font-family="TsangerJinKai02" x="48" y="38" fill="#1b365d" font-size="14" letter-spacing="3">FIGURE  1</text>
+      <text font-family="TsangerJinKai02" x="184" y="38" fill="#504e49" font-size="14" letter-spacing="3">多阶段在线漏斗的职责与计算分配</text>
       <line x1="48" y1="54" x2="952" y2="54" stroke="#1b365d" stroke-width="1"/>
-      <text x="48" y="88" fill="#6b6a64" font-size="15">候选规模</text>
-      <text x="952" y="88" text-anchor="end" fill="#6b6a64" font-size="15">特征成本与列表责任</text>
+      <text font-family="TsangerJinKai02" x="48" y="88" fill="#6b6a64" font-size="15">候选规模</text>
+      <text font-family="TsangerJinKai02" x="952" y="88" text-anchor="end" fill="#6b6a64" font-size="15">特征成本与列表责任</text>
       <rect x="48" y="112" width="192" height="100" rx="8" fill="#faf9f5" stroke="#b2b1ac"/>
-      <text x="72" y="143" fill="#1b365d" font-size="15" letter-spacing="2">RETRIEVAL</text><text x="72" y="175" fill="#141413" font-size="24">召回</text><text x="72" y="198" fill="#504e49" font-size="14">十亿级 → 千级 · 覆盖</text>
+      <text font-family="TsangerJinKai02" x="72" y="143" fill="#1b365d" font-size="15" letter-spacing="2">RETRIEVAL</text><text font-family="TsangerJinKai02" x="72" y="175" fill="#141413" font-size="24">召回</text><text font-family="TsangerJinKai02" x="72" y="198" fill="#504e49" font-size="14">十亿级 → 千级 · 覆盖</text>
       <path d="M240 160 L268 160 M260 154 L268 160 L260 166" fill="none" stroke="#504e49" stroke-width="2"/>
       <rect x="268" y="112" width="192" height="100" rx="8" fill="#faf9f5" stroke="#b2b1ac"/>
-      <text x="292" y="143" fill="#1b365d" font-size="15" letter-spacing="2">PRE-RANK</text><text x="292" y="175" fill="#141413" font-size="24">粗排</text><text x="292" y="198" fill="#504e49" font-size="14">千级 → 百级 · 保真</text>
+      <text font-family="TsangerJinKai02" x="292" y="143" fill="#1b365d" font-size="15" letter-spacing="2">PRE-RANK</text><text font-family="TsangerJinKai02" x="292" y="175" fill="#141413" font-size="24">粗排</text><text font-family="TsangerJinKai02" x="292" y="198" fill="#504e49" font-size="14">千级 → 百级 · 保真</text>
       <path d="M460 160 L488 160 M480 154 L488 160 L480 166" fill="none" stroke="#504e49" stroke-width="2"/>
       <rect x="488" y="112" width="192" height="100" rx="8" fill="#eef2f7" stroke="#1b365d" stroke-width="2"/>
-      <text x="512" y="143" fill="#1b365d" font-size="15" letter-spacing="2">FINE RANK</text><text x="512" y="175" fill="#141413" font-size="24">精排</text><text x="512" y="198" fill="#504e49" font-size="14">百级 · 精确价值预测</text>
+      <text font-family="TsangerJinKai02" x="512" y="143" fill="#1b365d" font-size="15" letter-spacing="2">FINE RANK</text><text font-family="TsangerJinKai02" x="512" y="175" fill="#141413" font-size="24">精排</text><text font-family="TsangerJinKai02" x="512" y="198" fill="#504e49" font-size="14">百级 · 精确价值预测</text>
       <path d="M680 160 L708 160 M700 154 L708 160 L700 166" fill="none" stroke="#1b365d" stroke-width="2"/>
       <rect x="708" y="112" width="244" height="100" rx="8" fill="#eef2f7" stroke="#1b365d" stroke-width="2"/>
-      <text x="732" y="143" fill="#1b365d" font-size="15" letter-spacing="2">BLEND / RERANK</text><text x="732" y="175" fill="#141413" font-size="24">混排与重排</text><text x="732" y="198" fill="#504e49" font-size="14">页面级 · 约束与体验</text>
+      <text font-family="TsangerJinKai02" x="732" y="143" fill="#1b365d" font-size="15" letter-spacing="2">BLEND / RERANK</text><text font-family="TsangerJinKai02" x="732" y="175" fill="#141413" font-size="24">混排与重排</text><text font-family="TsangerJinKai02" x="732" y="198" fill="#504e49" font-size="14">页面级 · 约束与体验</text>
       <rect x="48" y="268" width="904" height="108" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
-      <text x="72" y="302" fill="#1b365d" font-size="15" letter-spacing="2">SHARED CONTROL PLANE</text>
-      <text x="72" y="336" fill="#141413" font-size="21">日志与曝光校正 · 特征新鲜度 · 在线实验 · 策略和安全护栏</text>
-      <text x="72" y="360" fill="#504e49" font-size="14">每层优化自己的目标，同时保留对下游结果的可测贡献</text>
+      <text font-family="TsangerJinKai02" x="72" y="302" fill="#1b365d" font-size="15" letter-spacing="2">SHARED CONTROL PLANE</text>
+      <text font-family="TsangerJinKai02" x="72" y="336" fill="#141413" font-size="21">日志与曝光校正 · 特征新鲜度 · 在线实验 · 策略和安全护栏</text>
+      <text font-family="TsangerJinKai02" x="72" y="360" fill="#504e49" font-size="14">每层优化自己的目标，同时保留对下游结果的可测贡献</text>
     </svg>
     <figcaption>漏斗为同一请求分配不同计算强度；末端候选最少，却承担最完整的页面责任。</figcaption>
   </figure>
@@ -261,24 +264,24 @@ figcaption { color:var(--stone); font-size:8.2pt; text-align:center; margin-top:
     <svg viewBox="0 0 1000 456" xmlns="http://www.w3.org/2000/svg">
       <defs><pattern id="dots2" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".9" fill="#e3e2dc"/></pattern></defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots2)" opacity=".55"/>
-      <text x="48" y="38" fill="#1b365d" font-size="14" letter-spacing="3">FIGURE  2</text>
-      <text x="184" y="38" fill="#504e49" font-size="14" letter-spacing="3">跨阶段监督、曝光偏差与线上验证</text>
+      <text font-family="TsangerJinKai02" x="48" y="38" fill="#1b365d" font-size="14" letter-spacing="3">FIGURE  2</text>
+      <text font-family="TsangerJinKai02" x="184" y="38" fill="#504e49" font-size="14" letter-spacing="3">跨阶段监督、曝光偏差与线上验证</text>
       <line x1="48" y1="54" x2="952" y2="54" stroke="#1b365d"/>
       <rect x="48" y="104" width="196" height="92" rx="8" fill="#faf9f5" stroke="#b2b1ac"/>
-      <text x="72" y="134" fill="#1b365d" font-size="14" letter-spacing="2">LOGGED EXPOSURE</text><text x="72" y="166" fill="#141413" font-size="21">曝光与行为日志</text><text x="72" y="187" fill="#504e49" font-size="13">含随机探索切片</text>
+      <text font-family="TsangerJinKai02" x="72" y="134" fill="#1b365d" font-size="14" letter-spacing="2">LOGGED EXPOSURE</text><text font-family="TsangerJinKai02" x="72" y="166" fill="#141413" font-size="21">曝光与行为日志</text><text font-family="TsangerJinKai02" x="72" y="187" fill="#504e49" font-size="13">含随机探索切片</text>
       <path d="M244 150 L276 150 M268 144 L276 150 L268 156" fill="none" stroke="#504e49" stroke-width="2"/>
       <rect x="276" y="104" width="196" height="92" rx="8" fill="#faf9f5" stroke="#b2b1ac"/>
-      <text x="300" y="134" fill="#1b365d" font-size="14" letter-spacing="2">TEACHER</text><text x="300" y="166" fill="#141413" font-size="21">精排 / 列表价值</text><text x="300" y="187" fill="#504e49" font-size="13">完整特征与目标</text>
+      <text font-family="TsangerJinKai02" x="300" y="134" fill="#1b365d" font-size="14" letter-spacing="2">TEACHER</text><text font-family="TsangerJinKai02" x="300" y="166" fill="#141413" font-size="21">精排 / 列表价值</text><text font-family="TsangerJinKai02" x="300" y="187" fill="#504e49" font-size="13">完整特征与目标</text>
       <path d="M472 150 L504 150 M496 144 L504 150 L496 156" fill="none" stroke="#1b365d" stroke-width="2"/>
       <rect x="504" y="104" width="196" height="92" rx="8" fill="#eef2f7" stroke="#1b365d" stroke-width="2"/>
-      <text x="528" y="134" fill="#1b365d" font-size="14" letter-spacing="2">STUDENT</text><text x="528" y="166" fill="#141413" font-size="21">召回 / 粗排</text><text x="528" y="187" fill="#504e49" font-size="13">成本内保留上限</text>
+      <text font-family="TsangerJinKai02" x="528" y="134" fill="#1b365d" font-size="14" letter-spacing="2">STUDENT</text><text font-family="TsangerJinKai02" x="528" y="166" fill="#141413" font-size="21">召回 / 粗排</text><text font-family="TsangerJinKai02" x="528" y="187" fill="#504e49" font-size="13">成本内保留上限</text>
       <path d="M700 150 L732 150 M724 144 L732 150 L724 156" fill="none" stroke="#1b365d" stroke-width="2"/>
       <rect x="732" y="104" width="220" height="92" rx="8" fill="#eef2f7" stroke="#1b365d" stroke-width="2"/>
-      <text x="756" y="134" fill="#1b365d" font-size="14" letter-spacing="2">ONLINE TEST</text><text x="756" y="166" fill="#141413" font-size="21">流量实验与护栏</text><text x="756" y="187" fill="#504e49" font-size="13">增量收益 · 尾风险</text>
+      <text font-family="TsangerJinKai02" x="756" y="134" fill="#1b365d" font-size="14" letter-spacing="2">ONLINE TEST</text><text font-family="TsangerJinKai02" x="756" y="166" fill="#141413" font-size="21">流量实验与护栏</text><text font-family="TsangerJinKai02" x="756" y="187" fill="#504e49" font-size="13">增量收益 · 尾风险</text>
       <rect x="48" y="264" width="904" height="112" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
-      <text x="72" y="298" fill="#1b365d" font-size="14" letter-spacing="2">MEASUREMENT SURFACES</text>
-      <text x="72" y="331" fill="#141413" font-size="20">Recall@K 对下游结果 · 多目标价值 · 多样性与公平 · P95/P99 延迟</text>
-      <text x="72" y="356" fill="#504e49" font-size="14">训练样本记录由哪一层获得曝光，实验才能定位收益来源</text>
+      <text font-family="TsangerJinKai02" x="72" y="298" fill="#1b365d" font-size="14" letter-spacing="2">MEASUREMENT SURFACES</text>
+      <text font-family="TsangerJinKai02" x="72" y="331" fill="#141413" font-size="20">Recall@K 对下游结果 · 多目标价值 · 多样性与公平 · P95/P99 延迟</text>
+      <text font-family="TsangerJinKai02" x="72" y="356" fill="#504e49" font-size="14">训练样本记录由哪一层获得曝光，实验才能定位收益来源</text>
     </svg>
     <figcaption>上游模型学习保留下游需要的候选，线上实验检验收益与风险；随机探索用于观察历史策略没有展示过的选项。</figcaption>
   </figure>
@@ -375,24 +378,24 @@ figcaption { color:var(--stone); font-size:8.2pt; text-align:center; margin-top:
     <svg viewBox="0 0 1000 472" xmlns="http://www.w3.org/2000/svg">
       <defs><pattern id="dots3" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r=".9" fill="#e3e2dc"/></pattern></defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots3)" opacity=".55"/>
-      <text x="48" y="38" fill="#1b365d" font-size="14" letter-spacing="3">FIGURE  3</text>
-      <text x="184" y="38" fill="#504e49" font-size="14" letter-spacing="3">多阶段模型替换的六项发布门禁</text>
+      <text font-family="TsangerJinKai02" x="48" y="38" fill="#1b365d" font-size="14" letter-spacing="3">FIGURE  3</text>
+      <text font-family="TsangerJinKai02" x="184" y="38" fill="#504e49" font-size="14" letter-spacing="3">多阶段模型替换的六项发布门禁</text>
       <line x1="48" y1="54" x2="952" y2="54" stroke="#1b365d"/>
-      <rect x="52" y="108" width="136" height="84" rx="7" fill="#faf9f5" stroke="#b2b1ac"/><text x="72" y="136" fill="#1b365d" font-size="14">01</text><text x="72" y="164" fill="#141413" font-size="19">基线与切片</text>
+      <rect x="52" y="108" width="136" height="84" rx="7" fill="#faf9f5" stroke="#b2b1ac"/><text font-family="TsangerJinKai02" x="72" y="136" fill="#1b365d" font-size="14">01</text><text font-family="TsangerJinKai02" x="72" y="164" fill="#141413" font-size="19">基线与切片</text>
       <path d="M188 150 L208 150 M200 144 L208 150 L200 156" fill="none" stroke="#504e49" stroke-width="2"/>
-      <rect x="208" y="108" width="136" height="84" rx="7" fill="#faf9f5" stroke="#b2b1ac"/><text x="228" y="136" fill="#1b365d" font-size="14">02</text><text x="228" y="164" fill="#141413" font-size="19">阶段离线值</text>
+      <rect x="208" y="108" width="136" height="84" rx="7" fill="#faf9f5" stroke="#b2b1ac"/><text font-family="TsangerJinKai02" x="228" y="136" fill="#1b365d" font-size="14">02</text><text font-family="TsangerJinKai02" x="228" y="164" fill="#141413" font-size="19">阶段离线值</text>
       <path d="M344 150 L364 150 M356 144 L364 150 L356 156" fill="none" stroke="#504e49" stroke-width="2"/>
-      <rect x="364" y="108" width="136" height="84" rx="7" fill="#eef2f7" stroke="#1b365d"/><text x="384" y="136" fill="#1b365d" font-size="14">03</text><text x="384" y="164" fill="#141413" font-size="19">下游保留率</text>
+      <rect x="364" y="108" width="136" height="84" rx="7" fill="#eef2f7" stroke="#1b365d"/><text font-family="TsangerJinKai02" x="384" y="136" fill="#1b365d" font-size="14">03</text><text font-family="TsangerJinKai02" x="384" y="164" fill="#141413" font-size="19">下游保留率</text>
       <path d="M500 150 L520 150 M512 144 L520 150 L512 156" fill="none" stroke="#1b365d" stroke-width="2"/>
-      <rect x="520" y="108" width="136" height="84" rx="7" fill="#eef2f7" stroke="#1b365d"/><text x="540" y="136" fill="#1b365d" font-size="14">04</text><text x="540" y="164" fill="#141413" font-size="19">影子流量</text>
+      <rect x="520" y="108" width="136" height="84" rx="7" fill="#eef2f7" stroke="#1b365d"/><text font-family="TsangerJinKai02" x="540" y="136" fill="#1b365d" font-size="14">04</text><text font-family="TsangerJinKai02" x="540" y="164" fill="#141413" font-size="19">影子流量</text>
       <path d="M656 150 L676 150 M668 144 L676 150 L668 156" fill="none" stroke="#504e49" stroke-width="2"/>
-      <rect x="676" y="108" width="136" height="84" rx="7" fill="#faf9f5" stroke="#b2b1ac"/><text x="696" y="136" fill="#1b365d" font-size="14">05</text><text x="696" y="164" fill="#141413" font-size="19">小流量实验</text>
+      <rect x="676" y="108" width="136" height="84" rx="7" fill="#faf9f5" stroke="#b2b1ac"/><text font-family="TsangerJinKai02" x="696" y="136" fill="#1b365d" font-size="14">05</text><text font-family="TsangerJinKai02" x="696" y="164" fill="#141413" font-size="19">小流量实验</text>
       <path d="M812 150 L832 150 M824 144 L832 150 L824 156" fill="none" stroke="#504e49" stroke-width="2"/>
-      <rect x="832" y="108" width="120" height="84" rx="7" fill="#faf9f5" stroke="#b2b1ac"/><text x="852" y="136" fill="#1b365d" font-size="14">06</text><text x="852" y="164" fill="#141413" font-size="19">扩量/回退</text>
+      <rect x="832" y="108" width="120" height="84" rx="7" fill="#faf9f5" stroke="#b2b1ac"/><text font-family="TsangerJinKai02" x="852" y="136" fill="#1b365d" font-size="14">06</text><text font-family="TsangerJinKai02" x="852" y="164" fill="#141413" font-size="19">扩量/回退</text>
       <rect x="52" y="260" width="900" height="116" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
-      <text x="76" y="294" fill="#1b365d" font-size="14" letter-spacing="2">GO / HOLD</text>
-      <text x="76" y="326" fill="#141413" font-size="20">覆盖与保留率 · 多目标收益 · 长尾和供给 · 约束违例 · P99 与成本</text>
-      <text x="76" y="352" fill="#504e49" font-size="14">一层变更只声称自己能够解释的增量，并保持旧模型或规则的即时回退通路</text>
+      <text font-family="TsangerJinKai02" x="76" y="294" fill="#1b365d" font-size="14" letter-spacing="2">GO / HOLD</text>
+      <text font-family="TsangerJinKai02" x="76" y="326" fill="#141413" font-size="20">覆盖与保留率 · 多目标收益 · 长尾和供给 · 约束违例 · P99 与成本</text>
+      <text font-family="TsangerJinKai02" x="76" y="352" fill="#504e49" font-size="14">一层变更只声称自己能够解释的增量，并保持旧模型或规则的即时回退通路</text>
     </svg>
     <figcaption>每个阶段先证明没有破坏下游选择空间，再用线上实验确认产品价值。</figcaption>
   </figure>

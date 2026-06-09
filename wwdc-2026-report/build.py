@@ -56,7 +56,7 @@ ARCHITECTURE = """
           stroke="#6b6a64" stroke-width="1"/>
     <text x="108" y="116" fill="#6b6a64" font-size="14" font-family="JetBrains Mono"
           letter-spacing="2">INTERACTION</text>
-    <text x="108" y="148" fill="#141413" font-size="23" font-weight="600">
+    <text font-family="TsangerJinKai02" x="108" y="148" fill="#141413" font-size="23" font-weight="600">
       语音 · 键盘 · 相机 · 截图 · 视线 · Spotlight
     </text>
 
@@ -68,7 +68,7 @@ ARCHITECTURE = """
           stroke="#1B365D" stroke-width="1.5"/>
     <text x="108" y="216" fill="#1B365D" font-size="14" font-family="JetBrains Mono"
           letter-spacing="2">ORCHESTRATION</text>
-    <text x="108" y="248" fill="#141413" font-size="23" font-weight="600">
+    <text font-family="TsangerJinKai02" x="108" y="248" fill="#141413" font-size="23" font-weight="600">
       系统编排器：理解意图，选择数据、工具与执行路径
     </text>
 
@@ -80,7 +80,7 @@ ARCHITECTURE = """
           stroke="#6b6a64" stroke-width="1"/>
     <text x="108" y="316" fill="#6b6a64" font-size="14" font-family="JetBrains Mono"
           letter-spacing="2">DATA &amp; ACTIONS</text>
-    <text x="108" y="348" fill="#141413" font-size="23" font-weight="600">
+    <text font-family="TsangerJinKai02" x="108" y="348" fill="#141413" font-size="23" font-weight="600">
       Spotlight 索引 · App Toolbox · App Intents · 屏幕实体
     </text>
 
@@ -92,18 +92,18 @@ ARCHITECTURE = """
           stroke="#141413" stroke-width="1"/>
     <text x="108" y="416" fill="#6b6a64" font-size="14" font-family="JetBrains Mono"
           letter-spacing="2">ON DEVICE</text>
-    <text x="108" y="448" fill="#141413" font-size="22" font-weight="600">
+    <text font-family="TsangerJinKai02" x="108" y="448" fill="#141413" font-size="22" font-weight="600">
       Apple Foundation Models
     </text>
     <rect x="496" y="388" width="384" height="84" rx="6" fill="#EEEDE6"
           stroke="#6b6a64" stroke-width="1"/>
     <text x="524" y="416" fill="#6b6a64" font-size="14" font-family="JetBrains Mono"
           letter-spacing="2">PRIVATE CLOUD</text>
-    <text x="524" y="448" fill="#141413" font-size="22" font-weight="600">
+    <text font-family="TsangerJinKai02" x="524" y="448" fill="#141413" font-size="22" font-weight="600">
       Private Cloud Compute
     </text>
 
-    <text x="80" y="516" fill="#504e49" font-size="16">
+    <text font-family="TsangerJinKai02" x="80" y="516" fill="#504e49" font-size="16">
       请求先在设备上编排；需要更强推理时，只把必要部分交给可验证的私有云。
     </text>
   </svg>
@@ -115,17 +115,19 @@ ARCHITECTURE = """
 CSS = r"""
 @font-face {
   font-family: "Tsanger";
-  src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+  src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
   font-weight: 400;
 }
 @font-face {
   font-family: "Tsanger";
-  src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+  src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
   font-weight: 600;
 }
 @font-face {
   font-family: "JetBrains Mono";
-  src: url("fonts/JetBrainsMono.woff2") format("woff2");
+  src: url("../assets/fonts/JetBrainsMono.woff2") format("woff2");
   font-weight: 400 700;
 }
 @page {
@@ -134,20 +136,20 @@ CSS = r"""
   background: #f5f4ed;
   @top-right {
     content: string(chapter-title);
-    font-family: "Tsanger", serif;
+    font-family: "Tsanger";
     font-size: 7.5pt;
     color: #6b6a64;
   }
   @bottom-left {
     content: "WWDC 2026 · RESEARCH REPORT";
-    font-family: "JetBrains Mono", monospace;
+    font-family: "JetBrains Mono";
     font-size: 6.5pt;
     letter-spacing: 0.08em;
     color: #6b6a64;
   }
   @bottom-right {
     content: counter(page);
-    font-family: "Tsanger", serif;
+    font-family: "Tsanger";
     font-size: 8pt;
     color: #6b6a64;
   }
@@ -174,7 +176,7 @@ body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: "Tsanger", "Songti SC", Georgia, serif;
+  font-family: "Tsanger";
   font-size: 10.3pt;
   line-height: 1.66;
   letter-spacing: 0.15pt;
@@ -186,7 +188,7 @@ a { color: var(--brand); text-decoration: none; }
 p { margin: 0 0 9pt; }
 strong { font-weight: 600; }
 code {
-  font-family: "JetBrains Mono", "Tsanger", monospace;
+  font-family: "JetBrains Mono", "Tsanger";
   font-size: 8.3pt;
   padding: 1pt 3pt;
   border-radius: 2pt;
@@ -206,14 +208,14 @@ code {
   padding-bottom: 4mm;
   border-bottom: 0.5pt solid var(--line);
   color: var(--brand);
-  font-family: "JetBrains Mono", monospace;
+  font-family: "JetBrains Mono";
   font-size: 7pt;
   letter-spacing: 0.14em;
 }
 .cover-copy { padding-top: 11mm; }
 .cover-eyebrow {
   color: var(--brand);
-  font-family: "JetBrains Mono", monospace;
+  font-family: "JetBrains Mono";
   font-size: 8pt;
   letter-spacing: 0.14em;
 }
@@ -288,7 +290,7 @@ code {
 }
 .toc-num {
   color: var(--brand);
-  font-family: "JetBrains Mono", monospace;
+  font-family: "JetBrains Mono";
   font-size: 8pt;
   letter-spacing: 0.08em;
 }
@@ -320,7 +322,7 @@ code {
 .chapter-kicker {
   margin-bottom: 3mm;
   color: var(--brand);
-  font-family: "JetBrains Mono", monospace;
+  font-family: "JetBrains Mono";
   font-size: 7.2pt;
   letter-spacing: 0.14em;
 }
@@ -391,7 +393,7 @@ tbody tr:nth-child(even) td { background: var(--ivory); }
 sup.cite {
   margin-left: 1pt;
   color: var(--brand);
-  font-family: "JetBrains Mono", monospace;
+  font-family: "JetBrains Mono";
   font-size: 5.8pt;
   letter-spacing: 0;
 }
@@ -526,6 +528,7 @@ def build() -> None:
   <meta name="description" content="WWDC 2026 官方信息与开发者技术全景报告，覆盖 Siri AI、Apple Intelligence、OS 27、Xcode 27、Swift 6.4、App Store 与可用性边界。">
   <meta name="keywords" content="WWDC 2026,Siri AI,Apple Intelligence,OS 27,Xcode 27">
   <style>{CSS}</style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 <main>

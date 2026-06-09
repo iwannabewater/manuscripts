@@ -10,13 +10,15 @@
 <style>
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
   }
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
   }
@@ -26,13 +28,13 @@
     background: #f5f4ed;
     @top-left {
       content: string(section-title);
-      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8pt;
       color: #6b6a64;
     }
     @bottom-right {
       content: counter(page) "  ·  算法工程师 CS 软件工程技能包 2026";
-      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8.3pt;
       color: #6b6a64;
     }
@@ -56,7 +58,7 @@
     --gold-soft: #f1ead7;
     --border: #e4e0d3;
     --border-strong: #d4cec0;
-    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --serif: "TsangerJinKai02";
   }
   html, body { background: var(--paper); }
   @media screen { body { max-width: 297mm; margin: 0 auto; padding: 13mm 15mm 12mm 15mm; } }
@@ -71,7 +73,7 @@
   }
   strong { font-weight: 500; }
   code {
-    font-family: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 7.25pt;
     background: var(--ivory);
     border: 0.3pt solid var(--border);
@@ -350,6 +352,7 @@
     right: 0;
   }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 

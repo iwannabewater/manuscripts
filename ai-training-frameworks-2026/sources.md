@@ -21,7 +21,7 @@
 - TorchTitan paper: https://arxiv.org/abs/2410.06511
 - NVIDIA NeMo: https://github.com/NVIDIA-NeMo/NeMo
 - NVIDIA Megatron Bridge: https://github.com/NVIDIA-NeMo/Megatron-Bridge
-- Megatron Bridge documentation: https://docs.nvidia.com/nemo/megatron-bridge/
+- Megatron Bridge documentation: https://docs.nvidia.com/nemo/megatron-bridge/latest/
 - ByteDance Seed VeOmni: https://github.com/ByteDance-Seed/VeOmni
 - VeOmni paper: https://arxiv.org/abs/2508.02317
 - Hugging Face Nanotron: https://github.com/huggingface/nanotron
@@ -41,7 +41,7 @@
 - Hugging Face TRL: https://github.com/huggingface/trl
 - TRL documentation: https://huggingface.co/docs/trl
 - PyTorch torchtune: https://github.com/pytorch/torchtune
-- torchtune documentation: https://docs.pytorch.org/torchtune/
+- torchtune documentation: https://github.com/meta-pytorch/torchtune/blob/main/docs/source/index.rst
 - Axolotl documentation: https://docs.axolotl.ai/
 - LlamaFactory: https://github.com/hiyouga/LLaMA-Factory
 - LlamaFactory paper: https://arxiv.org/abs/2403.13372

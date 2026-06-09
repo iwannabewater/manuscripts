@@ -11,7 +11,8 @@
   /* Regular weight */
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
   }
@@ -19,7 +20,8 @@
   /* Bold weight - W05 for all bold variants */
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
   }
@@ -31,16 +33,14 @@
 
     @top-right {
       content: string(section-title);
-      font-family: "TsangerJinKai02", "Source Han Serif SC",
-                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8pt;
       color: #6b6a64;
     }
 
     @bottom-center {
       content: counter(page) "  ·  场外定投美国宽基";
-      font-family: "TsangerJinKai02", "Source Han Serif SC",
-                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 9pt;
       color: #6b6a64;
     }
@@ -64,7 +64,7 @@
     --border:    #e8e6dc;
     --border-soft:#e5e3d8;
     --tag-bg:    #E4ECF5;
-    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --serif: "TsangerJinKai02";
     --sans: var(--serif);
 
     --rhythm-module:  14pt;
@@ -260,9 +260,7 @@
      glyphs rendered as "?" or missing-glyph boxes in WeasyPrint when the system lacks
      a mono font with CJK coverage. */
   code {
-    font-family: "JetBrains Mono", "SF Mono", Consolas,
-                 "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 9pt;
     background: var(--ivory);
     padding: 1pt 4pt;
@@ -270,9 +268,7 @@
     color: var(--dark-warm);
   }
   pre {
-    font-family: "JetBrains Mono", "SF Mono", Consolas,
-                 "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 9pt;
     line-height: 1.5;
     background: var(--ivory);
@@ -459,6 +455,7 @@
   /* ========== CHAPTER BREAK ========== */
   .chapter { break-before: page; }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 <section class="cover">
@@ -586,16 +583,16 @@
   <h2>当前公告下的可执行额度</h2>
   <figure>
     <svg viewBox="0 0 700 190" width="100%" role="img" aria-label="候选份额单账户单日人民币申购及定投上限">
-      <text x="0" y="20" fill="#3d3d3a" class="bar-label">单账户单日累计申购及定投上限（元）</text>
-      <text x="0" y="62" fill="#3d3d3a" class="bar-label">广发纳指 F · 021778</text>
+      <text font-family="TsangerJinKai02" x="0" y="20" fill="#3d3d3a" class="bar-label">单账户单日累计申购及定投上限（元）</text>
+      <text font-family="TsangerJinKai02" x="0" y="62" fill="#3d3d3a" class="bar-label">广发纳指 F · 021778</text>
       <rect x="190" y="43" width="420" height="26" fill="#1B365D" rx="3"></rect>
-      <text x="622" y="62" fill="#1B365D" class="bar-value">3,000</text>
-      <text x="0" y="111" fill="#3d3d3a" class="bar-label">博时标普 E · 018738</text>
+      <text font-family="TsangerJinKai02" x="622" y="62" fill="#1B365D" class="bar-value">3,000</text>
+      <text font-family="TsangerJinKai02" x="0" y="111" fill="#3d3d3a" class="bar-label">博时标普 E · 018738</text>
       <rect x="190" y="92" width="280" height="26" fill="#52749a" rx="3"></rect>
-      <text x="482" y="111" fill="#1B365D" class="bar-value">2,000</text>
-      <text x="0" y="160" fill="#3d3d3a" class="bar-label">博时标普 A/C</text>
+      <text font-family="TsangerJinKai02" x="482" y="111" fill="#1B365D" class="bar-value">2,000</text>
+      <text font-family="TsangerJinKai02" x="0" y="160" fill="#3d3d3a" class="bar-label">博时标普 A/C</text>
       <rect x="190" y="141" width="14" height="26" fill="#a7b8c8" rx="3"></rect>
-      <text x="216" y="160" fill="#1B365D" class="bar-value">100</text>
+      <text font-family="TsangerJinKai02" x="216" y="160" fill="#1B365D" class="bar-value">100</text>
     </svg>
     <figcaption>图 1 · 按已读取公告列示；广发生效日 2026-02-04，博时生效日 2026-04-10。[R11, R14]</figcaption>
   </figure>

@@ -10,13 +10,15 @@
 <style>
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
   }
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
   }
@@ -26,13 +28,13 @@
     background: #f5f4ed;
     @top-right {
       content: string(section-title);
-      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8pt;
       color: #6b6a64;
     }
     @bottom-center {
       content: counter(page) "  ·  生成式推荐技术全史与产业落地报告 2026";
-      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8.8pt;
       color: #6b6a64;
     }
@@ -50,7 +52,7 @@
     --brand-tint: #EEF2F7;
     --border: #e8e6dc;
     --border-strong: #d8d4c7;
-    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --serif: "TsangerJinKai02";
   }
   html, body { background: var(--paper); }
   @media screen { body { max-width: 210mm; margin: 0 auto; padding: 18mm 20mm 20mm 20mm; } }
@@ -173,14 +175,14 @@
   li::marker { color: var(--brand); }
   a { color: var(--brand); text-decoration: none; }
   code {
-    font-family: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 8.2pt;
     background: var(--ivory);
     padding: 1pt 3pt;
     border-radius: 2pt;
   }
   pre {
-    font-family: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 8.3pt;
     line-height: 1.45;
     background: var(--ivory);
@@ -287,6 +289,7 @@
   figcaption { color: var(--stone); font-size: 8.3pt; text-align: center; margin-top: 5pt; }
   svg { width: 100%; height: auto; display: block; }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 
@@ -401,34 +404,34 @@
       <defs><pattern id="dots1" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/>
       <rect width="100%" height="100%" fill="url(#dots1)" opacity="0.55"/>
-      <text x="70" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  1</text>
-      <text x="190" y="38" fill="#504e49" font-size="13" font-family="monospace" letter-spacing="3">GR IN THE RECOMMENDER PIPELINE</text>
+      <text x="70" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  1</text>
+      <text x="190" y="38" fill="#504e49" font-size="13" font-family="JetBrains Mono" letter-spacing="3">GR IN THE RECOMMENDER PIPELINE</text>
       <line x1="70" y1="52" x2="930" y2="52" stroke="#1B365D" stroke-width="0.8"/>
       <rect x="80" y="90" width="145" height="86" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1.2"/>
-      <text x="152" y="126" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="serif">用户与上下文</text>
-      <text x="152" y="154" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">画像 · 行为 · 场景</text>
+      <text x="152" y="126" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">用户与上下文</text>
+      <text x="152" y="154" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">画像 · 行为 · 场景</text>
       <path d="M225 133 L280 133" stroke="#504e49" stroke-width="1.4"/>
       <path d="M270 126 L282 133 L270 140" fill="none" stroke="#504e49" stroke-width="1.4"/>
       <rect x="285" y="90" width="145" height="86" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.6"/>
-      <text x="357" y="126" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="serif">生成候选</text>
-      <text x="357" y="154" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">语义 ID · beam</text>
+      <text x="357" y="126" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">生成候选</text>
+      <text x="357" y="154" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">语义 ID · beam</text>
       <path d="M430 133 L485 133" stroke="#1B365D" stroke-width="1.5"/>
       <path d="M475 126 L487 133 L475 140" fill="none" stroke="#1B365D" stroke-width="1.5"/>
       <rect x="490" y="90" width="145" height="86" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1.2"/>
-      <text x="562" y="126" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="serif">排序打分</text>
-      <text x="562" y="154" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">CTR · CVR · 时长</text>
+      <text x="562" y="126" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">排序打分</text>
+      <text x="562" y="154" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">CTR · CVR · 时长</text>
       <path d="M635 133 L690 133" stroke="#504e49" stroke-width="1.4"/>
       <path d="M680 126 L692 133 L680 140" fill="none" stroke="#504e49" stroke-width="1.4"/>
       <rect x="695" y="90" width="145" height="86" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.6"/>
-      <text x="767" y="126" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="serif">生成列表</text>
-      <text x="767" y="154" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">重排 · 多目标</text>
+      <text x="767" y="126" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">生成列表</text>
+      <text x="767" y="154" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">重排 · 多目标</text>
       <path d="M767 176 L767 232" stroke="#504e49" stroke-width="1.4"/>
       <path d="M760 222 L767 234 L774 222" fill="none" stroke="#504e49" stroke-width="1.4"/>
       <rect x="610" y="238" width="315" height="70" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1.1"/>
-      <text x="767" y="268" text-anchor="middle" fill="#141413" font-size="22" font-weight="600" font-family="serif">解释、对话、创意与行动</text>
-      <text x="767" y="293" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">LLM · 多模态生成 · agent</text>
+      <text x="767" y="268" text-anchor="middle" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02">解释、对话、创意与行动</text>
+      <text x="767" y="293" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">LLM · 多模态生成 · agent</text>
       <path d="M610 273 C450 315 270 270 152 176" stroke="#B2B1AC" stroke-width="1.2" fill="none" stroke-dasharray="5 5"/>
-      <text x="276" y="298" fill="#6b6a64" font-size="14" font-family="serif">反馈闭环：曝光、点击、停留、购买、负反馈、申诉</text>
+      <text x="276" y="298" fill="#6b6a64" font-size="14" font-family="TsangerJinKai02">反馈闭环：曝光、点击、停留、购买、负反馈、申诉</text>
     </svg>
     <figcaption>GR 插入推荐系统的多个位置，而不是单点替换召回或排序。</figcaption>
   </figure>

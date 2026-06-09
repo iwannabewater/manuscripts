@@ -16,7 +16,7 @@
   /* Regular weight */
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
        url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
@@ -25,7 +25,7 @@
   /* Bold weight - W05 for all bold variants */
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
        url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
@@ -38,16 +38,14 @@
 
     @top-right {
       content: string(section-title);
-      font-family: "TsangerJinKai02", "Source Han Serif SC",
-                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8pt;
       color: #6b6a64;
     }
 
     @bottom-center {
       content: counter(page) "  ·  DeepSeek V4 技术报告深度解读";
-      font-family: "TsangerJinKai02", "Source Han Serif SC",
-                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 9pt;
       color: #6b6a64;
     }
@@ -71,7 +69,7 @@
     --border:    #e8e6dc;
     --border-soft:#e5e3d8;
     --tag-bg:    #E4ECF5;
-    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --serif: "TsangerJinKai02";
     --sans: var(--serif);
 
     --rhythm-module:  14pt;
@@ -267,9 +265,7 @@
      glyphs rendered as "?" or missing-glyph boxes in WeasyPrint when the system lacks
      a mono font with CJK coverage. */
   code {
-    font-family: "JetBrains Mono", "SF Mono", Consolas,
-                 "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 9pt;
     background: var(--ivory);
     padding: 1pt 4pt;
@@ -277,9 +273,7 @@
     color: var(--dark-warm);
   }
   pre {
-    font-family: "JetBrains Mono", "SF Mono", Consolas,
-                 "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 9pt;
     line-height: 1.5;
     background: var(--ivory);
@@ -411,6 +405,7 @@
   /* ========== CHAPTER BREAK ========== */
   .chapter { break-before: page; }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 
@@ -476,27 +471,27 @@
     <svg width="100%" viewBox="0 0 1000 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DeepSeek V4 技术主线概览">
       <defs><pattern id="dots1" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots1)" opacity="0.55"/>
-      <text x="80" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  1</text>
-      <text x="196" y="40" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="3">V4 的四条技术主线</text>
+      <text x="80" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  1</text>
+      <text x="196" y="40" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="3">V4 的四条技术主线</text>
       <line x1="80" y1="56" x2="920" y2="56" stroke="#1B365D" stroke-width="0.8"/>
       <rect x="88" y="104" width="176" height="96" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.4"/>
-      <text x="176" y="138" fill="#141413" font-size="24" font-weight="600" font-family="serif" text-anchor="middle">长上下文效率</text>
-      <text x="176" y="166" fill="#504e49" font-size="15" font-family="monospace" text-anchor="middle">CSA + HCA</text>
+      <text x="176" y="138" fill="#141413" font-size="24" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">长上下文效率</text>
+      <text x="176" y="166" fill="#504e49" font-size="15" font-family="JetBrains Mono" text-anchor="middle">CSA + HCA</text>
       <rect x="316" y="104" width="176" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="404" y="138" fill="#141413" font-size="24" font-weight="600" font-family="serif" text-anchor="middle">深层稳定性</text>
-      <text x="404" y="166" fill="#504e49" font-size="15" font-family="monospace" text-anchor="middle">mHC + Sinkhorn</text>
+      <text x="404" y="138" fill="#141413" font-size="24" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">深层稳定性</text>
+      <text x="404" y="166" fill="#504e49" font-size="15" font-family="JetBrains Mono" text-anchor="middle">mHC + Sinkhorn</text>
       <rect x="544" y="104" width="176" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="632" y="138" fill="#141413" font-size="24" font-weight="600" font-family="serif" text-anchor="middle">训练收敛</text>
-      <text x="632" y="166" fill="#504e49" font-size="15" font-family="monospace" text-anchor="middle">Muon + 稳定技巧</text>
+      <text x="632" y="138" fill="#141413" font-size="24" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">训练收敛</text>
+      <text x="632" y="166" fill="#504e49" font-size="15" font-family="JetBrains Mono" text-anchor="middle">Muon + 稳定技巧</text>
       <rect x="772" y="104" width="176" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="860" y="138" fill="#141413" font-size="24" font-weight="600" font-family="serif" text-anchor="middle">能力合并</text>
-      <text x="860" y="166" fill="#504e49" font-size="15" font-family="monospace" text-anchor="middle">Specialists → OPD</text>
+      <text x="860" y="138" fill="#141413" font-size="24" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">能力合并</text>
+      <text x="860" y="166" fill="#504e49" font-size="15" font-family="JetBrains Mono" text-anchor="middle">Specialists → OPD</text>
       <path d="M264 152 L316 152" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M306 146 L316 152 L306 158" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
       <path d="M492 152 L544 152" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M534 146 L544 152 L534 158" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
       <path d="M720 152 L772 152" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M762 146 L772 152 L762 158" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
       <rect x="160" y="264" width="680" height="72" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
-      <text x="500" y="294" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">结果：1M 上下文从“昂贵功能”变成“模型设计默认前提”</text>
-      <text x="500" y="322" fill="#504e49" font-size="15" font-family="monospace" text-anchor="middle">FLOPs / KV cache / rollout / agent memory / on-disk prefix reuse 同时被重构</text>
+      <text x="500" y="294" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">结果：1M 上下文从“昂贵功能”变成“模型设计默认前提”</text>
+      <text x="500" y="322" fill="#504e49" font-size="15" font-family="JetBrains Mono" text-anchor="middle">FLOPs / KV cache / rollout / agent memory / on-disk prefix reuse 同时被重构</text>
     </svg>
     <figcaption>图 1：V4 的主线不是单点算法，而是架构、优化器、系统和后训练的联合设计。</figcaption>
   </figure>
@@ -621,23 +616,23 @@
     <svg width="100%" viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DeepSeek V4 架构示意">
       <defs><pattern id="dots2" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots2)" opacity="0.55"/>
-      <text x="80" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  2</text>
-      <text x="196" y="40" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="3">DeepSeek V4 block-level architecture</text>
+      <text x="80" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  2</text>
+      <text x="196" y="40" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="3">DeepSeek V4 block-level architecture</text>
       <line x1="80" y1="56" x2="920" y2="56" stroke="#1B365D" stroke-width="0.8"/>
       <rect x="112" y="96" width="184" height="64" rx="8" fill="#faf9f5" stroke="#141413"/>
-      <text x="204" y="132" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">Input Tokens</text>
-      <text x="204" y="152" fill="#6b6a64" font-size="14" font-family="monospace" text-anchor="middle">128K vocab tokenizer</text>
+      <text x="204" y="132" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">Input Tokens</text>
+      <text x="204" y="152" fill="#6b6a64" font-size="14" font-family="JetBrains Mono" text-anchor="middle">128K vocab tokenizer</text>
       <rect x="112" y="204" width="184" height="64" rx="8" fill="#faf9f5" stroke="#141413"/>
-      <text x="204" y="240" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">Embedding</text>
+      <text x="204" y="240" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">Embedding</text>
       <rect x="376" y="88" width="248" height="376" rx="10" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.4"/>
-      <text x="500" y="122" fill="#1B365D" font-size="15" font-family="monospace" font-weight="600" text-anchor="middle" letter-spacing="2">TRANSFORMER BLOCK × L</text>
-      <rect x="416" y="152" width="168" height="52" rx="6" fill="#faf9f5" stroke="#504e49"/><text x="500" y="184" fill="#141413" font-size="21" font-weight="600" font-family="serif" text-anchor="middle">mHC Pre-Mix</text>
-      <rect x="416" y="228" width="168" height="64" rx="6" fill="#faf9f5" stroke="#1B365D" stroke-width="1.2"/><text x="500" y="258" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">CSA / HCA</text><text x="500" y="280" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">hybrid attention</text>
-      <rect x="416" y="316" width="168" height="64" rx="6" fill="#faf9f5" stroke="#504e49"/><text x="500" y="346" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">DeepSeekMoE</text><text x="500" y="368" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">shared + routed</text>
-      <rect x="416" y="404" width="168" height="52" rx="6" fill="#faf9f5" stroke="#504e49"/><text x="500" y="436" fill="#141413" font-size="21" font-weight="600" font-family="serif" text-anchor="middle">mHC Post-Mix</text>
-      <rect x="704" y="144" width="184" height="64" rx="8" fill="#faf9f5" stroke="#141413"/><text x="796" y="180" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">Prediction Head</text>
-      <rect x="704" y="264" width="184" height="64" rx="8" fill="#faf9f5" stroke="#141413"/><text x="796" y="294" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">MTP Module</text><text x="796" y="316" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">depth = 1</text>
-      <rect x="704" y="384" width="184" height="64" rx="8" fill="#faf9f5" stroke="#141413"/><text x="796" y="414" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">LM + MTP Loss</text><text x="796" y="436" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">main + future token</text>
+      <text x="500" y="122" fill="#1B365D" font-size="15" font-family="JetBrains Mono" font-weight="600" text-anchor="middle" letter-spacing="2">TRANSFORMER BLOCK × L</text>
+      <rect x="416" y="152" width="168" height="52" rx="6" fill="#faf9f5" stroke="#504e49"/><text x="500" y="184" fill="#141413" font-size="21" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">mHC Pre-Mix</text>
+      <rect x="416" y="228" width="168" height="64" rx="6" fill="#faf9f5" stroke="#1B365D" stroke-width="1.2"/><text x="500" y="258" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">CSA / HCA</text><text x="500" y="280" fill="#504e49" font-size="14" font-family="JetBrains Mono" text-anchor="middle">hybrid attention</text>
+      <rect x="416" y="316" width="168" height="64" rx="6" fill="#faf9f5" stroke="#504e49"/><text x="500" y="346" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">DeepSeekMoE</text><text x="500" y="368" fill="#504e49" font-size="14" font-family="JetBrains Mono" text-anchor="middle">shared + routed</text>
+      <rect x="416" y="404" width="168" height="52" rx="6" fill="#faf9f5" stroke="#504e49"/><text x="500" y="436" fill="#141413" font-size="21" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">mHC Post-Mix</text>
+      <rect x="704" y="144" width="184" height="64" rx="8" fill="#faf9f5" stroke="#141413"/><text x="796" y="180" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">Prediction Head</text>
+      <rect x="704" y="264" width="184" height="64" rx="8" fill="#faf9f5" stroke="#141413"/><text x="796" y="294" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">MTP Module</text><text x="796" y="316" fill="#504e49" font-size="14" font-family="JetBrains Mono" text-anchor="middle">depth = 1</text>
+      <rect x="704" y="384" width="184" height="64" rx="8" fill="#faf9f5" stroke="#141413"/><text x="796" y="414" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">LM + MTP Loss</text><text x="796" y="436" fill="#504e49" font-size="14" font-family="JetBrains Mono" text-anchor="middle">main + future token</text>
       <path d="M204 160 L204 204" stroke="#504e49" stroke-width="1.2"/><path d="M198 194 L204 204 L210 194" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
       <path d="M296 236 L376 236" stroke="#504e49" stroke-width="1.2"/><path d="M366 230 L376 236 L366 242" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
       <path d="M624 236 L704 176" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M694 176 L704 176 L698 184" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
@@ -669,23 +664,23 @@
     <svg width="100%" viewBox="0 0 1000 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="CSA HCA 工作机制示意">
       <defs><pattern id="dots3" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots3)" opacity="0.55"/>
-      <text x="80" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  3</text>
-      <text x="196" y="40" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="3">CSA / HCA compression logic</text>
+      <text x="80" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  3</text>
+      <text x="196" y="40" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="3">CSA / HCA compression logic</text>
       <line x1="80" y1="56" x2="920" y2="56" stroke="#1B365D" stroke-width="0.8"/>
-      <text x="112" y="96" fill="#1B365D" font-size="14" font-family="monospace" font-weight="600" letter-spacing="2">CSA</text>
+      <text x="112" y="96" fill="#1B365D" font-size="14" font-family="JetBrains Mono" font-weight="600" letter-spacing="2">CSA</text>
       <rect x="112" y="124" width="60" height="34" rx="4" fill="#faf9f5" stroke="#141413"/><rect x="180" y="124" width="60" height="34" rx="4" fill="#faf9f5" stroke="#141413"/><rect x="248" y="124" width="60" height="34" rx="4" fill="#faf9f5" stroke="#141413"/><rect x="316" y="124" width="60" height="34" rx="4" fill="#faf9f5" stroke="#141413"/>
-      <text x="244" y="190" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">m=4 token-level KV</text>
+      <text x="244" y="190" fill="#504e49" font-size="14" font-family="JetBrains Mono" text-anchor="middle">m=4 token-level KV</text>
       <path d="M244 164 L244 224" stroke="#504e49" stroke-width="1.2"/><path d="M238 214 L244 224 L250 214" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-      <rect x="184" y="228" width="120" height="52" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.2"/><text x="244" y="258" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Compressed KV</text>
+      <rect x="184" y="228" width="120" height="52" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.2"/><text x="244" y="258" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">Compressed KV</text>
       <path d="M304 254 L420 254" stroke="#504e49" stroke-width="1.2"/><path d="M410 248 L420 254 L410 260" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-      <rect x="420" y="216" width="168" height="76" rx="8" fill="#faf9f5" stroke="#141413"/><text x="504" y="246" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Lightning Indexer</text><text x="504" y="270" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">top-k compressed entries</text>
+      <rect x="420" y="216" width="168" height="76" rx="8" fill="#faf9f5" stroke="#141413"/><text x="504" y="246" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">Lightning Indexer</text><text x="504" y="270" fill="#504e49" font-size="14" font-family="JetBrains Mono" text-anchor="middle">top-k compressed entries</text>
       <path d="M588 254 L704 254" stroke="#504e49" stroke-width="1.2"/><path d="M694 248 L704 254 L694 260" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-      <rect x="704" y="216" width="168" height="76" rx="8" fill="#faf9f5" stroke="#141413"/><text x="788" y="246" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Shared-KV MQA</text><text x="788" y="270" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">sparse core attention</text>
-      <text x="112" y="348" fill="#1B365D" font-size="14" font-family="monospace" font-weight="600" letter-spacing="2">HCA</text>
-      <rect x="112" y="372" width="536" height="34" rx="4" fill="#faf9f5" stroke="#141413"/><text x="380" y="396" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">m'=128 token-level KV block</text>
+      <rect x="704" y="216" width="168" height="76" rx="8" fill="#faf9f5" stroke="#141413"/><text x="788" y="246" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">Shared-KV MQA</text><text x="788" y="270" fill="#504e49" font-size="14" font-family="JetBrains Mono" text-anchor="middle">sparse core attention</text>
+      <text x="112" y="348" fill="#1B365D" font-size="14" font-family="JetBrains Mono" font-weight="600" letter-spacing="2">HCA</text>
+      <rect x="112" y="372" width="536" height="34" rx="4" fill="#faf9f5" stroke="#141413"/><text x="380" y="396" fill="#504e49" font-size="14" font-family="JetBrains Mono" text-anchor="middle">m'=128 token-level KV block</text>
       <path d="M648 390 L704 390" stroke="#504e49" stroke-width="1.2"/><path d="M694 384 L704 390 L694 396" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-      <rect x="704" y="352" width="168" height="76" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.2"/><text x="788" y="382" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Heavy Compression</text><text x="788" y="406" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">dense attention retained</text>
-      <rect x="104" y="456" width="800" height="36" rx="6" fill="#EAE9E2" stroke="#504e49"/><text x="504" y="480" fill="#141413" font-size="16" font-family="serif" font-weight="600" text-anchor="middle">两者都额外接入 sliding-window uncompressed KV，以保留最近 token 的局部细节。</text>
+      <rect x="704" y="352" width="168" height="76" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.2"/><text x="788" y="382" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">Heavy Compression</text><text x="788" y="406" fill="#504e49" font-size="14" font-family="JetBrains Mono" text-anchor="middle">dense attention retained</text>
+      <rect x="104" y="456" width="800" height="36" rx="6" fill="#EAE9E2" stroke="#504e49"/><text x="504" y="480" fill="#141413" font-size="16" font-family="TsangerJinKai02" font-weight="600" text-anchor="middle">两者都额外接入 sliding-window uncompressed KV，以保留最近 token 的局部细节。</text>
     </svg>
     <figcaption>图 3：CSA 使用较小压缩率并稀疏选择；HCA 使用更大压缩率并保留 dense attention。</figcaption>
   </figure>
@@ -708,19 +703,19 @@
     <svg width="100%" viewBox="0 0 1000 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="V4 1M 上下文效率相对 V3.2 对比">
       <defs><pattern id="dots4" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots4)" opacity="0.55"/>
-      <text x="80" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  4</text>
-      <text x="196" y="40" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="3">1M context efficiency, V3.2 = 100</text>
+      <text x="80" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  4</text>
+      <text x="196" y="40" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="3">1M context efficiency, V3.2 = 100</text>
       <line x1="80" y1="56" x2="920" y2="56" stroke="#1B365D" stroke-width="0.8"/>
-      <text x="176" y="96" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Single-token FLOPs</text>
+      <text x="176" y="96" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">Single-token FLOPs</text>
       <line x1="120" y1="340" x2="420" y2="340" stroke="#504e49" stroke-width="1"/>
       <rect x="144" y="120" width="52" height="220" fill="#1B365D"/><rect x="236" y="281" width="52" height="59" fill="#EEF2F7" stroke="#1B365D"/><rect x="328" y="318" width="52" height="22" fill="#EAE9E2" stroke="#504e49"/>
-      <text x="170" y="112" fill="#141413" font-size="14" font-family="monospace" text-anchor="middle">100</text><text x="262" y="273" fill="#141413" font-size="14" font-family="monospace" text-anchor="middle">27</text><text x="354" y="310" fill="#141413" font-size="14" font-family="monospace" text-anchor="middle">10</text>
-      <text x="170" y="368" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">V3.2</text><text x="262" y="368" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">V4-Pro</text><text x="354" y="368" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">V4-Flash</text>
-      <text x="696" y="96" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Accumulated KV Cache</text>
+      <text x="170" y="112" fill="#141413" font-size="14" font-family="JetBrains Mono" text-anchor="middle">100</text><text x="262" y="273" fill="#141413" font-size="14" font-family="JetBrains Mono" text-anchor="middle">27</text><text x="354" y="310" fill="#141413" font-size="14" font-family="JetBrains Mono" text-anchor="middle">10</text>
+      <text x="170" y="368" fill="#504e49" font-size="13" font-family="JetBrains Mono" text-anchor="middle">V3.2</text><text x="262" y="368" fill="#504e49" font-size="13" font-family="JetBrains Mono" text-anchor="middle">V4-Pro</text><text x="354" y="368" fill="#504e49" font-size="13" font-family="JetBrains Mono" text-anchor="middle">V4-Flash</text>
+      <text x="696" y="96" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">Accumulated KV Cache</text>
       <line x1="540" y1="340" x2="840" y2="340" stroke="#504e49" stroke-width="1"/>
       <rect x="564" y="120" width="52" height="220" fill="#1B365D"/><rect x="656" y="318" width="52" height="22" fill="#EEF2F7" stroke="#1B365D"/><rect x="748" y="325" width="52" height="15" fill="#EAE9E2" stroke="#504e49"/>
-      <text x="590" y="112" fill="#141413" font-size="14" font-family="monospace" text-anchor="middle">100</text><text x="682" y="310" fill="#141413" font-size="14" font-family="monospace" text-anchor="middle">10</text><text x="774" y="317" fill="#141413" font-size="14" font-family="monospace" text-anchor="middle">7</text>
-      <text x="590" y="368" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">V3.2</text><text x="682" y="368" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">V4-Pro</text><text x="774" y="368" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">V4-Flash</text>
+      <text x="590" y="112" fill="#141413" font-size="14" font-family="JetBrains Mono" text-anchor="middle">100</text><text x="682" y="310" fill="#141413" font-size="14" font-family="JetBrains Mono" text-anchor="middle">10</text><text x="774" y="317" fill="#141413" font-size="14" font-family="JetBrains Mono" text-anchor="middle">7</text>
+      <text x="590" y="368" fill="#504e49" font-size="13" font-family="JetBrains Mono" text-anchor="middle">V3.2</text><text x="682" y="368" fill="#504e49" font-size="13" font-family="JetBrains Mono" text-anchor="middle">V4-Pro</text><text x="774" y="368" fill="#504e49" font-size="13" font-family="JetBrains Mono" text-anchor="middle">V4-Flash</text>
     </svg>
     <figcaption>图 4：官方报告给出的 1M context 相对效率。数值为相对 V3.2 的比例，V3.2 设为 100。</figcaption>
   </figure>
@@ -878,15 +873,15 @@
     <svg width="100%" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DeepSeek V4 后训练流程">
       <defs><pattern id="dots5" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots5)" opacity="0.55"/>
-      <text x="80" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  5</text>
-      <text x="196" y="40" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="3">post-training pipeline</text>
+      <text x="80" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  5</text>
+      <text x="196" y="40" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="3">post-training pipeline</text>
       <line x1="80" y1="56" x2="920" y2="56" stroke="#1B365D" stroke-width="0.8"/>
-      <rect x="96" y="112" width="160" height="76" rx="8" fill="#faf9f5" stroke="#141413"/><text x="176" y="144" fill="#141413" font-size="21" font-weight="600" font-family="serif" text-anchor="middle">Base Model</text><text x="176" y="168" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">32T / 33T pretrain</text>
-      <rect x="320" y="76" width="176" height="64" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.2"/><text x="408" y="104" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Math Expert</text><text x="408" y="126" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">SFT + GRPO</text>
-      <rect x="320" y="164" width="176" height="64" rx="8" fill="#faf9f5" stroke="#141413"/><text x="408" y="192" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Code Expert</text><text x="408" y="214" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">SFT + GRPO</text>
-      <rect x="320" y="252" width="176" height="64" rx="8" fill="#faf9f5" stroke="#141413"/><text x="408" y="280" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Agent Expert</text><text x="408" y="302" fill="#504e49" font-size="13" font-family="monospace" text-anchor="middle">tools + sandbox</text>
-      <rect x="584" y="144" width="176" height="96" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.2"/><text x="672" y="178" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">Full-vocab OPD</text><text x="672" y="204" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">student trajectories</text><text x="672" y="224" fill="#504e49" font-size="14" font-family="monospace" text-anchor="middle">multi-teacher reverse KL</text>
-      <rect x="820" y="156" width="112" height="72" rx="8" fill="#faf9f5" stroke="#141413"/><text x="876" y="186" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">Unified</text><text x="876" y="210" fill="#141413" font-size="20" font-weight="600" font-family="serif" text-anchor="middle">V4 Model</text>
+      <rect x="96" y="112" width="160" height="76" rx="8" fill="#faf9f5" stroke="#141413"/><text x="176" y="144" fill="#141413" font-size="21" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">Base Model</text><text x="176" y="168" fill="#504e49" font-size="14" font-family="JetBrains Mono" text-anchor="middle">32T / 33T pretrain</text>
+      <rect x="320" y="76" width="176" height="64" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.2"/><text x="408" y="104" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">Math Expert</text><text x="408" y="126" fill="#504e49" font-size="13" font-family="JetBrains Mono" text-anchor="middle">SFT + GRPO</text>
+      <rect x="320" y="164" width="176" height="64" rx="8" fill="#faf9f5" stroke="#141413"/><text x="408" y="192" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">Code Expert</text><text x="408" y="214" fill="#504e49" font-size="13" font-family="JetBrains Mono" text-anchor="middle">SFT + GRPO</text>
+      <rect x="320" y="252" width="176" height="64" rx="8" fill="#faf9f5" stroke="#141413"/><text x="408" y="280" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">Agent Expert</text><text x="408" y="302" fill="#504e49" font-size="13" font-family="JetBrains Mono" text-anchor="middle">tools + sandbox</text>
+      <rect x="584" y="144" width="176" height="96" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.2"/><text x="672" y="178" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">Full-vocab OPD</text><text x="672" y="204" fill="#504e49" font-size="14" font-family="JetBrains Mono" text-anchor="middle">student trajectories</text><text x="672" y="224" fill="#504e49" font-size="14" font-family="JetBrains Mono" text-anchor="middle">multi-teacher reverse KL</text>
+      <rect x="820" y="156" width="112" height="72" rx="8" fill="#faf9f5" stroke="#141413"/><text x="876" y="186" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">Unified</text><text x="876" y="210" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02" text-anchor="middle">V4 Model</text>
       <path d="M256 150 L320 108" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M310 108 L320 108 L314 116" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
       <path d="M256 150 L320 196" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M310 190 L320 196 L310 202" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
       <path d="M256 150 L320 284" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M312 276 L320 284 L308 286" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
@@ -894,7 +889,7 @@
       <path d="M496 196 L584 192" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M574 186 L584 192 L574 198" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
       <path d="M496 284 L584 192" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M572 190 L584 192 L576 200" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
       <path d="M760 192 L820 192" stroke="#504e49" stroke-width="1.2"/><path d="M810 186 L820 192 L810 198" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
-      <rect x="168" y="376" width="664" height="52" rx="8" fill="#EAE9E2" stroke="#504e49"/><text x="500" y="408" fill="#141413" font-size="17" font-family="serif" font-weight="600" text-anchor="middle">关键差异：V3.2 以 mixed RL 合并目标，V4 以多教师 full-vocabulary OPD 合并能力。</text>
+      <rect x="168" y="376" width="664" height="52" rx="8" fill="#EAE9E2" stroke="#504e49"/><text x="500" y="408" fill="#141413" font-size="17" font-family="TsangerJinKai02" font-weight="600" text-anchor="middle">关键差异：V3.2 以 mixed RL 合并目标，V4 以多教师 full-vocabulary OPD 合并能力。</text>
     </svg>
     <figcaption>图 5：V4 后训练先分化专家，再通过 OPD 合并到统一学生模型。</figcaption>
   </figure>

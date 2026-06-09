@@ -11,7 +11,7 @@
   /* Regular weight */
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
        url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
@@ -20,7 +20,7 @@
   /* Bold weight - W05 for all bold variants */
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
        url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
@@ -33,16 +33,14 @@
 
     @top-right {
       content: string(section-title);
-      font-family: "TsangerJinKai02", "Source Han Serif SC",
-                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8pt;
       color: #6b6a64;
     }
 
     @bottom-center {
       content: counter(page) "  ·  mise 完整使用指南：开发环境、工具链与工程任务的统一管理";
-      font-family: "TsangerJinKai02", "Source Han Serif SC",
-                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 9pt;
       color: #6b6a64;
     }
@@ -66,8 +64,8 @@
     --border:    #e8e6dc;
     --border-soft:#e5e3d8;
     --tag-bg:    #E4ECF5;
-    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
-    --sans: var(--serif);
+    --serif: "TsangerJinKai02";
+    --sans: "TsangerJinKai02";
 
     --rhythm-module:  14pt;
     --rhythm-section: 18pt;
@@ -262,9 +260,7 @@
      glyphs rendered as "?" or missing-glyph boxes in WeasyPrint when the system lacks
      a mono font with CJK coverage. */
   code {
-    font-family: "JetBrains Mono", "SF Mono", Consolas,
-                 "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 9pt;
     background: var(--ivory);
     padding: 1pt 4pt;
@@ -272,9 +268,7 @@
     color: var(--dark-warm);
   }
   pre {
-    font-family: "JetBrains Mono", "SF Mono", Consolas,
-                 "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 9pt;
     line-height: 1.5;
     background: var(--ivory);
@@ -412,6 +406,7 @@
   .cover-logo { width: 52pt; height: auto; margin-bottom: 18pt; }
   .source-list { font-size: 9pt; }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 <section class="cover">
@@ -442,8 +437,8 @@
   </defs>
   <rect width="100%" height="100%" fill="#f5f4ed"/>
   <rect width="100%" height="100%" fill="url(#dots)" opacity="0.55"/>
-  <text x="48" y="36" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  1</text>
-  <text x="184" y="36" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="3">MISE PROJECT MODEL</text>
+  <text x="48" y="36" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  1</text>
+  <text x="184" y="36" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="3">MISE PROJECT MODEL</text>
   <line x1="48" y1="52" x2="912" y2="52" stroke="#1B365D" stroke-width="1"/>
 
   <line x1="208" y1="208" x2="288" y2="208" stroke="#504e49" stroke-width="2"/>
@@ -462,38 +457,38 @@
   <path d="M760 300 L768 304 L760 308" fill="none" stroke="#504e49" stroke-width="2" stroke-linecap="round"/>
 
   <rect x="48" y="176" width="160" height="64" rx="8" fill="#E9E8E1" stroke="#6b6a64" stroke-width="1.5"/>
-  <text x="68" y="198" fill="#6b6a64" font-size="14" font-family="monospace" letter-spacing="2">PROJECT</text>
-  <text x="128" y="224" fill="#141413" font-size="24" font-weight="600" text-anchor="middle">项目目录</text>
+  <text x="68" y="198" fill="#6b6a64" font-size="14" font-family="JetBrains Mono" letter-spacing="2">PROJECT</text>
+  <text font-family="TsangerJinKai02" x="128" y="224" fill="#141413" font-size="24" font-weight="600" text-anchor="middle">项目目录</text>
 
   <rect x="288" y="168" width="160" height="80" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="2"/>
-  <text x="308" y="192" fill="#1B365D" font-size="14" font-family="monospace" letter-spacing="2">CONFIG</text>
-  <text x="368" y="224" fill="#141413" font-size="24" font-weight="600" text-anchor="middle">mise.toml</text>
+  <text x="308" y="192" fill="#1B365D" font-size="14" font-family="JetBrains Mono" letter-spacing="2">CONFIG</text>
+  <text font-family="TsangerJinKai02" x="368" y="224" fill="#141413" font-size="24" font-weight="600" text-anchor="middle">mise.toml</text>
 
   <rect x="528" y="80" width="160" height="64" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1.5"/>
-  <text x="548" y="102" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="2">TOOLS</text>
-  <text x="608" y="128" fill="#141413" font-size="24" font-weight="600" text-anchor="middle">运行时与 CLI</text>
+  <text x="548" y="102" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="2">TOOLS</text>
+  <text font-family="TsangerJinKai02" x="608" y="128" fill="#141413" font-size="24" font-weight="600" text-anchor="middle">运行时与 CLI</text>
 
   <rect x="528" y="176" width="160" height="64" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1.5"/>
-  <text x="548" y="198" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="2">ENV</text>
-  <text x="608" y="224" fill="#141413" font-size="24" font-weight="600" text-anchor="middle">环境变量</text>
+  <text x="548" y="198" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="2">ENV</text>
+  <text font-family="TsangerJinKai02" x="608" y="224" fill="#141413" font-size="24" font-weight="600" text-anchor="middle">环境变量</text>
 
   <rect x="528" y="272" width="160" height="64" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1.5"/>
-  <text x="548" y="294" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="2">TASKS</text>
-  <text x="608" y="320" fill="#141413" font-size="24" font-weight="600" text-anchor="middle">工程任务</text>
+  <text x="548" y="294" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="2">TASKS</text>
+  <text font-family="TsangerJinKai02" x="608" y="320" fill="#141413" font-size="24" font-weight="600" text-anchor="middle">工程任务</text>
 
   <rect x="768" y="80" width="144" height="64" rx="8" fill="#EEEDE6" stroke="#B2B1AC" stroke-width="1.5"/>
-  <text x="840" y="106" fill="#141413" font-size="22" font-weight="600" text-anchor="middle">activate</text>
-  <text x="840" y="128" fill="#504e49" font-size="15" text-anchor="middle">交互 Shell</text>
+  <text font-family="TsangerJinKai02" x="840" y="106" fill="#141413" font-size="22" font-weight="600" text-anchor="middle">activate</text>
+  <text font-family="TsangerJinKai02" x="840" y="128" fill="#504e49" font-size="15" text-anchor="middle">交互 Shell</text>
 
   <rect x="768" y="176" width="144" height="64" rx="8" fill="#EEEDE6" stroke="#B2B1AC" stroke-width="1.5"/>
-  <text x="840" y="202" fill="#141413" font-size="22" font-weight="600" text-anchor="middle">exec</text>
-  <text x="840" y="224" fill="#504e49" font-size="15" text-anchor="middle">脚本与 CI</text>
+  <text font-family="TsangerJinKai02" x="840" y="202" fill="#141413" font-size="22" font-weight="600" text-anchor="middle">exec</text>
+  <text font-family="TsangerJinKai02" x="840" y="224" fill="#504e49" font-size="15" text-anchor="middle">脚本与 CI</text>
 
   <rect x="768" y="272" width="144" height="64" rx="8" fill="#EEEDE6" stroke="#B2B1AC" stroke-width="1.5"/>
-  <text x="840" y="298" fill="#141413" font-size="22" font-weight="600" text-anchor="middle">run</text>
-  <text x="840" y="320" fill="#504e49" font-size="15" text-anchor="middle">标准动作</text>
+  <text font-family="TsangerJinKai02" x="840" y="298" fill="#141413" font-size="22" font-weight="600" text-anchor="middle">run</text>
+  <text font-family="TsangerJinKai02" x="840" y="320" fill="#504e49" font-size="15" text-anchor="middle">标准动作</text>
 
-  <text x="48" y="388" fill="#504e49" font-size="17">一份项目配置同时约束工具、环境变量和任务。交互 Shell、脚本和 CI 只是不同入口。</text>
+  <text font-family="TsangerJinKai02" x="48" y="388" fill="#504e49" font-size="17">一份项目配置同时约束工具、环境变量和任务。交互 Shell、脚本和 CI 只是不同入口。</text>
 </svg>
 
   <figcaption>Figure 1. 团队只需维护一份项目契约，差异留在入口，不留在安装说明里。</figcaption>

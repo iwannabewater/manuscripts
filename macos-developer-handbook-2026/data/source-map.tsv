@@ -33,7 +33,7 @@ launcher	raycast-window-management	https://manual.raycast.com/window-management	
 launcher	raycast-clipboard-history	https://manual.raycast.com/clipboard-history	clipboard behavior
 launcher	raycast-quicklinks	https://manual.raycast.com/quicklinks	quicklinks
 launcher	raycast-snippets	https://manual.raycast.com/snippets	snippets
-launcher	raycast-security	https://manual.raycast.com/security-and-privacy	permission boundary
+launcher	raycast-security	https://manual.raycast.com/ai/raycast-ai-privacy-security	permission boundary
 runtimes	mise-getting-started	https://mise.jdx.dev/getting-started.html	runtime workflow
 runtimes	mise-installation	https://mise.jdx.dev/installing-mise.html	mise installation
 runtimes	mise-configuration	https://mise.jdx.dev/configuration.html	project and user config

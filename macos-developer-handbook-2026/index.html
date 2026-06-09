@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <title>macOS 开发者工作站手册：从新机上手到可复现工程环境</title>
-
+<meta name="author" content="Winston">
 <meta name="description" content="macOS 开发者工作站手册，覆盖快捷操作、软件分层、Homebrew、Brewfile、Ghostty、mise、uv、OrbStack、Mole、权限、备份、维护 SOP 与 Cheatsheet。">
 <meta name="keywords" content="macOS, developer workstation, Homebrew, Brewfile, Ghostty, mise, uv, OrbStack, Mole, Cheatsheet">
 <style>
   /* Regular weight */
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype"),
-       url("https://cdn.jsdelivr.net/gh/tw93/paper@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
   }
@@ -19,8 +19,8 @@
   /* Bold weight - W05 for all bold variants */
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype"),
-       url("https://cdn.jsdelivr.net/gh/tw93/paper@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
   }
@@ -259,9 +259,7 @@
      glyphs rendered as "?" or missing-glyph boxes in WeasyPrint when the system lacks
      a mono font with CJK coverage. */
   code {
-    font-family: "JetBrains Mono", "SF Mono", Consolas,
-                 "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 9pt;
     background: var(--ivory);
     padding: 1pt 4pt;
@@ -269,9 +267,7 @@
     color: var(--dark-warm);
   }
   pre {
-    font-family: "JetBrains Mono", "SF Mono", Consolas,
-                 "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 9pt;
     line-height: 1.5;
     background: var(--ivory);
@@ -405,7 +401,7 @@
 
   @font-face {
     font-family: "JetBrains Mono";
-    src: url("fonts/JetBrainsMono.woff2") format("woff2");
+    src: url("../assets/fonts/JetBrainsMono.woff2") format("woff2");
     font-weight: 400;
     font-style: normal;
   }
@@ -431,6 +427,7 @@
   .chapter[data-section="12"] ul,
   .chapter[data-section="12"] ol { margin: 4pt 0 7pt 0; line-height: 1.48; }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 <section class="cover">
@@ -475,26 +472,26 @@
   <rect x="734" y="42" width="210" height="344" rx="18" fill="#dedce8"/>
   <path d="M248 214h22M480 214h22M712 214h22" stroke="#1b365d" stroke-width="5" stroke-linecap="round"/>
   <path d="M262 205l9 9-9 9M494 205l9 9-9 9M726 205l9 9-9 9" fill="none" stroke="#1b365d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
-  <text x="62" y="94" class="heading">系统层</text>
-  <text x="62" y="141" class="body">更新 · 加密</text>
-  <text x="62" y="177" class="body">权限 · 备份</text>
-  <text x="62" y="213" class="body">窗口 · 输入</text>
-  <text x="62" y="319" class="small">macOS 原生能力</text>
-  <text x="294" y="94" class="heading">工作站层</text>
-  <text x="294" y="141" class="body">Homebrew</text>
-  <text x="294" y="177" class="body">Brewfile</text>
-  <text x="294" y="213" class="body">终端 · 容器</text>
-  <text x="294" y="319" class="small">机器安装契约</text>
-  <text x="526" y="94" class="heading">项目层</text>
-  <text x="526" y="141" class="body">mise.toml</text>
-  <text x="526" y="177" class="body">mise.lock</text>
-  <text x="526" y="213" class="body">任务 · 环境变量</text>
-  <text x="526" y="319" class="small">项目运行时契约</text>
-  <text x="758" y="94" class="heading">语言层</text>
-  <text x="758" y="141" class="body">uv.lock</text>
-  <text x="758" y="177" class="body">package lock</text>
-  <text x="758" y="213" class="body">依赖 · 工具</text>
-  <text x="758" y="319" class="small">项目依赖契约</text>
+  <text font-family="TsangerJinKai02" x="62" y="94" class="heading">系统层</text>
+  <text font-family="TsangerJinKai02" x="62" y="141" class="body">更新 · 加密</text>
+  <text font-family="TsangerJinKai02" x="62" y="177" class="body">权限 · 备份</text>
+  <text font-family="TsangerJinKai02" x="62" y="213" class="body">窗口 · 输入</text>
+  <text font-family="TsangerJinKai02" x="62" y="319" class="small">macOS 原生能力</text>
+  <text font-family="TsangerJinKai02" x="294" y="94" class="heading">工作站层</text>
+  <text font-family="TsangerJinKai02" x="294" y="141" class="body">Homebrew</text>
+  <text font-family="TsangerJinKai02" x="294" y="177" class="body">Brewfile</text>
+  <text font-family="TsangerJinKai02" x="294" y="213" class="body">终端 · 容器</text>
+  <text font-family="TsangerJinKai02" x="294" y="319" class="small">机器安装契约</text>
+  <text font-family="TsangerJinKai02" x="526" y="94" class="heading">项目层</text>
+  <text font-family="TsangerJinKai02" x="526" y="141" class="body">mise.toml</text>
+  <text font-family="TsangerJinKai02" x="526" y="177" class="body">mise.lock</text>
+  <text font-family="TsangerJinKai02" x="526" y="213" class="body">任务 · 环境变量</text>
+  <text font-family="TsangerJinKai02" x="526" y="319" class="small">项目运行时契约</text>
+  <text font-family="TsangerJinKai02" x="758" y="94" class="heading">语言层</text>
+  <text font-family="TsangerJinKai02" x="758" y="141" class="body">uv.lock</text>
+  <text font-family="TsangerJinKai02" x="758" y="177" class="body">package lock</text>
+  <text font-family="TsangerJinKai02" x="758" y="213" class="body">依赖 · 工具</text>
+  <text font-family="TsangerJinKai02" x="758" y="319" class="small">项目依赖契约</text>
 </svg>
 
   <figcaption>Figure 1. 把工作站拆成四层：机器只维护工作站入口，项目自己携带运行时和依赖契约。</figcaption>
@@ -2461,7 +2458,7 @@ mo analyze
 </ul>
 <h2>Optional Tools</h2>
 <ul>
-<li><a href="https://manual.raycast.com/window-management">Raycast window management</a>、<a href="https://manual.raycast.com/clipboard-history">clipboard history</a>、<a href="https://manual.raycast.com/quicklinks">Quicklinks</a>、<a href="https://manual.raycast.com/snippets">Snippets</a> 与 <a href="https://manual.raycast.com/security-and-privacy">security and privacy</a>。</li>
+<li><a href="https://manual.raycast.com/window-management">Raycast window management</a>、<a href="https://manual.raycast.com/clipboard-history">clipboard history</a>、<a href="https://manual.raycast.com/quicklinks">Quicklinks</a>、<a href="https://manual.raycast.com/snippets">Snippets</a> 与 <a href="https://manual.raycast.com/ai/raycast-ai-privacy-security">security and privacy</a>。</li>
 <li><a href="https://github.com/jordanbaird/Ice">Ice</a>、<a href="https://github.com/exelban/stats">Stats</a>、<a href="https://github.com/iina/iina">IINA</a>、<a href="https://www.keka.io/en/">Keka</a>、<a href="https://github.com/localsend/localsend">LocalSend</a>、<a href="https://github.com/p0deje/Maccy">Maccy</a>。</li>
 <li><a href="https://github.com/waydabber/BetterDisplay">BetterDisplay</a>、<a href="https://github.com/rxhanson/Rectangle">Rectangle</a>、<a href="https://github.com/MrKai77/Loop">Loop</a>、<a href="https://github.com/nikitabobko/AeroSpace">AeroSpace</a>。</li>
 <li><a href="https://github.com/alienator88/Pearcleaner">Pearcleaner</a>、<a href="https://github.com/milanvarady/Applite">Applite</a>、<a href="https://github.com/mas-cli/mas">mas</a>。</li>

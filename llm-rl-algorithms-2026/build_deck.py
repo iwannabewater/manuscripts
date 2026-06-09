@@ -154,7 +154,7 @@ def render_latex_formula(key: str, formula: str) -> None:
     except Exception as exc:
         fallback_svg = f"""<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="140" viewBox="0 0 1400 140">
 <rect width="1400" height="140" fill="none"/>
-<text x="18" y="72" font-size="24" font-family="JetBrains Mono, monospace" fill="#141413">{esc(formula)}</text>
+<text x="18" y="72" font-size="24" font-family="JetBrains Mono" fill="#141413">{esc(formula)}</text>
 </svg>"""
         svg_path.write_text(fallback_svg, encoding="utf-8")
         try:
@@ -1043,19 +1043,21 @@ SLIDES: list[dict[str, Any]] = [
 
 
 CSS = """
-@font-face{font-family:Tsanger;src:url('fonts/TsangerJinKai02-W04.ttf') format('truetype');font-weight:400}
-@font-face{font-family:Tsanger;src:url('fonts/TsangerJinKai02-W05.ttf') format('truetype');font-weight:700}
-@font-face{font-family:JetBrainsMono;src:url('fonts/JetBrainsMono.woff2') format('woff2');font-weight:400}
+@font-face{font-family:Tsanger;src:url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");font-weight:400}
+@font-face{font-family:Tsanger;src:url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");font-weight:700}
+@font-face{font-family:JetBrainsMono;src:url("../assets/fonts/JetBrainsMono.woff2") format('woff2');font-weight:400}
 @page{size:280mm 158mm;margin:0}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:#e9e5d8;color:#141413}
-body{font-family:Georgia,Tsanger,"Noto Serif CJK SC","Source Han Serif SC",serif}
-.latin{font-family:Arial,"Helvetica Neue",Helvetica,sans-serif;font-weight:inherit;letter-spacing:0}
+body{font-family:Tsanger,"TsangerJinKai02"}
+.latin{font-family:Tsanger,"TsangerJinKai02";font-weight:inherit;letter-spacing:0}
 .slide{position:relative;width:280mm;height:158mm;padding:13mm 16mm 11mm 18mm;background:#f5f4ed;break-after:page;overflow:hidden}
 .slide::before{content:"";position:absolute;left:9mm;top:12mm;bottom:12mm;width:1.2mm;background:#1B365D}
 .slide::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2.2mm;background:#1B365D}
-.eyebrow{font-family:JetBrainsMono,monospace;font-size:8.5pt;letter-spacing:0;color:#7B2D26;text-transform:uppercase;margin-bottom:3mm}
-h1,h2{font-family:Georgia,Tsanger,"Noto Serif CJK SC","Source Han Serif SC",serif;font-weight:700;color:#1B365D;margin:0;line-height:1.08;letter-spacing:0}
+.eyebrow{font-family:JetBrainsMono;font-size:8.5pt;letter-spacing:0;color:#7B2D26;text-transform:uppercase;margin-bottom:3mm}
+h1,h2{font-family:Tsanger,"TsangerJinKai02";font-weight:700;color:#1B365D;margin:0;line-height:1.08;letter-spacing:0}
 h1{font-size:34pt;max-width:230mm}
 h2{font-size:21.5pt;max-width:235mm}
 .lead{font-size:13pt;line-height:1.45;margin:4mm 0 4.5mm;max-width:235mm;color:#2a2926}
@@ -1070,14 +1072,14 @@ h2{font-size:21.5pt;max-width:235mm}
 .col ul{list-style:none;margin:0;padding:0;display:grid;gap:2mm}
 .formula-card{margin:4mm 0 2.8mm;padding:4mm 5mm;background:#fffdf6;border:1.2pt solid rgba(27,54,93,.38);border-radius:2mm;display:flex;align-items:center;justify-content:center;min-height:20mm;max-height:37mm}
 .formula-card img{max-width:100%;max-height:30mm;object-fit:contain}
-.caption{font-size:9.2pt;line-height:1.35;color:#5c5547;margin:0 0 3mm;font-family:JetBrainsMono,Tsanger,monospace}
+.caption{font-size:9.2pt;line-height:1.35;color:#5c5547;margin:0 0 3mm;font-family:JetBrainsMono,Tsanger}
 table{width:100%;border-collapse:collapse;margin-top:4mm;font-size:8.9pt;line-height:1.32}
 th,td{border-bottom:1px solid rgba(27,54,93,.28);padding:2.0mm 2.1mm;text-align:left;vertical-align:top}
 th{color:#1B365D;font-weight:700;background:#ece7d8}
 tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 .callout{position:absolute;left:18mm;right:16mm;bottom:10mm;border-left:3mm solid #7B2D26;background:#fffdf6;padding:3mm 4mm;font-size:11.4pt;line-height:1.42;color:#1d1c19}
-.source{position:absolute;right:16mm;bottom:5.5mm;font-family:JetBrainsMono,monospace;font-size:7pt;color:#6d685f;max-width:160mm;text-align:right}
-.page{position:absolute;left:18mm;bottom:5.5mm;font-family:JetBrainsMono,monospace;font-size:7pt;color:#6d685f}
+.source{position:absolute;right:16mm;bottom:5.5mm;font-family:JetBrainsMono;font-size:7pt;color:#6d685f;max-width:160mm;text-align:right}
+.page{position:absolute;left:18mm;bottom:5.5mm;font-family:JetBrainsMono;font-size:7pt;color:#6d685f}
 .cover{padding-top:20mm}
 .cover::before{width:1.8mm}
 .cover h1{font-size:42pt}
@@ -1151,6 +1153,7 @@ def write_html() -> None:
 <meta name="author" content="Codex">
 <meta name="date" content="{TODAY}">
 <style>{CSS}</style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 {''.join(render_slide(s, i + 1) for i, s in enumerate(SLIDES))}
@@ -1249,7 +1252,7 @@ def write_pptx() -> None:
 
         title = sl.shapes.add_textbox(Inches(0.65), Inches(0.72), Inches(9.8), Inches(0.9)).text_frame
         title.text = data["title"]
-        title.paragraphs[0].font.name = "Georgia"
+        title.paragraphs[0].font.name = "TsangerJinKai02"
         title.paragraphs[0].font.bold = True
         title.paragraphs[0].font.size = Pt(27 if data.get("kind") == "cover" else 19)
         title.paragraphs[0].font.color.rgb = RGBColor(27, 54, 93)
@@ -1271,7 +1274,7 @@ def write_pptx() -> None:
             p = box.paragraphs[0] if i == 0 else box.add_paragraph()
             p.text = line
             p.level = 0
-            p.font.name = "Georgia"
+            p.font.name = "TsangerJinKai02"
             p.font.size = Pt(11 if len(lines) > 6 else 12.5)
             p.font.color.rgb = RGBColor(20, 20, 19)
 

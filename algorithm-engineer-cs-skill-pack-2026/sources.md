@@ -30,7 +30,7 @@
 - OpenAI Evals GitHub: https://github.com/openai/evals
 - OpenAI Cookbook, Getting Started with OpenAI Evals: https://cookbook.openai.com/examples/evaluation/getting_started_with_openai_evals
 - OpenAI API docs, Evaluation best practices: https://platform.openai.com/docs/guides/evaluation-best-practices
-- OpenAI careers, Software Engineer, Distributed Systems: https://openai.com/careers/software-engineer-distributed-systems/
+- OpenAI careers, Software Engineer, Distributed Systems: https://openai.com/careers/principal-software-engineer-b2b-engineering-remote-us/
 - Triton language and compiler: https://github.com/triton-lang/triton
 - Anthropic Responsible Scaling Policy: https://www.anthropic.com/news/anthropics-responsible-scaling-policy
 - Anthropic ML Infrastructure Engineer, Safeguards: https://www.anthropic.com/careers/jobs/4778843008

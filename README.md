@@ -24,6 +24,7 @@
 | Algorithm Engineer CS Skill Pack 2026 | 面向大模型、搜索、广告、推荐与算法平台工程师的 CS / 软件工程技能包，覆盖生产链路、工具矩阵、标准流程、岗位能力和训练路线 | `algorithm-engineer-cs-skill-pack-2026/index.html` / `algorithm-engineer-cs-skill-pack-2026/algorithm-engineer-cs-skill-pack-2026.pdf` |
 | Generative Recommendation 2026 | 生成式推荐的发展史、主流算法、产业落地与趋势判断 | `generative-recommendation-2026/index.html` / `generative-recommendation-2026/generative-recommendation-2026.pdf` |
 | E-commerce Generative Algorithms 2026 | 七类电商平台在多模态大模型、后训练、生成式推荐、智能搜索与图像检索方向的公开技术路线研究 | `ecommerce-generative-algorithms-2026/index.html` / `ecommerce-generative-algorithms-2026/ecommerce-generative-algorithms-2026.pdf` |
+| Embodied Intelligence 2026 | 具身智能入门与技术栈全景，覆盖感知、世界模型、机器人策略、仿真训练、数据闭环与产业落地边界 | `embodied-intelligence-2026/index.html` / `embodied-intelligence-2026/embodied-intelligence-2026.pdf` |
 | Multi-stage Ranking Algorithms 2026 | 国内外头部平台在召回、粗排、精排、混排与重排阶段的公开算法路线及工程经验 | `multi-stage-ranking-algorithms-2026/index.html` / `multi-stage-ranking-algorithms-2026/multi-stage-ranking-algorithms-2026.pdf` |
 | World Models 2026 | 世界模型的发展史、主流算法、产业落地与趋势判断 | `world-models-2026/index.html` / `world-models-2026/world-models-2026.pdf` |
 | slime RL Scaling Guide | THUDM/slime 上手实操与源码级技术详解 | `slime-rl-scaling-guide/index.html` / `slime-rl-scaling-guide/slime-rl-scaling-guide.pdf` |
@@ -34,7 +35,11 @@
 | macOS Developer Handbook 2026 | 面向开发者的新机上手与长期维护手册，覆盖原生快捷操作、软件分层、Homebrew、Brewfile、运行时、容器、权限、备份、维护 SOP 与独立 Cheatsheet | `macos-developer-handbook-2026/index.html` / `macos-developer-handbook-2026/macos-developer-handbook-2026.pdf` |
 | 小红书 FY2025 Equity Report | 小红书 2025 年业绩披露、历史估值与员工期权回购价格的证据分层研究 | `xiaohongshu-2025-equity-report/index.html` / `xiaohongshu-2025-equity-report/xiaohongshu-2025-equity-report.pdf` |
 | 字节跳动 FY2025 Equity Report | 字节跳动 2025 年业绩口径、员工权益回购价格与二级交易估值的证据分层研究 | `bytedance-2025-equity-report/index.html` / `bytedance-2025-equity-report/bytedance-2025-equity-report.pdf` |
+| PDD Holdings 2025 Equity Report | PDD Holdings 2025 年报中文研报，覆盖财务拆解、利润桥、现金流、估值、竞争位置、催化剂和风险 | `pdd-2025-equity-report/index.html` / `pdd-2025-equity-report/pdd-2025-equity-report.pdf` |
+| PDD Holdings 2026 Q1 Earnings Analysis | PDD Holdings 2026 年一季度财报分析，覆盖财务拆解、股价反应、券商口径、Temu、新拼姆战略与风险边界 | `pdd-2026-q1-earnings-analysis/index.html` / `pdd-2026-q1-earnings-analysis/pdd-2026-q1-earnings-analysis.pdf` |
+| 美团 2026 Q1 Earnings Analysis | 美团 2026 年一季度财报分析，覆盖核心本地商业、即时零售、资产负债表、同行竞争与监管时间线 | `meituan-2026-q1-earnings-analysis/index.html` / `meituan-2026-q1-earnings-analysis/meituan-2026-q1-earnings-analysis.pdf` |
 | 蔚小理 2026 | 蔚来、小鹏、理想汽车的发展现状、困境、优势和长期战略前景分析 | `neo-ev-forces-2026/index.html` / `neo-ev-forces-2026/neo-ev-forces-2026.pdf` |
+| 大陆居民合规配置港股、美股与境外基金 | 大陆居民合法合规配置港股、美股敞口与境外基金的路径地图、红线、执行动作、税费与风控检查 | `mainland-china-legal-global-investing-2026/index.html` / `mainland-china-legal-global-investing-2026/mainland-china-legal-global-investing-2026.pdf` |
 | 场外定投美国宽基 2026 | 中国内地投资者配置纳斯达克 100 与标普 500 的 QDII 场外份额筛选、期限策略和执行清单 | `otc-us-index-dca-2026/index.html` / `otc-us-index-dca-2026/otc-us-index-dca-2026.pdf` |
 
 ## Directory Contract

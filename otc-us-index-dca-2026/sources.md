@@ -37,7 +37,7 @@
 | R13 | 招商基金，`019547` 官方产品页，读取于 2026-05-25。[网页](https://www.cmfchina.com/web/fundDetail/019547/index.html) | 标记“限额”；管理费 `0.50%`、托管费 `0.15%`；当日境外节假日暂停公告 | `research/products/nasdaq/cmf-nasdaq-a-page.md` |
 | R14 | 博时基金公告转载全文，博时标普 500ETF 联接调整大额申购，公告日 2026-04-09。[网页](https://www.hongdianfund.com/FundAnnouncement/Detail/050025/0000000000001pp1hr) | 自 `2026-04-10`，`018738` 单日单账户申购、转换转入和定投累计上限 `2,000` 元 | `research/products/sp500/bosera-sp500-limit-202604.md` |
 | R15 | 博时标普 500ETF 联接基金 2025 年年度报告。[PDF](https://pdf.dfcfw.com/pdf/H2_AN202603311820895962_1.pdf) | E 类约定销售服务费 `0.10%/年`；自 `2024-07-04` 起优惠期折后 `0.01%/年` | `research/products/sp500/bosera-sp500-annual-2025.md` |
-| R16 | 博时标普 500ETF 联接基金 2026 年第 1 季度报告。[PDF](https://notice.10jqka.com.cn/api/pdf/2321fca3afb702b1.pdf) | E 类季度份额、阶段表现与基准偏离数据 | `research/products/sp500/bosera-sp500-q1-2026.md` |
+| R16 | 博时标普 500ETF 联接基金 2026 年第 1 季度报告。[PDF](https://www.cninfo.com.cn/new/disclosure/detail?stockCode=050025&announcementId=1223305947) | E 类季度份额、阶段表现与基准偏离数据 | `research/products/sp500/bosera-sp500-q1-2026.md` |
 | R17 | 博时 `018738` 销售展示页，读取于 2026-05-25。[网页](https://fund.10jqka.com.cn/pc/JSB358/interduce.html) | 展示管理费 `0.60%`、托管费 `0.20%`、优惠期销售服务费 `0.01%` | `research/products/sp500/bosera-sp500-e-current-fundpage.md` |
 
 ## 数据处理说明

@@ -10,14 +10,16 @@
 <style>
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
   }
 
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
   }
@@ -29,16 +31,14 @@
 
     @top-right {
       content: string(section-title);
-      font-family: "TsangerJinKai02", "Source Han Serif SC",
-                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8pt;
       color: #6b6a64;
     }
 
     @bottom-center {
       content: counter(page) "  ·  Diffusion LLM 入门、技术栈与产业前景报告 2026";
-      font-family: "TsangerJinKai02", "Source Han Serif SC",
-                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 9pt;
       color: #6b6a64;
     }
@@ -62,7 +62,7 @@
     --border:    #e8e6dc;
     --border-soft:#e5e3d8;
     --tag-bg:    #E4ECF5;
-    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --serif: "TsangerJinKai02";
     --sans: var(--serif);
 
     --rhythm-module:  14pt;
@@ -247,9 +247,7 @@
   }
 
   code {
-    font-family: "JetBrains Mono", "SF Mono", Consolas,
-                 "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 9pt;
     background: var(--ivory);
     padding: 1pt 4pt;
@@ -257,9 +255,7 @@
     color: var(--dark-warm);
   }
   pre {
-    font-family: "JetBrains Mono", "SF Mono", Consolas,
-                 "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 9pt;
     line-height: 1.5;
     background: var(--ivory);
@@ -386,6 +382,7 @@
   .chapter { margin-top: 24pt; }
   .toc + .chapter { margin-top: 0; }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 
@@ -504,35 +501,35 @@
       </defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/>
       <rect width="100%" height="100%" fill="url(#dots-a)" opacity="0.55"/>
-      <text x="80" y="44" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  1</text>
-      <text x="200" y="44" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="3">AR VS MASKED DIFFUSION</text>
+      <text x="80" y="44" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  1</text>
+      <text x="200" y="44" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="3">AR VS MASKED DIFFUSION</text>
       <line x1="80" y1="60" x2="920" y2="60" stroke="#1B365D" stroke-width="1"/>
 
-      <text x="112" y="112" fill="#141413" font-size="24" font-weight="600" font-family="serif">自回归生成</text>
-      <text x="592" y="112" fill="#141413" font-size="24" font-weight="600" font-family="serif">扩散式生成</text>
+      <text x="112" y="112" fill="#141413" font-size="24" font-weight="600" font-family="TsangerJinKai02">自回归生成</text>
+      <text x="592" y="112" fill="#141413" font-size="24" font-weight="600" font-family="TsangerJinKai02">扩散式生成</text>
 
       <rect x="96" y="148" width="72" height="52" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="2"/>
       <rect x="184" y="148" width="72" height="52" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.4"/>
       <rect x="272" y="148" width="72" height="52" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.4"/>
       <rect x="360" y="148" width="72" height="52" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.4"/>
-      <text x="132" y="181" fill="#1B365D" font-size="20" text-anchor="middle" font-family="serif">t1</text>
-      <text x="220" y="181" fill="#504e49" font-size="20" text-anchor="middle" font-family="serif">t2</text>
-      <text x="308" y="181" fill="#504e49" font-size="20" text-anchor="middle" font-family="serif">t3</text>
-      <text x="396" y="181" fill="#504e49" font-size="20" text-anchor="middle" font-family="serif">t4</text>
+      <text x="132" y="181" fill="#1B365D" font-size="20" text-anchor="middle" font-family="TsangerJinKai02">t1</text>
+      <text x="220" y="181" fill="#504e49" font-size="20" text-anchor="middle" font-family="TsangerJinKai02">t2</text>
+      <text x="308" y="181" fill="#504e49" font-size="20" text-anchor="middle" font-family="TsangerJinKai02">t3</text>
+      <text x="396" y="181" fill="#504e49" font-size="20" text-anchor="middle" font-family="TsangerJinKai02">t4</text>
       <path d="M168 174 L184 174" stroke="#504e49" stroke-width="2"/>
       <path d="M256 174 L272 174" stroke="#504e49" stroke-width="2"/>
       <path d="M344 174 L360 174" stroke="#504e49" stroke-width="2"/>
-      <text x="96" y="244" fill="#504e49" font-size="18" font-family="serif">每一步只承诺下一个 token，</text>
-      <text x="96" y="272" fill="#504e49" font-size="18" font-family="serif">速度受输出长度线性约束。</text>
+      <text x="96" y="244" fill="#504e49" font-size="18" font-family="TsangerJinKai02">每一步只承诺下一个 token，</text>
+      <text x="96" y="272" fill="#504e49" font-size="18" font-family="TsangerJinKai02">速度受输出长度线性约束。</text>
 
       <rect x="560" y="148" width="72" height="52" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1.4"/>
       <rect x="648" y="148" width="72" height="52" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1.4"/>
       <rect x="736" y="148" width="72" height="52" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1.4"/>
       <rect x="824" y="148" width="72" height="52" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1.4"/>
-      <text x="596" y="181" fill="#6b6a64" font-size="18" text-anchor="middle" font-family="serif">MASK</text>
-      <text x="684" y="181" fill="#6b6a64" font-size="18" text-anchor="middle" font-family="serif">MASK</text>
-      <text x="772" y="181" fill="#6b6a64" font-size="18" text-anchor="middle" font-family="serif">MASK</text>
-      <text x="860" y="181" fill="#6b6a64" font-size="18" text-anchor="middle" font-family="serif">MASK</text>
+      <text x="596" y="181" fill="#6b6a64" font-size="18" text-anchor="middle" font-family="TsangerJinKai02">MASK</text>
+      <text x="684" y="181" fill="#6b6a64" font-size="18" text-anchor="middle" font-family="TsangerJinKai02">MASK</text>
+      <text x="772" y="181" fill="#6b6a64" font-size="18" text-anchor="middle" font-family="TsangerJinKai02">MASK</text>
+      <text x="860" y="181" fill="#6b6a64" font-size="18" text-anchor="middle" font-family="TsangerJinKai02">MASK</text>
 
       <path d="M728 220 Q728 252 728 284" fill="none" stroke="#1B365D" stroke-width="2"/>
       <path d="M724 276 L728 286 L732 276" fill="none" stroke="#1B365D" stroke-width="2" stroke-linecap="round"/>
@@ -541,12 +538,12 @@
       <rect x="648" y="308" width="72" height="52" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.4"/>
       <rect x="736" y="308" width="72" height="52" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="2"/>
       <rect x="824" y="308" width="72" height="52" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.4"/>
-      <text x="596" y="341" fill="#1B365D" font-size="20" text-anchor="middle" font-family="serif">t1</text>
-      <text x="684" y="341" fill="#504e49" font-size="18" text-anchor="middle" font-family="serif">MASK</text>
-      <text x="772" y="341" fill="#1B365D" font-size="20" text-anchor="middle" font-family="serif">t3</text>
-      <text x="860" y="341" fill="#504e49" font-size="18" text-anchor="middle" font-family="serif">MASK</text>
-      <text x="560" y="404" fill="#504e49" font-size="18" font-family="serif">每轮同时评估多个位置，</text>
-      <text x="560" y="432" fill="#504e49" font-size="18" font-family="serif">高置信 token 固定，低置信 token 继续修正。</text>
+      <text x="596" y="341" fill="#1B365D" font-size="20" text-anchor="middle" font-family="TsangerJinKai02">t1</text>
+      <text x="684" y="341" fill="#504e49" font-size="18" text-anchor="middle" font-family="TsangerJinKai02">MASK</text>
+      <text x="772" y="341" fill="#1B365D" font-size="20" text-anchor="middle" font-family="TsangerJinKai02">t3</text>
+      <text x="860" y="341" fill="#504e49" font-size="18" text-anchor="middle" font-family="TsangerJinKai02">MASK</text>
+      <text x="560" y="404" fill="#504e49" font-size="18" font-family="TsangerJinKai02">每轮同时评估多个位置，</text>
+      <text x="560" y="432" fill="#504e49" font-size="18" font-family="TsangerJinKai02">高置信 token 固定，低置信 token 继续修正。</text>
     </svg>
     <figcaption>图 1：扩散语言模型把生成顺序从「严格左到右」变成「由噪声水平和置信度决定」。</figcaption>
   </figure>
@@ -647,46 +644,46 @@
       </defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/>
       <rect width="100%" height="100%" fill="url(#dots-b)" opacity="0.55"/>
-      <text x="80" y="44" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  2</text>
-      <text x="200" y="44" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="3">DIFFUSION LLM STACK</text>
+      <text x="80" y="44" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  2</text>
+      <text x="200" y="44" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="3">DIFFUSION LLM STACK</text>
       <line x1="80" y1="60" x2="920" y2="60" stroke="#1B365D" stroke-width="1"/>
 
       <rect x="104" y="96" width="792" height="72" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
-      <text x="132" y="126" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="2">LAYER  1</text>
-      <text x="132" y="152" fill="#141413" font-size="23" font-weight="600" font-family="serif">数据、tokenizer 与任务格式</text>
-      <text x="560" y="139" fill="#504e49" font-size="14" font-family="serif">
+      <text x="132" y="126" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="2">LAYER  1</text>
+      <text x="132" y="152" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">数据、tokenizer 与任务格式</text>
+      <text x="560" y="139" fill="#504e49" font-size="14" font-family="TsangerJinKai02">
         <tspan x="560" dy="0">预训练语料 · 指令数据 · 代码</tspan>
         <tspan x="560" dy="21">多模态 token · tokenizer · 格式约束</tspan>
       </text>
 
       <rect x="104" y="184" width="792" height="72" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
-      <text x="132" y="214" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="2">LAYER  2</text>
-      <text x="132" y="240" fill="#141413" font-size="23" font-weight="600" font-family="serif">前向噪声与训练目标</text>
-      <text x="560" y="227" fill="#504e49" font-size="14" font-family="serif">
+      <text x="132" y="214" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="2">LAYER  2</text>
+      <text x="132" y="240" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">前向噪声与训练目标</text>
+      <text x="560" y="227" fill="#504e49" font-size="14" font-family="TsangerJinKai02">
         <tspan x="560" dy="0">mask ratio · schedule · x0 prediction</tspan>
         <tspan x="560" dy="21">score entropy · ELBO · training recipe</tspan>
       </text>
 
       <rect x="104" y="272" width="792" height="72" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="2"/>
-      <text x="132" y="302" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="2">LAYER  3</text>
-      <text x="132" y="328" fill="#141413" font-size="23" font-weight="600" font-family="serif">去噪 Transformer 主干</text>
-      <text x="560" y="315" fill="#504e49" font-size="14" font-family="serif">
+      <text x="132" y="302" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="2">LAYER  3</text>
+      <text x="132" y="328" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">去噪 Transformer 主干</text>
+      <text x="560" y="315" fill="#504e49" font-size="14" font-family="TsangerJinKai02">
         <tspan x="560" dy="0">双向 attention · time embedding · MoE</tspan>
         <tspan x="560" dy="21">vision connector · RL heads · adapters</tspan>
       </text>
 
       <rect x="104" y="360" width="792" height="72" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
-      <text x="132" y="390" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="2">LAYER  4</text>
-      <text x="132" y="416" fill="#141413" font-size="23" font-weight="600" font-family="serif">采样器与质量控制</text>
-      <text x="560" y="403" fill="#504e49" font-size="14" font-family="serif">
+      <text x="132" y="390" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="2">LAYER  4</text>
+      <text x="132" y="416" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">采样器与质量控制</text>
+      <text x="560" y="403" fill="#504e49" font-size="14" font-family="TsangerJinKai02">
         <tspan x="560" dy="0">remasking · confidence · entropy</tspan>
         <tspan x="560" dy="21">temperature · verifier · guidance</tspan>
       </text>
 
       <rect x="104" y="448" width="792" height="72" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
-      <text x="132" y="478" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="2">LAYER  5</text>
-      <text x="132" y="504" fill="#141413" font-size="23" font-weight="600" font-family="serif">推理服务与应用接口</text>
-      <text x="560" y="491" fill="#504e49" font-size="14" font-family="serif">
+      <text x="132" y="478" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="2">LAYER  5</text>
+      <text x="132" y="504" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">推理服务与应用接口</text>
+      <text x="560" y="491" fill="#504e49" font-size="14" font-family="TsangerJinKai02">
         <tspan x="560" dy="0">KV Cache 变体 · batch · streaming</tspan>
         <tspan x="560" dy="21">OpenAI API · edit · infill · routing</tspan>
       </text>
@@ -895,25 +892,25 @@
       </defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/>
       <rect width="100%" height="100%" fill="url(#dots-c)" opacity="0.55"/>
-      <text x="80" y="44" fill="#1B365D" font-size="14" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  3</text>
-      <text x="200" y="44" fill="#504e49" font-size="14" font-family="monospace" letter-spacing="3">SAMPLING LOOP</text>
+      <text x="80" y="44" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  3</text>
+      <text x="200" y="44" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="3">SAMPLING LOOP</text>
       <line x1="80" y1="60" x2="920" y2="60" stroke="#1B365D" stroke-width="1"/>
 
       <rect x="104" y="120" width="152" height="76" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.4"/>
-      <text x="180" y="150" text-anchor="middle" fill="#141413" font-size="20" font-weight="600" font-family="serif">初始化</text>
-      <text x="180" y="178" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">全 mask 或块 mask</text>
+      <text x="180" y="150" text-anchor="middle" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02">初始化</text>
+      <text x="180" y="178" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">全 mask 或块 mask</text>
 
       <rect x="312" y="120" width="152" height="76" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="2"/>
-      <text x="388" y="150" text-anchor="middle" fill="#141413" font-size="20" font-weight="600" font-family="serif">并行预测</text>
-      <text x="388" y="178" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">所有位置 logits</text>
+      <text x="388" y="150" text-anchor="middle" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02">并行预测</text>
+      <text x="388" y="178" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">所有位置 logits</text>
 
       <rect x="520" y="120" width="152" height="76" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.4"/>
-      <text x="596" y="150" text-anchor="middle" fill="#141413" font-size="20" font-weight="600" font-family="serif">置信筛选</text>
-      <text x="596" y="178" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">entropy 或 margin</text>
+      <text x="596" y="150" text-anchor="middle" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02">置信筛选</text>
+      <text x="596" y="178" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">entropy 或 margin</text>
 
       <rect x="728" y="120" width="152" height="76" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.4"/>
-      <text x="804" y="150" text-anchor="middle" fill="#141413" font-size="20" font-weight="600" font-family="serif">释放 token</text>
-      <text x="804" y="178" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">低置信继续 mask</text>
+      <text x="804" y="150" text-anchor="middle" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02">释放 token</text>
+      <text x="804" y="178" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">低置信继续 mask</text>
 
       <path d="M256 158 L312 158" stroke="#504e49" stroke-width="1.8"/>
       <path d="M464 158 L520 158" stroke="#504e49" stroke-width="1.8"/>
@@ -922,8 +919,8 @@
       <path d="M382 208 L388 198 L394 208" fill="none" stroke="#1B365D" stroke-width="2" stroke-linecap="round"/>
 
       <rect x="132" y="332" width="736" height="92" rx="8" fill="#faf9f5" stroke="#e8e6dc" stroke-width="1"/>
-      <text x="164" y="364" fill="#1B365D" font-size="14" font-family="monospace" font-weight="600" letter-spacing="2">SYSTEM CONTROLS</text>
-      <text x="164" y="394" fill="#504e49" font-size="18" font-family="serif">缓存复用 · 块级长度 · verifier · 格式约束 · batch 调度 · 超时降级 · token 级历史回放</text>
+      <text x="164" y="364" fill="#1B365D" font-size="14" font-family="JetBrains Mono" font-weight="600" letter-spacing="2">SYSTEM CONTROLS</text>
+      <text x="164" y="394" fill="#504e49" font-size="18" font-family="TsangerJinKai02">缓存复用 · 块级长度 · verifier · 格式约束 · batch 调度 · 超时降级 · token 级历史回放</text>
     </svg>
     <figcaption>图 3：生产级推理不是单个采样公式，而是采样器、缓存、约束和调度的闭环。</figcaption>
   </figure>

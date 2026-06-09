@@ -11,13 +11,15 @@
 <style>
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
   }
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
   }
@@ -28,13 +30,13 @@
     background: #f5f4ed;
     @top-right {
       content: string(section-title);
-      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8pt;
       color: #6b6a64;
     }
     @bottom-center {
       content: counter(page) "  ·  从 0 到 GitHub Pages";
-      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 9pt;
       color: #6b6a64;
     }
@@ -56,8 +58,8 @@
     --border: #e8e6dc;
     --border-soft: #e5e3d8;
     --tag-bg: #E4ECF5;
-    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
-    --mono: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+    --serif: "TsangerJinKai02";
+    --mono: "JetBrains Mono", "TsangerJinKai02";
   }
 
   html, body { background: var(--parchment); }
@@ -278,6 +280,7 @@
   }
   .small { font-size: 9pt; color: var(--olive); }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 
@@ -531,7 +534,7 @@ npm create vite@latest . -- --template vanilla</code></pre>
 
 body {
   margin: 0;
-  font-family: Charter, Georgia, "Source Han Serif SC", serif;
+  font-family: "TsangerJinKai02";
   color: var(--text);
   background: var(--bg);
   line-height: 1.55;

@@ -16,13 +16,7 @@ python3 -c "from weasyprint import HTML; HTML('index.html', base_url='.').write_
 核验建议：
 
 ```bash
-python3 - <<'PY'
-from pathlib import Path
-text = Path('index.html').read_text()
-assert '{{' not in text and '}}' not in text
-for bad in ['Lorem ipsum', 'TBD', 'TODO']:
-    assert bad not in text
-PY
+make verify
 pdfinfo diffusion-llm-2026.pdf
 pdftotext diffusion-llm-2026.pdf - | head
 ```

@@ -10,12 +10,14 @@
   <style>
     @font-face {
       font-family: "Tsanger";
-      src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+      src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
       font-weight: 400;
     }
     @font-face {
       font-family: "Tsanger";
-      src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+      src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
       font-weight: 600;
     }
     @page {
@@ -24,14 +26,14 @@
       @bottom-left {
         content: "MEITUAN · 3690.HK";
         color: #738092;
-        font-family: "Tsanger", serif;
+        font-family: "Tsanger";
         font-size: 7pt;
         letter-spacing: 0.08em;
       }
       @bottom-right {
         content: counter(page) " · 美团 2026 Q1 财报深度分析";
         color: #738092;
-        font-family: "Tsanger", serif;
+        font-family: "Tsanger";
         font-size: 7pt;
       }
     }
@@ -54,7 +56,7 @@
       margin: 0;
       color: var(--ink);
       background: var(--paper);
-      font-family: "Tsanger", "Noto Serif SC", serif;
+      font-family: "Tsanger";
       font-size: 10.5pt;
       line-height: 1.72;
     }
@@ -127,7 +129,7 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      font-family: Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 11pt;
       letter-spacing: 0.18em;
     }
@@ -141,7 +143,7 @@
     .cover-main { margin-top: 14mm; }
     .eyebrow {
       color: var(--accent);
-      font-family: Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 10pt;
       letter-spacing: 0.14em;
       text-transform: uppercase;
@@ -186,7 +188,7 @@
     .cover-metric .value {
       margin-top: 1.5mm;
       color: var(--ink);
-      font-family: Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 19pt;
       line-height: 1;
     }
@@ -227,7 +229,7 @@
     .kicker {
       margin-top: 1.15em;
       color: var(--accent);
-      font-family: Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8.2pt;
       letter-spacing: 0.12em;
       text-transform: uppercase;
@@ -249,7 +251,7 @@
     .metric-card .label { color: var(--muted); font-size: 7.9pt; }
     .metric-card .value {
       margin-top: 1mm;
-      font-family: Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 16pt;
       line-height: 1.1;
     }
@@ -332,7 +334,7 @@
     }
     .timeline-date {
       color: var(--accent);
-      font-family: Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8.6pt;
       letter-spacing: 0.05em;
     }
@@ -368,7 +370,7 @@
     }
     .source-id {
       color: var(--accent);
-      font-family: Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-weight: 700;
     }
     .closing {
@@ -383,7 +385,7 @@
     .page-break { page-break-before: always; }
     .keep { page-break-inside: avoid; }
     .center { text-align: center; }
-    .num { font-family: Georgia, serif; }
+    .num { font-family: "TsangerJinKai02"; }
     .muted { color: var(--muted); }
     @media screen {
       body {
@@ -395,6 +397,7 @@
       .cover { min-height: 255mm; }
     }
   </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
   <section class="cover">
@@ -518,24 +521,24 @@
         <text x="18" y="27" font-family="Tsanger" font-size="18" fill="#172c44">同比经营利润桥</text>
         <text x="18" y="48" font-family="Tsanger" font-size="11" fill="#647488">2025 Q1 盈利 105.66 亿元 → 2026 Q1 亏损 64.70 亿元</text>
         <line x1="38" y1="150" x2="728" y2="150" stroke="#c8d0d5"/>
-        <text x="18" y="154" font-family="Georgia" font-size="10" fill="#738092">0</text>
+        <text x="18" y="154" font-family="TsangerJinKai02" font-size="10" fill="#738092">0</text>
         <rect x="52" y="70.8" width="72" height="79.2" fill="#24745f"/>
-        <text x="88" y="61" text-anchor="middle" font-family="Georgia" font-size="14" fill="#24745f">+105.66</text>
+        <text x="88" y="61" text-anchor="middle" font-family="TsangerJinKai02" font-size="14" fill="#24745f">+105.66</text>
         <text x="88" y="228" text-anchor="middle" font-family="Tsanger" font-size="11" fill="#172c44">2025 Q1</text>
         <rect x="168" y="70.8" width="68" height="45.7" fill="#9f4d45"/>
-        <text x="202" y="61" text-anchor="middle" font-family="Georgia" font-size="13" fill="#9f4d45">-60.93</text>
+        <text x="202" y="61" text-anchor="middle" font-family="TsangerJinKai02" font-size="13" fill="#9f4d45">-60.93</text>
         <text x="202" y="228" text-anchor="middle" font-family="Tsanger" font-size="11" fill="#172c44">毛利</text>
         <rect x="284" y="116.5" width="68" height="58.3" fill="#9f4d45"/>
-        <text x="318" y="107" text-anchor="middle" font-family="Georgia" font-size="13" fill="#9f4d45">-77.69</text>
+        <text x="318" y="107" text-anchor="middle" font-family="TsangerJinKai02" font-size="13" fill="#9f4d45">-77.69</text>
         <text x="318" y="228" text-anchor="middle" font-family="Tsanger" font-size="11" fill="#172c44">营销</text>
         <rect x="400" y="174.8" width="68" height="9.5" fill="#9f4d45"/>
-        <text x="434" y="166" text-anchor="middle" font-family="Georgia" font-size="13" fill="#9f4d45">-12.71</text>
+        <text x="434" y="166" text-anchor="middle" font-family="TsangerJinKai02" font-size="13" fill="#9f4d45">-12.71</text>
         <text x="434" y="228" text-anchor="middle" font-family="Tsanger" font-size="11" fill="#172c44">研发</text>
         <rect x="516" y="184.3" width="68" height="14.3" fill="#9f4d45"/>
-        <text x="550" y="176" text-anchor="middle" font-family="Georgia" font-size="13" fill="#9f4d45">-19.03</text>
+        <text x="550" y="176" text-anchor="middle" font-family="TsangerJinKai02" font-size="13" fill="#9f4d45">-19.03</text>
         <text x="550" y="228" text-anchor="middle" font-family="Tsanger" font-size="11" fill="#172c44">其他项目</text>
         <rect x="640" y="150" width="72" height="48.6" fill="#9f4d45"/>
-        <text x="676" y="215" text-anchor="middle" font-family="Georgia" font-size="14" fill="#9f4d45">-64.70</text>
+        <text x="676" y="215" text-anchor="middle" font-family="TsangerJinKai02" font-size="14" fill="#9f4d45">-64.70</text>
         <text x="676" y="228" text-anchor="middle" font-family="Tsanger" font-size="11" fill="#172c44">2026 Q1</text>
         <path d="M124 70.8 H168 M236 116.5 H284 M352 174.8 H400 M468 184.3 H516 M584 198.6 H640" stroke="#738092" stroke-dasharray="4 4"/>
       </svg>
@@ -766,7 +769,7 @@
       <div class="source-item"><span class="source-id">S10</span> 市场监管总局 <a href="https://www.samr.gov.cn/cms_files/filemanager/1647978232/attach/20262/21e294feabdd4001884285115d735989.pdf">网络餐饮食品安全责任规则</a>。</div>
       <div class="source-item"><span class="source-id">S11</span> 美团 <a href="https://www.meituan.com/news/NN260417173010929">“放心外卖”十大举措</a>。</div>
       <div class="source-item"><span class="source-id">S12</span> 美团拟收购叮咚买菜中国大陆业务，<a href="https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0205/2026020501302.pdf">港交所 PDF</a>。</div>
-      <div class="source-item"><span class="source-id">S13</span> 美团技术团队 <a href="https://tech.meituan.com/2026/04/02/longcat-next.html">LongCat-Next 文章</a>。</div>
+      <div class="source-item"><span class="source-id">S13</span> 美团技术团队 <a href="https://tech.meituan.com/2026/04/02/LongCat-Next.html">LongCat-Next 文章</a>。</div>
       <div class="source-item"><span class="source-id">S14</span> 阿里巴巴 <a href="https://home.alibabagroup.com/en-US/document-1991237455038119936">截至 2026 年 3 月季度业绩</a>。</div>
       <div class="source-item"><span class="source-id">S15</span> 京东 <a href="https://jdcorporateblog.com/jd-com-announces-first-quarter-2026-results/">2026 Q1 业绩公告</a>。</div>
       <div class="source-item"><span class="source-id">S16</span> Reuters 经 MarketScreener 发布的 <a href="https://www.marketscreener.com/news/meituan-posts-another-quarterly-loss-though-food-delivery-wars-are-beginning-to-abate-ce7f5dd8d18df221">美团 Q1 报道</a>。</div>

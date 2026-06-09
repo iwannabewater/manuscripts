@@ -10,19 +10,21 @@
 <style>
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
   }
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
   }
   @font-face {
     font-family: "JetBrains Mono";
-    src: url("fonts/JetBrainsMono.woff2") format("woff2");
+    src: url("../assets/fonts/JetBrainsMono.woff2") format("woff2");
     font-weight: 400;
     font-style: normal;
   }
@@ -33,13 +35,13 @@
     background: #f5f4ed;
     @top-right {
       content: string(section-title);
-      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8pt;
       color: #6b6a64;
     }
     @bottom-center {
       content: counter(page) "  ·  具身智能入门与技术栈全景报告 2026";
-      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8.8pt;
       color: #6b6a64;
     }
@@ -58,8 +60,8 @@
     --brand-tint: #EEF2F7;
     --border: #e8e6dc;
     --border-soft: #e5e3d8;
-    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
-    --mono: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+    --serif: "TsangerJinKai02";
+    --mono: "JetBrains Mono", "TsangerJinKai02";
   }
   html, body { background: var(--paper); }
   @media screen { body { max-width: 210mm; margin: 0 auto; padding: 18mm 20mm 20mm 20mm; } }
@@ -252,6 +254,7 @@
   }
   .two-col p, .two-col li { break-inside: avoid; }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 
@@ -387,49 +390,49 @@
       </defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/>
       <rect width="100%" height="100%" fill="url(#dots)" opacity="0.55"/>
-      <text x="72" y="42" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono, monospace" letter-spacing="3">FIGURE  1</text>
-      <text x="194" y="42" fill="#504e49" font-size="14" font-family="JetBrains Mono, monospace" letter-spacing="3">EMBODIED AI SYSTEM LOOP</text>
+      <text x="72" y="42" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  1</text>
+      <text x="194" y="42" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="3">EMBODIED AI SYSTEM LOOP</text>
       <line x1="72" y1="56" x2="928" y2="56" stroke="#1B365D" stroke-width="0.8"/>
 
       <rect x="72" y="94" width="196" height="82" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="92" y="126" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">身体与传感器</text>
-      <text x="92" y="154" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">相机、力矩、触觉、IMU、关节</text>
+      <text x="92" y="126" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">身体与传感器</text>
+      <text x="92" y="154" fill="#504e49" font-size="15" font-family="TsangerJinKai02">相机、力矩、触觉、IMU、关节</text>
 
       <rect x="308" y="94" width="176" height="82" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="328" y="126" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">状态估计</text>
-      <text x="328" y="154" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">定位、建图、物体状态、记忆</text>
+      <text x="328" y="126" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">状态估计</text>
+      <text x="328" y="154" fill="#504e49" font-size="15" font-family="TsangerJinKai02">定位、建图、物体状态、记忆</text>
 
       <rect x="524" y="94" width="184" height="82" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
-      <text x="544" y="126" fill="#1B365D" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">任务与策略模型</text>
-      <text x="544" y="154" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">VLA、世界模型、技能选择</text>
+      <text x="544" y="126" fill="#1B365D" font-size="23" font-weight="600" font-family="TsangerJinKai02">任务与策略模型</text>
+      <text x="544" y="154" fill="#504e49" font-size="15" font-family="TsangerJinKai02">VLA、世界模型、技能选择</text>
 
       <rect x="748" y="94" width="180" height="82" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="768" y="126" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">低层控制</text>
-      <text x="768" y="154" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">轨迹、阻抗、MPC、伺服</text>
+      <text x="768" y="126" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">低层控制</text>
+      <text x="768" y="154" fill="#504e49" font-size="15" font-family="TsangerJinKai02">轨迹、阻抗、MPC、伺服</text>
 
       <rect x="72" y="238" width="220" height="78" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="92" y="270" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">任务接口</text>
-      <text x="92" y="298" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">语言、UI、工作流、工单</text>
+      <text x="92" y="270" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">任务接口</text>
+      <text x="92" y="298" fill="#504e49" font-size="15" font-family="TsangerJinKai02">语言、UI、工作流、工单</text>
 
       <rect x="332" y="238" width="220" height="78" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="352" y="270" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">安全约束层</text>
-      <text x="352" y="298" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">人机距离、力限、碰撞、权限</text>
+      <text x="352" y="270" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">安全约束层</text>
+      <text x="352" y="298" fill="#504e49" font-size="15" font-family="TsangerJinKai02">人机距离、力限、碰撞、权限</text>
 
       <rect x="592" y="238" width="220" height="78" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="612" y="270" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">执行与环境反馈</text>
-      <text x="612" y="298" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">成功、失败、异常、人工接管</text>
+      <text x="612" y="270" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">执行与环境反馈</text>
+      <text x="612" y="298" fill="#504e49" font-size="15" font-family="TsangerJinKai02">成功、失败、异常、人工接管</text>
 
       <rect x="132" y="400" width="236" height="86" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
-      <text x="154" y="434" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">数据回流</text>
-      <text x="154" y="462" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">演示、日志、失败片段、标签</text>
+      <text x="154" y="434" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">数据回流</text>
+      <text x="154" y="462" fill="#504e49" font-size="15" font-family="TsangerJinKai02">演示、日志、失败片段、标签</text>
 
       <rect x="416" y="400" width="236" height="86" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
-      <text x="438" y="434" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">训练与评测</text>
-      <text x="438" y="462" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">仿真、离线训练、回归测试</text>
+      <text x="438" y="434" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">训练与评测</text>
+      <text x="438" y="462" fill="#504e49" font-size="15" font-family="TsangerJinKai02">仿真、离线训练、回归测试</text>
 
       <rect x="700" y="400" width="188" height="86" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
-      <text x="722" y="434" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02, serif">灰度上线</text>
-      <text x="722" y="462" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">策略版本、门控、回滚</text>
+      <text x="722" y="434" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">灰度上线</text>
+      <text x="722" y="462" fill="#504e49" font-size="15" font-family="TsangerJinKai02">策略版本、门控、回滚</text>
 
       <path d="M268 135 L308 135" stroke="#504e49" stroke-width="1.4" fill="none"/>
       <path d="M302 130 L310 135 L302 140" stroke="#504e49" stroke-width="1.4" fill="none" stroke-linecap="round"/>
@@ -452,7 +455,7 @@
       <path d="M794 400 C778 346 686 222 616 176" stroke="#1B365D" stroke-width="1.3" fill="none" stroke-dasharray="6 5"/>
       <path d="M612 184 L616 176 L622 183" stroke="#1B365D" stroke-width="1.3" fill="none" stroke-linecap="round"/>
 
-      <text x="92" y="560" fill="#504e49" font-size="16" font-family="TsangerJinKai02, serif">判断一个具身系统成熟度，不看演示视频的顺滑程度，而看它是否具备失败采样、版本回滚、场景覆盖和安全门控。</text>
+      <text x="92" y="560" fill="#504e49" font-size="16" font-family="TsangerJinKai02">判断一个具身系统成熟度，不看演示视频的顺滑程度，而看它是否具备失败采样、版本回滚、场景覆盖和安全门控。</text>
     </svg>
     <figcaption>图 1：具身智能系统的核心不是一个模型节点，而是模型与身体、安全、数据和运维共同组成的闭环。</figcaption>
   </figure>
@@ -599,24 +602,24 @@
       </defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/>
       <rect width="100%" height="100%" fill="url(#dots2)" opacity="0.55"/>
-      <text x="72" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono, monospace" letter-spacing="3">FIGURE  2</text>
-      <text x="194" y="40" fill="#504e49" font-size="14" font-family="JetBrains Mono, monospace" letter-spacing="3">ROBOT DATA FLYWHEEL</text>
+      <text x="72" y="40" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  2</text>
+      <text x="194" y="40" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="3">ROBOT DATA FLYWHEEL</text>
       <line x1="72" y1="54" x2="928" y2="54" stroke="#1B365D" stroke-width="0.8"/>
       <rect x="86" y="112" width="148" height="74" rx="8" fill="#faf9f5" stroke="#141413"/>
-      <text x="110" y="144" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02, serif">采集</text>
-      <text x="110" y="168" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">演示与上线日志</text>
+      <text x="110" y="144" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02">采集</text>
+      <text x="110" y="168" fill="#504e49" font-size="15" font-family="TsangerJinKai02">演示与上线日志</text>
       <rect x="286" y="112" width="148" height="74" rx="8" fill="#faf9f5" stroke="#141413"/>
-      <text x="310" y="144" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02, serif">筛选</text>
-      <text x="310" y="168" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">成功、失败、异常</text>
+      <text x="310" y="144" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02">筛选</text>
+      <text x="310" y="168" fill="#504e49" font-size="15" font-family="TsangerJinKai02">成功、失败、异常</text>
       <rect x="486" y="112" width="148" height="74" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
-      <text x="510" y="144" fill="#1B365D" font-size="22" font-weight="600" font-family="TsangerJinKai02, serif">训练</text>
-      <text x="510" y="168" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">预训练与微调</text>
+      <text x="510" y="144" fill="#1B365D" font-size="22" font-weight="600" font-family="TsangerJinKai02">训练</text>
+      <text x="510" y="168" fill="#504e49" font-size="15" font-family="TsangerJinKai02">预训练与微调</text>
       <rect x="686" y="112" width="148" height="74" rx="8" fill="#faf9f5" stroke="#141413"/>
-      <text x="710" y="144" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02, serif">评测</text>
-      <text x="710" y="168" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">回归与场景覆盖</text>
+      <text x="710" y="144" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02">评测</text>
+      <text x="710" y="168" fill="#504e49" font-size="15" font-family="TsangerJinKai02">回归与场景覆盖</text>
       <rect x="386" y="258" width="228" height="74" rx="8" fill="#EAE9E2" stroke="#504e49"/>
-      <text x="410" y="290" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02, serif">灰度上线与失败回流</text>
-      <text x="410" y="314" fill="#504e49" font-size="15" font-family="TsangerJinKai02, serif">只让可解释的改进进入现场</text>
+      <text x="410" y="290" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02">灰度上线与失败回流</text>
+      <text x="410" y="314" fill="#504e49" font-size="15" font-family="TsangerJinKai02">只让可解释的改进进入现场</text>
       <path d="M234 149 L286 149" stroke="#504e49" fill="none" stroke-width="1.3"/>
       <path d="M280 144 L288 149 L280 154" stroke="#504e49" fill="none" stroke-linecap="round"/>
       <path d="M434 149 L486 149" stroke="#1B365D" fill="none" stroke-width="1.5"/>

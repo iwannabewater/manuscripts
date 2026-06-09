@@ -7,19 +7,21 @@
 <meta name="author" content="Codex">
 <meta name="date" content="2026-05-16">
 <style>
-@font-face{font-family:Tsanger;src:url('fonts/TsangerJinKai02-W04.ttf') format('truetype');font-weight:400}
-@font-face{font-family:Tsanger;src:url('fonts/TsangerJinKai02-W05.ttf') format('truetype');font-weight:700}
-@font-face{font-family:JetBrainsMono;src:url('fonts/JetBrainsMono.woff2') format('woff2');font-weight:400}
+@font-face{font-family:Tsanger;src:url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");font-weight:400}
+@font-face{font-family:Tsanger;src:url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");font-weight:700}
+@font-face{font-family:JetBrainsMono;src:url("../assets/fonts/JetBrainsMono.woff2") format('woff2');font-weight:400}
 @page{size:280mm 158mm;margin:0}
 *{box-sizing:border-box}
 html,body{margin:0;padding:0;background:#e9e5d8;color:#141413}
-body{font-family:Georgia,Tsanger,"Noto Serif CJK SC","Source Han Serif SC",serif}
-.latin{font-family:Arial,"Helvetica Neue",Helvetica,sans-serif;font-weight:inherit;letter-spacing:0}
+body{font-family:Tsanger,"TsangerJinKai02"}
+.latin{font-family:Tsanger,"TsangerJinKai02";font-weight:inherit;letter-spacing:0}
 .slide{position:relative;width:280mm;height:158mm;padding:13mm 16mm 11mm 18mm;background:#f5f4ed;break-after:page;overflow:hidden}
 .slide::before{content:"";position:absolute;left:9mm;top:12mm;bottom:12mm;width:1.2mm;background:#1B365D}
 .slide::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2.2mm;background:#1B365D}
-.eyebrow{font-family:JetBrainsMono,monospace;font-size:8.5pt;letter-spacing:0;color:#7B2D26;text-transform:uppercase;margin-bottom:3mm}
-h1,h2{font-family:Georgia,Tsanger,"Noto Serif CJK SC","Source Han Serif SC",serif;font-weight:700;color:#1B365D;margin:0;line-height:1.08;letter-spacing:0}
+.eyebrow{font-family:JetBrainsMono;font-size:8.5pt;letter-spacing:0;color:#7B2D26;text-transform:uppercase;margin-bottom:3mm}
+h1,h2{font-family:Tsanger,"TsangerJinKai02";font-weight:700;color:#1B365D;margin:0;line-height:1.08;letter-spacing:0}
 h1{font-size:34pt;max-width:230mm}
 h2{font-size:21.5pt;max-width:235mm}
 .lead{font-size:13pt;line-height:1.45;margin:4mm 0 4.5mm;max-width:235mm;color:#2a2926}
@@ -34,20 +36,21 @@ h2{font-size:21.5pt;max-width:235mm}
 .col ul{list-style:none;margin:0;padding:0;display:grid;gap:2mm}
 .formula-card{margin:4mm 0 2.8mm;padding:4mm 5mm;background:#fffdf6;border:1.2pt solid rgba(27,54,93,.38);border-radius:2mm;display:flex;align-items:center;justify-content:center;min-height:20mm;max-height:37mm}
 .formula-card img{max-width:100%;max-height:30mm;object-fit:contain}
-.caption{font-size:9.2pt;line-height:1.35;color:#5c5547;margin:0 0 3mm;font-family:JetBrainsMono,Tsanger,monospace}
+.caption{font-size:9.2pt;line-height:1.35;color:#5c5547;margin:0 0 3mm;font-family:JetBrainsMono,Tsanger}
 table{width:100%;border-collapse:collapse;margin-top:4mm;font-size:8.9pt;line-height:1.32}
 th,td{border-bottom:1px solid rgba(27,54,93,.28);padding:2.0mm 2.1mm;text-align:left;vertical-align:top}
 th{color:#1B365D;font-weight:700;background:#ece7d8}
 tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 .callout{position:absolute;left:18mm;right:16mm;bottom:10mm;border-left:3mm solid #7B2D26;background:#fffdf6;padding:3mm 4mm;font-size:11.4pt;line-height:1.42;color:#1d1c19}
-.source{position:absolute;right:16mm;bottom:5.5mm;font-family:JetBrainsMono,monospace;font-size:7pt;color:#6d685f;max-width:160mm;text-align:right}
-.page{position:absolute;left:18mm;bottom:5.5mm;font-family:JetBrainsMono,monospace;font-size:7pt;color:#6d685f}
+.source{position:absolute;right:16mm;bottom:5.5mm;font-family:JetBrainsMono;font-size:7pt;color:#6d685f;max-width:160mm;text-align:right}
+.page{position:absolute;left:18mm;bottom:5.5mm;font-family:JetBrainsMono;font-size:7pt;color:#6d685f}
 .cover{padding-top:20mm}
 .cover::before{width:1.8mm}
 .cover h1{font-size:42pt}
 .cover .bullets{margin-top:7mm;max-width:215mm}
 .cover .bullets li{font-size:12.4pt}
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 <section class='slide cover'>

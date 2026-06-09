@@ -18,7 +18,7 @@
 - **S10** 网络餐饮服务食品安全责任规则：[PDF](https://www.samr.gov.cn/cms_files/filemanager/1647978232/attach/20262/21e294feabdd4001884285115d735989.pdf)
 - **S11** 美团“放心外卖”十大举措：[link](https://www.meituan.com/news/NN260417173010929)
 - **S12** 美团拟收购叮咚买菜中国大陆业务公告：[PDF](https://www1.hkexnews.hk/listedco/listconews/sehk/2026/0205/2026020501302.pdf)
-- **S13** 美团技术团队 LongCat-Next 开源文章：[link](https://tech.meituan.com/2026/04/02/longcat-next.html)
+- **S13** 美团技术团队 LongCat-Next 开源文章：[link](https://tech.meituan.com/2026/04/02/LongCat-Next.html)
 - **S14** 阿里巴巴截至 2026 年 3 月季度业绩公告：[official index](https://home.alibabagroup.com/en-US/document-1991237455038119936) / [release](https://www.businesswire.com/news/home/20260512841182/en/Alibaba-Group-Announces-March-Quarter-2026-and-Fiscal-Year-2026-Results)
 - **S15** 京东 2026 Q1 业绩公告：[official blog](https://jdcorporateblog.com/jd-com-announces-first-quarter-2026-results/) / [IR release](https://ir.jd.com/static-files/edd230c2-4179-422b-b128-774a5b02d894)
 - **S19** 五部门约谈主要外卖平台：[link](https://www.samr.gov.cn/xw/zj/art/2025/art_9d68293c1568446a9ad3f9ef09fb4dc0.html)

@@ -10,13 +10,15 @@
 <style>
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
   }
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
   }
@@ -26,13 +28,13 @@
     background: #f5f4ed;
     @top-left {
       content: string(section-title);
-      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8pt;
       color: #6b6a64;
     }
     @bottom-right {
       content: counter(page) "  ·  Git / GitHub 协作编码标准流程手册";
-      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8.3pt;
       color: #6b6a64;
     }
@@ -53,7 +55,7 @@
     --border-strong: #d8d4c7;
     --warn-bg: #f0e0d8;
     --warn-fg: #8b4513;
-    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --serif: "TsangerJinKai02";
   }
   html, body { background: var(--paper); }
   @media screen { body { max-width: 297mm; margin: 0 auto; padding: 13mm 15mm 12mm 15mm; } }
@@ -68,7 +70,7 @@
   }
   strong { font-weight: 500; }
   code {
-    font-family: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 7.3pt;
     background: var(--ivory);
     border: 0.3pt solid var(--border);
@@ -343,6 +345,7 @@
   .source-list li { font-size: 7.15pt; line-height: 1.32; margin-bottom: 1.8pt; }
   .score td:first-child { color: var(--brand); font-weight: 500; }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 

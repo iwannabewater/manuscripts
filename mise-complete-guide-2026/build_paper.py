@@ -53,8 +53,12 @@ def plain_title(title: str) -> str:
 def main() -> None:
     template = TEMPLATE.read_text()
     style = re.search(r"<style>(.*?)</style>", template, re.S).group(1)
-    style = style.replace("../fonts/", "fonts/")
+    style = style.replace("../fonts/", "../assets/fonts/")
     style = style.replace("{{文档标题}}", TITLE)
+    style = re.sub(r'"TsangerJinKai02"[^;{}]*serif', '"TsangerJinKai02"', style)
+    style = re.sub(r'"JetBrains Mono"[^;{}]*monospace', '"JetBrains Mono", "TsangerJinKai02"', style)
+    style = re.sub(r"--serif:[^;]+;", '--serif: "TsangerJinKai02";', style)
+    style = re.sub(r"--sans:[^;]+;", '--sans: "TsangerJinKai02";', style)
     style += """
   a { color: var(--brand); text-decoration: none; }
   h1 { string-set: section-title content(); }
@@ -134,6 +138,7 @@ def main() -> None:
 <meta name="keywords" content="mise, mise-en-place, 开发环境, 工具链, CI, Cheatsheet">
 <meta name="generator" content="Kami">
 <style>{style}</style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 {"".join(body)}

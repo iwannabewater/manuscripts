@@ -10,13 +10,15 @@
 <style>
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
   }
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
   }
@@ -26,13 +28,13 @@
     background: #f5f4ed;
     @top-right {
       content: string(section-title);
-      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8pt;
       color: #6b6a64;
     }
     @bottom-center {
       content: counter(page) "  ·  slime 上手实操与技术详解";
-      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 9pt;
       color: #6b6a64;
     }
@@ -52,8 +54,8 @@
     --accent-tint: #F4EFE3;
     --border: #e8e6dc;
     --border-strong: #d8d4c7;
-    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
-    --mono: "JetBrains Mono", "SF Mono", Consolas, "Liberation Mono", "TsangerJinKai02", "Source Han Serif SC", monospace;
+    --serif: "TsangerJinKai02";
+    --mono: "JetBrains Mono", "TsangerJinKai02";
   }
   html, body { background: var(--paper); }
   @media screen {
@@ -345,7 +347,7 @@
   }
   .diagram svg { display: block; width: 100%; height: auto; }
   .diagram text {
-    font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", serif;
+    font-family: "TsangerJinKai02";
     fill: var(--near-black);
   }
   .kbd {
@@ -358,6 +360,7 @@
   }
   .page-break { break-before: page; }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 
@@ -473,9 +476,9 @@ PYTHONPATH=/root/Megatron-LM python tools/convert_hf_to_torch_dist.py \
   --save /root/GLM-Z1-9B-0414_torch_dist</code></pre>
 
   <p>训练结束后若要导出 Hugging Face 格式，可从某个 Megatron 迭代目录反向转换。这里的 <code>--origin-hf-dir</code> 不是装饰参数，它提供 tokenizer、config 与 HF 目录结构基准。</p>
-  <pre><code class="language-bash">PYTHONPATH=/root/Megatron-LM python tools/convert_torch_dist_to_hf.py \
-  --input-dir /path/to/torch_dist_ckpt/iter_xxx/ \
-  --output-dir /root/GLM-Z1-9B-0414-iter_xxx \
+<pre><code class="language-bash">PYTHONPATH=/root/Megatron-LM python tools/convert_torch_dist_to_hf.py \
+  --input-dir /path/to/torch_dist_ckpt/iter_${ITERATION}/ \
+  --output-dir /root/GLM-Z1-9B-0414-iter_${ITERATION} \
   --origin-hf-dir /root/GLM-Z1-9B-0414</code></pre>
 
   <h2>启动官方示例</h2>
@@ -590,40 +593,40 @@ bash scripts/run-qwen3-4B.sh</code></pre>
         </marker>
       </defs>
       <rect x="20" y="28" width="880" height="374" rx="10" fill="#FAF9F5" stroke="#D8D4C7"/>
-      <text x="44" y="58" font-size="20" font-weight="500" fill="#1B365D">slime RL 后训练闭环</text>
+      <text font-family="TsangerJinKai02" x="44" y="58" font-size="20" font-weight="500" fill="#1B365D">slime RL 后训练闭环</text>
 
       <rect x="54" y="96" width="185" height="92" rx="8" fill="#EEF2F7" stroke="#1B365D"/>
-      <text x="82" y="124" font-size="18" font-weight="500">Data Source</text>
-      <text x="78" y="151" font-size="13">JSONL prompt</text>
-      <text x="78" y="170" font-size="13">metadata / label / tools</text>
+      <text font-family="TsangerJinKai02" x="82" y="124" font-size="18" font-weight="500">Data Source</text>
+      <text font-family="TsangerJinKai02" x="78" y="151" font-size="13">JSONL prompt</text>
+      <text font-family="TsangerJinKai02" x="78" y="170" font-size="13">metadata / label / tools</text>
 
       <rect x="54" y="236" width="185" height="92" rx="8" fill="#EEF2F7" stroke="#1B365D"/>
-      <text x="80" y="264" font-size="18" font-weight="500">Data Buffer</text>
-      <text x="78" y="291" font-size="13">partial rollout</text>
-      <text x="78" y="310" font-size="13">filter / recycle</text>
+      <text font-family="TsangerJinKai02" x="80" y="264" font-size="18" font-weight="500">Data Buffer</text>
+      <text font-family="TsangerJinKai02" x="78" y="291" font-size="13">partial rollout</text>
+      <text font-family="TsangerJinKai02" x="78" y="310" font-size="13">filter / recycle</text>
 
       <rect x="315" y="72" width="245" height="140" rx="8" fill="#FAF9F5" stroke="#1B365D"/>
-      <text x="346" y="102" font-size="18" font-weight="500">RolloutManager</text>
-      <text x="344" y="130" font-size="13">generate_rollout_async</text>
-      <text x="344" y="149" font-size="13">reward / verifier</text>
-      <text x="344" y="168" font-size="13">Sample to train_data</text>
-      <text x="344" y="187" font-size="13">DP split / metrics</text>
+      <text font-family="TsangerJinKai02" x="346" y="102" font-size="18" font-weight="500">RolloutManager</text>
+      <text font-family="TsangerJinKai02" x="344" y="130" font-size="13">generate_rollout_async</text>
+      <text font-family="TsangerJinKai02" x="344" y="149" font-size="13">reward / verifier</text>
+      <text font-family="TsangerJinKai02" x="344" y="168" font-size="13">Sample to train_data</text>
+      <text font-family="TsangerJinKai02" x="344" y="187" font-size="13">DP split / metrics</text>
 
       <rect x="638" y="64" width="214" height="154" rx="8" fill="#EEF2F7" stroke="#1B365D"/>
-      <text x="676" y="95" font-size="18" font-weight="500">SGLang Rollout</text>
-      <text x="669" y="123" font-size="13">sgl-router</text>
-      <text x="669" y="142" font-size="13">regular / prefill / decode</text>
-      <text x="669" y="161" font-size="13">KV cache / generation</text>
-      <text x="669" y="180" font-size="13">health / profiling</text>
+      <text font-family="TsangerJinKai02" x="676" y="95" font-size="18" font-weight="500">SGLang Rollout</text>
+      <text font-family="TsangerJinKai02" x="669" y="123" font-size="13">sgl-router</text>
+      <text font-family="TsangerJinKai02" x="669" y="142" font-size="13">regular / prefill / decode</text>
+      <text font-family="TsangerJinKai02" x="669" y="161" font-size="13">KV cache / generation</text>
+      <text font-family="TsangerJinKai02" x="669" y="180" font-size="13">health / profiling</text>
 
       <rect x="315" y="258" width="245" height="102" rx="8" fill="#EEF2F7" stroke="#1B365D"/>
-      <text x="352" y="287" font-size="18" font-weight="500">Megatron Actor</text>
-      <text x="344" y="315" font-size="13">logprob / advantage</text>
-      <text x="344" y="334" font-size="13">policy loss / optimizer</text>
+      <text font-family="TsangerJinKai02" x="352" y="287" font-size="18" font-weight="500">Megatron Actor</text>
+      <text font-family="TsangerJinKai02" x="344" y="315" font-size="13">logprob / advantage</text>
+      <text font-family="TsangerJinKai02" x="344" y="334" font-size="13">policy loss / optimizer</text>
 
       <rect x="638" y="268" width="214" height="82" rx="8" fill="#FAF9F5" stroke="#1B365D"/>
-      <text x="674" y="298" font-size="18" font-weight="500">Weight Update</text>
-      <text x="669" y="325" font-size="13">NCCL / Ray IPC / tensor</text>
+      <text font-family="TsangerJinKai02" x="674" y="298" font-size="18" font-weight="500">Weight Update</text>
+      <text font-family="TsangerJinKai02" x="669" y="325" font-size="13">NCCL / Ray IPC / tensor</text>
 
       <line x1="239" y1="142" x2="315" y2="142" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow)"/>
       <line x1="560" y1="142" x2="638" y2="142" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow)"/>
@@ -633,10 +636,10 @@ bash scripts/run-qwen3-4B.sh</code></pre>
       <line x1="560" y1="310" x2="638" y2="310" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow)"/>
       <line x1="745" y1="268" x2="745" y2="218" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow)"/>
 
-      <text x="267" y="132" font-size="12" fill="#504e49">prompt groups</text>
-      <text x="582" y="132" font-size="12" fill="#504e49">HTTP generate</text>
-      <text x="575" y="248" font-size="12" fill="#504e49">samples</text>
-      <text x="575" y="300" font-size="12" fill="#504e49">new weights</text>
+      <text font-family="TsangerJinKai02" x="267" y="132" font-size="12" fill="#504e49">prompt groups</text>
+      <text font-family="TsangerJinKai02" x="582" y="132" font-size="12" fill="#504e49">HTTP generate</text>
+      <text font-family="TsangerJinKai02" x="575" y="248" font-size="12" fill="#504e49">samples</text>
+      <text font-family="TsangerJinKai02" x="575" y="300" font-size="12" fill="#504e49">new weights</text>
     </svg>
     <figcaption>图 1：slime 的主控制闭环。图中箭头表示数据或权重的主要流向，真实实现中由 Ray actor、HTTP server、NCCL group 和本地进程共同完成。</figcaption>
   </figure>
@@ -666,31 +669,31 @@ bash scripts/run-qwen3-4B.sh</code></pre>
         </marker>
       </defs>
       <rect x="20" y="24" width="880" height="304" rx="10" fill="#FAF9F5" stroke="#D8D4C7"/>
-      <text x="44" y="56" font-size="20" font-weight="500" fill="#1B365D">train.py 每个 rollout_id 的主要顺序</text>
+      <text font-family="TsangerJinKai02" x="44" y="56" font-size="20" font-weight="500" fill="#1B365D">train.py 每个 rollout_id 的主要顺序</text>
       <g font-size="14">
         <rect x="48" y="92" width="108" height="64" rx="8" fill="#EEF2F7" stroke="#1B365D"/>
-        <text x="72" y="119" font-weight="500">Eval</text>
-        <text x="62" y="141" font-size="12">if needed</text>
+        <text font-family="TsangerJinKai02" x="72" y="119" font-weight="500">Eval</text>
+        <text font-family="TsangerJinKai02" x="62" y="141" font-size="12">if needed</text>
 
         <rect x="188" y="92" width="120" height="64" rx="8" fill="#FAF9F5" stroke="#1B365D"/>
-        <text x="217" y="119" font-weight="500">Generate</text>
-        <text x="205" y="141" font-size="12">rollout data</text>
+        <text font-family="TsangerJinKai02" x="217" y="119" font-weight="500">Generate</text>
+        <text font-family="TsangerJinKai02" x="205" y="141" font-size="12">rollout data</text>
 
         <rect x="340" y="92" width="112" height="64" rx="8" fill="#EEF2F7" stroke="#1B365D"/>
-        <text x="374" y="119" font-weight="500">Train</text>
-        <text x="355" y="141" font-size="12">actor / critic</text>
+        <text font-family="TsangerJinKai02" x="374" y="119" font-weight="500">Train</text>
+        <text font-family="TsangerJinKai02" x="355" y="141" font-size="12">actor / critic</text>
 
         <rect x="484" y="92" width="106" height="64" rx="8" fill="#EEF2F7" stroke="#1B365D"/>
-        <text x="518" y="119" font-weight="500">Save</text>
-        <text x="502" y="141" font-size="12">checkpoint</text>
+        <text font-family="TsangerJinKai02" x="518" y="119" font-weight="500">Save</text>
+        <text font-family="TsangerJinKai02" x="502" y="141" font-size="12">checkpoint</text>
 
         <rect x="622" y="92" width="112" height="64" rx="8" fill="#FAF9F5" stroke="#1B365D"/>
-        <text x="648" y="119" font-weight="500">Update</text>
-        <text x="640" y="141" font-size="12">weights</text>
+        <text font-family="TsangerJinKai02" x="648" y="119" font-weight="500">Update</text>
+        <text font-family="TsangerJinKai02" x="640" y="141" font-size="12">weights</text>
 
         <rect x="766" y="92" width="104" height="64" rx="8" fill="#EEF2F7" stroke="#1B365D"/>
-        <text x="790" y="119" font-weight="500">Next</text>
-        <text x="784" y="141" font-size="12">rollout_id</text>
+        <text font-family="TsangerJinKai02" x="790" y="119" font-weight="500">Next</text>
+        <text font-family="TsangerJinKai02" x="784" y="141" font-size="12">rollout_id</text>
 
         <line x1="156" y1="124" x2="188" y2="124" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow2)"/>
         <line x1="308" y1="124" x2="340" y2="124" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow2)"/>
@@ -699,9 +702,9 @@ bash scripts/run-qwen3-4B.sh</code></pre>
         <line x1="734" y1="124" x2="766" y2="124" stroke="#1B365D" stroke-width="2" marker-end="url(#arrow2)"/>
       </g>
       <rect x="86" y="214" width="748" height="70" rx="8" fill="#FBFAF6" stroke="#D8D4C7"/>
-      <text x="112" y="239" font-size="13">colocate / offload 情况下，generate 与 train 之间会穿插 rollout 权重、KV cache、训练权重</text>
-      <text x="112" y="259" font-size="13">和显存占用的 release / resume / offload / onload。</text>
-      <text x="112" y="279" font-size="13">异步训练由 train_async.py 提前启动下一轮 rollout，再在权重同步点等待 generation future。</text>
+      <text font-family="TsangerJinKai02" x="112" y="239" font-size="13">colocate / offload 情况下，generate 与 train 之间会穿插 rollout 权重、KV cache、训练权重</text>
+      <text font-family="TsangerJinKai02" x="112" y="259" font-size="13">和显存占用的 release / resume / offload / onload。</text>
+      <text font-family="TsangerJinKai02" x="112" y="279" font-size="13">异步训练由 train_async.py 提前启动下一轮 rollout，再在权重同步点等待 generation future。</text>
     </svg>
     <figcaption>图 2：同步训练循环与资源切换。真实源码中还包含 tracking、metrics、fault tolerance、profiling 和分布式 barrier。</figcaption>
   </figure>

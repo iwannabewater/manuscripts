@@ -16,7 +16,7 @@
   /* Regular weight */
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
        url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
@@ -25,7 +25,7 @@
   /* Bold weight - W05 for all bold variants */
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
        url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
@@ -38,16 +38,14 @@
 
     @top-right {
       content: string(section-title);
-      font-family: "TsangerJinKai02", "Source Han Serif SC",
-                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8pt;
       color: #6b6a64;
     }
 
     @bottom-center {
       content: counter(page) "  ·  蔚小理 2026";
-      font-family: "TsangerJinKai02", "Source Han Serif SC",
-                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 9pt;
       color: #6b6a64;
     }
@@ -71,7 +69,7 @@
     --border:    #e8e6dc;
     --border-soft:#e5e3d8;
     --tag-bg:    #E4ECF5;
-    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --serif: "TsangerJinKai02";
     --sans: var(--serif);
 
     --rhythm-module:  14pt;
@@ -267,9 +265,7 @@
      glyphs rendered as "?" or missing-glyph boxes in WeasyPrint when the system lacks
      a mono font with CJK coverage. */
   code {
-    font-family: "JetBrains Mono", "SF Mono", Consolas,
-                 "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 9pt;
     background: var(--ivory);
     padding: 1pt 4pt;
@@ -277,9 +273,7 @@
     color: var(--dark-warm);
   }
   pre {
-    font-family: "JetBrains Mono", "SF Mono", Consolas,
-                 "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 9pt;
     line-height: 1.5;
     background: var(--ivory);
@@ -411,6 +405,7 @@
   /* ========== CHAPTER BREAK ========== */
   .chapter { break-before: page; }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 
@@ -588,19 +583,19 @@
   <figure>
     <svg viewBox="0 0 640 250" width="100%" height="250" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Q1 2026 整车毛利率对比">
       <rect x="0" y="0" width="640" height="250" fill="#faf9f5"/>
-      <text x="30" y="32" font-size="18" font-family="TsangerJinKai02, serif" fill="#141413">Q1 2026 整车毛利率对比</text>
-      <text x="30" y="56" font-size="12" font-family="TsangerJinKai02, serif" fill="#6b6a64">数据来源：S01、S08、S15</text>
+      <text x="30" y="32" font-size="18" font-family="TsangerJinKai02" fill="#141413">Q1 2026 整车毛利率对比</text>
+      <text x="30" y="56" font-size="12" font-family="TsangerJinKai02" fill="#6b6a64">数据来源：S01、S08、S15</text>
       <line x1="130" y1="205" x2="590" y2="205" stroke="#e8e6dc" stroke-width="1"/>
       <line x1="130" y1="80" x2="130" y2="205" stroke="#e8e6dc" stroke-width="1"/>
-      <text x="42" y="108" font-size="14" font-family="TsangerJinKai02, serif" fill="#3d3d3a">蔚来</text>
+      <text x="42" y="108" font-size="14" font-family="TsangerJinKai02" fill="#3d3d3a">蔚来</text>
       <rect x="130" y="92" width="432" height="26" fill="#1B365D"/>
-      <text x="572" y="111" font-size="14" font-family="TsangerJinKai02, serif" fill="#1B365D">18.8%</text>
-      <text x="42" y="151" font-size="14" font-family="TsangerJinKai02, serif" fill="#3d3d3a">小鹏</text>
+      <text x="572" y="111" font-size="14" font-family="TsangerJinKai02" fill="#1B365D">18.8%</text>
+      <text x="42" y="151" font-size="14" font-family="TsangerJinKai02" fill="#3d3d3a">小鹏</text>
       <rect x="130" y="135" width="278" height="26" fill="#5f7f99"/>
-      <text x="418" y="154" font-size="14" font-family="TsangerJinKai02, serif" fill="#1B365D">12.1%</text>
-      <text x="42" y="194" font-size="14" font-family="TsangerJinKai02, serif" fill="#3d3d3a">理想</text>
+      <text x="418" y="154" font-size="14" font-family="TsangerJinKai02" fill="#1B365D">12.1%</text>
+      <text x="42" y="194" font-size="14" font-family="TsangerJinKai02" fill="#3d3d3a">理想</text>
       <rect x="130" y="178" width="140" height="26" fill="#9aa7ad"/>
-      <text x="280" y="197" font-size="14" font-family="TsangerJinKai02, serif" fill="#1B365D">6.1%</text>
+      <text x="280" y="197" font-size="14" font-family="TsangerJinKai02" fill="#1B365D">6.1%</text>
     </svg>
     <figcaption>图 1：同一季度内，蔚来的整车毛利率修复最明显，理想受到产品结构切换冲击最大。</figcaption>
   </figure>

@@ -18,17 +18,17 @@
 
 - THUDM/slime README: <https://github.com/THUDM/slime>
 - Official documentation index: <https://thudm.github.io/slime/>
-- Quick Start: <https://github.com/THUDM/slime/blob/main/docs/en/get_started/quick_start.md>
-- Usage: <https://github.com/THUDM/slime/blob/main/docs/en/usage.md>
-- Customization: <https://github.com/THUDM/slime/blob/main/docs/en/usage/customization.md>
-- Q&A: <https://github.com/THUDM/slime/blob/main/docs/en/qa.md>
-- SGLang configuration: <https://github.com/THUDM/slime/blob/main/docs/en/usage/sglang_config.md>
-- Fault tolerance: <https://github.com/THUDM/slime/blob/main/docs/en/usage/fault_tolerance.md>
-- Low precision: <https://github.com/THUDM/slime/blob/main/docs/en/usage/low_precision.md>
-- On-policy distillation: <https://github.com/THUDM/slime/blob/main/docs/en/usage/on_policy_distillation.md>
-- Speculative decoding: <https://github.com/THUDM/slime/blob/main/docs/en/usage/speculative_decoding.md>
-- PD disaggregation: <https://github.com/THUDM/slime/blob/main/docs/en/usage/pd_disaggregation.md>
-- Reproducibility: <https://github.com/THUDM/slime/blob/main/docs/en/usage/reproducibility.md>
+- Quick Start: <https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/get_started/quick_start.md>
+- Usage: <https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/get_started/usage.md>
+- Customization: <https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/get_started/customization.md>
+- Q&A: <https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/get_started/qa.md>
+- SGLang configuration: <https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/advanced/sglang-config.md>
+- Fault tolerance: <https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/advanced/fault-tolerance.md>
+- Low precision: <https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/advanced/low-precision.md>
+- On-policy distillation: <https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/advanced/on-policy-distillation.md>
+- Speculative decoding: <https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/advanced/speculative-decoding.md>
+- PD disaggregation: <https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/advanced/pd-disaggregation.md>
+- Reproducibility: <https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/advanced/reproducibility.md>
 - Introducing slime: <https://github.com/THUDM/slime/blob/main/docs/en/blogs/introducing_slime.md>
 - Release v0.1.0 blog: <https://github.com/THUDM/slime/blob/main/docs/en/blogs/release_v0.1.0.md>
 - Release v0.2.4: <https://github.com/THUDM/slime/releases/tag/v0.2.4>

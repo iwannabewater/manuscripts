@@ -10,14 +10,16 @@
 <style>
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
   }
 
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
   }
@@ -29,7 +31,7 @@
 
     @bottom-center {
       content: counter(page) " · PDD Holdings 2026 Q1 财报分析";
-      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8.5pt;
       color: #6b6a64;
     }
@@ -51,8 +53,8 @@
     --line: #dfddd2;
     --line-dark: #cbc7b8;
     --blue-bg: #e7edf4;
-    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
-    --chart-font: "Noto Sans", "AR PL UMing CN", "Noto Sans CJK SC", "Source Han Sans SC", "Microsoft YaHei", Arial, sans-serif;
+    --serif: "TsangerJinKai02";
+    --chart-font: "TsangerJinKai02";
   }
 
   html, body { background: var(--paper); }
@@ -331,6 +333,7 @@
     margin-bottom: 5pt;
   }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
   <header class="report-header">
@@ -383,45 +386,45 @@
     <figure>
       <svg viewBox="0 0 700 260" width="100%" height="260" role="img" aria-label="PDD 2026 Q1 financial snapshot">
         <rect x="0" y="0" width="700" height="260" fill="#fbfaf5" stroke="#dfddd2"/>
-        <text x="18" y="26" fill="#1B365D" font-size="18" font-weight="600">2026 Q1：收入继续增长，利润质量转弱</text>
-        <text x="18" y="47" fill="#686861" font-size="12">单位：人民币十亿元；净利润为 non-GAAP 口径</text>
+        <text font-family="TsangerJinKai02" x="18" y="26" fill="#1B365D" font-size="18" font-weight="600">2026 Q1：收入继续增长，利润质量转弱</text>
+        <text font-family="TsangerJinKai02" x="18" y="47" fill="#686861" font-size="12">单位：人民币十亿元；净利润为 non-GAAP 口径</text>
 
         <line x1="58" y1="206" x2="640" y2="206" stroke="#cbc7b8" stroke-width="1"/>
         <line x1="58" y1="72" x2="58" y2="206" stroke="#cbc7b8" stroke-width="1"/>
 
         <rect x="95" y="84" width="44" height="122" fill="#315b7c"/>
         <rect x="147" y="70" width="44" height="136" fill="#1B365D"/>
-        <text x="117" y="223" text-anchor="middle" fill="#454541" font-size="11">2025</text>
-        <text x="169" y="223" text-anchor="middle" fill="#454541" font-size="11">2026</text>
-        <text x="132" y="239" text-anchor="middle" fill="#686861" font-size="11">总收入</text>
-        <text x="117" y="102" text-anchor="middle" fill="#ffffff" font-size="11">95.7</text>
-        <text x="169" y="88" text-anchor="middle" fill="#ffffff" font-size="11">106.2</text>
-        <text x="132" y="59" text-anchor="middle" fill="#1B365D" font-size="11">+11.0%</text>
+        <text font-family="TsangerJinKai02" x="117" y="223" text-anchor="middle" fill="#454541" font-size="11">2025</text>
+        <text font-family="TsangerJinKai02" x="169" y="223" text-anchor="middle" fill="#454541" font-size="11">2026</text>
+        <text font-family="TsangerJinKai02" x="132" y="239" text-anchor="middle" fill="#686861" font-size="11">总收入</text>
+        <text font-family="TsangerJinKai02" x="117" y="102" text-anchor="middle" fill="#ffffff" font-size="11">95.7</text>
+        <text font-family="TsangerJinKai02" x="169" y="88" text-anchor="middle" fill="#ffffff" font-size="11">106.2</text>
+        <text font-family="TsangerJinKai02" x="132" y="59" text-anchor="middle" fill="#1B365D" font-size="11">+11.0%</text>
 
         <rect x="270" y="144" width="44" height="62" fill="#6e8cac"/>
         <rect x="322" y="142" width="44" height="64" fill="#315b7c"/>
-        <text x="292" y="223" text-anchor="middle" fill="#454541" font-size="11">2025</text>
-        <text x="344" y="223" text-anchor="middle" fill="#454541" font-size="11">2026</text>
-        <text x="318" y="239" text-anchor="middle" fill="#686861" font-size="11">在线营销</text>
-        <text x="292" y="164" text-anchor="middle" fill="#ffffff" font-size="11">48.7</text>
-        <text x="344" y="162" text-anchor="middle" fill="#ffffff" font-size="11">49.9</text>
-        <text x="318" y="132" text-anchor="middle" fill="#1B365D" font-size="11">+2.5%</text>
+        <text font-family="TsangerJinKai02" x="292" y="223" text-anchor="middle" fill="#454541" font-size="11">2025</text>
+        <text font-family="TsangerJinKai02" x="344" y="223" text-anchor="middle" fill="#454541" font-size="11">2026</text>
+        <text font-family="TsangerJinKai02" x="318" y="239" text-anchor="middle" fill="#686861" font-size="11">在线营销</text>
+        <text font-family="TsangerJinKai02" x="292" y="164" text-anchor="middle" fill="#ffffff" font-size="11">48.7</text>
+        <text font-family="TsangerJinKai02" x="344" y="162" text-anchor="middle" fill="#ffffff" font-size="11">49.9</text>
+        <text font-family="TsangerJinKai02" x="318" y="132" text-anchor="middle" fill="#1B365D" font-size="11">+2.5%</text>
 
         <rect x="450" y="146" width="44" height="60" fill="#9c8060"/>
         <rect x="502" y="133" width="44" height="73" fill="#8b4a34"/>
-        <text x="472" y="223" text-anchor="middle" fill="#454541" font-size="11">2025</text>
-        <text x="524" y="223" text-anchor="middle" fill="#454541" font-size="11">2026</text>
-        <text x="498" y="239" text-anchor="middle" fill="#686861" font-size="11">交易服务</text>
-        <text x="472" y="166" text-anchor="middle" fill="#ffffff" font-size="11">47.0</text>
-        <text x="524" y="153" text-anchor="middle" fill="#ffffff" font-size="11">56.3</text>
-        <text x="498" y="122" text-anchor="middle" fill="#8b4a34" font-size="11">+19.9%</text>
+        <text font-family="TsangerJinKai02" x="472" y="223" text-anchor="middle" fill="#454541" font-size="11">2025</text>
+        <text font-family="TsangerJinKai02" x="524" y="223" text-anchor="middle" fill="#454541" font-size="11">2026</text>
+        <text font-family="TsangerJinKai02" x="498" y="239" text-anchor="middle" fill="#686861" font-size="11">交易服务</text>
+        <text font-family="TsangerJinKai02" x="472" y="166" text-anchor="middle" fill="#ffffff" font-size="11">47.0</text>
+        <text font-family="TsangerJinKai02" x="524" y="153" text-anchor="middle" fill="#ffffff" font-size="11">56.3</text>
+        <text font-family="TsangerJinKai02" x="498" y="122" text-anchor="middle" fill="#8b4a34" font-size="11">+19.9%</text>
 
-        <text x="610" y="88" text-anchor="middle" fill="#1B365D" font-size="22" font-weight="600">19.9%</text>
-        <text x="610" y="108" text-anchor="middle" fill="#686861" font-size="11">non-GAAP</text>
-        <text x="610" y="124" text-anchor="middle" fill="#686861" font-size="11">经营利润率</text>
-        <text x="610" y="164" text-anchor="middle" fill="#8b4a34" font-size="22" font-weight="600">-16.8%</text>
-        <text x="610" y="184" text-anchor="middle" fill="#686861" font-size="11">non-GAAP</text>
-        <text x="610" y="200" text-anchor="middle" fill="#686861" font-size="11">净利润同比</text>
+        <text font-family="TsangerJinKai02" x="610" y="88" text-anchor="middle" fill="#1B365D" font-size="22" font-weight="600">19.9%</text>
+        <text font-family="TsangerJinKai02" x="610" y="108" text-anchor="middle" fill="#686861" font-size="11">non-GAAP</text>
+        <text font-family="TsangerJinKai02" x="610" y="124" text-anchor="middle" fill="#686861" font-size="11">经营利润率</text>
+        <text font-family="TsangerJinKai02" x="610" y="164" text-anchor="middle" fill="#8b4a34" font-size="22" font-weight="600">-16.8%</text>
+        <text font-family="TsangerJinKai02" x="610" y="184" text-anchor="middle" fill="#686861" font-size="11">non-GAAP</text>
+        <text font-family="TsangerJinKai02" x="610" y="200" text-anchor="middle" fill="#686861" font-size="11">净利润同比</text>
       </svg>
       <figcaption>来源：PDD 官方 Q1 2026 财报和 SEC 6-K 附件。PDD 不披露 Temu 或国内主站独立收入，因此图中收入分项按公司披露口径呈现。[S01][S02]</figcaption>
     </figure>
@@ -493,24 +496,24 @@
       <figure>
         <svg viewBox="0 0 340 230" width="100%" height="230" role="img" aria-label="Profit bridge">
           <rect x="0" y="0" width="340" height="230" fill="#fbfaf5" stroke="#dfddd2"/>
-          <text x="14" y="24" fill="#1B365D" font-size="16" font-weight="600">经营利润与税前利润的分叉</text>
+          <text font-family="TsangerJinKai02" x="14" y="24" fill="#1B365D" font-size="16" font-weight="600">经营利润与税前利润的分叉</text>
           <line x1="36" y1="188" x2="312" y2="188" stroke="#cbc7b8"/>
           <rect x="48" y="86" width="34" height="102" fill="#315b7c"/>
           <rect x="102" y="64" width="34" height="124" fill="#1B365D"/>
           <rect x="168" y="56" width="34" height="132" fill="#8b4a34"/>
           <rect x="222" y="74" width="34" height="114" fill="#9c8060"/>
-          <text x="65" y="201" text-anchor="middle" fill="#686861" font-size="10">25Q1</text>
-          <text x="119" y="201" text-anchor="middle" fill="#686861" font-size="10">26Q1</text>
-          <text x="185" y="201" text-anchor="middle" fill="#686861" font-size="10">25Q1</text>
-          <text x="239" y="201" text-anchor="middle" fill="#686861" font-size="10">26Q1</text>
-          <text x="92" y="217" text-anchor="middle" fill="#454541" font-size="10">经营利润</text>
-          <text x="212" y="217" text-anchor="middle" fill="#454541" font-size="10">税前利润</text>
-          <text x="119" y="50" text-anchor="middle" fill="#1B365D" font-size="11">+21.6%</text>
-          <text x="239" y="64" text-anchor="middle" fill="#8b4a34" font-size="11">-13.3%</text>
-          <text x="65" y="80" text-anchor="middle" fill="#315b7c" font-size="10">16.1</text>
-          <text x="119" y="84" text-anchor="middle" fill="#ffffff" font-size="10">19.6</text>
-          <text x="185" y="50" text-anchor="middle" fill="#8b4a34" font-size="10">19.3</text>
-          <text x="239" y="94" text-anchor="middle" fill="#ffffff" font-size="10">16.8</text>
+          <text font-family="TsangerJinKai02" x="65" y="201" text-anchor="middle" fill="#686861" font-size="10">25Q1</text>
+          <text font-family="TsangerJinKai02" x="119" y="201" text-anchor="middle" fill="#686861" font-size="10">26Q1</text>
+          <text font-family="TsangerJinKai02" x="185" y="201" text-anchor="middle" fill="#686861" font-size="10">25Q1</text>
+          <text font-family="TsangerJinKai02" x="239" y="201" text-anchor="middle" fill="#686861" font-size="10">26Q1</text>
+          <text font-family="TsangerJinKai02" x="92" y="217" text-anchor="middle" fill="#454541" font-size="10">经营利润</text>
+          <text font-family="TsangerJinKai02" x="212" y="217" text-anchor="middle" fill="#454541" font-size="10">税前利润</text>
+          <text font-family="TsangerJinKai02" x="119" y="50" text-anchor="middle" fill="#1B365D" font-size="11">+21.6%</text>
+          <text font-family="TsangerJinKai02" x="239" y="64" text-anchor="middle" fill="#8b4a34" font-size="11">-13.3%</text>
+          <text font-family="TsangerJinKai02" x="65" y="80" text-anchor="middle" fill="#315b7c" font-size="10">16.1</text>
+          <text font-family="TsangerJinKai02" x="119" y="84" text-anchor="middle" fill="#ffffff" font-size="10">19.6</text>
+          <text font-family="TsangerJinKai02" x="185" y="50" text-anchor="middle" fill="#8b4a34" font-size="10">19.3</text>
+          <text font-family="TsangerJinKai02" x="239" y="94" text-anchor="middle" fill="#ffffff" font-size="10">16.8</text>
         </svg>
         <figcaption>单位：人民币十亿元。经营利润增长，税前利润下滑，说明当季冲击不只来自经营费用。</figcaption>
       </figure>
@@ -548,8 +551,8 @@
     <figure>
       <svg viewBox="0 0 700 245" width="100%" height="245" role="img" aria-label="PDD stock reaction after Q1 2026 earnings">
         <rect x="0" y="0" width="700" height="245" fill="#fbfaf5" stroke="#dfddd2"/>
-        <text x="18" y="26" fill="#1B365D" font-size="18" font-weight="600">财报前后股价反应</text>
-        <text x="18" y="47" fill="#686861" font-size="12">收盘价，单位：美元；财报日为 2026-05-27</text>
+        <text font-family="TsangerJinKai02" x="18" y="26" fill="#1B365D" font-size="18" font-weight="600">财报前后股价反应</text>
+        <text font-family="TsangerJinKai02" x="18" y="47" fill="#686861" font-size="12">收盘价，单位：美元；财报日为 2026-05-27</text>
         <line x1="58" y1="198" x2="650" y2="198" stroke="#cbc7b8"/>
         <line x1="58" y1="62" x2="58" y2="198" stroke="#cbc7b8"/>
 
@@ -559,22 +562,22 @@
         <circle cx="400" cy="142" r="4" fill="#8b4a34"/>
         <circle cx="555" cy="136" r="4" fill="#2b6f6b"/>
 
-        <text x="90" y="67" text-anchor="middle" fill="#1B365D" font-size="12">96.64</text>
-        <text x="245" y="116" text-anchor="middle" fill="#8b4a34" font-size="12">86.61</text>
-        <text x="400" y="134" text-anchor="middle" fill="#8b4a34" font-size="12">83.03</text>
-        <text x="555" y="128" text-anchor="middle" fill="#2b6f6b" font-size="12">84.24</text>
+        <text font-family="TsangerJinKai02" x="90" y="67" text-anchor="middle" fill="#1B365D" font-size="12">96.64</text>
+        <text font-family="TsangerJinKai02" x="245" y="116" text-anchor="middle" fill="#8b4a34" font-size="12">86.61</text>
+        <text font-family="TsangerJinKai02" x="400" y="134" text-anchor="middle" fill="#8b4a34" font-size="12">83.03</text>
+        <text font-family="TsangerJinKai02" x="555" y="128" text-anchor="middle" fill="#2b6f6b" font-size="12">84.24</text>
 
-        <text x="90" y="218" text-anchor="middle" fill="#454541" font-size="11">5/26</text>
-        <text x="245" y="218" text-anchor="middle" fill="#454541" font-size="11">5/27</text>
-        <text x="400" y="218" text-anchor="middle" fill="#454541" font-size="11">5/28</text>
-        <text x="555" y="218" text-anchor="middle" fill="#454541" font-size="11">5/29</text>
+        <text font-family="TsangerJinKai02" x="90" y="218" text-anchor="middle" fill="#454541" font-size="11">5/26</text>
+        <text font-family="TsangerJinKai02" x="245" y="218" text-anchor="middle" fill="#454541" font-size="11">5/27</text>
+        <text font-family="TsangerJinKai02" x="400" y="218" text-anchor="middle" fill="#454541" font-size="11">5/28</text>
+        <text font-family="TsangerJinKai02" x="555" y="218" text-anchor="middle" fill="#454541" font-size="11">5/29</text>
 
         <rect x="202" y="160" width="88" height="22" fill="#e7edf4" stroke="#d5e0ec"/>
-        <text x="246" y="175" text-anchor="middle" fill="#1B365D" font-size="11">-10.38%</text>
+        <text font-family="TsangerJinKai02" x="246" y="175" text-anchor="middle" fill="#1B365D" font-size="11">-10.38%</text>
         <rect x="354" y="164" width="92" height="22" fill="#efe4dd" stroke="#e0cdbf"/>
-        <text x="400" y="179" text-anchor="middle" fill="#8b4a34" font-size="11">两日 -14.1%</text>
-        <text x="600" y="84" fill="#686861" font-size="11">5/27 成交量</text>
-        <text x="600" y="101" fill="#1B365D" font-size="16" font-weight="600">4036万股</text>
+        <text font-family="TsangerJinKai02" x="400" y="179" text-anchor="middle" fill="#8b4a34" font-size="11">两日 -14.1%</text>
+        <text font-family="TsangerJinKai02" x="600" y="84" fill="#686861" font-size="11">5/27 成交量</text>
+        <text font-family="TsangerJinKai02" x="600" y="101" fill="#1B365D" font-size="16" font-weight="600">4036万股</text>
       </svg>
       <figcaption>来源：Investing.com 历史价格页。5/29 为源检查时价格，盘中/实时价格可能变化。[S09]</figcaption>
     </figure>
@@ -667,31 +670,31 @@
       <figure>
         <svg viewBox="0 0 330 235" width="100%" height="235" role="img" aria-label="Strategic shift">
           <rect x="0" y="0" width="330" height="235" fill="#fbfaf5" stroke="#dfddd2"/>
-          <text x="16" y="27" fill="#1B365D" font-size="16" font-weight="600">跨境低价模型的迁移</text>
+          <text font-family="TsangerJinKai02" x="16" y="27" fill="#1B365D" font-size="16" font-weight="600">跨境低价模型的迁移</text>
           <rect x="28" y="55" width="112" height="46" fill="#e7edf4" stroke="#d5e0ec"/>
-          <text x="84" y="75" text-anchor="middle" fill="#1B365D" font-size="12">中国直发</text>
-          <text x="84" y="92" text-anchor="middle" fill="#686861" font-size="10">小包裹 + 低税费</text>
+          <text font-family="TsangerJinKai02" x="84" y="75" text-anchor="middle" fill="#1B365D" font-size="12">中国直发</text>
+          <text font-family="TsangerJinKai02" x="84" y="92" text-anchor="middle" fill="#686861" font-size="10">小包裹 + 低税费</text>
           <path d="M145 78 L184 78" stroke="#8b4a34" stroke-width="2" marker-end="url(#arrow)"/>
 
           <rect x="190" y="55" width="112" height="46" fill="#efe4dd" stroke="#e0cdbf"/>
-          <text x="246" y="75" text-anchor="middle" fill="#8b4a34" font-size="12">本地履约</text>
-          <text x="246" y="92" text-anchor="middle" fill="#686861" font-size="10">关税 + 合规 + 仓配</text>
+          <text font-family="TsangerJinKai02" x="246" y="75" text-anchor="middle" fill="#8b4a34" font-size="12">本地履约</text>
+          <text font-family="TsangerJinKai02" x="246" y="92" text-anchor="middle" fill="#686861" font-size="10">关税 + 合规 + 仓配</text>
 
           <rect x="28" y="132" width="112" height="46" fill="#e9efec" stroke="#d2dedb"/>
-          <text x="84" y="152" text-anchor="middle" fill="#2b6f6b" font-size="12">第三方商家</text>
-          <text x="84" y="169" text-anchor="middle" fill="#686861" font-size="10">平台分配流量</text>
+          <text font-family="TsangerJinKai02" x="84" y="152" text-anchor="middle" fill="#2b6f6b" font-size="12">第三方商家</text>
+          <text font-family="TsangerJinKai02" x="84" y="169" text-anchor="middle" fill="#686861" font-size="10">平台分配流量</text>
           <path d="M145 155 L184 155" stroke="#8b4a34" stroke-width="2" marker-end="url(#arrow)"/>
 
           <rect x="190" y="132" width="112" height="46" fill="#e7edf4" stroke="#d5e0ec"/>
-          <text x="246" y="152" text-anchor="middle" fill="#1B365D" font-size="12">第一方品牌</text>
-          <text x="246" y="169" text-anchor="middle" fill="#686861" font-size="10">商品能力 + 风险</text>
+          <text font-family="TsangerJinKai02" x="246" y="152" text-anchor="middle" fill="#1B365D" font-size="12">第一方品牌</text>
+          <text font-family="TsangerJinKai02" x="246" y="169" text-anchor="middle" fill="#686861" font-size="10">商品能力 + 风险</text>
 
           <defs>
             <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="3" orient="auto">
               <path d="M0,0 L7,3 L0,6 Z" fill="#8b4a34"/>
             </marker>
           </defs>
-          <text x="165" y="212" text-anchor="middle" fill="#686861" font-size="10">从流量效率，进入供应链和组织能力竞争</text>
+          <text font-family="TsangerJinKai02" x="165" y="212" text-anchor="middle" fill="#686861" font-size="10">从流量效率，进入供应链和组织能力竞争</text>
         </svg>
         <figcaption>示意图。PDD 未披露 Temu 分部利润，本图表达经营模型迁移逻辑，不是分部财务数据。</figcaption>
       </figure>

@@ -10,13 +10,15 @@
 <style>
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
   }
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
   }
@@ -26,13 +28,13 @@
     background: #f5f4ed;
     @top-right {
       content: string(section-title);
-      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8pt;
       color: #6b6a64;
     }
     @bottom-center {
       content: counter(page) "  ·  世界模型技术全史与产业落地报告 2026";
-      font-family: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8.8pt;
       color: #6b6a64;
     }
@@ -50,7 +52,7 @@
     --brand-tint: #EEF2F7;
     --border: #e8e6dc;
     --border-strong: #d8d4c7;
-    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --serif: "TsangerJinKai02";
   }
   html, body { background: var(--paper); }
   @media screen { body { max-width: 210mm; margin: 0 auto; padding: 18mm 20mm 20mm 20mm; } }
@@ -173,14 +175,14 @@
   li::marker { color: var(--brand); }
   a { color: var(--brand); text-decoration: none; }
   code {
-    font-family: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 8.2pt;
     background: var(--ivory);
     padding: 1pt 3pt;
     border-radius: 2pt;
   }
   pre {
-    font-family: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 8.3pt;
     line-height: 1.45;
     background: var(--ivory);
@@ -275,6 +277,7 @@
   figcaption { color: var(--stone); font-size: 8.3pt; text-align: center; margin-top: 5pt; }
   svg { width: 100%; height: auto; display: block; }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 
@@ -381,29 +384,29 @@
       <defs><pattern id="dots1" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/>
       <rect width="100%" height="100%" fill="url(#dots1)" opacity="0.55"/>
-      <text x="70" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  1</text>
-      <text x="190" y="38" fill="#504e49" font-size="13" font-family="monospace" letter-spacing="3">WORLD MODEL LOOP</text>
+      <text x="70" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  1</text>
+      <text x="190" y="38" fill="#504e49" font-size="13" font-family="JetBrains Mono" letter-spacing="3">WORLD MODEL LOOP</text>
       <line x1="70" y1="52" x2="930" y2="52" stroke="#1B365D" stroke-width="0.8"/>
       <rect x="88" y="96" width="152" height="84" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1.2"/>
-      <text x="164" y="130" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="serif">观测</text>
-      <text x="164" y="157" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">video · sensor · state</text>
+      <text x="164" y="130" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">观测</text>
+      <text x="164" y="157" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">video · sensor · state</text>
       <path d="M240 138 L304 138" stroke="#504e49" stroke-width="1.4"/>
       <path d="M294 131 L306 138 L294 145" fill="none" stroke="#504e49" stroke-width="1.4"/>
       <rect x="310" y="96" width="152" height="84" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.6"/>
-      <text x="386" y="130" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="serif">状态表征</text>
-      <text x="386" y="157" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">latent · object · 3D</text>
+      <text x="386" y="130" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">状态表征</text>
+      <text x="386" y="157" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">latent · object · 3D</text>
       <path d="M462 138 L526 138" stroke="#1B365D" stroke-width="1.5"/>
       <path d="M516 131 L528 138 L516 145" fill="none" stroke="#1B365D" stroke-width="1.5"/>
       <rect x="532" y="96" width="152" height="84" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.6"/>
-      <text x="608" y="130" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="serif">动态预测</text>
-      <text x="608" y="157" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">s, a -> s'</text>
+      <text x="608" y="130" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">动态预测</text>
+      <text x="608" y="157" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">s, a -> s'</text>
       <path d="M684 138 L748 138" stroke="#504e49" stroke-width="1.4"/>
       <path d="M738 131 L750 138 L738 145" fill="none" stroke="#504e49" stroke-width="1.4"/>
       <rect x="754" y="96" width="152" height="84" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1.2"/>
-      <text x="830" y="130" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="serif">规划控制</text>
-      <text x="830" y="157" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">MPC · policy · tree</text>
+      <text x="830" y="130" text-anchor="middle" fill="#141413" font-size="23" font-weight="600" font-family="TsangerJinKai02">规划控制</text>
+      <text x="830" y="157" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">MPC · policy · tree</text>
       <path d="M830 180 C780 252 610 282 420 260 C280 244 182 210 164 180" stroke="#B2B1AC" stroke-width="1.2" fill="none" stroke-dasharray="5 5"/>
-      <text x="500" y="274" text-anchor="middle" fill="#6b6a64" font-size="15" font-family="serif">闭环：动作改变世界，世界反馈新观测，模型继续校正</text>
+      <text x="500" y="274" text-anchor="middle" fill="#6b6a64" font-size="15" font-family="TsangerJinKai02">闭环：动作改变世界，世界反馈新观测，模型继续校正</text>
     </svg>
     <figcaption>世界模型的核心不是“生成画面”，而是把观测、状态、动态和行动接成可闭环的预测系统。</figcaption>
   </figure>

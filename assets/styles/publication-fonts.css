@@ -1,0 +1,96 @@
+@font-face {
+  font-family: "TsangerJinKai02";
+  src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "TsangerJinKai02";
+  src: url("../fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
+  font-weight: 500 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Tsanger";
+  src: url("../fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Tsanger";
+  src: url("../fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
+  font-weight: 500 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: url("../fonts/JetBrainsMono.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "JetBrainsMono";
+  src: url("../fonts/JetBrainsMono.woff2") format("woff2");
+  font-weight: 400 800;
+  font-style: normal;
+}
+
+:root {
+  --serif: "TsangerJinKai02";
+  --sans: "TsangerJinKai02";
+  --mono: "JetBrains Mono", "TsangerJinKai02";
+  --chart-font: "TsangerJinKai02";
+}
+
+html,
+body,
+main,
+section,
+article,
+p,
+li,
+td,
+th,
+figcaption,
+.latin,
+.serif,
+.sans {
+  font-family: "TsangerJinKai02" !important;
+}
+
+code,
+pre,
+kbd,
+samp,
+pre *,
+code *,
+.mono,
+.eyebrow,
+.source,
+.page,
+.caption {
+  font-family: "JetBrains Mono", "JetBrainsMono", "TsangerJinKai02" !important;
+}
+
+svg text,
+svg tspan,
+svg foreignObject,
+svg foreignObject * {
+  font-family: "TsangerJinKai02" !important;
+}
+
+svg text.mono,
+svg tspan.mono,
+svg [font-family*="Mono"],
+svg [font-family="JetBrains Mono"] {
+  font-family: "JetBrains Mono", "JetBrainsMono", "TsangerJinKai02" !important;
+}

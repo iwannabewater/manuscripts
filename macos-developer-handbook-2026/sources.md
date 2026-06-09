@@ -34,7 +34,7 @@
 
 ## Optional Tools
 
-- [Raycast window management](https://manual.raycast.com/window-management)、[clipboard history](https://manual.raycast.com/clipboard-history)、[Quicklinks](https://manual.raycast.com/quicklinks)、[Snippets](https://manual.raycast.com/snippets) 与 [security and privacy](https://manual.raycast.com/security-and-privacy)。
+- [Raycast window management](https://manual.raycast.com/window-management)、[clipboard history](https://manual.raycast.com/clipboard-history)、[Quicklinks](https://manual.raycast.com/quicklinks)、[Snippets](https://manual.raycast.com/snippets) 与 [security and privacy](https://manual.raycast.com/ai/raycast-ai-privacy-security)。
 - [Ice](https://github.com/jordanbaird/Ice)、[Stats](https://github.com/exelban/stats)、[IINA](https://github.com/iina/iina)、[Keka](https://www.keka.io/en/)、[LocalSend](https://github.com/localsend/localsend)、[Maccy](https://github.com/p0deje/Maccy)。
 - [BetterDisplay](https://github.com/waydabber/BetterDisplay)、[Rectangle](https://github.com/rxhanson/Rectangle)、[Loop](https://github.com/MrKai77/Loop)、[AeroSpace](https://github.com/nikitabobko/AeroSpace)。
 - [Pearcleaner](https://github.com/alienator88/Pearcleaner)、[Applite](https://github.com/milanvarady/Applite)、[mas](https://github.com/mas-cli/mas)。

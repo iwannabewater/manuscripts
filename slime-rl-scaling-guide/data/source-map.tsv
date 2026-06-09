@@ -1,14 +1,14 @@
 category	name	url	evidence	notes
 repository	THUDM/slime	https://github.com/THUDM/slime	official repository clone	Upstream repository captured at commit 82007faf.
 documentation	README	https://github.com/THUDM/slime	official README	Architecture overview, capabilities, model support and argument categories.
-documentation	Quick Start	https://github.com/THUDM/slime/blob/main/docs/en/get_started/quick_start.md	official documentation	Docker, checkpoint conversion and first run commands.
-documentation	Usage	https://github.com/THUDM/slime/blob/main/docs/en/usage.md	official documentation	Resource, checkpoint, SGLang and data usage notes.
-documentation	Customization	https://github.com/THUDM/slime/blob/main/docs/en/usage/customization.md	official documentation	Custom rollout, generate, reward, loss, filter and data source hooks.
-documentation	SGLang config	https://github.com/THUDM/slime/blob/main/docs/en/usage/sglang_config.md	official documentation	YAML model/server group configuration and router usage.
-documentation	Fault tolerance	https://github.com/THUDM/slime/blob/main/docs/en/usage/fault_tolerance.md	official documentation	Rollout server health check and recovery.
-documentation	Low precision	https://github.com/THUDM/slime/blob/main/docs/en/usage/low_precision.md	official documentation	FP8 rollout/training and INT4 notes.
-documentation	PD disaggregation	https://github.com/THUDM/slime/blob/main/docs/en/usage/pd_disaggregation.md	official documentation	Prefill/decode separation for rollout.
-documentation	Reproducibility	https://github.com/THUDM/slime/blob/main/docs/en/usage/reproducibility.md	official documentation	Deterministic SGLang and Megatron modes.
+documentation	Quick Start	https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/get_started/quick_start.md	official documentation	Docker, checkpoint conversion and first run commands.
+documentation	Usage	https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/get_started/usage.md	official documentation	Resource, checkpoint, SGLang and data usage notes.
+documentation	Customization	https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/get_started/customization.md	official documentation	Custom rollout, generate, reward, loss, filter and data source hooks.
+documentation	SGLang config	https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/advanced/sglang-config.md	official documentation	YAML model/server group configuration and router usage.
+documentation	Fault tolerance	https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/advanced/fault-tolerance.md	official documentation	Rollout server health check and recovery.
+documentation	Low precision	https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/advanced/low-precision.md	official documentation	FP8 rollout/training and INT4 notes.
+documentation	PD disaggregation	https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/advanced/pd-disaggregation.md	official documentation	Prefill/decode separation for rollout.
+documentation	Reproducibility	https://github.com/THUDM/slime/blob/82007faf4b398abd32bd8e07f9638f6cfeb70729/docs/en/advanced/reproducibility.md	official documentation	Deterministic SGLang and Megatron modes.
 release	v0.2.4	https://github.com/THUDM/slime/releases/tag/v0.2.4	GitHub release metadata	Release snapshot and change summary.
 blog	LMSYS slime blog	https://lmsys.org/blog/2025-07-09-slime/	public technical blog	System design rationale and SGLang/Megatron native positioning.
 source	train.py	https://github.com/THUDM/slime/blob/main/train.py	source review	Synchronous training loop.

@@ -1,0 +1,8 @@
+beautifulsoup4
+lxml
+markdown
+markdown-it-py
+Pillow
+pypdf
+python-pptx
+weasyprint

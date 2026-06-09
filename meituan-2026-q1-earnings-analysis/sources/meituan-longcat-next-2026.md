@@ -1,6 +1,6 @@
 # 美团发布原生多模态 LongCat-Next：当视觉和语音成为AI的母语 - 美团技术团队
 
-> Source: https://tech.meituan.com/2026/04/02/longcat-next.html
+> Source: https://tech.meituan.com/2026/04/02/LongCat-Next.html
 
 美团发布原生多模态 LongCat-Next：当视觉和语音成为AI的母语
 

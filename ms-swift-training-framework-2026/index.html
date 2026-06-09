@@ -16,7 +16,7 @@
   /* Regular weight */
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
        url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
@@ -25,7 +25,7 @@
   /* Bold weight - W05 for all bold variants */
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
        url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
@@ -38,16 +38,14 @@
 
     @top-right {
       content: string(section-title);
-      font-family: "TsangerJinKai02", "Source Han Serif SC",
-                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8pt;
       color: #6b6a64;
     }
 
     @bottom-center {
       content: counter(page) "  ·  ms-swift 大模型训练框架全景与源码级指南 2026";
-      font-family: "TsangerJinKai02", "Source Han Serif SC",
-                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 9pt;
       color: #6b6a64;
     }
@@ -71,7 +69,7 @@
     --border:    #e8e6dc;
     --border-soft:#e5e3d8;
     --tag-bg:    #E4ECF5;
-    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --serif: "TsangerJinKai02";
     --sans: var(--serif);
 
     --rhythm-module:  14pt;
@@ -267,9 +265,7 @@
      glyphs rendered as "?" or missing-glyph boxes in WeasyPrint when the system lacks
      a mono font with CJK coverage. */
   code {
-    font-family: "JetBrains Mono", "SF Mono", Consolas,
-                 "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 9pt;
     background: var(--ivory);
     padding: 1pt 4pt;
@@ -277,9 +273,7 @@
     color: var(--dark-warm);
   }
   pre {
-    font-family: "JetBrains Mono", "SF Mono", Consolas,
-                 "TsangerJinKai02", "Source Han Serif SC",
-                 "Noto Serif CJK SC", "Songti SC", monospace;
+    font-family: "JetBrains Mono", "TsangerJinKai02";
     font-size: 9pt;
     line-height: 1.5;
     background: var(--ivory);
@@ -411,6 +405,7 @@
   /* ========== CHAPTER BREAK ========== */
   .chapter { break-before: page; }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 
@@ -509,28 +504,28 @@
       </defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/>
       <rect width="100%" height="100%" fill="url(#dots1)" opacity="0.55"/>
-      <text x="80" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  1</text>
-      <text x="196" y="38" fill="#504e49" font-size="13" font-family="monospace" letter-spacing="3">MS-SWIFT STACK POSITION</text>
+      <text x="80" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  1</text>
+      <text x="196" y="38" fill="#504e49" font-size="13" font-family="JetBrains Mono" letter-spacing="3">MS-SWIFT STACK POSITION</text>
       <line x1="80" y1="52" x2="920" y2="52" stroke="#1B365D" stroke-width="0.8"/>
 
       <rect x="120" y="92" width="760" height="68" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
-      <text x="148" y="124" fill="#141413" font-size="24" font-weight="600" font-family="serif">用户入口</text>
-      <text x="148" y="148" fill="#504e49" font-size="15" font-family="monospace">swift sft / rlhf / infer / eval / export · Web-UI · Python API</text>
+      <text x="148" y="124" fill="#141413" font-size="24" font-weight="600" font-family="TsangerJinKai02">用户入口</text>
+      <text x="148" y="148" fill="#504e49" font-size="15" font-family="JetBrains Mono">swift sft / rlhf / infer / eval / export · Web-UI · Python API</text>
 
       <rect x="120" y="176" width="760" height="76" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="148" y="208" fill="#141413" font-size="24" font-weight="600" font-family="serif">ms-swift 任务协议层</text>
-      <text x="148" y="232" fill="#504e49" font-size="15" font-family="monospace">Arguments · ModelMeta · Template · Dataset · Pipeline · TrainerFactory</text>
+      <text x="148" y="208" fill="#141413" font-size="24" font-weight="600" font-family="TsangerJinKai02">ms-swift 任务协议层</text>
+      <text x="148" y="232" fill="#504e49" font-size="15" font-family="JetBrains Mono">Arguments · ModelMeta · Template · Dataset · Pipeline · TrainerFactory</text>
 
       <rect x="120" y="268" width="760" height="76" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="148" y="300" fill="#141413" font-size="24" font-weight="600" font-family="serif">训练与推理生态</text>
-      <text x="148" y="324" fill="#504e49" font-size="15" font-family="monospace">Transformers · PEFT · TRL · DeepSpeed · FSDP · Megatron · vLLM · SGLang</text>
+      <text x="148" y="300" fill="#141413" font-size="24" font-weight="600" font-family="TsangerJinKai02">训练与推理生态</text>
+      <text x="148" y="324" fill="#504e49" font-size="15" font-family="JetBrains Mono">Transformers · PEFT · TRL · DeepSpeed · FSDP · Megatron · vLLM · SGLang</text>
 
       <rect x="120" y="360" width="760" height="76" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="148" y="392" fill="#141413" font-size="24" font-weight="600" font-family="serif">执行基座</text>
-      <text x="148" y="416" fill="#504e49" font-size="15" font-family="monospace">PyTorch · CUDA / NPU / MPS / CPU · NCCL / HCCL · 文件系统与缓存</text>
+      <text x="148" y="392" fill="#141413" font-size="24" font-weight="600" font-family="TsangerJinKai02">执行基座</text>
+      <text x="148" y="416" fill="#504e49" font-size="15" font-family="JetBrains Mono">PyTorch · CUDA / NPU / MPS / CPU · NCCL / HCCL · 文件系统与缓存</text>
 
       <rect x="120" y="468" width="760" height="36" rx="4" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
-      <text x="500" y="492" text-anchor="middle" fill="#504e49" font-size="15" font-family="serif">关键理解：ms-swift 不是替代底层库，而是把底层库组合成大模型训练的可执行协议。</text>
+      <text x="500" y="492" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">关键理解：ms-swift 不是替代底层库，而是把底层库组合成大模型训练的可执行协议。</text>
     </svg>
     <figcaption>ms-swift 位于大模型训练的任务协议层，它把底层库的自由度约束成可复用的训练流程。</figcaption>
   </figure>
@@ -602,25 +597,25 @@
       </defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/>
       <rect width="100%" height="100%" fill="url(#dots2)" opacity="0.55"/>
-      <text x="80" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  2</text>
-      <text x="196" y="38" fill="#504e49" font-size="13" font-family="monospace" letter-spacing="3">SFT EXECUTION PATH</text>
+      <text x="80" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  2</text>
+      <text x="196" y="38" fill="#504e49" font-size="13" font-family="JetBrains Mono" letter-spacing="3">SFT EXECUTION PATH</text>
       <line x1="80" y1="52" x2="920" y2="52" stroke="#1B365D" stroke-width="0.8"/>
 
       <rect x="72" y="88" width="160" height="72" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
-      <text x="152" y="120" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">CLI</text>
-      <text x="152" y="144" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">swift sft</text>
+      <text x="152" y="120" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">CLI</text>
+      <text x="152" y="144" text-anchor="middle" fill="#504e49" font-size="14" font-family="JetBrains Mono">swift sft</text>
 
       <rect x="292" y="88" width="160" height="72" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="372" y="120" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Arguments</text>
-      <text x="372" y="144" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">SftArguments</text>
+      <text x="372" y="120" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">Arguments</text>
+      <text x="372" y="144" text-anchor="middle" fill="#504e49" font-size="14" font-family="JetBrains Mono">SftArguments</text>
 
       <rect x="512" y="88" width="160" height="72" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="592" y="120" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Pipeline</text>
-      <text x="592" y="144" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">SwiftSft</text>
+      <text x="592" y="120" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">Pipeline</text>
+      <text x="592" y="144" text-anchor="middle" fill="#504e49" font-size="14" font-family="JetBrains Mono">SwiftSft</text>
 
       <rect x="732" y="88" width="160" height="72" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="812" y="120" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Trainer</text>
-      <text x="812" y="144" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">TrainerFactory</text>
+      <text x="812" y="120" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">Trainer</text>
+      <text x="812" y="144" text-anchor="middle" fill="#504e49" font-size="14" font-family="JetBrains Mono">TrainerFactory</text>
 
       <path d="M232 124 L292 124" stroke="#1B365D" stroke-width="1.5" fill="none"/>
       <path d="M284 119 L292 124 L284 129" stroke="#1B365D" stroke-width="1.5" fill="none" stroke-linecap="round"/>
@@ -630,34 +625,34 @@
       <path d="M724 119 L732 124 L724 129" stroke="#504e49" stroke-width="1.5" fill="none" stroke-linecap="round"/>
 
       <rect x="108" y="236" width="216" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="132" y="268" fill="#141413" font-size="22" font-family="serif" font-weight="600">模型加载</text>
-      <text x="132" y="292" fill="#504e49" font-size="14" font-family="monospace">get_model_processor</text>
-      <text x="132" y="316" fill="#504e49" font-size="14" font-family="monospace">ModelMeta / loader</text>
+      <text x="132" y="268" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">模型加载</text>
+      <text x="132" y="292" fill="#504e49" font-size="14" font-family="JetBrains Mono">get_model_processor</text>
+      <text x="132" y="316" fill="#504e49" font-size="14" font-family="JetBrains Mono">ModelMeta / loader</text>
 
       <rect x="392" y="236" width="216" height="96" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
-      <text x="416" y="268" fill="#141413" font-size="22" font-family="serif" font-weight="600">模板编码</text>
-      <text x="416" y="292" fill="#504e49" font-size="14" font-family="monospace">get_template</text>
-      <text x="416" y="316" fill="#504e49" font-size="14" font-family="monospace">messages -> labels</text>
+      <text x="416" y="268" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">模板编码</text>
+      <text x="416" y="292" fill="#504e49" font-size="14" font-family="JetBrains Mono">get_template</text>
+      <text x="416" y="316" fill="#504e49" font-size="14" font-family="JetBrains Mono">messages -> labels</text>
 
       <rect x="676" y="236" width="216" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="700" y="268" fill="#141413" font-size="22" font-family="serif" font-weight="600">数据处理</text>
-      <text x="700" y="292" fill="#504e49" font-size="14" font-family="monospace">load_dataset</text>
-      <text x="700" y="316" fill="#504e49" font-size="14" font-family="monospace">packing / cache</text>
+      <text x="700" y="268" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">数据处理</text>
+      <text x="700" y="292" fill="#504e49" font-size="14" font-family="JetBrains Mono">load_dataset</text>
+      <text x="700" y="316" fill="#504e49" font-size="14" font-family="JetBrains Mono">packing / cache</text>
 
       <rect x="108" y="408" width="216" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="132" y="440" fill="#141413" font-size="22" font-family="serif" font-weight="600">Tuner 包装</text>
-      <text x="132" y="464" fill="#504e49" font-size="14" font-family="monospace">LoRA / full / adapter</text>
-      <text x="132" y="488" fill="#504e49" font-size="14" font-family="monospace">prepare_model</text>
+      <text x="132" y="440" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">Tuner 包装</text>
+      <text x="132" y="464" fill="#504e49" font-size="14" font-family="JetBrains Mono">LoRA / full / adapter</text>
+      <text x="132" y="488" fill="#504e49" font-size="14" font-family="JetBrains Mono">prepare_model</text>
 
       <rect x="392" y="408" width="216" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="416" y="440" fill="#141413" font-size="22" font-family="serif" font-weight="600">训练循环</text>
-      <text x="416" y="464" fill="#504e49" font-size="14" font-family="monospace">compute_loss</text>
-      <text x="416" y="488" fill="#504e49" font-size="14" font-family="monospace">save / eval / log</text>
+      <text x="416" y="440" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">训练循环</text>
+      <text x="416" y="464" fill="#504e49" font-size="14" font-family="JetBrains Mono">compute_loss</text>
+      <text x="416" y="488" fill="#504e49" font-size="14" font-family="JetBrains Mono">save / eval / log</text>
 
       <rect x="676" y="408" width="216" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="700" y="440" fill="#141413" font-size="22" font-family="serif" font-weight="600">产物</text>
-      <text x="700" y="464" fill="#504e49" font-size="14" font-family="monospace">checkpoint / args.json</text>
-      <text x="700" y="488" fill="#504e49" font-size="14" font-family="monospace">adapter / full weight</text>
+      <text x="700" y="440" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">产物</text>
+      <text x="700" y="464" fill="#504e49" font-size="14" font-family="JetBrains Mono">checkpoint / args.json</text>
+      <text x="700" y="488" fill="#504e49" font-size="14" font-family="JetBrains Mono">adapter / full weight</text>
 
       <path d="M500 160 L500 236" stroke="#504e49" stroke-width="1.2" fill="none"/>
       <path d="M495 228 L500 236 L505 228" stroke="#504e49" stroke-width="1.5" fill="none" stroke-linecap="round"/>
@@ -810,37 +805,37 @@ output_dir: output/qwen3_sft</code></pre>
       </defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/>
       <rect width="100%" height="100%" fill="url(#dots3)" opacity="0.55"/>
-      <text x="80" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  3</text>
-      <text x="196" y="38" fill="#504e49" font-size="13" font-family="monospace" letter-spacing="3">DATA TO GRADIENT</text>
+      <text x="80" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  3</text>
+      <text x="196" y="38" fill="#504e49" font-size="13" font-family="JetBrains Mono" letter-spacing="3">DATA TO GRADIENT</text>
       <line x1="80" y1="52" x2="920" y2="52" stroke="#1B365D" stroke-width="0.8"/>
 
       <rect x="84" y="108" width="184" height="80" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="176" y="140" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">原始数据</text>
-      <text x="176" y="164" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">jsonl / csv / hub</text>
+      <text x="176" y="140" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">原始数据</text>
+      <text x="176" y="164" text-anchor="middle" fill="#504e49" font-size="14" font-family="JetBrains Mono">jsonl / csv / hub</text>
 
       <rect x="328" y="108" width="184" height="80" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="420" y="140" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">预处理</text>
-      <text x="420" y="164" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">AutoPreprocessor</text>
+      <text x="420" y="140" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">预处理</text>
+      <text x="420" y="164" text-anchor="middle" fill="#504e49" font-size="14" font-family="JetBrains Mono">AutoPreprocessor</text>
 
       <rect x="572" y="108" width="184" height="80" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
-      <text x="664" y="140" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">标准格式</text>
-      <text x="664" y="164" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">messages + fields</text>
+      <text x="664" y="140" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">标准格式</text>
+      <text x="664" y="164" text-anchor="middle" fill="#504e49" font-size="14" font-family="JetBrains Mono">messages + fields</text>
 
       <rect x="328" y="260" width="184" height="80" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
-      <text x="420" y="292" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Template</text>
-      <text x="420" y="316" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">encode / collate</text>
+      <text x="420" y="292" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">Template</text>
+      <text x="420" y="316" text-anchor="middle" fill="#504e49" font-size="14" font-family="JetBrains Mono">encode / collate</text>
 
       <rect x="572" y="260" width="184" height="80" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="664" y="292" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Batch</text>
-      <text x="664" y="316" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">input_ids / labels</text>
+      <text x="664" y="292" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">Batch</text>
+      <text x="664" y="316" text-anchor="middle" fill="#504e49" font-size="14" font-family="JetBrains Mono">input_ids / labels</text>
 
       <rect x="328" y="412" width="184" height="80" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="420" y="444" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Loss</text>
-      <text x="420" y="468" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">CE / custom loss</text>
+      <text x="420" y="444" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">Loss</text>
+      <text x="420" y="468" text-anchor="middle" fill="#504e49" font-size="14" font-family="JetBrains Mono">CE / custom loss</text>
 
       <rect x="572" y="412" width="184" height="80" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="664" y="444" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">梯度更新</text>
-      <text x="664" y="468" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">optimizer step</text>
+      <text x="664" y="444" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">梯度更新</text>
+      <text x="664" y="468" text-anchor="middle" fill="#504e49" font-size="14" font-family="JetBrains Mono">optimizer step</text>
 
       <path d="M268 148 L328 148" stroke="#504e49" stroke-width="1.2" fill="none"/><path d="M320 143 L328 148 L320 153" stroke="#504e49" stroke-width="1.5" fill="none" stroke-linecap="round"/>
       <path d="M512 148 L572 148" stroke="#1B365D" stroke-width="1.5" fill="none"/><path d="M564 143 L572 148 L564 153" stroke="#1B365D" stroke-width="1.5" fill="none" stroke-linecap="round"/>
@@ -907,13 +902,13 @@ swift sft \
   <h2>训练后推理、合并与发布</h2>
   <pre><code class="language-shell"># 使用 LoRA adapter 推理
 swift infer \
-  --adapters output/qwen3_lora_sft/vx-xxx/checkpoint-xxx \
+  --adapters output/qwen3_lora_sft/${RUN_ID}/${CHECKPOINT} \
   --stream true \
   --temperature 0
 
 # 合并 LoRA 后用 vLLM 验证
 swift infer \
-  --adapters output/qwen3_lora_sft/vx-xxx/checkpoint-xxx \
+  --adapters output/qwen3_lora_sft/${RUN_ID}/${CHECKPOINT} \
   --merge_lora true \
   --infer_backend vllm \
   --vllm_max_model_len 8192 \
@@ -921,7 +916,7 @@ swift infer \
 
 # 推送到 ModelScope 或 Hugging Face
 swift export \
-  --adapters output/qwen3_lora_sft/vx-xxx/checkpoint-xxx \
+  --adapters output/qwen3_lora_sft/${RUN_ID}/${CHECKPOINT} \
   --push_to_hub true \
   --hub_model_id your-org/your-model \
   --use_hf false</code></pre>
@@ -1025,27 +1020,27 @@ swift export \
       </defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/>
       <rect width="100%" height="100%" fill="url(#dots4)" opacity="0.55"/>
-      <text x="80" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  4</text>
-      <text x="196" y="38" fill="#504e49" font-size="13" font-family="monospace" letter-spacing="3">GRPO TRAINING LOOP</text>
+      <text x="80" y="38" fill="#1B365D" font-size="13" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  4</text>
+      <text x="196" y="38" fill="#504e49" font-size="13" font-family="JetBrains Mono" letter-spacing="3">GRPO TRAINING LOOP</text>
       <line x1="80" y1="52" x2="920" y2="52" stroke="#1B365D" stroke-width="0.8"/>
 
       <circle cx="500" cy="308" r="164" fill="none" stroke="#B2B1AC" stroke-width="1.2" stroke-dasharray="6 8"/>
 
       <rect x="404" y="92" width="192" height="72" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="500" y="124" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Prompt Batch</text>
-      <text x="500" y="148" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">questions / tasks</text>
+      <text x="500" y="124" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">Prompt Batch</text>
+      <text x="500" y="148" text-anchor="middle" fill="#504e49" font-size="14" font-family="JetBrains Mono">questions / tasks</text>
 
       <rect x="672" y="248" width="192" height="72" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
-      <text x="768" y="280" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Rollout</text>
-      <text x="768" y="304" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">G completions</text>
+      <text x="768" y="280" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">Rollout</text>
+      <text x="768" y="304" text-anchor="middle" fill="#504e49" font-size="14" font-family="JetBrains Mono">G completions</text>
 
       <rect x="404" y="436" width="192" height="72" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="500" y="468" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Reward</text>
-      <text x="500" y="492" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">ORM / function</text>
+      <text x="500" y="468" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">Reward</text>
+      <text x="500" y="492" text-anchor="middle" fill="#504e49" font-size="14" font-family="JetBrains Mono">ORM / function</text>
 
       <rect x="136" y="248" width="192" height="72" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="232" y="280" text-anchor="middle" fill="#141413" font-size="22" font-family="serif" font-weight="600">Optimize</text>
-      <text x="232" y="304" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">loss + KL</text>
+      <text x="232" y="280" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02" font-weight="600">Optimize</text>
+      <text x="232" y="304" text-anchor="middle" fill="#504e49" font-size="14" font-family="JetBrains Mono">loss + KL</text>
 
       <path d="M596 128 Q768 128 768 248" stroke="#1B365D" stroke-width="1.5" fill="none"/>
       <path d="M763 240 L768 248 L773 240" stroke="#1B365D" stroke-width="1.5" fill="none" stroke-linecap="round"/>
@@ -1057,8 +1052,8 @@ swift export \
       <path d="M396 123 L404 128 L396 133" stroke="#504e49" stroke-width="1.5" fill="none" stroke-linecap="round"/>
 
       <rect x="360" y="264" width="280" height="88" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
-      <text x="500" y="296" text-anchor="middle" fill="#141413" font-size="20" font-family="serif" font-weight="600">组内相对优势</text>
-      <text x="500" y="324" text-anchor="middle" fill="#504e49" font-size="14" font-family="monospace">A = (R - mean(R)) / std(R)</text>
+      <text x="500" y="296" text-anchor="middle" fill="#141413" font-size="20" font-family="TsangerJinKai02" font-weight="600">组内相对优势</text>
+      <text x="500" y="324" text-anchor="middle" fill="#504e49" font-size="14" font-family="JetBrains Mono">A = (R - mean(R)) / std(R)</text>
     </svg>
     <figcaption>GRPO 的复杂度在于训练循环与推理采样循环被绑定，工程风险常出现在 rollout、奖励和权重同步。</figcaption>
   </figure>

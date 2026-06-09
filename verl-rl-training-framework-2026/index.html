@@ -10,21 +10,23 @@
 <style>
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
     font-weight: 400;
     font-style: normal;
   }
 
   @font-face {
     font-family: "TsangerJinKai02";
-    src: url("fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
     font-weight: 500;
     font-style: normal;
   }
 
   @font-face {
     font-family: "JetBrains Mono";
-    src: url("fonts/JetBrainsMono.woff2") format("woff2");
+    src: url("../assets/fonts/JetBrainsMono.woff2") format("woff2");
     font-weight: 400;
     font-style: normal;
   }
@@ -36,16 +38,14 @@
 
     @top-right {
       content: string(section-title);
-      font-family: "TsangerJinKai02", "Source Han Serif SC",
-                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 8pt;
       color: #6b6a64;
     }
 
     @bottom-center {
       content: counter(page) "  ·  verl 大模型强化学习训练框架";
-      font-family: "TsangerJinKai02", "Source Han Serif SC",
-                   "Noto Serif CJK SC", "Songti SC", Georgia, serif;
+      font-family: "TsangerJinKai02";
       font-size: 9pt;
       color: #6b6a64;
     }
@@ -70,9 +70,9 @@
     --border-soft: #e5e3d8;
     --tag-bg: #E4ECF5;
     --brand-tint: #EEF2F7;
-    --serif: "TsangerJinKai02", "Source Han Serif SC", "Noto Serif CJK SC", "Songti SC", "STSong", Georgia, serif;
+    --serif: "TsangerJinKai02";
     --sans: var(--serif);
-    --mono: "JetBrains Mono", "SF Mono", Consolas, "TsangerJinKai02", "Source Han Serif SC", monospace;
+    --mono: "JetBrains Mono", "TsangerJinKai02";
   }
 
   html, body { background: var(--parchment); }
@@ -306,6 +306,7 @@
     margin-top: 6pt;
   }
 </style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 
@@ -437,53 +438,53 @@
       </defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/>
       <rect width="100%" height="100%" fill="url(#dots)" opacity="0.55"/>
-      <text x="70" y="42" fill="#1B365D" font-size="15" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  1</text>
-      <text x="205" y="42" fill="#504e49" font-size="15" font-family="monospace" letter-spacing="3">VERL HYBRIDFLOW MENTAL MODEL</text>
+      <text x="70" y="42" fill="#1B365D" font-size="15" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  1</text>
+      <text x="205" y="42" fill="#504e49" font-size="15" font-family="JetBrains Mono" letter-spacing="3">VERL HYBRIDFLOW MENTAL MODEL</text>
       <line x1="70" y1="58" x2="930" y2="58" stroke="#1B365D" stroke-width="1"/>
 
       <rect x="90" y="92" width="820" height="88" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="118" y="124" fill="#1B365D" font-size="24" font-weight="600" font-family="serif">用户输入层</text>
-      <text x="118" y="150" fill="#504e49" font-size="14" font-family="monospace">Hydra config · parquet data · reward function</text>
-      <text x="118" y="170" fill="#504e49" font-size="14" font-family="monospace">model path · resource plan</text>
+      <text x="118" y="124" fill="#1B365D" font-size="24" font-weight="600" font-family="TsangerJinKai02">用户输入层</text>
+      <text x="118" y="150" fill="#504e49" font-size="14" font-family="JetBrains Mono">Hydra config · parquet data · reward function</text>
+      <text x="118" y="170" fill="#504e49" font-size="14" font-family="JetBrains Mono">model path · resource plan</text>
 
       <rect x="90" y="226" width="820" height="104" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
-      <text x="118" y="260" fill="#1B365D" font-size="24" font-weight="600" font-family="serif">单控制器层</text>
-      <text x="118" y="286" fill="#504e49" font-size="14" font-family="monospace">TaskRunner / RLTrainer</text>
-      <text x="118" y="306" fill="#504e49" font-size="14" font-family="monospace">runs algorithm dataflow in one process</text>
-      <text x="574" y="286" fill="#504e49" font-size="14" font-family="monospace">rollout -> reward</text>
-      <text x="574" y="306" fill="#504e49" font-size="14" font-family="monospace">advantage -> update</text>
+      <text x="118" y="260" fill="#1B365D" font-size="24" font-weight="600" font-family="TsangerJinKai02">单控制器层</text>
+      <text x="118" y="286" fill="#504e49" font-size="14" font-family="JetBrains Mono">TaskRunner / RLTrainer</text>
+      <text x="118" y="306" fill="#504e49" font-size="14" font-family="JetBrains Mono">runs algorithm dataflow in one process</text>
+      <text x="574" y="286" fill="#504e49" font-size="14" font-family="JetBrains Mono">rollout -> reward</text>
+      <text x="574" y="306" fill="#504e49" font-size="14" font-family="JetBrains Mono">advantage -> update</text>
 
       <rect x="80" y="374" width="260" height="104" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="104" y="408" fill="#141413" font-size="22" font-weight="600" font-family="serif">WorkerGroup</text>
-      <text x="104" y="434" fill="#504e49" font-size="14" font-family="monospace">dispatch · execute</text>
-      <text x="104" y="454" fill="#504e49" font-size="14" font-family="monospace">collect · one call</text>
+      <text x="104" y="408" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02">WorkerGroup</text>
+      <text x="104" y="434" fill="#504e49" font-size="14" font-family="JetBrains Mono">dispatch · execute</text>
+      <text x="104" y="454" fill="#504e49" font-size="14" font-family="JetBrains Mono">collect · one call</text>
 
       <rect x="370" y="374" width="260" height="104" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="394" y="408" fill="#141413" font-size="22" font-weight="600" font-family="serif">ResourcePool</text>
-      <text x="394" y="434" fill="#504e49" font-size="14" font-family="monospace">GPU placement</text>
-      <text x="394" y="454" fill="#504e49" font-size="14" font-family="monospace">actor · critic · rollout</text>
+      <text x="394" y="408" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02">ResourcePool</text>
+      <text x="394" y="434" fill="#504e49" font-size="14" font-family="JetBrains Mono">GPU placement</text>
+      <text x="394" y="454" fill="#504e49" font-size="14" font-family="JetBrains Mono">actor · critic · rollout</text>
 
       <rect x="660" y="374" width="260" height="104" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="684" y="408" fill="#141413" font-size="22" font-weight="600" font-family="serif">DataProto</text>
-      <text x="684" y="434" fill="#504e49" font-size="14" font-family="monospace">TensorDict + metadata</text>
-      <text x="684" y="454" fill="#504e49" font-size="14" font-family="monospace">chunk · concat · union</text>
+      <text x="684" y="408" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02">DataProto</text>
+      <text x="684" y="434" fill="#504e49" font-size="14" font-family="JetBrains Mono">TensorDict + metadata</text>
+      <text x="684" y="454" fill="#504e49" font-size="14" font-family="JetBrains Mono">chunk · concat · union</text>
 
       <rect x="70" y="530" width="204" height="78" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
-      <text x="94" y="560" fill="#141413" font-size="20" font-weight="600" font-family="serif">Model Engine</text>
-      <text x="94" y="584" fill="#504e49" font-size="13" font-family="monospace">FSDP2 · Megatron</text>
-      <text x="94" y="602" fill="#504e49" font-size="13" font-family="monospace">VeOmni</text>
+      <text x="94" y="560" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02">Model Engine</text>
+      <text x="94" y="584" fill="#504e49" font-size="13" font-family="JetBrains Mono">FSDP2 · Megatron</text>
+      <text x="94" y="602" fill="#504e49" font-size="13" font-family="JetBrains Mono">VeOmni</text>
       <rect x="294" y="530" width="204" height="78" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
-      <text x="318" y="560" fill="#141413" font-size="20" font-weight="600" font-family="serif">Rollout Engine</text>
-      <text x="318" y="584" fill="#504e49" font-size="13" font-family="monospace">vLLM · SGLang</text>
-      <text x="318" y="602" fill="#504e49" font-size="13" font-family="monospace">HF rollout</text>
+      <text x="318" y="560" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02">Rollout Engine</text>
+      <text x="318" y="584" fill="#504e49" font-size="13" font-family="JetBrains Mono">vLLM · SGLang</text>
+      <text x="318" y="602" fill="#504e49" font-size="13" font-family="JetBrains Mono">HF rollout</text>
       <rect x="518" y="530" width="204" height="78" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
-      <text x="542" y="560" fill="#141413" font-size="20" font-weight="600" font-family="serif">Checkpoint</text>
-      <text x="542" y="584" fill="#504e49" font-size="13" font-family="monospace">save · load</text>
-      <text x="542" y="602" fill="#504e49" font-size="13" font-family="monospace">weight sync</text>
+      <text x="542" y="560" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02">Checkpoint</text>
+      <text x="542" y="584" fill="#504e49" font-size="13" font-family="JetBrains Mono">save · load</text>
+      <text x="542" y="602" fill="#504e49" font-size="13" font-family="JetBrains Mono">weight sync</text>
       <rect x="742" y="530" width="204" height="78" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
-      <text x="766" y="560" fill="#141413" font-size="20" font-weight="600" font-family="serif">Reward / Env</text>
-      <text x="766" y="584" fill="#504e49" font-size="13" font-family="monospace">rule · RM</text>
-      <text x="766" y="602" fill="#504e49" font-size="13" font-family="monospace">sandbox · tools</text>
+      <text x="766" y="560" fill="#141413" font-size="20" font-weight="600" font-family="TsangerJinKai02">Reward / Env</text>
+      <text x="766" y="584" fill="#504e49" font-size="13" font-family="JetBrains Mono">rule · RM</text>
+      <text x="766" y="602" fill="#504e49" font-size="13" font-family="JetBrains Mono">sandbox · tools</text>
 
       <path d="M500 180 L500 226" stroke="#1B365D" stroke-width="1.5"/>
       <path d="M493 216 L500 226 L507 216" fill="none" stroke="#1B365D" stroke-width="1.5" stroke-linecap="round"/>
@@ -616,39 +617,39 @@ output = actor_rollout_ref_wg.generate_sequences(batch)</code></pre>
       </defs>
       <rect width="100%" height="100%" fill="#f5f4ed"/>
       <rect width="100%" height="100%" fill="url(#dots2)" opacity="0.55"/>
-      <text x="70" y="42" fill="#1B365D" font-size="15" font-weight="600" font-family="monospace" letter-spacing="3">FIGURE  2</text>
-      <text x="205" y="42" fill="#504e49" font-size="15" font-family="monospace" letter-spacing="3">DATAPROTO FIELD EVOLUTION</text>
+      <text x="70" y="42" fill="#1B365D" font-size="15" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  2</text>
+      <text x="205" y="42" fill="#504e49" font-size="15" font-family="JetBrains Mono" letter-spacing="3">DATAPROTO FIELD EVOLUTION</text>
       <line x1="70" y1="58" x2="930" y2="58" stroke="#1B365D" stroke-width="1"/>
 
       <rect x="70" y="104" width="164" height="92" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.4"/>
-      <text x="92" y="134" font-size="20" font-family="serif" font-weight="600" fill="#1B365D">01 数据加载</text>
-      <text x="92" y="160" font-size="14" font-family="monospace" fill="#504e49">prompts</text>
-      <text x="92" y="180" font-size="14" font-family="monospace" fill="#504e49">reward_model</text>
+      <text x="92" y="134" font-size="20" font-family="TsangerJinKai02" font-weight="600" fill="#1B365D">01 数据加载</text>
+      <text x="92" y="160" font-size="14" font-family="JetBrains Mono" fill="#504e49">prompts</text>
+      <text x="92" y="180" font-size="14" font-family="JetBrains Mono" fill="#504e49">reward_model</text>
 
       <rect x="286" y="104" width="164" height="92" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="308" y="134" font-size="20" font-family="serif" font-weight="600" fill="#141413">02 生成</text>
-      <text x="308" y="160" font-size="14" font-family="monospace" fill="#504e49">responses</text>
-      <text x="308" y="180" font-size="14" font-family="monospace" fill="#504e49">response_mask</text>
+      <text x="308" y="134" font-size="20" font-family="TsangerJinKai02" font-weight="600" fill="#141413">02 生成</text>
+      <text x="308" y="160" font-size="14" font-family="JetBrains Mono" fill="#504e49">responses</text>
+      <text x="308" y="180" font-size="14" font-family="JetBrains Mono" fill="#504e49">response_mask</text>
 
       <rect x="502" y="104" width="164" height="92" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="524" y="134" font-size="20" font-family="serif" font-weight="600" fill="#141413">03 概率</text>
-      <text x="524" y="160" font-size="14" font-family="monospace" fill="#504e49">old_log_probs</text>
-      <text x="524" y="180" font-size="14" font-family="monospace" fill="#504e49">ref_log_prob</text>
+      <text x="524" y="134" font-size="20" font-family="TsangerJinKai02" font-weight="600" fill="#141413">03 概率</text>
+      <text x="524" y="160" font-size="14" font-family="JetBrains Mono" fill="#504e49">old_log_probs</text>
+      <text x="524" y="180" font-size="14" font-family="JetBrains Mono" fill="#504e49">ref_log_prob</text>
 
       <rect x="718" y="104" width="164" height="92" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="740" y="134" font-size="20" font-family="serif" font-weight="600" fill="#141413">04 奖励</text>
-      <text x="740" y="160" font-size="14" font-family="monospace" fill="#504e49">token_scores</text>
-      <text x="740" y="180" font-size="14" font-family="monospace" fill="#504e49">rm_scores</text>
+      <text x="740" y="134" font-size="20" font-family="TsangerJinKai02" font-weight="600" fill="#141413">04 奖励</text>
+      <text x="740" y="160" font-size="14" font-family="JetBrains Mono" fill="#504e49">token_scores</text>
+      <text x="740" y="180" font-size="14" font-family="JetBrains Mono" fill="#504e49">rm_scores</text>
 
       <rect x="178" y="286" width="224" height="96" rx="8" fill="#faf9f5" stroke="#141413" stroke-width="1"/>
-      <text x="204" y="320" font-size="21" font-family="serif" font-weight="600" fill="#141413">05 Advantage</text>
-      <text x="204" y="346" font-size="14" font-family="monospace" fill="#504e49">advantages · returns</text>
-      <text x="204" y="368" font-size="14" font-family="monospace" fill="#6b6a64">GAE / GRPO / RLOO</text>
+      <text x="204" y="320" font-size="21" font-family="TsangerJinKai02" font-weight="600" fill="#141413">05 Advantage</text>
+      <text x="204" y="346" font-size="14" font-family="JetBrains Mono" fill="#504e49">advantages · returns</text>
+      <text x="204" y="368" font-size="14" font-family="JetBrains Mono" fill="#6b6a64">GAE / GRPO / RLOO</text>
 
       <rect x="598" y="286" width="224" height="96" rx="8" fill="#EAE9E2" stroke="#504e49" stroke-width="1"/>
-      <text x="624" y="320" font-size="21" font-family="serif" font-weight="600" fill="#141413">06 Update</text>
-      <text x="624" y="346" font-size="14" font-family="monospace" fill="#504e49">update_actor</text>
-      <text x="624" y="368" font-size="14" font-family="monospace" fill="#6b6a64">update_critic if needed</text>
+      <text x="624" y="320" font-size="21" font-family="TsangerJinKai02" font-weight="600" fill="#141413">06 Update</text>
+      <text x="624" y="346" font-size="14" font-family="JetBrains Mono" fill="#504e49">update_actor</text>
+      <text x="624" y="368" font-size="14" font-family="JetBrains Mono" fill="#6b6a64">update_critic if needed</text>
 
       <path d="M234 150 L286 150" stroke="#1B365D" stroke-width="1.5"/>
       <path d="M276 143 L286 150 L276 157" fill="none" stroke="#1B365D" stroke-width="1.5" stroke-linecap="round"/>

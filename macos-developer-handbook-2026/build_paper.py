@@ -58,19 +58,16 @@ def main(public_html: bool = False) -> None:
     author_line = f"<strong>{escape(author)}</strong><br>" if author else ""
     template = TEMPLATE.read_text()
     style = re.search(r"<style>(.*?)</style>", template, re.S).group(1)
-    style = style.replace("../fonts/", "fonts/")
+    style = style.replace("../fonts/", "../assets/fonts/")
     style = style.replace("{{文档标题}}", TITLE)
     style = re.sub("ka" + "mi", "paper", style, flags=re.I)
-    style = re.sub(
-        r'"TsangerJinKai02", "Source Han Serif SC",\s*'
-        r'"Noto Serif CJK SC", "Songti SC",(?: "STSong",)? Georgia, serif',
-        '"TsangerJinKai02"',
-        style,
-    )
+    style = style.replace("tw93/paper@main/assets/fonts", "tw93/Kami@main/assets/fonts")
+    style = re.sub(r'"TsangerJinKai02"[^;{}]*serif', '"TsangerJinKai02"', style)
+    style = re.sub(r'"JetBrains Mono"[^;{}]*monospace', '"JetBrains Mono", "TsangerJinKai02"', style)
     style += """
   @font-face {
     font-family: "JetBrains Mono";
-    src: url("fonts/JetBrainsMono.woff2") format("woff2");
+    src: url("../assets/fonts/JetBrainsMono.woff2") format("woff2");
     font-weight: 400;
     font-style: normal;
   }
@@ -165,6 +162,7 @@ def main(public_html: bool = False) -> None:
 <meta name="description" content="macOS 开发者工作站手册，覆盖快捷操作、软件分层、Homebrew、Brewfile、Ghostty、mise、uv、OrbStack、Mole、权限、备份、维护 SOP 与 Cheatsheet。">
 <meta name="keywords" content="macOS, developer workstation, Homebrew, Brewfile, Ghostty, mise, uv, OrbStack, Mole, Cheatsheet">
 <style>{style}</style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
 <body>
 {"".join(body)}
