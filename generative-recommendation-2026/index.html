@@ -325,7 +325,7 @@
 <section class="chapter">
   <div class="chapter-num">01 · Executive Summary</div>
   <h1>执行摘要</h1>
-  <p class="lead">生成式推荐（Generative Recommendation, GR）不是“用大模型写推荐理由”的窄概念，而是把推荐链路中的候选生成、偏好建模、列表决策、内容理解、解释交互和新内容生成逐步改写为<span class="hl">生成任务</span>。它继承推荐系统的工程约束，也引入基础模型的 token 化、序列建模、对齐、推理成本和安全治理问题。</p>
+  <p class="lead">生成式推荐（Generative Recommendation, GR）把候选生成、偏好建模、列表决策、内容理解、解释交互和新内容生成逐步改写为<span class="hl">生成任务</span>。它继承推荐系统的工程约束，也引入基础模型的 token 化、序列建模、对齐、推理成本和安全治理问题。</p>
 
   <div class="summary-grid">
     <div class="summary-card">
@@ -541,7 +541,7 @@ subject to: policy constraints, diversity, freshness, safety, inventory, latency
 <section class="chapter">
   <div class="chapter-num">06 · GR Taxonomy</div>
   <h1>生成式推荐算法谱系</h1>
-  <p class="lead">GR 不是单一算法，而是一组把推荐问题语言化、token 化、序列化和生成化的方法。最重要的区分不是“是否用了 LLM”，而是生成对象是什么：物品标识、行为序列、列表、解释、查询、广告创意还是完整交互动作。</p>
+  <p class="lead">GR 是一组把推荐问题语言化、token 化、序列化和生成化的方法。分类时应先看生成对象：物品标识、行为序列、列表、解释、查询、广告创意还是完整交互动作。</p>
 
   <h2>六类主流路线</h2>
   <table>
@@ -580,7 +580,7 @@ subject to: policy constraints, diversity, freshness, safety, inventory, latency
 <section class="chapter">
   <div class="chapter-num">07 · Semantic IDs</div>
   <h1>语义 ID 与生成式检索</h1>
-  <p class="lead">语义 ID 是当前 GR 最重要的技术接口之一。它解决的不是“给物品重新编号”这么简单，而是把物品从不可学习的高基数 ID，变成模型能生成、能组合、能泛化的离散语义 token。</p>
+  <p class="lead">语义 ID 是当前 GR 最重要的技术接口之一：它把不可学习的高基数物品 ID，变成模型能生成、组合和泛化的离散语义 token。</p>
 
   <h2>为什么原始 item ID 不适合生成</h2>
   <p>推荐平台的 item 数可以达到百万、千万甚至更高。若把每个 item 当作一个 token，词表过大、冷启动困难、相似物品没有共享结构。若直接让 LLM 输出商品标题或视频标题，又会出现标题歧义、重复命名、库外生成和不可控召回。语义 ID 试图在两者之间折中：每个物品由若干个离散 codeword 组成，例如 <code>[18, 203, 7, 41]</code>，不同物品可共享前缀或局部 token，从而表达相似性。</p>
@@ -629,7 +629,7 @@ subject to: policy constraints, diversity, freshness, safety, inventory, latency
 <section class="chapter">
   <div class="chapter-num">08 · LLM and Diffusion</div>
   <h1>LLM、扩散与多模态推荐</h1>
-  <p class="lead">LLM 和扩散模型给推荐系统带来的不是一个统一答案，而是新的表示能力、生成能力和交互能力。它们最适合进入语义理解、冷启动、多模态内容、解释对话、用户模拟和创意生成；是否进入主链路，要由延迟、成本和可控性决定。</p>
+  <p class="lead">LLM 和扩散模型为推荐系统增加了新的表示、生成和交互能力。它们适合进入语义理解、冷启动、多模态内容、解释对话、用户模拟和创意生成；是否进入主链路，要由延迟、成本和可控性决定。</p>
 
   <h2>LLM 推荐的五种模式</h2>
   <table>

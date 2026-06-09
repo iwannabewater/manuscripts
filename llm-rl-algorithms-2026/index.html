@@ -161,7 +161,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 </section><section class='slide standard'>
 <div class='eyebrow'>PPO-RLHF Loss</div>
 <h2><span class='latin'>LLM-PPO</span> 的真实目标通常是四项损失的折中</h2>
-<p class='lead'>工业实现不是只优化 <span class='latin'>clipped</span> <span class='latin'>surrogate</span>，而是同时管理奖励、价值、熵、<span class='latin'>KL</span>、长度和预训练能力。</p>
+<p class='lead'>工业实现同时管理 <span class='latin'>clipped</span> <span class='latin'>surrogate</span>、奖励、价值、熵、<span class='latin'>KL</span>、长度和预训练能力。</p>
 <div class='formula-card'><img src='assets/formulas/ppo_llm.svg' alt='LaTeX formula ppo_llm'></div>
 <p class='caption'><span class='latin'>LLM-RLHF</span> 中常见的 <span class='latin'>PPO</span> 合成目标示意。</p>
 <ul class='bullets'>
@@ -290,7 +290,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 </section><section class='slide standard'>
 <div class='eyebrow'>RRHF</div>
 <h2><span class='latin'>RRHF</span> 把多个候选的奖励排序蒸馏成 <span class='latin'>log-prob</span> 排序</h2>
-<p class='lead'><span class='latin'>RRHF</span> 的目标不是估计绝对奖励，而是让模型对高奖励回答赋予更高平均 <span class='latin'>token</span> <span class='latin'>log</span> <span class='latin'>probability</span>。</p>
+<p class='lead'><span class='latin'>RRHF</span> 让模型对高奖励回答赋予更高的平均 <span class='latin'>token</span> <span class='latin'>log</span> <span class='latin'>probability</span>，无需估计绝对奖励。</p>
 <div class='formula-card'><img src='assets/formulas/pl.svg' alt='LaTeX formula pl'></div>
 <p class='caption'>多候选排序可用 <span class='latin'>Plackett-Luce</span> 似然表达。</p>
 <ul class='bullets'>
@@ -367,7 +367,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <div class='eyebrow'>Post-DPO Variants</div>
 <h2><span class='latin'>APO</span>、<span class='latin'>AOT</span>、<span class='latin'>NCA</span>、<span class='latin'>SPPO</span> 等变体主要在偏好几何上重写 <span class='latin'>DPO</span></h2>
 <table><tr><td>算法族</td><td>核心变化</td><td>适用直觉</td></tr><tr><td><span class='latin'>APO</span></td><td>给 <span class='latin'>preference</span> <span class='latin'>margin</span> 加 <span class='latin'>anchor</span> 或正则，防止 <span class='latin'>winner</span> 与 <span class='latin'>loser</span> 同向漂移</td><td>需要更明确控制参考点的离线对齐</td></tr><tr><td><span class='latin'>AOT</span></td><td>用分布匹配或 <span class='latin'>optimal</span> <span class='latin'>transport</span> 视角处理偏好排序</td><td>希望优化整体分布而非独立 <span class='latin'>pair</span></td></tr><tr><td><span class='latin'>NCA/BCO</span></td><td>把 <span class='latin'>winner-loser</span> 区分改写为 <span class='latin'>contrastive</span> 或 <span class='latin'>classifier</span> <span class='latin'>objective</span></td><td>偏好数据噪声大、需要分类校准</td></tr><tr><td><span class='latin'>SPPO/Nash</span></td><td>用自博弈、<span class='latin'>Nash</span> 或 <span class='latin'>mirror</span> <span class='latin'>descent</span> 解释 <span class='latin'>policy</span> <span class='latin'>improvement</span></td><td>多模型互评、<span class='latin'>AI</span> <span class='latin'>feedback</span> 可持续生成</td></tr></table>
-<div class='callout'>这些方法的共同主题不是替代所有 <span class='latin'>DPO</span>，而是改变 <span class='latin'>log-ratio</span> <span class='latin'>margin</span> 的几何、参考点或采样过程。</div>
+<div class='callout'>这些方法共同改变 <span class='latin'>log-ratio</span> <span class='latin'>margin</span> 的几何、参考点或采样过程，并不要求全面替代 <span class='latin'>DPO</span>。</div>
 <div class='source'>Sources: NASH, APO, AOT, NCA, BCO, SPPO</div>
 <div class='page'>27 / 67</div>
 </section><section class='slide standard'>
@@ -475,8 +475,8 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <div class='page'>36 / 67</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>DAPO Mechanics</div>
-<h2><span class='latin'>DAPO</span> 的核心不是新 <span class='latin'>baseline</span>，而是让 <span class='latin'>GRPO</span> 的有效梯度密度上升</h2>
-<p class='lead'>在大规模 <span class='latin'>RLVR</span> 中，训练失败往往不是公式错误，而是有效 <span class='latin'>batch</span> 太少、熵过早塌缩、长样本吞噬 <span class='latin'>token</span> <span class='latin'>budget</span>。</p>
+<h2><span class='latin'>DAPO</span> 通过提高有效梯度密度改进 <span class='latin'>GRPO</span></h2>
+<p class='lead'>在大规模 <span class='latin'>RLVR</span> 中，常见失败来自有效 <span class='latin'>batch</span> 太少、熵过早塌缩和长样本吞噬 <span class='latin'>token</span> <span class='latin'>budget</span>。</p>
 <ul class='bullets'>
 <li><span class='latin'>Dynamic</span> <span class='latin'>Sampling</span> 提高每个 <span class='latin'>optimizer</span> <span class='latin'>step</span> 的非零 <span class='latin'>advantage</span> 比例。</li>
 <li><span class='latin'>Clip-Higher</span> 让低概率但正确的 <span class='latin'>token</span> 有机会被充分强化。</li>

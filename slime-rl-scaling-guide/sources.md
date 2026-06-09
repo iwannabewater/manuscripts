@@ -12,6 +12,8 @@
 - Commit date: 2026-05-06 14:36:18 +0800
 - Commit subject: `Only allow --allgather-cp for DSA model (#1891)`
 - Latest release at capture time: `v0.2.4`, published 2026-03-29
+- Latest release rechecked on 2026-06-09: `v0.3.0`, published 2026-05-31
+- Current release: <https://github.com/THUDM/slime/releases/tag/v0.3.0>
 - Research method: official repository clone, official documentation capture, source-code review and release metadata review during this writing session.
 
 ## Primary Documentation
@@ -19,16 +21,16 @@
 - THUDM/slime README: <https://github.com/THUDM/slime>
 - Official documentation index: <https://thudm.github.io/slime/>
 - Quick Start: <https://github.com/THUDM/slime/blob/main/docs/en/get_started/quick_start.md>
-- Usage: <https://github.com/THUDM/slime/blob/main/docs/en/usage.md>
-- Customization: <https://github.com/THUDM/slime/blob/main/docs/en/usage/customization.md>
-- Q&A: <https://github.com/THUDM/slime/blob/main/docs/en/qa.md>
-- SGLang configuration: <https://github.com/THUDM/slime/blob/main/docs/en/usage/sglang_config.md>
-- Fault tolerance: <https://github.com/THUDM/slime/blob/main/docs/en/usage/fault_tolerance.md>
-- Low precision: <https://github.com/THUDM/slime/blob/main/docs/en/usage/low_precision.md>
-- On-policy distillation: <https://github.com/THUDM/slime/blob/main/docs/en/usage/on_policy_distillation.md>
-- Speculative decoding: <https://github.com/THUDM/slime/blob/main/docs/en/usage/speculative_decoding.md>
-- PD disaggregation: <https://github.com/THUDM/slime/blob/main/docs/en/usage/pd_disaggregation.md>
-- Reproducibility: <https://github.com/THUDM/slime/blob/main/docs/en/usage/reproducibility.md>
+- Usage: <https://github.com/THUDM/slime/blob/main/docs/en/get_started/usage.md>
+- Customization: <https://github.com/THUDM/slime/blob/main/docs/en/get_started/customization.md>
+- Q&A: <https://github.com/THUDM/slime/blob/main/docs/en/get_started/qa.md>
+- SGLang configuration: <https://github.com/THUDM/slime/blob/main/docs/en/advanced/sglang-config.md>
+- Fault tolerance: <https://github.com/THUDM/slime/blob/main/docs/en/advanced/fault-tolerance.md>
+- Low precision: <https://github.com/THUDM/slime/blob/main/docs/en/advanced/low-precision.md>
+- On-policy distillation: <https://github.com/THUDM/slime/blob/main/docs/en/advanced/on-policy-distillation.md>
+- Speculative decoding: <https://github.com/THUDM/slime/blob/main/docs/en/advanced/speculative-decoding.md>
+- PD disaggregation: <https://github.com/THUDM/slime/blob/main/docs/en/advanced/pd-disaggregation.md>
+- Reproducibility: <https://github.com/THUDM/slime/blob/main/docs/en/advanced/reproducibility.md>
 - Introducing slime: <https://github.com/THUDM/slime/blob/main/docs/en/blogs/introducing_slime.md>
 - Release v0.1.0 blog: <https://github.com/THUDM/slime/blob/main/docs/en/blogs/release_v0.1.0.md>
 - Release v0.2.4: <https://github.com/THUDM/slime/releases/tag/v0.2.4>
@@ -64,4 +66,4 @@
 - 本文不是 slime 官方文档的翻译，而是基于源码和官方资料重组后的工程读本。
 - 本文不覆盖每一个模型脚本和所有 CLI 参数，参数完整定义应以当前源码为准。
 - 性能数字仅引用官方 release/blog 中有明确语境的描述，不做跨模型、跨硬件外推。
-- GitHub star、fork、release 和 HEAD 信息具有时效性，本文只保留抓取日口径。
+- GitHub star、fork 和 HEAD 信息只保留抓取日口径；稳定 release 已于 2026-06-09 复核。

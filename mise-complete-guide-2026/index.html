@@ -421,7 +421,7 @@
     <div class="cover-title">mise 完整使用指南<br>开发环境、工具链与工程任务的统一管理</div>
     <div class="cover-sub">从安装、工具版本、环境变量和任务，到锁文件、CI、安全边界与团队落地。</div>
   </div>
-  <div class="cover-meta"><strong>Winston</strong><br>版本 V1.0 · 2026-06-02<br>基于 mise v2026.5.18 官方资料</div>
+  <div class="cover-meta"><strong>Winston</strong><br>版本 V1.1 · 2026-06-09<br>2026-06-02 内容快照 · 版本复核至 mise v2026.6.1</div>
 </section><section class="toc"><h2>目录</h2><div class="toc-item"><span class="toc-num">01</span><span class="toc-title">执行摘要</span><span class="toc-page" data-section="1">03</span></div><div class="toc-item"><span class="toc-num">02</span><span class="toc-title">1. mise 解决的不是一个问题</span><span class="toc-page" data-section="2">04</span></div><div class="toc-item"><span class="toc-num">03</span><span class="toc-title">2. 15 分钟上手</span><span class="toc-page" data-section="3">05</span></div><div class="toc-item"><span class="toc-num">04</span><span class="toc-title">3. mise use、mise install、mise exec 和 mise run</span><span class="toc-page" data-section="4">08</span></div><div class="toc-item"><span class="toc-num">05</span><span class="toc-title">4. 三种接入方式</span><span class="toc-page" data-section="5">09</span></div><div class="toc-item"><span class="toc-num">06</span><span class="toc-title">5. mise.toml：项目级入口</span><span class="toc-page" data-section="6">10</span></div><div class="toc-item"><span class="toc-num">07</span><span class="toc-title">6. 工具、Registry 与后端</span><span class="toc-page" data-section="7">13</span></div><div class="toc-item"><span class="toc-num">08</span><span class="toc-title">7. 环境变量：把依赖写成契约</span><span class="toc-page" data-section="8">15</span></div><div class="toc-item"><span class="toc-num">09</span><span class="toc-title">8. 任务系统：给项目一个标准入口</span><span class="toc-page" data-section="9">17</span></div><div class="toc-item"><span class="toc-num">10</span><span class="toc-title">9. 锁文件：可读范围与可复现安装同时存在</span><span class="toc-page" data-section="10">19</span></div><div class="toc-item"><span class="toc-num">11</span><span class="toc-title">10. CI：让本地和流水线读同一份配置</span><span class="toc-page" data-section="11">21</span></div><div class="toc-item"><span class="toc-num">12</span><span class="toc-title">11. 安全：默认配置要克制</span><span class="toc-page" data-section="12">23</span></div><div class="toc-item"><span class="toc-num">13</span><span class="toc-title">12. 最佳食用方式</span><span class="toc-page" data-section="13">25</span></div><div class="toc-item"><span class="toc-num">14</span><span class="toc-title">13. 从 asdf 与 direnv 迁移</span><span class="toc-page" data-section="14">27</span></div><div class="toc-item"><span class="toc-num">15</span><span class="toc-title">14. 排障顺序</span><span class="toc-page" data-section="15">28</span></div><div class="toc-item"><span class="toc-num">16</span><span class="toc-title">15. 常见误区</span><span class="toc-page" data-section="16">30</span></div><div class="toc-item"><span class="toc-num">17</span><span class="toc-title">16. 一份可以直接采用的项目模板</span><span class="toc-page" data-section="17">31</span></div><div class="toc-item"><span class="toc-num">18</span><span class="toc-title">17. Further Reading</span><span class="toc-page" data-section="18">33</span></div><div class="toc-item"><span class="toc-num">19</span><span class="toc-title">附录：mise Cheatsheet</span><span class="toc-page" data-section="19">34</span></div><div class="toc-item"><span class="toc-num">20</span><span class="toc-title">附录：资料来源与边界</span><span class="toc-page" data-section="20">44</span></div></section><section class="chapter" data-section="1"><div class="chapter-num">01 · CHAPTER</div><h1>执行摘要</h1><p>一个项目常常同时依赖 Node.js、Python、Go、Terraform、<code>ripgrep</code>、<code>shellcheck</code>、环境变量和若干脚本。每项依赖单独管理时，新成员需要先读一页安装说明，CI 还要再写一套初始化逻辑。过几个月后，本地、文档和 CI 往往已经不是同一套版本。</p>
 <p><code>mise</code> 把这些约定收回项目目录。官方 README 对它的定位很直接：<strong>dev tools、env vars、tasks in one CLI</strong>。你可以在一个 <code>mise.toml</code> 中声明工具、环境变量和任务，让新 Shell、新 checkout 和 CI job 从同一份配置开始工作。</p>
 <p>这份教程给出一条偏保守的落地路线：</p>
@@ -1102,7 +1102,7 @@ locked = true
   ./bin/mise exec -- npm test
 </code></pre>
 <h3>10.2 GitHub Actions</h3>
-<p>截至 2026-06-02，<code>jdx/mise-action</code> 最新 release 是 <code>v4.0.1</code>。action 仓库 README 使用 <code>@v4</code>：</p>
+<p>截至 2026-06-09，<code>jdx/mise-action</code> 最新 release 是 <code>v4.1.0</code>。action 仓库 README 使用 <code>@v4</code>：</p>
 <pre><code class="language-yaml">name: test
 on:
   pull_request:
@@ -1117,7 +1117,7 @@ jobs:
       - uses: jdx/mise-action@v4
       - run: mise run ci
 </code></pre>
-<p>当仓库中存在 <code>mise.lock</code> 时，action 会自动执行 <code>mise install --locked</code>。它也会默认启用缓存，并使用 <code>${{ github.token }}</code> 处理 GitHub API 认证。</p>
+<p><code>v4.1.0</code> 起，当当前目录或父目录存在仓库级 <code>mise.lock</code> 时，action 会自动执行 <code>mise install --locked</code>。通过 <code>mise_toml</code> 或 <code>tool_versions</code> 动态传入配置时，不适用这条自动锁定规则。action 默认启用缓存，并使用 <code>${{ github.token }}</code> 处理 GitHub API 认证。</p>
 <p>对供应链要求更严格的组织，第三方 action 版本应按组织策略 pin 到 commit SHA，并由依赖更新工具持续维护。</p>
 <h3>10.3 缓存边界</h3>
 <p>GitHub Actions 官方文档把缓存定位为重复使用不常变化的文件。mise-action 会基于平台、版本与配置文件 hash 生成缓存键。<code>mise.lock</code> 稳定之后，CI 不需要为每次安装重复解析远端版本，失败面也更小。</p>
@@ -1135,6 +1135,7 @@ mise untrust
 <pre><code class="language-bash">MISE_PARANOID=1 mise install
 </code></pre>
 <p>paranoid mode 会要求更严格的配置 trust，强制 HTTPS，并在安装时重新验证 lockfile 中已有的 provenance。它适合高要求环境，不必作为所有开发者的默认设置。</p>
+<p><code>v2026.6.1</code> 还修复了 HTTP backend 版本名可能越出安装目录的安全问题（GHSA-f94h-j2qg-fxw3）。使用 HTTP backend 的团队不应停留在更早版本。</p>
 <h3>11.3 Minimum release age</h3>
 <p>刚发布的软件版本留给供应链攻击和误发布的观察时间：</p>
 <pre><code class="language-toml">[settings]
@@ -1654,7 +1655,7 @@ lockfile = true
 忽略：mise.local.toml、mise.local.lock、mise.&lt;env&gt;.local.toml、mise.&lt;env&gt;.local.lock
 </code></pre>
 <h2>12. GitHub Actions</h2>
-<p>截至 2026-06-02，<code>jdx/mise-action</code> 最新 release 是 <code>v4.0.1</code>：</p>
+<p>截至 2026-06-09，<code>jdx/mise-action</code> 最新 release 是 <code>v4.1.0</code>：</p>
 <pre><code class="language-yaml">name: test
 on:
   pull_request:
@@ -1669,7 +1670,7 @@ jobs:
       - uses: jdx/mise-action@v4
       - run: mise run ci
 </code></pre>
-<p>仓库存在 <code>mise.lock</code> 时，mise-action 会自动执行 <code>mise install --locked</code>。</p>
+<p><code>v4.1.0</code> 起，当前目录或父目录存在仓库级 <code>mise.lock</code> 时，mise-action 会自动执行 <code>mise install --locked</code>；动态传入 <code>mise_toml</code> 或 <code>tool_versions</code> 时不适用。</p>
 <h2>13. CI 和脚本</h2>
 <p>推荐：</p>
 <pre><code class="language-bash">mise install
@@ -1781,11 +1782,13 @@ depends = [&quot;lint&quot;, &quot;test&quot;]
 <li><strong>工程建议</strong>：基于官方事实整理出的推荐顺序，例如交互 Shell 用 <code>mise activate</code>，脚本和 CI 优先用 <code>mise exec</code>、<code>mise run</code> 或 shims。</li>
 <li><strong>边界提醒</strong>：不能从工具文档推出的结论，例如组织内部 secret 管理、合规要求和发布权限。</li>
 </ul>
-<p>官网页面快照保存在 <code>sources/raw/</code>，从官方仓库复制的 Markdown 原稿保存在 <code>sources/official-docs/</code>。正文中的命令以官方仓库提交 <code>310e325909893b6af5fb1aa6a42653eaa7f35131</code> 和 GitHub API 在 2026-06-02 返回的信息为准。</p>
+<p>官网页面快照保存在 <code>sources/raw/</code>，从官方仓库复制的 Markdown 原稿保存在 <code>sources/official-docs/</code>。正文中的命令以官方仓库提交 <code>310e325909893b6af5fb1aa6a42653eaa7f35131</code> 为基础；稳定版本与安全状态已在 2026-06-09 通过 GitHub Releases 再次复核。</p>
 <h2>Current Versions</h2>
 <ul>
-<li>mise 最新稳定版：<code>v2026.5.18</code>，发布于 <code>2026-05-31T21:43:15Z</code></li>
-<li><code>jdx/mise-action</code> 最新 release：<code>v4.0.1</code>，发布于 <code>2026-03-22T16:06:57Z</code></li>
+<li>mise 最新稳定版：<code>v2026.6.1</code>，发布于 2026-06-07
+https://github.com/jdx/mise/releases/tag/v2026.6.1</li>
+<li><code>jdx/mise-action</code> 最新 release：<code>v4.1.0</code>，发布于 2026-06-04
+https://github.com/jdx/mise-action/releases/tag/v4.1.0</li>
 </ul>
 <h2>Documentation Drift</h2>
 <p>mise 官网 CI 页面仍展示 <code>jdx/mise-action@v3</code>，而 <code>jdx/mise-action</code> 仓库 README 已展示 <code>jdx/mise-action@v4</code>。本文以 action 仓库为准。</p>

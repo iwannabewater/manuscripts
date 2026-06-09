@@ -11,6 +11,6 @@
 
 ## 版本口径
 
-资料核对日期：2026-05-18。
+源码快照日期：2026-05-18。发布版复核日期：2026-06-09。
 
-主要技术事实来自 `verl-project/verl` 官方仓库、官方 ReadTheDocs 文档、当前 `main` 分支源码浅克隆，以及 HybridFlow / DAPO / DeepSeekMath 等论文页面。文档中凡涉及“当前主线”均按本次核对的 `main` commit `657cfa5` 表述；凡涉及发布标签，按远端标签列表中最新的 `v0.7.1` 表述。
+主要技术事实来自 `verl-project/verl` 官方仓库、官方 ReadTheDocs 文档、当日 `main` 分支源码浅克隆，以及 HybridFlow / DAPO / DeepSeekMath 等论文页面。文档中凡涉及“主线快照”均按 commit `657cfa5` 表述；抓取日最新标签为 `v0.7.1`，2026-06-09 复核的最新稳定版为 `v0.8.0`。

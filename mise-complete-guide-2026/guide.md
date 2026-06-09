@@ -1,7 +1,7 @@
 # mise 完整使用指南：开发环境、工具链与工程任务的统一管理
 
-资料口径：截至 2026-06-02
-对应 mise 最新稳定版：`v2026.5.18`
+文档快照：2026-06-02
+版本复核：截至 2026-06-09，mise 最新稳定版为 `v2026.6.1`
 作者：Winston
 
 ## 执行摘要
@@ -775,7 +775,7 @@ script: |
 
 ### 10.2 GitHub Actions
 
-截至 2026-06-02，`jdx/mise-action` 最新 release 是 `v4.0.1`。action 仓库 README 使用 `@v4`：
+截至 2026-06-09，`jdx/mise-action` 最新 release 是 `v4.1.0`。action 仓库 README 使用 `@v4`：
 
 ```yaml
 name: test
@@ -793,7 +793,7 @@ jobs:
       - run: mise run ci
 ```
 
-当仓库中存在 `mise.lock` 时，action 会自动执行 `mise install --locked`。它也会默认启用缓存，并使用 `${{ github.token }}` 处理 GitHub API 认证。
+`v4.1.0` 起，当当前目录或父目录存在仓库级 `mise.lock` 时，action 会自动执行 `mise install --locked`。通过 `mise_toml` 或 `tool_versions` 动态传入配置时，不适用这条自动锁定规则。action 默认启用缓存，并使用 `${{ github.token }}` 处理 GitHub API 认证。
 
 对供应链要求更严格的组织，第三方 action 版本应按组织策略 pin 到 commit SHA，并由依赖更新工具持续维护。
 
@@ -828,6 +828,8 @@ MISE_PARANOID=1 mise install
 ```
 
 paranoid mode 会要求更严格的配置 trust，强制 HTTPS，并在安装时重新验证 lockfile 中已有的 provenance。它适合高要求环境，不必作为所有开发者的默认设置。
+
+`v2026.6.1` 还修复了 HTTP backend 版本名可能越出安装目录的安全问题（GHSA-f94h-j2qg-fxw3）。使用 HTTP backend 的团队不应停留在更早版本。
 
 ### 11.3 Minimum release age
 

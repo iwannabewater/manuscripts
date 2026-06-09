@@ -1,6 +1,6 @@
 # macOS Developer Handbook 2026 Research Notes
 
-资料收集日期：`2026-06-02`。
+资料收集日期：`2026-06-02`。平台状态复核日期：`2026-06-09`。
 
 ## Research Question
 
@@ -68,3 +68,5 @@
 ## Current Version Context
 
 Apple 在 `2026-05-11` 更新的版本页中列出 `macOS Tahoe 26.5` 为 Tahoe 最新版本。本手册的系统截图路径和快捷键口径以 `2026-06-02` 可公开访问资料为准。旧系统上的菜单名称可能不同。
+
+WWDC26 后，Apple 发布 macOS 27 与 Xcode 27 beta。该变化不推翻稳定工作站章节，但需要增加 beta 隔离边界：新 SDK 验证使用独立可恢复环境，日常主力机维持稳定系统。Apple 的 Xcode 27 beta release notes 标明其最低要求为 macOS Tahoe 26.4。

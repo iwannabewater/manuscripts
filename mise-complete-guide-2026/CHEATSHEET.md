@@ -1,7 +1,7 @@
 # mise Cheatsheet
 
-资料口径：截至 2026-06-02
-对应 mise 最新稳定版：`v2026.5.18`
+文档快照：2026-06-02
+版本复核：截至 2026-06-09，mise `v2026.6.1`，mise-action `v4.1.0`
 
 ## 1. 安装
 
@@ -308,7 +308,7 @@ mise lock --platform linux-x64,macos-arm64
 
 ## 12. GitHub Actions
 
-截至 2026-06-02，`jdx/mise-action` 最新 release 是 `v4.0.1`：
+截至 2026-06-09，`jdx/mise-action` 最新 release 是 `v4.1.0`：
 
 ```yaml
 name: test
@@ -326,7 +326,7 @@ jobs:
       - run: mise run ci
 ```
 
-仓库存在 `mise.lock` 时，mise-action 会自动执行 `mise install --locked`。
+`v4.1.0` 起，当前目录或父目录存在仓库级 `mise.lock` 时，mise-action 会自动执行 `mise install --locked`；动态传入 `mise_toml` 或 `tool_versions` 时不适用。
 
 ## 13. CI 和脚本
 

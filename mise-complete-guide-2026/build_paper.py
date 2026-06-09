@@ -92,7 +92,7 @@ def main() -> None:
     <div class="cover-title">mise 完整使用指南<br>开发环境、工具链与工程任务的统一管理</div>
     <div class="cover-sub">从安装、工具版本、环境变量和任务，到锁文件、CI、安全边界与团队落地。</div>
   </div>
-  <div class="cover-meta"><strong>Winston</strong><br>版本 V1.0 · 2026-06-02<br>基于 mise v2026.5.18 官方资料</div>
+  <div class="cover-meta"><strong>Winston</strong><br>版本 V1.1 · 2026-06-09<br>2026-06-02 内容快照 · 版本复核至 mise v2026.6.1</div>
 </section>""",
         '<section class="toc"><h2>目录</h2>' + "".join(toc) + "</section>",
     ]
