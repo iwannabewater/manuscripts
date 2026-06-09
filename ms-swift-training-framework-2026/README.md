@@ -1,9 +1,8 @@
 # ms-swift Training Framework 2026
 
 署名：Winston
-版本：V1.1
-源码快照：2026-05-19，commit `7dd6b0e`
-发布版复核：截至 2026-06-09，最新稳定版 `v4.2.3`
+版本：V1.0
+资料口径：截至 2026-05-19
 
 本目录收录《ms-swift 大模型训练框架全景与源码级指南 2026》。报告聚焦 ModelScope 社区 ms-swift 的训练框架逻辑，覆盖定位、源码架构、CLI 与参数、数据与模板、CPT/SFT、LoRA/QLoRA、RL 后训练、Megatron-SWIFT、多模态与 Agent、评测部署、扩展与排障。
 

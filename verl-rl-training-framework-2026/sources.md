@@ -1,6 +1,6 @@
 # Sources
 
-源码与正文核对日期：2026-05-18；稳定发布版复核日期：2026-06-09。本文优先采用官方仓库、官方文档与论文原始页面。抓取时 GitHub API 触发 rate limit，因此发布标签通过 `git ls-remote --tags --refs https://github.com/verl-project/verl.git` 核对。
+资料核对日期：2026-05-18。本文优先采用官方仓库、官方文档与论文原始页面。GitHub API 在本环境中触发 rate limit，因此发布标签通过 `git ls-remote --tags --refs https://github.com/verl-project/verl.git` 核对。
 
 ## 主要来源
 
@@ -75,17 +75,16 @@
 
 ## 本地核对
 
-- 官方仓库浅克隆：<https://github.com/verl-project/verl.git>
+- 官方仓库浅克隆：`https://github.com/verl-project/verl.git`
 - 本次 clone 的 `main` HEAD：`657cfa5ee7884a30d2a2912cefa56956c081c33c`
 - HEAD 日期：2026-05-18
 - HEAD 标题：`[trainer] feat: async generation dump with exception propagation and streaming write (#6324)`
 - 版本文件：`verl/version/version` -> `0.8.0.dev`
-- 抓取日远端最新标签：`v0.7.1`
-- 2026-06-09 复核最新稳定版：`v0.8.0`，发布于 2026-06-01
-- Release: <https://github.com/verl-project/verl/releases/tag/v0.8.0>
+- 远端标签核对结果中最新标签：`v0.7.1`
 
 ## 边界
 
 - 本文不是性能 benchmark，不重新跑训练任务；所有性能数字只引用官方论文或官方文档口径。
 - 本文不把开发分支能力等同于稳定发布能力；凡涉及 `0.8.0.dev`、TransferQueue、fully async 等内容均按“主线/实验/路线”措辞处理。
 - 本文不替代官方安装文档；环境依赖、Docker tag、vLLM/SGLang 版本组合应以运行当天官方文档和项目 CI 为准。
+

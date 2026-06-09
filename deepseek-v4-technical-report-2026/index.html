@@ -451,14 +451,14 @@
   <h1>执行摘要：V4 到底解决了什么</h1>
 
   <p class="lead">
-    DeepSeek V4 把“长上下文效率”放在架构中心。官方报告的核心命题是：在开放权重模型里，把 <span class="hl">1M Token 上下文</span> 从演示能力推进到可常规支持的工程能力，同时保留强推理、强代码和强 Agent 表现。
+    DeepSeek V4 不是单纯把参数量继续做大，而是把“长上下文效率”重新放到架构中心。官方报告给出的核心命题是：在开放权重模型里，把 <span class="hl">1M Token 上下文</span> 从演示能力推进到可常规支持的工程能力，同时保留强推理、强代码和强 Agent 表现。
   </p>
 
   <div class="exec-summary">
     <h2>一句话结论</h2>
     <p>V3 证明了 MLA + DeepSeekMoE + FP8 训练可以把 671B MoE 做得高效；R1 证明了 GRPO 与可验证奖励可以释放推理；V3.2 用 DSA 把长上下文成本压低并强化 Agent；V4 则把这些线索合并为新的系统：<span class="hl">混合 CSA/HCA 注意力 + mHC 残差拓扑 + Muon 优化器 + OPD 后训练</span>。</p>
     <p>从指标看，V4-Pro 为 1.6T 总参数、每 token 激活 49B；V4-Flash 为约 284B 总参数、每 token 激活 13B。两者均支持 1M 上下文。官方报告称在 1M 上下文下，V4-Pro 单 token 推理 FLOPs 约为 V3.2 的 27%，KV Cache 约为 V3.2 的 10%；V4-Flash 则约为 10% FLOPs 与 7% KV Cache。</p>
-    <p>V4 采用端到端共同设计：注意力压缩改变 KV 形态，新的 KV 形态又要求配套的 cache 管理、上下文并行、确定性 kernel、on-disk KV 复用和后训练 rollout 服务。</p>
+    <p>从方法看，V4 的关键不是某一个技巧，而是“端到端共同设计”：注意力压缩改变了 KV 形态，KV 形态反过来要求新的 cache 管理、上下文并行、确定性 kernel、on-disk KV 复用和后训练 rollout 服务。</p>
   </div>
 
   <div class="takeaway">
@@ -498,11 +498,11 @@
       <text x="500" y="294" fill="#141413" font-size="22" font-weight="600" font-family="serif" text-anchor="middle">结果：1M 上下文从“昂贵功能”变成“模型设计默认前提”</text>
       <text x="500" y="322" fill="#504e49" font-size="15" font-family="monospace" text-anchor="middle">FLOPs / KV cache / rollout / agent memory / on-disk prefix reuse 同时被重构</text>
     </svg>
-    <figcaption>图 1：V4 以架构、优化器、系统和后训练的联合设计为主线。</figcaption>
+    <figcaption>图 1：V4 的主线不是单点算法，而是架构、优化器、系统和后训练的联合设计。</figcaption>
   </figure>
 
   <h2>如何把 V4 记成三句话</h2>
-  <p>第一句话：V4 的首要目标是让百万上下文进入常规工程可用区。第二句话：它先把历史 KV 变成多分辨率记忆，再围绕这种新形态重做 cache、并行、量化和 rollout。第三句话：pre-training、specialist training 与 OPD 共同把它塑造成面向长程任务的综合系统。</p>
+  <p>第一句话：V4 的首要目标是让百万上下文进入常规工程可用区，而不是只追求一次性长文本演示。第二句话：实现这个目标需要先把历史 KV 变成多分辨率记忆，再围绕这种新 KV 形态重做 cache、并行、量化和 rollout。第三句话：V4 的能力提升来自 pre-training、specialist training 与 OPD 的组合，因此它不是单一 reasoning 模型，也不是单一长上下文模型，而是面向长程任务的综合系统。</p>
 
   <div class="callout">
     <p>读 V4 时最容易误解的一点，是把 CSA/HCA 当成“注意力加速技巧”。更准确的表述是：CSA/HCA 改变了模型保存、检索和复用历史信息的基本单位；后面的系统工程几乎都围绕这个新单位展开。</p>
@@ -853,7 +853,7 @@
   <h1>后训练：专家、GRM、OPD、工具调用与沙箱</h1>
 
   <p class="lead">
-    V4 后训练先让多个领域专家充分分化，再通过 full-vocabulary On-Policy Distillation 把能力合并到统一模型，重点从单一 policy optimization 转向多教师能力整合。
+    V4 后训练的核心不是“再做一次 RL”，而是先让多个领域专家充分分化，再通过 full-vocabulary On-Policy Distillation 把能力合并到统一模型。这是从单一 policy optimization 转向多教师能力整合。
   </p>
 
   <h2>9.1 三种 reasoning modes</h2>
@@ -972,7 +972,7 @@
   <p>V3.2 的 mixed RL 把 reasoning、agent、alignment 混在一个 RL stage 中。V4 改为先训练多个专家，再用 OPD 合并。这个变化值得重视，因为大模型能力越来越像多个分布的集合：数学、代码、搜索、写作、Agent、工具使用、格式控制各自有不同 reward 与数据形态。OPD 给出一种工程上可扩展的能力合并路线。</p>
 
   <h2>11.5 局限：复杂、未完全解释、依赖系统</h2>
-  <p>官方结论也承认 V4 为追求极致长上下文效率，保留了许多初步验证有效的组件和 tricks，使架构较复杂。Anticipatory Routing 与 SwiGLU Clamping 有效，但底层原理仍未充分理解。V4 已是强大的工程系统，却还不是“优雅最小解”。未来方向包括把架构蒸馏到更本质的设计、研究训练稳定性原理、探索新的稀疏维度、降低长上下文延迟、增强长程多轮 Agent、加入多模态能力。</p>
+  <p>官方结论也承认 V4 为追求极致长上下文效率，保留了许多初步验证有效的组件和 tricks，使架构较复杂。Anticipatory Routing 与 SwiGLU Clamping 有效，但底层原理仍未充分理解。换句话说，V4 是非常强的工程系统，但还不是“优雅最小解”。未来方向包括把架构蒸馏到更本质的设计、研究训练稳定性原理、探索新的稀疏维度、降低长上下文延迟、增强长程多轮 Agent、加入多模态能力。</p>
 
   <h2>11.6 实践判断：什么时候 V4 路线最有价值</h2>
   <table class="striped compact">

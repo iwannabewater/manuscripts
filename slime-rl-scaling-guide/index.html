@@ -370,8 +370,8 @@
   </div>
   <div class="cover-meta">
     <strong>Winston</strong><br>
-    源码快照 2026-05-06 · 发布版复核 2026-06-09<br>
-    main@82007faf · 抓取日 v0.2.4 · 当前稳定版 v0.3.0<br>
+    资料口径截至 2026-05-06<br>
+    THUDM/slime main@82007faf · latest release v0.2.4<br>
     Official repository · documentation · source code · release notes
   </div>
 </section>
@@ -392,7 +392,7 @@
 <section class="chapter">
   <div class="chapter-num">01 · Position</div>
   <h1>阅读前的定位</h1>
-  <p class="lead">slime 是 THUDM 开源的 LLM post-training 框架，官方描述为面向 RL Scaling 的后训练系统。它把训练引擎、推理服务、样本生成、奖励计算、数据缓冲、权重同步、资源编排和扩展接口组织在同一个工程闭环中。</p>
+  <p class="lead">slime 是 THUDM 开源的 LLM post-training 框架，官方描述为面向 RL Scaling 的后训练系统。它的核心价值不在于把 PPO 或 GRPO 写成一个训练脚本，而在于把大规模强化学习后训练所需的训练引擎、推理服务、样本生成、奖励计算、数据缓冲、权重同步、资源编排和可扩展接口放到同一个工程闭环中。</p>
 
   <div class="summary-grid">
     <div class="summary-card">
@@ -403,7 +403,7 @@
     <div class="summary-card">
       <div class="label">Primary Objective</div>
       <div class="num">让 RL 扩展到真实大模型</div>
-      <p>slime 面向 GLM、Qwen、DeepSeek、Llama 等大模型后训练中的多 GPU、多节点、长响应、动态采样、低精度 rollout 和权重同步问题。</p>
+      <p>slime 针对的不是单卡算法 demo，而是 GLM、Qwen、DeepSeek、Llama 等大模型后训练中常见的多 GPU、多节点、长响应、动态采样、低精度 rollout 和权重同步问题。</p>
     </div>
     <div class="summary-card">
       <div class="label">Design Trait</div>
@@ -413,7 +413,7 @@
     <div class="summary-card">
       <div class="label">Snapshot</div>
       <div class="num">main@82007faf</div>
-      <p>本文基于 2026-05-06 抓取的上游快照撰写：当日 release 为 v0.2.4，仓库 HEAD 为 <code>82007faf4b398abd32bd8e07f9638f6cfeb70729</code>。2026-06-09 复核时，最新稳定版已为 v0.3.0；正文源码解读仍固定在抓取 commit。</p>
+      <p>本文基于 2026-05-06 抓取的上游快照撰写。对应最新 release 为 v0.2.4，发布于 2026-03-29；仓库当日 HEAD 为 <code>82007faf4b398abd32bd8e07f9638f6cfeb70729</code>。</p>
     </div>
   </div>
 
@@ -878,7 +878,7 @@ bash scripts/run-qwen3-4B.sh</code></pre>
 
   <div class="note">
     <div class="note-label">Closing Position</div>
-    <p>slime 把 RL 后训练视为系统问题：算法目标、生成服务、数据状态、分布式训练、权重版本和资源切换彼此耦合。真正掌握它，需要能判断每个参数在训练闭环中的位置，以及它改变的是样本语义、训练数学、推理吞吐、显存峰值还是通信成本。</p>
+    <p>slime 的工程价值，来自它承认 RL 后训练是一个系统问题。算法目标、生成服务、数据状态、分布式训练、权重版本和资源切换彼此耦合。掌握 slime 的关键，不是记住更多参数，而是能判断每个参数在训练闭环中的位置，以及它改变的是样本语义、训练数学、推理吞吐、显存峰值还是通信成本。</p>
   </div>
 </section>
 

@@ -16,6 +16,5 @@
 - Repository: `https://github.com/THUDM/slime`
 - Commit: `82007faf4b398abd32bd8e07f9638f6cfeb70729`
 - Latest release at capture time: `v0.2.4`
-- Release recheck on 2026-06-09: `v0.3.0`
 
 重点内容包括 quick start、脚本参数拆解、Ray 编排、SGLang rollout、Megatron 训练、Sample 数据结构、优势估计、loss、权重同步、低精度、容错、调试和扩展接口。

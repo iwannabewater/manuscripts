@@ -1,7 +1,5 @@
 category	key	url	role
 apple	macos-updates	https://support.apple.com/en-us/109033	current macOS release context
-apple	macos-27-beta	https://developer.apple.com/documentation/macos-release-notes/macos-27-release-notes	macOS 27 beta status and known issues
-apple	xcode-27-beta	https://developer.apple.com/documentation/Xcode-Release-Notes/xcode-27-release-notes	Xcode 27 beta SDK scope and minimum macOS requirement
 apple	keyboard-shortcuts	https://support.apple.com/en-us/102650	system keyboard shortcuts
 apple	spotlight-actions	https://support.apple.com/guide/mac-help/take-actions-and-shortcuts-in-spotlight-mchl4953dfeb/mac	Spotlight actions
 apple	spotlight-shortcuts	https://support.apple.com/guide/mac-help/spotlight-keyboard-shortcuts-mh26783/mac	Spotlight shortcuts
@@ -35,7 +33,7 @@ launcher	raycast-window-management	https://manual.raycast.com/window-management	
 launcher	raycast-clipboard-history	https://manual.raycast.com/clipboard-history	clipboard behavior
 launcher	raycast-quicklinks	https://manual.raycast.com/quicklinks	quicklinks
 launcher	raycast-snippets	https://manual.raycast.com/snippets	snippets
-launcher	raycast-clipboard-history	https://manual.raycast.com/clipboard-history	local storage and sensitive clipboard boundary
+launcher	raycast-security	https://manual.raycast.com/security-and-privacy	permission boundary
 runtimes	mise-getting-started	https://mise.jdx.dev/getting-started.html	runtime workflow
 runtimes	mise-installation	https://mise.jdx.dev/installing-mise.html	mise installation
 runtimes	mise-configuration	https://mise.jdx.dev/configuration.html	project and user config

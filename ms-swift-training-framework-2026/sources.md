@@ -4,13 +4,13 @@
 
 本文档面向希望从 0 到 1 系统掌握 ms-swift 的工程师和研究者，目标是解释框架的整体逻辑、训练链路、源码结构、参数体系、后训练与规模化路线。本文不是官方文档替代品，也不覆盖每一个模型专属参数。
 
-源码与正文核对日期：2026-05-19。稳定发布版于 2026-06-09 再次复核。
+资料核对日期：2026-05-19。
 
 ## Primary Sources
 
 1. ModelScope `modelscope/ms-swift` GitHub repository
    - URL: https://github.com/modelscope/ms-swift
-   - Snapshot method: shallow clone of the official repository at the commit below
+   - Local snapshot: `/tmp/ms-swift`
    - Main commit checked: `7dd6b0e7be14796a600e7099e6b2f0c23ce91298`
    - Commit date: 2026-05-19 19:30:34 +0800
    - Usage: README 当前能力、源码目录、CLI 路由、pipeline、trainer、RL trainer、Megatron-SWIFT 目录。
@@ -19,18 +19,12 @@
    - URL: https://pypi.org/project/ms-swift/
    - Version checked: `4.2.1`
    - Release date on PyPI: 2026-05-17
-   - Usage: 抓取日稳定包版本、安装命令、Python requirement、extras。
+   - Usage: 最新稳定包版本、安装命令、Python requirement、extras。
 
 3. GitHub Releases
-   - Release page at capture time: https://github.com/modelscope/ms-swift/releases/tag/v4.2.1
+   - Latest release page: https://github.com/modelscope/ms-swift/releases/tag/v4.2.1
    - Major release page checked: https://github.com/modelscope/ms-swift/releases/tag/v4.2.0
-   - Usage: 抓取日稳定发布、v4.2.0 新特性与变更口径。
-
-## Release Recheck
-
-- 2026-06-09 复核：最新稳定版为 `v4.2.3`，发布于 2026-05-31。
-- Release: https://github.com/modelscope/ms-swift/releases/tag/v4.2.3
-- 正文源码路径与参数说明仍对应 commit `7dd6b0e`；新版本能力应以 `v4.2.3` 文档和迁移说明为准。
+   - Usage: 最新稳定发布、v4.2.0 新特性与变更口径。
 
 4. Swift ReadTheDocs Chinese latest
    - URL: https://swift.readthedocs.io/zh-cn/latest/
@@ -48,27 +42,25 @@
    - DOI: https://doi.org/10.1609/aaai.v39i28.35383
    - Usage: AAAI 2025 发表信息和正式引用。
 
-## Upstream Files Inspected
+## Local Files Inspected
 
-The following paths are relative to `modelscope/ms-swift` at commit `7dd6b0e7be14796a600e7099e6b2f0c23ce91298`:
-
-- `README_CN.md`
-- `setup.py`
-- `swift/cli/main.py`
-- `swift/cli/sft.py`
-- `swift/pipelines/train/sft.py`
-- `swift/trainers/trainer.py`
-- `swift/trainers/arguments.py`
-- `swift/rlhf_trainers/*.py`
-- `docs/source/GetStarted/SWIFT-installation.md`
-- `docs/source/Instruction/Command-line-parameters.md`
-- `docs/source/Instruction/Pre-training-and-Fine-tuning.md`
-- `docs/source/Instruction/GRPO/GetStarted/GRPO.md`
-- `docs/source/Megatron-SWIFT/Quick-start.md`
-- `docs/source/Megatron-SWIFT/Mcore-Bridge.md`
-- `docs/source/Customization/Architecture.md`
-- `docs/source/Customization/Custom-dataset.md`
-- `docs/source/Customization/Custom-model.md`
+- `/tmp/ms-swift/README_CN.md`
+- `/tmp/ms-swift/setup.py`
+- `/tmp/ms-swift/swift/cli/main.py`
+- `/tmp/ms-swift/swift/cli/sft.py`
+- `/tmp/ms-swift/swift/pipelines/train/sft.py`
+- `/tmp/ms-swift/swift/trainers/trainer.py`
+- `/tmp/ms-swift/swift/trainers/arguments.py`
+- `/tmp/ms-swift/swift/rlhf_trainers/*.py`
+- `/tmp/ms-swift/docs/source/GetStarted/SWIFT-installation.md`
+- `/tmp/ms-swift/docs/source/Instruction/Command-line-parameters.md`
+- `/tmp/ms-swift/docs/source/Instruction/Pre-training-and-Fine-tuning.md`
+- `/tmp/ms-swift/docs/source/Instruction/GRPO/GetStarted/GRPO.md`
+- `/tmp/ms-swift/docs/source/Megatron-SWIFT/Quick-start.md`
+- `/tmp/ms-swift/docs/source/Megatron-SWIFT/Mcore-Bridge.md`
+- `/tmp/ms-swift/docs/source/Customization/Architecture.md`
+- `/tmp/ms-swift/docs/source/Customization/Custom-dataset.md`
+- `/tmp/ms-swift/docs/source/Customization/Custom-model.md`
 
 ## Boundaries
 

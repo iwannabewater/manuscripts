@@ -26,7 +26,6 @@
 | E-commerce Generative Algorithms 2026 | 七类电商平台在多模态大模型、后训练、生成式推荐、智能搜索与图像检索方向的公开技术路线研究 | `ecommerce-generative-algorithms-2026/index.html` / `ecommerce-generative-algorithms-2026/ecommerce-generative-algorithms-2026.pdf` |
 | Multi-stage Ranking Algorithms 2026 | 国内外头部平台在召回、粗排、精排、混排与重排阶段的公开算法路线及工程经验 | `multi-stage-ranking-algorithms-2026/index.html` / `multi-stage-ranking-algorithms-2026/multi-stage-ranking-algorithms-2026.pdf` |
 | World Models 2026 | 世界模型的发展史、主流算法、产业落地与趋势判断 | `world-models-2026/index.html` / `world-models-2026/world-models-2026.pdf` |
-| Embodied Intelligence 2026 | 具身智能的发展脉络、模型栈、数据、硬件、评测与产业实践 | `embodied-intelligence-2026/index.html` / `embodied-intelligence-2026/embodied-intelligence-2026.pdf` |
 | slime RL Scaling Guide | THUDM/slime 上手实操与源码级技术详解 | `slime-rl-scaling-guide/index.html` / `slime-rl-scaling-guide/slime-rl-scaling-guide.pdf` |
 | Claude Code Project Workflow | 面向工程团队的 Claude Code 项目工作流手册 | `claude-code-project-workflow/index.html` / `claude-code-project-workflow/claude-code-project-workflow.pdf` |
 | Git & GitHub Collaboration Handbook | 面向算法 / 开发工程师的 Git 与 GitHub 协作编码标准流程手册，覆盖分支、Issue、PR、review、发布、回滚与 contributor 管理 | `git-github-collaboration-handbook/index.html` / `git-github-collaboration-handbook/git-github-collaboration-handbook.pdf` |
@@ -35,12 +34,8 @@
 | macOS Developer Handbook 2026 | 面向开发者的新机上手与长期维护手册，覆盖原生快捷操作、软件分层、Homebrew、Brewfile、运行时、容器、权限、备份、维护 SOP 与独立 Cheatsheet | `macos-developer-handbook-2026/index.html` / `macos-developer-handbook-2026/macos-developer-handbook-2026.pdf` |
 | 小红书 FY2025 Equity Report | 小红书 2025 年业绩披露、历史估值与员工期权回购价格的证据分层研究 | `xiaohongshu-2025-equity-report/index.html` / `xiaohongshu-2025-equity-report/xiaohongshu-2025-equity-report.pdf` |
 | 字节跳动 FY2025 Equity Report | 字节跳动 2025 年业绩口径、员工权益回购价格与二级交易估值的证据分层研究 | `bytedance-2025-equity-report/index.html` / `bytedance-2025-equity-report/bytedance-2025-equity-report.pdf` |
-| PDD Holdings 2025 Equity Report | PDD Holdings 2025 年报、现金流、估值、竞争位置与风险研究 | `pdd-2025-equity-report/index.html` / `pdd-2025-equity-report/pdd-2025-equity-report.pdf` |
-| PDD Holdings 2026 Q1 Earnings Analysis | PDD Holdings 2026 年一季度业绩、市场反应、战略投入与盈利可见度分析 | `pdd-2026-q1-earnings-analysis/index.html` / `pdd-2026-q1-earnings-analysis/pdd-2026-q1-earnings-analysis.pdf` |
-| 美团 2026 Q1 财报深度分析 | 美团 2026 年一季度业绩、核心本地商业、新业务、竞争与投入周期分析 | `meituan-2026-q1-earnings-analysis/index.html` / `meituan-2026-q1-earnings-analysis/meituan-2026-q1-earnings-analysis.pdf` |
 | 蔚小理 2026 | 蔚来、小鹏、理想汽车的发展现状、困境、优势和长期战略前景分析 | `neo-ev-forces-2026/index.html` / `neo-ev-forces-2026/neo-ev-forces-2026.pdf` |
 | 场外定投美国宽基 2026 | 中国内地投资者配置纳斯达克 100 与标普 500 的 QDII 场外份额筛选、期限策略和执行清单 | `otc-us-index-dca-2026/index.html` / `otc-us-index-dca-2026/otc-us-index-dca-2026.pdf` |
-| 大陆居民合规配置港股、美股与境外基金 | 中国内地居民使用境内认可通道配置境外资产的路径、红线与执行速查 | `mainland-china-legal-global-investing-2026/index.html` / `mainland-china-legal-global-investing-2026/mainland-china-legal-global-investing-2026.pdf` |
 
 ## Directory Contract
 
@@ -50,26 +45,10 @@
   index.html
   <work-slug>.pdf
   sources.md
-  data/                 # 涉及结构化数据时提供
+  data/
 ```
 
 HTML 源文件与 PDF 成品保存在同级目录，便于逐项审阅、复现与迁移。作品目录应保持自足，不依赖根目录下的临时状态或未纳入版本控制的生成文件。
-
-## Verification
-
-提交前运行：
-
-```bash
-make verify
-```
-
-发布前或批量调整来源后，再运行外部链接巡检：
-
-```bash
-make verify-network
-```
-
-仓库验证会检查作品目录契约、根目录索引、HTML 本地资源、引用编号、CSV/TSV 列数、PDF 页数与文本可提取性。外部链接巡检会把 `404` 与 `410` 视为失败，并把反爬、限流和临时服务错误保留为人工复核项。
 
 ## License
 

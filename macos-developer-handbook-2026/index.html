@@ -440,7 +440,7 @@
     <div class="cover-title">macOS 开发者工作站手册<br>从新机上手到可复现工程环境</div>
     <div class="cover-sub">系统快捷操作、软件分层、Homebrew 与 Brewfile、终端、运行时、容器、权限、备份、维护 SOP 和独立 Cheatsheet。</div>
   </div>
-  <div class="cover-meta">Winston 版本 V1.1 · 2026-06-09<br>稳定基线：macOS Tahoe 26.5 · 已复核 macOS 27 / Xcode 27 beta 边界</div>
+  <div class="cover-meta">Winston 版本 V1.0 · 2026-06-02<br>资料口径：macOS Tahoe 26.5 与公开资料，截至 2026-06-02</div>
 </section><section class="toc"><h2>目录</h2><div class="toc-item"><span class="toc-num">01</span><span class="toc-title">执行摘要</span><span class="toc-page" data-section="1">03</span></div><div class="toc-item"><span class="toc-num">02</span><span class="toc-title">1. 先建立工作站心智模型</span><span class="toc-page" data-section="2">04</span></div><div class="toc-item"><span class="toc-num">03</span><span class="toc-title">2. 新机开箱前 15 分钟</span><span class="toc-page" data-section="3">06</span></div><div class="toc-item"><span class="toc-num">04</span><span class="toc-title">3. 60 分钟落地路径</span><span class="toc-page" data-section="4">08</span></div><div class="toc-item"><span class="toc-num">05</span><span class="toc-title">4. macOS 快捷操作：先掌握高频路径</span><span class="toc-page" data-section="5">12</span></div><div class="toc-item"><span class="toc-num">06</span><span class="toc-title">5. 触控板、窗口与桌面</span><span class="toc-page" data-section="6">15</span></div><div class="toc-item"><span class="toc-num">07</span><span class="toc-title">6. 软件推荐矩阵：默认、按需、谨慎</span><span class="toc-page" data-section="7">17</span></div><div class="toc-item"><span class="toc-num">08</span><span class="toc-title">7. Homebrew 与 Brewfile：把新机安装变成契约</span><span class="toc-page" data-section="8">19</span></div><div class="toc-item"><span class="toc-num">09</span><span class="toc-title">8. Ghostty 与 shell：少配一点</span><span class="toc-page" data-section="9">21</span></div><div class="toc-item"><span class="toc-num">10</span><span class="toc-title">9. mise 与 uv：让项目环境回到项目</span><span class="toc-page" data-section="10">22</span></div><div class="toc-item"><span class="toc-num">11</span><span class="toc-title">10. OrbStack：容器、Linux 与本地 Kubernetes</span><span class="toc-page" data-section="11">25</span></div><div class="toc-item"><span class="toc-num">12</span><span class="toc-title">11. Mole：维护先观察，删除要预演</span><span class="toc-page" data-section="12">27</span></div><div class="toc-item"><span class="toc-num">13</span><span class="toc-title">12. 日常 SOP：每天、每周、每月</span><span class="toc-page" data-section="13">28</span></div><div class="toc-item"><span class="toc-num">14</span><span class="toc-title">13. 权限、安全与隐私</span><span class="toc-page" data-section="14">30</span></div><div class="toc-item"><span class="toc-num">15</span><span class="toc-title">14. 社区推荐如何转化为可靠方案</span><span class="toc-page" data-section="15">32</span></div><div class="toc-item"><span class="toc-num">16</span><span class="toc-title">15. 三种工作站配置</span><span class="toc-page" data-section="16">34</span></div><div class="toc-item"><span class="toc-num">17</span><span class="toc-title">16. 排障手册</span><span class="toc-page" data-section="17">36</span></div><div class="toc-item"><span class="toc-num">18</span><span class="toc-title">17. 最佳食用方式</span><span class="toc-page" data-section="18">38</span></div><div class="toc-item"><span class="toc-num">19</span><span class="toc-title">18. 发布前自检</span><span class="toc-page" data-section="19">39</span></div><div class="toc-item"><span class="toc-num">20</span><span class="toc-title">附录：macOS Developer Workstation Cheatsheet</span><span class="toc-page" data-section="20">40</span></div><div class="toc-item"><span class="toc-num">21</span><span class="toc-title">附录：资料来源与边界</span><span class="toc-page" data-section="21">49</span></div></section><section class="chapter" data-section="1"><div class="chapter-num">01 · CHAPTER</div><h1>执行摘要</h1><p>一台真正好用的 Mac，不是安装了最多软件的 Mac，而是摩擦足够少、行为足够稳定、出了问题能够恢复的 Mac。</p>
 <p>这份手册给出一套保守但高效的开发者工作站方案。核心思路只有五条：</p>
 <ol>
@@ -589,7 +589,6 @@
 <h3>2.1 确认系统版本</h3>
 <p>打开 <code>Apple 菜单 &gt; 关于本机</code>，确认 macOS 名称、版本和硬件信息。Apple 在 <code>2026-05-11</code> 更新的版本页中列出 <code>macOS Tahoe 26.5</code> 为 Tahoe 最新版本；在 <code>2026-06-02</code> 新建工作站时，应先通过 <code>系统设置 &gt; 通用 &gt; 软件更新</code> 检查实际可用更新。</p>
 <p>Homebrew 官方安装文档当前将 <code>macOS Sonoma 14</code> 或更高版本列为受支持基线。旧系统可能仍能运行部分软件，但不要把“可能工作”当成团队标准。</p>
-<p>WWDC26 后，Apple 已提供 macOS 27 与 Xcode 27 beta。需要验证新 SDK 的开发者应使用独立 APFS volume、备用设备或可恢复的测试环境，不应直接把唯一主力工作站升级为 beta。Xcode 27 beta 要求 macOS Tahoe 26.4 或更高版本；不需要新 SDK 的团队继续使用稳定系统和稳定 Xcode。</p>
 <h3>2.2 开启 FileVault</h3>
 <p>路径：<code>系统设置 &gt; 隐私与安全性 &gt; FileVault</code>。</p>
 <p>FileVault 用于加密启动磁盘。开启前先确定恢复密钥的保存方式：个人设备可保存在可靠的密码管理器中；公司设备遵循组织 MDM 和密钥托管规则。不要把恢复密钥只放在这台 Mac 上。</p>
@@ -2432,13 +2431,11 @@ mo analyze
 </tbody>
 </table>
 </section><section class="chapter" data-section="21"><div class="chapter-num">21 · APPENDIX</div><h1>附录：资料来源与边界</h1><p class="lead">事实优先来自 Apple 支持文档和各项目官方文档；社区讨论用于发现真实痛点、候选工具和反例。</p><div class="source-list"><h2>Method</h2>
-<p>本手册在 <code>2026-06-02</code> 完成正文资料收集，并于 <code>2026-06-09</code> 复核 Apple 平台状态。事实优先来自 Apple 支持文档和各项目官方文档；Homebrew API 用于确认 Brewfile 标识；Linux.do 公开讨论用于发现候选工具、使用场景和反例。社区内容不作为安全边界或高风险命令的唯一依据。</p>
+<p>本手册在 <code>2026-06-02</code> 完成资料收集与核验。事实优先来自 Apple 支持文档和各项目官方文档；Homebrew API 用于确认 Brewfile 标识；Linux.do 公开讨论用于发现候选工具、使用场景和反例。社区内容不作为安全边界或高风险命令的唯一依据。</p>
 <p>逐条链接保存在 <code>data/source-map.tsv</code>。以下为正文使用频率最高的来源。</p>
 <h2>Apple</h2>
 <ul>
 <li><a href="https://support.apple.com/en-us/109033">Find out which macOS your Mac is using</a>：系统版本口径。Apple 在 <code>2026-05-11</code> 发布的页面中列出 <code>macOS Tahoe 26.5</code>。</li>
-<li><a href="https://developer.apple.com/documentation/macos-release-notes/macos-27-release-notes">macOS 27 beta release notes</a>：WWDC26 后的开发者 beta 状态与已知问题。</li>
-<li><a href="https://developer.apple.com/documentation/Xcode-Release-Notes/xcode-27-release-notes">Xcode 27 beta release notes</a>：Xcode 27 beta SDK 范围及 macOS Tahoe 26.4 最低要求。</li>
 <li><a href="https://support.apple.com/en-us/102650">Mac keyboard shortcuts</a>：修饰键、应用切换、Finder、截图、锁屏和文本编辑快捷键。</li>
 <li><a href="https://support.apple.com/guide/mac-help/take-actions-and-shortcuts-in-spotlight-mchl4953dfeb/mac">Take actions and shortcuts in Spotlight</a>：Spotlight 能力。</li>
 <li><a href="https://support.apple.com/guide/mac-help/mh35869/mac">Trackpad gestures</a>、<a href="https://support.apple.com/en-us/102482">three finger drag</a> 与 <a href="https://support.apple.com/guide/mac-help/use-hot-corners-mchlp3000/mac">Hot Corners</a>：触控板和桌面动作。</li>
@@ -2464,7 +2461,7 @@ mo analyze
 </ul>
 <h2>Optional Tools</h2>
 <ul>
-<li><a href="https://manual.raycast.com/window-management">Raycast window management</a>、<a href="https://manual.raycast.com/clipboard-history">clipboard history</a>、<a href="https://manual.raycast.com/quicklinks">Quicklinks</a> 与 <a href="https://manual.raycast.com/snippets">Snippets</a>。</li>
+<li><a href="https://manual.raycast.com/window-management">Raycast window management</a>、<a href="https://manual.raycast.com/clipboard-history">clipboard history</a>、<a href="https://manual.raycast.com/quicklinks">Quicklinks</a>、<a href="https://manual.raycast.com/snippets">Snippets</a> 与 <a href="https://manual.raycast.com/security-and-privacy">security and privacy</a>。</li>
 <li><a href="https://github.com/jordanbaird/Ice">Ice</a>、<a href="https://github.com/exelban/stats">Stats</a>、<a href="https://github.com/iina/iina">IINA</a>、<a href="https://www.keka.io/en/">Keka</a>、<a href="https://github.com/localsend/localsend">LocalSend</a>、<a href="https://github.com/p0deje/Maccy">Maccy</a>。</li>
 <li><a href="https://github.com/waydabber/BetterDisplay">BetterDisplay</a>、<a href="https://github.com/rxhanson/Rectangle">Rectangle</a>、<a href="https://github.com/MrKai77/Loop">Loop</a>、<a href="https://github.com/nikitabobko/AeroSpace">AeroSpace</a>。</li>
 <li><a href="https://github.com/alienator88/Pearcleaner">Pearcleaner</a>、<a href="https://github.com/milanvarady/Applite">Applite</a>、<a href="https://github.com/mas-cli/mas">mas</a>。</li>

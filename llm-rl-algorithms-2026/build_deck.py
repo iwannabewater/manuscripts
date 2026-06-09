@@ -329,7 +329,7 @@ SLIDES: list[dict[str, Any]] = [
     slide(
         "LLM-PPO 的真实目标通常是四项损失的折中",
         "PPO-RLHF Loss",
-        "工业实现同时管理 clipped surrogate、奖励、价值、熵、KL、长度和预训练能力。",
+        "工业实现不是只优化 clipped surrogate，而是同时管理奖励、价值、熵、KL、长度和预训练能力。",
         points=[
             "value loss 学习 response 或 token 级回报，决定 advantage 是否可信。",
             "entropy bonus 防止早期塌缩，但过强会牺牲遵循性。",
@@ -458,7 +458,7 @@ SLIDES: list[dict[str, Any]] = [
     slide(
         "RRHF 把多个候选的奖励排序蒸馏成 log-prob 排序",
         "RRHF",
-        "RRHF 让模型对高奖励回答赋予更高的平均 token log probability，无需估计绝对奖励。",
+        "RRHF 的目标不是估计绝对奖励，而是让模型对高奖励回答赋予更高平均 token log probability。",
         points=[
             "数据结构通常是一题多答，每个回答有 reward 或排序。",
             "训练信号是 pairwise/listwise ranking violation，辅以 SFT 保持流畅性。",
@@ -541,7 +541,7 @@ SLIDES: list[dict[str, Any]] = [
             ["NCA/BCO", "把 winner-loser 区分改写为 contrastive 或 classifier objective", "偏好数据噪声大、需要分类校准"],
             ["SPPO/Nash", "用自博弈、Nash 或 mirror descent 解释 policy improvement", "多模型互评、AI feedback 可持续生成"],
         ],
-        callout="这些方法共同改变 log-ratio margin 的几何、参考点或采样过程，并不要求全面替代 DPO。",
+        callout="这些方法的共同主题不是替代所有 DPO，而是改变 log-ratio margin 的几何、参考点或采样过程。",
         source="NASH, APO, AOT, NCA, BCO, SPPO",
     ),
     slide(
@@ -662,9 +662,9 @@ SLIDES: list[dict[str, Any]] = [
         source="DAPO",
     ),
     slide(
-        "DAPO 通过提高有效梯度密度改进 GRPO",
+        "DAPO 的核心不是新 baseline，而是让 GRPO 的有效梯度密度上升",
         "DAPO Mechanics",
-        "在大规模 RLVR 中，常见失败来自有效 batch 太少、熵过早塌缩和长样本吞噬 token budget。",
+        "在大规模 RLVR 中，训练失败往往不是公式错误，而是有效 batch 太少、熵过早塌缩、长样本吞噬 token budget。",
         points=[
             "Dynamic Sampling 提高每个 optimizer step 的非零 advantage 比例。",
             "Clip-Higher 让低概率但正确的 token 有机会被充分强化。",

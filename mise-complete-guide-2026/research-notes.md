@@ -1,8 +1,7 @@
 # Research Notes
 
 作者：Winston
-文档快照：2026-06-02
-版本复核：截至 2026-06-09
+资料口径：截至 2026-06-02
 
 ## 1. 研究目标
 
@@ -26,31 +25,19 @@ mise 官方仓库浅克隆提交：
 fix(spm): track artifact bundle options in lock identity (#10160)
 ```
 
-文档快照时，GitHub Releases API 返回的最新稳定版：
+截至 2026-06-02，GitHub Releases API 返回的最新稳定版：
 
 ```text
 v2026.5.18
 published_at: 2026-05-31T21:43:15Z
 ```
 
-文档快照时，`jdx/mise-action` 最新 release：
+截至 2026-06-02，`jdx/mise-action` 最新 release：
 
 ```text
 v4.0.1
 published_at: 2026-03-22T16:06:57Z
 ```
-
-2026-06-09 复核结果：
-
-```text
-mise v2026.6.1
-published_at: 2026-06-07
-
-mise-action v4.1.0
-published_at: 2026-06-04
-```
-
-`v2026.6.1` 修复 HTTP backend 版本名可能越出安装目录的问题（GHSA-f94h-j2qg-fxw3）。`mise-action@v4.1.0` 新增仓库 lockfile 自动使用 `mise install --locked`；这一行为不能回溯归因于 `v4.0.1`。
 
 ## 3. 核心判断
 
@@ -104,7 +91,7 @@ mise 官网 `continuous-integration.md` 仍展示：
 - uses: jdx/mise-action@v4
 ```
 
-2026-06-09 复核时，GitHub release API 返回 `v4.1.0`。本文以 action 仓库为准，示例使用 `jdx/mise-action@v4`，并在 `sources.md` 记录漂移。
+GitHub release API 返回 `v4.0.1`。本文以 action 仓库为准，示例使用 `jdx/mise-action@v4`，并在 `sources.md` 记录漂移。
 
 ### 旧 Tips 页面中的锁文件说明
 

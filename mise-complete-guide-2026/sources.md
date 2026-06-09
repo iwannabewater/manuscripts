@@ -1,8 +1,7 @@
 # Sources
 
 作者：Winston
-文档快照：2026-06-02
-版本复核：截至 2026-06-09
+资料口径：截至 2026-06-02
 
 ## Method
 
@@ -12,14 +11,12 @@
 - **工程建议**：基于官方事实整理出的推荐顺序，例如交互 Shell 用 `mise activate`，脚本和 CI 优先用 `mise exec`、`mise run` 或 shims。
 - **边界提醒**：不能从工具文档推出的结论，例如组织内部 secret 管理、合规要求和发布权限。
 
-官网页面快照保存在 `sources/raw/`，从官方仓库复制的 Markdown 原稿保存在 `sources/official-docs/`。正文中的命令以官方仓库提交 `310e325909893b6af5fb1aa6a42653eaa7f35131` 为基础；稳定版本与安全状态已在 2026-06-09 通过 GitHub Releases 再次复核。
+官网页面快照保存在 `sources/raw/`，从官方仓库复制的 Markdown 原稿保存在 `sources/official-docs/`。正文中的命令以官方仓库提交 `310e325909893b6af5fb1aa6a42653eaa7f35131` 和 GitHub API 在 2026-06-02 返回的信息为准。
 
 ## Current Versions
 
-- mise 最新稳定版：`v2026.6.1`，发布于 2026-06-07
-  https://github.com/jdx/mise/releases/tag/v2026.6.1
-- `jdx/mise-action` 最新 release：`v4.1.0`，发布于 2026-06-04
-  https://github.com/jdx/mise-action/releases/tag/v4.1.0
+- mise 最新稳定版：`v2026.5.18`，发布于 `2026-05-31T21:43:15Z`
+- `jdx/mise-action` 最新 release：`v4.0.1`，发布于 `2026-03-22T16:06:57Z`
 
 ## Documentation Drift
 

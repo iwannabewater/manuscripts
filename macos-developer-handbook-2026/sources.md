@@ -2,15 +2,13 @@
 
 ## Method
 
-本手册在 `2026-06-02` 完成正文资料收集，并于 `2026-06-09` 复核 Apple 平台状态。事实优先来自 Apple 支持文档和各项目官方文档；Homebrew API 用于确认 Brewfile 标识；Linux.do 公开讨论用于发现候选工具、使用场景和反例。社区内容不作为安全边界或高风险命令的唯一依据。
+本手册在 `2026-06-02` 完成资料收集与核验。事实优先来自 Apple 支持文档和各项目官方文档；Homebrew API 用于确认 Brewfile 标识；Linux.do 公开讨论用于发现候选工具、使用场景和反例。社区内容不作为安全边界或高风险命令的唯一依据。
 
 逐条链接保存在 `data/source-map.tsv`。以下为正文使用频率最高的来源。
 
 ## Apple
 
 - [Find out which macOS your Mac is using](https://support.apple.com/en-us/109033)：系统版本口径。Apple 在 `2026-05-11` 发布的页面中列出 `macOS Tahoe 26.5`。
-- [macOS 27 beta release notes](https://developer.apple.com/documentation/macos-release-notes/macos-27-release-notes)：WWDC26 后的开发者 beta 状态与已知问题。
-- [Xcode 27 beta release notes](https://developer.apple.com/documentation/Xcode-Release-Notes/xcode-27-release-notes)：Xcode 27 beta SDK 范围及 macOS Tahoe 26.4 最低要求。
 - [Mac keyboard shortcuts](https://support.apple.com/en-us/102650)：修饰键、应用切换、Finder、截图、锁屏和文本编辑快捷键。
 - [Take actions and shortcuts in Spotlight](https://support.apple.com/guide/mac-help/take-actions-and-shortcuts-in-spotlight-mchl4953dfeb/mac)：Spotlight 能力。
 - [Trackpad gestures](https://support.apple.com/guide/mac-help/mh35869/mac)、[three finger drag](https://support.apple.com/en-us/102482) 与 [Hot Corners](https://support.apple.com/guide/mac-help/use-hot-corners-mchlp3000/mac)：触控板和桌面动作。
@@ -36,7 +34,7 @@
 
 ## Optional Tools
 
-- [Raycast window management](https://manual.raycast.com/window-management)、[clipboard history](https://manual.raycast.com/clipboard-history)、[Quicklinks](https://manual.raycast.com/quicklinks) 与 [Snippets](https://manual.raycast.com/snippets)。
+- [Raycast window management](https://manual.raycast.com/window-management)、[clipboard history](https://manual.raycast.com/clipboard-history)、[Quicklinks](https://manual.raycast.com/quicklinks)、[Snippets](https://manual.raycast.com/snippets) 与 [security and privacy](https://manual.raycast.com/security-and-privacy)。
 - [Ice](https://github.com/jordanbaird/Ice)、[Stats](https://github.com/exelban/stats)、[IINA](https://github.com/iina/iina)、[Keka](https://www.keka.io/en/)、[LocalSend](https://github.com/localsend/localsend)、[Maccy](https://github.com/p0deje/Maccy)。
 - [BetterDisplay](https://github.com/waydabber/BetterDisplay)、[Rectangle](https://github.com/rxhanson/Rectangle)、[Loop](https://github.com/MrKai77/Loop)、[AeroSpace](https://github.com/nikitabobko/AeroSpace)。
 - [Pearcleaner](https://github.com/alienator88/Pearcleaner)、[Applite](https://github.com/milanvarady/Applite)、[mas](https://github.com/mas-cli/mas)。

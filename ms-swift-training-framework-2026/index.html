@@ -423,8 +423,8 @@
   </div>
   <div class="cover-meta">
     <strong>Winston</strong><br>
-    V1.1  ·  2026-06-09 复核<br>
-    源码快照 main@7dd6b0e · 抓取日稳定版 v4.2.1 · 当前稳定版 v4.2.3
+    V1.0  ·  2026-05-19<br>
+    资料口径：ms-swift main commit 7dd6b0e；PyPI / GitHub 最新稳定版 v4.2.1
   </div>
 </section>
 
@@ -450,8 +450,8 @@
   <h1>执行摘要：先建立正确的框架观</h1>
 
   <p class="lead">
-    ms-swift 是 ModelScope 社区维护的
-    <span class="hl">大模型与多模态大模型训练到部署全链路框架</span>。截至源码快照日，官方 README 与 PyPI 页面宣称其支持
+    ms-swift 不是一个只包了一层训练命令的 LoRA 脚手架，而是 ModelScope 社区维护的
+    <span class="hl">大模型与多模态大模型训练到部署全链路框架</span>。截至本稿核对时，官方 README 与 PyPI 页面宣称其支持
     600+ 纯文本大模型、400+ 多模态大模型、150+ 数据集，并覆盖预训练、监督微调、人类对齐、推理、评测、量化和部署。
   </p>
 
@@ -479,9 +479,9 @@
       <tr><th>项目</th><th>本稿采用口径</th><th>说明</th></tr>
     </thead>
     <tbody>
-      <tr><td>稳定版本</td><td>抓取日为 `v4.2.1`；2026-06-09 复核为 `v4.2.3`</td><td>正文能力按源码快照解释，实际安装优先核对当前 release。</td></tr>
+      <tr><td>稳定版本</td><td>PyPI `ms-swift 4.2.1`，发布于 2026-05-17</td><td>用于安装、版本判断和稳定能力描述。</td></tr>
       <tr><td>主分支源码</td><td>commit `7dd6b0e`，2026-05-19 19:30 +0800</td><td>用于目录结构、pipeline、Trainer、RL trainer 等源码级解读。</td></tr>
-      <tr><td>官方文档</td><td>抓取时 ReadTheDocs latest 标示为 `swift 4.3.0.dev0`</td><td>本文把 dev 文档中的新增能力与当时稳定版 v4.2.1 区分表达。</td></tr>
+      <tr><td>官方文档</td><td>ReadTheDocs latest 标示为 `swift 4.3.0.dev0`</td><td>本文把 dev 文档中的新增能力与稳定 v4.2.1 区分表达。</td></tr>
       <tr><td>论文口径</td><td>arXiv 2408.05517 v4；AAAI 2025 Demonstration Track</td><td>用于框架设计动机和学术引用，不用论文中过期数量覆盖 README 当前数量。</td></tr>
     </tbody>
   </table>
@@ -492,7 +492,7 @@
   <h1>定位与边界：ms-swift 解决哪一类训练问题</h1>
 
   <p class="lead">
-    ms-swift 的定位可以简化为一句话：让研究者和工程师以统一接口完成大模型与多模态大模型的训练、对齐、评测、量化、推理和部署。它把模型适配、数据格式、训练策略、推理后端和导出链路收束成一个可复用系统。
+    ms-swift 的定位可以简化为一句话：让研究者和工程师以统一接口完成大模型与多模态大模型的训练、对齐、评测、量化、推理和部署。它的优势不是某一个单点算法，而是把模型适配、数据格式、训练策略、推理后端和导出链路收束成一个可复用系统。
   </p>
 
   <h2>它站在什么层次</h2>
@@ -1325,7 +1325,7 @@ megatron sft \
   <p><strong>Mcore-Bridge</strong>：ModelScope 的 Megatron-Core 桥接工具，降低 safetensors 与 Megatron 格式转换成本。</p>
 
   <h2>C. 关键来源</h2>
-  <p>核心事实来自 modelscope/ms-swift GitHub README 与本地源码快照 commit `7dd6b0e`、抓取日 PyPI / GitHub Releases `v4.2.1`、ReadTheDocs `swift 4.3.0.dev0`、AAAI 2025 论文与 arXiv:2408.05517。稳定发布版已于 2026-06-09 复核为 `v4.2.3`。完整来源、文件路径和边界说明见 `sources.md`。</p>
+  <p>核心事实来自 modelscope/ms-swift GitHub README 与本地源码快照 commit `7dd6b0e`、PyPI `ms-swift 4.2.1`、GitHub Releases `v4.2.1` / `v4.2.0`、ReadTheDocs latest `swift 4.3.0.dev0`、AAAI 2025 论文与 arXiv:2408.05517。完整来源、文件路径和边界说明见 `sources.md`。</p>
 </section>
 
 </body>

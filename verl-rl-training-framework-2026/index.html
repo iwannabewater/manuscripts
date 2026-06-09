@@ -340,11 +340,11 @@
 <section class="chapter">
   <div class="chapter-num">01 · Executive Summary</div>
   <h1>执行摘要：先建立一张完整地图</h1>
-  <p class="lead">verl 是面向大语言模型后训练的强化学习框架，用于把 <span class="hl">多模型、多阶段、多后端、多 GPU</span> 的 RLHF / RLVR 训练组织成可扩展、可替换、可调试的数据流。</p>
+  <p class="lead">verl 是面向大语言模型后训练的强化学习训练框架。它真正要解决的不是「如何写一个 PPO loss」，而是如何把 <span class="hl">多模型、多阶段、多后端、多 GPU</span> 的 RLHF / RLVR 训练组织成一条可扩展、可替换、可调试的数据流。</p>
 
   <div class="takeaway">
     <div class="takeaway-label">本文口径</div>
-    本文源码快照取自 2026-05-18：<code>main@657cfa5</code>，版本文件为 <code>0.8.0.dev</code>，抓取日最新标签为 <code>v0.7.1</code>。2026-06-09 复核时，最新稳定版已为 <code>v0.8.0</code>。正文仍按固定 commit 解释源码，避免把后续发布能力倒灌进历史快照。
+    本文资料核对于 2026-05-18。官方仓库 `main` 浅克隆 HEAD 为 <code>657cfa5</code>，版本文件为 <code>0.8.0.dev</code>；远端标签列表中最新标签为 <code>v0.7.1</code>。因此本文把「主线开发能力」和「稳定发布标签」分开表述。
   </div>
 
   <h2>一句话理解 verl</h2>
@@ -494,7 +494,7 @@
       <path d="M500 478 L620 530" stroke="#504e49" stroke-width="1.2"/>
       <path d="M790 478 L844 530" stroke="#504e49" stroke-width="1.2"/>
     </svg>
-    <figcaption>HybridFlow 将算法控制、资源放置、数据协议和底层计算分开。</figcaption>
+    <figcaption>HybridFlow 的重点不是某个后端，而是把算法控制、资源放置、数据协议和底层计算分开。</figcaption>
   </figure>
 
   <h2>为什么不用纯多控制器</h2>
@@ -720,7 +720,7 @@ batch = compute_advantage(batch, adv_estimator=config.algorithm.adv_estimator)</
 <section class="chapter">
   <div class="chapter-num">07 · Worker And Engine</div>
   <h1>Worker 与 Engine：角色、后端与权重同步</h1>
-  <p class="lead">verl 的 Worker 表示「角色组合」。同一个 ActorRolloutRefWorker 可以只构造 actor，也可以构造 actor + rollout，或构造 actor + rollout + ref；具体训练实现进一步交给 TrainingWorker 和 BaseEngine。</p>
+  <p class="lead">verl 的 Worker 不是简单进程，而是「角色组合」。同一个 ActorRolloutRefWorker 可以只构造 actor，也可以构造 actor + rollout，也可以构造 actor + rollout + ref。真正的训练实现进一步交给 TrainingWorker 和 BaseEngine。</p>
 
   <h2>角色拆解</h2>
   <table class="striped">
@@ -770,7 +770,7 @@ batch = compute_advantage(batch, adv_estimator=config.algorithm.adv_estimator)</
 <section class="chapter">
   <div class="chapter-num">08 · Algorithms</div>
   <h1>算法层：PPO、GRPO、DAPO 与优势估计</h1>
-  <p class="lead">verl 的算法层复用同一条 rollout、reward、advantage、update 数据流。算法差异主要落在 advantage estimator、critic 是否启用、KL 放在 reward 还是 loss、采样组大小和 loss aggregation。</p>
+  <p class="lead">verl 的算法层不是把每个算法写成互不相干的 trainer，而是尽量复用同一条 rollout、reward、advantage、update 数据流。差异主要落在 advantage estimator、critic 是否启用、KL 放在 reward 还是 loss、采样组大小和 loss aggregation。</p>
 
   <h2>PPO：actor-critic 与 GAE</h2>
   <p>PPO 使用 actor-critic 架构。actor 是被优化的策略，critic 估计 value。生成后，PPO 计算 old policy 与 new policy 的概率比，再用 clipped surrogate objective 限制单次策略更新幅度。GAE 用 <code>gamma</code> 和 <code>lam</code> 在 bias 与 variance 之间折中。</p>
