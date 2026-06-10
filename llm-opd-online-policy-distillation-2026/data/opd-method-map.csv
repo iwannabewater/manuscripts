@@ -1,0 +1,8 @@
+method,problem_addressed,mechanism,primary_sources,uncertainty
+Baseline OPD,Off-policy distillation trains on teacher states rather than student states,Student samples trajectories and teacher provides dense token-level feedback,S01 S02 S03,Teacher logits and tokenizer compatibility can dominate cost
+Multi-teacher OPD,One teacher does not cover all domains or stages,Domain or stage-specific teachers supervise student rollouts,S04 S05 S06 S07,Official reports differ in detail and benchmark protocols
+Prefix OPD,Full rollouts and teacher scoring are expensive,Stop early and distill informative prefixes,S08,Prefix concentration may vary by task and response length
+AOPD,Standard OPD has variance and weak-exploration failure modes,Use asymmetric objective with local divergence minimization in non-positive advantage regions,S09,Requires careful comparison against tuned OPD baselines
+Trust Region OPD,Teacher-student distribution mismatch can destabilize gradients,Limit OPD to reliable regions and handle outliers separately,S10,Trust region thresholds may be model and task specific
+Hindsight-guided OPD,Agent next-state signals are richer than scalar rewards,Extract hints from next state and convert them into token-level directional supervision,S12,Online agent settings remain harder to reproduce than static math benchmarks
+Self-distillation OPD,External teachers may be unavailable or costly,Use model self-generated reasoning and self-teacher style feedback,S11,Teacher-free gains need stronger independent replication

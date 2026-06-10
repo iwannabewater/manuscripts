@@ -1,0 +1,423 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>大模型 OPD 技术概览 2026</title>
+  <link rel="stylesheet" href="../assets/styles/publication-fonts.css">
+  <style>
+    :root {
+      --paper: #f4f1e8;
+      --ink: #1d2730;
+      --blue: #173a63;
+      --blue-soft: #e3eaf0;
+      --muted: #66717b;
+      --line: #c9c4b7;
+      --ivory: #fbfaf5;
+      --accent: #9a6a2f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 8.5mm 10mm 8mm;
+    }
+
+    html,
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    body {
+      font-family: var(--serif);
+      font-size: 8.8pt;
+      line-height: 1.38;
+    }
+
+    .sheet {
+      min-height: 193mm;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 3mm;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr 42mm;
+      gap: 7mm;
+      align-items: end;
+      border-bottom: 1.2pt solid var(--blue);
+      padding-bottom: 2.8mm;
+    }
+
+    .eyebrow {
+      margin: 0 0 1mm;
+      color: var(--accent);
+      font-family: var(--mono);
+      font-size: 6.2pt;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--blue);
+      font-size: 25pt;
+      line-height: 1.04;
+      letter-spacing: 0.02em;
+    }
+
+    .subtitle {
+      margin: 1.4mm 0 0;
+      max-width: 198mm;
+      color: var(--muted);
+      font-size: 8.6pt;
+    }
+
+    .asof {
+      color: var(--muted);
+      font-size: 6.8pt;
+      line-height: 1.5;
+      text-align: right;
+    }
+
+    .asof strong {
+      display: block;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 8.6pt;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1.2fr;
+      border-bottom: 0.6pt solid var(--line);
+      padding-bottom: 2.4mm;
+    }
+
+    .metric {
+      padding: 0 3.5mm;
+      border-left: 0.55pt solid var(--line);
+    }
+
+    .metric:first-child {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .metric-value {
+      display: block;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 15.5pt;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .metric-label {
+      display: block;
+      margin-top: 1mm;
+      color: var(--muted);
+      font-size: 6.6pt;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1.05fr 1.35fr 0.85fr;
+      gap: 4.5mm;
+      min-height: 0;
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--blue);
+      font-size: 10.4pt;
+      line-height: 1.15;
+    }
+
+    .kicker {
+      margin: 0.7mm 0 2mm;
+      color: var(--muted);
+      font-size: 6.4pt;
+    }
+
+    .panel {
+      border-top: 0.8pt solid var(--blue);
+      padding-top: 2mm;
+    }
+
+    .thesis {
+      padding: 3mm;
+      background: var(--ivory);
+      border: 0.6pt solid var(--line);
+    }
+
+    .thesis p {
+      margin: 0;
+      font-size: 9.2pt;
+      line-height: 1.45;
+    }
+
+    .thesis strong {
+      color: var(--blue);
+    }
+
+    .loop {
+      margin-top: 2.5mm;
+      display: grid;
+      gap: 1.4mm;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 16mm 1fr;
+      gap: 2.2mm;
+      padding: 1.6mm 0;
+      border-bottom: 0.35pt solid var(--line);
+    }
+
+    .step b {
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 7pt;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .step span {
+      color: var(--ink);
+    }
+
+    .frontier {
+      display: grid;
+      gap: 1.5mm;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 23mm 1fr 18mm;
+      gap: 2mm;
+      padding: 1.6mm 0;
+      border-bottom: 0.35pt solid var(--line);
+    }
+
+    .row:first-of-type {
+      border-top: 0.55pt solid var(--line);
+    }
+
+    .method {
+      color: var(--blue);
+      font-weight: 700;
+    }
+
+    .why {
+      color: var(--muted);
+      font-size: 7.5pt;
+    }
+
+    .src {
+      color: var(--accent);
+      font-family: var(--mono);
+      font-size: 6.2pt;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .side {
+      display: grid;
+      gap: 2.4mm;
+      align-content: start;
+    }
+
+    .box {
+      padding: 2.5mm;
+      background: var(--ivory);
+      border-left: 2.2pt solid var(--blue);
+    }
+
+    .box h3 {
+      margin: 0 0 1.5mm;
+      color: var(--blue);
+      font-size: 8.7pt;
+      line-height: 1.2;
+    }
+
+    .box p,
+    .box li {
+      margin: 0;
+      color: var(--ink);
+      font-size: 7.6pt;
+      line-height: 1.38;
+    }
+
+    ul {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    li {
+      padding-top: 1.2mm;
+      border-top: 0.35pt solid var(--line);
+    }
+
+    li:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .tag {
+      display: inline-block;
+      margin-right: 1mm;
+      color: var(--accent);
+      font-family: var(--mono);
+      font-size: 6.2pt;
+      font-weight: 700;
+    }
+
+    footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 5mm;
+      align-items: end;
+      padding-top: 2mm;
+      border-top: 0.6pt solid var(--line);
+      color: var(--muted);
+      font-size: 6.2pt;
+      line-height: 1.35;
+    }
+
+    footer strong {
+      color: var(--blue);
+    }
+  </style>
+</head>
+<body>
+  <main class="sheet">
+    <header>
+      <div>
+        <p class="eyebrow">LLM post-training · OPD · 2026</p>
+        <h1>大模型 OPD：让学生在自己的错误上学习</h1>
+        <p class="subtitle">这里的 OPD 指 on-policy distillation，中文可称在线或在策略蒸馏：学生模型先按当前策略生成轨迹，教师再在这些学生访问过的状态上给 token、prefix、sequence 或 trajectory 级监督。</p>
+      </div>
+      <div class="asof">
+        证据复核
+        <strong>2026.06.12 CST</strong>
+        公开材料截至 2026.06.10<br>
+        证据等级：A 为论文或官方报告，B 为研究机构解释
+      </div>
+    </header>
+
+    <section class="metrics" aria-label="Key evidence">
+      <div class="metric">
+        <span class="metric-value">1/10</span>
+        <span class="metric-label">Qwen3 Table 21 报告 OPD 用约 1,800 GPU hours，对照 RL 为 17,920。S02</span>
+      </div>
+      <div class="metric">
+        <span class="metric-value">4</span>
+        <span class="metric-label">2026 公开工业报告已把 OPD 用于多教师、跨阶段、能力合并和回归恢复。S04-S07</span>
+      </div>
+      <div class="metric">
+        <span class="metric-value">2x-47x</span>
+        <span class="metric-label">Prefix OPD 报告的 training FLOP 降幅，前提是任务信号集中在前缀。S08</span>
+      </div>
+      <div class="metric">
+        <span class="metric-value">3类</span>
+        <span class="metric-label">探索不足、高方差或错配梯度、teacher-student 分布差距，是 2026 方法主要在修的失败面。S09 S10</span>
+      </div>
+    </section>
+
+    <section class="content">
+      <section class="panel">
+        <h2>核心判断</h2>
+        <p class="kicker">OPD 不是“更会模仿的 SFT”，而是把模仿发生的位置改成学生真实会到达的位置。</p>
+        <div class="thesis">
+          <p><strong>当部署学生会犯自己的错时，静态教师答案不够。</strong>纯 SFT 让学生看教师轨迹，RL 给学生自己的轨迹打稀疏分。OPD 把两者合并：样本来自学生，监督来自教师，所以它最适合长链推理、代码、工具调用、多阶段后训练和小模型压缩。</p>
+        </div>
+        <div class="loop">
+          <div class="step"><b>Seed</b><span>先用 SFT、off-policy distillation 或 RL checkpoint 让学生进入教师可修复的支持集。</span></div>
+          <div class="step"><b>Rollout</b><span>学生按当前策略生成答案、推理链、工具调用或 agent trajectory。</span></div>
+          <div class="step"><b>Relabel</b><span>教师在学生轨迹上给 logprob、偏好、过程分或 hindsight hint。</span></div>
+          <div class="step"><b>Update</b><span>用 reverse KL、advantage-weighted loss、prefix loss、trust region 或 asymmetric objective 更新学生。</span></div>
+          <div class="step"><b>Audit</b><span>教师退出评测闭环；同时记录 teacher 调用成本、collapse、遗忘和 out-of-domain 表现。</span></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2>2026 前沿谱系</h2>
+        <p class="kicker">主线不是换一个损失函数，而是在“谁 rollout、谁监督、哪些 token 可信、何时停”上做工程约束。</p>
+        <div class="frontier">
+          <div class="row">
+            <div class="method">Baseline OPD</div>
+            <div>学生 rollout，教师给 dense token-level feedback，缓解 exposure bias；适合从强 SFT checkpoint 继续提升。</div>
+            <div class="src">S01 S02</div>
+          </div>
+          <div class="row">
+            <div class="method">Multi-teacher</div>
+            <div>MiMo、GLM-5、Nemotron、DeepSeek-V4 都把 OPD 用作领域能力合并、跨阶段保留或回归恢复的后训练部件。</div>
+            <div class="src">S04-S07</div>
+          </div>
+          <div class="row">
+            <div class="method">Prefix OPD</div>
+            <div>只对学生生成前缀做蒸馏并提前停止 rollout，把教师评估集中在早期分叉 token，报告降低 FLOP。</div>
+            <div class="src">S08</div>
+          </div>
+          <div class="row">
+            <div class="method">AOPD</div>
+            <div>把正优势的强化和非正优势区域的局部散度最小化分开，针对高方差、零优势区和弱初始化探索瓶颈。</div>
+            <div class="src">S09</div>
+          </div>
+          <div class="row">
+            <div class="method">TrOPD</div>
+            <div>只在教师监督可靠的 trust region 做 OPD，对 outlier 区域采用 clipping、masking 或 forward KL guidance。</div>
+            <div class="src">S10</div>
+          </div>
+          <div class="row">
+            <div class="method">Agentic OPD</div>
+            <div>把用户反馈、工具输出和环境 next-state 转为 hindsight hint，再给 token-level directional supervision。</div>
+            <div class="src">S12</div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="side">
+        <div class="box">
+          <h3>什么时候用</h3>
+          <ul>
+            <li><span class="tag">01</span>学生小、便宜、要部署，教师大、贵、可离线打分。</li>
+            <li><span class="tag">02</span>任务长，早期错误会滚雪球，静态教师轨迹覆盖不到学生状态。</li>
+            <li><span class="tag">03</span>已有 SFT 或 RL checkpoint，目标是补强、压缩、合并或抗遗忘。</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>什么时候慎用</h3>
+          <ul>
+            <li><span class="tag">A</span>学生太弱，rollout 大量落在教师也难修的坏区域。</li>
+            <li><span class="tag">B</span>teacher logits 不可得，tokenizer 不一致，或教师调用成本超过 RLVR。</li>
+            <li><span class="tag">C</span>评测仍由同一教师主导，容易把风格贴近误读为能力提升。</li>
+          </ul>
+        </div>
+        <div class="box">
+          <h3>落地配方</h3>
+          <p>先离线蒸馏建支持集，再短周期 OPD；先全量找信号，再用 prefix、entropy、trust region 或 asymmetric objective 降成本；最后用无教师评测守住事实、代码、推理、工具和安全边界。</p>
+        </div>
+        <div class="box">
+          <h3>一句话</h3>
+          <p>OPD 的价值不在“学生更像教师”，而在“学生在自己会犯错的位置获得密集纠偏”。</p>
+        </div>
+      </aside>
+    </section>
+
+    <footer>
+      <div><strong>Source IDs:</strong> S01 Thinking Machines, S02 Qwen3, S03 OPD survey, S04 MiMo-V2-Flash, S05 GLM-5, S06 Nemotron-Cascade 2, S07 DeepSeek-V4, S08 Prefix OPD, S09 AOPD, S10 TrOPD, S11 Self-Distilled Reasoner, S12 OpenClaw-RL. Full evidence map: sources.md and data/source-map.tsv.</div>
+      <div>大模型 OPD 技术概览 2026 · one-pager</div>
+    </footer>
+  </main>
+</body>
+</html>

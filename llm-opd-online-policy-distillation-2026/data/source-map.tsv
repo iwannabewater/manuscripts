@@ -1,0 +1,13 @@
+id	level	source_type	date	url	supports	used_in
+S01	B	lab_blog	2025-10-27	https://thinkingmachines.ai/blog/on-policy-distillation/	Defines OPD as student rollouts plus teacher token-level feedback and describes reverse KL implementation.	Definition and training loop
+S02	A	technical_report	2025-05-14	https://arxiv.org/abs/2505.09388	Reports Qwen3 post-training and Table 21 comparison between RL and on-policy distillation.	Industry signal and metric strip
+S03	B	survey	2026-05-18	https://arxiv.org/abs/2604.00626	Frames OPD as a response to off-policy exposure bias and classifies OPD methods.	Landscape and uncertainty
+S04	A	technical_report	2026-01-06	https://arxiv.org/abs/2601.02780	Describes MiMo-V2-Flash multi-teacher on-policy distillation with dense token-level reward.	Industry signal
+S05	A	technical_report	2026-02-17	https://arxiv.org/abs/2602.15763	Describes GLM-5 on-policy cross-stage distillation to recover earlier-stage skills.	Industry signal and recipe
+S06	A	technical_report	2026-03-22	https://arxiv.org/abs/2603.19220	Describes Nemotron-Cascade 2 multi-domain OPD for regression recovery and retained gains.	Industry signal
+S07	A	model_card	2026-05	https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro	Describes DeepSeek-V4 unified consolidation via on-policy distillation after domain expert training.	Industry signal
+S08	A	paper	2026-02-16	https://arxiv.org/abs/2602.15260	Reports prefix OPD matching full OPD while reducing training FLOP by 2x-47x.	Frontier table
+S09	A	paper	2026-05-13	https://arxiv.org/abs/2605.06387	Identifies standard OPD failure modes and proposes asymmetric OPD.	Frontier table
+S10	A	paper	2026-06-03	https://arxiv.org/abs/2606.01249	Identifies instability under teacher-student distribution mismatch and proposes trust region OPD.	Frontier table and risk box
+S11	A	paper	2026-03-20	https://arxiv.org/abs/2601.18734	Represents on-policy self-distillation for reasoning models.	Adjacent route
+S12	A	paper	2026-03	https://arxiv.org/html/2603.10165v1	Uses hindsight-guided OPD to turn next-state signals into token-level supervision for agents.	Agentic OPD
