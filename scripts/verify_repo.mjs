@@ -6,9 +6,17 @@ import path from "node:path";
 const root = path.resolve(new URL("..", import.meta.url).pathname);
 const errors = [];
 const warnings = [];
+const localOnlyPatterns = [
+  /^AGENTS\.md$/i,
+  /^CLAUDE\.md$/i,
+  /^GEMINI\.md$/i,
+  /(^|\/)(QUALITY_AUDIT|HEALTH_REPORT|HUNT_REPORT|REVIEW_NOTES|WORKLOG)\.md$/i,
+  /(^|\/)(audit|review|scratch|outputs)\//i,
+];
 
 const exists = (p) => fs.existsSync(path.join(root, p));
 const read = (p) => fs.readFileSync(path.join(root, p), "utf8");
+const isLocalOnly = (p) => localOnlyPatterns.some((re) => re.test(p));
 
 function addError(message) {
   errors.push(message);
@@ -63,15 +71,8 @@ function checkLocalOnlyFiles() {
     addWarning("git ls-files unavailable; skipped tracked-file hygiene check");
     return;
   }
-  const forbidden = [
-    /^AGENTS\.md$/i,
-    /^CLAUDE\.md$/i,
-    /^GEMINI\.md$/i,
-    /(^|\/)(QUALITY_AUDIT|HEALTH_REPORT|HUNT_REPORT|REVIEW_NOTES|WORKLOG)\.md$/i,
-    /(^|\/)(audit|review|scratch|outputs)\//i,
-  ];
   for (const file of tracked.trim().split(/\n/).filter(Boolean)) {
-    if (forbidden.some((re) => re.test(file))) {
+    if (isLocalOnly(file)) {
       addError(`local-only file is tracked: ${file}`);
     }
   }
@@ -79,7 +80,9 @@ function checkLocalOnlyFiles() {
 
 function checkFontSources() {
   const files = walk(".").filter((file) => /\.(html|css|py|md)$/i.test(file));
-  const sourceFiles = files.filter((file) => !file.includes("/sources/") && !file.includes("/research/"));
+  const sourceFiles = files.filter(
+    (file) => !isLocalOnly(file) && !file.includes("/sources/") && !file.includes("/research/"),
+  );
   const forbidden = [
     /url\(["']?fonts\/TsangerJinKai02-/,
     /url\(["']?fonts\/JetBrainsMono\.woff2/,
