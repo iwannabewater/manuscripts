@@ -33,6 +33,7 @@
 | Zero to GitHub Pages Website | 从 0 构建网站并部署到 GitHub Pages 的完整工程链路 | `zero-to-github-pages-website/index.html` / `zero-to-github-pages-website/zero-to-github-pages-website.pdf` |
 | mise Complete Guide 2026 | mise 完整中文教程，覆盖工具版本、环境变量、任务、锁文件、CI、安全边界、迁移、排障与独立 Cheatsheet | `mise-complete-guide-2026/index.html` / `mise-complete-guide-2026/mise-complete-guide-2026.pdf` |
 | macOS Developer Handbook 2026 | 面向开发者的新机上手与长期维护手册，覆盖原生快捷操作、软件分层、Homebrew、Brewfile、运行时、容器、权限、备份、维护 SOP 与独立 Cheatsheet | `macos-developer-handbook-2026/index.html` / `macos-developer-handbook-2026/macos-developer-handbook-2026.pdf` |
+| 中国互联网公司市值排名 2026 | 基于统一收盘日的中国互联网公司 Top 15 市值排名，并对字节跳动、小红书的私营交易估值进行证据分层 | `china-internet-market-cap-ranking-2026/index.html` / `china-internet-market-cap-ranking-2026/china-internet-market-cap-ranking-2026.pdf` |
 | 小红书 FY2025 Equity Report | 小红书 2025 年业绩披露、历史估值与员工期权回购价格的证据分层研究 | `xiaohongshu-2025-equity-report/index.html` / `xiaohongshu-2025-equity-report/xiaohongshu-2025-equity-report.pdf` |
 | 字节跳动 FY2025 Equity Report | 字节跳动 2025 年业绩口径、员工权益回购价格与二级交易估值的证据分层研究 | `bytedance-2025-equity-report/index.html` / `bytedance-2025-equity-report/bytedance-2025-equity-report.pdf` |
 | PDD Holdings 2025 Equity Report | PDD Holdings 2025 年报中文研报，覆盖财务拆解、利润桥、现金流、估值、竞争位置、催化剂和风险 | `pdd-2025-equity-report/index.html` / `pdd-2025-equity-report/pdd-2025-equity-report.pdf` |

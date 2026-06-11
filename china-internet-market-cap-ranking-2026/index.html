@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>中国互联网公司市值排名 2026</title>
+  <link rel="stylesheet" href="../assets/styles/publication-fonts.css">
+  <style>
+    :root {
+      --paper: #f4f1e8;
+      --ink: #1e2833;
+      --blue: #1b365d;
+      --muted: #68727b;
+      --line: #c9c5b9;
+      --bar: #c7c4b9;
+      --bar-light: #dedbd2;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 9mm 11mm 8mm;
+    }
+
+    html,
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    body {
+      font-family: var(--serif);
+      font-size: 10pt;
+      line-height: 1.45;
+    }
+
+    .sheet {
+      width: 100%;
+      min-height: 190mm;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 4mm;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      border-bottom: 1.2pt solid var(--blue);
+      padding-bottom: 3mm;
+    }
+
+    .eyebrow {
+      margin: 0 0 1.2mm;
+      color: var(--blue);
+      font-size: 7.2pt;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--blue);
+      font-size: 26pt;
+      line-height: 1.04;
+      letter-spacing: 0.02em;
+    }
+
+    .subtitle {
+      margin: 1.6mm 0 0;
+      max-width: 178mm;
+      color: var(--muted);
+      font-size: 9.2pt;
+    }
+
+    .asof {
+      text-align: right;
+      color: var(--muted);
+      font-size: 7.4pt;
+      line-height: 1.55;
+    }
+
+    .asof strong {
+      display: block;
+      color: var(--ink);
+      font-size: 10pt;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 0.6pt solid var(--line);
+      padding-bottom: 3mm;
+    }
+
+    .metric {
+      padding: 0 4mm;
+      border-left: 0.6pt solid var(--line);
+    }
+
+    .metric:first-child {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .metric-value {
+      display: block;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 16pt;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .metric-label {
+      display: block;
+      margin-top: 1.1mm;
+      color: var(--muted);
+      font-size: 7.2pt;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 2.15fr 1fr;
+      gap: 7mm;
+      min-height: 0;
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--blue);
+      font-size: 11pt;
+      line-height: 1.2;
+    }
+
+    .section-kicker {
+      margin: 0.8mm 0 2.5mm;
+      color: var(--muted);
+      font-size: 7pt;
+    }
+
+    .ranking-head,
+    .rank-row {
+      display: grid;
+      grid-template-columns: 7mm 39mm 1fr 20mm;
+      align-items: center;
+      column-gap: 2.2mm;
+    }
+
+    .ranking-head {
+      padding: 0 0 1.2mm;
+      color: var(--muted);
+      border-bottom: 0.6pt solid var(--line);
+      font-family: var(--mono);
+      font-size: 6.2pt;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .rank-row {
+      min-height: 7.25mm;
+      border-bottom: 0.35pt solid var(--line);
+    }
+
+    .rank {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 7.2pt;
+    }
+
+    .company {
+      min-width: 0;
+    }
+
+    .company strong {
+      display: inline;
+      color: var(--ink);
+      font-size: 8.8pt;
+      line-height: 1;
+    }
+
+    .company small {
+      display: inline;
+      margin-left: 1.2mm;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 5.8pt;
+      white-space: nowrap;
+    }
+
+    .private-name strong {
+      color: var(--blue);
+    }
+
+    .bar-track {
+      position: relative;
+      height: 3.8mm;
+    }
+
+    .bar-fill {
+      display: block;
+      height: 100%;
+      min-width: 1.2mm;
+      background: var(--bar);
+    }
+
+    .top-three .bar-fill {
+      background: var(--blue);
+    }
+
+    .private .bar-fill {
+      background: transparent;
+      border: 0.8pt solid var(--blue);
+    }
+
+    .value {
+      text-align: right;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 7.8pt;
+      font-weight: 700;
+    }
+
+    .private .value {
+      color: var(--blue);
+    }
+
+    .sidebar {
+      border-left: 0.8pt solid var(--line);
+      padding-left: 6mm;
+    }
+
+    .takeaways {
+      margin: 2.4mm 0 4.5mm;
+      padding: 0;
+      list-style: none;
+      counter-reset: point;
+    }
+
+    .takeaways li {
+      position: relative;
+      margin: 0;
+      padding: 2.4mm 0 2.4mm 8mm;
+      border-bottom: 0.5pt solid var(--line);
+      font-size: 8.1pt;
+      line-height: 1.45;
+      counter-increment: point;
+    }
+
+    .takeaways li::before {
+      content: "0" counter(point);
+      position: absolute;
+      left: 0;
+      top: 2.5mm;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 6.6pt;
+      font-weight: 700;
+    }
+
+    .takeaways strong {
+      color: var(--blue);
+    }
+
+    .method {
+      margin-top: 3.2mm;
+      padding-top: 3mm;
+      border-top: 1pt solid var(--blue);
+    }
+
+    .method p {
+      margin: 1.8mm 0 0;
+      color: var(--muted);
+      font-size: 7.1pt;
+      line-height: 1.5;
+    }
+
+    .method strong {
+      color: var(--ink);
+    }
+
+    .legend {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2mm 3mm;
+      margin-top: 3mm;
+      color: var(--muted);
+      font-size: 6.4pt;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 1.5mm;
+    }
+
+    .swatch {
+      width: 8mm;
+      height: 2.7mm;
+      background: var(--bar);
+    }
+
+    .swatch.top {
+      background: var(--blue);
+    }
+
+    .swatch.private {
+      background: transparent;
+      border: 0.7pt solid var(--blue);
+    }
+
+    .evidence {
+      display: inline-grid;
+      place-items: center;
+      width: 4mm;
+      height: 4mm;
+      color: var(--blue);
+      border: 0.6pt solid var(--blue);
+      font-family: var(--mono);
+      font-size: 5.5pt;
+      font-weight: 700;
+    }
+
+    footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 6mm;
+      padding-top: 2.5mm;
+      border-top: 0.6pt solid var(--line);
+      color: var(--muted);
+      font-size: 5.8pt;
+      line-height: 1.4;
+    }
+
+    footer strong {
+      color: var(--ink);
+    }
+
+    .page {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    @media screen and (max-width: 900px) {
+      body {
+        padding: 20px;
+      }
+
+      .sheet {
+        min-height: auto;
+      }
+
+      .content {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        border-left: 0;
+        border-top: 1px solid var(--line);
+        padding: 20px 0 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="sheet">
+    <header>
+      <div>
+        <p class="eyebrow">Market Map · China Internet · 2026</p>
+        <h1>中国互联网公司市值排名</h1>
+        <p class="subtitle">上市公司按统一收盘日市值排序；字节跳动、小红书以最近可辨认的私营交易估值单独标记。</p>
+      </div>
+      <div class="asof">
+        市场截面
+        <strong>2026.06.10</strong>
+        证据复核 2026.06.11
+      </div>
+    </header>
+
+    <section class="metrics" aria-label="Key metrics">
+      <div class="metric">
+        <span class="metric-value">15</span>
+        <span class="metric-label">互联网平台样本</span>
+      </div>
+      <div class="metric">
+        <span class="metric-value">US$600bn+</span>
+        <span class="metric-label">字节拟议交易估值下限</span>
+      </div>
+      <div class="metric">
+        <span class="metric-value">US$535.9bn</span>
+        <span class="metric-label">腾讯公开市场市值</span>
+      </div>
+      <div class="metric">
+        <span class="metric-value">71.0%</span>
+        <span class="metric-label">前三名占榜单总值下限</span>
+      </div>
+    </section>
+
+    <section class="content">
+      <div class="ranking">
+        <h2>市值与私营估值 Top 15</h2>
+        <p class="section-kicker">单位：十亿美元；条形以 US$600bn 为基准。空心条表示非上市、非连续交易价格。</p>
+        <div class="ranking-head">
+          <span>Rank</span>
+          <span>Company</span>
+          <span>Relative value</span>
+          <span style="text-align:right">US$ bn</span>
+        </div>
+
+        <div class="rank-row top-three private">
+          <span class="rank">01</span>
+          <span class="company private-name"><strong>字节跳动*</strong><small>PRIVATE · B</small></span>
+          <span class="bar-track"><span class="bar-fill" style="width:100%"></span></span>
+          <span class="value">&gt;600.0</span>
+        </div>
+        <div class="rank-row top-three">
+          <span class="rank">02</span>
+          <span class="company"><strong>腾讯控股</strong><small>0700.HK · A/B</small></span>
+          <span class="bar-track"><span class="bar-fill" style="width:89.3%"></span></span>
+          <span class="value">535.9</span>
+        </div>
+        <div class="rank-row top-three">
+          <span class="rank">03</span>
+          <span class="company"><strong>阿里巴巴</strong><small>BABA · A/B</small></span>
+          <span class="bar-track"><span class="bar-fill" style="width:46.4%"></span></span>
+          <span class="value">278.1</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank">04</span>
+          <span class="company"><strong>拼多多</strong><small>PDD · A/B</small></span>
+          <span class="bar-track"><span class="bar-fill" style="width:19.4%"></span></span>
+          <span class="value">116.5</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank">05</span>
+          <span class="company"><strong>小米集团</strong><small>1810.HK · A/B</small></span>
+          <span class="bar-track"><span class="bar-fill" style="width:14.4%"></span></span>
+          <span class="value">86.6</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank">06</span>
+          <span class="company"><strong>网易</strong><small>NTES · A/B</small></span>
+          <span class="bar-track"><span class="bar-fill" style="width:13.3%"></span></span>
+          <span class="value">79.5</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank">07</span>
+          <span class="company"><strong>美团</strong><small>3690.HK · A/B</small></span>
+          <span class="bar-track"><span class="bar-fill" style="width:10.4%"></span></span>
+          <span class="value">62.2</span>
+        </div>
+        <div class="rank-row private">
+          <span class="rank">08</span>
+          <span class="company private-name"><strong>小红书*</strong><small>PRIVATE · C</small></span>
+          <span class="bar-track"><span class="bar-fill" style="width:8.3%"></span></span>
+          <span class="value">50.0</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank">09</span>
+          <span class="company"><strong>百度</strong><small>BIDU · A/B</small></span>
+          <span class="bar-track"><span class="bar-fill" style="width:6.8%"></span></span>
+          <span class="value">40.6</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank">10</span>
+          <span class="company"><strong>京东集团</strong><small>JD · A/B</small></span>
+          <span class="bar-track"><span class="bar-fill" style="width:6.5%"></span></span>
+          <span class="value">39.1</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank">11</span>
+          <span class="company"><strong>携程集团</strong><small>TCOM · A/B</small></span>
+          <span class="bar-track"><span class="bar-fill" style="width:5.1%"></span></span>
+          <span class="value">30.3</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank">12</span>
+          <span class="company"><strong>快手科技</strong><small>1024.HK · A/B</small></span>
+          <span class="bar-track"><span class="bar-fill" style="width:4.2%"></span></span>
+          <span class="value">25.4</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank">13</span>
+          <span class="company"><strong>贝壳</strong><small>BEKE · A/B</small></span>
+          <span class="bar-track"><span class="bar-fill" style="width:2.9%"></span></span>
+          <span class="value">17.7</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank">14</span>
+          <span class="company"><strong>腾讯音乐</strong><small>TME · A/B</small></span>
+          <span class="bar-track"><span class="bar-fill" style="width:2.5%"></span></span>
+          <span class="value">14.8</span>
+        </div>
+        <div class="rank-row">
+          <span class="rank">15</span>
+          <span class="company"><strong>阅文集团</strong><small>0772.HK · A/B</small></span>
+          <span class="bar-track"><span class="bar-fill" style="width:2.4%"></span></span>
+          <span class="value">14.1</span>
+        </div>
+      </div>
+
+      <aside class="sidebar">
+        <h2>如何读这张榜</h2>
+        <ol class="takeaways">
+          <li><strong>字节标记高于腾讯，但不是公开市值。</strong>拟议老股交易给出的下限比腾讯同日市值高约 12%，交易尚未完成；腾讯仍是本榜公开市场样本中定价最高的公司。</li>
+          <li><strong>头部高度集中，第三名后出现断层。</strong>按字节下限计算，前三名占榜单总值下限的 71.0%；阿里市值约为拼多多的 2.4 倍。</li>
+          <li><strong>小红书的名次对证据口径敏感。</strong>最新老股报道的 500 亿美元对应第 8 名，但仅为 C 级；采用 GSR 文件隐含的 310 亿美元，则落在携程附近。</li>
+        </ol>
+
+        <div class="method">
+          <h2>口径与证据</h2>
+          <p><strong>上市公司：</strong>2026-06-10 收盘市值；港股按 USD/HKD 7.8373 换算。双重上市不重复相加。</p>
+          <p><strong>私营公司：</strong>两家公司都没有公开发布可核验的官方整体估值。字节采用 2026-04 拟议股份出售标记（B）；小红书采用 2025 年末老股报道（C）。</p>
+          <p><strong>样本：</strong>互联网平台、数字内容、在线交易与互联网服务。小米为混合业务；金融机构、物流运营商与缺乏可比整体权益值的 OTC 证券不纳入。</p>
+        </div>
+
+        <div class="legend" aria-label="Legend">
+          <span class="legend-item"><span class="swatch top"></span>头部公开市值</span>
+          <span class="legend-item"><span class="swatch"></span>其他公开市值</span>
+          <span class="legend-item"><span class="swatch private"></span>私营估值标记</span>
+          <span class="legend-item"><span class="evidence">A</span>官方页交叉核对</span>
+          <span class="legend-item"><span class="evidence">B</span>可复算数据 / 主流报道</span>
+          <span class="legend-item"><span class="evidence">C</span>单一交易报道</span>
+        </div>
+      </aside>
+    </section>
+
+    <footer>
+      <div>
+        <strong>Sources</strong> · Official quote cross-checks: HKEX, Nasdaq, NYSE · Historical snapshot: Yahoo Finance · Private markers: SCMP, Reuters, Bloomberg. Evidence map: <strong>sources.md</strong> · <strong>data/</strong>
+      </div>
+      <div class="page">
+        Research one-pager · 2026.06.11<br>
+        非投资建议
+      </div>
+    </footer>
+  </main>
+</body>
+</html>
