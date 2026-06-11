@@ -1,0 +1,643 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>美国互联网公司市值排名 2026</title>
+  <link rel="stylesheet" href="../assets/styles/publication-fonts.css">
+  <style>
+    :root {
+      --paper: #f3efe4;
+      --ink: #202a35;
+      --blue: #173a63;
+      --muted: #66717a;
+      --line: #c8c3b6;
+      --wash: #e7e2d6;
+      --bar: #b8b5ad;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 8mm 10mm 7mm;
+    }
+
+    html,
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    body {
+      font-family: var(--serif);
+      font-size: 9pt;
+      line-height: 1.42;
+    }
+
+    .sheet {
+      height: 195mm;
+      min-height: 195mm;
+      display: grid;
+      grid-template-rows: auto auto 1fr auto;
+      gap: 3.4mm;
+    }
+
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      padding-bottom: 2.8mm;
+      border-bottom: 1.2pt solid var(--blue);
+    }
+
+    .eyebrow {
+      margin: 0 0 1.1mm;
+      color: var(--blue);
+      font-size: 6.4pt;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--blue);
+      font-size: 25pt;
+      line-height: 1;
+      letter-spacing: 0.025em;
+    }
+
+    .subtitle {
+      margin: 1.5mm 0 0;
+      max-width: 190mm;
+      color: var(--muted);
+      font-size: 8.6pt;
+    }
+
+    .asof {
+      min-width: 37mm;
+      text-align: right;
+      color: var(--muted);
+      font-size: 6.6pt;
+      line-height: 1.55;
+    }
+
+    .asof strong {
+      display: block;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 10.2pt;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding-bottom: 2.8mm;
+      border-bottom: 0.55pt solid var(--line);
+    }
+
+    .metric {
+      padding: 0 4mm;
+      border-left: 0.55pt solid var(--line);
+    }
+
+    .metric:first-child {
+      padding-left: 0;
+      border-left: 0;
+    }
+
+    .metric-value {
+      display: block;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 15.8pt;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .metric-label {
+      display: block;
+      margin-top: 0.9mm;
+      color: var(--muted);
+      font-size: 6.7pt;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 2.18fr 0.82fr;
+      gap: 6.5mm;
+      min-height: 0;
+    }
+
+    h2,
+    h3 {
+      margin: 0;
+      color: var(--blue);
+      line-height: 1.15;
+    }
+
+    h2 {
+      font-size: 10.5pt;
+    }
+
+    h3 {
+      font-size: 8pt;
+    }
+
+    .section-note {
+      margin: 0.7mm 0 1.8mm;
+      color: var(--muted);
+      font-size: 6.3pt;
+    }
+
+    .band + .band {
+      margin-top: 2.6mm;
+    }
+
+    .band-title {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      padding-bottom: 1mm;
+      border-bottom: 0.65pt solid var(--blue);
+    }
+
+    .band-title span {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 5.8pt;
+    }
+
+    .scale {
+      display: grid;
+      grid-template-columns: 7mm 42mm 1fr 19mm;
+      column-gap: 2mm;
+      padding: 1mm 0 0.5mm;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 5.2pt;
+      text-transform: uppercase;
+    }
+
+    .scale-axis {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .scale-axis span {
+      font-style: normal;
+    }
+
+    .rank-row {
+      display: grid;
+      grid-template-columns: 7mm 42mm 1fr 19mm;
+      align-items: center;
+      column-gap: 2mm;
+      min-height: 9.5mm;
+      border-bottom: 0.35pt solid var(--line);
+    }
+
+    .leaders .rank-row {
+      min-height: 10.25mm;
+    }
+
+    .rank {
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 6.4pt;
+    }
+
+    .company {
+      min-width: 0;
+      white-space: nowrap;
+    }
+
+    .company strong {
+      color: var(--ink);
+      font-size: 8.5pt;
+      line-height: 1;
+    }
+
+    .company small {
+      margin-left: 1.2mm;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 5.3pt;
+    }
+
+    .bar-track {
+      display: block;
+      position: relative;
+      height: 3.5mm;
+      border-left: 0.45pt solid var(--line);
+      border-right: 0.45pt solid var(--line);
+    }
+
+    .bar-fill {
+      display: block;
+      height: 100%;
+      min-width: 1.4mm;
+      background: var(--bar);
+    }
+
+    .top-three .bar-fill {
+      background: var(--blue);
+    }
+
+    .value {
+      text-align: right;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 7.1pt;
+      font-weight: 700;
+    }
+
+    .sidebar {
+      border-left: 0.8pt solid var(--line);
+      padding-left: 5.5mm;
+    }
+
+    .gravity {
+      padding-bottom: 3.4mm;
+      border-bottom: 1pt solid var(--blue);
+    }
+
+    .gravity-label {
+      margin: 0;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 5.8pt;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .gravity-value {
+      margin: 1.1mm 0 0;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 31pt;
+      font-weight: 700;
+      line-height: 0.92;
+    }
+
+    .gravity-copy {
+      margin: 1.4mm 0 2.2mm;
+      color: var(--ink);
+      font-size: 7.2pt;
+      line-height: 1.42;
+    }
+
+    .gravity-bar {
+      display: flex;
+      height: 3.2mm;
+      border: 0.5pt solid var(--blue);
+    }
+
+    .gravity-bar span:first-child {
+      width: 87.8%;
+      background: var(--blue);
+    }
+
+    .gravity-bar span:last-child {
+      flex: 1;
+      background: var(--paper);
+    }
+
+    .gravity-key {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 0.8mm;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 5.2pt;
+    }
+
+    .takeaways {
+      margin: 2.2mm 0 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: insight;
+    }
+
+    .takeaways li {
+      position: relative;
+      margin: 0;
+      padding: 2.1mm 0 2.1mm 7mm;
+      border-bottom: 0.4pt solid var(--line);
+      font-size: 7.1pt;
+      line-height: 1.42;
+      counter-increment: insight;
+    }
+
+    .takeaways li::before {
+      content: "0" counter(insight);
+      position: absolute;
+      left: 0;
+      top: 2.25mm;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 5.8pt;
+      font-weight: 700;
+    }
+
+    .takeaways strong {
+      color: var(--blue);
+    }
+
+    .method {
+      margin-top: 2.5mm;
+    }
+
+    .method p {
+      margin: 1.2mm 0 0;
+      color: var(--muted);
+      font-size: 6.1pt;
+      line-height: 1.45;
+    }
+
+    .method strong {
+      color: var(--ink);
+    }
+
+    .screen {
+      margin-top: 2.4mm;
+      padding-top: 2mm;
+      border-top: 0.7pt solid var(--blue);
+    }
+
+    .screen-note {
+      margin: 0.8mm 0 0.9mm;
+      color: var(--muted);
+      font-size: 5.8pt;
+    }
+
+    .screen-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 3mm;
+      padding: 0.65mm 0;
+      border-bottom: 0.35pt solid var(--line);
+      font-size: 6.1pt;
+    }
+
+    .screen-row span {
+      color: var(--ink);
+    }
+
+    .screen-row small {
+      margin-left: 1mm;
+      color: var(--muted);
+      font-family: var(--mono);
+      font-size: 5.2pt;
+    }
+
+    .screen-row b {
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 5.8pt;
+    }
+
+    footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 5mm;
+      padding-top: 2mm;
+      border-top: 0.55pt solid var(--line);
+      color: var(--muted);
+      font-size: 5.25pt;
+      line-height: 1.35;
+    }
+
+    footer strong {
+      color: var(--ink);
+    }
+
+    .page {
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    @media screen and (max-width: 900px) {
+      body {
+        padding: 20px;
+      }
+
+      .sheet {
+        min-height: auto;
+      }
+
+      .content {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        padding: 20px 0 0;
+        border-left: 0;
+        border-top: 1px solid var(--line);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="sheet">
+    <header>
+      <div>
+        <p class="eyebrow">Market Atlas · U.S. Internet · 2026</p>
+        <h1>美国互联网公司市值排名</h1>
+        <p class="subtitle">上市公司 Top 15：统一收盘截面、整体权益市值；两套线性标尺分别呈现超级平台与第二梯队。</p>
+      </div>
+      <div class="asof">
+        市场截面
+        <strong>2026.06.10</strong>
+        证据复核 2026.06.11
+      </div>
+    </header>
+
+    <section class="metrics" aria-label="Key metrics">
+      <div class="metric">
+        <span class="metric-value">US$9.50tn</span>
+        <span class="metric-label">Top 15 整体权益市值合计</span>
+      </div>
+      <div class="metric">
+        <span class="metric-value">87.8%</span>
+        <span class="metric-label">Alphabet、Amazon、Meta 占比</span>
+      </div>
+      <div class="metric">
+        <span class="metric-value">7.2×</span>
+        <span class="metric-label">前三名市值 / 其余十二家</span>
+      </div>
+      <div class="metric">
+        <span class="metric-value">12.5×</span>
+        <span class="metric-label">Alphabet / Netflix 市值</span>
+      </div>
+    </section>
+
+    <section class="content">
+      <div class="ranking">
+        <h2>市值 Top 15</h2>
+        <p class="section-note">单位：十亿美元。两组均为从零开始的线性标尺；分组只为保持可读性，不改变排名。</p>
+
+        <section class="band leaders" aria-label="Trillion-scale leaders">
+          <div class="band-title">
+            <h3>超级平台</h3>
+            <span>SCALE 0—4,500</span>
+          </div>
+          <div class="scale">
+            <span>Rank</span>
+            <span>Company</span>
+            <span class="scale-axis"><span>0</span><span>2,250</span><span>4,500</span></span>
+            <span style="text-align:right">US$ bn</span>
+          </div>
+          <div class="rank-row top-three">
+            <span class="rank">01</span>
+            <span class="company"><strong>Alphabet</strong><small>GOOG · NASDAQ</small></span>
+            <span class="bar-track"><span class="bar-fill" style="width:96.20%"></span></span>
+            <span class="value">4,329.2</span>
+          </div>
+          <div class="rank-row top-three">
+            <span class="rank">02</span>
+            <span class="company"><strong>Amazon</strong><small>AMZN · NASDAQ</small></span>
+            <span class="bar-track"><span class="bar-fill" style="width:56.89%"></span></span>
+            <span class="value">2,560.2</span>
+          </div>
+          <div class="rank-row top-three">
+            <span class="rank">03</span>
+            <span class="company"><strong>Meta Platforms</strong><small>META · NASDAQ</small></span>
+            <span class="bar-track"><span class="bar-fill" style="width:32.21%"></span></span>
+            <span class="value">1,449.4</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank">04</span>
+            <span class="company"><strong>Netflix</strong><small>NFLX · NASDAQ</small></span>
+            <span class="bar-track"><span class="bar-fill" style="width:7.67%"></span></span>
+            <span class="value">345.3</span>
+          </div>
+        </section>
+
+        <section class="band" aria-label="Platform field">
+          <div class="band-title">
+            <h3>平台与基础设施梯队</h3>
+            <span>SCALE 0—180</span>
+          </div>
+          <div class="scale">
+            <span>Rank</span>
+            <span>Company</span>
+            <span class="scale-axis"><span>0</span><span>90</span><span>180</span></span>
+            <span style="text-align:right">US$ bn</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank">05</span>
+            <span class="company"><strong>AppLovin</strong><small>APP · NASDAQ</small></span>
+            <span class="bar-track"><span class="bar-fill" style="width:92.01%"></span></span>
+            <span class="value">165.6</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank">06</span>
+            <span class="company"><strong>Uber</strong><small>UBER · NYSE</small></span>
+            <span class="bar-track"><span class="bar-fill" style="width:77.59%"></span></span>
+            <span class="value">139.7</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank">07</span>
+            <span class="company"><strong>Booking Holdings</strong><small>BKNG · NASDAQ</small></span>
+            <span class="bar-track"><span class="bar-fill" style="width:69.15%"></span></span>
+            <span class="value">124.5</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank">08</span>
+            <span class="company"><strong>Cloudflare</strong><small>NET · NYSE</small></span>
+            <span class="bar-track"><span class="bar-fill" style="width:43.32%"></span></span>
+            <span class="value">78.0</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank">09</span>
+            <span class="company"><strong>Airbnb</strong><small>ABNB · NASDAQ</small></span>
+            <span class="bar-track"><span class="bar-fill" style="width:42.57%"></span></span>
+            <span class="value">76.6</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank">10</span>
+            <span class="company"><strong>DoorDash</strong><small>DASH · NASDAQ</small></span>
+            <span class="bar-track"><span class="bar-fill" style="width:36.55%"></span></span>
+            <span class="value">65.8</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank">11</span>
+            <span class="company"><strong>eBay</strong><small>EBAY · NASDAQ</small></span>
+            <span class="bar-track"><span class="bar-fill" style="width:26.25%"></span></span>
+            <span class="value">47.2</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank">12</span>
+            <span class="company"><strong>Reddit</strong><small>RDDT · NYSE</small></span>
+            <span class="bar-track"><span class="bar-fill" style="width:18.42%"></span></span>
+            <span class="value">33.2</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank">13</span>
+            <span class="company"><strong>Roblox</strong><small>RBLX · NYSE</small></span>
+            <span class="bar-track"><span class="bar-fill" style="width:16.51%"></span></span>
+            <span class="value">29.7</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank">14</span>
+            <span class="company"><strong>Expedia Group</strong><small>EXPE · NASDAQ</small></span>
+            <span class="bar-track"><span class="bar-fill" style="width:14.60%"></span></span>
+            <span class="value">26.3</span>
+          </div>
+          <div class="rank-row">
+            <span class="rank">15</span>
+            <span class="company"><strong>Verisign</strong><small>VRSN · NASDAQ</small></span>
+            <span class="bar-track"><span class="bar-fill" style="width:14.56%"></span></span>
+            <span class="value">26.2</span>
+          </div>
+        </section>
+      </div>
+
+      <aside class="sidebar">
+        <section class="gravity">
+          <p class="gravity-label">Market gravity · Top 3 share</p>
+          <p class="gravity-value">87.8%</p>
+          <p class="gravity-copy">前三家公司合计 <strong>US$8.34tn</strong>，是其余十二家总和的 7.2 倍。</p>
+          <div class="gravity-bar" aria-label="Top three market capitalization share">
+            <span></span><span></span>
+          </div>
+          <div class="gravity-key"><span>TOP 3</span><span>REST 12 · 12.2%</span></div>
+        </section>
+
+        <ol class="takeaways">
+          <li><strong>榜单实质上由三家公司决定。</strong>Alphabet 一家占样本总值 45.6%；Meta 到 Netflix 之间仍隔着约 1.10 万亿美元。</li>
+          <li><strong>第四、第五名之间出现第二道断层。</strong>Netflix 市值约为 AppLovin 的 2.1 倍。广告技术、本地服务、旅行与基础设施组成更分散的下一梯队。</li>
+          <li><strong>榜尾应看量级，不宜执着名次。</strong>Expedia 与 Verisign 仅差约 6100 万美元，单日波动即可互换；两者都处在约 260 亿美元量级。</li>
+        </ol>
+
+        <section class="method">
+          <h3>口径</h3>
+          <p><strong>样本：</strong>美国总部与主要经营基础、公开上市，以互联网平台、数字内容、广告技术或互联网基础设施为核心。排除硬件、半导体、电信、金融平台、纯企业软件、数据中心 REIT 与库存型零售。</p>
+          <p><strong>数据：</strong>2026-06-10 收盘 <code>trailingMarketCap</code>；Nasdaq / NYSE 官方证券页与 SEC 文件交叉核验。Alphabet 多类别股份按整体公司计值，不重复相加。</p>
+        </section>
+
+        <section class="screen">
+          <h3>门槛复核</h3>
+          <p class="screen-note">同日市值，单位 US$ bn；均低于第 15 名 Verisign（26.2）。</p>
+          <div class="screen-row"><span>Akamai <small>AKAM</small></span><b>18.9</b></div>
+          <div class="screen-row"><span>Roku <small>ROKU</small></span><b>17.3</b></div>
+          <div class="screen-row"><span>Pinterest <small>PINS</small></span><b>12.2</b></div>
+          <div class="screen-row"><span>GoDaddy <small>GDDY</small></span><b>10.6</b></div>
+          <div class="screen-row"><span>The Trade Desk <small>TTD</small></span><b>9.1</b></div>
+          <div class="screen-row"><span>Snap <small>SNAP</small></span><b>8.9</b></div>
+        </section>
+      </aside>
+    </section>
+
+    <footer>
+      <span><strong>证据：</strong>M01–M15 排名市值；M16–M21 候选筛查；X01–X15 交易所官方页；F01–F05 SEC 申报。完整 URL、计算与边界见 <strong>sources.md</strong>。市值为市场截面，不构成投资建议。</span>
+      <span class="page">US INTERNET MARKET CAP · 2026 · 01</span>
+    </footer>
+  </main>
+</body>
+</html>
