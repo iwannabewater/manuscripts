@@ -1,23 +1,30 @@
 claim_id	claim	source	status	confidence
 C01	WWDC26于2026年6月8日至12日在线举行，6月8日在Apple Park举办现场活动	S01,S02	official	high
 C02	现场活动有超过1000名开发者、设计师和学生，学生挑战有350名获奖者及50名杰出获奖者	S02	official	high
-C03	Apple官方称会议提供超过100个新视频会话；6月9日索引页去重计数为133个链接	S01,S02,S18	official_plus_measurement	high
-C04	OS 27开发者测试版已于6月8日提供，公测计划于7月提供，免费更新计划于2026年秋季提供	S03	official	high
-C05	Siri AI于6月8日在iOS、iPadOS、macOS、visionOS进入开发者测试，watchOS稍后加入	S03,S04	official	high
-C06	Siri AI消费者beta计划于2026年稍后推出，首发英语	S03,S04	official	high
-C07	Siri AI在中国暂不可用，在欧盟的iOS和iPadOS首发暂不可用	S03,S04	official	high
-C08	Siri AI结合个人上下文、屏幕感知、应用操作、网页知识和独立Siri应用	S03,S04,S07,S08,S09,S10,S11	official	high
-C09	Siri AI使用端侧模型、Private Cloud Compute、Spotlight索引和App Toolbox	S04	official	high
-C10	Foundation Models支持Language Model协议、苹果模型、Claude、Gemini及其他提供商	S16,S17	official	high
-C11	符合Small Business Program和下载量门槛的应用可无云API费用使用PCC上的新一代Apple Foundation Models	S16	official	high
-C12	Core AI面向自带端侧模型，MLX支持Metal 4、GPU Neural Accelerators和多Mac RDMA训练	S17	official	high
-C13	Xcode 27加入可选模型的编码代理、代理技能、翻译代理、Device Hub和性能分析更新	S13	official	high
-C14	Swift 6.4加入anyAppleOS、@diagnose、异步defer、非拷贝迭代和最高4倍URL解析性能	S14	official	high
-C15	SwiftUI新增Document API、工具栏控制、通用重排、缓存和构建性能更新	S15	official	high
-C16	iOS 27支持iPhone 11及之后机型和iPhone SE第二代及之后机型	S07	official	high
-C17	Apple Intelligence的硬件门槛高于OS 27系统升级门槛	S03,S04,S07,S08,S09,S10	official_inference	high
-C18	Apple宣称应用启动最高快30%，照片最高快70%，AirDrop最高快80%，iPad外置盘最高快5倍	S03,S07,S08	official_benchmark	high
-C19	儿童安全新增Ask to Browse、联系人审批、暴力内容干预、Time Allowances和Schedules	S03,S05	official	high
-C20	App Store新增Creative Assets、个性化集合、组织与群组订阅、Bundles、Suites和Retention Messaging	S06	official	high
-C21	Apple将Liquid Glass可读性、搜索、网络切换与性能修复置于发布叙事的重要位置	S03,S19,S23	official_plus_analysis	medium_high
-C22	WWDC26的核心战略信号是将AI从单一助手升级为系统级能力和开发者平台	S03,S04,S16,S17,S20	analysis	medium_high
+C03	Apple官方称大会提供超过100个新视频会话；6月16日索引测量为137个去重条目，其中134个可播放、3个即将上线	S01,S02,S18	official_plus_measurement	high
+C04	OS 27开发者测试版于6月8日提供，公测计划于7月提供，免费更新计划于2026年秋季提供	S03	official	high
+C05	Siri AI于6月8日在iOS、iPadOS、macOS、visionOS进入开发者测试，watchOS稍后加入	S03,S04,S21	official	high
+C06	Siri AI消费者beta计划于2026年稍后推出，首发英语	S03,S04,S21	official	high
+C07	Siri AI在中国暂不可用，在欧盟的iOS、iPadOS和watchOS首发暂不可用	S03,S04,S21	official	high
+C08	Siri AI结合个人上下文、屏幕和视觉理解、应用操作、网页知识及独立Siri应用	S04,S21	official	high
+C09	Siri AI使用端侧模型、Private Cloud Compute、Spotlight索引和App Toolbox	S04,S21	official	high
+C10	Foundation Models支持模型无关架构、Apple模型、PCC及Gemini和Claude等第三方提供商	S16,S17,S23	official	high
+C11	符合Small Business Program和下载量门槛的应用可免云API费用使用PCC上的新一代Apple Foundation Models	S16	official	high
+C12	Core AI面向自有端侧模型，MLX支持Metal 4、GPU Neural Accelerators和多Mac RDMA计算	S17,S23	official	high
+C13	Xcode 27支持Anthropic、Google、OpenAI代理、Agent Client Protocol、MCP、翻译代理和Device Hub	S13,S23	official	high
+C14	Xcode 27仅支持Apple silicon，统一安装器约缩小30%，Xcode Cloud最高提速2倍	S23	official_benchmark	high
+C15	Swift 6.4加入anyAppleOS、@diagnose、异步defer、非拷贝迭代和最高4倍URL解析性能	S14,S23	official	high
+C16	SwiftUI新增文档API、工具栏控制、通用重排、缓存和构建性能更新	S15	official	high
+C17	代理安全需要处理prompt injection、不安全输出和过度授权，并采用验证、约束与最小权限	S28	official_guidance	high
+C18	WWDC26技术会话覆盖gRPC、Linux容器、MetricKit、Trust Insights和Safari 27等生产主题	S29,S30,S31,S32,S33	official	high
+C19	iOS 27支持iPhone 11及之后机型和iPhone SE第二代及之后机型	S07	official	high
+C20	Apple Intelligence硬件门槛高于OS 27系统升级门槛	S03,S04,S07,S08,S09,S10	official_inference	high
+C21	Apple宣称应用启动最高快30%、照片载入最高快70%、AirDrop最高快80%、iPad外置盘最高快5倍	S03,S07,S08	official_benchmark	high
+C22	Apple服务更新覆盖Maps、Find My、Wallet、Podcasts、iCloud、Music、Fitness+、Apple TV和Apple Sports	S24	official	high
+C23	儿童安全新增Ask to Browse、联系人审批、暴力内容干预、Time Allowances和Schedules	S03,S05	official	high
+C24	App Store新增Creative Assets、个性化集合、年度承诺、组织采购、群组席位、Bundles、Suites和Retention Messaging	S06,S25	official	high
+C25	Group purchases官方闭幕后口径为2026年稍后，而非确定的冬季日期	S25	official	high
+C26	2026 Apple Design Awards从36个入围作品中选出六类共12个获奖者	S02,S27	official	high
+C27	Apple将Liquid Glass可读性、搜索、网络与性能修复置于发布叙事的重要位置	S03,S07,S08,S09,S19	official_plus_analysis	medium_high
+C28	WWDC26的战略信号是把AI从单一助手扩展为系统能力、开发者工具、服务和治理平台	S03,S04,S16,S17,S20,S21,S23	analysis	medium_high
+C29	Siri AI的工程可用性取决于索引质量、App Intents、权限控制、模型路由、评估和失败降级	S04,S16,S17,S28	analysis	medium_high

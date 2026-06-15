@@ -16,22 +16,25 @@ OUTPUT_PDF = ROOT / "wwdc-2026-report.pdf"
 
 
 TOC_NOTES = {
-    "01. 执行摘要": "六个结论与关键数字",
-    "02. 大会事实与时间边界": "会议规模、日程与发布节奏",
-    "03. 发布主线：先修地基，再把 AI 接进系统": "可靠性与 AI 的同一条主线",
-    "04. Siri AI：产品能力、系统架构与开放节奏": "个人上下文、应用动作与隐私架构",
-    "05. 开发者 AI 栈：从模型调用到可测试代理": "Foundation Models、Core AI、MLX、Evaluations",
+    "01. 执行摘要": "八个结论与关键数字",
+    "02. 大会事实与证据边界": "闭幕状态、发布节奏与索引计数",
+    "03. 总体判断：平台工程，而非单点发布": "Siri、开发栈、可靠性与治理",
+    "04. Siri AI：能力、架构与交付边界": "个人上下文、应用动作与模型路由",
+    "05. 开发者 AI 栈：模型、代理、评估与隐私": "Foundation Models、Core AI、MLX、Evaluations",
     "06. Xcode 27、Swift 6.4 与 SwiftUI": "代理、语言与 UI 框架更新",
-    "07. OS 27 平台更新": "iPhone、iPad、Mac、Watch、Vision Pro 与 TV",
-    "08. 性能、搜索、网络与 Liquid Glass": "官方基准与测试边界",
-    "09. 儿童安全与平台治理": "内容、联系人、时间与开发者责任",
-    "10. App Store：从单应用订阅走向组织、群组与跨开发者组合": "增长、发现、订阅与审核",
-    "11. 兼容性与可用性矩阵": "系统、AI、设备、语言与地区",
-    "12. 对用户、开发者和 Apple 的意义": "行动建议与成败标准",
-    "13. 仍未知的事项": "后续 beta 需要验证的问题",
-    "14. 建议阅读顺序": "官方资料的高效入口",
-    "附录：证据等级": "事实、测量、分析与媒体语境",
-    "来源与使用边界": "官方来源、媒体来源与方法限制",
+    "07. Keynote 之外：137 个索引条目的技术全景": "生产基础、安全、Web 与空间计算",
+    "08. OS 27 平台更新": "iPhone、iPad、Mac、Watch、Vision Pro 与 TV",
+    "09. Apple 服务：AI 进入高频场景": "Maps、Music、Fitness+、Wallet 与媒体",
+    "10. 性能、搜索、网络与 Liquid Glass": "官方基准与测试边界",
+    "11. 儿童安全与平台治理": "内容、联系人、时间与开发者责任",
+    "12. App Store：营销、订阅与组合销售": "素材、发现、席位与审核",
+    "13. 兼容性与可用性矩阵": "系统、AI、设备、语言、地区与额度",
+    "14. Apple Design Awards 2026": "六个类别与十二个获奖者",
+    "15. 对用户、开发者与 Apple 的意义": "工程行动与成败标准",
+    "16. 仍需追踪的问题": "beta、配额、地区与上线日期",
+    "17. 建议阅读与观看顺序": "官方资料与重点会话入口",
+    "附录：证据等级与写作规则": "事实、基准、测量、分析与未知事项",
+    "来源与使用边界": "官方来源、页面测量与方法限制",
 }
 
 
@@ -178,7 +181,7 @@ body {
   color: var(--ink);
   font-family: "Tsanger";
   font-size: 10.3pt;
-  line-height: 1.66;
+  line-height: 1.58;
   letter-spacing: 0.15pt;
   widows: 3;
   orphans: 3;
@@ -303,28 +306,61 @@ code {
   line-height: 1.4;
 }
 .chapter {
+  break-before: auto;
+}
+.chapter-01,
+.chapter-04,
+.chapter-07,
+.chapter-08,
+.chapter-13,
+.source-index {
   break-before: page;
 }
 .chapter-07 {
-  font-size: 9.6pt;
-  line-height: 1.55;
+  font-size: 8.75pt;
+  line-height: 1.42;
 }
-.chapter-07 h2 { margin-top: 14pt; }
-.chapter-07 li { margin: 1.4pt 0; }
-.chapter-11 ul {
+.chapter-07 h2 {
+  margin: 10pt 0 5pt;
+  font-size: 13.5pt;
+}
+.chapter-07 p { margin-bottom: 6pt; }
+.chapter-07 li { margin: 1pt 0; }
+.chapter-07 table {
+  margin: 7pt 0 9pt;
+  font-size: 7.55pt;
+  line-height: 1.3;
+}
+.chapter-07 th { padding: 4pt 5pt; }
+.chapter-07 td { padding: 3.6pt 5pt; }
+.chapter-13 ul {
   columns: 2;
   column-gap: 8mm;
 }
-.chapter-11 li {
+.chapter-13 li {
   break-inside: avoid;
   margin: 1.5pt 0;
 }
+.chapter-13 {
+  font-size: 9.55pt;
+  line-height: 1.48;
+}
+.chapter-13 h2 { margin: 13pt 0 6pt; }
+.chapter-13 p { margin-bottom: 7pt; }
+.chapter-13 table {
+  margin: 8pt 0 10pt;
+  font-size: 7.95pt;
+  line-height: 1.36;
+}
+.chapter-13 th { padding: 4.5pt 5pt; }
+.chapter-13 td { padding: 4pt 5pt; }
 .chapter-kicker {
   margin-bottom: 3mm;
   color: var(--brand);
   font-family: "JetBrains Mono";
   font-size: 7.2pt;
   letter-spacing: 0.14em;
+  break-after: avoid;
 }
 .chapter > h1 {
   string-set: chapter-title content();
@@ -334,6 +370,7 @@ code {
   border-bottom: 0.5pt solid var(--line);
   font-size: 22pt;
   line-height: 1.25;
+  break-after: avoid;
 }
 h2 {
   margin: 20pt 0 7pt;
@@ -414,9 +451,16 @@ figcaption {
   border-radius: 4pt;
   background: var(--paper);
 }
-.source-index h2 { margin-top: 16pt; }
+.source-index {
+  font-size: 8.85pt;
+  line-height: 1.43;
+}
+.source-index h2 {
+  margin: 11pt 0 5pt;
+  font-size: 13.5pt;
+}
 .source-index ul { padding-left: 16pt; }
-.source-index li { margin-bottom: 4pt; }
+.source-index li { margin-bottom: 2.4pt; }
 .source-index a { overflow-wrap: anywhere; }
 .colophon {
   margin-top: 12mm;
@@ -472,7 +516,7 @@ def chapterize(rendered: str) -> tuple[str, list[str]]:
         body = body.replace("<h3>", "<h2>").replace("</h3>", "</h2>")
         body = body.replace("<h4>", "<h3>").replace("</h4>", "</h3>")
         if title.startswith("04. Siri AI"):
-            body = body.replace("<h2>4.3 Personal Context", ARCHITECTURE + "<h2>4.3 Personal Context", 1)
+            body = body.replace("<h2>4.4 App Intents", ARCHITECTURE + "<h2>4.4 App Intents", 1)
         chapters.append(
             f'<section class="chapter chapter-{number.lower()}"><div class="chapter-kicker">'
             f'{number} · WWDC 2026</div><h1>{match.group(1)}</h1>{body}</section>'
@@ -504,7 +548,7 @@ def source_chapter() -> tuple[str, str]:
         '<h1>来源与使用边界</h1>'
         f"{rendered}"
         '<div class="colophon">'
-        "研究与撰写：Winston · 版本 1.0 · 2026-06-09"
+        "研究与撰写：Winston · 版本 2.0 · 2026-06-16"
         "</div></section>",
         "来源与使用边界",
     )
@@ -523,10 +567,11 @@ def build() -> None:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>WWDC 2026 全景报告</title>
+  <title>WWDC 2026 闭幕后全景报告</title>
   <meta name="author" content="Winston">
-  <meta name="description" content="WWDC 2026 官方信息与开发者技术全景报告，覆盖 Siri AI、Apple Intelligence、OS 27、Xcode 27、Swift 6.4、App Store 与可用性边界。">
-  <meta name="keywords" content="WWDC 2026,Siri AI,Apple Intelligence,OS 27,Xcode 27">
+  <meta name="generator" content="wwdc-2026-report/build.py">
+  <meta name="description" content="WWDC 2026 闭幕后官方信息与开发者技术全景报告，覆盖 Siri AI、Apple Intelligence、OS 27、Xcode 27、137 个视频索引条目、Apple 服务、App Store 与可用性边界。">
+  <meta name="keywords" content="WWDC 2026,Siri AI,Apple Intelligence,OS 27,Xcode 27,Apple Developer">
   <style>{CSS}</style>
 <link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>
@@ -534,13 +579,13 @@ def build() -> None:
 <main>
   <section class="cover">
     <div>
-      <div class="cover-topline"><span>APPLE DEVELOPER RESEARCH</span><span>2026 · 06 · 09</span></div>
+      <div class="cover-topline"><span>APPLE DEVELOPER RESEARCH</span><span>2026 · 06 · 16</span></div>
       <div class="cover-copy">
         <div class="cover-eyebrow">WWDC26 · OFFICIAL INFORMATION &amp; ANALYSIS</div>
-        <h1>WWDC 2026 全景报告
-          <span>Siri AI 进入开发者测试，OS 27 重建可靠性与平台能力</span>
+        <h1>WWDC 2026 闭幕后全景报告
+          <span>Siri AI 进入开发者测试，Apple 把模型、代理与系统服务收进同一套平台</span>
         </h1>
-        <p class="cover-deck">基于 Apple Newsroom、Apple Developer、六大操作系统产品页及权威媒体报道，拆解 Siri AI、开发者 AI 栈、OS 27、平台治理和真实可用性边界。</p>
+        <p class="cover-deck">基于 Apple Newsroom、Apple Developer、六大操作系统产品页与官方会话，复核 Siri AI、开发者 AI 栈、OS 27、Apple 服务、平台治理和真实可用性边界。</p>
       </div>
       <figure class="cover-visual">
         <img src="assets/apple-platforms-siri-ai.jpg" alt="Apple 官方展示的 Mac、iPhone、iPad、Apple Watch 与 Apple Vision Pro">
@@ -548,8 +593,8 @@ def build() -> None:
       </figure>
     </div>
     <div class="cover-meta">
-      <div><strong>Winston</strong><br>版本 1.0 · 北京时间 2026-06-09</div>
-      <div>官方事实优先<br>媒体观点单独标注</div>
+      <div><strong>Winston</strong><br>版本 2.0 · 北京时间 2026-06-16</div>
+      <div>官方事实优先<br>证据日期明确</div>
     </div>
   </section>
   {build_toc(titles)}

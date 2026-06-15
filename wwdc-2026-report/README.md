@@ -1,4 +1,4 @@
-# WWDC 2026 全景报告
+# WWDC 2026 闭幕后全景报告
 
 本目录收录 WWDC 2026 的完整研究稿、来源索引、主张映射、HTML 长文版与打印级 PDF。
 
@@ -13,18 +13,18 @@
 
 ## 时间边界
 
-报告完成于北京时间 2026 年 6 月 9 日。WWDC26 于美国太平洋时间 6 月 8 日开幕，会议持续至 6 月 12 日。因此，本文覆盖 Keynote、Platforms State of the Union、Apple 首批官方页面与当时已上线的开发者视频，不把会议后续几天可能新增或修订的内容写成既定事实。
+报告于北京时间 2026 年 6 月 16 日完成闭幕后复核。WWDC26 已于 6 月 12 日结束；Apple Developer 视频索引当时有 137 个去重条目，其中 134 个可播放、3 个仍标记为即将上线。报告对动态页面、beta 状态、地区和额度条件保留明确的证据日期。
 
 ## 生成 PDF
 
 ```bash
-python3 -m venv /tmp/wwdc26-report-venv
-/tmp/wwdc26-report-venv/bin/pip install weasyprint pypdf pymupdf markdown
-/tmp/wwdc26-report-venv/bin/python wwdc-2026-report/build.py
+make fonts
+.venv/bin/python wwdc-2026-report/build.py
+make verify
 ```
 
 `build.py` 会从 `report.md` 与 `sources.md` 重新生成 `index.html` 和 PDF。
 
 ## 研究原则
 
-事实优先使用 Apple Newsroom、Apple Developer 与 Apple 操作系统产品页。媒体报道只用于补充发布语境和外部评价，不替代 Apple 对功能、设备、区域和时间的官方口径。
+事实使用 Apple Newsroom、Apple Developer、操作系统产品页与官方会话。页面测量、Apple 自报数据、分析判断和未知事项分别标注，不把 beta 计划、基准峰值或平台数据改写成稳定交付和独立验证。
