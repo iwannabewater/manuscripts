@@ -44,6 +44,7 @@
 | 蔚小理 2026 | 蔚来、小鹏、理想汽车的发展现状、困境、优势和长期战略前景分析 | `neo-ev-forces-2026/index.html` / `neo-ev-forces-2026/neo-ev-forces-2026.pdf` |
 | 大陆居民合规配置港股、美股与境外基金 | 大陆居民合法合规配置港股、美股敞口与境外基金的路径地图、红线、执行动作、税费与风控检查 | `mainland-china-legal-global-investing-2026/index.html` / `mainland-china-legal-global-investing-2026/mainland-china-legal-global-investing-2026.pdf` |
 | 场外定投美国宽基 2026 | 中国内地投资者配置纳斯达克 100 与标普 500 的 QDII 场外份额筛选、期限策略和执行清单 | `otc-us-index-dca-2026/index.html` / `otc-us-index-dca-2026/otc-us-index-dca-2026.pdf` |
+| 场外纳斯达克 100 基金推荐排名 2026 | 基于公开费率、规模、限购状态和阶段跟踪复核的人民币场外纳斯达克 100 QDII 基金执行型推荐排序 | `nasdaq100-otc-fund-ranking-2026/index.html` / `nasdaq100-otc-fund-ranking-2026/nasdaq100-otc-fund-ranking-2026.pdf` |
 
 ## Directory Contract
 

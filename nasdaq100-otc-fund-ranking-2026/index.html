@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<!-- 纳斯达克 100 场外基金推荐排名 · A4 阅读版 -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>场外纳斯达克 100 基金推荐排名 2026</title>
+<meta name="author" content="Winston">
+<meta name="description" content="基于 2026-06-17 可得公开数据，对境内场外纳斯达克 100 QDII 基金进行执行型买入排序。">
+<meta name="keywords" content="纳斯达克100, QDII, 场外基金, 基金排名, Winston">
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
+<style>
+  @font-face { font-family: "TsangerJinKai02"; src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"); font-weight: 400; font-style: normal; }
+  @font-face { font-family: "TsangerJinKai02"; src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"); font-weight: 500; font-style: normal; }
+  @font-face { font-family: "JetBrains Mono"; src: url("../assets/fonts/JetBrainsMono.woff2") format("woff2"); font-weight: 400 800; font-style: normal; }
+  @page { size: A4; margin: 20mm 22mm 22mm 22mm; background: #f5f4ed; @top-right { content: string(section-title); font-family: "TsangerJinKai02"; font-size: 8pt; color: #6b6a64; } @bottom-center { content: counter(page) "  ·  场外纳斯达克 100 基金推荐排名"; font-family: "TsangerJinKai02"; font-size: 9pt; color: #6b6a64; } }
+  @page:first { @top-right { content: ""; } @bottom-center { content: ""; } }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --parchment: #f5f4ed; --ivory: #faf9f5; --near-black: #141413; --dark-warm: #3d3d3a; --olive: #504e49; --stone: #6b6a64; --brand: #1B365D; --border: #e8e6dc; --border-soft: #e5e3d8; --tag-bg: #E4ECF5; --text-font: "TsangerJinKai02"; --code-font: "JetBrains Mono", "TsangerJinKai02"; }
+  html, body { background: var(--parchment); }
+  @media screen { body { max-width: 210mm; margin: 0 auto; padding: 20mm 22mm 22mm 22mm; } }
+  body { color: var(--near-black); font-family: var(--text-font); font-size: 10.4pt; line-height: 1.55; letter-spacing: 0.25pt; widows: 3; orphans: 3; }
+  strong { font-weight: 500; }
+  .cover { min-height: 240mm; display: flex; flex-direction: column; justify-content: space-between; padding: 38mm 0 0 0; break-after: page; }
+  .cover-eyebrow { display: inline-flex; align-items: center; gap: 8pt; font-size: 10pt; color: var(--brand); letter-spacing: 1.4pt; text-transform: uppercase; font-weight: 500; margin-bottom: 18pt; }
+  .cover-eyebrow::before { content: ""; width: 9pt; height: 1.5pt; border-radius: 0.75pt; background: var(--brand); }
+  .cover-title { font-size: 35pt; font-weight: 500; line-height: 1.16; letter-spacing: 0.25pt; margin-bottom: 16pt; }
+  .cover-sub { font-size: 13.6pt; color: var(--olive); line-height: 1.52; max-width: 88%; margin-bottom: 30pt; }
+  .cover-meta { font-size: 10pt; color: var(--stone); line-height: 1.6; }
+  .toc { break-after: page; }
+  .toc h2 { font-size: 22pt; font-weight: 500; margin-bottom: 14pt; border-left: 2.5pt solid var(--brand); border-radius: 1.5pt; padding-left: 8pt; }
+  .toc-item { display: flex; justify-content: space-between; align-items: baseline; padding: 6pt 0; border-bottom: 0.3pt dotted var(--border); font-size: 11pt; }
+  .toc-num { color: var(--brand); min-width: 30pt; font-weight: 500; }
+  .toc-title { flex: 1; padding-left: 6pt; }
+  .toc-page { color: var(--stone); font-variant-numeric: tabular-nums; }
+  h1 { font-size: 22pt; font-weight: 500; line-height: 1.2; margin: 0 0 10pt 0; border-left: 2.5pt solid var(--brand); border-radius: 1.5pt; padding-left: 8pt; break-after: avoid; string-set: section-title content(); }
+  h2 { font-size: 16pt; font-weight: 500; line-height: 1.25; margin: 24pt 0 8pt 0; break-after: avoid; string-set: section-title content(); }
+  h3 { font-size: 13pt; font-weight: 500; line-height: 1.3; margin: 18pt 0 6pt 0; color: var(--dark-warm); break-after: avoid; }
+  p { margin: 0 0 10pt 0; line-height: 1.55; }
+  .lead { font-size: 12pt; color: var(--dark-warm); line-height: 1.55; margin-bottom: 14pt; }
+  .muted { color: var(--stone); font-size: 8.8pt; }
+  .hl { color: var(--brand); font-weight: 500; }
+  .page-break { break-before: page; }
+  table { width: 100%; border-collapse: collapse; font-size: 8.8pt; margin: 12pt 0; break-inside: avoid; }
+  table.ranking-table { break-inside: auto; font-size: 8.1pt; }
+  table.ranking-table th { padding: 4pt 4pt; }
+  table.ranking-table td { padding: 3pt 4pt; }
+  table.ranking-table tr { break-inside: avoid; }
+  table.compact-table { font-size: 8.6pt; }
+  table.compact-table th, table.compact-table td { text-align: left !important; }
+  th { text-align: left; font-weight: 500; color: var(--dark-warm); padding: 5pt 5pt; border-bottom: 1pt solid var(--border); }
+  td { padding: 4pt 5pt; border-bottom: 0.3pt solid var(--border-soft); vertical-align: top; }
+  td:nth-child(3), td:nth-child(4), td:nth-child(5), td:nth-child(6), td:nth-child(7), th:nth-child(3), th:nth-child(4), th:nth-child(5), th:nth-child(6), th:nth-child(7) { text-align: right; font-variant-numeric: tabular-nums; }
+  tbody tr:nth-child(even) td { background: var(--ivory); }
+  .tag { display: inline-block; background: var(--tag-bg); color: var(--brand); font-size: 8.6pt; font-weight: 500; padding: 1pt 5pt; border-radius: 2pt; letter-spacing: 0.3pt; }
+  .callout { background: var(--ivory); border-left: 2pt solid var(--brand); padding: 10pt 14pt; border-radius: 3pt; margin: 12pt 0; line-height: 1.55; break-inside: avoid; }
+  .metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10pt; margin: 14pt 0 18pt; }
+  .metric { background: var(--ivory); border: 0.5pt solid var(--border); border-radius: 5pt; padding: 9pt 10pt; min-height: 48pt; }
+  .metric-value { color: var(--brand); font-size: 18pt; font-weight: 500; font-variant-numeric: tabular-nums; line-height: 1.1; }
+  .metric-label { color: var(--olive); font-size: 8.8pt; line-height: 1.35; margin-top: 3pt; }
+  .rank-grid { display: grid; grid-template-columns: 1.1fr 1fr; gap: 12pt; margin: 10pt 0 14pt; }
+  .panel { background: var(--ivory); border: 0.5pt solid var(--border); border-radius: 5pt; padding: 10pt 12pt; break-inside: avoid; }
+  .panel h3 { margin-top: 0; }
+  .bar { display: grid; grid-template-columns: 72pt 1fr 32pt; gap: 6pt; align-items: center; margin: 4pt 0; font-size: 8.6pt; }
+  .bar-line { height: 7pt; background: #e8e6dc; border-radius: 4pt; overflow: hidden; }
+  .bar-line span { display: block; height: 100%; background: var(--brand); border-radius: 4pt; }
+  .source { color: var(--stone); font-size: 8.7pt; line-height: 1.45; }
+  .appendix-list li { margin-bottom: 4pt; }
+  ol, ul { margin: 6pt 0 10pt 0; padding-left: 18pt; }
+  li::marker { color: var(--brand); }
+  a { color: var(--brand); text-decoration: none; }
+  code { font-family: var(--code-font); font-size: 8.7pt; background: var(--ivory); padding: 1pt 3pt; border-radius: 2pt; }
+</style>
+</head>
+<body>
+<section class="cover">
+  <div>
+    <div class="cover-eyebrow">Research memo · QDII · Nasdaq 100</div>
+    <div class="cover-title">场外纳斯达克 100 基金推荐排名 2026</div>
+    <div class="cover-sub">面向中国内地普通投资者的人民币场外 QDII 筛选。结论以 2026-06-17 可得公开信息为准，排名优先考虑真实可买性、长期成本、规模与跟踪稳定性。</div>
+  </div>
+  <div class="cover-meta">
+    <div><strong>作者：</strong>Winston</div>
+    <div><strong>证据日期：</strong>基金净值与交易状态截至 2026-06-16 至 2026-06-17；规模截至 2026-03-31；QDII 额度表发布日期 2026-05-29。</div>
+    <div><strong>边界：</strong>研究型排序，不构成个性化投资建议、收益承诺或适当性结论。</div>
+  </div>
+</section>
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">先给结论：现在真正能执行的排序</span><span class="toc-page">03</span></div>
+  <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">筛选口径：为什么不是简单看一年涨幅</span><span class="toc-page">04</span></div>
+  <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">头部基金逐只拆解</span><span class="toc-page">05</span></div>
+  <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">暂停申购产品：值得盯，但不能写成可买</span><span class="toc-page">06</span></div>
+  <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">头部选择和外部参照</span><span class="toc-page">06</span></div>
+  <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">买入执行清单与风险边界</span><span class="toc-page">07</span></div>
+  <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">数据、来源与评分说明</span><span class="toc-page">08</span></div>
+</section>
+<section>
+  <h1>先给结论：现在真正能执行的排序</h1>
+  <p class="lead">如果只看长期产品质量，博时、天弘、嘉实、易方达、国泰都可以进入讨论；但截至本次抓取，它们在天天基金展示为暂停申购，不能放进“现在买入”的首选名单。本文的主榜只排当前仍显示限大额申购的人民币场外份额。</p>
+  <div class="metrics">
+    <div class="metric"><div class="metric-value">41</div><div class="metric-label">只人民币相关候选份额纳入原始池</div></div>
+    <div class="metric"><div class="metric-value">11</div><div class="metric-label">只当前可执行主榜份额</div></div>
+    <div class="metric"><div class="metric-value">0.60%</div><div class="metric-label">样本最低年度运作费率</div></div>
+    <div class="metric"><div class="metric-value">10-100</div><div class="metric-label">主榜常见单日申购上限，单位为元</div></div>
+  </div>
+  <table class="ranking-table">
+    <thead><tr><th>排名</th><th>基金</th><th>执行分</th><th>年运作费</th><th>规模</th><th>日限额</th><th>近 1 年</th><th>判断</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td><strong>南方纳斯达克100指数发起 A</strong><br><span class="muted">016452 · 首选执行</span></td><td>91</td><td>0.65%</td><td>31.11 亿元</td><td>50</td><td>27.06%</td><td>费率低、总规模最大的一组低费率直投型份额，当前限额 50 元。</td></tr>
+<tr><td>2</td><td><strong>摩根纳斯达克100指数 A</strong><br><span class="muted">019172 · 低费率强候选</span></td><td>88</td><td>0.6%</td><td>21.78 亿元</td><td>10</td><td>27.44%</td><td>运作费率 0.60% 为样本最低档之一，规模过 20 亿元，但当前限额 10 元。</td></tr>
+<tr><td>3</td><td><strong>汇添富纳斯达克100ETF联接 A</strong><br><span class="muted">018966 · 额度友好</span></td><td>86</td><td>0.65%</td><td>10.35 亿元</td><td>100</td><td>25.61%</td><td>低费率且当前限额 100 元，短板是近一年跟踪表现略落后。</td></tr>
+<tr><td>4</td><td><strong>华安纳斯达克100ETF联接 A</strong><br><span class="muted">040046 · 老牌稳定</span></td><td>85</td><td>0.8%</td><td>47.03 亿元</td><td>10</td><td>28.52%</td><td>成立时间长、规模足、近一年收益靠前，成本高于低费率新品。</td></tr>
+<tr><td>5</td><td><strong>招商纳斯达克100ETF联接 A</strong><br><span class="muted">019547 · 低费率观察</span></td><td>82</td><td>0.65%</td><td>16.52 亿元</td><td>10</td><td>26.93%</td><td>低费率、规模已到可用区间，但历史样本仍短且限额 10 元。</td></tr>
+<tr><td>6</td><td><strong>建信纳斯达克100指数 A</strong><br><span class="muted">539001 · 老牌可买</span></td><td>80</td><td>1%</td><td>16.24 亿元</td><td>100</td><td>26.29%</td><td>成立时间最早之一，当前限额 100 元，成本偏高。</td></tr>
+<tr><td>7</td><td><strong>广发纳斯达克100ETF联接 A</strong><br><span class="muted">270042 · 最大规模备选</span></td><td>79</td><td>1%</td><td>97.16 亿元</td><td>10</td><td>27.84%</td><td>规模和历史最好看，但 1.00% 运作费率与 10 元限额拖累推荐顺位。</td></tr>
+<tr><td>8</td><td><strong>华泰柏瑞纳斯达克100ETF联接 A</strong><br><span class="muted">019524 · 低费率备选</span></td><td>77</td><td>0.65%</td><td>7.02 亿元</td><td>10</td><td>26.59%</td><td>低费率，规模和历史长度弱于前列。</td></tr>
+<tr><td>9</td><td><strong>万家纳斯达克100指数 A</strong><br><span class="muted">019441 · 小规模低费率</span></td><td>76</td><td>0.65%</td><td>4.38 亿元</td><td>50</td><td>26.42%</td><td>低费率且限额 50 元，但规模较小。</td></tr>
+<tr><td>10</td><td><strong>宝盈纳斯达克100指数 A</strong><br><span class="muted">019736 · 小规模低费率</span></td><td>74</td><td>0.65%</td><td>5.68 亿元</td><td>10</td><td>26.62%</td><td>低费率，但规模与限额不占优。</td></tr>
+<tr><td>11</td><td><strong>大成纳斯达克100ETF联接 A</strong><br><span class="muted">000834 · 传统备选</span></td><td>72</td><td>1%</td><td>34.53 亿元</td><td>10</td><td>27.49%</td><td>规模和年限不错，成本偏高且限额 10 元。</td></tr>
+    </tbody>
+  </table>
+  <div class="callout"><strong>我的排序结论很直接：</strong>首选南方 A，低成本与规模平衡最好；若能忍受 10 元日限额，摩根 A 是低费率强候选；如果更看重每天能多买一点，汇添富 A 比不少老产品更顺手。华安、广发、建信属于老牌稳健备选，优点是历史和规模，缺点是成本更高。</div>
+</section>
+<section>
+  <h2>为什么不是简单看一年涨幅</h2>
+  <p>纳斯达克 100 是一条高度同质的指数暴露。基金之间的年度收益差异，通常来自费率、现金拖累、汇率估值、申赎安排、目标 ETF 折溢价处理和短期跟踪误差。把“近一年涨幅最高”直接当成买入推荐，会把偶然的跟踪偏离误读为管理能力。</p>
+  <p>本文把权重放在五个维度：年运作费率、当前申购状态和日限额、基金规模、阶段收益是否明显偏离同类、成立时间。申购状态单独加权，是因为 2026 年 QDII 额度仍是硬约束。国家外汇管理局 2026-05-29 发布的 QDII 额度审批情况表说明额度仍按机构管理，销售端的暂停申购和小额限购是投资者能不能执行的第一道门槛。</p>
+  <p>同一产品的 A、C、I、E 类不能混在一起看。长期持有通常偏向 A 类或低销售服务费的 I/E 类，因为一次性申购费被时间摊薄；短期或不确定持有期限可看 C 类，但 C 类每年销售服务费会持续扣。本文主榜以普通长期持有为目标，优先列 A 类；当 I/E 类更便宜但渠道不稳定时，只作为替代说明。</p>
+  <table class="compact-table">
+    <thead><tr><th>排序先问什么</th><th>处理原则</th></tr></thead>
+    <tbody>
+      <tr><td>今天能不能买</td><td>暂停申购不进主榜；限大额产品按日限额高低调整执行分。</td></tr>
+      <tr><td>长期成本够不够低</td><td>同等可买性下，0.60% 到 0.65% 运作费率优先于 0.80% 到 1.00% 老产品。</td></tr>
+      <tr><td>规模是否足够</td><td>规模太小会放大申赎和现金摩擦，规模足但费率高则降为稳健备选。</td></tr>
+      <tr><td>收益是否异常</td><td>阶段收益只做跟踪复核，不把短期领先直接写成产品能力。</td></tr>
+    </tbody>
+  </table>
+</section>
+<section>
+  <h2>头部基金逐只拆解</h2>
+  <div class="rank-grid">
+    <div class="panel"><h3>费用对比</h3>
+      <div class="bar"><span>016452</span><div class="bar-line"><span style="width:61%"></span></div><span>0.65%</span></div><div class="bar"><span>019172</span><div class="bar-line"><span style="width:64%"></span></div><span>0.6%</span></div><div class="bar"><span>018966</span><div class="bar-line"><span style="width:61%"></span></div><span>0.65%</span></div><div class="bar"><span>040046</span><div class="bar-line"><span style="width:52%"></span></div><span>0.8%</span></div><div class="bar"><span>019547</span><div class="bar-line"><span style="width:61%"></span></div><span>0.65%</span></div><div class="bar"><span>539001</span><div class="bar-line"><span style="width:40%"></span></div><span>1%</span></div><div class="bar"><span>270042</span><div class="bar-line"><span style="width:40%"></span></div><span>1%</span></div><div class="bar"><span>019524</span><div class="bar-line"><span style="width:61%"></span></div><span>0.65%</span></div>
+      <p class="source">条越长代表年度运作费越低。申购费另行列示，A 类在长期持有中通常更容易摊薄。</p>
+    </div>
+    <div class="panel"><h3>规模对比</h3>
+      <div class="bar"><span>016452</span><div class="bar-line"><span style="width:31.11%"></span></div><span>31.11</span></div><div class="bar"><span>019172</span><div class="bar-line"><span style="width:21.78%"></span></div><span>21.78</span></div><div class="bar"><span>018966</span><div class="bar-line"><span style="width:12%"></span></div><span>10.35</span></div><div class="bar"><span>040046</span><div class="bar-line"><span style="width:47.03%"></span></div><span>47.03</span></div><div class="bar"><span>019547</span><div class="bar-line"><span style="width:16.52%"></span></div><span>16.52</span></div><div class="bar"><span>539001</span><div class="bar-line"><span style="width:16.24%"></span></div><span>16.24</span></div><div class="bar"><span>270042</span><div class="bar-line"><span style="width:97.16%"></span></div><span>97.16</span></div><div class="bar"><span>019524</span><div class="bar-line"><span style="width:12%"></span></div><span>7.02</span></div>
+      <p class="source">单位为亿元。规模不是越大越好，但太小会放大申赎、现金和运营摩擦。</p>
+    </div>
+  </div>
+  <h3>1. 南方纳斯达克 100 指数发起 A，最均衡的首选</h3>
+  <p>南方 A 的年运作费率为 0.65%，A 类规模 31.11 亿元，同产品 C 类和 I 类合计后规模更可观。当前展示为限大额，日累计申购上限 50 元。它不是一年涨幅最高的产品，但成本、规模、可买性三项同时过线，适合作为普通投资者的默认执行份额。</p>
+  <h3>2. 摩根纳斯达克 100 指数 A，低费率但额度太窄</h3>
+  <p>摩根 A 的年运作费率为 0.60%，在样本里处于最低档，A 类规模 21.78 亿元，近一年收益 27.44%。它的问题不是产品质量，而是当前日限额只有 10 元。适合每天小额慢慢排队，不适合一次性把目标仓位建起来。</p>
+  <h3>3. 汇添富纳斯达克 100ETF 联接 A，执行便利性好</h3>
+  <p>汇添富 A 的年运作费率为 0.65%，当前展示日限额 100 元，是主榜里更友好的执行额度之一。它的近一年收益 25.61%，低于主榜中部分产品，所以我不把它排到第一。但如果投资者的核心目标是“每天能稳定买到一点”，它比 10 元限额的老牌产品更顺手。</p>
+  <h3>4. 华安纳斯达克 100ETF 联接 A，老牌产品里的质量样本</h3>
+  <p>华安 A 成立于 2013 年，A 类规模 47.03 亿元，近一年收益 28.52%，近三年 78.70%。它的短板是 0.80% 的年运作费率高于新一代低费率产品，当前日限额也只有 10 元。适合偏好长历史、愿意为成熟运营付费的人。</p>
+  <h3>5. 招商、建信、广发、华泰柏瑞、万家、宝盈、大成怎么取舍</h3>
+  <p>招商 A 的费率和规模都能看，但历史还短；建信 A 和广发 A 胜在历史和规模，输在年运作费率 1.00%；华泰柏瑞 A、万家 A、宝盈 A 是低费率小规模阵营，适合作为第二梯队补充；大成 A 有历史和规模，但费用结构不占优。</p>
+</section>
+<section class="page-break">
+  <h2>暂停申购产品：值得盯，但不能写成可买</h2>
+  <p>下面这些产品并不差，有些指标甚至很好。本文没有把它们放进主榜前列，是因为截至抓取时销售平台显示暂停申购。恢复申购后，应按同一张评分表重新排。</p>
+  <table>
+    <thead><tr><th>代码</th><th>产品</th><th>年运作费</th><th>规模</th><th>状态</th><th>观察意见</th></tr></thead>
+    <tbody><tr><td>016055</td><td>博时纳斯达克 100ETF 发起式联接 A</td><td>0.65%</td><td>13.01 亿元</td><td>暂停申购</td><td>近 1 年 28.08%，指标好，但当前不可作为执行首选</td></tr><tr><td>018043</td><td>天弘纳斯达克 100 指数发起 A</td><td>0.60%</td><td>21.86 亿元</td><td>暂停申购</td><td>低费率、规模够用，恢复申购后应进入第一梯队复核</td></tr><tr><td>016532</td><td>嘉实纳斯达克 100ETF 发起联接 A</td><td>0.60%</td><td>18.86 亿元</td><td>暂停申购</td><td>费用和规模都好，当前买入路径受阻</td></tr><tr><td>161130</td><td>易方达纳斯达克 100ETF 联接 A</td><td>0.60%</td><td>15.17 亿元</td><td>暂停申购</td><td>LOF 份额历史表现强，但目前不能按普通场外申购执行</td></tr><tr><td>160213</td><td>国泰纳斯达克 100 指数</td><td>约 1.00%</td><td>16.36 亿元</td><td>暂停申购</td><td>历史长、近 3 年表现突出，成本和状态限制较明显</td></tr><tr><td>015299</td><td>华夏纳斯达克 100ETF 发起式联接 A</td><td>0.80%</td><td>3.15 亿元</td><td>暂停申购</td><td>产品规模偏小，恢复后仍需看额度和规模</td></tr></tbody>
+  </table>
+  <p>这里最值得盯的是博时 A、天弘 A、嘉实 A 和易方达 A。它们的成本低，规模不算小，阶段收益也没有明显异常。问题是“好产品”和“现在可买”是两件事。场外 QDII 的现实是额度先决定门票，产品质量决定拿到门票后买哪只。</p>
+</section>
+<section>
+  <h2>头部选择和外部参照</h2>
+  <p>如果投资者拥有合规的境外账户，Invesco 的 QQQM 是更直接的长期参照，官方披露的费用率为 0.15%；QQQ 的官方费用率在 2026 年已降至 0.18%。这说明人民币 QDII 的 0.60% 到 1.30% 运作费率并不便宜，它买的是境内合规通道、人民币申赎和基金公司处理跨境交易的便利。</p>
+  <p>境内投资者更容易踩坑的是场内 ETF 溢价。场外份额按基金净值申赎，理论上避开了二级市场溢价，但代价是额度、T+2 确认、节假日暂停和每日限额。2026 年在纳指相关 QDII 产品上，这些限制不是边角问题，而是执行策略本身。</p>
+  <div class="callout"><strong>实操建议：</strong>已有仓位的人，不必为了 0.1 个百分点的费率差频繁切换；新建仓的人，先用南方 A 或汇添富 A 这类可执行份额建立规则，再把摩根 A、华安 A 当作低费率或长历史补充。暂停申购产品恢复后再复核，不要在场内溢价高的时候追 ETF。</div>
+</section>
+<section>
+  <h2>买入执行清单与风险边界</h2>
+  <ol>
+    <li><strong>申购日前先查状态。</strong>QDII 产品会因额度、美国市场节假日、基金公司风控临时暂停申购。本文数据不能替代下单当天的状态确认。</li>
+    <li><strong>长期持有优先 A 类，短期不确定再看 C 类。</strong>A 类有一次性申购费，平台折后常见 0.10% 到 0.13%；C 类没有申购费，但销售服务费每年扣。</li>
+    <li><strong>不要把纳斯达克 100 当成“分散全球”。</strong>Nasdaq 官方方法论写明指数覆盖 100 家 Nasdaq 上市非金融公司，并采用修正市值加权。它是美国大盘成长与科技集中暴露，不是全球均衡组合。</li>
+    <li><strong>定投解决的是心理和执行，不保证更高收益。</strong>一次性投入和分批投入谁更优，取决于后续市场路径。对大多数普通投资者，稳定执行比猜短期点位更重要。</li>
+    <li><strong>汇率是收益的一部分。</strong>人民币份额的净值会受到美元资产表现和汇率折算共同影响。纳指上涨但人民币升值时，人民币份额收益可能被压低。</li>
+  </ol>
+  <p>这份排名默认读者已经通过适当性匹配，能承受中高风险权益产品波动。纳斯达克 100 在上涨年份很容易让人低估回撤，真正的风险不是“买不到最好的一只”，而是在高估值、高集中度和汇率波动叠加时，用不适合自己的仓位买入。</p>
+  <table class="compact-table">
+    <thead><tr><th>风险</th><th>触发信号</th><th>处理原则</th></tr></thead>
+    <tbody>
+      <tr><td>额度风险</td><td>限大额变为暂停申购，或日限额进一步压低。</td><td>先保留现金计划，不用场内高溢价替代；恢复后重新跑评分。</td></tr>
+      <tr><td>成本风险</td><td>低费率产品恢复申购，或现持产品费率明显高于同类。</td><td>新钱优先低费率可买份额；存量是否切换要扣除赎回费、确认时间和汇率窗口。</td></tr>
+      <tr><td>集中度风险</td><td>美股大盘成长估值扩张，纳指回撤和汇率波动同时放大。</td><td>用目标仓位约束投入速度，不把单一指数当作完整权益组合。</td></tr>
+      <tr><td>跟踪风险</td><td>阶段收益长期偏离同类中位数，且不能用费率或汇率解释。</td><td>降为观察名单，等季报和净值序列复核后再决定是否继续买入。</td></tr>
+    </tbody>
+  </table>
+</section>
+<section class="page-break">
+  <h2>数据、来源与评分说明</h2>
+  <p>原始候选池来自天天基金/东方财富基金档案页和阶段涨幅接口，抓取 41 个人民币相关份额。规模字段使用 2026-03-31 净资产规模，净值与交易状态使用 2026-06-16 至 2026-06-17 页面展示。主榜只保留当前显示“限大额”且可场外申购的人民币份额。</p>
+  <p>执行分满分 100，权重为费用 35%、申购可执行性 25%、规模 20%、阶段跟踪复核 10%、成立时间 10%。这不是收益预测，也不是对基金经理主动能力的评价，只是为了回答一个更窄的问题：在今天的场外通道里，哪只更值得先买。</p>
+  <table class="compact-table">
+    <thead><tr><th>维度</th><th>权重</th><th>字段</th><th>证据等级</th></tr></thead>
+    <tbody>
+      <tr><td>费用</td><td>35%</td><td>管理费、托管费、销售服务费、常见申购费折扣。</td><td>基金档案与基金公司页面。</td></tr>
+      <tr><td>可执行性</td><td>25%</td><td>申购状态、单日累计限额、是否暂停申购。</td><td>交易平台实时展示，需下单日复核。</td></tr>
+      <tr><td>规模</td><td>20%</td><td>最近季末净资产规模，A/C/I/E 分份额观察。</td><td>基金档案规模字段。</td></tr>
+      <tr><td>跟踪复核</td><td>10%</td><td>近 1 年、近 3 年阶段收益是否明显脱离同类。</td><td>同口径阶段涨幅接口。</td></tr>
+      <tr><td>成立时间</td><td>10%</td><td>产品运行年限和穿越不同市场阶段的样本长度。</td><td>基金档案与招募说明书。</td></tr>
+    </tbody>
+  </table>
+  <ul class="appendix-list">
+    <li><strong>S1 国家外汇管理局：</strong>合格境内机构投资者 QDII 投资额度审批情况表，发布日期 2026-05-29。</li>
+    <li><strong>S2 Nasdaq：</strong>Nasdaq-100 Index Methodology，2026 年版；Nasdaq-100 官方概览页。</li>
+    <li><strong>S3 Invesco：</strong>QQQM 与 QQQ 官方产品页，用作境外低费率参照。</li>
+    <li><strong>S4 天天基金/东方财富：</strong>基金费率、规模、交易状态、阶段涨幅页面，用于同口径横向对比。</li>
+    <li><strong>S5 基金公司官方页面和公告：</strong>南方、广发、易方达、嘉实、天弘、华夏、汇添富、摩根等产品页或公告，用于复核产品法律名称、份额代码、投资范围和暂停/限购逻辑。</li>
+  </ul>
+  <p class="source">详见同目录 <code>sources.md</code> 与 <code>data/fund-screen-2026-06-17.json</code>、<code>data/fund-ranking-2026-06-17.csv</code>。本文不收录美元份额、场内 ETF 本体、主动股票型纳斯达克精选产品，也不覆盖税务与个人资产配置比例建议。</p>
+</section>
+</body>
+</html>
