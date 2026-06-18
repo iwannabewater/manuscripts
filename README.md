@@ -13,6 +13,7 @@
 
 | 作品 | 主题 | 文件 |
 |---|---|---|
+| RAG 前沿 2026 | 从经典 RAG、Advanced RAG 到 Agentic 检索、多模态知识与国内外平台实践的证据化技术研究 | `rag-frontiers-2026/index.html` / `rag-frontiers-2026/rag-frontiers-2026.pdf` |
 | WWDC 2026 闭幕后全景报告 | 基于 Apple 第一方资料的闭幕后复核，覆盖 Siri AI、开发者 AI 栈、137 个视频索引条目、OS 27、服务、App Store、治理与可用性边界 | `wwdc-2026-report/index.html` / `wwdc-2026-report/wwdc-2026-report.pdf` |
 | Diffusion LLM 2026 | 扩散语言模型的系统入门、数学直觉、架构、训练推理技术栈、国内外厂商版图与未来路线图 | `diffusion-llm-2026/index.html` / `diffusion-llm-2026/diffusion-llm-2026.pdf` |
 | DeepSeek V4 Technical Report 2026 | DeepSeek V4 官方 technical report 的完整中文深度解读，覆盖百万上下文、CSA/HCA、mHC、Muon、系统工程、后训练与代际对比 | `deepseek-v4-technical-report-2026/index.html` / `deepseek-v4-technical-report-2026/deepseek-v4-technical-report-2026.pdf` |

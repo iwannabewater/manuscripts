@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>RAG 前沿 2026：从检索流水线到可学习的知识系统</title>
+<meta name="author" content="Kami">
+<meta name="description" content="从经典 RAG、Advanced RAG 到 Agentic 检索、多模态知识与大厂实践，梳理截至 2026-06-22 的研究证据、工程边界与生产路线。">
+<meta name="keywords" content="RAG, Retrieval-Augmented Generation, Advanced RAG, Agentic RAG, 多模态检索">
+<meta name="generator" content="Kami">
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 20mm 22mm 22mm 22mm;
+    background: #f5f4ed;
+
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02";
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+
+    @bottom-center {
+      content: counter(page) "  ·  RAG 前沿 2026";
+      font-family: "TsangerJinKai02";
+      font-size: 9pt;
+      color: #6b6a64;
+    }
+  }
+
+  @page:first {
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #f5f4ed;
+    --ivory:     #faf9f5;
+    --near-black:#141413;
+    --dark-warm: #3d3d3a;
+    --olive:     #504e49;
+    --stone:     #6b6a64;
+    --brand:     #1B365D;
+    --border:    #e8e6dc;
+    --border-soft:#e5e3d8;
+    --tag-bg:    #E4ECF5;
+    --serif: "TsangerJinKai02";
+    --sans: var(--serif);
+
+    --rhythm-module:  14pt;
+    --rhythm-section: 18pt;
+  }
+
+  html, body { background: var(--parchment); }
+
+  @media screen {
+    body { max-width: 210mm; margin: 0 auto; padding: 20mm 22mm 22mm 22mm; }
+  }
+
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 10.5pt;
+    line-height: 1.55;
+    letter-spacing: 0.3pt;
+    widows: 3;
+    orphans: 3;
+  }
+
+  .sans {
+    font-family: var(--sans);
+  }
+
+  .cover {
+    min-height: 240mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40mm 0 0 0;
+    break-after: page;
+  }
+  .cover-eyebrow {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 18pt;
+  }
+  .cover-title {
+    font-size: 36pt;
+    font-weight: 500;
+    color: var(--near-black);
+    line-height: 1.15;
+    letter-spacing: 0.3pt;
+    margin-bottom: 16pt;
+  }
+  .cover-sub {
+    font-family: var(--sans);
+    font-size: 14pt;
+    color: var(--olive);
+    line-height: 1.5;
+    max-width: 85%;
+    margin-bottom: 30pt;
+  }
+  .cover-meta {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--stone);
+    line-height: 1.5;
+  }
+  .cover-meta strong {
+    color: var(--dark-warm);
+    font-weight: 500;
+  }
+
+  .toc { break-after: page; }
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: var(--rhythm-module);
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6pt 0;
+    border-bottom: 0.3pt dotted var(--border);
+    font-size: 11pt;
+  }
+  .toc-item:last-of-type { border-bottom: none; }
+  .toc-num {
+    color: var(--brand);
+    font-weight: 500;
+    min-width: 30pt;
+  }
+  .toc-title {
+    flex: 1;
+    color: var(--near-black);
+    padding-left: 6pt;
+  }
+  .toc-page {
+    color: var(--stone);
+    font-variant-numeric: tabular-nums;
+  }
+
+  h1 {
+    font-size: 22pt;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 10pt 0;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    color: var(--near-black);
+    break-after: avoid;
+  }
+
+  h2 {
+    font-size: 16pt;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 24pt 0 8pt 0;
+    color: var(--near-black);
+    break-after: avoid;
+  }
+
+  h3 {
+    font-size: 13pt;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 18pt 0 6pt 0;
+    color: var(--dark-warm);
+    break-after: avoid;
+  }
+
+  .chapter-num {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+    string-set: section-title content();
+  }
+
+  .references p {
+    font-size: 8.8pt;
+    line-height: 1.42;
+    margin-bottom: 7pt;
+    break-inside: avoid;
+  }
+
+  .references {
+    column-count: 2;
+    column-gap: 18pt;
+  }
+
+  .references .ref-id {
+    color: var(--brand);
+    font-family: "JetBrains Mono", "TsangerJinKai02";
+    font-weight: 600;
+  }
+
+  .references a {
+    color: var(--brand);
+    text-decoration: none;
+  }
+
+  p {
+    margin: 0 0 10pt 0;
+    line-height: 1.55;
+    color: var(--near-black);
+    widows: 2;
+    orphans: 2;
+  }
+
+  .lead {
+    font-size: 12pt;
+    line-height: 1.55;
+    color: var(--dark-warm);
+    margin-bottom: var(--rhythm-module);
+  }
+
+  .hl { color: var(--brand); font-weight: 500; }
+  strong { font-weight: 500; }
+
+  ul, ol {
+    margin: 6pt 0 10pt 0;
+    padding-left: 20pt;
+    line-height: 1.55;
+  }
+  ul li::marker { color: var(--brand); }
+  ol li::marker { color: var(--brand); font-weight: 500; }
+
+  blockquote, .quote {
+    border-left: 2pt solid var(--brand);
+    margin: 12pt 0;
+    padding: 4pt 0 4pt 16pt;
+    color: var(--olive);
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  blockquote .cite, .quote .cite {
+    display: block;
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 4pt;
+  }
+
+  code {
+    font-family: "JetBrains Mono", "TsangerJinKai02";
+    font-size: 9pt;
+    background: var(--ivory);
+    padding: 1pt 4pt;
+    border-radius: 2pt;
+    color: var(--dark-warm);
+  }
+  pre {
+    font-family: "JetBrains Mono", "TsangerJinKai02";
+    font-size: 9pt;
+    line-height: 1.5;
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 10pt 0;
+    white-space: pre-wrap;
+    color: var(--near-black);
+    break-inside: avoid;
+  }
+  pre code { background: transparent; padding: 0; font-size: inherit; }
+
+  table, .kami-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin: 12pt 0;
+    break-inside: avoid;
+  }
+  table th, .kami-table th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--dark-warm);
+    padding: 6pt 8pt;
+    border-bottom: 1pt solid var(--border);
+    background: transparent;
+  }
+  table td, .kami-table td {
+    padding: 5pt 8pt;
+    border-bottom: 0.3pt solid var(--border-soft);
+    vertical-align: top;
+  }
+  table.compact th, .kami-table.compact th { padding: 3pt 6pt; font-size: 8pt; }
+  table.compact td, .kami-table.compact td { padding: 2pt 6pt; font-size: 8pt; line-height: 1.4; }
+  table.financial td:not(:first-child), .kami-table.financial td:not(:first-child) {
+    text-align: right; font-variant-numeric: tabular-nums;
+  }
+  table.financial th:not(:first-child), .kami-table.financial th:not(:first-child) { text-align: right; }
+  table.striped tbody tr:nth-child(even) td, .kami-table.striped tbody tr:nth-child(even) td {
+    background: var(--ivory);
+  }
+  table .total td, .kami-table .total td {
+    font-weight: 500; border-top: 1pt solid var(--brand); border-bottom: none; color: var(--near-black);
+  }
+
+  .callout {
+    background: var(--ivory);
+    border-left: 2pt solid var(--brand);
+    padding: 10pt 14pt;
+    border-radius: 3pt;
+    margin: 12pt 0;
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  .callout blockquote,
+  .callout .quote {
+    border-left: none;
+    padding-left: 0;
+    margin: 6pt 0;
+    color: var(--olive);
+  }
+  .callout blockquote:first-child,
+  .callout .quote:first-child { margin-top: 0; }
+  .callout blockquote:last-child,
+  .callout .quote:last-child  { margin-bottom: 0; }
+
+  .takeaway {
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .takeaway-label {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--brand);
+    letter-spacing: 0.5pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--brand);
+    font-family: var(--sans);
+    font-size: 9pt;
+    font-weight: 500;
+    padding: 1pt 6pt;
+    border-radius: 3pt;
+    margin-right: 4pt;
+  }
+
+  figure {
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  figure img {
+    max-width: 100%;
+    border-radius: 4pt;
+  }
+  figcaption {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 6pt;
+    text-align: center;
+  }
+
+  .exec-summary {
+    background: var(--ivory);
+    border-left: 1.4pt solid var(--brand);
+    border-radius: 6pt;
+    padding: 16pt 20pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .exec-summary h2 {
+    margin-top: 0;
+    font-size: 13pt;
+  }
+
+  .chapter { break-before: page; margin-top: 0; }
+</style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
+</head>
+<body>
+
+<section class="cover">
+  <div>
+    <div class="cover-eyebrow">Research Paper · Evidence through 2026-06-22</div>
+    <div class="cover-title">RAG 前沿 2026<br>从检索流水线<br>到可学习的知识系统</div>
+    <div class="cover-sub">一份从经典 RAG、Advanced RAG 到 Agentic、可学习搜索与多模态检索的完整技术读物，并复核国内外大厂的公开落地路径。</div>
+  </div>
+  <div class="cover-meta">
+    <strong>Kami Research Notes</strong><br>
+    V1.0 · 2026-06-22<br>
+    证据截止 2026-06-22，面向 RAG 工程师、研究者与技术决策者
+  </div>
+</section>
+
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">执行摘要：RAG 正在从固定管线变成检索决策系统</span><span class="toc-page">03</span></div>
+  <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">经典 RAG：外部记忆如何进入生成过程</span><span class="toc-page">05</span></div>
+  <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">工程基线：数据、切片、召回、重排与引用</span><span class="toc-page">07</span></div>
+  <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">Advanced RAG：在流水线的每个薄弱点增加判断</span><span class="toc-page">09</span></div>
+  <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">长上下文、GraphRAG 与多粒度知识组织</span><span class="toc-page">11</span></div>
+  <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">Frontier：Agentic RAG 与可学习搜索策略</span><span class="toc-page">13</span></div>
+  <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">多模态 RAG：从 OCR 文本回到原始页面</span><span class="toc-page">15</span></div>
+  <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">评测与安全：把答案质量拆回可诊断的组件</span><span class="toc-page">16</span></div>
+  <div class="toc-item"><span class="toc-num">09</span><span class="toc-title">国内外大厂实践：平台能力正在如何收敛</span><span class="toc-page">18</span></div>
+  <div class="toc-item"><span class="toc-num">10</span><span class="toc-title">生产蓝图：先做最小基线，再为困难查询购买复杂度</span><span class="toc-page">19</span></div>
+  <div class="toc-item"><span class="toc-num">11</span><span class="toc-title">研究议程、术语表与延伸阅读</span><span class="toc-page">21</span></div>
+  <div class="toc-item"><span class="toc-num">12</span><span class="toc-title">参考文献：30 个核心来源与证据等级</span><span class="toc-page">23</span></div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">01 · Executive Summary</div>
+  <h1>执行摘要</h1>
+
+  <p class="lead">检索增强生成（Retrieval-Augmented Generation，RAG）的关键变化，是检索决策权正在从固定配置移向模型策略。2020 年的经典 RAG 把一次检索结果交给生成器；2023 至 2024 年的 Advanced RAG 开始判断是否检索、检索结果是否可信、需要哪种粒度；2025 至 2026 年的前沿工作进一步训练模型规划查询、调用搜索、阅读证据并决定何时停止。[S01, S05-S08, S11-S14]</p>
+
+  <div class="exec-summary">
+    <h2>七个结论先行</h2>
+    <ol>
+      <li><span class="hl">RAG 是外部记忆与生成模型之间的接口，不等于向量检索。</span>经典论文把参数化记忆与可更新的非参数化记忆结合起来，向量索引只是其中一种实现。[S01]</li>
+      <li><span class="hl">检索质量仍是第一约束。</span>DPR、ColBERTv2 等工作提升了语义召回与细粒度匹配；2026 年已部署客服研究发现，只要相关文档进入前三条，超过 92% 的案例能生成准确、完整的回答。[S02, S03, S21]</li>
+      <li><span class="hl">没有一种 Advanced RAG 技巧可以无条件迁移。</span>HyDE 在其零样本检索基准中有效，但在一项生产客服研究里 Recall@10 从 66.4% 降至 62.8%；BM25 在 T2-RAGBench 的文本表格任务中有价值，却会拖累另一组强稠密检索组合。[S04, S18, S21]</li>
+      <li><span class="hl">长上下文与 RAG 应由路由器组合。</span>2024 年对比研究中，资源充足时长上下文平均表现更强；RAG 更便宜，输入远超窗口时仍占优。Self-Route 据此把性能与成本变成逐查询决策。[S10]</li>
+      <li><span class="hl">Frontier RAG 的核心是学习搜索策略。</span>Search-R1、ReSearch 与 DeepResearcher 把搜索视为可交互环境，用强化学习优化「何时搜、搜什么、搜几次」；A-RAG 则把关键词、语义片段与全文阅读暴露成分层工具。[S11-S14]</li>
+      <li><span class="hl">多模态文档不应默认先压扁成文本。</span>ColPali 与 VisRAG 直接检索页面图像，保留表格、布局和图示；VisRAG 在其设置中报告相对 TextRAG 约 20%-40% 的端到端提升。[S15, S16]</li>
+      <li><span class="hl">生产 RAG 是受治理的数据系统。</span>权限过滤、来源血缘、更新时效、拒答、成本和攻击面与 Recall 同等重要。PoisonedRAG 表明，少量恶意文本即可操纵回答，外部知识库不能视为可信边界。[S20, S22-S27]</li>
+    </ol>
+  </div>
+
+  <h2>本文的判断框架</h2>
+  <p>本文把 RAG 拆成三个平面。<strong>知识平面</strong>负责数据进入、解析、切片、索引、权限和更新；<strong>检索平面</strong>负责查询理解、召回、融合、重排与上下文压缩；<strong>控制平面</strong>负责路由、迭代、工具调用、停止条件与成本预算。经典 RAG 主要建设前两个平面，Frontier RAG 的新增价值集中在第三个平面。</p>
+
+  <div class="takeaway">
+    <div class="takeaway-label">Core Thesis</div>
+    RAG 正在把每一次信息获取变成可观测、可评测、可预算的决策。检索策略越自由，系统越需要权限、来源与停止条件约束。
+  </div>
+
+  <h2>证据边界</h2>
+  <p>本文共使用 30 个核心来源，证据截止北京时间 2026-06-22。正式论文与预印本分开处理；云平台文档证明公开能力，不证明实际效果；厂商 benchmark 仅按厂商自报呈现。不同来源出现冲突时，正文保留条件差异，不把冲突抹平成一条万能经验。完整映射见 <code>sources.md</code> 与 <code>data/source-map.tsv</code>。</p>
+
+  <figure>
+    <svg viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg">
+      <defs><pattern id="dots-evo" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots-evo)" opacity="0.55"/>
+      <text x="80" y="44" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  1</text>
+      <text x="214" y="44" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="3">RAG EVOLUTION</text>
+      <line x1="80" y1="60" x2="920" y2="60" stroke="#1B365D" stroke-width="1"/>
+      <rect x="96" y="92" width="808" height="120" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+      <text x="128" y="124" fill="#1B365D" font-size="14" font-family="JetBrains Mono" letter-spacing="2">2020 · CLASSIC</text>
+      <text x="128" y="160" fill="#141413" font-size="24" font-weight="600" font-family="TsangerJinKai02">固定流水线</text>
+      <text x="360" y="160" fill="#504e49" font-size="18" font-family="TsangerJinKai02">查询 → Top-k 检索 → 拼接上下文 → 生成</text>
+      <text x="360" y="190" fill="#6b6a64" font-size="16" font-family="TsangerJinKai02">决策权主要在工程配置，目标是引入可更新外部记忆</text>
+      <rect x="96" y="228" width="808" height="120" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+      <text x="128" y="260" fill="#1B365D" font-size="14" font-family="JetBrains Mono" letter-spacing="2">2022-2024 · ADVANCED</text>
+      <text x="128" y="296" fill="#141413" font-size="24" font-weight="600" font-family="TsangerJinKai02">条件化流水线</text>
+      <text x="360" y="296" fill="#504e49" font-size="18" font-family="TsangerJinKai02">改写、混合召回、重排、校正、图与树索引</text>
+      <text x="360" y="326" fill="#6b6a64" font-size="16" font-family="TsangerJinKai02">每个薄弱点增加判断，但工作流仍由人预先定义</text>
+      <rect x="96" y="364" width="808" height="132" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="2"/>
+      <text x="128" y="396" fill="#1B365D" font-size="14" font-family="JetBrains Mono" letter-spacing="2">2025-2026 · FRONTIER</text>
+      <text x="128" y="432" fill="#141413" font-size="24" font-weight="600" font-family="TsangerJinKai02">可学习检索策略</text>
+      <text x="360" y="432" fill="#504e49" font-size="18" font-family="TsangerJinKai02">模型规划查询、选择工具、阅读证据、反思与停止</text>
+      <text x="360" y="462" fill="#6b6a64" font-size="16" font-family="TsangerJinKai02">复杂度从算法转向策略、接口、轨迹评测与治理</text>
+    </svg>
+    <figcaption>图 1：RAG 的控制权从静态配置移动到模型策略，工程约束同时从相关性扩展到轨迹与治理。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">02 · Classical RAG</div>
+  <h1>经典 RAG：外部记忆如何进入生成过程</h1>
+
+  <p class="lead">经典 RAG 解决的是知识存储位置问题。语言模型把知识压进参数后，更新慢、来源难追踪；RAG 把一部分知识放到可检索的外部索引，在推理时选取证据，再让生成器基于证据作答。[S01]</p>
+
+  <h2>原始定义比今天的产品口径更严格</h2>
+  <p>Lewis 等人的 2020 年论文把文档视为潜变量，检索器返回文档分布，生成器对候选文档条件下的输出概率做边缘化。RAG-Sequence 在整段输出中使用同一文档，RAG-Token 允许不同 token 依赖不同文档。今天工程中常见的「先检索再拼 Prompt」保留了外部记忆思想，却通常不再端到端训练检索器与生成器。[S01]</p>
+
+  <p>这个区分很重要。<strong>研究模型 RAG</strong>关心联合概率、端到端训练与任务指标；<strong>应用系统 RAG</strong>关心异构数据、权限、更新、延迟、引用与可运维性。两者共享名字，但失败路径并不相同。工程系统即使不训练任何参数，也能通过索引与上下文编排获得价值。</p>
+
+  <h2>一个最小可用闭环</h2>
+  <pre><code>离线：文档 → 解析 → 切片 → 元数据 → 向量 / 倒排索引
+在线：问题 → 查询规范化 → 召回 top-k → 重排 → 上下文组装
+生成：系统约束 + 问题 + 证据 → 回答 + 引用 + 拒答状态
+反馈：查询、命中、引用、延迟、人工纠错 → 评测集与索引更新</code></pre>
+
+  <p>最小闭环里没有 Agent、知识图谱或多模型路由。它仍然可以上线，但必须满足四条约束：文档有稳定 ID 和版本；每个切片保留父文档与权限元数据；答案能回指证据；未检索到充分证据时允许拒答。缺少任意一条，系统都难以调试或治理。</p>
+
+  <h2>检索器的三种表达能力</h2>
+  <table class="striped">
+    <thead><tr><th>检索方式</th><th>匹配信号</th><th>擅长</th><th>常见失误</th></tr></thead>
+    <tbody>
+      <tr><td>稀疏检索</td><td>词项、词频、倒排索引</td><td>专有名词、编号、精确短语</td><td>同义表达和语义改写</td></tr>
+      <tr><td>单向量稠密检索</td><td>查询与文档整体向量相似度</td><td>语义近似、自然语言问题</td><td>细粒度实体、数字与否定条件</td></tr>
+      <tr><td>多向量 / late interaction</td><td>token 级向量交互</td><td>细粒度相关性与跨域检索</td><td>索引体积、服务复杂度</td></tr>
+    </tbody>
+  </table>
+
+  <p>DPR 用双塔编码器展示了稠密检索在开放域 QA 中的可行性，在其基准上相对强 BM25 系统把 top-20 检索准确率提高 9 至 19 个百分点。[S02] ColBERTv2 保留 token 级 late interaction，并用残差压缩把索引空间相对原 ColBERT 降低 6 至 10 倍。[S03] 这些结果说明检索表达力可以购买，但没有证明稠密检索在每种企业语料上都胜过词法匹配。</p>
+
+  <h2>RAG 的四类收益</h2>
+  <ol>
+    <li><strong>更新：</strong>知识库替换或新增文档，无需重新训练生成模型。</li>
+    <li><strong>长尾：</strong>模型参数未覆盖的专业知识可以在推理时提供。</li>
+    <li><strong>来源：</strong>检索结果可作为引用候选，为核验建立入口。</li>
+    <li><strong>控制：</strong>企业可以通过数据范围、权限过滤与版本策略界定回答边界。</li>
+  </ol>
+
+  <div class="callout">RAG 降低了「知识不在模型参数里」这一类错误，却增加了检索遗漏、错误证据、上下文冲突、权限泄漏与知识库投毒。它改变错误结构，不消除错误。</div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">03 · Engineering Baseline</div>
+  <h1>工程基线：数据、切片、召回、重排与引用</h1>
+
+  <p class="lead">生产 RAG 的质量上限通常在生成前就已确定。解析丢掉表格，切片切断条件，权限元数据没有进入过滤器，后面的 reranker 和大模型只能更流畅地处理不完整证据。</p>
+
+  <h2>数据进入索引前要保留什么</h2>
+  <table class="compact striped">
+    <thead><tr><th>对象</th><th>最低字段</th><th>原因</th></tr></thead>
+    <tbody>
+      <tr><td>文档</td><td>document_id、version、source_uri、updated_at</td><td>更新、去重、删除与来源追踪</td></tr>
+      <tr><td>切片</td><td>chunk_id、parent_id、section_path、offset</td><td>父子回溯与上下文重建</td></tr>
+      <tr><td>权限</td><td>tenant、principal、ACL、classification</td><td>检索时安全裁剪，而非生成后遮盖</td></tr>
+      <tr><td>质量</td><td>parser、language、content_type、confidence</td><td>识别 OCR、表格、图片等弱环节</td></tr>
+      <tr><td>时效</td><td>effective_from、expires_at、supersedes</td><td>处理制度版本与冲突来源</td></tr>
+    </tbody>
+  </table>
+
+  <h2>切片不是固定 token 数</h2>
+  <p>切片要同时服务召回和阅读。过短切片容易命中，却丢掉定义、例外和表头；过长切片保留语境，却稀释相关信号并增加重排成本。更稳妥的做法是按标题、段落、表格和代码结构切分，并保留父子关系：子切片负责匹配，父单元负责回填上下文。</p>
+
+  <p>一项 2026 年已部署客服研究使用 15,848 份帮助文档与 310 个专家反馈查询，发现 2,048-token 切片在其数据上通常优于 512-token 切片，原因是较长单元保留了帮助文章的连贯性。[S21] 这个反例不能推导出新的默认长度，却说明只按通用博客经验设置 300 或 500 token，可能错过真实语料的结构。</p>
+
+  <h2>召回与重排要分开看</h2>
+  <p>第一阶段召回追求覆盖，第二阶段重排追求前列精度。候选集过小，reranker 无法找回遗漏文档；候选集过大，交叉编码器或 LLM 重排的成本迅速上升。生产指标应同时报告 Recall@k、nDCG 或 MRR、最终引用覆盖率与每次查询成本，不能只看一个端到端正确率。</p>
+
+  <p>已部署客服研究给出一个实用信号：相关文档出现在前三条时，超过 92% 的回答准确且完整；主要缺口是 Recall@50 到 Recall@10 的排序损失。[S21] 这类证据把优化目标从「换更大的生成模型」改成「把已召回证据推到可用位置」。</p>
+
+  <h2>混合检索不是信仰</h2>
+  <p>稀疏与稠密信号互补时，可以用 Reciprocal Rank Fusion 或学习融合提高覆盖。但相同做法在不同数据上会相反。T2-RAGBench 的 23,088 个文本表格问答样本中，Hybrid BM25 是最强检索方案；另一项客服研究则发现，在四个数据集上把 BM25 加到强稠密模型会降低整体表现。[S18, S21]</p>
+
+  <div class="takeaway">
+    <div class="takeaway-label">Engineering Rule</div>
+    先建立词法、稠密、混合三条可复现基线，再决定是否融合。任何没有在本域查询集上验证的「最佳实践」，都只是待检验的候选配置。
+  </div>
+
+  <h2>引用需要原子化</h2>
+  <p>把文档 URL 放在回答末尾不等于引用。可核验引用需要把回答拆成原子主张，记录每个主张对应的证据片段、文档版本与位置；若证据只支持一半句子，引用就不完整。长答案应限制每段的独立主张数，避免一条引文被迫支撑多个事实。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">04 · Advanced RAG</div>
+  <h1>Advanced RAG：在流水线的每个薄弱点增加判断</h1>
+
+  <p class="lead">Advanced RAG 是一组针对局部失败的干预方法，分别处理查询表达不足、检索噪声、长文层级、生成途中缺证据与错误上下文。选择方法前，应先定位失败发生在哪一层。</p>
+
+  <h2>查询侧：改写、扩展与分解</h2>
+  <p>HyDE 先让语言模型生成一篇假设文档，再用该文档向量去寻找真实文档，试图跨过短查询与长文档之间的表达差距。[S04] 它适合语义意图清楚但词汇不匹配的零样本检索，不适合把虚构细节当作事实，也未必适合精确数值问题。2026 年客服研究在 300 个查询子集上观察到 HyDE 的 Recall@10 从 66.4% 降至 62.8%，说明查询扩展可能把检索带离原问题。[S21]</p>
+
+  <p>多查询改写与问题分解解决的是复合意图。一条问题同时含时间、地区、指标和例外条件时，单向量容易把条件平均掉。拆成多个子查询并行召回可提高覆盖，但会放大调用次数、融合难度和权限检查面。只有当评测集确实包含复合查询时，分解才值得成为默认路径。</p>
+
+  <h2>生成侧：主动检索、反思与校正</h2>
+  <table class="striped">
+    <thead><tr><th>方法</th><th>触发机制</th><th>解决的问题</th><th>代价</th></tr></thead>
+    <tbody>
+      <tr><td>FLARE</td><td>预测下一句，低置信 token 触发检索</td><td>长文生成途中出现新信息需求</td><td>临时生成、反复检索与重写 [S05]</td></tr>
+      <tr><td>Self-RAG</td><td>训练反思 token 判断检索与支持度</td><td>固定 top-k、无关证据、引用不一致</td><td>需要专门训练数据与解码逻辑 [S06]</td></tr>
+      <tr><td>CRAG</td><td>轻量评估器判断检索质量</td><td>本地检索错误或不确定</td><td>增加评估器与外部网页搜索依赖 [S07]</td></tr>
+    </tbody>
+  </table>
+
+  <p>FLARE 把一次性检索改成生成期信息获取；Self-RAG 把「是否需要搜」与「证据是否支持」编码成模型可生成的反思 token；CRAG 在检索后增加质量评估和纠错动作。[S05-S07] 三者共同完成了一次概念迁移：检索不再是固定前处理，而是生成过程中的条件动作。</p>
+
+  <h2>知识侧：层级与全局问题</h2>
+  <p>普通 chunk 检索擅长局部事实，不擅长回答「整个语料的主要主题是什么」。RAPTOR 递归聚类并摘要，建立从原始片段到高层概括的树；其论文中，RAPTOR 与 GPT-4 在 QuALITY 上报告 82.6% 准确率，相比此前 62.3% 的最佳结果提高约 20 个百分点。[S08] 这个结果来自特定长文 QA 设置，也伴随索引构建与摘要失真风险。</p>
+
+  <p>Microsoft GraphRAG 用实体关系图、社区检测和社区报告支持全局 query-focused summarization。[S09] 它适合需要跨文档主题、关系和群体结构的问题，不应替代精确事实检索。图谱构建使用 LLM 抽取时，实体合并错误会固化进索引，查询成本也高于平面向量检索。</p>
+
+  <h2>常见误区</h2>
+  <ol>
+    <li>先上 GraphRAG，再寻找需要全局图问题的业务。</li>
+    <li>把查询改写后的文本当成事实，而不是召回工具。</li>
+    <li>只评最终答案，不知道提升来自召回、重排还是生成器。</li>
+    <li>用 LLM judge 替代所有人工标注，没有校准 judge 的偏差。</li>
+    <li>增加 Agent loop 后，不设置最大步数、成本与证据充分度。</li>
+  </ol>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">05 · Long Context and Structure</div>
+  <h1>长上下文、GraphRAG 与多粒度知识组织</h1>
+
+  <p class="lead">RAG 与长上下文的选择应落实到逐查询路由。数据规模、查询范围、时效、权限、延迟与证据密度共同决定哪条路径更合适。</p>
+
+  <h2>2024 年对比研究给出的条件化答案</h2>
+  <p>Li 等人在 9 个长上下文数据集上比较 RAG 与完整长上下文。三种当时的模型中，长上下文平均分别领先 RAG 7.6%、13.1% 和 3.6%；RAG 在输入显著超过模型窗口时仍有优势。[S10] 论文提出 Self-Route：先用检索上下文判断能否回答，不能回答的查询再升级到完整长上下文。</p>
+
+  <p>这项研究还揭示 RAG 失败的四类原因：多跳问题需要前一步答案才能继续检索；全局问题难以形成局部查询；长复杂查询难被单向量理解；隐式问题需要理解整段材料。[S10] 这些失败不是增加 top-k 就一定能解决，往往需要迭代检索、摘要层级或完整上下文。</p>
+
+  <h2>三条路径的工程边界</h2>
+  <table class="striped">
+    <thead><tr><th>路径</th><th>优先场景</th><th>优势</th><th>主要风险</th></tr></thead>
+    <tbody>
+      <tr><td>经典 RAG</td><td>局部事实、语料很大、更新频繁</td><td>便宜、快、权限与引用易控制</td><td>召回遗漏、复杂问题一次检索不足</td></tr>
+      <tr><td>长上下文</td><td>单份材料可放入窗口、全局理解</td><td>保留整体语境、少建索引</td><td>成本、延迟、位置偏差、权限裁剪粗</td></tr>
+      <tr><td>Agentic RAG</td><td>多跳、跨源、需要交叉验证</td><td>按需探索、可组合多种工具</td><td>轨迹不稳定、调用放大、攻击面扩大</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <svg viewBox="0 0 1000 520" xmlns="http://www.w3.org/2000/svg">
+      <defs><pattern id="dots-route" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots-route)" opacity="0.55"/>
+      <text x="80" y="44" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  2</text>
+      <text x="214" y="44" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="3">QUERY ROUTING</text>
+      <line x1="80" y1="60" x2="920" y2="60" stroke="#1B365D" stroke-width="1"/>
+      <rect x="376" y="92" width="248" height="72" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="2"/>
+      <text x="500" y="124" text-anchor="middle" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02">查询分类器</text>
+      <text x="500" y="148" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">范围 · 复杂度 · 时效 · 权限 · 预算</text>
+      <path d="M500 164 L500 212" stroke="#504e49" stroke-width="1.5"/><path d="M496 204 L500 214 L504 204" fill="none" stroke="#504e49" stroke-width="1.5"/>
+      <path d="M500 188 L212 232" stroke="#504e49" stroke-width="1.5"/><path d="M220 226 L210 232 L222 234" fill="none" stroke="#504e49" stroke-width="1.5"/>
+      <path d="M500 188 L788 232" stroke="#504e49" stroke-width="1.5"/><path d="M778 228 L790 232 L780 236" fill="none" stroke="#504e49" stroke-width="1.5"/>
+      <rect x="96" y="232" width="248" height="132" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+      <text x="220" y="272" text-anchor="middle" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02">经典 RAG</text>
+      <text x="220" y="306" text-anchor="middle" fill="#504e49" font-size="16" font-family="TsangerJinKai02">局部事实 · 高频查询</text>
+      <text x="220" y="334" text-anchor="middle" fill="#6b6a64" font-size="15" font-family="TsangerJinKai02">低成本、强引用</text>
+      <rect x="376" y="232" width="248" height="132" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+      <text x="500" y="272" text-anchor="middle" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02">长上下文</text>
+      <text x="500" y="306" text-anchor="middle" fill="#504e49" font-size="16" font-family="TsangerJinKai02">整体理解 · 单份材料</text>
+      <text x="500" y="334" text-anchor="middle" fill="#6b6a64" font-size="15" font-family="TsangerJinKai02">高保真、高 token 成本</text>
+      <rect x="656" y="232" width="248" height="132" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+      <text x="780" y="272" text-anchor="middle" fill="#141413" font-size="22" font-weight="600" font-family="TsangerJinKai02">Agentic RAG</text>
+      <text x="780" y="306" text-anchor="middle" fill="#504e49" font-size="16" font-family="TsangerJinKai02">多跳 · 跨源 · 交叉验证</text>
+      <text x="780" y="334" text-anchor="middle" fill="#6b6a64" font-size="15" font-family="TsangerJinKai02">高弹性、高轨迹风险</text>
+      <rect x="248" y="404" width="504" height="64" rx="8" fill="#EAE9E2" stroke="#6b6a64" stroke-width="1"/>
+      <text x="500" y="444" text-anchor="middle" fill="#504e49" font-size="18" font-family="TsangerJinKai02">统一输出：证据、引用、置信、延迟、成本与拒答原因</text>
+    </svg>
+    <figcaption>图 2：路由器不只看上下文长度，还要联合查询范围、权限和预算；三条路径共享同一评测与治理出口。</figcaption>
+  </figure>
+
+  <h2>GraphRAG、层级摘要与长上下文保留不同结构</h2>
+  <p>RAPTOR 按语义层级组织摘要树，GraphRAG 按实体关系和社区组织全局报告，长上下文直接保留原始顺序。三者分别优先保留层级、关系和原文，损失函数不同。选择结构时要先问问题需要什么：跨层摘要、关系路径，还是原文细节。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">06 · Frontier</div>
+  <h1>Frontier：Agentic RAG 与可学习搜索策略</h1>
+
+  <p class="lead">Frontier RAG 把搜索从函数调用升级成序列决策。模型不只消费 top-k 结果，还要决定查询、工具、阅读粒度、下一步和停止时机。这个自由度可以提升复杂问题表现，也会把延迟、循环和错误传播带进系统。</p>
+
+  <h2>从提示工程到策略学习</h2>
+  <p>Search-R1 把搜索引擎作为强化学习环境，轨迹交替包含思考、搜索与检索结果；它用 retrieved token masking 避免把环境返回内容当作策略输出训练，并用结果奖励优化多轮搜索。COLM 2025 PDF 的摘要与结论在 7 个 QA 数据集上，对 Qwen2.5-7B 与 3B 报告相对 RAG 基线 24% 和 20% 的平均提升；同一版本的结果概述与 arXiv 页面却写成 41% 和 20%。本文采用较低的 24% 口径，并保留这一版本内冲突。[S11]</p>
+
+  <p>ReSearch 同样用强化学习让模型学会在推理中搜索，但强调不依赖人工标注的推理过程。[S12] DeepResearcher 把训练扩展到真实网页环境，WebDancer 则把浏览数据构造、轨迹采样、监督冷启动和强化学习组织成四阶段训练范式。[S13, S30] 这些工作共同指向一个变化：检索质量不仅取决于 encoder，还取决于长期动作策略。</p>
+
+  <h2>A-RAG 把复杂度移到接口</h2>
+  <p>A-RAG 的 2026 年预印本提供三个工具：<code>keyword_search</code>、<code>semantic_search</code> 与 <code>chunk_read</code>。模型先看关键词或语义摘要，再决定是否读取完整 chunk，避免把所有候选一次性塞进上下文。[S14] 这比预先写死 GraphRAG 或工作流更接近 Agent：方法的关键不再是更复杂的检索算法，而是更清晰的工具粒度与返回契约。</p>
+
+  <p>A-RAG 在 MuSiQue 的实验中，把最大步骤从 5 提到 20 时，GPT-5-mini 的表现约提高 8%；把 reasoning effort 从 minimal 提到 high 时，GPT-5-mini 与 GPT-5 约提高 25%。[S14] 这些是预印本设置下的结果，尚不能直接外推为生产收益。它们更可靠地说明了一个研究方向：RAG 开始具备 test-time scaling 轴。</p>
+
+  <figure>
+    <svg viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg">
+      <defs><pattern id="dots-loop" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern></defs>
+      <rect width="100%" height="100%" fill="#f5f4ed"/><rect width="100%" height="100%" fill="url(#dots-loop)" opacity="0.55"/>
+      <text x="80" y="44" fill="#1B365D" font-size="14" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  3</text>
+      <text x="214" y="44" fill="#504e49" font-size="14" font-family="JetBrains Mono" letter-spacing="3">AGENTIC RETRIEVAL LOOP</text>
+      <line x1="80" y1="60" x2="920" y2="60" stroke="#1B365D" stroke-width="1"/>
+      <rect x="96" y="116" width="152" height="80" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+      <text x="172" y="150" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02">规划</text><text x="172" y="178" text-anchor="middle" fill="#6b6a64" font-size="15" font-family="TsangerJinKai02">分解信息需求</text>
+      <rect x="312" y="116" width="152" height="80" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+      <text x="388" y="150" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02">搜索</text><text x="388" y="178" text-anchor="middle" fill="#6b6a64" font-size="15" font-family="TsangerJinKai02">关键词 / 语义</text>
+      <rect x="528" y="116" width="152" height="80" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+      <text x="604" y="150" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02">阅读</text><text x="604" y="178" text-anchor="middle" fill="#6b6a64" font-size="15" font-family="TsangerJinKai02">片段 / 全文 / 邻接</text>
+      <rect x="744" y="116" width="152" height="80" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="2"/>
+      <text x="820" y="150" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02">判断</text><text x="820" y="178" text-anchor="middle" fill="#6b6a64" font-size="15" font-family="TsangerJinKai02">证据是否充分</text>
+      <path d="M248 156 L312 156 M464 156 L528 156 M680 156 L744 156" stroke="#504e49" stroke-width="1.5"/>
+      <path d="M304 152 L314 156 L304 160 M520 152 L530 156 L520 160 M736 152 L746 156 L736 160" fill="none" stroke="#504e49" stroke-width="1.5"/>
+      <path d="M820 196 Q820 280 700 280 L300 280 Q172 280 172 196" fill="none" stroke="#1B365D" stroke-width="1.5" stroke-dasharray="6 6"/>
+      <path d="M168 206 L172 196 L176 206" fill="none" stroke="#1B365D" stroke-width="1.5"/>
+      <rect x="144" y="332" width="712" height="116" rx="8" fill="#EAE9E2" stroke="#6b6a64" stroke-width="1"/>
+      <text x="176" y="366" fill="#1B365D" font-size="14" font-family="JetBrains Mono" letter-spacing="2">BUDGET &amp; GUARDRAILS</text>
+      <text x="176" y="402" fill="#141413" font-size="19" font-family="TsangerJinKai02">最大步数 · 最大 token · 允许来源 · 权限 · 引用覆盖 · 超时 · 拒答</text>
+      <text x="176" y="430" fill="#6b6a64" font-size="15" font-family="TsangerJinKai02">自由度由控制面授予，也必须由控制面收回。</text>
+    </svg>
+    <figcaption>图 3：Agentic RAG 的循环必须与预算和安全约束并列设计；没有停止条件的自主检索只是不可控放大器。</figcaption>
+  </figure>
+
+  <h2>Deep Research 是 RAG 的长时程产品形态</h2>
+  <p>OpenAI 将 Deep Research 描述为经过端到端强化学习的网页研究 Agent，可在多步轨迹中搜索、阅读文本、图像和 PDF，并回溯与引用。[S28] Anthropic Research 强调跨网页与内部 Workspace 连续搜索，并提供可检查引用。[S29] 这些页面证明多轮检索已经进入公开产品，但没有公开足够细节让外部复现其全部架构。</p>
+
+  <h2>Frontier 的未决问题</h2>
+  <ul>
+    <li><strong>停止：</strong>什么时候证据已经足够，而不是继续搜索相似页面。</li>
+    <li><strong>奖励：</strong>只奖励最终答案是否会学到投机搜索或过度调用。</li>
+    <li><strong>轨迹：</strong>如何评估中间查询、来源选择、回溯和证据覆盖。</li>
+    <li><strong>稳定：</strong>网页变化、搜索排序与工具失败会让结果难以复现。</li>
+    <li><strong>治理：</strong>Agent 能访问更多源后，权限、投毒与提示注入风险同步增加。</li>
+  </ul>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">07 · Multimodal RAG</div>
+  <h1>多模态 RAG：从 OCR 文本回到原始页面</h1>
+
+  <p class="lead">真实知识不只存在于段落。财报表格、论文公式、产品手册布局和演示文稿图示在 OCR 之后经常失去关系。多模态 RAG 的前沿工作因此把「页面」重新定义为可检索对象。</p>
+
+  <h2>ColPali：页面图像作为多向量文档</h2>
+  <p>ColPali 用视觉语言模型把整页图像编码为多向量表示，再用 late interaction 匹配文本查询与页面 token。它同时发布 ViDoRe 基准，覆盖不同领域、语言与视觉文档任务。[S15] 这条路线减少了 OCR、版面分析与文本拼接的脆弱级联，但需要保存页面图像表示，并承担视觉模型的索引和服务成本。</p>
+
+  <h2>VisRAG：检索与生成都保留页面</h2>
+  <p>VisRAG 用 VLM 同时承担页面检索与答案生成，直接绕过传统 TextRAG 的解析阶段。论文在 6 个数据集上报告，使用不同生成器时相对 TextRAG 获得约 20% 至 40% 的端到端提升；其离线页面处理在 PlotQA 设置中为 121 ms，而文本基线的解析加编码为 312 ms，在线查询总时延相同为 54 ms。[S16]</p>
+
+  <p>这些数字来自指定硬件、模型与数据集，不能直接作为采购指标。更稳妥的结论是：当回答依赖版面、图表或视觉关系时，纯文本解析产生的信息损失可能大于 VLM 成本。文本密集、结构简单的语料仍可能更适合成熟的文本检索。</p>
+
+  <h2>表格是检索与推理的双重难点</h2>
+  <p>T2-RAGBench 由 23,088 组问题、上下文和答案构成，包含 7,318 份真实金融文档；专家确认 91.3% 的改写问题在脱离上下文后仍具有唯一语义。[S18] 它要求系统先从文本与表格语料中找到正确文档，再做数值推理，避免只在 oracle context 下测生成器。</p>
+
+  <table class="striped">
+    <thead><tr><th>文档形态</th><th>建议主索引</th><th>补充索引</th><th>验证重点</th></tr></thead>
+    <tbody>
+      <tr><td>制度与帮助文章</td><td>结构化文本切片</td><td>关键词、元数据</td><td>版本、例外条款、父段落</td></tr>
+      <tr><td>财报与数据表</td><td>表格结构或页面视觉</td><td>文本说明、公司与期间过滤</td><td>表头、单位、期间、计算链</td></tr>
+      <tr><td>论文与技术手册</td><td>页面视觉 + 文本双索引</td><td>章节层级、公式说明</td><td>图文对应、跨页引用</td></tr>
+      <tr><td>图片与幻灯片</td><td>视觉多向量</td><td>OCR、标题、演讲者备注</td><td>布局、图例、页面顺序</td></tr>
+    </tbody>
+  </table>
+
+  <h2>平台实践正在吸收多模态解析</h2>
+  <p>Amazon Bedrock Knowledge Bases 建议包含图表、表格或图片的 PDF 使用 Bedrock Data Automation 或基础模型解析，并允许把抽取出的视觉元素存入 S3，在检索结果或来源归因中返回。[S24] 阿里云百炼公开支持文档、表格、图片与多模态向量，腾讯知识引擎把公式、图片、表格和阅读顺序纳入文档解析能力。[S25, S26]</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">08 · Evaluation and Security</div>
+  <h1>评测与安全：把答案质量拆回可诊断的组件</h1>
+
+  <p class="lead">端到端正确率告诉你系统坏了，却不告诉你坏在哪里。RAG 评测必须区分知识库覆盖、召回、排序、上下文利用、答案忠实度、引用与运行成本；Agentic RAG 还要评估整条轨迹。</p>
+
+  <h2>最小评测矩阵</h2>
+  <table class="compact striped">
+    <thead><tr><th>层</th><th>核心问题</th><th>指标示例</th><th>需要的标注</th></tr></thead>
+    <tbody>
+      <tr><td>语料</td><td>答案是否存在、是否最新、权限是否正确</td><td>coverage、freshness、ACL violation</td><td>文档版本与授权真值</td></tr>
+      <tr><td>召回</td><td>相关证据是否进入候选集</td><td>Recall@k</td><td>问题到相关文档</td></tr>
+      <tr><td>排序</td><td>相关证据是否足够靠前</td><td>MRR、nDCG@k</td><td>分级相关性</td></tr>
+      <tr><td>生成</td><td>答案是否正确且只用证据支持的内容</td><td>exact match、faithfulness、citation precision</td><td>答案或原子主张</td></tr>
+      <tr><td>系统</td><td>成本与延迟是否可接受</td><td>p50/p95、tokens、tool calls、cost</td><td>运行日志</td></tr>
+      <tr><td>轨迹</td><td>查询、工具与停止是否合理</td><td>step success、source diversity、loop rate</td><td>轨迹审核规则</td></tr>
+    </tbody>
+  </table>
+
+  <h2>RAGAS 的价值与边界</h2>
+  <p>RAGAS 把自动评测分成忠实度、答案相关性与上下文相关性。其 WikiEval 实验中，与人工偏好的符合率分别为 0.95、0.78 和 0.70，高于直接让 GPT 打分或排序的基线。[S19] 上下文相关性最难，且长上下文会让评估模型更难选出真正必要的句子。</p>
+
+  <p>自动评测适合高频回归，不适合代替金标。每个业务至少保留一组人工审阅的困难查询，覆盖无答案、冲突来源、过期制度、多跳、表格、权限和恶意文档。LLM judge 更换模型或 Prompt 后，应重新校准与人工判断的一致性。</p>
+
+  <h2>安全从知识库完整性开始</h2>
+  <p>PoisonedRAG 把知识库识别为新的攻击面。攻击文本需要同时满足两个条件：容易被目标问题检索到，并能诱导生成器输出攻击者指定答案。论文在百万级干净文本的知识库中，为每个目标问题注入 5 条恶意文本，报告约 90% 的攻击成功率；在 NQ 黑盒设置中达到 97%。[S20]</p>
+
+  <p>这类攻击不能只靠 Prompt 防御。需要在数据进入、索引、检索和生成四处建立控制：来源 allowlist 与签名；文档变更审计；重复与异常相似度检测；可信度参与排序；对冲突证据显式标注；高风险答案要求多源一致或人工复核。权限必须在检索前过滤，因为生成后删除敏感文字无法撤回模型已经读取的内容。</p>
+
+  <h2>上线门槛</h2>
+  <ol>
+    <li>困难查询集有稳定版本，并记录来源与期望行为。</li>
+    <li>可区分无文档、未召回、排序失败、生成误用与引用错误。</li>
+    <li>每个回答能回放查询、候选、重排、最终上下文与模型版本。</li>
+    <li>权限、删除和版本替换在索引与缓存中可验证生效。</li>
+    <li>注入、投毒、冲突来源和超长输入经过对抗测试。</li>
+    <li>p95 延迟、单次成本和最大工具调用数有明确预算。</li>
+  </ol>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">09 · Industry Practice</div>
+  <h1>国内外大厂实践：平台能力正在如何收敛</h1>
+
+  <p class="lead">公开产品没有收敛到同一套内部实现，却明显收敛到同一组产品能力：托管摄取、多格式解析、混合检索、重排、引用、权限、观测与 Agentic 查询规划。差异更多落在数据生态、可控粒度、成熟度和计费方式。</p>
+
+  <h2>海外平台</h2>
+  <table class="compact striped">
+    <thead><tr><th>平台</th><th>公开能力</th><th>可提炼的落地模式</th><th>边界</th></tr></thead>
+    <tbody>
+      <tr><td>Microsoft Azure AI Search</td><td>LLM 查询分解、并行子查询、关键词/向量/混合搜索、语义重排、引用与活动日志</td><td>把检索层产品化为 Agent 的知识接口</td><td>部分能力 GA、部分仍为 preview；多查询增加 token 与延迟 [S22]</td></tr>
+      <tr><td>Google Vertex AI RAG Engine</td><td>摄取、转换、corpus 索引、检索与生成的托管框架</td><td>与 Cloud Storage、Drive 和区域治理整合</td><td>区域成熟度和安全控制支持不完全一致 [S23]</td></tr>
+      <tr><td>Amazon Bedrock Knowledge Bases</td><td>文本与多模态解析、图表抽取、S3 归档、来源归因、reranker</td><td>把文档理解与知识库摄取合并</td><td>高级解析按页或 token 产生额外成本 [S24]</td></tr>
+      <tr><td>OpenAI Deep Research</td><td>多步网页搜索、文件、图像与 PDF、Python 工具、引用</td><td>把 RAG 延伸为异步研究任务</td><td>架构细节与评测主要来自厂商描述 [S28]</td></tr>
+      <tr><td>Anthropic Research</td><td>连续网页搜索、Google Workspace、内部文档索引、inline citations</td><td>把私域工作上下文与开放网页统一检索</td><td>官方页面证明产品形态，不足以复现内部策略 [S29]</td></tr>
+    </tbody>
+  </table>
+
+  <h2>国内平台</h2>
+  <table class="compact striped">
+    <thead><tr><th>平台</th><th>公开能力</th><th>可提炼的落地模式</th><th>边界</th></tr></thead>
+    <tbody>
+      <tr><td>阿里云百炼</td><td>文档、表格与图片知识库，命中测试，多知识库召回，Rank 重排，RDS/OSS 接入</td><td>在应用与工作流中复用统一知识库能力</td><td>最多 5 个知识库等限制随产品更新，需按文档复核 [S25]</td></tr>
+      <tr><td>腾讯云</td><td>解析、切片、embedding、改写、重排原子能力；Agentic RAG 支持反思、策略切换和多轮检索</td><td>同时提供组件化数据平面和 Agent 控制平面</td><td>2026-05-28 的 Agentic RAG 页面属于平台公开能力，不是独立效果评测 [S26]</td></tr>
+      <tr><td>百度千帆 AppBuilder</td><td>RAG、Agent、工作流、AI 搜索、iRAG 与低代码/高代码工具链</td><td>围绕企业应用交付整合知识、工具和 UI</td><td>公开页面以产品能力为主，缺少可横向比较的检索实验 [S27]</td></tr>
+      <tr><td>阿里巴巴 WebDancer</td><td>浏览数据、轨迹采样、SFT 冷启动与 RL 的四阶段研究路线</td><td>把深度搜索能力沉淀为可训练 Agent</td><td>论文 benchmark 不等于云产品 SLA [S30]</td></tr>
+    </tbody>
+  </table>
+
+  <h2>行业收敛出的五条工程原则</h2>
+  <ol>
+    <li><strong>数据接入是一等产品。</strong>解析、更新、权限和版本比聊天界面更难替换。</li>
+    <li><strong>召回与生成保持解耦。</strong>检索响应包含证据、引用和执行信息，允许下游 Agent 自主消费。[S22]</li>
+    <li><strong>多查询并行而非无限串行。</strong>复合问题分解后并行召回，减少 Agent 链路的线性延迟。</li>
+    <li><strong>多模态解析进入默认能力。</strong>图表、表格和图片不再只靠 OCR 文本代表。[S24-S26]</li>
+    <li><strong>可观测性进入接口。</strong>查询计划、来源、活动日志与成本成为 RAG 响应的一部分，而不是排障时临时拼接。</li>
+  </ol>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">10 · Production Blueprint</div>
+  <h1>生产蓝图：先做最小基线，再为困难查询购买复杂度</h1>
+
+  <p class="lead">可上线的 RAG 路线不从 GraphRAG 或 Agent 开始。它从一组真实问题、可追踪语料和可诊断基线开始；复杂度只用于已经被评测确认的失败类型。</p>
+
+  <h2>案例：企业售后知识助手</h2>
+  <p>假设知识库包含 20,000 份产品手册、服务政策和维修公告，查询分成三类：60% 是单一事实，25% 同时包含型号、地区和购买时间，15% 需要跨手册、工单和网页公告交叉验证。设计目标是让每类查询走成本最低的可靠路径。</p>
+
+  <table class="striped">
+    <thead><tr><th>查询</th><th>首选路径</th><th>升级条件</th><th>输出约束</th></tr></thead>
+    <tbody>
+      <tr><td>「X200 的电池保修多久？」</td><td>混合召回 + rerank</td><td>无有效版本或地区冲突</td><td>政策版本、适用地区、原文引用</td></tr>
+      <tr><td>「2024 年在上海购买的 X200，进水后能否保修？」</td><td>条件分解 + 元数据过滤 + 多查询</td><td>政策条款与维修公告冲突</td><td>逐条件判定，不满足时拒绝下结论</td></tr>
+      <tr><td>「过去一年 X200 进水故障的主要原因与处置建议？」</td><td>Agentic RAG / 层级摘要</td><td>证据少于 2 类来源或覆盖不足</td><td>区分统计、案例与厂商建议，列出样本边界</td></tr>
+    </tbody>
+  </table>
+
+  <h2>四个可独立上线的阶段</h2>
+  <ol>
+    <li><strong>基线：</strong>结构化解析、稳定 ID、权限过滤、词法与稠密检索对照、引用和拒答。先覆盖单一事实。</li>
+    <li><strong>高级检索：</strong>加入父子切片、融合与 reranker，只针对 Recall@k 或排序失败。阶段完成后仍是可用的经典 RAG。</li>
+    <li><strong>路由：</strong>按查询复杂度选择经典 RAG、长上下文或结构化工具。记录路由正确率与成本差异。</li>
+    <li><strong>Agentic：</strong>只为多跳和交叉验证查询开放多轮搜索，设置来源 allowlist、最大步数、token、超时与引用覆盖门槛。</li>
+  </ol>
+
+  <h2>一套可执行的默认参数观</h2>
+  <p>默认值应来自校准，不来自框架示例。初始候选可以设置多个 k 值并画出 Recall、nDCG、延迟与成本曲线；切片可以从结构边界与 512/1,024/2,048 token 三档起测；reranker 深度只覆盖 Recall 曲线仍增长的区间。每个新增模型或工具都必须证明它在困难查询子集上的边际收益。</p>
+
+  <h2>失败路由表</h2>
+  <table class="compact striped">
+    <thead><tr><th>观察到的失败</th><th>优先排查</th><th>可能修复</th><th>不要先做</th></tr></thead>
+    <tbody>
+      <tr><td>答案文档不在 top-50</td><td>语料覆盖、解析、查询表达</td><td>修数据、混合召回、领域 embedding</td><td>换更大生成模型</td></tr>
+      <tr><td>在 top-50，不在 top-5</td><td>排序与候选噪声</td><td>rerank、融合、元数据过滤</td><td>扩大上下文到全部候选</td></tr>
+      <tr><td>证据正确，答案错误</td><td>Prompt、冲突证据、上下文利用</td><td>原子主张、引用约束、模型路由</td><td>继续增加召回量</td></tr>
+      <tr><td>多跳问题缺后续证据</td><td>问题分解与停止条件</td><td>Agentic loop、结构化工具</td><td>把所有查询改成 Agent</td></tr>
+      <tr><td>表格或图示问题失败</td><td>解析损失</td><td>表格结构索引、视觉 RAG</td><td>只调 chunk overlap</td></tr>
+      <tr><td>回答引用了过期制度</td><td>时效元数据与版本替换</td><td>effective date 过滤、冲突提示</td><td>让 LLM 自己判断新旧</td></tr>
+    </tbody>
+  </table>
+
+  <h2>上线验收</h2>
+  <div class="callout">
+    一条查询必须能够从答案回放到证据、候选、查询计划、语料版本、权限决策、模型版本和成本。无法回放的 RAG 系统即使平均分很高，也不具备稳定迭代条件。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">11 · Research Agenda</div>
+  <h1>研究议程、术语表与延伸阅读</h1>
+
+  <p class="lead">2026 年之后，RAG 的主要增量不会只来自更强 embedding。更关键的问题是检索策略如何学习、外部知识如何保真、多模态记忆如何统一，以及系统如何在性能、成本与可信之间动态分配计算。</p>
+
+  <h2>六条前沿研究方向</h2>
+  <ol>
+    <li><strong>可学习检索策略：</strong>从最终结果奖励走向过程约束，避免过度搜索、投机查询和来源单一。</li>
+    <li><strong>Agent-friendly interfaces：</strong>比较关键词、语义、图遍历、SQL、页面阅读等工具粒度，形成稳定的返回契约。[S14]</li>
+    <li><strong>成本感知 test-time scaling：</strong>让步数、reasoning effort、检索深度与模型大小共同受预算控制。</li>
+    <li><strong>多模态统一记忆：</strong>文本、表格、页面、图像、音频和结构化数据共享检索与引用坐标。[S15-S18]</li>
+    <li><strong>可验证生成：</strong>从回答级 citation 走向原子主张、证据充分度、冲突与不确定性表达。</li>
+    <li><strong>安全与隐私检索：</strong>研究知识库投毒、提示注入、访问控制、来源信誉与私有检索的可证明边界。[S20]</li>
+  </ol>
+
+  <h2>研究判断</h2>
+  <p><span class="hl">最可能稳定落地的方向</span>是经典 RAG 与 Agentic RAG 共存：高频局部问题走低成本管线，困难问题由路由器升级到多查询或 Agent。平台文档已经体现这种双轨结构，Azure 同时保留 classic 与 agentic retrieval，腾讯也把原子 RAG 能力与 Agentic RAG 分层提供。[S22, S26]</p>
+
+  <p><span class="hl">最值得谨慎的方向</span>是把开放网页搜索直接接入高权限 Agent。搜索范围扩大后，知识库投毒、提示注入、隐私泄漏和工具误用会形成级联风险。前沿性能必须与来源 allowlist、只读工具、权限继承、轨迹日志和人工升级机制同时评估。</p>
+
+  <h2>术语表</h2>
+  <p><strong>RAG：</strong>Retrieval-Augmented Generation，在生成时引入外部检索证据。</p>
+  <p><strong>Advanced RAG：</strong>对查询、索引、召回、重排、上下文与生成加入适应性或校正机制的统称，不是单一算法。</p>
+  <p><strong>Agentic RAG：</strong>模型可自主规划并多轮调用检索工具，根据结果决定下一步与停止。</p>
+  <p><strong>Hybrid Retrieval：</strong>融合词法与向量等多类检索信号，效果依赖语料与融合策略。</p>
+  <p><strong>reranker：</strong>对第一阶段候选重新打分的模型，常见为 cross-encoder、late interaction 或 LLM。</p>
+  <p><strong>Late Interaction：</strong>查询与文档分别编码为多个 token 向量，在检索时做细粒度交互。</p>
+  <p><strong>GraphRAG：</strong>利用实体关系、社区或图遍历组织检索的 RAG 家族，适合关系和全局语料问题。</p>
+  <p><strong>Multimodal RAG：</strong>检索与利用文本之外的页面、图像、表格、音频等证据。</p>
+  <p><strong>Test-time Scaling：</strong>推理时通过更多步骤、搜索或计算提高表现，而不是只扩大训练规模。</p>
+
+  <h2>Further Reading</h2>
+  <table class="compact striped">
+    <thead><tr><th>起点</th><th>资料</th><th>为什么读</th></tr></thead>
+    <tbody>
+      <tr><td>最佳起点</td><td>RAG 原始论文 [S01]</td><td>理解外部记忆与生成的原始定义</td></tr>
+      <tr><td>工程检索</td><td>已部署客服研究 [S21]</td><td>看到 BM25、HyDE、融合、重排与切片在真实语料上的条件化结果</td></tr>
+      <tr><td>Advanced</td><td>Self-RAG [S06]</td><td>理解按需检索与反思如何进入模型解码</td></tr>
+      <tr><td>Frontier</td><td>Search-R1 [S11]</td><td>理解搜索引擎如何进入强化学习环境</td></tr>
+      <tr><td>2026 前沿</td><td>A-RAG [S14]</td><td>理解 Agent-friendly 分层接口与 test-time scaling，注意其预印本身份</td></tr>
+    </tbody>
+  </table>
+
+  <h2>结论</h2>
+  <p>经典 RAG 把知识从参数中解耦，Advanced RAG 把检索流程拆成可优化组件，本文所称 Frontier RAG 则把信息获取交给可学习策略。三者对应成本与复杂度不同的工具层，可以长期共存。成熟系统会保留简单路径，并只让困难查询进入更昂贵的搜索循环。</p>
+
+  <div class="takeaway">
+    <div class="takeaway-label">Final Principle</div>
+    先证明「答案存在并能被找回」，再优化「模型如何使用答案」；先让困难查询可识别，再让 Agent 获得更多自由。RAG 的可靠性来自边界清楚，不来自组件数量。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">12 · References</div>
+  <h1>参考文献：30 个核心来源与证据等级</h1>
+
+  <p class="lead">文中编号与本表一一对应。A 表示正式会议或期刊论文，B 表示研究预印本，C 表示官方产品文档，D 表示厂商自报效果。平台文档只能证明公开能力，不能替代独立效果评测。</p>
+
+  <div class="references">
+    <p id="s01"><span class="ref-id">[S01] A</span> Lewis et al. <em>Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks</em>. NeurIPS 2020. <a href="https://arxiv.org/abs/2005.11401">arXiv</a></p>
+    <p id="s02"><span class="ref-id">[S02] A</span> Karpukhin et al. <em>Dense Passage Retrieval for Open-Domain Question Answering</em>. EMNLP 2020. <a href="https://arxiv.org/abs/2004.04906">arXiv</a></p>
+    <p id="s03"><span class="ref-id">[S03] A</span> Santhanam et al. <em>ColBERTv2: Effective and Efficient Retrieval via Lightweight Late Interaction</em>. NAACL 2022. <a href="https://arxiv.org/abs/2112.01488">arXiv</a></p>
+    <p id="s04"><span class="ref-id">[S04] A</span> Gao et al. <em>Precise Zero-Shot Dense Retrieval without Relevance Labels</em>. ACL 2023. <a href="https://arxiv.org/abs/2212.10496">arXiv</a></p>
+    <p id="s05"><span class="ref-id">[S05] A</span> Jiang et al. <em>Active Retrieval Augmented Generation</em>. EMNLP 2023. <a href="https://arxiv.org/abs/2305.06983">arXiv</a></p>
+    <p id="s06"><span class="ref-id">[S06] A</span> Asai et al. <em>Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection</em>. ICLR 2024. <a href="https://arxiv.org/abs/2310.11511">arXiv</a></p>
+    <p id="s07"><span class="ref-id">[S07] B</span> Yan et al. <em>Corrective Retrieval Augmented Generation</em>. 2024 preprint. <a href="https://arxiv.org/abs/2401.15884">arXiv</a></p>
+    <p id="s08"><span class="ref-id">[S08] A</span> Sarthi et al. <em>RAPTOR: Recursive Abstractive Processing for Tree-Organized Retrieval</em>. ICLR 2024. <a href="https://arxiv.org/abs/2401.18059">arXiv</a></p>
+    <p id="s09"><span class="ref-id">[S09] B</span> Edge et al. <em>From Local to Global: A Graph RAG Approach to Query-Focused Summarization</em>. Microsoft Research, 2024. <a href="https://www.microsoft.com/en-us/research/publication/from-local-to-global-a-graph-rag-approach-to-query-focused-summarization/">official page</a></p>
+    <p id="s10"><span class="ref-id">[S10] A</span> Li et al. <em>Retrieval Augmented Generation or Long-Context LLMs? A Comprehensive Study and Hybrid Approach</em>. EMNLP 2024 Industry Track. <a href="https://arxiv.org/abs/2407.16833">arXiv</a></p>
+    <p id="s11"><span class="ref-id">[S11] A</span> Jin et al. <em>Search-R1: Training LLMs to Reason and Leverage Search Engines with Reinforcement Learning</em>. COLM 2025. <a href="https://arxiv.org/abs/2503.09516">arXiv</a></p>
+    <p id="s12"><span class="ref-id">[S12] B</span> Chen et al. <em>ReSearch: Learning to Reason with Search for LLMs via Reinforcement Learning</em>. 2025 preprint. <a href="https://arxiv.org/abs/2503.19470">arXiv</a></p>
+    <p id="s13"><span class="ref-id">[S13] B</span> Zheng et al. <em>DeepResearcher: Scaling Deep Research via Reinforcement Learning in Real-world Environments</em>. 2025 preprint. <a href="https://arxiv.org/abs/2504.03160">arXiv</a></p>
+    <p id="s14"><span class="ref-id">[S14] B</span> <em>A-RAG: Scaling Agentic Retrieval-Augmented Generation via Hierarchical Retrieval Interfaces</em>. 2026 preprint. <a href="https://arxiv.org/abs/2602.03442">arXiv</a></p>
+    <p id="s15"><span class="ref-id">[S15] A</span> Faysse et al. <em>ColPali: Efficient Document Retrieval with Vision Language Models</em>. 2024. <a href="https://arxiv.org/abs/2407.01449">arXiv</a></p>
+    <p id="s16"><span class="ref-id">[S16] A</span> Yu et al. <em>VisRAG: Vision-based Retrieval-augmented Generation on Multi-modality Documents</em>. 2024. <a href="https://arxiv.org/abs/2410.10594">arXiv</a></p>
+    <p id="s17"><span class="ref-id">[S17] B</span> <em>M2RAG: A Multimodal Retrieval-Augmented Generation Benchmark</em>. 2025 preprint. <a href="https://arxiv.org/abs/2502.17297">arXiv</a></p>
+    <p id="s18"><span class="ref-id">[S18] A</span> <em>T2-RAGBench: A Comprehensive Benchmark for Retrieval-Augmented Generation with Text and Tables</em>. EACL 2026. <a href="https://aclanthology.org/2026.eacl-long.8/">ACL Anthology</a></p>
+    <p id="s19"><span class="ref-id">[S19] A</span> Es et al. <em>RAGAS: Automated Evaluation of Retrieval Augmented Generation</em>. EACL 2024. <a href="https://arxiv.org/abs/2309.15217">arXiv</a></p>
+    <p id="s20"><span class="ref-id">[S20] A</span> Zou et al. <em>PoisonedRAG: Knowledge Corruption Attacks to Retrieval-Augmented Generation of Large Language Models</em>. USENIX Security 2025. <a href="https://arxiv.org/abs/2402.07867">arXiv</a></p>
+    <p id="s21"><span class="ref-id">[S21] A</span> <em>Retrieval Enhancements for RAG: Insights from a Deployed Customer Support Chatbot</em>. EACL 2026 Industry Track. <a href="https://aclanthology.org/2026.eacl-industry.13/">ACL Anthology</a></p>
+    <p id="s22"><span class="ref-id">[S22] C</span> Microsoft. <em>Agentic Retrieval in Azure AI Search</em>. Updated 2026-06-12. <a href="https://learn.microsoft.com/en-us/azure/search/search-agentic-retrieval-concept">official docs</a></p>
+    <p id="s23"><span class="ref-id">[S23] C</span> Google Cloud. <em>Vertex AI RAG Engine Overview</em>. Updated 2026-06-18. <a href="https://docs.cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-overview">official docs</a></p>
+    <p id="s24"><span class="ref-id">[S24] C</span> Amazon Web Services. <em>Advanced Parsing Options for Amazon Bedrock Knowledge Bases</em>. Checked 2026-06-22. <a href="https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/kb-advanced-parsing.html">official docs</a></p>
+    <p id="s25"><span class="ref-id">[S25] C</span> 阿里云. <em>百炼知识库</em>. 复核于 2026-06-22. <a href="https://help.aliyun.com/zh/model-studio/user-guide/rag-knowledge-base/">官方文档</a></p>
+    <p id="s26"><span class="ref-id">[S26] C</span> 腾讯云. <em>Agentic RAG</em>. Updated 2026-05-28. <a href="https://cloud.tencent.com/document/product/1759/132211">官方文档</a></p>
+    <p id="s27"><span class="ref-id">[S27] C</span> 百度智能云. <em>千帆 AppBuilder 知识库</em>. 复核于 2026-06-22. <a href="https://cloud.baidu.com/doc/AppBuilder/s/create-database">官方文档</a></p>
+    <p id="s28"><span class="ref-id">[S28] C/D</span> OpenAI. <em>Introducing Deep Research</em>. Updated 2026-02-10. <a href="https://openai.com/index/introducing-deep-research/">official page</a></p>
+    <p id="s29"><span class="ref-id">[S29] C/D</span> Anthropic. <em>Research</em>. 2025-04-15. <a href="https://www.anthropic.com/news/research">official page</a></p>
+    <p id="s30"><span class="ref-id">[S30] B</span> Wu et al. <em>WebDancer: Towards Autonomous Information Seeking Agency</em>. 2025 preprint. <a href="https://arxiv.org/abs/2505.22648">arXiv</a></p>
+  </div>
+</section>
+
+</body>
+
+</html>

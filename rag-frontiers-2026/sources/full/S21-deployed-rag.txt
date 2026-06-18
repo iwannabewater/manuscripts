@@ -1,0 +1,746 @@
+    Retrieval Enhancements for RAG: Insights from a Deployed Customer
+                             Support Chatbot
+
+             Daniel González Juclà1 , Mohit Tuteja2 , Marcos Esteve Casademunt1 ,
+                  Keshav Unnikrishnan2 , Yasir Usmani2 , Arvind Roshaan2
+                                1
+                                    Thomson Reuters Labs, Zug, Switzerland
+                                 2
+                                    Thomson Reuters Labs, Bangalore, India
+
+
+                      Abstract                                when relevant documents are present in their con-
+                                                              text. Importantly, this research intentionally limits
+    Retrieval-Augmented Generation (RAG) sys-                 its scope to retrieval enhancements and does not
+    tems depend critically on retrieval quality to            evaluate the full end-to-end RAG pipeline, priori-
+    enable accurate, contextually relevant LLM
+                                                              tizing improvements in document relevance to lay
+    responses. While LLMs excel at synthesis,
+    their RAG performance is bottlenecked by doc-
+                                                              a stronger foundation for downstream generation
+    ument relevance. We evaluate advanced re-                 tasks.
+    trieval techniques including embedding model
+    comparison, Reciprocal Rank Fusion (RRF),                 2    Related Work
+    embedding concatenation and list-wise and
+    adaptive LLM-based re-ranking, demonstrat-                Retrieval-Augmented Generation (RAG) has
+    ing that zero-shot LLMs outperform traditional            emerged as a pivotal framework for enhancing
+    cross-encoders in identifying high-relevance              large language models (LLMs) by integrating ex-
+    passages.
+                                                              ternal knowledge sources to improve response ac-
+    We also explore context-aware embeddings,                 curacy and relevance. The foundational work by
+    diverse chunking strategies, and model fine-              (Lewis et al., 2020) introduced RAG, combining
+    tuning. All methods are rigorously evaluated              parametric and non-parametric memory to effec-
+    on a proprietary dataset powering our deployed
+                                                              tively tackle knowledge-intensive tasks. A compre-
+    production chatbot, with validation on three
+    public benchmarks: FiQA, HotpotQA, and Sci-               hensive survey by Gao et al. (2024) reviews over
+    Docs. Results show consistent gains in Re-                100 RAG studies, categorizing them into Naive,
+    call@10, closing the gap with Recall@50 and               Advanced, and Modular RAG paradigms, and pro-
+    yielding actionable pipeline recommendations.             vides insights into advancements in retrieval, gen-
+    By prioritizing retrieval enhancements, we sig-           eration, and augmentation techniques.
+    nificantly elevate downstream LLM response                   The retrieval phase is central to RAG’s effi-
+    quality in real-world, customer-facing applica-
+                                                              cacy. Recent innovations include Hypothetical
+    tions.
+                                                              Document Embeddings (HyDE), introduced in Gao
+                                                              et al. (2023), which enhance zero-shot dense re-
+1    Introduction
+                                                              trieval by generating hypothetical documents that
+To enhance our RAG-based system’s retrieval per-              better capture query intent. Reciprocal Rank Fu-
+formance, we observed that when relevant docu-                sion (RRF) (Cormack et al., 2009) aggregates rank-
+ments are ranked within the top three results, the            ings from multiple retrievers, proving valuable in
+LLM generates accurate and comprehensive re-                  hybrid search.
+sponses in over 92% of cases. However, the re-                   Context-aware embeddings have been investi-
+call@3 for retrieved documents was notably lower,             gated to capture nuanced query-document relation-
+underscoring a critical bottleneck in the retrieval           ships. Anthropic’s Contextual Retrieval method
+phase. This insight drove our investigation into              (Anthropic, 2024), along with Zhang et al. (2025b),
+advanced retrieval strategies to improve overall sys-         significantly reduce retrieval failures by incorporat-
+tem performance, with a deliberate emphasis on                ing chunk-level context and improving precision
+enhancing recall metrics. We specifically focus               (Rau et al., 2025). The impact of context length is
+on the retrieval component, as LLMs have demon-               studied in (Joren et al., 2025), which introduces the
+strated the ability to generate accurate responses            concept of sufficient context, and (Li et al., 2024),
+                                                          169
+       Proceedings of the 19th Conference of the European Chapter of the Association for Computational Linguistics
+                                        Volume 5: Industry Track, pages 169–180
+                           March 25-27, 2026 ©2026 Association for Computational Linguistics
+which compares RAG with long-context LLMs and          from the Dev set (distractor) setting. This setting
+proposes a hybrid approach.                            tests the models’ capabilities in retrieving both the
+   Model fine-tuning using LLMs to generate syn-       relevant documents needed for multi-hop reason-
+thetic samples is explored in Appendix D. A com-       ing.
+mon pipeline, as noted by Rosa et al. (Rosa et al.,       SciDocs: SciDocs is a citation prediction dataset
+2022), retrieves top-k candidates using bi-encoders    in the scientific domain, comprising 1,000 queries
+and re-ranks them with cross-encoders.                 and a corpus of 25,657 documents. It focuses on
+   LLMs have shown exceptional performance in          retrieving documents relevant to scientific queries,
+complex tasks (Brown et al., 2020), prompting          with binary relevance judgments and an average
+exploration of their use in re-ranking (Qin et al.,    of 4.9 documents per query. SciDocs evaluates
+2024). SlideGar (Rathee et al., 2025a) and related     models’ performance in retrieving precise, domain-
+work (Rathee et al., 2025b) demonstrate adaptive       specific scientific information, making it suitable
+retrieval guidance, while (Gangi Reddy et al., 2024)   for testing retrieval in academic contexts.
+propose FIRST, a listwise re-ranking method using         Help Articles: Our product assistant chat-bot
+output logits. LLMs also excel at needle-in-the-       answers questions related to the company’s prod-
+haystack tasks (Team et al., 2024).                    uct usage, tax & finance related queries in general.
+   To our knowledge, no prior study evaluates          This content comes from a lot of help and support
+LLMs as direct re-rankers over the top 50 can-         articles available on publicly accessible company
+didates from state-of-the-art embedding models.        web-pages/ PDFs. We extracted text from 15,848
+We address this gap by focusing exclusively on         such web-pages and some PDF articles. PDF text
+retrieval enhancement to maximize downstream           chunking was done using LLMSherpa as it’s layout-
+LLM performance.                                       aware chunking helps preserve structural coherence
+                                                       (e.g., sections, tables). These source documents,
+3   Datasets                                           particularly the PDFs have higher average token
+                                                       count than all the BeIR datasets hence chunking is
+We tested all the approaches on four datasets. Three   needed for models with smaller context windows.
+of the datasets come from the BeIR benchmark           We also collected Subject Matter Expert (SME)
+(Thakur et al., 2021b), and we curated a propri-       feedback on 310 user queries and the model’s re-
+etary internal dataset for our downstream use case.    sponses. This is the same dataset used to build
+Below is a brief description of each dataset:          and deploy our production chatbot, which has been
+   FiQA-2018: The Financial Question Answer-           successfully answering live customer queries in the
+ing dataset (FiQA-2018) focuses on question-           wild.
+answering in the financial domain. It contains            Extended summary stats for each dataset used
+14,166 query-document pairs, with 648 queries          can be found in Table 1.
+and a corpus of 57,638 documents. Queries are
+financial questions, and documents are relevant        4     Methodology
+passages or answers, often sourced from financial
+texts. The dataset uses binary relevance judgments,    4.1    Help Articles Data Preparation
+with an average of 2.6 documents per query. FiQA       We collected data from the company’s public URLs
+is designed to evaluate retrieval models’ ability to   and help and support PDFs. For pages contain-
+handle domain-specific queries.                        ing tables, these were extracted and converted into
+   HotpotQA: HotpotQA is a question-answering          markdown format before being passed to the mod-
+dataset emphasizing multi-hop reasoning. Queries       els for embedding creation. This led to better re-
+require reasoning over multiple documents (specifi-    trieval performance for queries that needed infor-
+cally 2) to provide answers, supported by sentence-    mation in the tables.
+level facts for explainability. The corpus is             For generating recommendations, we utilized
+Wikipedia-based containing 5,233,329 documents.        five different promising embedding models (see
+We however have constructed a smaller corpus           Section 4.2) to create an unbiased set of documents
+from the Dev set (distractor) setting with 66,581      to be shared with SMEs. The top 10 retrieved arti-
+documents, to keep the size of corpus in the same      cles from each model were collected. We followed
+range as the other datasets. We report the perfor-     a systematic process: selecting and stacking the
+mance of our experiments on the 7405 questions         rank 1 article from each model and removing dupli-
+                                                   170
+                Dataset         Queries   Rel D/Q   Chunks    Chunks         Total   Median    Tokens      Max
+                                 count                  512      2048   documents     tokens      p75    tokens
+                FiQA                648       2.6    60,314    57,658       57,638       115      206     3,471
+                HotpotQA          7,405         2    66,790    66,581       66,581       486      690     8,263
+                SciDocs           1,000       4.9    27,234    25,736       25,657       187      245     6,980
+                Help Articles       310       3.6    28,870    20,243       15,848       237      480   125,248
+
+
+Table 1: Dataset statistics including total number of queries, chunk counts for different chunk sizes, total documents,
+median token count, 75th percentile token count, and maximum token count
+
+
+cates, then proceeding similarly with rank 2 articles,            4.3    Chunking for embeddings
+and so on until we obtained 10 unique recommen-                   We generated document chunks of varying lengths
+dations for each question in our dataset. Finally,                (512 & 2048 tokens) and evaluated performance
+we randomized the order of these top 10 recom-                    across these configurations. The BeIR datasets con-
+mendations before sharing them with the SMEs.                     tained relatively concise documents with limited
+  For SME feedback, we asked experts to rank                      token counts, resulting in minimal performance
+the articles based on their relevance to each query.              variation between configurations. Nevertheless,
+They could use the links provided, but also add their             models utilizing 2048-token segments consistently
+own in the ranked list if they found that the answers             demonstrated superior performance compared to
+were coming from beyond the list provided. This                   512-token, as this length preserves the coherence
+option was utilized by the SMEs in 20% of the                     of documents that marginally exceed the 512-token
+cases. We also collected feedback on the overall                  threshold. We conducted additional experiments
+answer quality.                                                   with 1024 and 4096-token segments, which can be
+                                                                  found in Table 6 in the Appendix, but for clarity
+4.2 Embedding models                                              and conciseness, we present performance metrics
+                                                                  exclusively for the 2048 token configuration.
+The selected embedding models consist of some of
+the top performing models on the Massive Text Em-                 4.4    Reciprocal Rank Fusion(RRF)
+bedding Benchmark (MTEB) (Muennighoff et al.,
+2023) at the time of writing this paper:                          For each dataset and candidate embedding model,
+                                                                  we evaluated retrieval effectiveness using Re-
+    • stella 1.5B (Zhang et al., 2025a)
+                                                                  call@50 and Recall@10 metrics. This initial as-
+    • text-embedding-3-large (OpenAI, 2024)
+                                                                  sessment revealed a substantial performance dispar-
+    • gemini-large-03-07 (Lee et al., 2025)
+                                                                  ity between Recall@50 and Recall@10 across all
+    • Alibaba-NLP/gte-Qwen2-1.5B-instruct (Li
+                                                                  datasets. Subsequently, we identified the highest-
+      et al., 2023)
+                                                                  performing model for each dataset (based on Re-
+    • BM25 (Robertson and Zaragoza, 2009)
+                                                                  call@50) and implemented pairwise RRF between
+   We consider BM25 as it is still a widely used                  that model and each alternative candidate model.
+keyword-based approach. Also, we had seen in our                  While more comprehensive model combinations
+earlier tests for one of our company’s products that              were feasible, we prioritized solution stability and
+it does add some value when some specific error                   deployment simplicity while still achieving signifi-
+codes are mentioned in the query by the user while                cant performance enhancements.
+facing issues with the product.
+   Additional models were initially experimented                  4.5    Embedding Concatenation
+with, but these were later dropped as they had a                  Additionally, we investigated embedding concate-
+larger/more recent model from the same provider                   nation as a lightweight fusion mechanism to inte-
+available and/or were performing lower. These                     grate complementary signals from multiple embed-
+models are:                                                       ding models. Specifically, we normalized all dense
+    • stella 400M (Zhang et al., 2025a)                           embeddings to unit length and performed pairwise
+    • text-embedding-ada-002 (OpenAI, 2022)                       concatenation between the best-performing model
+    • text-embedding-005-gemini (Lee et al., 2025)                on each dataset and each of the remaining three
+    • finBERT (Araci, 2019) and a fine-tuned ver-                 dense embedding models, yielding multiple aug-
+      sion with proprietary data. More information                mented representations per candidate passage.
+      about this fine-tuning can be found in Ap-                    Notably, the performance gains observed were
+      pendix D                                                    comparable to those achieved with Reciprocal
+                                                              171
+                  Model                              FIQA                   SciDocs          Help Articles            HotpotQA
+                                             R@50       R@10      R@50          R@10       R@50       R@10        R@50      R@10
+                  gemini_large_03_07         81.8%      65.7%     45.5%         27.1%      88.0%      69.4%       97.8%     94.6%
+                  Stella 1.5B                81.7%      63.2%     46.5%        26.9%       86.4%     68.5%       95.91%     89.9%
+                  text-embedding-3-large     78.0%      63.0%     42.5%        25.1%       86.3%     67.0%        94.6%     87.9%
+                  gte-Qwen2-1.5B             80.3%      61.8%     43.7%        24.7%       83.7%     63.0%        92.4%     85.2%
+                  BM25                       38.1%      23.9%     21.6%        12.3%       54.3%     34.8%        70.1%     61.2%
+
+
+Table 2: Recall metrics (Recall@50 and Recall@10) for different models across FIQA, SciDocs, Help Articles, and
+HotpotQA datasets. The model chunk size is 2048 in each case.
+
+                                                 FIQA                         SciDocs                    Help Articles               HotpotQA
+ Model                               Recall@50      Recall@10    Recall@50       Recall@10       Recall@50     Recall@10     Recall@50    Recall@10
+ Champion (gemini_large_03_07)         81.8%          65.7%        45.5%           27.1%           88.0%         69.4%        97.8%         94.6%
+ Champion + Stella 1.5B                84.3%         66.7%        47.3%            27.5%           89.1%         71.5%         97.7%        93.4%
+ Champion + text-embedding-3-large     82.3%          66.6%        45.4%           26.8%           89.2%        73.2%          97.7%        92.6%
+ Champion + gte-Qwen2-1.5B            84.8%           65.8%        46.3%           27.2%          89.8%          70.8%         97.4%        90.8%
+ Champion + BM25                       75.1%          49.0%        41.0%           20.8%           87.0%         58.1%         97.4%        89.1%
+
+
+Table 3: Reciprocal Rank Fusion results. Recall after combining the retrieval results from the champion model
+(gemini_large_03_07) in Table 2 with the rest of the candidates.
+
+                                           FIQA                           SciDocs                     Help Articles                 HotpotQA
+ Model                        Recall@50        Recall@10     Recall@50        Recall@10       Recall@50      Recall@10      Recall@50     Recall@10
+ Champion                       84.3%            66.7%         47.3%            27.5%           89.2%          73.2%          97.8%         94.6%
+ Champion + Cross Encoder       84.3%            61.6%         47.3%            22.9%           89.2%          69.4%          97.8%         94.3%
+ Champion + LLM Reranking    84.0% ± 0.0      64.7% ± 0.4   47.4% ± 0.0      24.9% ± 0.2     89.2% ± 0.0    74.7% ± 0.0    97.8% ± 0.0   96.4% ± 0.0
+ Champion + SlideGAR         84.0% ± 0.0      66.7% ± 0.5   47.4% ± 0.0      27.7% ± 0.1     89.2% ± 0.0    72.2% ± 0.0       97.8%         96.1%
+ BM25                           38.1%            23.9%         21.6%            12.3%           54.3%          34.9%          70.1%         61.2%
+ BM25 + Cross Encoder           40.2%            34.9%         21.7%            14.9%           67.9%          55.2%          71.0%         69.2%
+ BM25 + LLM Reranking           38.1%            23.9%         21.7%            16.5%           67.9%          55.3%          70.1%         61.2%
+
+
+Table 4: Re-ranking results. Different re-ranking methods applied to the best approach from Table 3 for each
+dataset. For FIQA and SciDocs it is gemini_large_03_07 + Stella 1.5B, for Help Articles gemini_large_03_07 +
+text-embedding-3-large, and for HotpotQA gemini_large_03_07. Confidence intervals (95%) are shown where
+available. All values are rounded to one decimal place. Highest mean value in each column is bolded.
+
+
+Rank Fusion (RRF), with detailed results reported                              NLP/gte-reranker-modernbert-base (Zhang et al.,
+in Appendix F. This suggests that embedding con-                               2024) in its comparative analysis, as it has a very
+catenation and RRF are equally effective fusion                                competitive performance in several text embed-
+strategies for combining retrieval signals.                                    ding and text retrieval evaluation tasks. This cross-
+   However, for operational simplicity and consis-                             encoder architecture could enable more sophisti-
+tency in downstream re-ranking experiments (cross-                             cated semantic matching than initial retrieval mod-
+encoder and LLM-based), we selected RRF as the                                 els alone.
+primary fusion method. This choice allows us to
+build a unified pipeline where all re-ranking strate-                          4.6.2       LLM Reranking
+gies are evaluated on top of the same high-quality                             We provide an LLM with the top 50 retrieved doc-
+top-50 candidate set. We therefore generate all                                uments and ask it to return an ordered list with the
+further results using the RRF-enhanced retrieval                               indices of the top 10 most relevant documents for
+outputs only.                                                                  the provided query. To optimize the performance
+                                                                               on this LLM task, experiments are carried out with:
+4.6 Reranking Strategies                                                          - Models: We primarily use gpt-4.1 for rerank-
+We performed re-ranking on the champion mod-                                   ing. We have also experimented with gpt-4.1-mini
+els for each data set obtained post RRF (Table 3).                             as a cost-effective alternative to gpt-4.1 in Table 7.
+Details on the results of the same can be found in                             A cost analysis per query can be found in Appendix
+Table 4.                                                                       A, to demonstrate the feasibility depending on the
+                                                                               user’s budget.
+4.6.1 Cross-encoder Reranking                                                     - Prompts: Different LLM prompt-tuning meth-
+To address the notable performance gap between                                 ods have been evaluated, including zero-shot, one-
+Recall@10 and Recall@50, we employed cross-                                    shot and meta-prompting. Passing more than one
+encoder reranking—a widely recognized methodol-                                full example has not been evaluated as each exam-
+ogy for refining the ranking of top_k retrieved doc-                           ple contains 50 documents, hence being costly.
+uments. This investigation incorporates Alibaba-                                  Another LLM based re-ranking strategy tested
+                                                                          172
+was SlideGAR.                                            we designated it as the champion model and com-
+                                                         bined its retrieval results with all other approaches
+4.7 Meta-Prompting                                       using Reciprocal Rank Fusion. Table 3 displays
+Hou et al. (2023) introduced meta-prompting as           these findings. Gemini’s Recall@10 improved
+a technique used to improve or generate a task-          across all four datasets, with gains of up to 3.8
+specific prompt, often leveraging examples from          percentage points achieved via different retriever
+a dataset. We use a similar approach to come up          ensembles, demonstrating that a well-combined en-
+with a prompt to learn from hard examples in the         semble can surpass even the strongest individual
+training set:                                            model.
+   (1) For a subsample of the training set (1000            While many traditional RAG pipelines employ
+samples), retrieve the top 50 documents.                 hybrid search combining an embedding model with
+   (2) If recall@50 >= 0.5 (there are relevant arti-     BM25, our results clearly indicate that including
+cles within the top 50), run LLM reranking.              BM25 in the combination significantly diminishes
+   (3) If recall@50 - recall@10 after re-ranking >       overall retrieval performance compared to using
+0.3, there was a re-ranking failure: use this exam-      either a single embedding model or a combination
+ple to run meta-prompting and update the system          of two embedding models.
+prompt.
+   Appendix B contains Figure 1 with the meta-           5.4    Re-ranking
+prompt used to obtain an enhanced system prompt.         Table 4 presents the results of applying various re-
+                                                         ranking techniques to the best models from Table
+5   Results                                              3 for each dataset. Some interesting observations
+5.1 Evaluation Metrics                                   are:
+                                                            (1) With sufficiently powerful embedding mod-
+While evaluating performance on the Help Arti-           els, cross-encoders appear to be no longer neces-
+cles dataset, we observed that whenever relevant         sary, as they actually decrease the recall@10 across
+documents were present within even the top three         all datasets.
+retrieval results, the LLM generated accurate and
+                                                            (2) LLM Re-ranking with GPT4.1 outperforms
+comprehensive responses in over 92% of cases.
+                                                         all other approaches in 2 of the 4 datasets, while re-
+This paper’s investigation is thus a direct attempt to
+                                                         maining competitive in the others. This represents
+close the substantial gap between Recall@10 and
+                                                         impressive performance for a zero-shot, out-of-the-
+Recall@50, which was identified as the primary
+                                                         box model, especially considering it is being com-
+performance challenge. Although we focus on the
+                                                         pared to models specifically trained for retrieval
+recall metrics in this paper, we have still provided
+                                                         and re-ranking tasks. This suggests that future,
+nDCG scores for our main experiments in appendix
+                                                         more powerful LLMs might achieve even better
+G to provide a more complete picture for the IR
+                                                         results, and that fine-tuning an LLM specifically
+community.
+                                                         for re-ranking could be worthwhile, given that its
+5.2 Retrieval: Embedding models                          base version already matches top performances.
+                                                            (3) SlideGAR demonstrated performance compa-
+Table 2 presents the retrieval results using various
+                                                         rable to the champion model. It outperformed LLM
+embedding models and BM25. Gemini embed-
+                                                         re-ranking in 2 datasets while being surpassed in
+dings consistently outperform all other embedding
+                                                         the other 2.
+models, with Stella 1.5B following closely behind.
+                                                            Additional LLM re-ranking ablation studies can
+These findings align with MTEB rankings, where
+                                                         be found in Appendix C, where One-shot and Meta-
+both models appear in the top 10. Interestingly, text-
+                                                         prompting techniques demonstrated slight improve-
+embedding-3-large demonstrated superior perfor-
+                                                         ments in re-ranking performance.
+mance compared to Qwen2-1.5B when retrieving
+10 documents. As expected, BM25 ranks lowest             6     Conclusion & Future Research
+among all approaches.
+                                                         Our comprehensive analysis of advanced retrieval
+5.3 Retrieval: Reciprocal Rank Fusion                    strategies for Large Language Models (LLMs)
+Since gemini_large_03_07 emerged as the best em-         within Retrieval-Augmented Generation (RAG)
+bedding model in almost all datasets and metrics,        systems has yielded several critical insights and
+                                                     173
+actionable strategies. Despite achieving notable         lower chunk sizes in those. Our hypothesis still is
+improvements, a persistent gap remains between           that contextual embeddings could add value where
+Recall@10 and Recall@50 across various datasets,         chunking across long documents is needed.
+indicating significant room for optimization in doc-        In conclusion, our research highlights the critical
+ument retrieval accuracy.                                interplay between various retrieval and re-ranking
+   The implementation of Reciprocal Rank Fusion          strategies in enhancing the performance of RAG
+(RRF) and LLM re-ranking has demonstrated de-            systems. The outlined strategic approach for con-
+cent gains, underscoring their effectiveness in en-      structing retrieval pipelines provides a structured
+hancing retrieval performance. Cross-encoder re-         pathway for future implementations. Further in-
+ranking also contributed positively, albeit variably     vestigations into contextual embeddings and their
+across different setups. These results solidify the      application in handling extensive document sizes
+importance of these advanced techniques in refin-        remain a promising avenue for advancing the state-
+ing the retrieval process.                               of-the-art in retrieval technologies. This continual
+   We make the following strategic recommenda-           evolution in retrieval methodologies is crucial for
+tions for Building an Effective Retrieval Pipeline:      leveraging the full capabilities of LLMs in generat-
+                                                         ing contextually relevant and accurate responses.
+  1. Initial Testing: Conduct thorough test-
+     ing with top-performing embedding models            Limitations
+     across different chunk sizes to understand
+     their baseline performance.                         Our evaluation encompassed four diverse datasets,
+                                                         providing meaningful insights across different
+  2. RRF or Concatenation: Select a champion             retrieval scenarios, though additional domain-
+     model and apply either pairwise RRF or em-          specific applications could further validate our find-
+     bedding concatenation with other candidates.        ings. As with all research in this rapidly evolving
+     Both methods yield comparable gains in Re-          field, our results represent a snapshot of current ca-
+     call@10.                                            pabilities, with the understanding that embedding
+                                                         models and LLMs continue to advance.
+  3. Advanced Re-ranking: With the refined
+     model from the fusion phase, experiment with           While our computational approach allowed us
+     adaptive and list-wise LLM re-ranking, along        to evaluate several leading embedding models and
+     with cross-encoder re-ranking, to further opti-     re-ranking techniques, we necessarily focused on
+     mize the retrieval outputs.                         the most promising candidates rather than exhaus-
+                                                         tively testing all available models. This strate-
+   Our study also specifically highlighted limita-       gic approach enabled deeper analysis of high-
+tions in the traditional BM25 algorithm. Despite         performing systems while acknowledging that spe-
+its widespread use, BM25 was found to perform            cialized domain-specific embedding models might
+poorly compared to state-of-the-art embedding            offer advantages in certain contexts.
+models, especially when not combined with ad-               Our findings regarding BM25’s diminished util-
+vanced re-ranking techniques. This is particularly       ity when combined with modern embedding mod-
+evident in scenarios that are not heavily keyword-       els reflect patterns observed across our test datasets,
+focused, where the semantic richness of queries          though specific use cases involving highly technical
+and documents is poorly captured by the purely           or specialized vocabulary may still benefit from lex-
+lexical approach of BM25. The findings suggest           ical matching approaches. Similarly, while cross-
+that unless the user’s dataset and queries are heavily   encoders did not improve performance in our ex-
+keyword-intensive, BM25 is unlikely to improve           periments, alternative implementations might yield
+retrieval performance significantly and might even       different results in specific contexts.
+degrade it when combined with more sophisticated            For LLM re-ranking, we primarily leveraged
+models.                                                  GPT-4.1, which demonstrated impressive capabil-
+   We carried out some experiments using HyDE            ities. While resource considerations limited our
+but the results were not promising (details are in       ability to test all available LLMs, the strong perfor-
+Appendix E). We saw minimal gains from con-              mance of GPT-4.1 suggests promising directions
+textual embeddings on the Help Articles dataset,         for future work.
+but could not test on other data-sets owing to the          Finally, our results point to LLM fine-tuning
+                                                     174
+for re-ranking as a compelling research direction.       Alexander Hermans, Lucas Beyer, and Bastian Leibe.
+While implementation and testing of this approach          2017. In defense of the triplet loss for person re-
+                                                           identification. Preprint, arXiv:1703.07737.
+fell outside our current scope, the strong zero-shot
+performance of LLMs suggests significant potential       Yutai Hou, Hongyuan Dong, Xinghao Wang, Bohan Li,
+for further performance gains through targeted fine-       and Wanxiang Che. 2023. Metaprompting: Learning
+                                                           to learn better prompts. Preprint, arXiv:2209.11486.
+tuning.
+                                                         Hailey Joren, Jianyi Zhang, Chun-Sung Ferng, Da-
+                                                           Cheng Juan, Ankur Taly, and Cyrus Rashtchian. 2025.
+References                                                 Sufficient context: A new lens on retrieval augmented
+                                                           generation systems. In The Thirteenth International
+Anthropic. 2024. Introducing contextual retrieval.         Conference on Learning Representations.
+
+Dogu Araci. 2019. Finbert: Financial sentiment anal-     Jinhyuk Lee, Feiyang Chen, Sahil Dua, Daniel
+  ysis with pre-trained language models. Preprint,          Cer, Madhuri Shanbhogue, Iftekhar Naim, Gus-
+  arXiv:1908.10063.                                         tavo Hernández Ábrego, Zhe Li, Kaifeng Chen, Hen-
+                                                            rique Schechter Vera, Xiaoqi Ren, Shanfeng Zhang,
+Tom B. Brown, Benjamin Mann, Nick Ryder, Melanie            Daniel Salz, Michael Boratko, Jay Han, Blair Chen,
+  Subbiah, Jared Kaplan, Prafulla Dhariwal, Arvind          Shuo Huang, Vikram Rao, Paul Suganthan, and 28
+  Neelakantan, Pranav Shyam, Girish Sastry, Amanda          others. 2025. Gemini embedding: Generalizable em-
+  Askell, Sandhini Agarwal, Ariel Herbert-Voss,             beddings from gemini. Preprint, arXiv:2503.07891.
+  Gretchen Krueger, Tom Henighan, Rewon Child,
+  Aditya Ramesh, Daniel M. Ziegler, Jeffrey Wu,          Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio
+  Clemens Winter, and 12 others. 2020.        Lan-         Petroni, Vladimir Karpukhin, Naman Goyal, Hein-
+  guage models are few-shot learners. Preprint,            rich Küttler, Mike Lewis, Wen-tau Yih, Tim Rock-
+  arXiv:2005.14165.                                        täschel, Sebastian Riedel, and Douwe Kiela. 2020.
+                                                           Retrieval-augmented generation for knowledge-
+Gordon V. Cormack, Charles L A Clarke, and Stefan          intensive NLP tasks. CoRR, abs/2005.11401.
+  Buettcher. 2009. Reciprocal rank fusion outperforms
+                                                         Zehan Li, Xin Zhang, Yanzhao Zhang, Dingkun Long,
+  condorcet and individual rank learning methods. In
+                                                           Pengjun Xie, and Meishan Zhang. 2023. Towards
+  Proceedings of the 32nd International ACM SIGIR
+                                                           general text embeddings with multi-stage contrastive
+  Conference on Research and Development in Infor-
+                                                           learning. arXiv preprint arXiv:2308.03281.
+  mation Retrieval, SIGIR ’09, page 758–759, New
+  York, NY, USA. Association for Computing Machin-       Zhuowan Li, Cheng Li, Mingyang Zhang, Qiaozhu Mei,
+  ery.                                                     and Michael Bendersky. 2024. Retrieval augmented
+                                                           generation or long-context LLMs? a comprehensive
+Revanth Gangi Reddy, JaeHyeok Doo, Yifei Xu,               study and hybrid approach. In Proceedings of the
+  Md Arafat Sultan, Deevya Swain, Avirup Sil, and          2024 Conference on Empirical Methods in Natural
+  Heng Ji. 2024. FIRST: Faster improved listwise           Language Processing: Industry Track, pages 881–
+  reranking with single token decoding. In Proceed-        893, Miami, Florida, US. Association for Computa-
+  ings of the 2024 Conference on Empirical Methods         tional Linguistics.
+  in Natural Language Processing, pages 8642–8652,
+  Miami, Florida, USA. Association for Computational     Niklas Muennighoff, Nouamane Tazi, Loïc Magne, and
+  Linguistics.                                             Nils Reimers. 2023. Mteb: Massive text embedding
+                                                           benchmark. Preprint, arXiv:2210.07316.
+Luyu Gao, Xueguang Ma, Jimmy Lin, and Jamie Callan.
+  2023. Precise zero-shot dense retrieval without rel-   OpenAI. 2022. New and improved embedding model.
+  evance labels. In Proceedings of the 61st Annual         Accessed: 2025-07-02.
+  Meeting of the Association for Computational Lin-
+                                                         OpenAI. 2024. New embedding models and api updates.
+  guistics (Volume 1: Long Papers), pages 1762–1777,
+                                                           Accessed: 2025-07-02.
+  Toronto, Canada. Association for Computational Lin-
+  guistics.                                              Zhen Qin, Rolf Jagerman, Kai Hui, Honglei Zhuang,
+                                                           Junru Wu, Le Yan, Jiaming Shen, Tianqi Liu, Jialu
+Yunfan Gao, Yun Xiong, Xinyu Gao, Kangxiang Jia,           Liu, Donald Metzler, Xuanhui Wang, and Michael
+  Jinliu Pan, Yuxi Bi, Yi Dai, Jiawei Sun, Meng Wang,      Bendersky. 2024. Large language models are effec-
+  and Haofen Wang. 2024. Retrieval-augmented gener-        tive text rankers with pairwise ranking prompting. In
+  ation for large language models: A survey. Preprint,     Findings of the Association for Computational Lin-
+  arXiv:2312.10997.                                        guistics: NAACL 2024, pages 1504–1518, Mexico
+                                                           City, Mexico. Association for Computational Lin-
+Matthew Henderson, Rami Al-Rfou, Brian Strope, Yun-        guistics.
+  Hsuan Sung, László Lukács, Ruiqi Guo, Sanjiv Ku-
+  mar, Balint Miklos, and Ray Kurzweil. 2017. Effi-      Mandeep Rathee, Sean MacAvaney, and Avishek Anand.
+  cient natural language response suggestion for smart     2025a. Guiding retrieval using llm-based listwise
+  reply. arXiv preprint arXiv:1705.00652.                  rankers. Preprint, arXiv:2501.09186.
+                                                     175
+Mandeep Rathee, Sean MacAvaney, and Avishek Anand.         An Yang, Bowen Yu, Chengyuan Li, Dayiheng Liu, Fei
+  2025b. Guiding retrieval using llm-based listwise          Huang, Haoyan Huang, Jiandong Jiang, Jianhong Tu,
+  rankers. In Advances in Information Retrieval:             Jianwei Zhang, Jingren Zhou, Junyang Lin, Kai Dang,
+ 47th European Conference on Information Retrieval,          Kexin Yang, Le Yu, Mei Li, Minmin Sun, Qin Zhu,
+ ECIR 2025, Lucca, Italy, April 6–10, 2025, Pro-             Rui Men, Tao He, and 9 others. 2025. Qwen2.5-1m
+  ceedings, Part I, page 230–246, Berlin, Heidelberg.        technical report. arXiv preprint arXiv:2501.15383.
+  Springer-Verlag.
+
+David Rau, Shuai Wang, Hervé Déjean, Stéphane Clin-        Dun Zhang, Jiacheng Li, Ziyang Zeng, and Fulong
+  chant, and Jaap Kamps. 2025. Context embeddings            Wang. 2025a. Jasper and stella: distillation of sota
+  for efficient answer generation in retrieval-augmented     embedding models. Preprint, arXiv:2412.19048.
+  generation. In Proceedings of the Eighteenth ACM
+  International Conference on Web Search and Data
+  Mining, WSDM ’25, page 493–502, New York, NY,            Dun Zhang, Panxiang Zou, and Yudong Zhou. 2025b.
+  USA. Association for Computing Machinery.                  Dewey long context embedding model: A technical
+                                                             report. Preprint, arXiv:2503.20376.
+Stephen Robertson and Hugo Zaragoza. 2009. The
+   probabilistic relevance framework: Bm25 and be-         Xin Zhang, Yanzhao Zhang, Dingkun Long, Wen Xie,
+  yond. Foundations and Trends in Information Re-            Ziqi Dai, Jialong Tang, Huan Lin, Baosong Yang,
+   trieval, 3:333–389.                                       Pengjun Xie, Fei Huang, and 1 others. 2024. mgte:
+                                                             Generalized long-context text representation and
+Guilherme Rosa, Luiz Bonifacio, Vitor Jeronymo,
+                                                             reranking models for multilingual text retrieval. In
+  Hugo Abonizio, Marzieh Fadaee, Roberto Lotufo,
+                                                             Proceedings of the 2024 Conference on Empirical
+  and Rodrigo Nogueira. 2022. In defense of cross-
+                                                             Methods in Natural Language Processing: Industry
+  encoders for zero-shot retrieval. arXiv preprint
+                                                             Track, pages 1393–1412.
+  arXiv:2212.06121.
+
+Gemini Team, Petko Georgiev, Ving Ian Lei, Ryan
+  Burnell, Libin Bai, Anmol Gulati, Garrett Tanzer,        A    Appendix: LLM Reranking cost
+  Damien Vincent, Zhufeng Pan, Shibo Wang, Soroosh
+  Mariooryad, Yifan Ding, Xinyang Geng, Fred Al-           This appendix contains the approximate cost of
+  cober, Roy Frostig, Mark Omernick, Lexi Walker,
+                                                           LLM re-ranking with proprietary models, in or-
+  Cosmin Paduraru, Christina Sorokin, and 1118 oth-
+  ers. 2024. Gemini 1.5: Unlocking multimodal un-          der to demonstrate its financial feasibility for cost-
+  derstanding across millions of tokens of context.        effective LLMs. The costs in Table X correspond
+  Preprint, arXiv:2403.05530.                              to 1 query, with an LLM re-ranking 50 documents
+Qwen Team. 2025. Qwen2.5-1m: Deploy your own               of 512 tokens each (25,000 tokens in total approxi-
+ qwen with context length up to 1m tokens.                 mately). The cost per token in the output is negli-
+                                                           gible as it is just a list with 10 indices, so the cost
+Nandan Thakur, Nils Reimers, Johannes Daxen-               from the input tokens is what is measured. As per
+  berger, and Iryna Gurevych. 2021a. Augmented
+  SBERT: Data augmentation method for improving            the table’s creation date. The OpenAI’s pricing
+  bi-encoders for pairwise sentence scoring tasks. In      page shows the following prices:
+  Proceedings of the 2021 Conference of the North             - gpt-4.1 nano: $0.10 per 1M input tokens
+  American Chapter of the Association for Computa-
+  tional Linguistics: Human Language Technologies,            - gpt-4.1 mini: $0.40 per 1M input tokens
+  pages 296–310, Online. Association for Computa-             - gpt-4.1: $2 per 1M input tokens
+  tional Linguistics.
+
+Nandan Thakur, Nils Reimers, Andreas Rücklé, Ab-                 LLM              Cost per query
+  hishek Srivastava, and Iryna Gurevych. 2021b. Beir:            gpt-4.1-nano     $0.0025
+  A heterogenous benchmark for zero-shot evalua-
+  tion of information retrieval models. Preprint,
+                                                                 gpt-4.1-mini     $0.01
+  arXiv:2104.08663.                                              gpt-4.1          $0.05
+
+Kexin Wang, Nandan Thakur, Nils Reimers, and Iryna         Table 5: LLM re-ranking cost. Price per query for
+  Gurevych. 2022. Gpl: Generative pseudo labeling for      different OpenAI models, assuming 50 documents of
+  unsupervised domain adaptation of dense retrieval.       512 tokens.
+  Preprint, arXiv:2112.07577.
+
+Liang Wang, Nan Yang, Xiaolong Huang, Linjun Yang,
+  Rangan Majumder, and Furu Wei. 2024. Improv-
+                                                              With open-source LLMs, even fine-tuned for this
+  ing text embeddings with large language models.          task, the cost of LLM re-ranking would just consist
+  Preprint, arXiv:2401.00368.                              on the infrastructure to host-them.
+                                                       176
+                                              Stella 1.5B                   BM25
+                     Tokens per chunk   Recall@50 Recall@10         Recall@50 Recall@10
+                     512                81.9%         63.0%         53.9%      33.5%
+                     1024               83.0%         65.7%         54.6%      34.5%
+                     2048               84.9%         66.5%         54.3%      34.8%
+                     4096               85.5%         67.5%         54.6%      35.2%
+
+Table 6: Chunk size comparison on Help Articles. Recall@50 and @10 for 4 common chunk sizes with two of the
+candidate retrieval models.
+
+
+B     Appendix: Meta-prompt                                      chunk). GPT4.1 has been used following
+                                                                 a similar approach as the one described in
+                                                                 (Wang et al., 2024) to generate around 5k
+                                                                 samples. We fine-tuned a stella 400M(Zhang
+                                                                 et al., 2025a) using the library sentence trans-
+                                                                 formers (Thakur et al., 2021a) for 1 epoch
+                                                                 with a learning rate of 6.25e-6, batch size of
+                                                                 8, linear warmup of 500 steps and Triplet-
+                                                                 Loss(Hermans et al., 2017). An example of
+                                                                 the prompt and the response can be seen on
+                                                                 Figures 2 and 3
+
+                                                              2. Given a document generate a set of questions
+                                                                 for that document. Qwen2.5-7B-Instruct-1M
+                                                                 (Yang et al., 2025) (Team, 2025) has been used
+                                                                 to generate 55,257 pairs (query,document).
+                                                                 We fine-tuned a stella 400M (Zhang et al.,
+                                                                 2025a) using the library sentence transform-
+                                                                 ers for 1 epoch with a learning rate of 6.25e-6,
+Figure 1: Meta prompt. Prompt used to refine the                 batch size of 8, linear warmup of 500 steps
+system prompt to improve the performance of LLM                  and MultipleNegativesRankingLoss (Hender-
+re-ranking. Asking the LLM to first provide a failure
+                                                                 son et al., 2017). An example of the prompt
+analysis allows it to reason over how to improve the
+system prompt, which is generated afterwards.                    can be seen on Figure 4
+
+                                                          In addition, we explored fine-tuning a finBERT
+C     Appendix: LLM Reranking ablation                    model (Araci, 2019) using GPL (Wang et al., 2022)
+      study                                               but, as we will describe later, the results were un-
+Different LLM prompting techniques have been              derperforming compared to Stella and other SOTA
+explored in order to improve its performance, and         models.
+these results can be found in Table 7.                       As presented in Table 8, the stella 400M model
+                                                          demonstrates strong performance on Help Articles
+D     Appendix: Finetuning embeddings                     achieving high recall@50. A larger chunksize of
+                                                          2048 generally proves beneficial for stella models.
+One of the strategies explored is to finetune the
+                                                             While the base stella 400M model already ex-
+embeddings with the objective to improve Recall
+                                                          hibits robust performance, finetuning with Qwen
+in our internal Dataset (Help Articles). Given that
+                                                          (Yang et al., 2025) (Team, 2025) questions further
+we didn’t have enough samples to be considered
+                                                          enhances recall metrics, positioning it as a particu-
+as training data we explore the use of techniques
+                                                          larly effective choice for article retrieval.
+described in (Wang et al., 2022) and (Wang et al.,
+                                                             In contrast, finBERT models, even with effec-
+2024) to generate synthetic triplets. Two differ-
+                                                          tive finetuning such as Generative Pseudo-Labeling
+ent prompts have been explored for generation of
+                                                          (Wang et al., 2022), perform substantially poorer
+samples :
+                                                          across all evaluated metrics compared to the stella
+    1. Given a specific document, generate a triplet      variants. This performance disparity underscores a
+       of (query, positive chunk, hard negative           fundamental difference in their suitability for this
+                                                        177
+                                                                            FIQA                          SciDocs
+     Model                                                      Recall@50     Recall@10       Recall@50      Recall@10
+     Champion (gemini_large_03_07 + Stella 1.5B)                  84.3%         66.7%           47.3%          27.5%
+     Champion + LLM Reranking GPT 4.1                             84.3%         63.5%           47.3%          26.5%
+     Champion + LLM Reranking GPT 4.1 mini                        84.3%         63.1%           47.3%          24.9%
+     Champion + One-shot LLM Reranking GPT 4.1                    84.3%         63.3%           47.3%          27.4%
+     Champion + One-shot + Meta-prompting GPT 4.1                 84.3%         64.8%           47.3%          28.4%
+
+Table 7: LLM Re-ranking ablation study. Champion model is the combination of gemini_large_03_07 and Stella
+1.5B through RRF. One-shot corresponds to the hardest example found in the train-set. Meta-prompting references
+the use of an enhanced prompt found through meta-prompting
+
+                Model                                     chunk_size    ndcg@5   ndcg@10   recall@10   recall@50
+                stella 400M finetuned on Qwen questions     2048        46.1%     51.2%      63.1%       85.3%
+                stella 400M                                 2048        48.2%     52.4%      63.3%       83.5%
+                stella 400M finetuned on Qwen questions      512        41.9%     47.6%      59.0%       82.8%
+                stella 400M finetuned GPT triplets          2048        45.3%     49.9%      58.1%       80.1%
+                stella_400M                                  512        43.7%     49.0%      59.3%       79.7%
+                stella 400M finetuned GPT triplets           512        42.3%     48.0%      55.8%       76.2%
+                finBERT GPL                                  512        20.9%     25.0%      34.7%       62.5%
+                finBERT                                      512         9.8%     12.5%      15.4%       36.8%
+
+
+                      Table 8: Retrieval metrics on Help Articles dataset for finetuned models
+
+
+
+
+                                                                       Figure 3: Example of response for the triplet generator
+
+
+
+
+Figure 2: Description of the prompt for triplet genera-
+tion, the different variables follow the same values as
+(Wang et al., 2024)
+document text is the document we want to obtain
+                                                                       Figure 4: Description of the prompt for query generation
+the triplet for and user queries is a set of queries
+that are extracted from our internal database
+                                                                       proving small languages models could be interest-
+specific information retrieval task.                                   ing in setups where the amount of documents to
+                                                                       index makes it prohibitively costly to execute big-
+  For the triplet generation strategy, results were
+                                                                       ger models such as stella 1.5B or some proprietary
+underperforming compared to vanilla stella 400M,
+                                                                       models.
+we think that hard negative selection should be
+improved, for instance by, not choosing the hard
+                                                                       E    Appendix: HyDE
+negative from the same document as the positive
+pair.                                                                  We evaluated the HyDE approach on a subset of
+  Fine-tuning embeddings shows that improving                          Help Articles (300 queries). The hypothetical doc-
+over the baseline model could be done by generat-                      uments for the queries were generated using gpt-
+ing synthetic samples over a custom dataset. Im-                       4o. The embeddings of the dataset, queries and
+                                                                  178
+                                                      FIQA                       SciDocs                Help Articles             HotpotQA
+ Model                                    Recall@50      Recall@10   Recall@50      Recall@10   Recall@50     Recall@10   Recall@50    Recall@10
+ Champion (gemini_large_03_07)              81.8%          65.7%       45.5%          27.1%       88.0%         69.4%      97.8%         94.6%
+ Champion + Stella 1.5B                    84.5%          66.8%       47.8%           27.8%       88.0%        71.8%        97.6%        93.7%
+ Champion + text-embedding-3-large          81.7%          66.6%       45.0%          27.1%       88.4%         71.0%       97.3%        92.8%
+ Champion + gte-Qwen2-1.5B                  84.1%          65.2%       46.5%          27.4%      88.8%          71.6%       96.4%        91.6%
+
+
+Table 9: Embedding concatenation results. Recall after combining the retrieval results from the champion model
+(gemini_large_03_07) in Table 2 with the rest of the candidates.
+
+                                                        FIQA                       SciDocs              Help Articles             HotpotQA
+ Model                                       nDCG@50       nDCG@10     nDCG@50        nDCG@10    nDCG@50      nDCG@10     nDCG@50      nDCG@10
+ Champion model (gemini_large_03_07)           61.7%         56.9%       32.5%          25.6%     62.94%       58.21%       91.5%        90.6%
+ Champion model + stella 1.5B                  64.5%         59.3%       33.7%          26.2%     64.60%       60.62%       90.8%        89.7%
+ Champion model+ text-embedding-3-large        63.1%         58.6%       32.3%          25.6%     64.36%       60.25%       89.8%        88.6%
+ Champion + gte-Qwen2-1.5B                     63.6%         57.9%       32.9%          25.7%     64.85%       60.81%       89.0%        87.6%
+
+
+Table 10: Embedding concatenation results. nDCG after combining the retrieval results from the champion model
+(gemini_large_03_07) in Table 2 with the rest of the candidates.
+
+
+the hypothetical documents were all generated us-                                deployment.
+ing text-embedding-ada-002. We considered text-                                     We therefore conclude that either method can be
+embedding-ada-002 as the baseline in this exper-                                 used interchangeably in production RAG systems,
+iment, i.e., the query embeddings were used to                                   with the final choice guided by engineering con-
+obtain the 50 most relevant documents from the                                   straints (e.g., index size for concatenation vs. rank
+dataset. In the HyDE approach, the embeddings of                                 aggregation logic for RRF).
+the hypothetical documents were used to obtain the
+50 most relevant documents from the dataset. We                                  G     Appendix: nDCG Results for
+find that the Recall@10 of the baseline is 66.4%                                       Reference
+while that of HyDE is 62.8%, significantly degrad-                               This appendix reports nDCG@50 and nDCG@10
+ing the performance over the baseline. The Re-                                   for all experiments in Tables 2, 3, and 4, included
+call@50 of the baseline is 82.8% while that of                                   for reference only to support the information re-
+HyDE is 82.4%.                                                                   trieval (IR) community. While our primary evalu-
+                                                                                 ation uses Recall (Section 5.1), nDCG provides a
+F    Appendix: Embedding Concatenation                                           complementary view of ranking quality by assign-
+     Results                                                                     ing higher weights to relevant documents placed
+We investigated embedding concatenation as a                                     earlier in the list. Notably, the top-performing mod-
+lightweight alternative to Reciprocal Rank Fusion                                els and fusion strategies are nearly identical under
+(RRF) for combining signals from multiple dense                                  both Recall and nDCG. Results can be found in
+retrievers. All embeddings were normalized to                                    Tables 11, 12 and 13
+unit length and concatenated pairwise between the
+champion model (gemini_large_03_07) and each
+of the remaining three dense models.
+   As shown in Tables 9 and 10, the performance
+of embedding concatenation is nearly identical
+to that of RRF across both Recall@50/10 and
+nDCG@50/10 metrics on all four datasets (FIQA,
+SciDocs, Help Articles, HotpotQA). Differences
+are within ±0.3 percentage points, indicating no
+statistically or practically significant advantage of
+one method over the other.
+   This equivalence supports our recommendation
+to treat RRF and embedding concatenation as
+equally viable fusion strategies. However, all down-
+stream re-ranking results (cross-encoder and LLM-
+based) are reported using RRF only, to maintain
+consistency in the evaluation pipeline and simplify
+                                                                          179
+ Model                                FIQA                           SciDocs                   Help Articles               HotpotQA
+                            NDCG@50      NDCG@10           NDCG@50      NDCG@10        NDCG@50       NDCG@10       NDCG@50      NDCG@10
+ gemini_large_03_07          61.7%         56.9%            32.5%         25.6%         62.9%          58.2%        91.5%         90.6%
+ stella 1.5B                  61.2%        55.6%            32.5%         25.1%          62.5%         58.2%         87.6%        85.9%
+ text-embedding-3-large       59.7%        55.1%             29.8%        23.4%          61.2%         56.8%         85.3%        83.4%
+ gte-Qwen2-1.5B               59.3%        53.9%             30.4%        23.3%          56.7%         51.6%         83.8%        81.8%
+ bm25                         22.7%        18.8%             15.2%        11.8%          32.1%         27.0%         57.9%        55.4%
+
+
+Table 11: NDCG metrics (NDCG@50 and NDCG@10) for different models across FIQA, SciDocs, Help Articles,
+and HotpotQA datasets. The model chunk size is 2048 in each case.
+
+                                               FIQA                       SciDocs                 Help Articles             HotpotQA
+ Model                               NDCG@50      NDCG@10      NDCG@50       NDCG@10      NDCG@50       NDCG@10     NDCG@50      NDCG@10
+ Champion (gemini_large_03_07)         61.7%        56.9%        32.5%         25.6%        62.9%         58.2%       91.5%        90.6%
+ Champion + stella 1.5B               64.1%         58.9%       33.4%          25.9%       64.3%          60.4%       90.4%        89.2%
+ Champion + text-embedding-3-large     62.9%        58.2%        32.3%         25.3%        63.0%         59.2%       89.5%        88.1%
+ Champion + gte-Qwen2-1.5B             63.5%        57.9%        32.7%         25.5%        62.9%         58.7%       88.6%        86.8%
+ Champion + bm25                       46.6%        39.1%        27.0%         19.5%        63.9%         60.2%       83.4%        81.0%
+
+
+Table 12: Reciprocal Rank Fusion results. NDCG after combining the retrieval results from the champion model
+(gemini_large_03_07) in Table 11 with the rest of the candidates.
+
+                                            FIQA                        SciDocs                  Help Articles             HotpotQA
+ Model                          NDCG@50        NDCG@10      NDCG@50        NDCG@10      NDCG@50        NDCG@10     NDCG@50      NDCG@10
+ Champion                         64.1%          58.9%        33.4%           25.9%        63.0%          59.2%      91.6%        90.6%
+ Champion + Cross Encoder         58.2%          51.5%        30.3%           21.3%        61.1%          55.9%      91.7%        90.7%
+ Champion + LLM Reranking       63.9%±0.1      57.8%±0.2    32.7%±0.2      24.0%±0.2    65.3%±0.0      61.2%±0.0   94.0%±0.0    93.6%±0.0
+ Champion + SlideGAR            62.8%±0.2      57.1%±0.2    33.3%±0.0      25.6%±0.1    62.6%±0.0      58.9%±0.0     94.2%        93.7%
+ bm25                             22.7%          18.8%        15.2%           11.8%        32.1%          27.0%      57.9%        55.4%
+ BM25+ Cross Encoder              33.3%          31.8%        15.5%           11.9%        50.3%          47.1%      69.1%        68.6%
+ BM25+ GPT 4.1                    22.7%          18.8%        19.2%           16.4%        51.7%          48.5%      57.9%        55.4%
+
+
+Table 13: Re-ranking results. Different re-ranking methods applied to the best approach from Table 3 for each
+dataset. For FIQA and SciDocs it is gemini_large_03_07 + stella 1.5B, for Help Articles gemini_large_03_07 +
+stella 1.5B, and for HotpotQA gemini_large_03_07.
+
+
+
+
+                                                                      180
+

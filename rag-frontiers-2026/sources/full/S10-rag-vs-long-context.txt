@@ -1,0 +1,730 @@
+                                                      Retrieval Augmented Generation or Long-Context LLMs?
+                                                           A Comprehensive Study and Hybrid Approach
+
+                                                               Zhuowan Li1 Cheng Li1 Mingyang Zhang1
+                                                                   Qiaozhu Mei2 * Michael Bendersky1
+                                                                1
+                                                                  Google DeepMind 2 University of Michigan
+                                                    1
+                                                      {zhuowan,chgli,mingyang,bemike}@google.com 2 qmei@umich.edu
+
+
+
+                                                                 Abstract                          (a)
+
+
+                                             Retrieval Augmented Generation (RAG) has
+
+                                                                                                    performance
+                                             been a powerful tool for Large Language Mod-
+
+
+
+
+arXiv:2407.16833v2 [cs.CL] 17 Oct 2024
+                                             els (LLMs) to efficiently process overly lengthy
+                                             contexts. However, recent LLMs like Gemini-
+                                             1.5 and GPT-4 show exceptional capabilities to
+                                             understand long contexts directly. We conduct
+                                             a comprehensive comparison between RAG                (b)
+
+                                             and long-context (LC) LLMs, aiming to lever-
+                                             age the strengths of both. We benchmark RAG            cost
+
+                                             and LC across various public datasets using
+                                             three latest LLMs. Results reveal that when
+                                             resourced sufficiently, LC consistently outper-
+                                             forms RAG in terms of average performance.           Figure 1: While long-context LLMs (LC) surpass RAG
+                                             However, RAG’s significantly lower cost re-          in long-context understanding, RAG is significantly
+                                             mains a distinct advantage. Based on this ob-        more cost-efficient. Our approach, S ELF -ROUTE, com-
+                                             servation, we propose S ELF -ROUTE, a simple         bining RAG and LC, achieves comparable performance
+                                             yet effective method that routes queries to RAG      to LC at a much lower cost.
+                                             or LC based on model self-reflection. S ELF -
+                                             ROUTE significantly reduces the computation          and RAG: on one hand, RAG conceptually acts as
+                                             cost while maintaining a comparable perfor-          a prior, regularizing the attention of LLMs onto
+                                             mance to LC. Our findings provide a guideline
+                                                                                                  retrieved segments, thus avoiding the distraction of
+                                             for long-context applications of LLMs using
+                                             RAG and LC.                                          the irrelevant information and saving unnecessary
+                                                                                                  attention computations; on the other hand, large-
+                                         1    Introduction                                        scale pretraining may enable LLMs to develop even
+                                                                                                  stronger long-context capabilities. Therefore, we
+                                         Retrieval augmented generation (RAG) has been            are motivated to compare RAG and LC, evaluating
+                                         shown to be a both effective and efficient approach      both their performance and efficiency.
+                                         for large language models (LLMs) to leverage ex-            In this work, we systematically benchmark RAG
+                                         ternal knowledge. RAG retrieves relevant informa-        and LC on various public datasets, gaining a com-
+                                         tion based on the query and then prompts an LLM          prehensive understanding of their pros and cons,
+                                         to generate a response in the context of the retrieved   and ultimately combining them to get the best of
+                                         information. This approach significantly expands         both worlds. Different from findings in previous
+                                         LLM’s access to vast amounts of information at a         work (Xu et al., 2023), we find that LC consistently
+                                         minimal cost.                                            outperform RAG in almost all settings (when re-
+                                            However, recent LLMs like Gemini and GPT-4            sourced sufficiently). This demonstrates the su-
+                                         have demonstrated exceptional capabilities in un-        perior progress of recent LLMs in long-context
+                                         derstanding long contexts directly. For example,         understanding.
+                                         Gemini 1.5 can process up to 1 million tokens (Reid
+                                                                                                     Despite the suboptimal performance, RAG re-
+                                         et al., 2024). This prompts the need for a system-
+                                                                                                  mains relevant due to its significantly lower compu-
+                                         atic comparison between long-context (LC) LLMs
+                                                                                                  tational cost. In contrast to LC, RAG significantly
+                                             * Visiting researcher to Google DeepMind.            decreases the input length to LLMs, leading to re-
+duced costs, as LLM API pricing is typically based               RAG with correction (Yan et al., 2024), critique
+on the number of input tokens. (Google, 2024; Ope-               (Asai et al., 2023), verification (Li et al., 2023), or
+nAI, 2024b)1 . Moreover, our analysis reveals that               adaptive search (Wang et al., 2023; Cheng et al.,
+the predictions from LC and RAG are identical for                2024; Jeong et al., 2024) to improve retrieval qual-
+over 60% of queries. For these queries, RAG can                  ity on knowledge-intensive tasks.
+reduce cost without sacrificing performance.                     Long-context evaluation. Evaluating long-context
+   Based on this observation, we propose S ELF -                 models is challenging due to the difficulty in
+ROUTE, a simple yet effective method that routes                 collecting and analyzing long texts. Recent re-
+various queries to RAG or LC based on model self-                searchers propose both synthetic tests like needle-
+reflection. With S ELF -ROUTE, we significantly re-              in-a-haystack (Greg Kamradt, 2023), Ruler (Hsieh
+duce the cost while achieving overall performance                et al., 2024), or Counting Stars (Song et al., 2024),
+comparable to LC. For example, the cost is reduced               and real datasets including LongBench (Bai et al.,
+by 65% for Gemini-1.5-Pro and 39% for GPT-4O.                    2023), ∞Bench (Zhang et al., 2024), L-Eval (An
+   Fig. 1 shows the comparisons of LC, RAG and                   et al., 2023), and others (Shaham et al., 2022; Yuan
+S ELF -ROUTE using three recent LLMs: GPT-4O,                    et al., 2024; Maharana et al., 2024). Evaluating
+GPT-3.5-Turbo and Gemini-1.5-Pro. In addition to                 on these datasets, recent works study the perfor-
+quantitative evaluation, we provide a comprehen-                 mance degradation over various context lengths
+sive analysis comparing RAG and LC, including                    (Levy et al., 2024; Hsieh et al., 2024), the lost-
+common failure patterns of RAG, the trade-offs                   in-the-middle phenomenon (Liu et al., 2024), and
+between cost and performance, and the results on                 explore solutions (Kuratov et al., 2024). Related
+additional synthetic datasets. Our analysis serves               to our work, Xu et al. (2023) compare RAG and
+as a starting point, inspiring future improvements               long-context prompting and find that long-context
+of RAG, and as a empirical guide for building long-              models still lags behind RAG. This is different
+context applications using RAG and LC.                           from our findings, possibly due to consideration of
+                                                                 stronger LLMs and longer contexts in our work.
+2       Related Work
+                                                                 3     Benchmarking RAG versus LC
+Long-context LLMs. There has long been ef-
+forts for enabling LLMs to handle long contexts                  3.1    Datasets and metrics
+(Guo et al., 2022; Beltagy et al., 2020; Chen et al.,            We evaluate on a subset of datasets from Long-
+2023b). While recent LLMs like Gemini-1.5 (Reid                  Bench (Bai et al., 2023) and ∞Bench (Zhang et al.,
+et al., 2024), GPT-4 (Achiam et al., 2023), Claude-              2024), which are recent benchmarks containing a
+3 (Anthropic, 2024) achieve significantly larger                 collection of new and existing datasets for LLM
+context window size, long-context prompting is                   evaluation, covering both synthetic and real texts in
+still expensive due to the quadratic computation                 multiple languages. LongBench contains a collec-
+cost of transformers regarding to the input token                tion of 21 datasets, with an average context length
+numbers. Recent work proposes methods to reduce                  of 7k words. ∞Bench consists of even longer con-
+cost by prompt compression (Jiang et al., 2023),                 texts with an average length of 100k tokens.
+model distillation (Hsieh et al., 2023), or LLM cas-                Among the datasets, we mainly focus on tasks
+cading (Chen et al., 2023a).                                     that are (a) in English, (b) real, and (c) query-based
+Retrieval-augmented generation. Augmenting                       (e.g. summarization tasks do not contain queries
+LLMs with relevant information retrieved from var-               for retrieving relevant information). This results in
+ious sources (Lewis et al., 2020) has been success-              7 datasets from LongBench including NarrativeQA
+ful in complementing LLMs with external knowl-                   (Kočiskỳ et al., 2018), Qasper (Dasigi et al., 2021),
+edge. RAG achieves good performance on tasks                     MultiFieldQA (Bai et al., 2023), HotpotQA (Yang
+like language modeling (Khandelwal et al., 2019;                 et al., 2018), 2WikiMultihopQA (Ho et al., 2020),
+Shi et al., 2023) and QA (Guu et al., 2020; Izacard              MuSiQue (Trivedi et al., 2022), QMSum (Zhong
+and Grave, 2020), with a significantly lower compu-              et al., 2021); and 2 datasets from ∞Bench includ-
+tation cost (Borgeaud et al., 2022). Related to but              ing En.QA and EN.MC. Please refer to Appendix A
+different from our work, recently works augment                  for more details. Additionally, in Sec. 5.4, we will
+    1
+    While retrieval may introduce extra cost, retrieval system   provide an ablation a synthetic datasets PassKey
+is much easier to set up and can be hosted on customer side.     from ∞Bench.
+  For evaluation metrics, we report F1 scores for      in Sec. 5.3 and Tab. 2.
+the open-ended QA tasks, accuracy for the multi-          As shown in Tab. 1, LC consistently outperforms
+choice QA tasks, and ROUGE score for the sum-          RAG for all the three models, with a significant
+marization tasks.                                      margin. On average, LC surpasses RAG by 7.6%
+                                                       for Gemini-1.5-Pro, 13.1% for GPT-4O, and 3.6%
+3.2      Models and Retrievers                         for GPT-3.5-Turbo. Noticeably, the performance
+Three latest LLMs are evaluated, including Gemini-     gap is more significant for the more recent mod-
+1.5-Pro (Reid et al., 2024), GPT-4O (OpenAI,           els (GPT-4O and Gemini-1.5-Pro) compared to
+2024a), and GPT-3.5-Turbo (OpenAI, 2023) 2 .           GPT-3.5-Turbo, highlighting the exceptional long-
+Gemini-1.5-Pro is a recent long-context LLM from       context understanding capacity of the latest LLMs.
+Google, supporting up to 1 million tokens. GPT-           However, there is an exception observed on the
+4O, the newest lightweight yet strong LLM from         two longer datasets from ∞Bench (i.e., En.QA and
+OpenAI, supports 128k tokens. GPT-3.5-Turbo            En.MC), where RAG achieves higher performance
+supports 16k tokens.                                   than LC for GPT-3.5-Turbo. This result deviates
+   Two retrievers are used in our study: Contriever    from the overall trend, likely due to the significantly
+(Izacard et al., 2021), which is a contrastively       longer context in these datasets (147k words on av-
+trained dense retriever outperforming BM25 on          erage) compared with the limited context window
+BEIR datasets, and Dragon (Lin et al., 2023), which    (16k) of GPT-3.5-Turbo. This finding highlights
+is a recent generalizable dense retriever achieving    the effectiveness of RAG when the input text con-
+high performance in both supervised and zero-shot      siderably exceeds the model’s context window size,
+settings without complex late interaction. Follow-     emphasizing a specific use case of RAG.
+ing (Xu et al., 2023), we divide long contexts into
+                                                       4     Self-Route
+chunks of 300 words, and select the top k chunks
+(default k = 5) based on the cosine similarity of      4.1    Motivation
+the query embedding and the chunk embeddings.          As demonstrated in Sec. 3, RAG lags behind long-
+The chunks are ordered by the similarity scores,       context LLMs in terms of performance. However,
+with the chunk index prepended at the beginning.       despite this performance gap, we surprisingly find
+   Since black-box LLMs are pretrained on un-          a high degree of overlap in their predictions, as
+known datasets, the leakage of evaluation datasets     illustrated in Fig. 2.
+may occur. Especially, some of the evaluation
+datasets are based on Wikipedia, which has likely
+been seen by LLMs during during. In some cases,
+we find that model may predict the correct answer
+using exactly the same words as the groundtruth
+(e.g. “meticulously”), even when they do not appear
+in the provided context. In our experiment, we try
+mitigating this issue by prompting the model to an-
+swer “based only on the provided passage”
+for both RAG and LC. It remains an open ques-
+tion how to address the data leakage issue in LLM                               𝑆!"# − 𝑆$%
+evaluation.
+                                                       Figure 2: Distribution of the difference of predic-
+3.3      Benchmarking results                          tion scores between RAG and LC (computed w.r.t.
+                                                       groundtruth labels). RAG and LC predictions are highly
+We benchmark the performance of LC and RAG             identical, for both correct and incorrect ones.
+across the nine datasets, using three recent LLMs:
+Gemini-1.5-Pro, GPT-4O and GPT-3.5-Turbo.
+                                                          Fig. 2 displays the distribution of the differences
+Tab. 1 presents the results using the Contriever
+                                                       between RAG prediction scores SRAG and LC pre-
+retriever, where rows *-1 and rows *-2 present the
+                                                       diction scores SLC , specifically SRAG − SLC (the
+benchmarking results for LC and RAG respectively.
+                                                       scores are multiplied by 100 to be scaled to 1-100).
+Results using the Dragon retriever will be discussed
+                                                       These scores S represent the evaluation of model
+   2
+       gpt-3.5-turbo-0125, gpt-4o-2024-05-13           predictions against the groundtruth. Notably, for
+                                        Avg    Narr    Qasp    Mult     Hotp     2Wiki   Musi    Sum     En.QA    En.MC
+                  1-1   LC             49.70   32.76   47.83   52.33    61.85    62.96   40.22   20.73    43.08    85.57
+                  1-2   RAG            37.33   22.54   44.68   49.53    48.36    54.24   26.56   19.51    19.46    51.09
+                  1-3   S ELF -ROUTE   46.41   28.32   45.23   51.47    55.18    62.68   40.66   19.77    37.51    76.86
+ Gemini-1.5-Pro   1-4   answerable %   76.78   73.00   85.00   96.67    84.50    81.00   58.50   93.50    56.41    62.45
+                  1-5   token %        38.39   23.07   49.93   36.88    32.97    53.49   56.14   17.96    42.25    32.84
+                  2-1   LC             48.67   32.78   44.54   55.28    62.42    70.69   41.65   21.92    32.36    76.42
+                  2-2   RAG            32.60   18.05   46.02   50.74    36.86    50.21   16.09   19.97    14.43    41.05
+ GPT-4O           2-3   S ELF -ROUTE   48.89   31.36   47.99   53.17    62.14    70.14   41.69   21.31    34.95    77.29
+                  2-4   answerable %   57.36   44.00   67.50   94.00    52.50    62.00   30.00   92.00    27.07    47.16
+                  2-5   token %        61.40   66.40   72.25   39.65    65.79    77.05   85.00   20.26    73.01    53.21
+                  3-1   LC             32.07   23.34   42.96   49.19    45.33    41.04   17.92   19.61    14.73    34.50
+                  3-2   RAG            30.33   18.22   38.15   49.21    37.84    35.16   16.41   18.94    15.39    43.67
+ GPT-3.5-Turbo    3-3   S ELF -ROUTE   35.32   24.06   38.65   52.07    47.28    44.62   34.44   19.88    22.03    44.54
+                  3-4   answerable %   74.10   71.50   80.00   91.33    68.50    69.00   47.00   93.50    50.43    95.63
+                  3-5   token %        38.85   20.56   55.08   35.29    48.70    65.91   65.08   16.40    38.17     4.50
+
+
+Table 1: Results of Gemini-1.5-Pro, GPT-3.5-Turbo, and GPT-4O using the Contriever retriever. LC consistently
+outperforms RAG, while S ELF -ROUTE achieves performance comparable to LC using much less tokens.
+
+most queries, RAG scores and LC scores are highly              “Write unanswerable if the query can not
+similar. In fact, for 63% queries, the model pre-              be answered based on the provided text”.
+dictions are exactly identical; and for 70% queries,           For the queries deemed answerable, we accept the
+the score difference is less than 10 (absolute value).         RAG prediction as the final answer. For the queries
+Interestingly, the identical predictions are not nec-          deemed unanswerable, we proceed to the second
+essarily correct, as shown by the varying colors rep-          step, providing the full context to the long-context
+resenting the average score, i.e., (SRAG + SLC )/2.            LLMs to obtain the final prediction (i.e., LC).
+This observation suggests that RAG and LC tend                    As our results will demonstrate, most queries can
+to make not only the same correct predictions but              be solved by the first RAG-and-Route step (e.g.,
+also similar errors.                                           82% for Gemini-1.5-Pro), with only a small por-
+   This finding motivates us to leverage RAG for               tion requiring the following long-context prediction
+the majority of queries, reserving computationally             step. Since the RAG-and-Route step only needs
+more expensive LC for a small subset of queries                the retrieved chunks (e.g., 1.5k tokens) as input,
+where it truly excels. By doing so, RAG can signif-            which is significantly shorter than the full contexts
+icantly reduce computational costs without sacrific-           (e.g., 10k - 100k tokens), the overall computation
+ing overall performance.                                       cost is substantially reduced. Detailed token count
+                                                               analysis will be provided in the results.
+4.2   Self-Route
+Based on the above motivation, we propose S ELF -              4.3     Results
+ROUTE, a simple yet effective method combining                 Rows *-3 to *-5 in Tab. 1 present the results of our
+RAG and LC to reduce cost while maintaining a                  method, utilizing the three LLMs. Rows *-3 report
+performance comparable to LC. S ELF -ROUTE uti-                the performance. Rows *-4 show the percentage
+lizes LLM itself to route queries based on self-               of answerable queries, as predicted in the RAG-
+reflection, under the assumption that LLMs are                 and-Route step. Rows *-5 display the percentage
+well-calibrated in predicting whether a query is               of tokens used by our method, compared to that
+answerable given provided context.                             of LC. In terms of performance (rows *-3), S ELF -
+   Concretely, our method consists of two steps: a             ROUTE significantly outperforms RAG, achieving
+RAG-and-Route step and a long-context prediction               results comparable to LC. Across all three models,
+step. In the first step, we provide the query and              S ELF -ROUTE surpasses RAG (rows *-2) by over
+the retrieved chunks to the LLM, and prompt it to              5%. Compared to LC (rows *-1), there is a slight
+predict whether the query is answerable and, if so,            performance drop for GPT-4O (-0.2%) and Gemini-
+generate the answer. This is similar to standard               1.5-Pro (-2.2%), but an improvement for GPT-3.5-
+RAG, with one key difference: the LLM is given                 Turbo (+1.7%).
+the option to decline answering with the prompt                   All three LLMs consistently route more than half
+of queries towards RAG, as shown in rows *-4. For
+Gemini-1.5-Pro, the answerable percentage even                      (a)
+
+
+
+
+                                                          performance
+reaches 81.74% (row 1-4). This indicates that RAG
+may answer most queries without the need for LC,
+confirming our initial motivation.
+   Due to the high answerable rate, the number of
+tokens required is significantly reduced (rows *-
+5). For example, GPT-4O uses only 61% tokens                                                  top-k
+                                                                  (b)
+while achieving comparable performance (46.83)
+
+
+
+                                                          token percentage
+with LC (47.04), Gemini-1.5-Pro uses 38.6% of
+the tokens. Since the computation cost of the
+transformer-based LLMs is quadratic to token
+count, and most LLM APIs charge based on token
+count (OpenAI, 2024b; Google, 2024), this lower
+token count translates to substantial cost savings.                                          top-k
+
+   On longer datasets, the advantage of our method      Figure 3: Trade-off curves between (a) model perfor-
+is more pronounced for OpenAI models, but less          mance and (b) token percentage as a function of k.
+significant for Gemini. For instance, for GPT-4O,
+S ELF -ROUTE outperforms LC by 2.3% and 7.4%
+                                                        minimum at k = 5. This is because when k in-
+respectively on EN.QA and EN.MC, which contain
+                                                        creases, the cost of RAG (and routing) increases,
+longer contexts. For GPT-3.5-Turbo, the advantage
+                                                        but more queries are routed to RAG from LC, thus
+margins are even larger. However, for Gemini-
+                                                        the overall cost may decrease. The sweet point of k
+1.5-Pro, the performance is lower than LC. These
+                                                        might be different for each dataset, e.g. on average,
+different behaviors are possibly due to the differ-
+                                                        k = 5 has the lowest cost as shown in the curves,
+ence in LLM alignments, i.e., OpenAI models are
+                                                        but on some datasets, especially ones that contain
+more likely to reject answering using RAG, leading
+                                                        extractive questions which does not need multi-hop
+to a lower answerable percentage but higher accu-
+                                                        reasoning (like NarrativeQA and QMSum), k = 1
+racy, which results in a different performance-cost
+                                                        leads to the lowest cost. This indicates that the opti-
+trade-off compared with Gemini-1.5-Pro.
+                                                        mal k depends on the nature of the task, as well as
+5     Analysis                                          the performance requirement. We encourage future
+                                                        researchers to look for different ks when applying
+5.1    Ablations of k                                   our method to various applications.
+Both RAG and S ELF -ROUTE relies on the top-k
+                                                        5.2                  Why does RAG fail?
+retrieved text chunks. The larger k is, the longer
+context are fed into LLMs for RAG prediction as         To gain a better understanding of why RAG lags
+well as routing, resulting in different costs versus    behind LC, we analyze the failure reasons for the
+performances. To study the influence of k, in Fig. 3,   examples that cannot be answered by RAG. We
+we plot the performance and cost (i.e. input token      first manually check some examples for which our
+percentage) curves when different ks are used.          RAG-and-Route step predicts “unanswerable” and
+   In terms of performance, for both RAG and            summarize four typical failure reasons, then prompt
+S ELF -ROUTE, a larger k leads to better perfor-        LLM to classify all the examples.
+mance. While k increases, more and more chunks             The four reasons include: (A) The query requires
+are fed into the LLMs, thus the performance grad-       multi-step reasoning so the results of previous steps
+ually improves to approach LC. As can be seen in        are needed to retrieve information for later steps,
+from the curves, the advantage of S ELF -ROUTE          e.g. “What nationality is the performer of
+is the most significant for smaller k. For example,     song XXX”. (B) The query is general, e.g. “What
+when k = 1, RAG gets from 20.24% while S ELF -          does the group think about XXX”, which is
+ROUTE gets 37.9%, while when k is larger than 50,       challenging for the retriever to formulate a good
+all three methods get similar performance.              query. (C) The query is long and complex, which
+   However, the trend of cost is not monotonous         is challenging for the retriever to understand. How-
+for S ELF -ROUTE. As seen, the cost reaches its         ever, answering this kind of questions is arguably,
+                                                Avg    Narr    Qasp    Mult      Hotp    2Wiki   Musi    Sum     En.QA    En.MC
+                             1   LC            49.70   32.76   47.83   52.33     61.85   62.96   40.22   20.73    43.08    85.57
+                             2   RAG           38.09   21.91   44.33   53.08     51.61   50.05   30.47   19.93    21.25    50.22
+                             3   combine       46.81   28.50   43.82   54.62     56.58   60.62   40.66   20.07    37.79    78.60
+                    Dragon   4   RAG ratio     77.88   74.00   84.00   97.33     86.00   77.00   66.00   95.50    61.25    59.83
+                             5   Token ratio   37.87   19.31   54.15   34.78     32.64   55.65   48.16   16.64    38.71    40.83
+
+                                          Table 2: Results for Gemini-1.5-Pro using Dragon retriever.
+
+an advantage of LLMs. (D) The query is implicit,                                  We hope this failure analysis inspires future im-
+demanding a thorough understanding of the en-                                  provements of RAG. For example, engaging chain-
+tire context. For instance, in a lengthy conversa-                             of-thought (Wei et al., 2022) into RAG may help ad-
+tional narrative about a space voyage, a question                              dress the multi-step questions, and revisiting query
+like “What caused the shadow behind the                                        understanding techniques like query expansion (Lv
+spaceship?” requires readers to connect the dots                               and Zhai, 2009; Zhai and Lafferty, 2001) may help
+and deduce the answer, as there is no explicit men-                            with the general queries and complex queries. We
+tion of the shadow when the cause is revealed.                                 are also glad to see recent efforts towards the direc-
+                                                                               tion (Chan et al., 2024; Ma et al., 2023).
+
+                                                                               5.3   Different retrievers
+                                                                               The results using a retriever, Dragon, is shown in
+
+number of queries
+                                                                               Tab. 2 based on Gemini-1.5-Pro. As can be seen,
+                                                                               the results are consistent with Contriever, for all
+                                                                               of LC, RAG, and S ELF -ROUTE, showing that our
+                                                                               findings are generalizable across retrievers.
+
+                                                                               5.4   Results on synthetic data
+ Figure 4: Distribution of typical RAG failure reasons.                    In this study, we mainly focus on real datasets, with
+                                                                           a consideration that results on synthetic data, which
+   Using these reasons, we prompt Gemini-1.5-Pro                           are artificially created by researchers, may subject
+with few-shot in-context examples that we man-                             to dataset artifacts. We notice some methods that
+ually annotated, to classify all the unanswerable                          researchers adopted to create synthetic long context
+examples into these four categories, plus an “other"                       datasets may unconsciously, but largely, influence
+option. Fig. 4 shows the distribution of failure rea-                      the performance comparison between RAG and LC.
+sons on the seven datasets in LongBench. Each                              For example, here we describe the results on the
+dataset may contain different number of RAG fail-                          “PassKey” dataset in ∞Bench and its variations.
+ure cases, resulting in various bar heights. The                              This “PassKey” dataset presents a needle-in-a-
+distribution patterns are consistent with the nature                       haystack test, where a sentence with a passkey
+of the datasets. For example, the three Wikipedia-                         (e.g. “the passkey is 123456”) is hidden within
+based multi-hop reasoning datasets (HotpotQA,                              chunks of irrelevant text, and the model is asked
+2WikiMQA, MuSiQue) are challenging for RAG                                 to answer the question “What is the passkey”.
+because of multi-step retrieval as shown in blue.                          The task requires strong retrieval capability. On
+For NarrativeQA, which are long stories containing                         this dataset, RAG achieves 80.34% accuracy, out-
+a lot of dialogues, most failure cases are due to im-                      performing LC, which gets 65.25% using Gemini-
+plicit queries that requires understanding the whole                       1.5-Pro. However, if the query is slightly modi-
+context (shown in green). For QMSum, which is a                            fied as “What is the special token hidden
+summarization dataset contains open-ended ques-                            inside the texts”, RAG accuracy sharply drops
+tions, failures are mostly due to general queries                          to only 4.58%, while LC keeps roughly the same
+(shown in red). We manually checked the exam-                              (69.32%). Another example: if the chunks contain
+ples classified as “others” and find that most of                          two passkeys and the query is “Which passkey
+them are actually multi-step questions, often with                         is larger? First or second?”, then RAG
+ambiguities, which poses challenges for answering.                         (47.63%) under-performs LC (64.24%) as well.
+                                         RAG        LC         any contexts (i.e., commonsense questions), and
+        Original                         80.34    65.25        report the model’s performance only on the non-
+                                                               commonsense questions. Tab. 5 shows the perfor-
+        Variant-1: “special token”        4.58    69.32
+                                                               mance of Gemini-1.5-Pro and GPT-3.5-Turbo on
+        Variant-2: “which is larger”     47.63    64.24
+                                                               all the questions from the MuSiQue dataset, as well
+Table 3: Synthetic dataset may unconsciously contain           as their performance on the non-commonsense sub-
+artifacts that influence the comparison results.               set3 . As shown, after excluding the commonsense
+                                                               questions, the trend remains the same.
+Tab. 3 summarizes the results, which demonstrates
+that the evaluation highly subjects to artifacts in
+dataset construction, showing limitation of syn-                                    all questions      w/o commonsense
+                                                                                  Gemini GPT-3.5       Gemini GPT-3.5
+thetic testing.
+                                                                   # questions     200        200        133        150
+5.5     Exclusion of LLM’s internal knowledge                      LC             40.22      17.92      31.76      13.00
+Ideally, the comparison in this paper should ex-                   RAG            26.56      16.41      15.51      13.05
+                                                                   Self-Route     40.66      34.44      31.32      19.76
+clude the model’s internal knowledge (i.e., para-
+metric knowledge) so that the model’s performance                  answerable %   58.50      47.00      52.63      45.33
+                                                                   token %        56.14      65.08      48.46      53.43
+are solely based on its capability to understand long
+contexts. In our study, this internal knowledge is             Table 5: Results on MuSiQue on all questions, and on
+excluded by utilizing the prompt “based only on                the subset of non-commonsense questions (i.e., exclud-
+the provided passage”, which we empirically find is            ing questions that can be answered without contexts).
+a simple yet effective method. Here we discuss the
+effectiveness of this method, as well as alternative
+                                                                  That said, a more thorough study to explore vari-
+methods to exclude external knowledge.
+                                                               ous methods for controlling the usage of model’s
+   First, we validate the effectiveness of the sim-
+                                                               internal knowledge, and to study the source of in-
+ple prompt “based only on the provided passage”.
+                                                               ternal knowledge (e.g. LLM"s world knowledge
+Tab. 4 compares the performance (long-context) of
+                                                               or dataset leakage), will be valuable future work,
+Gemini-1.5-Pro with and without this prompt. As
+                                                               which we hope can be further investigated.
+shown, using this prompt consistently limits the
+model’s performance (average performance drops
+from 50.57 to 45.53), which indicates that using               6     conclusion
+this simple instruction can already effectively limit
+the usage of the model’s parametric knowledge.                 This paper presents a comprehensive comparison of
+                                                               RAG and LC, highlighting the trade-offs between
+                        without                with            performance and computational cost. While LC
+                   "based only on ..."   "based only on ..."
+                                                               demonstrate superior performance in long-context
+  NarrativeQA            36.35                   32.76         understanding, RAG remains a viable option due
+  Qasper                 50.69                   47.83
+  MultiFieldQA           56.07                   52.33
+                                                               to its lower cost and advantages when the input
+  HotpotQA               66.47                   61.85         considerably exceeds the model’s context window
+  2WikiMQA               68.97                   62.96         size. Our proposed method, which dynamically
+  Musique                54.56                   40.22         routes queries based on model self-reflection, ef-
+  QMSum                  20.87                   20.73
+                                                               fectively combines the strengths of both RAG and
+  En.QA                  49.20                   43.08
+  En.MC                  90.83                   85.57         LC, achieving comparable performance to LC at a
+                                                               significantly reduced cost. We believe our findings
+  Avg                    50.57                   45.53
+                                                               contribute valuable insights for the practical appli-
+                                                               cation of long-context LLMs and pave the way for
+Table 4: Comparison of the long-context performance
+                                                               future research in optimizing RAG techniques.
+of Gemini-1.5-Pro, using the prompt with and without
+“based only on the provided passage”.
+                                                                   3
+                                                                     Different models may learn different internal knowledge,
+   Second, as an alternative method to exclude                 resulting in different numbers of non-commonsense ques-
+                                                               tions. For example, GPT-3.5-Turbo gets 14.53 performance on
+internal knowledge, we remove the questions                    MuSiQue while Gemini-1.5-Pro gets 23.58 using only internal
+where the model can correctly answer without                   knowledge,
+Acknowledgements                                                active retrieval for retrieval augmented generation.
+                                                                arXiv preprint arXiv:2406.12534.
+We would like to thank Weize Kong, Tao Chen, Jef-
+frey Dudek and Spurthi Amba Hombaiah for their                Pradeep Dasigi, Kyle Lo, Iz Beltagy, Arman Cohan,
+helpful comments and suggestions, as well as the                Noah A Smith, and Matt Gardner. 2021. A dataset of
+anonymous reviewers for the valuable discussions.               information-seeking questions and answers anchored
+                                                                in research papers. arXiv preprint arXiv:2105.03011.
+
+                                                              Google. 2024. Gemini pricing. https://ai.google.
+References                                                      dev/pricing.
+Josh Achiam, Steven Adler, Sandhini Agarwal, Lama
+  Ahmad, Ilge Akkaya, Florencia Leoni Aleman,                 Greg Kamradt. 2023. Needle in a haystack - pressure
+  Diogo Almeida, Janko Altenschmidt, Sam Altman,                testing llms.  https://github.com/gkamradt/
+  Shyamal Anadkat, et al. 2023. Gpt-4 technical report.         LLMTest_NeedleInAHaystack.
+  arXiv preprint arXiv:2303.08774.
+                                                              Mandy Guo, Joshua Ainslie, David C Uthus, Santiago
+Chenxin An, Shansan Gong, Ming Zhong, Mukai                    Ontanon, Jianmo Ni, Yun-Hsuan Sung, and Yinfei
+  Li, Jun Zhang, Lingpeng Kong, and Xipeng Qiu.                Yang. 2022. Longt5: Efficient text-to-text trans-
+  2023. L-eval: Instituting standardized evaluation            former for long sequences. In Findings of the Associ-
+  for long context language models. arXiv preprint             ation for Computational Linguistics: NAACL 2022,
+  arXiv:2307.11088.                                            pages 724–736.
+Anthropic. 2024. Claude 3.5 sonnet. https://www.              Kelvin Guu, Kenton Lee, Zora Tung, Panupong Pasu-
+  anthropic.com/news/claude-3-5-sonnet/.                        pat, and Mingwei Chang. 2020. Retrieval augmented
+                                                                language model pre-training. In International confer-
+Akari Asai, Zeqiu Wu, Yizhong Wang, Avirup Sil, and
+                                                                ence on machine learning, pages 3929–3938. PMLR.
+  Hannaneh Hajishirzi. 2023. Self-rag: Learning to
+  retrieve, generate, and critique through self-reflection.
+                                                              Xanh Ho, Anh-Khoa Duong Nguyen, Saku Sugawara,
+  arXiv preprint arXiv:2310.11511.
+                                                                and Akiko Aizawa. 2020. Constructing a multi-hop
+Yushi Bai, Xin Lv, Jiajie Zhang, Hongchang Lyu,                 qa dataset for comprehensive evaluation of reasoning
+  Jiankai Tang, Zhidian Huang, Zhengxiao Du, Xiao               steps. arXiv preprint arXiv:2011.01060.
+  Liu, Aohan Zeng, Lei Hou, et al. 2023. Longbench:
+  A bilingual, multitask benchmark for long context           Cheng-Ping Hsieh, Simeng Sun, Samuel Kriman, Shan-
+  understanding. arXiv preprint arXiv:2308.14508.               tanu Acharya, Dima Rekesh, Fei Jia, and Boris Gins-
+                                                                burg. 2024. Ruler: What’s the real context size of
+Iz Beltagy, Matthew E Peters, and Arman Cohan. 2020.            your long-context language models? arXiv preprint
+   Longformer: The long-document transformer. arXiv             arXiv:2404.06654.
+   preprint arXiv:2004.05150.
+                                                              Cheng-Yu Hsieh, Chun-Liang Li, Chih-Kuan Yeh,
+Sebastian Borgeaud, Arthur Mensch, Jordan Hoff-                 Hootan Nakhost, Yasuhisa Fujii, Alexander Ratner,
+  mann, Trevor Cai, Eliza Rutherford, Katie Milli-              Ranjay Krishna, Chen-Yu Lee, and Tomas Pfister.
+  can, George Bm Van Den Driessche, Jean-Baptiste               2023. Distilling step-by-step! outperforming larger
+  Lespiau, Bogdan Damoc, Aidan Clark, et al. 2022.              language models with less training data and smaller
+  Improving language models by retrieving from tril-            model sizes. arXiv preprint arXiv:2305.02301.
+  lions of tokens. In International conference on ma-
+  chine learning, pages 2206–2240. PMLR.                      Gautier Izacard, Mathilde Caron, Lucas Hosseini, Se-
+                                                                bastian Riedel, Piotr Bojanowski, Armand Joulin,
+Chi-Min Chan, Chunpu Xu, Ruibin Yuan, Hongyin Luo,              and Edouard Grave. 2021. Unsupervised dense in-
+  Wei Xue, Yike Guo, and Jie Fu. 2024. Rq-rag: Learn-           formation retrieval with contrastive learning. arXiv
+  ing to refine queries for retrieval augmented genera-         preprint arXiv:2112.09118.
+  tion. arXiv preprint arXiv:2404.00610.
+Lingjiao Chen, Matei Zaharia, and James Zou. 2023a.           Gautier Izacard and Edouard Grave. 2020. Leverag-
+  Frugalgpt: How to use large language models while             ing passage retrieval with generative models for
+  reducing cost and improving performance. arXiv                open domain question answering. arXiv preprint
+  preprint arXiv:2305.05176.                                    arXiv:2007.01282.
+
+Shouyuan Chen, Sherman Wong, Liangjian Chen, and              Soyeong Jeong, Jinheon Baek, Sukmin Cho, Sung Ju
+  Yuandong Tian. 2023b. Extending context window                Hwang, and Jong C Park. 2024. Adaptive-rag: Learn-
+  of large language models via positional interpolation.        ing to adapt retrieval-augmented large language mod-
+  arXiv preprint arXiv:2306.15595.                              els through question complexity. In Proceedings of
+                                                                the 2024 Conference of the North American Chap-
+Qinyuan Cheng, Xiaonan Li, Shimin Li, Qin Zhu,                  ter of the Association for Computational Linguistics:
+  Zhangyue Yin, Yunfan Shao, Linyang Li, Tianxi-                Human Language Technologies (Volume 1: Long Pa-
+  ang Sun, Hang Yan, and Xipeng Qiu. 2024. Unified              pers), pages 7029–7043.
+Huiqiang Jiang, Qianhui Wu, Xufang Luo, Dongsheng           OpenAI. 2023. Gpt-3.5-turbo. https://platform.
+  Li, Chin-Yew Lin, Yuqing Yang, and Lili Qiu. 2023.          openai.com/docs/models/gpt-3-5-turbo.
+  Longllmlingua: Accelerating and enhancing llms
+  in long context scenarios via prompt compression.         OpenAI. 2024a. Gpt-4o.         https://openai.com/
+  arXiv preprint arXiv:2310.06839.                            index/hello-gpt-4o/.
+
+Urvashi Khandelwal, Omer Levy, Dan Jurafsky, Luke           OpenAI. 2024b. Openai-api pricing. https://
+  Zettlemoyer, and Mike Lewis. 2019. Generalization           platform.openai.com/docs/overview.
+  through memorization: Nearest neighbor language
+  models. arXiv preprint arXiv:1911.00172.                  Machel Reid, Nikolay Savinov, Denis Teplyashin,
+                                                             Dmitry Lepikhin, Timothy Lillicrap, Jean-baptiste
+Tomáš Kočiskỳ, Jonathan Schwarz, Phil Blunsom, Chris       Alayrac, Radu Soricut, Angeliki Lazaridou, Orhan Fi-
+  Dyer, Karl Moritz Hermann, Gábor Melis, and Ed-            rat, Julian Schrittwieser, et al. 2024. Gemini 1.5: Un-
+  ward Grefenstette. 2018. The narrativeqa reading           locking multimodal understanding across millions of
+  comprehension challenge. Transactions of the Asso-         tokens of context. arXiv preprint arXiv:2403.05530.
+  ciation for Computational Linguistics, 6:317–328.
+                                                            Uri Shaham, Elad Segal, Maor Ivgi, Avia Efrat, Ori
+Yuri Kuratov, Aydar Bulatov, Petr Anokhin, Dmitry             Yoran, Adi Haviv, Ankit Gupta, Wenhan Xiong, Mor
+  Sorokin, Artyom Sorokin, and Mikhail Burtsev. 2024.         Geva, Jonathan Berant, et al. 2022. Scrolls: Stan-
+  In search of needles in a 10m haystack: Recur-              dardized comparison over long language sequences.
+  rent memory finds what llms miss. arXiv preprint            arXiv preprint arXiv:2201.03533.
+  arXiv:2402.10790.
+                                                            Weijia Shi, Sewon Min, Michihiro Yasunaga, Min-
+Mosh Levy, Alon Jacoby, and Yoav Goldberg. 2024.             joon Seo, Rich James, Mike Lewis, Luke Zettle-
+ Same task, more tokens: the impact of input length on       moyer, and Wen-tau Yih. 2023. Replug: Retrieval-
+ the reasoning performance of large language models.         augmented black-box language models. arXiv
+ arXiv preprint arXiv:2402.14848.                            preprint arXiv:2301.12652.
+Patrick Lewis, Ethan Perez, Aleksandra Piktus, Fabio        Mingyang Song, Mao Zheng, and Xuan Luo. 2024.
+  Petroni, Vladimir Karpukhin, Naman Goyal, Hein-             Counting-stars: A simple, efficient, and reasonable
+  rich Küttler, Mike Lewis, Wen-tau Yih, Tim Rock-            strategy for evaluating long-context large language
+  täschel, et al. 2020. Retrieval-augmented generation        models. arXiv preprint arXiv:2403.11802.
+  for knowledge-intensive nlp tasks. Advances in Neu-
+  ral Information Processing Systems, 33:9459–9474.         Harsh Trivedi, Niranjan Balasubramanian, Tushar Khot,
+                                                              and Ashish Sabharwal. 2022. Musique: Multi-
+Xiaonan Li, Changtai Zhu, Linyang Li, Zhangyue Yin,
+                                                              hop questions via single-hop question composition.
+  Tianxiang Sun, and Xipeng Qiu. 2023. Llatrieval:
+                                                              Transactions of the Association for Computational
+  Llm-verified retrieval for verifiable generation. arXiv
+                                                              Linguistics, 10:539–554.
+  preprint arXiv:2311.07838.
+Sheng-Chieh Lin, Akari Asai, Minghan Li, Barlas Oguz,       Yile Wang, Peng Li, Maosong Sun, and Yang Liu. 2023.
+  Jimmy Lin, Yashar Mehdad, Wen-tau Yih, and Xilun             Self-knowledge guided retrieval augmentation for
+  Chen. 2023. How to train your dragon: Diverse                large language models. In Findings of the Associa-
+  augmentation towards generalizable dense retrieval.          tion for Computational Linguistics: EMNLP 2023,
+  arXiv preprint arXiv:2302.07452.                             pages 10303–10315.
+
+Nelson F Liu, Kevin Lin, John Hewitt, Ashwin Paran-         Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten
+  jape, Michele Bevilacqua, Fabio Petroni, and Percy           Bosma, Fei Xia, Ed Chi, Quoc V Le, Denny Zhou,
+  Liang. 2024. Lost in the middle: How language mod-           et al. 2022. Chain-of-thought prompting elicits rea-
+  els use long contexts. Transactions of the Association       soning in large language models. Advances in neural
+  for Computational Linguistics, 12:157–173.                   information processing systems, 35:24824–24837.
+
+Yuanhua Lv and ChengXiang Zhai. 2009. Adaptive              Peng Xu, Wei Ping, Xianchao Wu, Lawrence McAfee,
+  relevance feedback in information retrieval. In Pro-        Chen Zhu, Zihan Liu, Sandeep Subramanian, Evelina
+  ceedings of the 18th ACM conference on Information          Bakhturina, Mohammad Shoeybi, and Bryan Catan-
+  and knowledge management, pages 255–264.                    zaro. 2023. Retrieval meets long context large lan-
+                                                              guage models. arXiv preprint arXiv:2310.03025.
+Xinbei Ma, Yeyun Gong, Pengcheng He, Hai Zhao,
+  and Nan Duan. 2023. Query rewriting for retrieval-        Shi-Qi Yan, Jia-Chen Gu, Yun Zhu, and Zhen-Hua Ling.
+  augmented large language models. arXiv preprint             2024. Corrective retrieval augmented generation.
+  arXiv:2305.14283.                                           arXiv preprint arXiv:2401.15884.
+
+Adyasha Maharana, Dong-Ho Lee, Sergey Tulyakov,             Zhilin Yang, Peng Qi, Saizheng Zhang, Yoshua Ben-
+  Mohit Bansal, Francesco Barbieri, and Yuwei                 gio, William W Cohen, Ruslan Salakhutdinov, and
+  Fang. 2024. Evaluating very long-term conver-               Christopher D Manning. 2018. Hotpotqa: A dataset
+  sational memory of llm agents. arXiv preprint               for diverse, explainable multi-hop question answer-
+  arXiv:2402.17753.                                           ing. arXiv preprint arXiv:1809.09600.
+Tao Yuan, Xuefei Ning, Dong Zhou, Zhijie Yang,
+  Shiyao Li, Minghui Zhuang, Zheyue Tan, Zhuyu Yao,
+  Dahua Lin, Boxun Li, et al. 2024. Lv-eval: A bal-
+  anced long-context benchmark with 5 length levels
+  up to 256k. arXiv preprint arXiv:2402.05136.
+Chengxiang Zhai and John Lafferty. 2001. Model-based
+  feedback in the language modeling approach to in-
+  formation retrieval. In Proceedings of the tenth inter-
+  national conference on Information and knowledge
+  management, pages 403–410.
+Xinrong Zhang, Yingfa Chen, Shengding Hu, Zi-
+  hang Xu, Junhao Chen, Moo Khai Hao, Xu Han,
+  Zhen Leng Thai, Shuo Wang, Zhiyuan Liu, et al.
+  2024. Infinity bench: Extending long context
+  evaluation beyond 100k tokens. arXiv preprint
+  arXiv:2402.13718.
+Ming Zhong, Da Yin, Tao Yu, Ahmad Zaidi, Mutethia
+  Mutuma, Rahul Jha, Ahmed Hassan Awadallah, Asli
+  Celikyilmaz, Yang Liu, Xipeng Qiu, et al. 2021.
+  Qmsum: A new benchmark for query-based multi-
+  domain meeting summarization. arXiv preprint
+  arXiv:2104.05938.
+A   Dataset details
+We evaluate on 7 datasets from LongBench (Bai et al., 2023). NarrativeQA (Kočiskỳ et al., 2018) is
+a question answering dataset, where the context is a long story like a novel or a movie script. Qasper
+(Dasigi et al., 2021) focuses on question answering over academic NLP papers and is annotated by
+NLP practitioners. MultiFieldQA, originally proposed in LongBench, contains human-annotated QA
+over documents and articles from multiple sources, including legal documents, government reports,
+encyclopedias, academic papers, etc. HotpotQA (Yang et al., 2018) contains two-hop questions written
+by native English speakers that requires reasoning over two related Wikipedia paragraphs in the long
+context. 2WikiMultihopQA (Ho et al., 2020) contains up to 5-hop questions that are synthesized through
+manually designed templates, ensuring that they cannot be solved through shortcuts. The questions in
+MuSiQue (Trivedi et al., 2022) are up to 4-hop, first constructed from single-hop question compositions,
+and then paraphrased by annotators for linguistic diversity. QMSum (Zhong et al., 2021) is a query-based
+summarization dataset over meeting scripts from multiple domains.
+   We evaluate on 2 datasets from ∞Bench (Zhang et al., 2024). En.QA contains human-annotated
+question-answer pairs for long novels, with key entity names manually replaced in order to avoid
+knowledge leakage due to model pretraining. EN.MC is annotated similarly to En.QA, but differs in that
+the model is presented with four challenging answer choices written by the annotators.
+   Tab. 6 shows the details of the datasets, including the number of queries in each evaluation dataset and
+the average context length (i.e. number of words).
+
+                                                                  Num. Query             Avg. Length
+                                        NarrativeQA                       200              18,395
+                                        Qasper                            200               3,599
+                                        MultiFieldQA                      150               4,539
+                  LongBench
+                                        HotpotQA                          200               9,133
+                (Bai et al., 2023)
+                                        2WikiMultihopQA                   200               4,873
+                                        MuSiQue                           200              11,196
+                                        QMSum                             200              10,533
+                    ∞Bench              En.QA                             351              150,374
+               (Zhang et al., 2024)     En.MC                             229              142,622
+
+                                           Table 6: Dataset statistics.
+
+
+B   Ablations of k
+Tab. 7 shows the performance and token ratio for different k, which corresponds to Fig. 3. The performance
+of LC, which serves as an upper bound, is 45.53. The token ratio is computed the token counts for RAG
+or S ELF -ROUTE divided the number of tokens required by LC.
+
+                                        performance              token ratio
+                           top-k      RAG Self-Route           RAG Self-Route
+                               1      20.24      41.35         5.26              39.64
+                               5      37.92      43.33        17.02              38.63
+                              10      41.20      44.38        42.42              53.66
+                              50      44.06      45.19        95.29             102.97
+                             100      44.12      45.23        100.32            106.59
+
+             Table 7: Performance and token ratio for different k. This table corresponds to Fig. 3.
+C     Prompts
+Tab. 9 shows the prompts for each dataset in our study. The prompts are modified from the released
+prompts as in LongBench (Bai et al., 2023) and ∞Bench (Zhang et al., 2024). Tab. 8 shows the prompts
+used in the failure case study as in Sec. 5.2.
+
+    You are given some text chunks from an article, and a question. The text chunks are retrieved by an external retriever.
+    Now:
+
+    (1) Tell whether the question can be answered based only on the provided text chunks.
+    (2) If the question can be answered, answer the question based on the texts as concisely as you can, using a single
+    phrase if possible.
+    (3) If the question cannot be answered, choose the reason from the following:
+
+    A. The question needs multistep reasoning, thus it is hard to retrieve all the relevant chunks. For example, "What
+    nationality is the performer of song You Can?" contains two steps: find the performer, then find the nationality of the
+    performer. Other examples include "Where does the director of film Wine Of Morning work at?", "What is another
+    notable work made by the author of Miss Sara Sampson?"
+    B. The question is a general query, thus it is hard to retrieve relevant chunks. For example, "What did the group
+    think about Dave leaving?" is general because the group may include multiple persons, and they can have different
+    thinkings.
+    C. The question is long and complex, which is hard for the retriever to encode it to retrieve relevant chunks. For
+    example, "What did Julie Morgan elaborate on the online survey when talking about the evaluations on the legitimacy
+    of the children’s rights, protection and demands?", "The Huskies football team were invited to the Alamo Bowl where
+    they were defeated by a team coached by Art Briles and who played their home games at what stadium?"
+    D. The question is not explicit and requires comprehensive understanding of the whole story and cannot be solved
+    using retrieval-augmented generation. For example, "What caused the shadow behind Koerber’s ship?" needs a
+    comprehensive understanding of the whole story. Another example like "How many words are there in the article"
+    also requires the complete article.
+    E. Others.
+    Keep the above reasons in mind, and choose the most possible reason if you think the question cannot be answered
+    based on the text. Output the results in JSON format.
+
+    {in_context_examples}
+    Text: {context}
+    Question: {input}
+    Answer:
+
+
+                                       Table 8: Prompt for the failure case analysis.
+NarrativeQA   You are given a story, which can be either a novel or a movie script, and a question. Answer the question
+              as concisely as you can, using a single phrase if possible. Do not provide any explanation. If the question
+              cannot be answered based on the information in the article, write “unanswerable”. Story: {context} Now,
+              answer the question based on the story as concisely as you can, using a single phrase if possible. Do not
+              provide any explanation. If the question cannot be answered based on the information in the article, write
+              “unanswerable”. Question: {input} Answer:
+Qasper        You are given a scientific article and a question. Answer the question as concisely as you can, using a single
+              phrase or sentence if possible. If the question cannot be answered based on the information in the article,
+              write “unanswerable”. If the question is a yes/no question, answer “yes”, “no”, or “unanswerable”. Do not
+              provide any explanation. Article: {context} Answer the question based on the above article as concisely
+              as you can, using a single phrase or sentence if possible. If the question cannot be answered based on the
+              information in the article, write “unanswerable”. If the question is a yes/no question, answer “yes”, “no”, or
+              “unanswerable”. Do not provide any explanation. Question: input Answer:
+MultiFQA      Read the following text and answer briefly. {context} Now, answer the following question based on the above
+              text, only give me the answer and do not output any other words. If the question cannot be answered based
+              on the information in the article, write “unanswerable”. Question: {input} Answer:
+HotpotQA      Answer the question based on the given passages. Only give me the answer and do not output any other
+              words. If the question cannot be answered based on the information in the article, write “unanswerable”. The
+              following are given passages. {context} Answer the question based on the given passages. Only give me the
+              answer and do not output any other words. If the question cannot be answered based on the information in
+              the article, write “unanswerable”. Question: {input} Answer:
+2WikiMQA      Answer the question based on the given passages. Only give me the answer and do not output any other
+              words. If the question cannot be answered based on the information in the article, write “unanswerable”. The
+              following are given passages. {context} Answer the question based on the given passages. Only give me the
+              answer and do not output any other words. If the question cannot be answered based on the information in
+              the article, write “unanswerable”. Question: {input} Answer:
+MuSiQue       Answer the question based on the given passages. Only give me the answer and do not output any other
+              words. If the question cannot be answered based on the information in the article, write “unanswerable”. The
+              following are given passages. {context} Answer the question based on the given passages. Only give me the
+              answer and do not output any other words. If the question cannot be answered based on the information in
+              the article, write “unanswerable”. Question: {input} Answer:
+QMSum         You are given a meeting transcript and a query containing a question or instruction. Answer the query in
+              one or more sentences. If the question cannot be answered based on the information in the article, write
+              “unanswerable”. Transcript: {context} Now, answer the query based on the above meeting transcript in
+              one or more sentences. If the question cannot be answered based on the information in the article, write
+              “unanswerable”. Query: {input} Answer:
+EN.QA         Read the book and answer the question. Be very concise in your answer. If the question cannot be answered
+              based on the information in the article, write “unanswerable”. {context} Question: {input} Only give me the
+              answer and do not output any other words. If the question cannot be answered based on the information in
+              the article, write “unanswerable”. Answer:
+EN.MC         Read the book and answer the question. If the question cannot be answered based on the information in the
+              article, write “unanswerable”. {context} Question: {input} {all_classes} Only output the letter of the correct
+              answer and do not output any other words. If the question cannot be answered based on the information in
+              the article, write “unanswerable”. The letter of the correct answer is
+
+                                         Table 9: Prompts for each dataset.
+

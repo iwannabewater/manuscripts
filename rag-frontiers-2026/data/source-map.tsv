@@ -1,0 +1,31 @@
+id	category	evidence_level	source_date	source	url	used_in	notes
+S01	foundation	A	2020-05-22	Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks	https://arxiv.org/abs/2005.11401	01,02	RAG original formulation
+S02	retrieval	A	2020-04-10	Dense Passage Retrieval for Open-Domain Question Answering	https://arxiv.org/abs/2004.04906	01,02	Dense dual encoder retrieval
+S03	retrieval	A	2021-12-02	ColBERTv2	https://arxiv.org/abs/2112.01488	01,02	Late interaction and residual compression
+S04	query	A	2022-12-20	HyDE	https://arxiv.org/abs/2212.10496	01,04	Hypothetical document query expansion
+S05	adaptive	A	2023-05-11	FLARE	https://arxiv.org/abs/2305.06983	01,04	Forward-looking active retrieval
+S06	adaptive	A	2023-10-17	Self-RAG	https://arxiv.org/abs/2310.11511	01,04	On-demand retrieval and reflection
+S07	robustness	B	2024-01-29	Corrective Retrieval Augmented Generation	https://arxiv.org/abs/2401.15884	01,04	Retrieval evaluator and correction
+S08	structure	A	2024-01-31	RAPTOR	https://arxiv.org/abs/2401.18059	01,04	Recursive summary tree
+S09	structure	B	2024-04	From Local to Global GraphRAG	https://www.microsoft.com/en-us/research/publication/from-local-to-global-a-graph-rag-approach-to-query-focused-summarization/	04	Corpus-global query-focused summarization
+S10	routing	A	2024-07-23	RAG or Long-Context LLMs	https://arxiv.org/abs/2407.16833	01,05	Performance-cost routing
+S11	agentic	A	2025-03-12	Search-R1	https://arxiv.org/abs/2503.09516	01,06	RL with interleaved search and reasoning
+S12	agentic	B	2025-03-25	ReSearch	https://arxiv.org/abs/2503.19470	01,06	Search reasoning without supervised traces
+S13	agentic	B	2025-04	DeepResearcher	https://arxiv.org/abs/2504.03160	01,06	RL in real web environments
+S14	agentic	B	2026-02-03	A-RAG	https://arxiv.org/abs/2602.03442	01,06,11	Hierarchical retrieval interfaces
+S15	multimodal	A	2024-06-27	ColPali	https://arxiv.org/abs/2407.01449	01,07,11	Visual page retrieval
+S16	multimodal	A	2024-10-14	VisRAG	https://arxiv.org/abs/2410.10594	01,07,11	Vision-native RAG
+S17	evaluation	B	2025-02-24	M2RAG Benchmark	https://arxiv.org/abs/2502.17297	11	Multimodal RAG benchmark
+S18	evaluation	A	2026-03	T2-RAGBench	https://aclanthology.org/2026.eacl-long.8/	01,03,07,11	Text-table retrieval and reasoning
+S19	evaluation	A	2023-09-26	RAGAS	https://arxiv.org/abs/2309.15217	08	Reference-free RAG metrics
+S20	security	A	2024-02-12	PoisonedRAG	https://arxiv.org/abs/2402.07867	01,08,11	Knowledge corruption attacks
+S21	practice	A	2026-03	Deployed Customer Support Chatbot	https://aclanthology.org/2026.eacl-industry.13/	01,03,04,11	Production retrieval evidence
+S22	industry	C	2026-06-12	Azure AI Search Agentic Retrieval	https://learn.microsoft.com/en-us/azure/search/search-agentic-retrieval-concept	01,09,11	Agentic retrieval product architecture
+S23	industry	C	2026-06-18	Vertex AI RAG Engine	https://docs.cloud.google.com/vertex-ai/generative-ai/docs/rag-engine/rag-overview	09	Managed RAG data framework
+S24	industry	C	2026-06	Amazon Bedrock Knowledge Bases parsing	https://docs.aws.amazon.com/en_us/bedrock/latest/userguide/kb-advanced-parsing.html	07,09	Multimodal parsing and attribution
+S25	industry	C	2026-06	阿里云百炼知识库	https://help.aliyun.com/zh/model-studio/user-guide/rag-knowledge-base/	07,09	Multi-format enterprise knowledge base
+S26	industry	C	2026-05-28	腾讯云 Agentic RAG	https://cloud.tencent.com/document/product/1759/132211	07,09,11	Iterative retrieval product
+S27	industry	C	2026-06	百度千帆 AppBuilder	https://cloud.baidu.com/doc/AppBuilder/s/create-database	01,09	RAG Agent workflow platform
+S28	industry	C/D	2026-02-10	OpenAI Deep Research	https://openai.com/index/introducing-deep-research/	06,09	Vendor-described deep research agent
+S29	industry	C/D	2025-04-15	Anthropic Research	https://www.anthropic.com/news/research	06,09	Vendor-described multi-search research
+S30	agentic	B	2025-05-28	WebDancer	https://arxiv.org/abs/2505.22648	06	Autonomous information seeking training

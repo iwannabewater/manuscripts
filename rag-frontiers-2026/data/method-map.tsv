@@ -1,0 +1,19 @@
+layer	method	year	primary_problem	decision_owner	retrieval_unit	main_tradeoff	source_id
+Classic	RAG-Sequence and RAG-Token	2020	External mutable memory	Fixed model design	Passage	Simple provenance but fixed retrieval	S01
+Classic	DPR	2020	Semantic recall	Retriever	Passage	Dense generalization depends on supervision	S02
+Advanced	ColBERTv2	2021	Fine-grained relevance	Retriever	Token multivector	Higher index complexity with better matching	S03
+Advanced	HyDE	2022	Query-document vocabulary gap	LLM query transform	Hypothetical document	Can drift on precise or numerical queries	S04
+Advanced	FLARE	2023	When and what to retrieve in long generation	Confidence heuristic	Future sentence	Repeated generation and search cost	S05
+Advanced	Self-RAG	2023	Unnecessary retrieval and unsupported output	Trained generator	Segment and passage	Requires reflection-token training	S06
+Advanced	CRAG	2024	Bad retrieval results	Retrieval evaluator	Passage plus web	Evaluator and web-search dependency	S07
+Advanced	RAPTOR	2024	Multi-scale long-document understanding	Prebuilt tree	Chunk and summary node	Index construction cost and summary loss	S08
+Advanced	GraphRAG	2024	Corpus-global questions	Prebuilt graph workflow	Entity community summary	Expensive indexing and task specificity	S09
+Hybrid	Self-Route	2024	RAG versus long-context choice	Model router	Chunk or full context	Router calibration and model dependence	S10
+Frontier	Search-R1	2025	Learn when and how to search	RL policy	Search result	Training stability and environment cost	S11
+Frontier	ReSearch	2025	Reasoning-search integration without traces	RL policy	Search result	Benchmark transfer remains open	S12
+Frontier	DeepResearcher	2025	Long-horizon web research	RL agent	Web page	Open-web noise and reproducibility	S13
+Frontier	A-RAG	2026	Agent-friendly multi-granularity access	Reasoning agent	Keyword sentence chunk	More steps increase latency and risk	S14
+Frontier	ColPali	2024	Visually rich document retrieval	Vision retriever	Page image	Storage and VLM serving cost	S15
+Frontier	VisRAG	2024	OCR and layout information loss	Vision retriever and generator	Page image	Multi-page reasoning and VLM cost	S16
+Evaluation	RAGAS	2023	Component-aware evaluation	Evaluator LLM	Claim answer context	Judge bias and context-length sensitivity	S19
+Security	PoisonedRAG	2024	Knowledge-base integrity	Attacker and defender	Injected passage	Current defenses remain incomplete	S20
