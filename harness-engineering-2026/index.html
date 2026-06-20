@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Harness Engineering 2026：让模型能力成为可靠任务系统</title>
+<meta name="author" content="Kami">
+<meta name="description" content="从执行层原理、组件协同到自优化研究与中外实践，梳理截至 2026-06-20 的 Harness Engineering 证据、边界与落地路线。">
+<meta name="keywords" content="Harness Engineering, AI Agent, Agent Harness, MCP, Agent Skills">
+<meta name="generator" content="Kami">
+<style>
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 20mm 22mm 22mm 22mm;
+    background: #f5f4ed;
+
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02";
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+
+    @bottom-center {
+      content: counter(page) "  ·  Harness Engineering 2026";
+      font-family: "TsangerJinKai02";
+      font-size: 9pt;
+      color: #6b6a64;
+    }
+  }
+
+  @page:first {
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #f5f4ed;
+    --ivory:     #faf9f5;
+    --near-black:#141413;
+    --dark-warm: #3d3d3a;
+    --olive:     #504e49;
+    --stone:     #6b6a64;
+    --brand:     #1B365D;
+    --border:    #e8e6dc;
+    --border-soft:#e5e3d8;
+    --tag-bg:    #E4ECF5;
+    --serif: "TsangerJinKai02";
+    --sans: var(--serif);
+
+    --rhythm-module:  14pt;
+    --rhythm-section: 18pt;
+  }
+
+  html, body { background: var(--parchment); }
+
+  @media screen {
+    body { max-width: 210mm; margin: 0 auto; padding: 20mm 22mm 22mm 22mm; }
+  }
+
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 10.5pt;
+    line-height: 1.55;
+    letter-spacing: 0.3pt;
+    widows: 3;
+    orphans: 3;
+  }
+
+  .sans {
+    font-family: var(--sans);
+  }
+
+  .cover {
+    min-height: 240mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40mm 0 0 0;
+    break-after: page;
+  }
+  .cover-eyebrow {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 18pt;
+  }
+  .cover-title {
+    font-size: 36pt;
+    font-weight: 500;
+    color: var(--near-black);
+    line-height: 1.15;
+    letter-spacing: 0.3pt;
+    margin-bottom: 16pt;
+  }
+  .cover-sub {
+    font-family: var(--sans);
+    font-size: 14pt;
+    color: var(--olive);
+    line-height: 1.5;
+    max-width: 85%;
+    margin-bottom: 30pt;
+  }
+  .cover-meta {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--stone);
+    line-height: 1.5;
+  }
+  .cover-meta strong {
+    color: var(--dark-warm);
+    font-weight: 500;
+  }
+
+  .toc { break-after: page; }
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: var(--rhythm-module);
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6pt 0;
+    border-bottom: 0.3pt dotted var(--border);
+    font-size: 11pt;
+  }
+  .toc-item:last-of-type { border-bottom: none; }
+  .toc-num {
+    color: var(--brand);
+    font-weight: 500;
+    min-width: 30pt;
+  }
+  .toc-title {
+    flex: 1;
+    color: var(--near-black);
+    padding-left: 6pt;
+  }
+  .toc-page {
+    color: var(--stone);
+    font-variant-numeric: tabular-nums;
+  }
+
+  h1 {
+    font-size: 22pt;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 10pt 0;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    color: var(--near-black);
+    break-after: avoid;
+  }
+
+  h2 {
+    font-size: 16pt;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 24pt 0 8pt 0;
+    color: var(--near-black);
+    break-after: avoid;
+  }
+
+  h3 {
+    font-size: 13pt;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 18pt 0 6pt 0;
+    color: var(--dark-warm);
+    break-after: avoid;
+  }
+
+  .chapter-num {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+    string-set: section-title content();
+  }
+
+  .references p {
+    font-size: 8.8pt;
+    line-height: 1.42;
+    margin-bottom: 7pt;
+    break-inside: avoid;
+  }
+
+  .references {
+    column-count: 2;
+    column-gap: 18pt;
+  }
+
+  .references .ref-id {
+    color: var(--brand);
+    font-family: "JetBrains Mono", "TsangerJinKai02";
+    font-weight: 600;
+  }
+
+  .references a {
+    color: var(--brand);
+    text-decoration: none;
+  }
+
+  p {
+    margin: 0 0 10pt 0;
+    line-height: 1.55;
+    color: var(--near-black);
+    widows: 2;
+    orphans: 2;
+  }
+
+  .lead {
+    font-size: 12pt;
+    line-height: 1.55;
+    color: var(--dark-warm);
+    margin-bottom: var(--rhythm-module);
+  }
+
+  .hl { color: var(--brand); font-weight: 500; }
+  strong { font-weight: 500; }
+
+  ul, ol {
+    margin: 6pt 0 10pt 0;
+    padding-left: 20pt;
+    line-height: 1.55;
+  }
+  ul li::marker { color: var(--brand); }
+  ol li::marker { color: var(--brand); font-weight: 500; }
+
+  blockquote, .quote {
+    border-left: 2pt solid var(--brand);
+    margin: 12pt 0;
+    padding: 4pt 0 4pt 16pt;
+    color: var(--olive);
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  blockquote .cite, .quote .cite {
+    display: block;
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 4pt;
+  }
+
+  code {
+    font-family: "JetBrains Mono", "TsangerJinKai02";
+    font-size: 9pt;
+    background: var(--ivory);
+    padding: 1pt 4pt;
+    border-radius: 2pt;
+    color: var(--dark-warm);
+  }
+  pre {
+    font-family: "JetBrains Mono", "TsangerJinKai02";
+    font-size: 9pt;
+    line-height: 1.5;
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 10pt 0;
+    white-space: pre-wrap;
+    color: var(--near-black);
+    break-inside: avoid;
+  }
+  pre code { background: transparent; padding: 0; font-size: inherit; }
+
+  table, .kami-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin: 12pt 0;
+    break-inside: avoid;
+  }
+  table th, .kami-table th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--dark-warm);
+    padding: 6pt 8pt;
+    border-bottom: 1pt solid var(--border);
+    background: transparent;
+  }
+  table td, .kami-table td {
+    padding: 5pt 8pt;
+    border-bottom: 0.3pt solid var(--border-soft);
+    vertical-align: top;
+  }
+  table.compact th, .kami-table.compact th { padding: 3pt 6pt; font-size: 8pt; }
+  table.compact td, .kami-table.compact td { padding: 2pt 6pt; font-size: 8pt; line-height: 1.4; }
+  table.financial td:not(:first-child), .kami-table.financial td:not(:first-child) {
+    text-align: right; font-variant-numeric: tabular-nums;
+  }
+  table.financial th:not(:first-child), .kami-table.financial th:not(:first-child) { text-align: right; }
+  table.striped tbody tr:nth-child(even) td, .kami-table.striped tbody tr:nth-child(even) td {
+    background: var(--ivory);
+  }
+  table .total td, .kami-table .total td {
+    font-weight: 500; border-top: 1pt solid var(--brand); border-bottom: none; color: var(--near-black);
+  }
+
+  .callout {
+    background: var(--ivory);
+    border-left: 2pt solid var(--brand);
+    padding: 10pt 14pt;
+    border-radius: 3pt;
+    margin: 12pt 0;
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  .callout blockquote,
+  .callout .quote {
+    border-left: none;
+    padding-left: 0;
+    margin: 6pt 0;
+    color: var(--olive);
+  }
+  .callout blockquote:first-child,
+  .callout .quote:first-child { margin-top: 0; }
+  .callout blockquote:last-child,
+  .callout .quote:last-child  { margin-bottom: 0; }
+
+  .takeaway {
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .takeaway-label {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--brand);
+    letter-spacing: 0.5pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--brand);
+    font-family: var(--sans);
+    font-size: 9pt;
+    font-weight: 500;
+    padding: 1pt 6pt;
+    border-radius: 3pt;
+    margin-right: 4pt;
+  }
+
+  figure {
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  figure img {
+    max-width: 100%;
+    border-radius: 4pt;
+  }
+  figcaption {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 6pt;
+    text-align: center;
+  }
+
+  .exec-summary {
+    background: var(--ivory);
+    border-left: 1.4pt solid var(--brand);
+    border-radius: 6pt;
+    padding: 16pt 20pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .exec-summary h2 {
+    margin-top: 0;
+    font-size: 13pt;
+  }
+
+  .chapter { break-before: page; margin-top: 0; }
+</style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
+</head>
+<body>
+
+
+<section class="cover">
+  <div>
+    <div class="cover-eyebrow">TECHNICAL RESEARCH · 2026</div>
+    <div class="cover-title">Harness Engineering 2026<br>让模型能力成为<br>可靠任务系统</div>
+    <div class="cover-sub">从执行层原理、组件协同与自优化研究，到国内外厂商和开源社区的落地实践</div>
+  </div>
+  <div class="cover-meta">
+    <strong>Evidence-first technical survey</strong><br>
+    证据截至 2026-06-20 · Asia/Shanghai<br>
+    版本 1.0 · 公开研究资料
+  </div>
+</section>
+
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item"><span class="toc-num">00</span><span class="toc-title">执行摘要：Agent 能力的最小报告单位已经改变</span><span class="toc-page">03</span></div>
+  <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">Harness 的边界：模型之外，任务系统之内</span><span class="toc-page">04</span></div>
+  <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">执行原理：观察、行动、验证如何形成可靠闭环</span><span class="toc-page">05</span></div>
+  <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">生态协同：Skills、MCP、A2A 与运行时各管一层</span><span class="toc-page">07</span></div>
+  <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">前沿研究：Harness 开始成为可测量、可搜索的程序</span><span class="toc-page">09</span></div>
+  <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">失效模式：增加组件不等于增加能力</span><span class="toc-page">11</span></div>
+  <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">落地实践：国际厂商与国内社区怎样取舍</span><span class="toc-page">13</span></div>
+  <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">参考架构：从最小闭环走向持续优化</span><span class="toc-page">15</span></div>
+  <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">研究议程：下一步要解决可迁移性与治理</span><span class="toc-page">17</span></div>
+  <div class="toc-item"><span class="toc-num">09</span><span class="toc-title">术语、常见误区与进一步阅读</span><span class="toc-page">18</span></div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">00 · Executive Summary</div>
+  <h1>Agent 能力的最小报告单位已经改变</h1>
+  <p class="lead">把一个基础模型接到真实任务上，最终表现由模型、Harness 与任务环境共同决定。2026 年的最新证据已经足以支持一个谨慎结论：<span class="hl">只报模型名，不再足以解释 Agent 能力</span>。更可复现的单位是 model-harness configuration，也就是模型与执行配置的组合 [S01, S03]。</p>
+
+  <div class="exec-summary">
+    <h2>四个结论</h2>
+    <p><strong>Harness 是执行系统，不是加长版 Prompt。</strong> 它决定模型看见什么、能调用什么、状态放在哪里、何时验证、失败后如何恢复，以及满足什么条件才能结束。Prompt 只是其中一个组件 [S01, S07]。</p>
+    <p><strong>执行对齐能产生一阶影响。</strong> Claw-SWE-Bench 在固定模型时观察到最高 27.4 个百分点的 Harness 差异；同一 GLM 5.1 配合不同适配器时，Pass@1 从 19.1% 到 73.4%。这些数字来自单篇预印本，不能直接外推，但足以说明执行契约不是评测噪声 [S03]。</p>
+    <p><strong>组件越多，系统未必越强。</strong> SWE-Skills-Bench 的 49 个公开 Skills 中，39 个没有提高通过率，平均增益仅 1.2%；三个 Skill 因版本不匹配使表现最多下降 10%。多 Agent 也有明显成本，Anthropic 报告其研究系统消耗约为普通聊天的 15 倍 Token [S04, S10]。</p>
+    <p><strong>前沿正在从手工调参转向轨迹驱动优化。</strong> Meta-Harness、RHO、Self-Harness 与 HarnessX 分别探索代码搜索、无标签回顾、自我改进和模型协同进化。它们把执行轨迹变成修改 Harness 的反馈，但目前大多是 2026 年预印本，复现、跨域迁移和防止过拟合仍未解决 [S02, S05, S06, S08]。</p>
+  </div>
+
+  <table class="compact striped">
+    <thead><tr><th>判断</th><th>证据</th><th>读法</th></tr></thead>
+    <tbody>
+      <tr><td>Harness 影响可与模型选择同量级</td><td>固定模型最高差 27.4 pp [S03]</td><td>报告完整组合，不把差异都归因给模型</td></tr>
+      <tr><td>过程知识需要选择与版本管理</td><td>39/49 Skills 无通过率增益 [S04]</td><td>Skill 是待评测依赖，不是免费能力</td></tr>
+      <tr><td>自动优化已经出现强信号</td><td>多篇预印本报告 4.7 至 21.4 pp 等不同增益 [S05, S08]</td><td>看 held-out、回归门和代码可复现性</td></tr>
+      <tr><td>生产可靠性来自显式状态与验证</td><td>进度文件、Git、轨迹、快照和恢复成为共同组件 [S09, S12, S15]</td><td>先建设可观察、可恢复的闭环</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">本文不做 Harness 产品排行榜。厂商内部数字按厂商自报处理，开源仓库只证明公开能力存在，论文结果只在各自任务、预算和评测协议内成立。</div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">01 · Definition and Boundary</div>
+  <h1>Harness 的边界：模型之外，任务系统之内</h1>
+  <p class="lead">本文将 Harness 译作「执行框架」，后文保留英文词。它位于基础模型和外部环境之间，把模型输出变成可执行、可检查、可恢复的任务过程。</p>
+
+  <h2>一个可操作的定义</h2>
+  <p>Harness-Bench 把 Harness 定义为管理上下文、工具、状态、约束、权限、追踪和恢复的系统层；Natural-Language Agent Harnesses 又补上验证、停止条件、预算与多次 Agent 调用的组织方式 [S01, S07]。两者的公共部分可以写成一个工程定义：<strong>Harness 是围绕固定模型的非参数执行系统，它编排观察、动作与反馈，同时约束动作能影响的环境。</strong></p>
+  <p>这个定义把三个常被混用的对象分开。模型是从上下文到输出的学习函数；Agent 是一个或多个模型调用与外部动作组成的执行过程；Harness 则规定这个过程怎样运行。没有外部动作的一次文本生成可以使用 Prompt，却通常不需要完整 Harness。只要任务涉及文件、浏览器、数据库、长程状态或其他 Agent，执行层就开始决定结果。</p>
+
+  <h2>边界内外</h2>
+  <table class="striped">
+    <thead><tr><th>对象</th><th>是否属于 Harness</th><th>原因</th></tr></thead>
+    <tbody>
+      <tr><td>系统指令、AGENTS.md、任务契约</td><td>是</td><td>控制模型如何解释任务与完成条件</td></tr>
+      <tr><td>工具定义、MCP 连接、文件编辑器</td><td>是</td><td>规定动作空间与观察格式</td></tr>
+      <tr><td>Session、Memory、工作区与检查点</td><td>是</td><td>保存跨步骤和跨上下文状态</td></tr>
+      <tr><td>编排、重试、预算、审批和停止规则</td><td>是</td><td>决定执行路径与风险边界</td></tr>
+      <tr><td>基础模型权重与训练语料</td><td>否</td><td>属于参数能力，Harness 不修改权重</td></tr>
+      <tr><td>只负责展示的聊天 UI</td><td>通常否</td><td>除非它承载审批、恢复或状态协议</td></tr>
+      <tr><td>任务评测容器</td><td>相邻层</td><td>用于固定外部条件，不应与被测 Harness 混为一体</td></tr>
+    </tbody>
+  </table>
+
+  <h2>为什么要按组合报告能力</h2>
+  <p>传统模型评测试图固定提示和推理条件，Agent 评测却无法轻易固定执行层。工具接口、补丁提取、上下文压缩、超时和停止规则会改变模型实际收到的信息，也会改变最终产物是否进入评分器。Claw-SWE-Bench 的完整适配器把通用 Agent 的工作区状态转换为 SWE-bench 接受的补丁契约，最小适配器则没有完成同样的对齐。19.1% 与 73.4% 的差距首先说明适配器是否完成了任务契约，不应被解释成某个孤立技巧带来 54.3 个百分点增益 [S03]。</p>
+  <p>因此，公开结果至少应同时披露模型版本、Harness 版本、任务提示、工具集、预算与超时、并发方式、环境镜像、补丁或产物提取规则、缓存口径和评测器。Harness-Bench 进一步建议保留执行轨迹与验证器输出，使完成率、过程质量、效率、安全和可审计性能够一起分析 [S01]。</p>
+
+  <div class="takeaway">
+    <div class="takeaway-label">最小报告单位</div>
+    <code>任务结果 = f（模型，Harness，环境，预算，评测器）</code>。如果其中一项没有公开，排行榜差异就可能来自未披露的执行条件。
+  </div>
+</section>
+
+<section>
+  <div class="chapter-num">02 · Execution Mechanics</div>
+  <h1>观察、行动、验证如何形成可靠闭环</h1>
+  <p class="lead">可靠 Harness 不靠一条万能指令。它把一次开放式推理改造成一组有状态、可验证的状态转移，并让失败信息能够回到下一次决策。</p>
+
+  <h2>核心循环</h2>
+  <pre><code>while budget remains:
+    observation = assemble(task, state, evidence, tool_results)
+    action      = model(observation)
+    effect      = execute(action, permission_policy, sandbox)
+    verdict     = verify(effect, acceptance_contract)
+    state       = checkpoint(state, action, effect, verdict)
+    if verdict.complete: return artifact
+    if verdict.recoverable: adapt_or_retry()
+return explicit_failure</code></pre>
+  <p>每次模型调用都要拿到与当前环境一致的观察，动作结果也要由确定性证据验证。Harness-Bench 把一种常见失败称为执行对齐失效（execution-alignment failure）：推理听起来合理，但已经脱离工具反馈、工作区状态、证据或产物契约 [S01]。</p>
+
+  <h2>八层组件栈</h2>
+  <figure>
+    <svg viewBox="0 0 920 520" style="width:100%;height:auto" role="img" aria-label="Harness 八层组件栈">
+      <rect x="72" y="24" width="776" height="52" rx="8" fill="#1B365D"/>
+      <text x="460" y="56" text-anchor="middle" fill="#faf9f5" font-size="18" font-family="TsangerJinKai02">任务契约 · 输入、产物、验收标准、停止条件</text>
+      <rect x="72" y="92" width="376" height="72" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="92" y="120" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">上下文与状态</text>
+      <text x="92" y="145" fill="#504e49" font-size="13" font-family="TsangerJinKai02">检索、压缩、Memory、文件系统、检查点</text>
+      <rect x="472" y="92" width="376" height="72" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="492" y="120" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">工具与 Agent-Computer Interface</text>
+      <text x="492" y="145" fill="#504e49" font-size="13" font-family="TsangerJinKai02">Schema、描述、结果格式、错误语义、MCP</text>
+      <rect x="72" y="180" width="376" height="72" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="92" y="208" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">控制流与协作</text>
+      <text x="92" y="233" fill="#504e49" font-size="13" font-family="TsangerJinKai02">循环、规划、路由、并发、Subagent、A2A</text>
+      <rect x="472" y="180" width="376" height="72" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="492" y="208" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">工作区与沙箱</text>
+      <text x="492" y="233" fill="#504e49" font-size="13" font-family="TsangerJinKai02">文件、依赖、网络、凭据、容器、快照</text>
+      <rect x="72" y="268" width="376" height="72" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="92" y="296" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">验证与安全边界</text>
+      <text x="92" y="321" fill="#504e49" font-size="13" font-family="TsangerJinKai02">测试、断言、审批、权限、Guardrail</text>
+      <rect x="472" y="268" width="376" height="72" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="492" y="296" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">可观测性与恢复</text>
+      <text x="492" y="321" fill="#504e49" font-size="13" font-family="TsangerJinKai02">Trace、Replay、重试、回滚、断点续作</text>
+      <rect x="72" y="356" width="776" height="64" rx="8" fill="#e8e6dc"/>
+      <text x="460" y="385" text-anchor="middle" fill="#141413" font-size="15" font-family="TsangerJinKai02">资源与调度 · Token、时间、并发、成本、模型路由</text>
+      <text x="460" y="406" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">每层都产生事件，统一进入轨迹与评测数据</text>
+      <line x1="460" y1="420" x2="460" y2="460" stroke="#1B365D" stroke-width="2"/>
+      <path d="M452 452 L460 464 L468 452 Z" fill="#1B365D"/>
+      <rect x="224" y="464" width="472" height="40" rx="8" fill="#faf9f5" stroke="#1B365D"/>
+      <text x="460" y="489" text-anchor="middle" fill="#1B365D" font-size="14" font-family="TsangerJinKai02">结果评测 · 完成率、过程质量、效率、安全、可审计性</text>
+    </svg>
+    <figcaption>图 1｜Harness 的层次不等于固定实现。可靠性来自跨层契约一致，尤其是任务产物、工具反馈、工作区状态和验证器使用同一份事实。</figcaption>
+  </figure>
+
+  <h2>五种增益机制</h2>
+  <p><strong>信息对齐</strong>，让模型在恰当时刻获得足够而不过量的任务信息。OpenAI 的案例把短 AGENTS.md 当目录，把细节放入可检索、可验证的仓库文档；Anthropic 则用进度文件和 Git 历史跨越上下文窗口 [S09, S13]。</p>
+  <p><strong>动作可供性</strong>，让工具的名字、参数、错误和输出符合模型能稳定使用的形式。Anthropic 的工具测试 Agent 通过反复调用并重写描述，使后续任务完成时间下降 40%。这是厂商内部结果，但它说明工具接口本身可以成为性能变量 [S10, S11]。</p>
+  <p><strong>状态连续性</strong>，把长程工作从聊天记录迁到持久化 Session、文件、事件日志和检查点。Managed Agents 把 Session、Harness 与 Sandbox 分开，OpenAI Agents SDK 也把 Harness 状态放到可快照、可重建的计算环境之外 [S12, S15]。</p>
+  <p><strong>反馈闭合</strong>，用测试、浏览器、数据校验或人工审批证明动作达成任务契约。Google ADK 同时评估工具轨迹和最终响应；OpenAI 的 Agent-first 仓库把架构约束写成 Lint 和结构测试，并让错误消息直接给 Agent 修复指引 [S13, S17]。</p>
+  <p><strong>错误围堵</strong>，用最小权限、沙箱、超时、幂等重试和回滚限制失败传播。一次错误需要留下可诊断证据，并且不能污染下一次运行。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">03 · Ecosystem Coordination</div>
+  <h1>Skills、MCP、A2A 与运行时各管一层</h1>
+  <p class="lead">Harness 生态的价值不在于把所有能力装进一个框架，而在于让过程知识、工具、Agent 协作、执行状态和计算环境拥有清楚的接口。协议解决可连接性，Harness 负责把连接变成可控任务。</p>
+
+  <h2>四种接口不要混为一谈</h2>
+  <figure>
+    <svg viewBox="0 0 920 470" style="width:100%;height:auto" role="img" aria-label="Harness 生态协议协同">
+      <rect x="300" y="28" width="320" height="64" rx="8" fill="#1B365D"/>
+      <text x="460" y="57" text-anchor="middle" fill="#faf9f5" font-size="17" font-family="TsangerJinKai02">Harness Runtime</text>
+      <text x="460" y="80" text-anchor="middle" fill="#faf9f5" font-size="12" font-family="TsangerJinKai02">Agent Loop · Session · Policy · Recovery</text>
+
+      <rect x="40" y="152" width="188" height="86" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="134" y="184" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">Agent Skills</text>
+      <text x="134" y="209" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">按需加载过程知识</text>
+      <text x="134" y="228" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">脚本 · 模板 · 参考资料</text>
+
+      <rect x="260" y="152" width="188" height="86" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="354" y="184" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">MCP</text>
+      <text x="354" y="209" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">发现并调用工具</text>
+      <text x="354" y="228" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">Resources · Prompts · Tools</text>
+
+      <rect x="480" y="152" width="188" height="86" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="574" y="184" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">A2A</text>
+      <text x="574" y="209" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">跨系统委派任务</text>
+      <text x="574" y="228" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">AgentCard · Task · Artifact</text>
+
+      <rect x="700" y="152" width="180" height="86" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="790" y="184" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">App Protocol</text>
+      <text x="790" y="209" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">连接客户端与 Harness</text>
+      <text x="790" y="228" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">Thread · Turn · Item · Approval</text>
+
+      <line x1="460" y1="92" x2="134" y2="144" stroke="#6b6a64" stroke-width="1.2"/>
+      <line x1="460" y1="92" x2="354" y2="144" stroke="#6b6a64" stroke-width="1.2"/>
+      <line x1="460" y1="92" x2="574" y2="144" stroke="#6b6a64" stroke-width="1.2"/>
+      <line x1="460" y1="92" x2="790" y2="144" stroke="#6b6a64" stroke-width="1.2"/>
+
+      <rect x="176" y="306" width="568" height="60" rx="8" fill="#e8e6dc"/>
+      <text x="460" y="333" text-anchor="middle" fill="#141413" font-size="15" font-family="TsangerJinKai02">Workspace 与 Sandbox</text>
+      <text x="460" y="354" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">文件 · 依赖 · 凭据隔离 · 网络策略 · 快照 · 产物目录</text>
+
+      <line x1="134" y1="238" x2="300" y2="298" stroke="#6b6a64" stroke-width="1.2"/>
+      <line x1="354" y1="238" x2="408" y2="298" stroke="#6b6a64" stroke-width="1.2"/>
+      <line x1="574" y1="238" x2="520" y2="298" stroke="#6b6a64" stroke-width="1.2"/>
+      <line x1="790" y1="238" x2="620" y2="298" stroke="#6b6a64" stroke-width="1.2"/>
+
+      <rect x="248" y="402" width="424" height="42" rx="8" fill="#faf9f5" stroke="#1B365D"/>
+      <text x="460" y="428" text-anchor="middle" fill="#1B365D" font-size="14" font-family="TsangerJinKai02">Trace 与 Eval 贯穿所有接口，负责诊断与回归</text>
+      <line x1="460" y1="366" x2="460" y2="394" stroke="#1B365D" stroke-width="2"/>
+      <path d="M452 388 L460 400 L468 388 Z" fill="#1B365D"/>
+    </svg>
+    <figcaption>图 2｜互操作标准只定义边界和消息。选择何时加载 Skill、调用哪一个工具、是否并发、怎样审批以及如何验证，仍是 Harness 的职责。</figcaption>
+  </figure>
+
+  <h2>Agent Skills：把过程知识变成可版本化依赖</h2>
+  <p>Agent Skills 规范用一个必需的 <code>SKILL.md</code> 和可选的脚本、参考资料、模板目录封装过程知识。发现阶段只加载名称与描述，任务匹配后再读取完整指令，需要时才打开附属资源，这种渐进披露降低了常驻上下文成本 [S21]。它适合承载代码审查流程、文档生产规范和领域操作手册，却不适合承担精确的权限检查或数据验证。</p>
+  <p>SWE-Skills-Bench 的负面结果说明，Skill 必须像依赖一样选择、锁版本和回归测试。通用建议往往重复模型已有能力，过时建议会与仓库当前状态冲突。Skill 的价值来自窄而准的程序性知识，以及可执行的验收条件，不来自字数 [S04]。</p>
+
+  <h2>MCP：标准化工具与上下文，不替代工具设计</h2>
+  <p>MCP 2025-11-25 定义 Resources、Prompts 和 Tools，并要求主机在传输资源和调用工具前获得用户同意。规范同时承认，协议本身无法强制所有安全原则 [S19]。截至 2026-06-20，下一版仍是 2026-07-28 Release Candidate，方向包括无状态协议内核、独立扩展、长任务和更严格的授权模型，不能写成已经发布的稳定规范 [S20]。</p>
+  <p>把一个糟糕工具接入 MCP，只会标准化糟糕接口。工具需要互斥而清楚的职责、有限参数、结构化错误、紧凑输出和可评测描述。工具数量很大时，应先检索工具元数据，再按任务暴露小集合，避免让描述挤占任务上下文 [S10, S11]。</p>
+
+  <h2>A2A 与 App Protocol：一个管 Agent 间任务，一个管客户端体验</h2>
+  <p>A2A 1.0 用 AgentCard 描述能力，用 Task、Message、Artifact 和扩展表达异步协作，允许独立且内部不透明的 Agent 交换任务和产物 [S22]。它适合跨团队、跨厂商委派，不负责暴露对方内部 Memory 或工具。Codex App Server 则面向产品客户端，用双向事件流表达 thread、turn、item、diff 和审批，目标是让 CLI、IDE、桌面和 Web 复用同一 Harness [S14]。两者解决的问题不同。</p>
+
+  <h2>一个端到端例子</h2>
+  <p>设想一个需要修复支付回调并发布审计报告的工程任务。Harness 先从仓库 AGENTS.md 读取边界，再按任务加载支付 Skill。它通过 MCP 获取日志和工单，只把只读工具交给诊断 Agent；修复 Agent 在隔离工作区修改代码，测试 Agent 使用独立上下文验证。若合规审查属于另一套企业系统，Harness 通过 A2A 委派并接收签名 Artifact。客户端从 App Protocol 看到进度和高风险审批，最终只有测试、审计与产物校验都通过，任务才进入完成状态。</p>
+  <div class="callout">判断生态协同质量，要看每个接口是否减少了隐式状态、重复适配和权限歧义，接入协议的数量没有解释力。</div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">04 · Research Frontier</div>
+  <h1>Harness 开始成为可测量、可搜索的程序</h1>
+  <p class="lead">2026 年的研究出现一条清楚路线：先把 Harness 作为独立变量测量，再把策略从控制器代码中抽出，最后用轨迹和回归测试自动修改它。</p>
+
+  <h2>第一步是把 Harness 从排行榜噪声中分离</h2>
+  <p>Harness-Bench 固定任务环境、预算、超时和评测器，同时保留不同 Harness 的原生执行行为。它包含 106 个离线沙箱任务和 5,194 条轨迹，覆盖软件工程、数据分析、知识工作与权限敏感流程 [S01]。这种设计提高了现实性，却只能比较完整配置，无法证明某一条重试规则或上下文策略单独造成差异。</p>
+  <p>Claw-SWE-Bench 进一步用统一适配器契约比较通用 Agent Harness。350 个任务跨 8 种语言和 43 个仓库，并同时报告 Pass@1、成本、时长和缓存。固定模型时 Harness 差异最高 27.4 个百分点，固定 OpenClaw 时模型差异为 29.4 个百分点 [S03]。排名本身解释力有限，结果证明模型与 Harness 都属于一阶变量。</p>
+
+  <h2>八项前沿工作放在同一张表里</h2>
+  <table class="compact striped">
+    <thead><tr><th>工作</th><th>优化对象</th><th>反馈</th><th>关键结果</th><th>主要限制</th></tr></thead>
+    <tbody>
+      <tr><td>Harness-Bench [S01]</td><td>完整配置</td><td>验证器与轨迹</td><td>106 任务，5,194 轨迹</td><td>诊断，不拆单组件因果</td></tr>
+      <tr><td>Claw-SWE-Bench [S03]</td><td>Harness 与适配器</td><td>补丁评测与成本</td><td>固定模型最高差 27.4 pp</td><td>集中在编码任务</td></tr>
+      <tr><td>NLAH [S07]</td><td>自然语言策略</td><td>模块行为与任务结果</td><td>跨编码、终端、计算机使用可执行</td><td>确定性机制仍需代码</td></tr>
+      <tr><td>Meta-Harness [S05]</td><td>Harness 代码</td><td>全历史代码、分数、轨迹</td><td>分类 +7.7 pp，4 倍少 Token</td><td>外层搜索成本高</td></tr>
+      <tr><td>RHO [S06]</td><td>工具、Skills、工作流</td><td>自验证、自一致性、自偏好</td><td>SWE-Bench Pro 59% → 78%</td><td>没有独立真值反馈</td></tr>
+      <tr><td>Self-Harness [S08]</td><td>模型自己的 Harness</td><td>失败聚类与回归测试</td><td>3 个模型 held-out +14.2 至 +21.4 pp</td><td>只测 Terminal-Bench-2.0</td></tr>
+      <tr><td>HarnessX [S02]</td><td>类型化组件与模型</td><td>轨迹、Critic、RL 信号</td><td>15 个配置平均 +14.5%</td><td>代码截至证据日待发布</td></tr>
+      <tr><td>SWE-Skills-Bench [S04]</td><td>单个 Skill</td><td>成对执行测试</td><td>平均 +1.2%，39/49 无增益</td><td>初步预印本结果</td></tr>
+    </tbody>
+  </table>
+
+  <h2>策略与机制分离，让 Harness 可以消融</h2>
+  <p>Natural-Language Agent Harnesses 把任务阶段、角色、状态规则、验证策略和停止条件写成自然语言策略，由共享运行时解释；测试、解析器、沙箱和产物校验仍保留在确定性代码中 [S07]。这个分工比「用自然语言替代代码」更实际。自然语言适合表达可读、可修改的政策，代码负责精确执行和可重复验证。</p>
+  <p>可消融性是关键收益。Verifier、上下文压缩、文件状态、多候选搜索和恢复策略如果拥有清楚边界，就能单独关闭并观察结果。没有模块边界的 Harness 只能整体比较，研究者无法知道增益来自哪一层，也很难把有效机制迁到另一套运行时。</p>
+
+  <h2>轨迹驱动的自优化循环</h2>
+  <figure>
+    <svg viewBox="0 0 920 390" style="width:100%;height:auto" role="img" aria-label="Harness 自优化循环">
+      <rect x="44" y="140" width="150" height="72" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="119" y="170" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">运行当前 Harness</text>
+      <text x="119" y="193" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">固定模型与任务预算</text>
+
+      <rect x="246" y="52" width="166" height="72" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="329" y="82" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">收集轨迹与产物</text>
+      <text x="329" y="105" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">动作、状态、成本、验证</text>
+
+      <rect x="500" y="52" width="166" height="72" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="583" y="82" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">挖掘重复失败</text>
+      <text x="583" y="105" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">聚类 · 自一致性 · 归因</text>
+
+      <rect x="708" y="140" width="168" height="72" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="792" y="170" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">生成最小修改</text>
+      <text x="792" y="193" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">Prompt · Tool · Memory · Flow</text>
+
+      <rect x="500" y="266" width="166" height="72" rx="8" fill="#1B365D"/>
+      <text x="583" y="296" text-anchor="middle" fill="#faf9f5" font-size="15" font-family="TsangerJinKai02">回归与 held-out 验证</text>
+      <text x="583" y="319" text-anchor="middle" fill="#faf9f5" font-size="12" font-family="TsangerJinKai02">提升且不退化才晋级</text>
+
+      <rect x="246" y="266" width="166" height="72" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="329" y="296" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">版本化与部署</text>
+      <text x="329" y="319" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">记录差异、证据与回滚点</text>
+
+      <line x1="194" y1="154" x2="240" y2="113" stroke="#6b6a64" stroke-width="1.5"/><path d="M232 111 L244 110 L239 122 Z" fill="#6b6a64"/>
+      <line x1="412" y1="88" x2="492" y2="88" stroke="#6b6a64" stroke-width="1.5"/><path d="M484 82 L496 88 L484 94 Z" fill="#6b6a64"/>
+      <line x1="666" y1="112" x2="702" y2="148" stroke="#6b6a64" stroke-width="1.5"/><path d="M698 137 L706 152 L691 148 Z" fill="#6b6a64"/>
+      <line x1="748" y1="212" x2="650" y2="260" stroke="#6b6a64" stroke-width="1.5"/><path d="M658 250 L646 262 L663 261 Z" fill="#6b6a64"/>
+      <line x1="500" y1="302" x2="420" y2="302" stroke="#faf9f5" stroke-width="5"/><line x1="500" y1="302" x2="420" y2="302" stroke="#6b6a64" stroke-width="1.5"/><path d="M432 296 L416 302 L432 308 Z" fill="#6b6a64"/>
+      <line x1="270" y1="266" x2="166" y2="218" stroke="#6b6a64" stroke-width="1.5"/><path d="M176 230 L162 216 L180 219 Z" fill="#6b6a64"/>
+    </svg>
+    <figcaption>图 3｜自动优化的可信度取决于最右下角的回归门。没有 held-out 任务、最小修改和回滚点，自我改进很容易变成对当前评测器的过拟合。</figcaption>
+  </figure>
+
+  <p>Meta-Harness 让外层 Agent 通过文件系统访问所有历史候选的代码、轨迹和分数，避免把反馈压成一个标量。它在在线分类中比强基线高 7.7 个点，同时使用 4 倍更少的上下文 Token；发现的数学推理 Harness 在 5 个未见模型上平均提升 4.7 个点 [S05]。</p>
+  <p>RHO 不使用标注验证集，而从历史任务选出困难且多样的核心集，进行多次 Rollout，再用自验证、自一致性和成对自偏好选择修改。论文报告单轮把 SWE-Bench Pro 从 59% 提升到 78% [S06]。Self-Harness 则让同一个模型分析自己的失败，提出小改动，并只接纳通过回归测试的版本；三个模型在 held-out 任务上分别提高 21.4、14.3 和 14.2 个百分点 [S08]。</p>
+  <p>HarnessX 把上下文、工具、Skills、控制流和 Memory 做成类型化原语，再用 Digester、Planner、Evolver、Critic 四阶段管线修改它们，并尝试把轨迹同时用于 Harness 更新和模型 RL。论文报告 15 个配置平均提升 14.5%，最高 44.0%，但截至证据日完整代码尚未发布，应把它看成研究方向而非可复现事实 [S02]。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">05 · Failure Modes</div>
+  <h1>增加组件不等于增加能力</h1>
+  <p class="lead">Harness 的每一层既可能修复模型弱点，也可能引入新的失配。设计质量取决于能否用轨迹和回归测试证明边际价值，而不是组件数量。</p>
+
+  <h2>上下文越多，相关信息占比可能越低</h2>
+  <p>大而全的系统指令会挤占任务、代码和证据的空间，陈旧规则还会与当前仓库冲突。OpenAI 的案例从大型 AGENTS.md 退回到约 100 行的入口地图，把细节放入结构化文档并用 CI 检查交叉链接和新鲜度 [S13]。Agent Skills 的渐进披露也采用同一原则，只在发现、激活和资源读取三个阶段逐步加载 [S21]。</p>
+  <p>压缩同样有风险。摘要可能丢掉未完成动作、错误根因和任务契约。长程 Harness 需要把关键状态外置到结构化文件、版本历史或事件日志，而不是相信下一次压缩仍保留全部决定 [S09, S12]。</p>
+
+  <h2>工具数量会制造选择错误</h2>
+  <p>工具越多，描述占用的上下文越大，命名重叠也会增加错误路由。一个「搜索」工具如果同时承担网页、Slack、数据库和仓库检索，模型难以从名称预测成本与适用边界。更稳的做法是命名空间、窄接口、结构化错误和按任务检索工具。MCP 解决发现与调用格式，却不保证工具描述清楚，也不保证服务端实现安全 [S11, S19]。</p>
+
+  <h2>Skill 可能重复常识，也可能携带过期事实</h2>
+  <p>SWE-Skills-Bench 为每个任务建立有无 Skill 的成对实验。49 个 Skills 中只有 7 个产生明显增益，39 个没有提高通过率；Token 开销最高增加 451% 而通过率不变，三个 Skill 因版本不匹配最多使通过率下降 10% [S04]。这组初步结果不应被外推为「Skills 无用」，它支持更窄的判断：只有能补足特定知识缺口、与当前版本一致并通过任务回归的 Skill 才值得常驻。</p>
+
+  <h2>多 Agent 适合宽度搜索，不适合所有依赖图</h2>
+  <p>Anthropic 的多 Agent 研究系统在内部评测中比单 Agent 高 90.2%，Token 消耗约为普通聊天的 15 倍。其分析中，Token 用量解释 BrowseComp 评测 80% 的表现方差；收益集中在可以并行探索、信息超过单上下文窗口且任务价值覆盖成本的场景 [S10]。编码任务中共享状态多、依赖强，过早拆分会带来重复搜索、合并冲突和协调等待。</p>
+  <p>委派必须包含目标、输出格式、证据要求、工具范围和结束条件。Subagent 应拥有隔离上下文和最小工具集，返回压缩后的产物而不是全部对话。主 Agent 负责解决冲突与验收，不能把多个未经核验的答案直接拼接。</p>
+
+  <h2>自动优化会把评测器弱点学进 Harness</h2>
+  <p>自动 Harness 搜索面临与强化学习相似的问题：奖励投机、灾难性遗忘、探索不足和跨任务干扰。HarnessX 用 Critic、确定性门和任务变体隔离处理这些风险；Self-Harness 要求候选修改小而具体，并用 held-out 回归决定是否晋级 [S02, S08]。如果修改同时改了任务提示、预算和评测器，增益就无法归因。</p>
+  <p>RHO 用自偏好替代外部标注，降低数据门槛，也让判断者与执行者可能共享偏差。生产系统可以用它生成候选，最终接纳仍应依赖确定性验证、独立模型或人工抽检，特别是安全、财务和合规任务 [S06]。</p>
+
+  <h2>七个可观察的坏味道</h2>
+  <table class="compact striped">
+    <thead><tr><th>症状</th><th>常见根因</th><th>应记录的证据</th><th>首个修复动作</th></tr></thead>
+    <tbody>
+      <tr><td>合理解释，错误产物</td><td>推理脱离工作区状态</td><td>最后一次读取与实际文件哈希</td><td>最终回答前重开产物并运行验证器</td></tr>
+      <tr><td>重复调用同一失败工具</td><td>错误语义不可判别</td><td>工具名、参数、错误码、序列号</td><td>增加结构化错误与重试上限</td></tr>
+      <tr><td>长任务提前宣布完成</td><td>完成条件只存在于自然语言</td><td>需求矩阵与未通过项</td><td>把验收条件写成不可删除的状态文件</td></tr>
+      <tr><td>上下文越长表现越差</td><td>入口文档过大或规则过期</td><td>实际加载片段和命中来源</td><td>入口改成索引，按需读取</td></tr>
+      <tr><td>并发后结果重复或冲突</td><td>任务边界和产物契约不清</td><td>委派包、返回格式、合并记录</td><td>缩小并发面，明确唯一责任</td></tr>
+      <tr><td>Benchmark 提升，线上退化</td><td>过拟合评测器或任务分布</td><td>held-out、时间切分、失败簇</td><td>冻结评测器，增加回归与回滚门</td></tr>
+      <tr><td>重启后无法继续</td><td>状态留在进程或 Sandbox</td><td>Session 事件、检查点、产物清单</td><td>外置状态并验证重建流程</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">06 · Production Practice</div>
+  <h1>国际厂商与国内社区怎样取舍</h1>
+  <p class="lead">优秀实践并没有收敛到一个框架。它们收敛的是工程问题：知识怎样被 Agent 找到，动作怎样被验证，状态怎样跨越运行时，权限怎样约束，轨迹怎样进入下一轮改进。</p>
+
+  <h2>OpenAI：把仓库、运行时和任务板都改造成控制面</h2>
+  <p>OpenAI 报告一个内部产品在 5 个月内由 3 名工程师驱动 Codex 合并约 1,500 个 PR，代码约 100 万行，估计开发时间为手写的十分之一；所有数字都是厂商案例，没有独立复测 [S13]。真正可迁移的机制有四个：仓库知识成为唯一事实源；应用 UI、日志、指标和 Trace 对 Agent 可读；架构约束进入 Lint 和结构测试；人类把意图与验收写清，Agent 执行与自评。</p>
+  <p>Codex App Server 把同一 Agent Loop 暴露给 CLI、IDE、桌面和 Web。Thread 保存持久会话，Turn 表示一次用户触发的工作，Item 表示消息、工具、审批与 Diff 等原子事件。双向 JSON-RPC 让服务器可以请求审批并暂停执行 [S14]。这套接口展示了 Harness 产品化的一项关键分离：UI 不再复制 Agent Loop，而是订阅稳定事件。</p>
+  <p>Agents SDK 继续把 Harness 与计算环境拆开。Harness 保存状态和调度，Sandbox 承担文件、Shell 与依赖执行，Manifest 描述工作区，快照与重建让容器失效后仍能继续 [S15]。Symphony 则把 Linear 一类任务板变成状态机，每个未阻塞 Issue 对应独立工作区和 Agent。OpenAI 报告部分团队前三周落地 PR 数增长 500%，这同样属于厂商自报，适合观察工作流形态，不适合作为普遍生产率预测 [S16]。</p>
+
+  <h2>Anthropic：长程状态、工具可用性和并行搜索分开优化</h2>
+  <p>Anthropic 的长程实验把第一轮初始化与后续增量执行分开。初始化器创建环境、需求矩阵、进度文件和 Git 基线；后续 Agent 一次完成一个功能，运行端到端验证，提交清楚的状态给下一轮 [S09]。这套方法没有复杂编排器，却抓住了长程任务的核心：新上下文必须能从持久化产物恢复事实，而不是从模糊摘要猜测。</p>
+  <p>Managed Agents 把 Session 视为追加式事件日志，把 Harness 视为调用模型与路由工具的循环，把 Sandbox 视为执行环境。三者用稳定接口连接，允许模型升级时替换 Harness 假设，也允许长任务在计算环境迁移后继续 [S12]。Claude Agent SDK 进一步把文件系统、Shell、编辑和搜索作为通用计算机接口，其基本反馈循环是收集上下文、行动、验证、重复 [S18]。</p>
+  <p>多 Agent 研究系统使用编排者-工作者结构，主 Agent 规划并行搜索，Subagent 用独立上下文压缩局部证据，Citation Agent 再定位引用。团队同时限制 Agent 数和工具调用预算，避免简单问题生成 50 个 Subagent [S10]。这个案例说明并发策略应由任务可分解性驱动，而不是产品宣传中的「Agent Team」标签。</p>
+
+  <h2>Google 与社区框架：把状态机、评测和人类介入做成基础设施</h2>
+  <p>Google ADK 区分最终响应评测与工具轨迹评测，并支持基于真值或 Rubric 的工具使用指标。开发期可以把单个 Session 当单元测试，生产回放则检查真实动作序列 [S17]。LangGraph 强调持久执行、短期与长期 Memory、人类介入和状态转移追踪；OpenHands 把可组合 Agent SDK 与 Docker Sandbox 分开 [S23, S24]。这些框架的共同价值在基础设施，不在某个固定 Prompt。</p>
+
+  <h2>国内大厂与社区：从模型适配走向完整 Harness</h2>
+  <table class="striped">
+    <thead><tr><th>项目</th><th>核心形态</th><th>值得借鉴</th><th>公开边界</th></tr></thead>
+    <tbody>
+      <tr><td>ByteDance DeerFlow [S25]</td><td>长程 Super Agent Harness</td><td>Skills 渐进加载、Subagent 隔离、Memory、Sandbox、Gateway 与产物目录</td><td>Gateway 运行状态仍在进程内，公开文档要求单 Worker，横向状态桥尚未提供</td></tr>
+      <tr><td>ByteDance Trae Agent [S26]</td><td>研究友好的编码 Agent</td><td>多模型配置、文件与 Shell 工具、完整轨迹 JSON、容器执行</td><td>模块透明度高，生产编排与多租户不是核心目标</td></tr>
+      <tr><td>Alibaba Qwen-Agent [S27]</td><td>围绕 Qwen 的 Agent 组件库</td><td>模型特定 Function Calling 解析、MCP、RAG、Docker Code Interpreter</td><td>不同 Qwen 版本需要不同工具解析配置，体现 Harness 与模型耦合</td></tr>
+      <tr><td>AgentScope [S28]</td><td>Agent-Oriented 生产框架</td><td>细粒度权限、多租户、多 Session、Workspace/Sandbox、团队与后台任务</td><td>能力面广，具体任务仍需自己建立评测和策略</td></tr>
+    </tbody>
+  </table>
+
+  <p>DeerFlow 2.0 的公开架构最接近本文所说的完整 Harness：Skills 与工具提供能力，Subagent 承担隔离协作，文件系统保存工作状态，Sandbox 隔离执行，Memory 跨 Session 保留信息，Gateway 管理流式事件与运行状态 [S25]。它也公开写出当前限制：Gateway 默认单 Worker，直接提高 Worker 数会破坏取消、SSE 重连和去重。这种边界披露比单纯罗列功能更有工程价值。</p>
+  <p>Trae Agent 把每次模型交互、工具动作和执行元数据写入轨迹文件，适合做 Harness 消融和故障分析 [S26]。Qwen-Agent 针对 Qwen 系列的工具调用格式和推理字段做模型适配，并提供 MCP、RAG 和容器代码解释器 [S27]。AgentScope 把权限、多租户、多 Session 与工作区隔离放到框架层，代表从研究编排走向服务治理的另一条路线 [S28]。</p>
+
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">07 · Reference Architecture</div>
+  <h1>从最小闭环走向持续优化</h1>
+  <p class="lead">生产 Harness 不应从多 Agent 拓扑开始。最小可用版本只有一条路径：一个明确任务契约，一组必要工具，一个持久状态载体，一个独立验证器，以及失败时可恢复的执行环境。</p>
+
+  <h2>最小可用 Harness</h2>
+  <figure>
+    <svg viewBox="0 0 920 430" style="width:100%;height:auto" role="img" aria-label="最小可用 Harness 参考架构">
+      <rect x="36" y="48" width="164" height="72" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="118" y="78" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">1 · 任务契约</text>
+      <text x="118" y="101" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">输入 · 产物 · 验收 · 预算</text>
+
+      <rect x="252" y="48" width="164" height="72" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="334" y="78" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">2 · Agent Loop</text>
+      <text x="334" y="101" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">观察 · 行动 · 反馈</text>
+
+      <rect x="504" y="48" width="164" height="72" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="586" y="78" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">3 · 工具边界</text>
+      <text x="586" y="101" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">最小集合 · Schema · 权限</text>
+
+      <rect x="720" y="48" width="164" height="72" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="802" y="78" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02">4 · Sandbox</text>
+      <text x="802" y="101" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">Workspace · 凭据 · 快照</text>
+
+      <line x1="200" y1="84" x2="244" y2="84" stroke="#6b6a64" stroke-width="1.5"/><path d="M236 78 L248 84 L236 90 Z" fill="#6b6a64"/>
+      <line x1="416" y1="84" x2="496" y2="84" stroke="#6b6a64" stroke-width="1.5"/><path d="M488 78 L500 84 L488 90 Z" fill="#6b6a64"/>
+      <line x1="668" y1="84" x2="712" y2="84" stroke="#6b6a64" stroke-width="1.5"/><path d="M704 78 L716 84 L704 90 Z" fill="#6b6a64"/>
+
+      <rect x="180" y="188" width="248" height="80" rx="8" fill="#e8e6dc"/>
+      <text x="304" y="220" text-anchor="middle" fill="#141413" font-size="15" font-family="TsangerJinKai02">持久状态与 Artifact Store</text>
+      <text x="304" y="245" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">事件日志 · 文件 · Checkpoint · 版本</text>
+
+      <rect x="492" y="188" width="248" height="80" rx="8" fill="#1B365D"/>
+      <text x="616" y="220" text-anchor="middle" fill="#faf9f5" font-size="15" font-family="TsangerJinKai02">独立 Verifier</text>
+      <text x="616" y="245" text-anchor="middle" fill="#faf9f5" font-size="12" font-family="TsangerJinKai02">测试 · 规则 · 人工审批 · 证据</text>
+
+      <line x1="334" y1="120" x2="304" y2="180" stroke="#6b6a64" stroke-width="1.5"/><path d="M302 169 L302 184 L313 174 Z" fill="#6b6a64"/>
+      <line x1="586" y1="120" x2="616" y2="180" stroke="#6b6a64" stroke-width="1.5"/><path d="M607 174 L618 184 L618 169 Z" fill="#6b6a64"/>
+      <line x1="428" y1="228" x2="484" y2="228" stroke="#6b6a64" stroke-width="1.5"/><path d="M476 222 L488 228 L476 234 Z" fill="#6b6a64"/>
+
+      <rect x="244" y="332" width="432" height="58" rx="8" fill="#faf9f5" stroke="#1B365D"/>
+      <text x="460" y="357" text-anchor="middle" fill="#1B365D" font-size="14" font-family="TsangerJinKai02">Trace → 失败聚类 → 候选修改 → 回归验证 → 版本发布</text>
+      <text x="460" y="378" text-anchor="middle" fill="#504e49" font-size="12" font-family="TsangerJinKai02">持续优化是外层循环，不进入单次任务的可信计算边界</text>
+
+      <line x1="304" y1="268" x2="392" y2="324" stroke="#6b6a64" stroke-width="1.5"/>
+      <line x1="616" y1="268" x2="528" y2="324" stroke="#6b6a64" stroke-width="1.5"/>
+    </svg>
+    <figcaption>图 4｜任务执行与 Harness 优化分成两个循环。单次任务只运行已发布版本，优化器在外层读取脱敏轨迹并通过回归门发布新版本。</figcaption>
+  </figure>
+
+  <h2>任务契约先于 Prompt</h2>
+  <p>契约至少写清输入、输出 Artifact、允许的动作、完成条件、预算和失败格式。编码任务的 Artifact 是可应用补丁及测试证据；研究任务的 Artifact 是带来源定位的报告及证据包；数据任务的 Artifact 是可解析文件、Schema 和校验结果。完成条件必须由验证器读取 Artifact 判断，不能依赖 Agent 自述。</p>
+
+  <h2>状态分成四类</h2>
+  <table class="striped">
+    <thead><tr><th>状态</th><th>寿命</th><th>载体</th><th>禁止做法</th></tr></thead>
+    <tbody>
+      <tr><td>Turn 状态</td><td>一次模型调用</td><td>当前观察与工具结果</td><td>把全部历史无差别塞回上下文</td></tr>
+      <tr><td>Task 状态</td><td>一次任务</td><td>事件日志、工作区、任务清单</td><td>只保存在进程内存</td></tr>
+      <tr><td>User/Team Memory</td><td>跨任务</td><td>结构化事实、偏好、授权范围</td><td>把推断写成事实，永久保存敏感内容</td></tr>
+      <tr><td>Harness 经验</td><td>跨版本</td><td>脱敏轨迹、失败簇、回归集</td><td>直接把单次成功轨迹升级为规则</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Verifier 与执行 Agent 保持不同职责</h2>
+  <p>Verifier 应尽量依赖确定性信号，比如测试退出码、文件 Schema、数据库约束、页面选择器和来源定位。需要语义判断时，再使用独立 Rubric、不同模型或人工抽检。执行 Agent 不应修改测试、评分器和不可变需求；如果业务允许更新验收标准，这必须是单独审批事件。</p>
+
+  <h2>五级建设顺序</h2>
+  <table class="compact striped">
+    <thead><tr><th>级别</th><th>独立可交付能力</th><th>进入下一级的门</th></tr></thead>
+    <tbody>
+      <tr><td>L1 · 可执行</td><td>单 Agent、最小工具、明确 Artifact</td><td>核心任务有确定性通过/失败信号</td></tr>
+      <tr><td>L2 · 可诊断</td><td>结构化事件、工具错误、成本和产物追踪</td><td>失败能归到具体状态转移</td></tr>
+      <tr><td>L3 · 可恢复</td><td>持久 Session、Checkpoint、幂等重试、回滚</td><td>杀掉进程后能从检查点继续</td></tr>
+      <tr><td>L4 · 可协作</td><td>按需 Subagent、隔离工具、结构化 Handoff</td><td>并发在成本约束下显著优于单 Agent</td></tr>
+      <tr><td>L5 · 可优化</td><td>失败聚类、候选 Harness、held-out 回归、版本发布</td><td>跨时间与任务分布保持增益，无关键退化</td></tr>
+    </tbody>
+  </table>
+  <p>每一级都能独立上线。没有必要为了使用 A2A 或多 Agent 跳过 L2 和 L3。无法诊断和恢复的并发系统，只会更快地产生无法解释的失败。</p>
+
+  <h2>评测矩阵</h2>
+  <p>离线评测同时覆盖结果、过程、成本、安全和恢复。结果看 Artifact 是否满足契约；过程看工具选择、无效循环和证据链；成本看 Token、时长、工具与 Sandbox 费用；安全看越权、注入和数据外传；恢复看超时、工具故障、容器丢失和断网后的状态。上线后按失败簇采样真实轨迹，定期加入冻结回归集。</p>
+
+  <div class="takeaway">
+    <div class="takeaway-label">一周内可以完成的最小动作</div>
+    选择 20 个真实任务，冻结模型、工具和预算；为每个任务写 Artifact 验收器；记录完整轨迹；只修改一个 Harness 组件；用成对结果决定保留或回滚。
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">08 · Research Agenda</div>
+  <h1>下一步要解决可迁移性与治理</h1>
+  <p class="lead">前沿结果证明 Harness 可以被优化，却没有证明它能稳定跨模型、跨任务和跨组织迁移。真正困难的问题从「能不能改进」转向「改进是否可归因、可复现、可治理」。</p>
+
+  <h2>从完整配置比较走向组件因果</h2>
+  <p>Harness-Bench 和 Claw-SWE-Bench 已经把 Harness 变成评测轴，但完整配置中 Prompt、工具、状态和恢复相互耦合。下一步需要类型化生命周期 Hook、统一事件 Schema 和严格消融，使研究者能回答「哪一类任务受益于哪一层修改」。NLAH 与 HarnessX 的模块化尝试提供了表达方法，仍需要跨运行时复现 [S01, S02, S07]。</p>
+
+  <h2>模型特定优化与跨模型迁移要同时报告</h2>
+  <p>Self-Harness 发现不同模型需要不同改动：有的模型需要提前产出文件，有的需要停止重复命令，有的需要保存 Shell 环境 [S08]。这说明「最佳 Harness」很可能不存在。研究应同时给出同模型 held-out、跨模型迁移和新模型升级后的退化，区分通用机制与模型补丁。</p>
+
+  <h2>自动优化需要安全发布系统</h2>
+  <p>未来的 Harness Optimizer 更像配置编译器与发布系统，而不是一次 Prompt 改写。候选版本要经过静态检查、权限差异审查、成本上限、冻结回归、Canary 和自动回滚。高风险工具的权限策略不能由同一个优化器在没有独立审批的情况下放宽。轨迹可能包含用户数据、凭据和内部代码，训练与回放前需要最小化、脱敏和保留期限。</p>
+
+  <h2>Harness 与模型会形成双向训练循环</h2>
+  <p>HarnessX 提出把 Harness 进化产生的轨迹作为模型 RL 信号，再让更新后的模型参与下一轮 Harness 进化 [S02]。这条路线可能减少运行时补丁，也可能把 Harness 的局部偏差固化进模型。评测必须保留一组不参与两侧优化的外部任务，并追踪模型升级后哪些 Harness 规则已经过时。</p>
+
+  <h2>协议层会更轻，应用状态仍然很重</h2>
+  <p>MCP 2026 Release Candidate 把协议内核改为无状态，并把长任务与 UI 放入扩展，目标是更容易部署在普通 HTTP 基础设施上 [S20]。无状态协议不代表无状态 Agent。Session、Memory、审批、Artifact 和恢复仍由 Harness 或应用保存。A2A 也刻意不要求共享对方内部状态 [S22]。未来架构会更重视状态所有权和可迁移格式。</p>
+
+  <h2>Agent 可读性会成为组织基础设施</h2>
+  <p>OpenAI 的案例把仓库内知识、应用 UI、日志、指标与架构约束都改成 Agent 可检索和可验证的表面 [S13]。这类「Agent legibility」要求事实源有索引、有所有者、有新鲜度检查，并能通过工具读取，文档数量本身没有价值。它同时改善新工程师上手和自动化质量，也会增加维护与治理成本。</p>
+
+  <h2>成本、延迟与风险要进入同一条 Pareto 前沿</h2>
+  <p>只追求通过率会奖励更长上下文、更多 Rollout 和更多 Subagent。Claw-SWE-Bench 已经同时报告成本，Anthropic 的多 Agent 案例也公开了 15 倍 Token 量级 [S03, S10]。下一代基准应统一披露缓存、并发、重试、Sandbox 和外部工具费用，并报告高风险动作数和人工审批时间。</p>
+
+  <table class="striped">
+    <thead><tr><th>研究问题</th><th>需要的最小证据</th><th>不能接受的替代</th></tr></thead>
+    <tbody>
+      <tr><td>一个组件是否有效</td><td>固定其他变量的成对消融</td><td>比较两套完全不同的产品</td></tr>
+      <tr><td>增益是否迁移</td><td>新任务、新模型和时间切分</td><td>在优化集上重复测试</td></tr>
+      <tr><td>自动修改是否安全</td><td>权限 Diff、冻结回归、Canary、回滚</td><td>由优化器自评后直接全量发布</td></tr>
+      <tr><td>多 Agent 是否值得</td><td>相同预算下的质量-成本前沿</td><td>只报最高成功率</td></tr>
+      <tr><td>协议是否提升可靠性</td><td>故障注入、兼容性和授权测试</td><td>统计接入数量</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <div class="chapter-num">09 · Reference</div>
+  <h1>术语、常见误区与进一步阅读</h1>
+
+  <h2>术语表</h2>
+  <table class="compact striped">
+    <thead><tr><th>术语</th><th>本文定义</th></tr></thead>
+    <tbody>
+      <tr><td>Harness</td><td>围绕固定模型的非参数执行系统，管理上下文、工具、状态、控制流、权限、追踪、恢复与评测。</td></tr>
+      <tr><td>Agent</td><td>一个或多个模型调用与外部动作组成的执行过程。</td></tr>
+      <tr><td>Agent Loop</td><td>观察、决策、动作、反馈、验证和停止组成的循环。</td></tr>
+      <tr><td>Trajectory / Trace</td><td>任务运行中的模型调用、工具动作、状态变化、成本和验证事件序列。</td></tr>
+      <tr><td>Artifact</td><td>任务交付物，如补丁、文件、报告、数据表、审批记录或结构化结果。</td></tr>
+      <tr><td>Agent-Computer Interface</td><td>Agent 与计算环境交互的工具、观察和错误接口。</td></tr>
+      <tr><td>Skill</td><td>按需加载的过程知识包，可包含指令、脚本、参考资料和模板。</td></tr>
+      <tr><td>MCP</td><td>连接 LLM 应用与 Resources、Prompts、Tools 的开放协议。</td></tr>
+      <tr><td>A2A</td><td>独立 Agent 系统间交换能力描述、任务、消息和 Artifact 的协议。</td></tr>
+      <tr><td>Verifier</td><td>根据任务契约检查过程或 Artifact 的确定性规则、模型或人工角色。</td></tr>
+      <tr><td>Harness Optimization</td><td>基于评测与轨迹修改 Prompt、工具、Memory、控制流或运行时策略的外层过程。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>常见误区</h2>
+  <p><strong>把 Harness 当 Prompt 模板。</strong> Prompt 无法独自提供持久状态、工具执行、权限、恢复和验证。先画执行状态，再写指令。</p>
+  <p><strong>先上多 Agent，再补评测。</strong> 没有单 Agent 基线和任务可分解性证据，多 Agent 的增益与成本都无法归因。先测一条闭环。</p>
+  <p><strong>把 MCP 接入数当能力。</strong> 协议只让工具可发现和可调用。工具质量、授权、输出大小和故障语义仍需单独评测。</p>
+  <p><strong>让执行 Agent 同时改测试。</strong> Agent 可以通过降低标准制造成功。测试和不可变验收条件需要权限隔离或独立审批。</p>
+  <p><strong>用更多上下文修复遗忘。</strong> 长上下文会引入噪声和陈旧规则。关键状态写入结构化 Artifact，其余按需检索。</p>
+  <p><strong>把厂商数字直接横比。</strong> 任务、预算、模型版本、缓存和适配器不同。厂商案例用于理解机制，不用于排行榜。</p>
+  <p><strong>自动优化后直接发布。</strong> 自偏好和 LLM Judge 可能共享偏差。候选版本必须经过 held-out 回归、权限 Diff 和回滚演练。</p>
+
+  <h2>Further Reading</h2>
+  <ol>
+    <li><strong>最佳起点：Harness-Bench [S01]</strong>，给出可操作定义、评测单位和 106 个可复现实务任务。</li>
+    <li><strong>最佳系统设计材料：OpenAI Harness Engineering [S13]</strong>，展示 Agent 可读仓库、验证器、可观测性和架构约束怎样协同。</li>
+    <li><strong>最佳长程实践：Anthropic Effective Harnesses [S09]</strong>，用初始化器、进度文件、Git 和端到端测试解决跨上下文连续性。</li>
+    <li><strong>最佳自动优化论文：Meta-Harness [S05]</strong>，解释为什么完整代码、轨迹和历史比标量反馈更适合 Harness 搜索。</li>
+    <li><strong>最佳反例：SWE-Skills-Bench [S04]</strong>，提醒读者过程知识的价值取决于任务匹配、版本和回归验证。</li>
+  </ol>
+
+  <h2>研究方法与限制</h2>
+  <p>资料检索截至 2026-06-20，优先使用论文原文、正式规范、官方工程文章与官方开源仓库。2026 年 Harness 研究大多仍是预印本，本文按前沿信号处理；论文增益只在各自任务和预算内成立。厂商内部评测与生产率数据标为 C/D 级证据，不当作独立验证。开源项目按截至证据日的仓库提交快照描述公开能力，未运行统一模型与任务横评。</p>
+  <p>本文没有覆盖所有 Agent 框架，也没有把 UI 产品、纯 Prompt 库和基础模型训练框架纳入主比较。金融、医疗、法律和高权限自动化需要额外的监管、审计和人类授权设计，本文的参考架构不能替代领域控制。</p>
+
+  <h2>参考资料</h2>
+  <div class="references">
+    <p><span class="ref-id">[S01]</span> Yao et al. <a href="https://arxiv.org/abs/2605.27922">Harness-Bench: Measuring Harness Effects across Models in Realistic Agent Workflows</a>. 2026-05-27.</p>
+    <p><span class="ref-id">[S02]</span> Chen et al. <a href="https://arxiv.org/abs/2606.14249">HarnessX: A Composable, Adaptive, and Evolvable Agent Harness Foundry</a>. 2026-06-12.</p>
+    <p><span class="ref-id">[S03]</span> Zheng et al. <a href="https://arxiv.org/abs/2606.12344">Claw-SWE-Bench</a>. 2026-06-10.</p>
+    <p><span class="ref-id">[S04]</span> Han et al. <a href="https://arxiv.org/abs/2603.15401">SWE-Skills-Bench</a>. 2026-03-16.</p>
+    <p><span class="ref-id">[S05]</span> Lee et al. <a href="https://arxiv.org/abs/2603.28052">Meta-Harness: End-to-End Optimization of Model Harnesses</a>. 2026-03-30.</p>
+    <p><span class="ref-id">[S06]</span> Pan et al. <a href="https://arxiv.org/abs/2606.05922">Retrospective Harness Optimization</a>. 2026-06-04.</p>
+    <p><span class="ref-id">[S07]</span> Pan et al. <a href="https://arxiv.org/abs/2603.25723">Natural-Language Agent Harnesses</a>. 2026-03-26.</p>
+    <p><span class="ref-id">[S08]</span> Zhang et al. <a href="https://arxiv.org/abs/2606.09498">Self-Harness: Harnesses That Improve Themselves</a>. 2026-06-08.</p>
+    <p><span class="ref-id">[S09]</span> Anthropic. <a href="https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents">Effective harnesses for long-running agents</a>. 2025-11-26.</p>
+    <p><span class="ref-id">[S10]</span> Anthropic. <a href="https://www.anthropic.com/engineering/built-multi-agent-research-system">How we built our multi-agent research system</a>. 2025-06-13.</p>
+    <p><span class="ref-id">[S11]</span> Anthropic. <a href="https://www.anthropic.com/engineering/writing-tools-for-agents">Writing effective tools for agents</a>. 2025-09-11.</p>
+    <p><span class="ref-id">[S12]</span> Anthropic. <a href="https://www.anthropic.com/engineering/managed-agents">Scaling Managed Agents</a>. 2026-04-08.</p>
+    <p><span class="ref-id">[S13]</span> OpenAI. <a href="https://openai.com/index/harness-engineering/">Harness engineering: leveraging Codex in an agent-first world</a>. 2026-02-11.</p>
+    <p><span class="ref-id">[S14]</span> OpenAI. <a href="https://openai.com/index/unlocking-the-codex-harness/">Unlocking the Codex harness: how we built the App Server</a>. 2026-02-04.</p>
+    <p><span class="ref-id">[S15]</span> OpenAI. <a href="https://openai.com/index/the-next-evolution-of-the-agents-sdk/">The next evolution of the Agents SDK</a>. 2026-04-15.</p>
+    <p><span class="ref-id">[S16]</span> OpenAI. <a href="https://openai.com/index/open-source-codex-orchestration-symphony/">An open-source spec for Codex orchestration: Symphony</a>. 2026-04-27.</p>
+    <p><span class="ref-id">[S17]</span> Google. <a href="https://google.github.io/adk-docs/evaluate/">ADK: Why evaluate agents</a>. Checked 2026-06-20.</p>
+    <p><span class="ref-id">[S18]</span> Anthropic. <a href="https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk/">Building agents with the Claude Agent SDK</a>. 2025-09-29.</p>
+    <p><span class="ref-id">[S19]</span> Model Context Protocol. <a href="https://modelcontextprotocol.io/specification/2025-11-25">Specification 2025-11-25</a>.</p>
+    <p><span class="ref-id">[S20]</span> Model Context Protocol. <a href="https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/">2026-07-28 Specification Release Candidate</a>. 2026-05-21.</p>
+    <p><span class="ref-id">[S21]</span> Agent Skills. <a href="https://github.com/agentskills/agentskills/tree/5d4c1fda3f786fff826c7f56b6cb3341e7f3a911">Specification and documentation</a>. Snapshot 2026-05-20.</p>
+    <p><span class="ref-id">[S22]</span> Linux Foundation. <a href="https://a2a-protocol.org/latest/specification/">A2A Protocol Specification 1.0</a>. 2026.</p>
+    <p><span class="ref-id">[S23]</span> LangGraph. <a href="https://github.com/langchain-ai/langgraph/tree/711b31550286585b3793857b2a99c8dafd98b785">Repository snapshot</a>. 2026-06-19.</p>
+    <p><span class="ref-id">[S24]</span> OpenHands. <a href="https://github.com/OpenHands/OpenHands/tree/7b228db6ae143598b4caf65c6f7ed759b511f922">Repository snapshot</a>. 2026-06-19.</p>
+    <p><span class="ref-id">[S25]</span> ByteDance. <a href="https://github.com/bytedance/deer-flow/tree/f3621bc8ad5581cef1267451dd6bb6d294577e5b">DeerFlow snapshot</a>. 2026-06-20.</p>
+    <p><span class="ref-id">[S26]</span> ByteDance. <a href="https://github.com/bytedance/trae-agent/tree/e839e559ac61bdd0e057c375dd1dee391fee797d">Trae Agent snapshot</a>. 2026-02-05.</p>
+    <p><span class="ref-id">[S27]</span> Alibaba. <a href="https://github.com/QwenLM/Qwen-Agent/tree/31a4d36d123688581a9e9744427272b33ce940e0">Qwen-Agent snapshot</a>. 2026-03-04.</p>
+    <p><span class="ref-id">[S28]</span> AgentScope. <a href="https://github.com/agentscope-ai/agentscope/tree/fd1c2cd2acbf261d55823bb636b5295507dfce0d">Repository snapshot</a>. 2026-06-19.</p>
+  </div>
+</section>
+</body>
+</html>

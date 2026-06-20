@@ -1,0 +1,29 @@
+id	level	date	type	source	url	main_use	boundary
+S01	B	2026-05-27	preprint	Harness-Bench	https://arxiv.org/abs/2605.27922	定义、配置级评测、106 个任务与 5,194 条轨迹	完整配置诊断，不作组件因果拆解
+S02	B	2026-06-12	preprint	HarnessX	https://arxiv.org/abs/2606.14249	类型化组件、轨迹驱动进化、模型协同训练	截至证据日代码待发布
+S03	B	2026-06-10	preprint	Claw-SWE-Bench	https://arxiv.org/abs/2606.12344	模型与 Harness 效应、适配器契约、成本维度	特定 SWE-style 任务
+S04	B	2026-03-16	preprint	SWE-Skills-Bench	https://arxiv.org/abs/2603.15401	Skill 边际价值、版本冲突与 Token 开销	初步结果，49 个公开 Skills
+S05	B	2026-03-30	preprint	Meta-Harness	https://arxiv.org/abs/2603.28052	外层代码搜索、完整历史、跨模型迁移	外层搜索成本与任务覆盖有限
+S06	B	2026-06-04	preprint	Retrospective Harness Optimization	https://arxiv.org/abs/2606.05922	无标签轨迹、自验证、自一致性、自偏好	自偏好不等于独立真值
+S07	B	2026-03-26	preprint	Natural-Language Agent Harnesses	https://arxiv.org/abs/2603.25723	策略与机制分离、可读 Harness、模块消融	自然语言不替代确定性验证器和沙箱
+S08	B	2026-06-08	preprint	Self-Harness	https://arxiv.org/abs/2606.09498	弱点挖掘、候选修改、回归验证	单一基准族
+S09	C	2025-11-26	official-engineering	Anthropic Effective Harnesses for Long-Running Agents	https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents	初始化、进度文件、Git 恢复、端到端验证	工程经验
+S10	C/D	2025-06-13	official-engineering	Anthropic Multi-Agent Research System	https://www.anthropic.com/engineering/built-multi-agent-research-system	编排者-工作者、并行上下文、成本、工具优化	内部评测和厂商自报
+S11	C/D	2025-09-11	official-engineering	Anthropic Writing Effective Tools for Agents	https://www.anthropic.com/engineering/writing-tools-for-agents	工具命名空间、描述、评测与收敛	厂商实践
+S12	C	2026-04-08	official-engineering	Anthropic Managed Agents	https://www.anthropic.com/engineering/managed-agents	Session、Harness、Sandbox 解耦与上下文重置	产品架构说明
+S13	C/D	2026-02-11	official-engineering	OpenAI Harness Engineering	https://openai.com/index/harness-engineering/	Agent 可读仓库、机械约束、验证与垃圾回收	案例数据未独立复测
+S14	C	2026-02-04	official-engineering	OpenAI Codex App Server	https://openai.com/index/unlocking-the-codex-harness/	统一 Agent Loop、thread-turn-item、双向审批	接口说明
+S15	C	2026-04-15	official-product	OpenAI Agents SDK Harness and Sandbox	https://openai.com/index/the-next-evolution-of-the-agents-sdk/	内存、技能、沙箱、快照恢复、计算解耦	产品能力
+S16	C/D	2026-04-27	official-engineering	OpenAI Symphony	https://openai.com/index/open-source-codex-orchestration-symphony/	Issue Tracker 控制面、DAG、持续 Agent	500% 为厂商案例
+S17	C	2026-06-20	official-docs	Google ADK Evaluation	https://google.github.io/adk-docs/evaluate/	轨迹与最终结果双重评测	文档能力说明
+S18	C	2025-09-29	official-engineering	Claude Agent SDK	https://www.anthropic.com/engineering/building-agents-with-the-claude-agent-sdk/	计算机工具、文件系统式上下文、反馈循环	厂商实践
+S19	C	2025-11-25	standard	Model Context Protocol Specification	https://modelcontextprotocol.io/specification/2025-11-25	Resources、Prompts、Tools 与安全原则	协议不强制实现安全
+S20	C	2026-05-21	standard-rc	MCP 2026-07-28 Release Candidate	https://blog.modelcontextprotocol.io/posts/2026-07-28-release-candidate/	无状态内核、扩展、Tasks、授权强化	截至证据日仍是 RC
+S21	C	2026-05-20	standard-repo	Agent Skills	commit:5d4c1fda3f786fff826c7f56b6cb3341e7f3a911	渐进披露、过程知识、跨产品复用	格式互操作不证明 Skill 有效
+S22	C	2026-03-12	standard	A2A Protocol 1.0	https://a2a-protocol.org/latest/specification/	AgentCard、Task、Message、Artifact、长任务	协议不共享内部状态或工具
+S23	C	2026-06-19	open-source-repo	LangGraph	commit:711b31550286585b3793857b2a99c8dafd98b785	持久执行、状态、人类介入、追踪	公开能力，不作性能比较
+S24	C	2026-06-19	open-source-repo	OpenHands	commit:7b228db6ae143598b4caf65c6f7ed759b511f922	Agent SDK 与 Sandbox	背景材料
+S25	C	2026-06-20	open-source-repo	ByteDance DeerFlow	commit:f3621bc8ad5581cef1267451dd6bb6d294577e5b	Skills、Subagents、Memory、Sandbox、Gateway	未统一实测
+S26	C	2026-02-05	open-source-repo	ByteDance Trae Agent	commit:e839e559ac61bdd0e057c375dd1dee391fee797d	多模型、工具、轨迹记录、容器	未统一实测
+S27	C	2026-03-04	open-source-repo	Qwen-Agent	commit:31a4d36d123688581a9e9744427272b33ce940e0	Qwen 工具调用、MCP、RAG、代码解释器	未统一实测
+S28	C	2026-06-19	open-source-repo	AgentScope	commit:fd1c2cd2acbf261d55823bb636b5295507dfce0d	权限、多租户、多会话、工作区与 Agent Team	未统一实测

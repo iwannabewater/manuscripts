@@ -1,0 +1,21 @@
+claim_id	topic	claim	evidence_ids	evidence_level	interpretation_boundary
+C01	定义	Harness 是模型与环境之间管理上下文、工具、状态、权限、追踪和恢复的执行层	S01,S07	B	2026 年仍无唯一行业定义，正文采用两篇论文的公共交集
+C02	评测单位	Agent 能力应至少按 model-harness configuration 报告	S01,S03	B	配置级比较不等于拆出单个组件的因果效应
+C03	适配器效应	Claw-SWE-Bench 中同一 GLM 5.1 从最小适配器 19.1% 提升到完整适配器 73.4%	S03	B	来自单篇 2026 预印本和特定任务契约，不能外推到全部 Agent 任务
+C04	模型与 Harness	固定模型时 Harness 选择造成最高 27.4 个百分点 Pass@1 差异	S03	B	比较的是完整 Harness，不是单一策略消融
+C05	Skills 负面结果	49 个 Skills 中 39 个没有提高通过率，平均提升 1.2%	S04	B	预印本初步结果，仅覆盖软件工程任务与其选取的公开 Skills
+C06	Skills 风险	版本不匹配的 Skill 最多使表现下降 10%，Token 开销最高增加 451% 且通过率不变	S04	B	极值来自特定 Skill 和仓库配对，不代表中位数
+C07	自动搜索	Meta-Harness 在在线分类中提升 7.7 个点，同时使用 4 倍更少的上下文 Token	S05	B	任务规模有限，外层搜索本身有额外计算成本
+C08	跨模型迁移	Meta-Harness 发现的数学推理 Harness 在 5 个未见模型上平均提升 4.7 个点	S05	B	只证明所测任务族中的迁移，不证明通用可移植性
+C09	无标签优化	RHO 单轮将 SWE-Bench Pro 通过率从 59% 提升到 78%	S06	B	自偏好可能共享模型偏差，且结果依赖过去轨迹分布
+C10	自我改进	Self-Harness 在 3 个模型的 held-out 任务上分别提高 21.4、14.3、14.2 个百分点	S08	B	只在 Terminal-Bench-2.0 上验证，仍需跨领域复现
+C11	组合进化	HarnessX 在 15 个模型-基准配置上平均提升 14.5%，最高 44.0%	S02	B	截至证据日完整代码尚未发布，复现证据不足
+C12	长程状态	初始化器、进度文件、Git 历史和单功能增量提交改善跨上下文连续性	S09	C	Anthropic 工程经验，不是独立对照实验
+C13	多 Agent	Anthropic 内部研究评测中多 Agent 比单 Agent 高 90.2%，但 Token 约为普通聊天的 15 倍	S10	D	内部评测与厂商自报，且收益集中在可并行的宽度搜索任务
+C14	工具接口	Anthropic 通过重写工具描述使后续 Agent 任务完成时间下降 40%	S10,S11	D	厂商内部结果，说明 ACI 可优化，不代表所有工具都能获得同量级收益
+C15	可读环境	OpenAI 报告 3 名工程师在 5 个月内合并约 1,500 个 PR，并把仓库知识、验证器和可观测性暴露给 Agent	S13	D	厂商案例，无独立复测；吞吐量不等同于代码质量
+C16	统一运行时	Codex App Server 用双向 JSON-RPC 暴露 thread、turn、item、审批和工具事件	S14	C	证明公开接口形态，不证明该实现优于其他协议
+C17	计算解耦	OpenAI Agents SDK 将 Harness 状态与 Sandbox 计算解耦，以支持凭据隔离、快照恢复和并行容器	S15	C	产品能力说明，未给出独立性能比较
+C18	任务控制面	Symphony 将 Issue Tracker 作为状态机和控制面，部分团队前三周落地 PR 数增长 500%	S16	D	厂商自报，可能同时受流程、团队和任务选择影响
+C19	协议协同	MCP 管工具与上下文，A2A 管独立 Agent 间任务、消息和产物，Agent Skills 管按需加载的过程知识	S19,S21,S22	C	协议解决互操作，不自动解决工具质量、权限和任务正确性
+C20	国内实践	DeerFlow、Trae Agent、Qwen-Agent、AgentScope 分别覆盖长程 Harness、轨迹研究、模型适配和生产服务边界	S25,S26,S27,S28	C	基于公开仓库能力，未做统一基准横评
