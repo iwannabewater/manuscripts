@@ -1,0 +1,11 @@
+category	benchmark	glm_5_1	glm_5_2	comparison_model	comparison_score	source_id	as_of	notes
+coding	Terminal-Bench 2.1 Terminus-2	63.5	81.0	Claude Opus 4.8	85.0	S01	2026-06-17	Official evaluation with Terminus-2 harness
+coding	SWE-bench Pro	58.4	62.1	Claude Opus 4.8	69.2	S01	2026-06-17	Official OpenHands evaluation with tailored prompt
+coding	NL2Repo	42.7	48.9	GPT-5.5	50.7	S01	2026-06-17	Official evaluation at 400K context
+coding	DeepSWE	18.0	46.2	GPT-5.5	70.0	S01	2026-06-17	Official pier and mini-swe-agent evaluation
+long_horizon	FrontierSWE Dominance	30.5	74.4	Claude Opus 4.8	75.1	S01;S15	2026-06-22	Current external page rounds GLM-5.2 and Opus to 74 and 75
+long_horizon	PostTrainBench	20.1	34.3	Claude Opus 4.8 Max	34.1	S01;S16	2026-06-22	GLM-5.2 became first after Opus rerun average update
+long_horizon	SWE-Marathon	1.0	13.0	Claude Opus 4.8	26.0	S01;S17	2026-06-22	Model scores from Z.ai table; benchmark site describes overall task set
+independent	Artificial Analysis Intelligence Index v4.1	40	51	MiniMax M3	44	S13	2026-06-17	Leading open-weight model at publication
+independent	AA-LCR	62	71	NA	NA	S13	2026-06-17	Independent long-context reasoning evaluation
+independent	Output tokens per task	26000	43000	DeepSeek V4 Pro max	37000	S13	2026-06-17	Weighted Intelligence Index token use

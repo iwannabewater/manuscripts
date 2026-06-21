@@ -1,0 +1,20 @@
+id	title	url	evidence_level	scope	accessed
+S01	GLM-5.2: Built for Long-Horizon Tasks	https://z.ai/blog/glm-5.2	primary	Release architecture training serving official benchmarks	2026-06-22
+S02	GLM-5.2 Model Card	https://huggingface.co/zai-org/GLM-5.2	primary	Weights license benchmarks supported frameworks	2026-06-22
+S03	GLM-5.2 config.json	https://huggingface.co/zai-org/GLM-5.2/blob/main/config.json	primary	Layers experts DSA IndexShare context configuration	2026-06-22
+S04	GLM-5: from Vibe Coding to Agentic Engineering	https://arxiv.org/abs/2602.15763	primary	Base architecture pretraining MTP asynchronous agent RL	2026-06-22
+S05	IndexCache	https://arxiv.org/abs/2603.12201	primary	Cross-layer sparse-attention index reuse	2026-06-22
+S06	Breaking Entropy Bounds	https://arxiv.org/abs/2606.12370	primary	MTP rejection sampling TV loss RL acceleration	2026-06-22
+S07	THUDM/slime	https://github.com/THUDM/slime	primary	Agentic RL rollout OPD training infrastructure	2026-06-22
+S08	Z.ai Thinking Mode	https://docs.z.ai/guides/capabilities/thinking-mode	primary	Thinking interleaving preserved reasoning API contract	2026-06-22
+S09	GLM Coding Plan Overview	https://docs.z.ai/devpack/overview	primary	Supported models quotas promotion usage boundary	2026-06-22
+S10	vLLM GLM-5.2 Recipe	https://recipes.vllm.ai/zai-org/GLM-5.2	primary	FP8 BF16 hardware MTP 1M serving	2026-06-22
+S11	SGLang GLM-5.2 Cookbook	https://cookbook.sglang.io/autoregressive/GLM/GLM-5.2	primary	DSA MTP context parallelism chunked prefill hardware	2026-06-22
+S12	KTransformers GLM-5.2 Tutorial	https://github.com/kvcache-ai/ktransformers/blob/main/doc/en/kt-kernel/GLM-5.2-Tutorial.md	primary	CPU GPU heterogeneous deployment	2026-06-22
+S13	Artificial Analysis GLM-5.2 Launch Analysis	https://artificialanalysis.ai/articles/glm-5-2-is-the-new-leading-open-weights-model-on-the-artificial-analysis-intelligence-index	independent	Intelligence cost token use price peer comparison	2026-06-22
+S14	Artificial Analysis GLM-5.2 Model Page	https://artificialanalysis.ai/models/glm-5-2	independent	Current metrics speed price context metadata	2026-06-22
+S15	FrontierSWE	https://www.frontierswe.com/	independent	Long-horizon software engineering leaderboard tasks harness	2026-06-22
+S16	PostTrainBench	https://posttrainbench.com/	independent	AI post-training leaderboard methodology contamination	2026-06-22
+S17	SWE-Marathon	https://www.swe-marathon.org/	independent	Multi-hour software engineering task set	2026-06-22
+S18	Jie Tang GLM-5.2 Commentary	https://x.com/jietang/status/2065784751345287314	builder_view	Open-weight strategy and accessibility position	2026-06-22
+S19	Jie Tang Academic Homepage	https://keg.cs.tsinghua.edu.cn/jietang/	primary	Academic role and fellow credentials	2026-06-22

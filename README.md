@@ -16,6 +16,7 @@
 | WWDC 2026 闭幕后全景报告 | 基于 Apple 第一方资料的闭幕后复核，覆盖 Siri AI、开发者 AI 栈、137 个视频索引条目、OS 27、服务、App Store、治理与可用性边界 | `wwdc-2026-report/index.html` / `wwdc-2026-report/wwdc-2026-report.pdf` |
 | Diffusion LLM 2026 | 扩散语言模型的系统入门、数学直觉、架构、训练推理技术栈、国内外厂商版图与未来路线图 | `diffusion-llm-2026/index.html` / `diffusion-llm-2026/diffusion-llm-2026.pdf` |
 | DeepSeek V4 Technical Report 2026 | DeepSeek V4 官方 technical report 的完整中文深度解读，覆盖百万上下文、CSA/HCA、mHC、Muon、系统工程、后训练与代际对比 | `deepseek-v4-technical-report-2026/index.html` / `deepseek-v4-technical-report-2026/deepseek-v4-technical-report-2026.pdf` |
+| GLM-5.2 Technical Report 2026 | GLM-5.2 的完整中文深度解读，覆盖 1M 上下文、IndexShare、MTP、长轨迹 Agentic RL、独立评测、部署成本与开放权重边界 | `glm-5-2-technical-report-2026/index.html` / `glm-5-2-technical-report-2026/glm-5-2-technical-report-2026.pdf` |
 | ms-swift Training Framework 2026 | 大模型训练框架 ms-swift 的完整架构、训练链路、源码路径、RL 后训练、Megatron 并行、评测部署与扩展排障 | `ms-swift-training-framework-2026/index.html` / `ms-swift-training-framework-2026/ms-swift-training-framework-2026.pdf` |
 | verl RL Training Framework 2026 | 大模型强化学习训练框架 verl 的完整架构、训练链路、算法配置、性能调优与源码路线 | `verl-rl-training-framework-2026/index.html` / `verl-rl-training-framework-2026/verl-rl-training-framework-2026.pdf` |
 | LLM RL Algorithms 2026 | 大模型强化学习算法全景，覆盖 RLHF、RLAIF、RLVR、DPO、PPO、GRPO、DAPO、GSPO 等主流算法 | `llm-rl-algorithms-2026/index.html` / `llm-rl-algorithms-2026/llm-rl-algorithms-2026.pdf` |

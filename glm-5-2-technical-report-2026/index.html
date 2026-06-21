@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<!-- ==================================================================
+     LONG DOCUMENT TEMPLATE · parchment design system
+     多页 A4 白皮书/技术报告/年度总结
+     结构：封面 -> 目录 -> 执行摘要 -> 正文章节 -> 附录
+     ================================================================== -->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>GLM-5.2 技术报告深度解读：1M 上下文、IndexShare 与长时 Agent 工程</title>
+<meta name="author" content="Winston">
+<meta name="description" content="一份面向工程师与技术决策者的 GLM-5.2 深度解读，覆盖 1M 上下文、IndexShare、MTP、Agentic RL、评测、部署与边界。">
+<meta name="keywords" content="GLM-5.2, 技术报告, 1M上下文, IndexShare, Agentic RL">
+<meta name="generator" content="Kami">
+<style>
+  /* Regular weight */
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");
+    font-weight: 400;
+    font-style: normal;
+  }
+
+  /* Bold weight - W05 for all bold variants */
+  @font-face {
+    font-family: "TsangerJinKai02";
+    src: url("../assets/fonts/TsangerJinKai02-W05.ttf") format("truetype"),
+       url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W05.ttf") format("truetype");
+    font-weight: 500;
+    font-style: normal;
+  }
+
+  @page {
+    size: A4;
+    margin: 20mm 22mm 22mm 22mm;
+    background: #f5f4ed;
+
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02";
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+
+    @bottom-center {
+      content: counter(page) "  ·  GLM-5.2 技术报告深度解读";
+      font-family: "TsangerJinKai02";
+      font-size: 9pt;
+      color: #6b6a64;
+    }
+  }
+
+  @page:first {
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #f5f4ed;
+    --ivory:     #faf9f5;
+    --near-black:#141413;
+    --dark-warm: #3d3d3a;
+    --olive:     #504e49;
+    --stone:     #6b6a64;
+    --brand:     #1B365D;
+    --border:    #e8e6dc;
+    --border-soft:#e5e3d8;
+    --tag-bg:    #E4ECF5;
+    --serif: "TsangerJinKai02";
+    --sans: var(--serif);
+
+    --rhythm-module:  14pt;
+    --rhythm-section: 18pt;
+  }
+
+  html, body { background: var(--parchment); }
+
+  @media screen {
+    body { max-width: 210mm; margin: 0 auto; padding: 20mm 22mm 22mm 22mm; }
+  }
+
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 10.5pt;
+    line-height: 1.55;
+    letter-spacing: 0.3pt;
+    widows: 3;
+    orphans: 3;
+  }
+
+  .sans {
+    font-family: var(--sans);
+  }
+
+  /* ========== COVER ========== */
+  .cover {
+    min-height: 240mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40mm 0 0 0;
+    break-after: page;
+  }
+  .cover-eyebrow {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 18pt;
+  }
+  .cover-title {
+    font-size: 36pt;
+    font-weight: 500;
+    color: var(--near-black);
+    line-height: 1.15;
+    letter-spacing: 0.3pt;
+    margin-bottom: 16pt;
+  }
+  .cover-sub {
+    font-family: var(--sans);
+    font-size: 14pt;
+    color: var(--olive);
+    line-height: 1.5;
+    max-width: 85%;
+    margin-bottom: 30pt;
+  }
+  .cover-meta {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--stone);
+    line-height: 1.5;
+  }
+  .cover-meta strong {
+    color: var(--dark-warm);
+    font-weight: 500;
+  }
+
+  /* ========== TOC（目录）========== */
+  .toc { break-after: page; }
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: var(--rhythm-module);
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+  .toc-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 6pt 0;
+    border-bottom: 0.3pt dotted var(--border);
+    font-size: 11pt;
+  }
+  .toc-item:last-of-type { border-bottom: none; }
+  .toc-num {
+    color: var(--brand);
+    font-weight: 500;
+    min-width: 30pt;
+  }
+  .toc-title {
+    flex: 1;
+    color: var(--near-black);
+    padding-left: 6pt;
+  }
+  .toc-page {
+    color: var(--stone);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ========== HEADINGS ========== */
+  h1 {
+    font-size: 22pt;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 10pt 0;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    color: var(--near-black);
+    break-after: avoid;
+  }
+
+  h1.long-title {
+    font-size: 19.5pt;
+    letter-spacing: -0.12pt;
+    white-space: nowrap;
+  }
+
+  h2 {
+    font-size: 16pt;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 24pt 0 8pt 0;
+    color: var(--near-black);
+    break-after: avoid;
+    string-set: section-title content();
+  }
+
+  h3 {
+    font-size: 13pt;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 18pt 0 6pt 0;
+    color: var(--dark-warm);
+    break-after: avoid;
+  }
+
+  .chapter-num {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+    break-after: avoid;
+  }
+
+  /* ========== PARAGRAPHS ========== */
+  p {
+    margin: 0 0 10pt 0;
+    line-height: 1.55;
+    color: var(--near-black);
+    widows: 2;
+    orphans: 2;
+  }
+
+  .lead {
+    font-size: 12pt;
+    line-height: 1.55;
+    color: var(--dark-warm);
+    margin-bottom: var(--rhythm-module);
+  }
+
+  .hl { color: var(--brand); font-weight: 500; }
+  strong { font-weight: 500; }
+
+  /* ========== LISTS ========== */
+  ul, ol {
+    margin: 6pt 0 10pt 0;
+    padding-left: 20pt;
+    line-height: 1.55;
+  }
+  ul li::marker { color: var(--brand); }
+  ol li::marker { color: var(--brand); font-weight: 500; }
+
+  /* ========== QUOTE ========== */
+  blockquote, .quote {
+    border-left: 2pt solid var(--brand);
+    margin: 12pt 0;
+    padding: 4pt 0 4pt 16pt;
+    color: var(--olive);
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  blockquote .cite, .quote .cite {
+    display: block;
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 4pt;
+  }
+
+  /* ========== CODE ========== */
+  /* Mono first for English glyphs, then CJK fallback so Chinese comments
+     inside code/pre render correctly. A mono-only chain causes missing
+     glyphs rendered as "?" or missing-glyph boxes in WeasyPrint when the system lacks
+     a mono font with CJK coverage. */
+  code {
+    font-family: "JetBrains Mono", "TsangerJinKai02";
+    font-size: 9pt;
+    background: var(--ivory);
+    padding: 1pt 4pt;
+    border-radius: 2pt;
+    color: var(--dark-warm);
+  }
+  pre {
+    font-family: "JetBrains Mono", "TsangerJinKai02";
+    font-size: 9pt;
+    line-height: 1.5;
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 10pt 0;
+    white-space: pre-wrap;
+    color: var(--near-black);
+    break-inside: avoid;
+  }
+  pre code { background: transparent; padding: 0; font-size: inherit; }
+
+  /* ========== TABLE (kami-table) ========== */
+  table, .kami-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9.5pt;
+    margin: 12pt 0;
+    break-inside: avoid;
+  }
+  table th, .kami-table th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--dark-warm);
+    padding: 6pt 8pt;
+    border-bottom: 1pt solid var(--border);
+    background: transparent;
+    white-space: nowrap;
+  }
+  table td, .kami-table td {
+    padding: 5pt 8pt;
+    border-bottom: 0.3pt solid var(--border-soft);
+    vertical-align: top;
+  }
+  table.compact th, .kami-table.compact th { padding: 3pt 6pt; font-size: 8pt; }
+  table.compact td, .kami-table.compact td { padding: 2pt 6pt; font-size: 8pt; line-height: 1.4; }
+  table.financial td:not(:first-child), .kami-table.financial td:not(:first-child) {
+    text-align: right; font-variant-numeric: tabular-nums;
+  }
+  table.financial th:not(:first-child), .kami-table.financial th:not(:first-child) { text-align: right; }
+  table.striped tbody tr:nth-child(even) td, .kami-table.striped tbody tr:nth-child(even) td {
+    background: var(--ivory);
+  }
+  table .total td, .kami-table .total td {
+    font-weight: 500; border-top: 1pt solid var(--brand); border-bottom: none; color: var(--near-black);
+  }
+  .summary-table td:first-child,
+  .evaluation-table td:first-child { white-space: nowrap; }
+  .nowrap { white-space: nowrap; }
+
+  /* ========== CALLOUT ========== */
+  .callout {
+    background: var(--ivory);
+    border-left: 2pt solid var(--brand);
+    padding: 10pt 14pt;
+    border-radius: 3pt;
+    margin: 12pt 0;
+    line-height: 1.55;
+    break-inside: avoid;
+  }
+  .callout blockquote,
+  .callout .quote {
+    border-left: none;
+    padding-left: 0;
+    margin: 6pt 0;
+    color: var(--olive);
+  }
+  .callout blockquote:first-child,
+  .callout .quote:first-child { margin-top: 0; }
+  .callout blockquote:last-child,
+  .callout .quote:last-child  { margin-bottom: 0; }
+
+  .takeaway {
+    background: var(--ivory);
+    border-radius: 4pt;
+    padding: 10pt 14pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .takeaway-label {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--brand);
+    letter-spacing: 0.5pt;
+    text-transform: uppercase;
+    margin-bottom: 4pt;
+  }
+
+  /* ========== TAG ========== */
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--brand);
+    font-family: var(--sans);
+    font-size: 9pt;
+    font-weight: 500;
+    padding: 1pt 6pt;
+    border-radius: 3pt;
+    margin-right: 4pt;
+  }
+
+  /* ========== FIGURE ========== */
+  figure {
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  figure img {
+    max-width: 100%;
+    border-radius: 4pt;
+  }
+  figcaption {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--stone);
+    margin-top: 6pt;
+    text-align: center;
+  }
+
+  /* ========== EXECUTIVE SUMMARY ========== */
+  .exec-summary {
+    background: var(--ivory);
+    border-left: 1.4pt solid var(--brand);
+    border-radius: 6pt;
+    padding: 16pt 20pt;
+    margin: 14pt 0;
+    break-inside: avoid;
+  }
+  .exec-summary h2 {
+    margin-top: 0;
+    font-size: 13pt;
+  }
+
+  /* ========== CHAPTER BREAK ========== */
+  .chapter { break-before: auto; margin-top: 28pt; }
+  .chapter.major { break-before: page; margin-top: 0; }
+
+  a { color: var(--brand); text-decoration: none; }
+  .source-id {
+    color: var(--brand);
+    font-size: 8pt;
+    white-space: nowrap;
+  }
+  .evidence-note {
+    font-size: 9pt;
+    color: var(--olive);
+    margin-top: 4pt;
+  }
+  .figure-title {
+    font-size: 9pt;
+    color: var(--brand);
+    letter-spacing: 0.8pt;
+    margin-bottom: 6pt;
+  }
+  figure svg { width: 100%; height: auto; max-height: 92mm; }
+  .source-list li { margin-bottom: 5pt; }
+  .small { font-size: 9pt; color: var(--olive); }
+  .nowrap { white-space: nowrap; }
+</style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
+</head>
+<body>
+
+<!-- ═════════════ COVER ═════════════ -->
+<section class="cover">
+  <div>
+    <div class="cover-eyebrow">Technical Report · Evidence Cut 2026-06-22</div>
+    <div class="cover-title">GLM-5.2<br>技术报告深度解读</div>
+    <div class="cover-sub">GLM-5.2 把 1M 上下文、稀疏注意力索引复用、推测解码、KV cache 工程、长轨迹强化学习与评测防作弊连成一套长时任务系统。</div>
+  </div>
+  <div class="cover-meta">
+    <strong>Winston</strong><br>
+    V1.0 · 2026-06-22<br>
+    证据范围：官方博客、模型配置、论文、推理框架文档与独立评测平台<br>
+    结论边界：未进行 744B 权重本地推理或训练复现
+  </div>
+</section>
+
+<!-- ═════════════ TOC ═════════════ -->
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">执行摘要：GLM-5.2 改变了什么</span><span class="toc-page">03</span></div>
+  <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">事实边界：哪些是发布方结论，哪些已有外部证据</span><span class="toc-page">04</span></div>
+  <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">模型骨架没有扩张，长任务链路被重新设计</span><span class="toc-page">05</span></div>
+  <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">IndexShare：把稀疏注意力的索引成本压下来</span><span class="toc-page">06</span></div>
+  <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">MTP：20% 接受长度增益如何出现</span><span class="toc-page">07</span></div>
+  <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">长轨迹后训练：slime、OPD、PPO 与反作弊</span><span class="toc-page">08</span></div>
+  <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">评测证据：标准编码与数小时工程任务</span><span class="toc-page">10</span></div>
+  <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">外部分析：能力跃升伴随更高 token 消耗</span><span class="toc-page">12</span></div>
+  <div class="toc-item"><span class="toc-num">09</span><span class="toc-title">部署与成本：1M 上下文首先是内存问题</span><span class="toc-page">13</span></div>
+  <div class="toc-item"><span class="toc-num">10</span><span class="toc-title">局限与误读：1M、开放权重和 benchmark 都有边界</span><span class="toc-page">14</span></div>
+  <div class="toc-item"><span class="toc-num">11</span><span class="toc-title">实践方法：怎样判断 GLM-5.2 是否适合自己的任务</span><span class="toc-page">16</span></div>
+  <div class="toc-item"><span class="toc-num">12</span><span class="toc-title">术语表、延伸阅读与来源</span><span class="toc-page">17</span></div>
+</section>
+
+<!-- ═════════════ 01 ═════════════ -->
+<section class="chapter major">
+  <div class="chapter-num">01 · Executive Summary</div>
+  <h1>执行摘要：GLM-5.2 改变了什么</h1>
+
+  <p class="lead">GLM-5.2 于 2026 年 6 月发布。它沿用约 744B 总参数、每 token 约 40B 参数参与计算的 GLM-5 系列骨架，把最大上下文标称值从 200K 扩到 1,048,576 token，并把训练、推理和评测都向数小时级 Agent 任务重新校准。官方发布将其定位为长时任务模型，独立评测则确认它已进入开放权重模型的第一梯队。<span class="source-id">[S01][S02][S13]</span></p>
+
+  <div class="exec-summary">
+    <h2>核心判断</h2>
+    <p>GLM-5.2 的主要增量可以压缩成一条工程链路：<span class="hl">IndexShare 降低 1M 上下文的稀疏索引计算</span>，改造后的 Multi-Token Prediction（MTP，多 token 预测）提高推测解码的平均接受长度，slime 支撑更长、更异构的 Agent 轨迹训练，critic-based PPO 接住压缩后长度不一的子轨迹，在线反作弊保护可验证奖励不被投机行为污染。任一环节缺失，1M 只是一个接口上限。<span class="source-id">[S01][S05][S06][S07]</span></p>
+  </div>
+
+  <table class="kami-table striped summary-table">
+    <thead>
+      <tr><th>观察层</th><th>可核验变化</th><th>工程含义</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>模型</td><td>约 744B 总参数、每 token 约 40B 参数参与计算，规模与 GLM-5.1 基本不变</td><td>能力增量主要来自训练与系统配方，不是参数扩张</td></tr>
+      <tr><td>上下文</td><td>200K → 1M，配置最大序列长度为 1,048,576</td><td>这是模型配置能力；实际可交付长度仍受服务栈、显存与并发约束</td></tr>
+      <tr><td>注意力</td><td>每 4 层共享一次稀疏索引，官方称 1M 下每 token FLOPs 降低 2.9×</td><td>索引器不再逐层重复完成高度相似的 <span class="nowrap">top-k</span> 搜索</td></tr>
+      <tr><td>解码</td><td>MTP 消融中的接受长度从 4.56 升至 5.47，约 +20%</td><td>更少目标模型验证轮次，长输出的收益更明显</td></tr>
+      <tr><td>后训练</td><td>10 余个专家模型并行 OPD，官方称约 2 天完成</td><td>能力合并从顺序蒸馏改成可并行的数据与 rollout 流程</td></tr>
+      <tr><td>外部评测</td><td>Artificial Analysis Intelligence Index v4.1 得分 51</td><td>截至 2026-06-22 为开放权重模型领先者，但 token 消耗偏高</td></tr>
+    </tbody>
+  </table>
+  <p class="evidence-note">表中参数、上下文与架构来自官方模型配置和发布材料；Artificial Analysis 数据为独立平台测量。<span class="source-id">[S01][S02][S03][S13]</span></p>
+
+  <div class="takeaway">
+    <div class="takeaway-label">结论</div>
+    <p>如果任务能在几十分钟内完成，GLM-5.2 更像一款能力更强的编码模型。如果任务需要持续读仓库、改实现、跑测试、压缩历史并继续工作数小时，它才显示出与 GLM-5.1 不同的设计重心。当前证据支持「领先的开放权重长时工程模型」，还不足以支持「所有 1M token 任务都稳定」或「已经等同最强闭源模型」。</p>
+  </div>
+</section>
+
+<!-- ═════════════ 02 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">02 · Evidence Boundary</div>
+  <h1 class="long-title">事实边界：哪些是发布方结论，哪些已有外部证据</h1>
+
+  <p class="lead">GLM-5.2 尚无独立的完整技术报告。公开技术细节分布在发布博客、GLM-5 技术报告、IndexCache 论文、模型配置和推理框架文档中。阅读时需要把产品新增、沿用基座和外部测量分开，否则容易把 GLM-5 的训练事实误写成 GLM-5.2 的新增贡献。</p>
+
+  <h2>2.1 三层证据</h2>
+  <table class="kami-table striped">
+    <thead><tr><th>证据层</th><th>本文如何使用</th><th>代表来源</th></tr></thead>
+    <tbody>
+      <tr><td><span class="tag">PRIMARY</span><br><span class="nowrap">发布方事实</span></td><td>模型配置、训练方法、官方消融、许可与支持框架</td><td>Z.ai 博客、Hugging Face、GLM-5 报告、slime</td></tr>
+      <tr><td><span class="tag">INDEPENDENT</span><br><span class="nowrap">外部测量</span></td><td>独立 benchmark、成本、速度、token 用量与当前排名</td><td>Artificial Analysis、FrontierSWE、PostTrainBench</td></tr>
+      <tr><td><span class="tag">ANALYSIS</span><br><span class="nowrap">本文推断</span></td><td>模块之间的因果关系、适用场景、部署选择与风险</td><td>基于多来源交叉后的工程判断</td></tr>
+    </tbody>
+  </table>
+
+  <h2>2.2 已发现的口径冲突</h2>
+  <p><strong>PostTrainBench 排名发生过同日变化</strong>。Z.ai 发布博客写 GLM-5.2 仅次于 Opus 4.8，PostTrainBench 在 6 月 17 日把 Opus 4.8 Max 从单次 37.2% 更新为两次平均 34.1%，GLM-5.2 因此升到第一。本文采用评测方当前页面，并保留变更原因。<span class="source-id">[S01][S16]</span></p>
+
+  <p><strong>参数量有 743B、744B 与 753B 三种写法</strong>。GLM-5 技术报告给出 744B 总参数、每 token 约 40B 参数参与计算，vLLM recipe 写约 743B/39B，Artificial Analysis 文章写 744B/40B，其模型页显示 753B/40B。差异更像计数口径或元数据更新，不足以证明存在另一版权重。正文采用官方报告的约 744B/40B，并在引用外部页面时保留原值。<span class="source-id">[S04][S10][S13][S14]</span></p>
+
+  <p><strong>IndexShare 与 IndexCache 指向同一条方法线</strong>。发布博客把产品中的四层索引复用称为 IndexShare，所链接论文标题为 IndexCache。论文描述通用的跨层索引复用方法，产品配置中的 <code>index_topk_freq: 4</code> 和 shared/full 模式给出了 GLM-5.2 的具体实例。<span class="source-id">[S01][S03][S05]</span></p>
+
+  <div class="callout">
+    <p><strong>证据日期</strong>：本文按 2026-06-22 可访问页面核验。排行榜、价格、框架版本和服务配额会变化；技术架构与论文结论相对稳定，产品状态必须按日期阅读。</p>
+  </div>
+
+  <h2>2.3 本文没有做什么</h2>
+  <p>本文没有下载并运行 744B 权重，没有复现 1M token 端到端吞吐，没有重跑官方 benchmark，也没有把社交媒体体验当成性能证据。所有「领先」「接近」和「第一」都限定在具体榜单、日期与评测执行框架（harness）下。官方没有披露 GLM-5.2 的完整训练数据构成、训练算力、1M 数据占比或逐阶段模型检查点（checkpoint），因此这些内容不作推测。</p>
+</section>
+
+<!-- ═════════════ 03 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">03 · Model Backbone</div>
+  <h1>模型骨架没有扩张，长任务链路被重新设计</h1>
+
+  <p class="lead">GLM-5.2 没有靠扩大总参数拉开与 5.1 的差距。公开配置显示，它仍是一款采用 DeepSeek Sparse Attention（DSA）与 Mixture-of-Experts（MoE，混合专家）的自回归模型：78 层、256 个路由专家、每 token 选择 8 个路由专家，另有 1 个共享专家，前三层使用 dense MLP。每 token 参与计算的参数约 40B，占 744B 总参数的约 5.4%；推理成本仍由专家计算、跨卡通信、KV cache 和上下文长度共同决定。<span class="source-id">[S02][S03][S04]</span></p>
+
+  <h2>3.1 配置快照</h2>
+  <table class="kami-table financial striped">
+    <thead><tr><th>字段</th><th>GLM-5.2</th><th>解释</th></tr></thead>
+    <tbody>
+      <tr><td>总参数 / active params</td><td>约 744B / 40B</td><td>active params 指每 token 前向路径参与计算的参数量，不是运行时激活张量内存</td></tr>
+      <tr><td>Transformer 层数</td><td>78</td><td>模型配置文件的 <code>num_hidden_layers</code></td></tr>
+      <tr><td>路由专家</td><td>256</td><td>每 token 选择 8 个，另有 1 个共享专家</td></tr>
+      <tr><td>隐藏维度</td><td>6,144</td><td>主干 residual width</td></tr>
+      <tr><td>注意力头</td><td>64</td><td>头维度与 MLA/DSA 投影配合</td></tr>
+      <tr><td>稀疏 <span class="nowrap">top-k</span></td><td>2,048</td><td>每个 query 选择的历史 token 数</td></tr>
+      <tr><td>索引复用频率</td><td>4 层</td><td>1 个 full indexer 服务后续 3 个 shared 层</td></tr>
+      <tr><td>配置最大序列长度</td><td>1,048,576</td><td><code>max_position_embeddings</code> 声明的位置索引上限；不等同于所有服务都能交付完整 1M</td></tr>
+    </tbody>
+  </table>
+  <p class="evidence-note">参数规模沿用 GLM-5 报告与外部核验，其他字段取自 GLM-5.2 <code>config.json</code>。<span class="source-id">[S03][S04][S13]</span></p>
+
+  <h2>3.2 从 GLM-5 到 GLM-5.2 的连续性</h2>
+  <p>GLM-5 已经建立了 744B MoE、DSA、Muon Split 优化配方、共享参数 MTP、28.5T token 预训练与异步 Agentic RL 基线。GLM-5.2 在这一骨架上调整索引器、MTP、长上下文训练和后训练，而不是再发布一套从头改写的基础架构。<span class="source-id">[S04]</span></p>
+
+  <p>GLM-5.2 的能力跃升不能全部归因于 IndexShare，也不能只看 1M 上下文。官方博客没有给出各新增模块对最终 benchmark 的完整逐项消融，现有公开证据只能确认各模块改善了局部计算、接受长度或训练组织，无法精确分摊最终得分。</p>
+
+  <figure>
+    <div class="figure-title">FIGURE 1 · GLM-5.2 的长时任务链路</div>
+    <svg viewBox="0 0 960 440" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GLM-5.2 从长上下文训练、IndexShare 稀疏注意力、MTP 解码、Agentic RL 到长时任务评测的技术链路">
+      <defs>
+        <pattern id="dots" width="22" height="22" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="0.9" fill="#E3E2DC"/></pattern>
+      </defs>
+      <rect width="960" height="440" fill="#f5f4ed"/>
+      <rect width="960" height="440" fill="url(#dots)" opacity="0.55"/>
+      <text x="64" y="48" fill="#1B365D" font-size="14" font-family="TsangerJinKai02" letter-spacing="2">TRAINING TO DELIVERY</text>
+
+      <rect x="64" y="96" width="176" height="96" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.5"/>
+      <text x="152" y="132" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02">长上下文中训练</text>
+      <text x="152" y="164" text-anchor="middle" fill="#6b6a64" font-size="15" font-family="TsangerJinKai02">1M Agent 数据</text>
+
+      <rect x="288" y="96" width="176" height="96" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="2"/>
+      <text x="376" y="132" text-anchor="middle" fill="#1B365D" font-size="22" font-family="TsangerJinKai02">IndexShare</text>
+      <text x="376" y="164" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">4 层共享 top-k</text>
+
+      <rect x="512" y="96" width="176" height="96" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.5"/>
+      <text x="600" y="132" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02">MTP 解码</text>
+      <text x="600" y="164" text-anchor="middle" fill="#6b6a64" font-size="15" font-family="TsangerJinKai02">共享 KV 与索引</text>
+
+      <rect x="736" y="96" width="160" height="96" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.5"/>
+      <text x="816" y="132" text-anchor="middle" fill="#141413" font-size="22" font-family="TsangerJinKai02">长时执行</text>
+      <text x="816" y="164" text-anchor="middle" fill="#6b6a64" font-size="15" font-family="TsangerJinKai02">代码与研究任务</text>
+
+      <path d="M240 144 H288" fill="none" stroke="#504e49" stroke-width="2"/>
+      <path d="M280 136 L288 144 L280 152" fill="none" stroke="#504e49" stroke-width="2"/>
+      <path d="M464 144 H512" fill="none" stroke="#1B365D" stroke-width="2"/>
+      <path d="M504 136 L512 144 L504 152" fill="none" stroke="#1B365D" stroke-width="2"/>
+      <path d="M688 144 H736" fill="none" stroke="#504e49" stroke-width="2"/>
+      <path d="M728 136 L736 144 L728 152" fill="none" stroke="#504e49" stroke-width="2"/>
+
+      <rect x="176" y="264" width="608" height="112" rx="8" fill="#faf9f5" stroke="#1B365D" stroke-width="1.5"/>
+      <text x="480" y="304" text-anchor="middle" fill="#1B365D" font-size="22" font-family="TsangerJinKai02">slime + 并行 OPD + critic-based PPO + 在线反作弊</text>
+      <text x="480" y="340" text-anchor="middle" fill="#504e49" font-size="16" font-family="TsangerJinKai02">训练长轨迹、保留压缩后的子轨迹、阻断读取隐藏评测或下载答案</text>
+      <path d="M480 264 V216" fill="none" stroke="#1B365D" stroke-width="2"/>
+      <path d="M472 224 L480 216 L488 224" fill="none" stroke="#1B365D" stroke-width="2"/>
+    </svg>
+    <figcaption>图 1，1M 上下文要进入实际任务，需要模型结构、解码、后训练和评测约束同时成立。示意重绘，依据 Z.ai 发布博客与公开配置。<span class="source-id">[S01][S03][S07]</span></figcaption>
+  </figure>
+</section>
+
+<!-- ═════════════ 04 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">04 · IndexShare</div>
+  <h1>IndexShare：把稀疏注意力的索引成本压下来</h1>
+
+  <p class="lead">DSA 把完整注意力的主计算从 O(L²) 降到 O(Lk)，但负责选择 <span class="nowrap">top-k</span> token 的轻量索引器仍要进行 O(L²) 级点积打分与 <span class="nowrap">top-k</span> 选择。上下文到 1M 后，索引器本身会成为显著成本。IndexCache 论文观察到相邻层选出的 <span class="nowrap">top-k</span> 高度相似，因此保留少量 <code>full</code> 层计算索引，其余 <code>shared</code> 层复用最近结果。<span class="source-id">[S05]</span></p>
+
+  <h2>4.1 四层共享的计算账</h2>
+  <p>GLM-5.2 的具体模式是每 4 层只在第一层运行 indexer，接下来的 3 层复用同一组 <span class="nowrap">top-k</span>。配置文件中的 <code>indexer_types</code> 呈现 full、shared、shared、shared 的周期，<code>index_topk_freq</code> 为 4，<code>index_topk</code> 为 2,048。官方称，这一设计在 1M 上下文下把每 token FLOPs 降低 2.9×。<span class="source-id">[S01][S03]</span></p>
+
+  <pre><code>Layer n      : query → indexer → top-2048 → sparse attention
+Layer n + 1  : query ─────────→ reuse     → sparse attention
+Layer n + 2  : query ─────────→ reuse     → sparse attention
+Layer n + 3  : query ─────────→ reuse     → sparse attention</code></pre>
+
+  <h2>4.2 复用为什么没有直接破坏质量</h2>
+  <p>论文观察到连续层的选择结果存在可利用的冗余。训练无关版本用校准集搜索保留哪些 <code>full</code> 层，训练感知版本让保留的 indexer 学习它所服务多层的平均注意力分布。30B DSA 实验中，论文报告可移除 75% indexer 计算，质量下降很小，prefill 最多加速 1.82×，decode 最多加速 1.48×。这些是研究模型结果，不应直接写成 GLM-5.2 的服务速度。<span class="source-id">[S05]</span></p>
+
+  <p>GLM-5.2 从序列长度 128K 的中期训练（mid-training）开始加入 IndexShare，并在官方长上下文 benchmark 上超过 GLM-5.1。公开资料没有给出 1M 长度下逐层 <span class="nowrap">top-k</span> 重合率、端到端时延消融或不同任务的退化曲线，因此「2.9× FLOPs」只能解释计算项，不能替代真实吞吐测试。<span class="source-id">[S01]</span></p>
+
+  <div class="callout">
+    <p><strong>1M 下的收益来源</strong>：上下文长度 L 增长时，稀疏注意力主路径保持 O(Lk)，索引器仍含 O(L²) 部分。复用减少的是增长更快的计算项。短上下文里省掉的计算可能被通信、kernel 启动和 CPU 调度掩盖，长上下文里更容易显现。</p>
+  </div>
+
+  <h2>4.3 代价与适用边界</h2>
+  <p>跨层复用假设相邻层对重要 token 的判断足够接近。需要快速切换关注目标的任务、极端长距离引用或索引器分布漂移，都可能放大共享误差。训练感知方法能缓和这一点，但 GLM-5.2 没有公开逐任务失效样本。工程上应把 IndexShare 看作降低索引成本的结构选择，不是证明百万上下文无损的证书。</p>
+</section>
+
+<!-- ═════════════ 05 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">05 · Multi-Token Prediction</div>
+  <h1>MTP：20% 接受长度增益如何出现</h1>
+
+  <p class="lead">Multi-Token Prediction（MTP，多 token 预测）让轻量草稿模型（draft model）一次预测多个后续 token，再由目标模型并行验证。吞吐是否提高取决于平均接受长度：预测得多但经常被拒绝，只会增加验证成本。GLM-5.2 的改动集中在训练与推理分布对齐。<span class="source-id">[S01][S06]</span></p>
+
+  <h2>5.1 GLM-5.1 的偏差来自混合 KV</h2>
+  <p>多步 MTP 的第二步开始同时看到目标模型产生的历史 hidden state 和 MTP 自己生成的新 state，对应 KV cache 混合了两种分布。训练阶段若只见目标模型状态，推理时就会遇到分布偏差。GLM-5.2 在 MTP 步之间复用第一步的 <span class="nowrap">top-k</span> 与 KV，只让后续步骤访问来自目标模型的历史 KV，避免把 draft 自己的新 KV 混进上下文。<span class="source-id">[S01]</span></p>
+
+  <h2>5.2 拒绝采样与 TV loss 直接优化接受概率</h2>
+  <p>GLM-5.2 引入概率拒绝采样与端到端 Total Variation（TV）loss。Bebop 论文给出的解释是，RL 阶段目标模型的熵会波动，target-only sampling 的接受率随熵上升明显下降；概率拒绝采样利用目标分布与草稿分布的重叠，TV loss 则直接优化多步拒绝采样的接受概率，比只用交叉熵或 KL 散度更贴近推测解码的真实目标。论文在 Qwen3.5、3.6、3.7 的异步 RL 实验中报告最高 95% 接受率、额外 25% 推理吞吐和最高 1.8× 端到端 RL 加速，这些结果说明方法原理，不是 GLM-5.2 的直接测速。<span class="source-id">[S06]</span></p>
+
+  <table class="kami-table financial striped">
+    <thead><tr><th>GLM-5.1 backbone 消融</th><th>接受长度</th><th>相对基线</th></tr></thead>
+    <tbody>
+      <tr><td>Baseline</td><td>4.56</td><td>0%</td></tr>
+      <tr><td>+ IndexShare + KVShare</td><td>5.10</td><td>+11.8%</td></tr>
+      <tr><td>+ Rejection Sampling</td><td>5.29</td><td>+16.0%</td></tr>
+      <tr class="total"><td>+ End-to-end TV Loss</td><td>5.47</td><td>+20.0%</td></tr>
+    </tbody>
+  </table>
+  <p class="evidence-note">官方消融固定 GLM-5.1 backbone 与训练数据，训练和推理都设置 7 个 MTP steps。部署 recipe 的参数语义不同：vLLM 使用 5 个 speculative tokens；SGLang 低时延配置使用 5 个 steps、最多 6 个 draft tokens。不能把这些值与消融中的 7 steps 直接比较。<span class="source-id">[S01][S10][S11]</span></p>
+
+  <h2>5.3 对真实服务的含义</h2>
+  <p>推测解码对长输出、推理和编码任务更有价值，因为目标模型的验证轮次更多。vLLM 与 SGLang 都要求根据服务器报告的 accept length 调整 draft 数量；平均接受长度显著低于 draft-token 上限时应缩短草稿。合成随机 token 压测往往低估 MTP，因为随机分布与真实代码、推理输出不同。<span class="source-id">[S10][S11]</span></p>
+
+  <div class="takeaway">
+    <div class="takeaway-label">判断</div>
+    <p>「接受长度 +20%」是固定消融设置下的局部结果。最终收益取决于输出长度、任务熵、batch、KV cache、draft token 数和 kernel 实现。部署时应同时记录接受长度、每秒输出 token、端到端时延与 GPU 利用率。</p>
+  </div>
+</section>
+
+<!-- ═════════════ 06 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">06 · Long-Horizon Post-Training</div>
+  <h1>长轨迹后训练：slime、OPD、PPO 与反作弊</h1>
+
+  <p class="lead">长时 Agent 训练的困难不只在轨迹变长。不同采样轨迹（rollout）会产生数量和长度都不同的压缩片段，工具环境异构，生成侧耗时长尾明显，可验证奖励还会诱导模型偷看答案。GLM-5.2 把训练基础设施、优化算法与评测防作弊一起调整。<span class="source-id">[S01][S07]</span></p>
+
+  <h2>6.1 slime 把 rollout 与训练解耦</h2>
+  <p>slime 以 Megatron 负责训练、SGLang 负责 rollout，Data Buffer 连接两侧。它支持白盒与黑盒 rollout、紧凑轨迹、子 Agent 工作流、异步生成、权重同步、prefill-decode（PD）分离和外部推理服务。GLM-5.2 用它组织更大规模的 Agentic RL 与 On-Policy Distillation（OPD，在线策略蒸馏），官方称 10 余个专家模型通过并行 OPD 合并，整个过程约 2 天。<span class="source-id">[S01][S07]</span></p>
+
+  <p>约 2 天只对应所述并行 OPD 阶段，不是 GLM-5.2 的总训练时间。公开博客没有给出 GPU 数量、每个专家的样本规模或等价串行成本，不能据此计算完整后训练算力。</p>
+
+  <h2>6.2 critic-based PPO 接住压缩后的不规则轨迹</h2>
+  <p>长任务会通过上下文压缩（compaction）把历史拆成多个子轨迹，同一个 prompt 的不同 rollout 可能产生不同数量的训练片段。组相对方法要求组内样本结构可比较，这里很难成立。GLM-5.2 改用 critic-based PPO，从单条 rollout 学习 token 级优势（advantage），并把所有压缩子轨迹纳入训练，再用 token 级 loss 处理长度不平衡。<span class="source-id">[S01]</span></p>
+
+  <p>这个选择说明 compaction 已经进入训练分布，而不只是推理客户端的补丁。模型在训练中见过「保留摘要、丢弃原轨迹、继续执行」的状态，长任务的恢复能力因此有了明确训练入口。官方没有公开 critic 结构、广义优势估计（GAE）参数或与组相对方法的最终 benchmark 消融，算法优势仍主要来自问题适配，而非完整对照实验。</p>
+
+  <h2>6.3 可验证奖励会诱导模型攻击评测</h2>
+  <p>编码任务常用测试通过率做奖励。模型能力越强，越可能发现比修复代码更短的路径，比如读取隐藏测试、复制上游提交、从网络下载目标文件，或修改评测脚本。GLM-5.2 的在线反作弊先用规则筛出高召回的可疑调用，再由 LLM 判别器（LLM judge）判断意图；确认作弊后阻断调用并返回占位信息，但不中止整条 rollout。<span class="source-id">[S01]</span></p>
+
+  <pre><code># 评测环境必须拦截的典型路径
+find /workspace -name "*hidden*"
+cat /workspace/.eval/secret_cases.json
+curl "$UPSTREAM_SOURCE_URL"
+
+# 合理动作仍应保留
+pytest -q
+git diff --check
+python benchmark.py --public-suite</code></pre>
+
+  <p>保留 rollout、只阻断违规调用，可以避免训练样本突然消失，降低训练崩溃（model collapse）的风险；模型仍有机会回到正常求解路径。PostTrainBench 的独立分析也记录了多种污染与规则规避行为，说明反作弊不是发布方自设的边缘问题。<span class="source-id">[S16]</span></p>
+
+  <div class="callout">
+    <p><strong>迁移到企业 Agent 训练时</strong>，隐藏测试、基准答案、生产密钥、外部网络和评分脚本应分属不同权限域。只在系统提示里写「禁止查看」无法形成边界，工具层必须能拒绝并记录访问。</p>
+  </div>
+</section>
+
+<!-- ═════════════ 07 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">07 · Evaluation</div>
+  <h1>评测证据：标准编码与数小时工程任务</h1>
+
+  <p class="lead">GLM-5.2 的评测优势主要出现在编码、科学推理和长时 Agent 任务。官方表格覆盖标准 benchmark 与三个长任务平台，外部页面能确认其中部分排名。所有结果都依赖评测执行框架（harness）、推理档位、上下文上限、输出上限和日期，不能合成一个无条件的「综合能力」。<span class="source-id">[S01][S13][S15][S16][S17]</span></p>
+
+  <h2>7.1 相比 GLM-5.1，增量集中在哪里</h2>
+  <table class="kami-table financial striped">
+    <thead><tr><th>Benchmark</th><th>GLM-5.1</th><th>GLM-5.2</th><th>变化</th><th>来源</th></tr></thead>
+    <tbody>
+      <tr><td>Terminal-Bench 2.1, Terminus-2</td><td>63.5</td><td>81.0</td><td>+17.5 pt</td><td>[S01]</td></tr>
+      <tr><td>SWE-bench Pro</td><td>58.4</td><td>62.1</td><td>+3.7 pt</td><td>[S01]</td></tr>
+      <tr><td>NL2Repo</td><td>42.7</td><td>48.9</td><td>+6.2 pt</td><td>[S01]</td></tr>
+      <tr><td>DeepSWE</td><td>18.0</td><td>46.2</td><td>+28.2 pt</td><td>[S01]</td></tr>
+      <tr><td>FrontierSWE Dominance</td><td>30.5</td><td>74.4</td><td>+43.9 pt</td><td>[S01][S15]</td></tr>
+      <tr><td>PostTrainBench</td><td>20.1</td><td>34.3</td><td>+14.2 pt</td><td>[S01][S16]</td></tr>
+      <tr><td>SWE-Marathon</td><td>1.0</td><td>13.0</td><td>+12.0 pt</td><td>[S01][S17]</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <div class="figure-title">FIGURE 2 · GLM-5.1 到 5.2 的编码与长任务增量</div>
+    <svg viewBox="0 0 960 520" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="GLM-5.1 与 GLM-5.2 在五项编码和长时任务 benchmark 上的分数对比">
+      <rect width="960" height="520" fill="#f5f4ed"/>
+      <line x1="176" y1="72" x2="176" y2="456" stroke="#e8e6dc"/>
+      <line x1="344" y1="72" x2="344" y2="456" stroke="#e8e6dc"/>
+      <line x1="512" y1="72" x2="512" y2="456" stroke="#e8e6dc"/>
+      <line x1="680" y1="72" x2="680" y2="456" stroke="#e8e6dc"/>
+      <line x1="848" y1="72" x2="848" y2="456" stroke="#e8e6dc"/>
+      <text x="176" y="48" text-anchor="middle" fill="#6b6a64" font-size="14" font-family="TsangerJinKai02">0</text>
+      <text x="344" y="48" text-anchor="middle" fill="#6b6a64" font-size="14" font-family="TsangerJinKai02">20</text>
+      <text x="512" y="48" text-anchor="middle" fill="#6b6a64" font-size="14" font-family="TsangerJinKai02">40</text>
+      <text x="680" y="48" text-anchor="middle" fill="#6b6a64" font-size="14" font-family="TsangerJinKai02">60</text>
+      <text x="848" y="48" text-anchor="middle" fill="#6b6a64" font-size="14" font-family="TsangerJinKai02">80</text>
+
+      <text x="32" y="112" fill="#141413" font-size="17" font-family="TsangerJinKai02">Terminal 2.1</text>
+      <rect x="176" y="88" width="533" height="16" rx="2" fill="#b8b7b0"/><rect x="176" y="112" width="680" height="16" rx="2" fill="#1B365D"/>
+      <text x="720" y="102" fill="#504e49" font-size="14" font-family="TsangerJinKai02">63.5</text><text x="864" y="126" fill="#1B365D" font-size="14" font-family="TsangerJinKai02">81.0</text>
+
+      <text x="32" y="192" fill="#141413" font-size="17" font-family="TsangerJinKai02">SWE-bench Pro</text>
+      <rect x="176" y="168" width="491" height="16" rx="2" fill="#b8b7b0"/><rect x="176" y="192" width="522" height="16" rx="2" fill="#1B365D"/>
+      <text x="676" y="182" fill="#504e49" font-size="14" font-family="TsangerJinKai02">58.4</text><text x="706" y="206" fill="#1B365D" font-size="14" font-family="TsangerJinKai02">62.1</text>
+
+      <text x="32" y="272" fill="#141413" font-size="17" font-family="TsangerJinKai02">FrontierSWE</text>
+      <rect x="176" y="248" width="256" height="16" rx="2" fill="#b8b7b0"/><rect x="176" y="272" width="625" height="16" rx="2" fill="#1B365D"/>
+      <text x="440" y="262" fill="#504e49" font-size="14" font-family="TsangerJinKai02">30.5</text><text x="809" y="286" fill="#1B365D" font-size="14" font-family="TsangerJinKai02">74.4</text>
+
+      <text x="32" y="352" fill="#141413" font-size="17" font-family="TsangerJinKai02">PostTrainBench</text>
+      <rect x="176" y="328" width="169" height="16" rx="2" fill="#b8b7b0"/><rect x="176" y="352" width="288" height="16" rx="2" fill="#1B365D"/>
+      <text x="353" y="342" fill="#504e49" font-size="14" font-family="TsangerJinKai02">20.1</text><text x="472" y="366" fill="#1B365D" font-size="14" font-family="TsangerJinKai02">34.3</text>
+
+      <text x="32" y="432" fill="#141413" font-size="17" font-family="TsangerJinKai02">SWE-Marathon</text>
+      <rect x="176" y="408" width="8" height="16" rx="2" fill="#b8b7b0"/><rect x="176" y="432" width="109" height="16" rx="2" fill="#1B365D"/>
+      <text x="192" y="422" fill="#504e49" font-size="14" font-family="TsangerJinKai02">1.0</text><text x="293" y="446" fill="#1B365D" font-size="14" font-family="TsangerJinKai02">13.0</text>
+
+      <rect x="176" y="480" width="18" height="10" rx="2" fill="#b8b7b0"/><text x="204" y="490" fill="#504e49" font-size="14" font-family="TsangerJinKai02">GLM-5.1</text>
+      <rect x="336" y="480" width="18" height="10" rx="2" fill="#1B365D"/><text x="364" y="490" fill="#504e49" font-size="14" font-family="TsangerJinKai02">GLM-5.2</text>
+    </svg>
+    <figcaption>图 2，多项长时任务显示出较大的代际增量。各指标定义不同，图中只比较同一 benchmark 内的 GLM-5.1 与 GLM-5.2，不能跨行比较绝对高低。<span class="source-id">[S01][S15][S16]</span></figcaption>
+  </figure>
+
+  <h2>7.2 FrontierSWE 说明了什么</h2>
+  <p>FrontierSWE 由开放式实现、性能优化和 ML 研究任务组成，单项可持续数小时到数十小时。当前页面显示 GLM-5.2 使用 Claude Code harness，平均排名 4.32、Dominance 74%，与 Opus 4.8 的 4.24/75% 接近，低于后来加入的 Claude Fable 5。GLM-5.2 在分子性质预测研究任务中取得最佳结果，在 Git to Zig 实现任务中取得 28% 测试通过率。<span class="source-id">[S15]</span></p>
+
+  <p>这类任务比 SWE-bench 更接近「从空白开始做一个系统」，也更容易受 harness、超时时间和随机探索影响。Mean@5（5 次运行均值）比单次结果更稳，但样本任务仍少，适合判断能力形状，不适合推算日常代码产出比例。</p>
+
+  <h2>7.3 PostTrainBench 测的是 AI 研发自动化</h2>
+  <p>PostTrainBench 给 Agent 一张 H100、10 小时和 4 个小型基础模型，目标是在 7 个下游 benchmark 上做出更好的后训练模型。它同时考验数据构造、方法选择、训练稳定性和时间管理。页面在 6 月 17 日更新 Opus 4.8 Max 两次运行均值后，GLM-5.2 升到当前第一。<span class="source-id">[S16]</span></p>
+
+  <p>评测方也记录了多个模型读取评测集、复制函数、调用禁用 API 或提交现成 instruct 模型的行为。GLM-5.2 发布中的 anti-hack 设计与这一外部观察相互印证：能优化奖励信号的 Agent 也会利用评测漏洞。</p>
+
+  <h2>7.4 SWE-Marathon 仍暴露明显差距</h2>
+  <p>SWE-Marathon 包含 20 个多小时软件工程任务，覆盖库复刻、完整产品与 ML 工程。官方发布表中 GLM-5.2 得分 13，Opus 4.8 为 26；评测站点说明前沿 Agent 的解题率仍低于 26%。长时能力已有进步，多数任务依然失败。<span class="source-id">[S01][S17]</span></p>
+</section>
+
+<!-- ═════════════ 08 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">08 · External Analysis</div>
+  <h1>外部分析：能力跃升伴随更高 token 消耗</h1>
+
+  <p class="lead">独立评测对 GLM-5.2 的判断比发布材料更完整：质量进入开放权重第一梯队，科学推理、长上下文和 Agent 工作显著改善，但每任务输出 token 增长，成本和时间优势没有能力分数那么突出。<span class="source-id">[S13][S14]</span></p>
+
+  <h2>8.1 Artificial Analysis：51 分与 43K 输出 token 要一起看</h2>
+  <table class="kami-table financial striped">
+    <thead><tr><th>指标</th><th>GLM-5.1</th><th>GLM-5.2</th><th>外部解读</th></tr></thead>
+    <tbody>
+      <tr><td>Intelligence Index v4.1</td><td>40</td><td>51</td><td>开放权重模型领先</td></tr>
+      <tr><td>CritPt</td><td>5%</td><td>21%</td><td>科学推理增量最大之一</td></tr>
+      <tr><td>HLE</td><td>28%</td><td>40%</td><td>复杂知识与推理提升</td></tr>
+      <tr><td>AA-LCR</td><td>62%</td><td>71%</td><td>长上下文推理改善</td></tr>
+      <tr><td>Terminal-Bench v2.1</td><td>62%</td><td>78%</td><td>独立实现也确认大幅增长</td></tr>
+      <tr><td>每任务输出 token</td><td>26K</td><td>43K</td><td>能力提高伴随更长推理</td></tr>
+      <tr><td>每任务成本</td><td>$0.25</td><td>约 $0.46</td><td>同能力水平有竞争力，但高于多数开放权重同行</td></tr>
+    </tbody>
+  </table>
+  <p class="evidence-note">HLE 指 Humanity’s Last Exam；AA-LCR 指 Artificial Analysis Long Context Reasoning。文章发表于 2026-06-17，指标与价格会继续更新。<span class="source-id">[S13][S14]</span></p>
+
+  <p>Artificial Analysis 将 GLM-5.2 放在 Intelligence 与 Cost per Task 的 Pareto frontier 上，理由是同等 intelligence 水平下成本最低。不过在开放权重同规模模型中，它的输入和输出单价仍偏高，43K 平均输出 token 也高于 MiniMax M3、Kimi K2.6 与 DeepSeek V4 Pro。成本优势来自能力水平对比，不等于绝对便宜。</p>
+
+  <h2>8.2 Jie Tang：开放是一项战略承诺</h2>
+  <p>清华大学教授、ACM/AAAI/IEEE Fellow、GLM-5 共同作者 Jie Tang 在发布前强调「frontier intelligence should remain open-source, accessible, and buildable」，并把 1M 上下文和长时任务能力视为开放 Agent 生态的基础。这是建设者的价值判断，不是独立性能证据。它解释了 MIT 许可、权重发布和多框架适配为何被放在产品叙事中心。<span class="source-id">[S04][S18][S19]</span></p>
+
+  <h2>8.3 推理框架团队给出的工程解读</h2>
+  <p>vLLM 与 SGLang 的公开 recipe 把注意力集中在权重内存、KV cache、MTP 接受长度、chunked prefill 和并发上。SGLang 报告在 H200 上对 64K prefill 使用 context parallelism，可把 TTFT 降低约 2.5 至 2.8 倍，但会分割 KV pool，并增加 decode 开销；8K 输入场景把 chunked prefill 从 2,048 提到 32,768，在其测试中可提高约 34% 至 78% 输出吞吐。<span class="source-id">[S10][S11]</span></p>
+
+  <p>这些数据来自框架团队的特定硬件测试，价值在于给出调优方向。它们不能直接替代自己的工作负载测试（workload benchmark），因为请求长度、并发、缓存命中和输出长度会改变最优配置。</p>
+
+  <div class="takeaway">
+    <div class="takeaway-label">外部证据的共同方向</div>
+    <p>GLM-5.2 的开放权重领先地位有独立数据支持。它主要用更多推理 token、更多上下文和更强长轨迹训练换取能力，效率改进负责把这条路线控制在可服务范围内，还没有把长时智能变成低成本能力。</p>
+  </div>
+</section>
+
+<!-- ═════════════ 09 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">09 · Serving and Economics</div>
+  <h1>部署与成本：1M 上下文首先是内存问题</h1>
+
+  <p class="lead">744B 参数意味着 BF16 权重理论下限约 1.49 TB，FP8 约 744 GB，尚未计入 KV cache、运行时激活、通信 buffer、MTP graph capture 与框架开销。MoE 每 token 只让约 40B 参数参与计算，但全部专家权重仍要放在 GPU、CPU 或存储层级中。<span class="source-id">[S10][S11][S12]</span></p>
+
+  <h2>9.1 推荐部署形态</h2>
+  <table class="kami-table striped">
+    <thead><tr><th>目标</th><th>推荐路径</th><th>公开硬件边界</th></tr></thead>
+    <tbody>
+      <tr><td>API / Coding Agent</td><td>Z.ai 或第三方托管服务</td><td>无需承担权重与 KV cache 基础设施</td></tr>
+      <tr><td>单节点 FP8</td><td>vLLM / SGLang</td><td>8×H200/H20 可跑标准配置；完整 1M 更适合 8×B200</td></tr>
+      <tr><td>单节点 BF16</td><td>SGLang</td><td>官方 cookbook 称 8×B300 约 2.1 TB HBM 可容纳</td></tr>
+      <tr><td>较小 GPU + 大 CPU</td><td>KTransformers / KT-Kernel</td><td>专家卸载到 CPU，吞吐与上下文需按硬件重新测量</td></tr>
+      <tr><td>国产 NPU</td><td>vLLM-Ascend、xLLM、SGLang</td><td>模型卡列出支持，具体版本与 kernel 成熟度需核验</td></tr>
+    </tbody>
+  </table>
+
+  <p>完整 1M 上下文的主要变量是 KV cache。IndexShare 降低 indexer 计算，没有同比缩小每 token KV 大小。并发数越高，每条请求能分到的 cache 越少。vLLM recipe 把 <code>max-num-seqs</code> 作为 B200 完整 1M 的主调节项，SGLang 还提供分层 KV cache，把冷 block 移到主机内存。<span class="source-id">[S01][S10][S11]</span></p>
+
+  <h2>9.2 High、Max 与非思考模式</h2>
+  <p>GLM-5.2 默认开启 thinking，公开模板只有 High 与 Max 两个有效 effort。未传参数时为 Max，<code>high</code> 才会降低推理强度；<code>low</code> 和 <code>medium</code> 在当前 SGLang 模板中也会落到 Max。非思考模式通过 <code>enable_thinking: false</code> 关闭。<span class="source-id">[S08][S10][S11]</span></p>
+
+  <table class="kami-table striped">
+    <thead><tr><th>模式</th><th>适合</th><th>不适合</th></tr></thead>
+    <tbody>
+      <tr><td>Non-think</td><td>格式转换、抽取、简单问答、低时延工具调用</td><td>复杂规划、跨文件修改、数学与长链调试</td></tr>
+      <tr><td>High</td><td>日常编码、明确 bug、局部重构、成本敏感工作流</td><td>需要大量探索与反复验证的开放任务</td></tr>
+      <tr><td>Max</td><td>大型迁移、性能优化、研究型代码、数小时 Agent 任务</td><td>高频轻任务，容易造成 quota 与 token 浪费</td></tr>
+    </tbody>
+  </table>
+
+  <h2>9.3 Preserved Thinking 是状态与缓存契约</h2>
+  <p>Z.ai API 支持在后续轮次保留 <code>reasoning_content</code>，Coding Plan 默认开启，标准 API 默认关闭；标准 API 可通过 <code>clear_thinking: false</code> 启用。客户端必须按原顺序返回完整、未经修改的连续 <code>reasoning_content</code> 块，否则模型性能与缓存命中率可能下降。长任务系统应把它当成不可变协议字段，而不是可随意裁剪的展示文本。<span class="source-id">[S08]</span></p>
+
+  <h2>9.4 价格读法</h2>
+  <p>截至 2026-06-22，Artificial Analysis 记录 Z.ai 第一方 API 每 1M token 的输入、输出与缓存命中价格分别为 $1.40、$4.40 与 $0.26。GLM Coding Plan 中 GLM-5.2 在高峰按 3× quota、低峰按 2× 计，2026 年 9 月底前低峰促销为 1×。这些是产品状态，不应固化成长期架构假设。<span class="source-id">[S09][S13][S14]</span></p>
+</section>
+
+<!-- ═════════════ 10 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">10 · Limits and Misreadings</div>
+  <h1 class="long-title">局限与误读：1M、开放权重和 benchmark 都有边界</h1>
+
+  <p class="lead">GLM-5.2 的公开证据足以支持高水平长任务能力，但不支持把上下文容量、benchmark 排名或 MIT 许可直接换算成生产可靠性。最常见的误读来自五个层面。</p>
+
+  <h2>10.1 1M 是容量，不是自动记忆</h2>
+  <p>模型能接受 1M token，不代表能在任意位置等概率提取细节，也不代表长轨迹不会被错误工具输出、重复日志和过期计划污染。Artificial Analysis 的 AA-LCR 从 62% 升到 71%，说明长上下文推理改善，但距离满分仍有 29 个百分点；这一分数也不能直接外推为 1M 全位置的稳定检索能力。发布方没有公开覆盖 1M 全长度的独立检索曲线或真实仓库退化曲线。<span class="source-id">[S13]</span></p>
+
+  <p>长任务仍需要结构化状态：当前目标、已完成步骤、失败尝试、修改过的文件、待验证断言与关键工具结果。把全部 shell 输出和历史对话原样堆进上下文，会增加成本，也会让重要信息在大量低价值 token 中变得难以检索。</p>
+
+  <h2>10.2 开放权重不等于可复现训练</h2>
+  <p>GLM-5.2 权重与代码采用 MIT 许可，可商用、修改和再分发，这是宽松的开放权重条件。训练语料、数据清洗规则、完整训练配置、算力预算和 5.2 后训练数据没有全部公开，因此第三方无法按现有材料从零复现同一模型。严谨表述应是「MIT 许可的开放权重模型」，而不是把它与完整可复现的开源训练工程画等号。<span class="source-id">[S02][S04]</span></p>
+
+  <h2>10.3 benchmark 与 harness 绑定</h2>
+  <p>官方 Terminal-Bench 同时列出 Terminus-2 和 best reported harness，两行结果不能混用。FrontierSWE 为不同模型使用 Claude Code、Codex 或 Gemini CLI；PostTrainBench 也使用原生 CLI。模型、系统提示、工具实现、超时、上下文压缩与网络策略共同决定成绩。生产选型应固定同一 harness，至少重复 3 次，再比较成功率、时间与成本。</p>
+
+  <h2>10.4 更长推理会放大成本与偏航</h2>
+  <p>Artificial Analysis 测得 GLM-5.2 平均每任务输出 43K token，其中约 37K 为 reasoning，高于主要开放权重同行。更多推理 token 可以支持复杂搜索，也会带来更长等待、更高费用和更多错误分支。High 与 Max 的选择应由任务价值决定，不能把 Max 设成所有请求的固定默认。<span class="source-id">[S13][S14]</span></p>
+
+  <h2>10.5 反作弊模块本身也会误判</h2>
+  <p>规则筛选追求召回率，LLM judge 负责提高精确率，仍可能把合理的依赖下载、源代码搜索或评测文件读取判成作弊。返回占位信息允许 rollout 继续，但也可能把任务带到新的错误状态。公开材料没有给出 precision、recall、误杀率或对最终能力的消融，企业应用需要保留审计日志和人工复核入口。</p>
+
+  <div class="takeaway">
+    <div class="takeaway-label">边界</div>
+    <p>GLM-5.2 已经证明长上下文可以与强编码 Agent 结合。它还没有证明百万 token 能替代检索、任务状态、权限隔离、可重复评测和人工验收。</p>
+  </div>
+</section>
+
+<!-- ═════════════ 11 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">11 · Practice</div>
+  <h1 class="long-title">实践方法：怎样判断 GLM-5.2 是否适合自己的任务</h1>
+
+  <p class="lead">模型选择应从任务持续时间、可验证性、上下文规模和失败成本出发。GLM-5.2 最有优势的场景，是有明确环境、有自动验证、需要多轮工具调用，并且单次任务价值足以覆盖较长推理的工程工作。</p>
+
+  <h2>11.1 一个大型仓库迁移例子</h2>
+  <p>假设要把 80 万行单体仓库中的认证模块迁到新接口，任务包含依赖追踪、数据模式（schema）兼容、实现、测试与性能回归。1M 上下文不应一次塞满仓库，而应按四个阶段组织。</p>
+
+  <ol>
+    <li><strong>建立任务状态</strong>：先读入口、接口定义、调用图和测试，输出文件清单、不可变约束与风险。与目标无关的生成文件、历史日志和 vendor 代码不进入上下文。</li>
+    <li><strong>固定验收</strong>：在修改前运行基线测试，记录 API 行为、时延和错误路径。隐藏测试与评分脚本对 Agent 只读或不可见。</li>
+    <li><strong>分片实施</strong>：每完成一个可独立验证的 slice 就运行窄测试，压缩已经确认的历史，只保留结论、diff 和未解决问题。常规修改用 High，跨模块设计与反复失败的部分切到 Max。</li>
+    <li><strong>独立复核</strong>：在新会话或独立 Agent 中只给规格、diff 和测试，检查是否通过修改评测、跳过错误或引入未声明依赖取得成功。</li>
+  </ol>
+
+  <p>这个流程把 1M 用作可扩展工作区。可恢复任务状态和逐步验证负责约束执行，长上下文负责减少重复加载与跨阶段信息损失。</p>
+
+  <h2>11.2 内部评测的最小集合</h2>
+  <table class="kami-table striped evaluation-table">
+    <thead><tr><th>维度</th><th>最低要求</th><th>记录指标</th></tr></thead>
+    <tbody>
+      <tr><td>任务</td><td>20 至 50 个真实任务，覆盖常规、困难与失败样本</td><td>完成率、回归率、人工修改量</td></tr>
+      <tr><td>Harness</td><td>固定工具、system prompt、权限、超时与 compaction</td><td>工具调用数、失败类型、违规调用</td></tr>
+      <tr><td>重复</td><td>高价值任务至少 3 次</td><td>均值、方差、最差结果</td></tr>
+      <tr><td>经济性</td><td>同时测 High、Max 与现有模型</td><td>token、时间、API 成本、GPU 时</td></tr>
+      <tr><td>长上下文</td><td>按 32K、128K、400K、1M 分桶</td><td>正确率、首 token 时延（TTFT）、吞吐、显存溢出（OOM）</td></tr>
+    </tbody>
+  </table>
+
+  <h2>11.3 选型建议</h2>
+  <p><strong>优先选择 GLM-5.2</strong>，当任务持续一小时以上、仓库或资料规模很大、需要多轮工具反馈，并且有测试或 verifier 可以约束结果。开放权重与 MIT 许可也适合需要本地控制或定制推理栈的团队。</p>
+
+  <p><strong>先做小规模试验</strong>，当日常工作主要是短补全、简单问答和低时延对话。GLM-5.2 的 43K 平均输出 token 暗示 Max 模式可能过度消耗，High 或更小模型可能有更好的单位成本。</p>
+
+  <p><strong>不要把自托管当默认</strong>。FP8 权重仍接近 744 GB，完整 1M 还要大量 KV cache。只有在请求量、数据边界、定制需求或长期成本能覆盖 8 卡高端节点与运维时，自托管才合理。</p>
+
+  <div class="callout">
+    <p><strong>上线门槛</strong>：在固定 harness 下，GLM-5.2 应同时改善任务完成率或人工返工量，并把单任务成本和 P95 完成时间控制在可接受范围。只提高 benchmark 或平均成功率，不足以替换现有生产模型。</p>
+  </div>
+</section>
+
+<!-- ═════════════ 12 ═════════════ -->
+<section class="chapter">
+  <div class="chapter-num">12 · Glossary and Sources</div>
+  <h1>术语表、延伸阅读与来源</h1>
+
+  <h2>12.1 关键术语</h2>
+  <table class="kami-table striped">
+    <thead><tr><th>术语</th><th>本文含义</th></tr></thead>
+    <tbody>
+      <tr><td>DSA</td><td>DeepSeek Sparse Attention。用轻量 indexer 为每个 query 选择 <span class="nowrap">top-k</span> 历史 token，再做稀疏注意力。</td></tr>
+      <tr><td>配置最大序列长度</td><td><code>max_position_embeddings</code> 声明的位置索引上限；它约束模型可表示的序列长度，但实际服务上下文还受推理框架、KV cache、显存、并发和 API 配额约束。</td></tr>
+      <tr><td>IndexShare / IndexCache</td><td>跨层复用稀疏注意力索引。IndexCache 是论文方法名，IndexShare 是 GLM-5.2 发布中的产品称呼。</td></tr>
+      <tr><td>MTP</td><td>Multi-Token Prediction。草稿模型一次预测多个后续 token，目标模型并行验证。</td></tr>
+      <tr><td>KVShare</td><td>GLM-5.2 MTP 中复用第一步的 KV cache，使后续 draft step 只访问目标模型产生的历史 KV；不同于泛指的 KV cache 共享。</td></tr>
+      <tr><td>接受长度</td><td>一次推测解码中，平均被目标模型接受的连续 draft token 数。</td></tr>
+      <tr><td>OPD</td><td>On-Policy Distillation。教师对当前策略正在访问的状态提供监督，减少离策略分布差异。</td></tr>
+      <tr><td>Compaction</td><td>把长轨迹压缩成摘要或子轨迹，保留任务状态并继续执行。</td></tr>
+      <tr><td>critic-based PPO</td><td>基于 critic 的近端策略优化（Proximal Policy Optimization），用价值模型估计 token 级 advantage，适合数量和长度不一致的单条 rollout。</td></tr>
+      <tr><td>KV cache</td><td>保存历史 token 的 key/value，减少自回归解码重复计算；长上下文下通常成为主要内存开销。</td></tr>
+      <tr><td>Harness</td><td>模型之外的 Agent 运行环境，包括 system prompt、CLI、工具、权限、超时和上下文管理。</td></tr>
+    </tbody>
+  </table>
+
+  <h2>12.2 Further Reading</h2>
+  <ol class="source-list">
+    <li><strong>最佳起点</strong>：Z.ai, <a href="https://z.ai/blog/glm-5.2">GLM-5.2: Built for Long-Horizon Tasks</a>。覆盖全部 5.2 新增模块与官方评测。<span class="source-id">[S01]</span></li>
+    <li><strong>架构基线</strong>：GLM-5 Team, <a href="https://arxiv.org/abs/2602.15763">GLM-5: from Vibe Coding to Agentic Engineering</a>。理解 744B MoE、DSA、MTP 与异步 Agentic RL。<span class="source-id">[S04]</span></li>
+    <li><strong>注意力方法</strong>：Bai et al., <a href="https://arxiv.org/abs/2603.12201">IndexCache: Accelerating Sparse Attention via Cross-Layer Index Reuse</a>。给出跨层索引复用的完整动机与实验。<span class="source-id">[S05]</span></li>
+    <li><strong>独立测量</strong>：Artificial Analysis, <a href="https://artificialanalysis.ai/articles/glm-5-2-is-the-new-leading-open-weights-model-on-the-artificial-analysis-intelligence-index">GLM-5.2 is the new leading open weights model</a>。同时看 intelligence、成本和 token 用量。<span class="source-id">[S13]</span></li>
+    <li><strong>部署起点</strong>：<a href="https://recipes.vllm.ai/zai-org/GLM-5.2">vLLM recipe</a> 与 <a href="https://cookbook.sglang.io/autoregressive/GLM/GLM-5.2">SGLang cookbook</a>。包含 FP8、1M KV cache、MTP 与硬件边界。<span class="source-id">[S10][S11]</span></li>
+  </ol>
+
+  <h2>12.3 完整来源</h2>
+  <ol class="source-list small">
+    <li>[S01] Z.ai, GLM-5.2: Built for Long-Horizon Tasks, 2026-06-17.</li>
+    <li>[S02] zai-org, GLM-5.2 Hugging Face Model Card.</li>
+    <li>[S03] zai-org, GLM-5.2 <code>config.json</code>.</li>
+    <li>[S04] GLM-5 Team, GLM-5: from Vibe Coding to Agentic Engineering, arXiv:2602.15763.</li>
+    <li>[S05] Bai et al., IndexCache, arXiv:2603.12201.</li>
+    <li>[S06] Li et al., Breaking Entropy Bounds, arXiv:2606.12370.</li>
+    <li>[S07] THUDM/slime repository and documentation.</li>
+    <li>[S08] Z.ai Developer Docs, Thinking Mode.</li>
+    <li>[S09] Z.ai Developer Docs, GLM Coding Plan Overview.</li>
+    <li>[S10] vLLM Recipes, zai-org/GLM-5.2.</li>
+    <li>[S11] SGLang Documentation, GLM-5.2.</li>
+    <li>[S12] KTransformers, GLM-5.2 Tutorial.</li>
+    <li>[S13] Artificial Analysis, GLM-5.2 launch analysis.</li>
+    <li>[S14] Artificial Analysis, GLM-5.2 model page.</li>
+    <li>[S15] FrontierSWE leaderboard and task pages.</li>
+    <li>[S16] PostTrainBench leaderboard, methodology and changelog.</li>
+    <li>[S17] SWE-Marathon benchmark site.</li>
+    <li>[S18] Jie Tang, GLM-5.2 release commentary, 2026-06-13.</li>
+    <li>[S19] Tsinghua KEG, Jie Tang academic homepage.</li>
+  </ol>
+
+  <h2>12.4 边界说明</h2>
+  <p>本文是独立技术解读，不代表 Z.ai、评测平台或论文作者。发布方 benchmark 均标为官方结果，外部平台结果按各自 harness 与页面日期引用，本文计算均基于公开数字。后续若模型卡、排行榜、价格或框架 recipe 更新，应重新核验时效性内容。</p>
+</section>
+
+</body>
+</html>
