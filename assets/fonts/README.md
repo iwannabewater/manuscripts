@@ -9,5 +9,5 @@ Run:
 make fonts
 ```
 
-The script downloads or copies the Kami publication fonts into this single
+The script downloads or copies the Winston publication fonts into this single
 shared directory so work folders do not need their own `fonts/` subdirectories.

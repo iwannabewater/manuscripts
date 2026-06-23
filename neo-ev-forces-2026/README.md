@@ -5,7 +5,7 @@ This project contains a deep-research paper on NIO, XPENG and Li Auto as of 2026
 ## Outputs
 
 - `analysis.md`: long-form Chinese analysis with source IDs.
-- `index.html`: Kami-styled paper source.
+- `index.html`: Winston-styled paper source.
 - `neo-ev-forces-2026.pdf`: rendered PDF output.
 - `data/`: structured CSV/TSV snapshots used in the analysis.
 - `sources/`: fetched Markdown source snapshots.

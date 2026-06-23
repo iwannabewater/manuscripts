@@ -4,7 +4,7 @@
 
 ## Files
 
-- `index.html`: Kami 排版源文件，可直接在浏览器中阅读或重新打印。
+- `index.html`: Winston 排版源文件，可直接在浏览器中阅读或重新打印。
 - `slime-rl-scaling-guide.pdf`: PDF 成品。
 - `sources.md`: 资料来源、口径和不覆盖范围。
 - `data/source-map.tsv`: 主要资料映射表。

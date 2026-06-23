@@ -2,7 +2,7 @@
 
 这是一个独立长文档项目，面向希望从零建立具身智能全局认知的技术读者。交付物包括：
 
-- `index.html`: 可阅读、可打印的 Kami 长文档源文件
+- `index.html`: 可阅读、可打印的 Winston 长文档源文件
 - `embodied-intelligence-2026.pdf`: 已构建 PDF
 - `sources.md`: 资料清单
 - `data/source-map.tsv`: 事实来源映射

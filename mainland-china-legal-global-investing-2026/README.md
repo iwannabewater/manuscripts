@@ -4,7 +4,7 @@
 
 ## 文件
 
-- `index.html`：Kami one-pager 源文件
+- `index.html`：Winston one-pager 源文件
 - `mainland-china-legal-global-investing-2026.pdf`：可直接分享/打印的 PDF
 - `sources.md`：官方来源与事实核对说明
 

@@ -9,7 +9,7 @@
 
 | 文件 | 说明 |
 |---|---|
-| `index.html` | Kami 排版源文件 |
+| `index.html` | Winston 排版源文件 |
 | `mise-complete-guide-2026.pdf` | PDF 成品 |
 | `guide.md` | 完整教程 Markdown 版 |
 | `CHEATSHEET.md` | 可独立使用的命令与配置速查表 |

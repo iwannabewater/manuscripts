@@ -4,7 +4,7 @@
 
 ## Files
 
-- `index.html`: Kami 排版源文件，可直接在浏览器中预览。
+- `index.html`: Winston 排版源文件，可直接在浏览器中预览。
 - `pdd-2026-q1-earnings-analysis.pdf`: PDF 成品。
 - `analysis.md`: 研究长文底稿。
 - `sources.md`: 来源、核验口径与边界。

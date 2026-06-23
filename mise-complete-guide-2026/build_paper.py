@@ -136,7 +136,7 @@ def main() -> None:
 <meta name="author" content="Winston">
 <meta name="description" content="mise 完整中文使用指南，覆盖安装、工具版本、环境变量、任务、锁文件、CI、安全边界、迁移、排障与 Cheatsheet。">
 <meta name="keywords" content="mise, mise-en-place, 开发环境, 工具链, CI, Cheatsheet">
-<meta name="generator" content="Kami">
+<meta name="generator" content="Winston">
 <style>{style}</style>
 <link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 </head>

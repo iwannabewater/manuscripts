@@ -2,7 +2,7 @@
 
 交付内容：
 
-- `index.html`：可阅读、可打印的 Kami 长文档源文件。
+- `index.html`：可阅读、可打印的 Winston 长文档源文件。
 - `rag-frontiers-2026.pdf`：正式 PDF 成品。
 - `sources.md`：来源、证据等级、事实边界与研究方法。
 - `data/source-map.tsv`：来源到正文用途的映射。

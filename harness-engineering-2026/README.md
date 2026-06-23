@@ -4,7 +4,7 @@
 
 ## Files
 
-- `index.html`：Kami 长文档源文件，也是网页阅读入口。
+- `index.html`：Winston 长文档源文件，也是网页阅读入口。
 - `harness-engineering-2026.pdf`：正式 PDF 成品。
 - `sources.md`：来源、证据等级、冲突与事实边界。
 - `data/source-map.tsv`：来源到正文用途的映射。
