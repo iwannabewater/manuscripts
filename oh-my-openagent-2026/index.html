@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>oh-my-openagent 2026：从 0 到 1 再到全貌</title>
+<meta name="author" content="Winston">
+<meta name="description" content="关于 oh-my-openagent 的证据化中文技术读物，覆盖命名、安装、OpenCode Ultimate、Codex Light、编排、MCP、配置、安全和扩展路线。">
+<meta name="keywords" content="oh-my-openagent, OpenCode, Codex, MCP, Agent Harness">
+<meta name="generator" content="Kami">
+<style>
+  @page {
+    size: A4;
+    margin: 20mm 22mm 22mm 22mm;
+    background: #f5f4ed;
+
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02";
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+
+    @bottom-center {
+      content: counter(page) "  ·  oh-my-openagent 2026";
+      font-family: "TsangerJinKai02";
+      font-size: 9pt;
+      color: #6b6a64;
+    }
+  }
+
+  @page:first {
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --parchment: #f5f4ed;
+    --ivory: #faf9f5;
+    --near-black: #141413;
+    --dark-warm: #3d3d3a;
+    --olive: #504e49;
+    --stone: #6b6a64;
+    --brand: #1B365D;
+    --brand-soft: #E4ECF5;
+    --border: #e8e6dc;
+    --border-soft: #e5e3d8;
+    --serif: "TsangerJinKai02";
+    --sans: "TsangerJinKai02";
+    --mono: "JetBrains Mono", "TsangerJinKai02";
+  }
+
+  html,
+  body {
+    background: var(--parchment);
+  }
+
+  @media screen {
+    body {
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 20mm 22mm 22mm 22mm;
+    }
+  }
+
+  body {
+    color: var(--near-black);
+    font-family: var(--serif);
+    font-size: 10.4pt;
+    line-height: 1.55;
+    letter-spacing: 0.2pt;
+    widows: 3;
+    orphans: 3;
+  }
+
+  a {
+    color: var(--brand);
+    text-decoration: none;
+  }
+
+  p {
+    margin: 0 0 9pt 0;
+    line-height: 1.55;
+    widows: 2;
+    orphans: 2;
+  }
+
+  strong {
+    font-weight: 500;
+  }
+
+  .cover {
+    min-height: 240mm;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    gap: 20pt;
+    break-after: page;
+  }
+
+  .cover-main {
+    display: grid;
+    grid-template-columns: 1fr 56mm;
+    gap: 18pt;
+    align-items: center;
+    padding-top: 28mm;
+  }
+
+  .cover-mark {
+    width: 48mm;
+    height: 48mm;
+    border-radius: 10pt;
+    background: var(--ivory);
+    border: 0.5pt solid var(--border);
+    padding: 7mm;
+    justify-self: end;
+  }
+
+  .cover-mark img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .cover-eyebrow {
+    font-family: var(--sans);
+    font-size: 10pt;
+    color: var(--brand);
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 18pt;
+  }
+
+  .cover-title {
+    font-size: 34pt;
+    font-weight: 500;
+    color: var(--near-black);
+    line-height: 1.14;
+    letter-spacing: 0.2pt;
+    margin-bottom: 16pt;
+  }
+
+  .cover-sub {
+    font-size: 13.5pt;
+    color: var(--olive);
+    line-height: 1.5;
+    max-width: 95%;
+  }
+
+  .cover-meta {
+    font-size: 10pt;
+    color: var(--stone);
+    line-height: 1.6;
+    border-top: 0.6pt solid var(--border);
+    padding-top: 12pt;
+  }
+
+  .toc {
+    break-after: page;
+  }
+
+  .toc h2,
+  h1 {
+    font-size: 22pt;
+    font-weight: 500;
+    line-height: 1.2;
+    margin: 0 0 10pt 0;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    color: var(--near-black);
+    break-after: avoid;
+  }
+
+  .toc-item {
+    display: grid;
+    grid-template-columns: 30pt 1fr 26pt;
+    gap: 6pt;
+    align-items: baseline;
+    padding: 6pt 0;
+    border-bottom: 0.3pt dotted var(--border);
+    font-size: 11pt;
+  }
+
+  .toc-num {
+    color: var(--brand);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .toc-page {
+    color: var(--stone);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .chapter {
+    break-before: page;
+  }
+
+  .chapter-num {
+    font-family: var(--sans);
+    font-size: 9pt;
+    color: var(--brand);
+    letter-spacing: 0.9pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+    string-set: section-title content();
+  }
+
+  h2 {
+    font-size: 15.5pt;
+    font-weight: 500;
+    line-height: 1.25;
+    margin: 22pt 0 8pt 0;
+    color: var(--near-black);
+    break-after: avoid;
+  }
+
+  h3 {
+    font-size: 12.6pt;
+    font-weight: 500;
+    line-height: 1.3;
+    margin: 16pt 0 6pt 0;
+    color: var(--dark-warm);
+    break-after: avoid;
+  }
+
+  .lead {
+    font-size: 11.8pt;
+    line-height: 1.55;
+    color: var(--dark-warm);
+    margin-bottom: 12pt;
+  }
+
+  .hl {
+    color: var(--brand);
+    font-weight: 500;
+  }
+
+  code,
+  pre,
+  .mono {
+    font-family: var(--mono);
+    letter-spacing: 0;
+  }
+
+  code {
+    font-size: 8.8pt;
+    background: var(--ivory);
+    padding: 1pt 4pt;
+    border-radius: 2pt;
+    color: var(--dark-warm);
+    overflow-wrap: anywhere;
+  }
+
+  pre {
+    font-size: 8.5pt;
+    line-height: 1.48;
+    background: var(--ivory);
+    border: 0.4pt solid var(--border);
+    border-radius: 4pt;
+    padding: 9pt 12pt;
+    margin: 10pt 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    break-inside: avoid;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    font-size: 9.2pt;
+    line-height: 1.42;
+    margin: 12pt 0;
+    break-inside: avoid;
+  }
+
+  th {
+    text-align: left;
+    font-weight: 500;
+    color: var(--dark-warm);
+    padding: 5pt 6pt;
+    border-bottom: 1pt solid var(--border);
+  }
+
+  td {
+    padding: 4.5pt 6pt;
+    border-bottom: 0.3pt solid var(--border-soft);
+    vertical-align: top;
+    overflow-wrap: anywhere;
+  }
+
+  tbody tr:nth-child(even) td {
+    background: var(--ivory);
+  }
+
+  .compact {
+    font-size: 8.2pt;
+  }
+
+  .compact th {
+    padding: 3.5pt 5pt;
+  }
+
+  .compact td {
+    padding: 3pt 5pt;
+  }
+
+  .num {
+    font-family: var(--mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .callout,
+  .summary-card {
+    background: var(--ivory);
+    border-left: 1.5pt solid var(--brand);
+    border-radius: 5pt;
+    padding: 12pt 15pt;
+    margin: 12pt 0;
+    break-inside: avoid;
+  }
+
+  .callout p:last-child,
+  .summary-card p:last-child {
+    margin-bottom: 0;
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--brand-soft);
+    color: var(--brand);
+    font-family: var(--sans);
+    font-size: 8pt;
+    font-weight: 500;
+    padding: 1pt 5pt;
+    border-radius: 3pt;
+    margin: 0 3pt 3pt 0;
+  }
+
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8pt;
+    margin: 12pt 0 14pt 0;
+    break-inside: avoid;
+  }
+
+  .metric {
+    background: var(--ivory);
+    border: 0.4pt solid var(--border);
+    border-radius: 5pt;
+    padding: 8pt 8pt 9pt;
+    min-height: 42pt;
+  }
+
+  .metric-value {
+    display: block;
+    color: var(--brand);
+    font-size: 17pt;
+    font-weight: 500;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .metric-label {
+    display: block;
+    color: var(--olive);
+    font-size: 8.2pt;
+    line-height: 1.35;
+    margin-top: 3pt;
+  }
+
+  figure {
+    margin: 13pt 0;
+    break-inside: avoid;
+  }
+
+  figure img {
+    width: 100%;
+    max-height: 96mm;
+    object-fit: contain;
+    border-radius: 4pt;
+    border: 0.4pt solid var(--border);
+    background: var(--ivory);
+  }
+
+  figcaption {
+    font-size: 8.6pt;
+    color: var(--stone);
+    line-height: 1.4;
+    text-align: center;
+    margin-top: 5pt;
+  }
+
+  .diagram {
+    width: 100%;
+    height: auto;
+    background: var(--ivory);
+    border: 0.4pt solid var(--border);
+    border-radius: 5pt;
+  }
+
+  .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10pt;
+    break-inside: avoid;
+  }
+
+  .pill-row {
+    margin: 6pt 0 10pt 0;
+  }
+
+  ul,
+  ol {
+    margin: 5pt 0 9pt 0;
+    padding-left: 18pt;
+  }
+
+  li {
+    margin-bottom: 4pt;
+  }
+
+  li::marker {
+    color: var(--brand);
+  }
+
+  .references {
+    column-count: 2;
+    column-gap: 18pt;
+  }
+
+  .references p {
+    font-size: 8.3pt;
+    line-height: 1.4;
+    margin-bottom: 6pt;
+    break-inside: avoid;
+  }
+
+  .ref-id {
+    color: var(--brand);
+    font-family: var(--mono);
+    font-weight: 500;
+  }
+
+  .footnote {
+    font-size: 8.4pt;
+    color: var(--stone);
+    line-height: 1.45;
+  }
+</style>
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
+</head>
+<body>
+
+<section class="cover">
+  <div class="cover-main">
+    <div>
+      <div class="cover-eyebrow">TECHNICAL RESEARCH · 2026</div>
+      <div class="cover-title">oh-my-openagent 2026<br>从 0 到 1<br>再到全貌</div>
+      <div class="cover-sub">一份面向工程师的中文读物，讲清这个项目到底装了什么、接到哪里、如何工作、有什么边界，以及什么时候值得把它放进自己的 Agent 工作流。</div>
+    </div>
+    <div class="cover-mark">
+      <img src="assets/omo-logo.png" alt="oh-my-openagent 官方 Logo">
+    </div>
+  </div>
+  <div class="cover-meta">
+    <strong>Author</strong> Winston<br>
+    <strong>Evidence date</strong> 2026-06-25 · Asia/Shanghai<br>
+    <strong>Target snapshot</strong> code-yeongyu/oh-my-openagent · 881e612f825cd44a29e4def46b5618035be13f61<br>
+    <strong>Output</strong> HTML source and PDF publication
+  </div>
+</section>
+
+<section class="toc">
+  <h2>目录</h2>
+  <div class="toc-item"><span class="toc-num">00</span><span>执行摘要：它不是一个单纯的提示词包</span><span class="toc-page">03</span></div>
+  <div class="toc-item"><span class="toc-num">01</span><span>从 0 开始：先把名字和入口对齐</span><span class="toc-page">05</span></div>
+  <div class="toc-item"><span class="toc-num">02</span><span>安装前决策：Ultimate、Light 与 Both</span><span class="toc-page">07</span></div>
+  <div class="toc-item"><span class="toc-num">03</span><span>从 1 到能用：一次安装会改变哪些层</span><span class="toc-page">09</span></div>
+  <div class="toc-item"><span class="toc-num">04</span><span>OpenCode Ultimate：agent 编排是主线</span><span class="toc-page">11</span></div>
+  <div class="toc-item"><span class="toc-num">05</span><span>Codex Light：插件化、轻量化与边界</span><span class="toc-page">13</span></div>
+  <div class="toc-item"><span class="toc-num">06</span><span>配置、安全、遥测与许可证</span><span class="toc-page">15</span></div>
+  <div class="toc-item"><span class="toc-num">07</span><span>从 1 到全部：如何扩展而不失控</span><span class="toc-page">17</span></div>
+  <div class="toc-item"><span class="toc-num">08</span><span>常见误区、检查清单与进一步阅读</span><span class="toc-page">19</span></div>
+  <div class="toc-item"><span class="toc-num">09</span><span>来源与证据口径</span><span class="toc-page">21</span></div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">00 · Executive Summary</div>
+  <h1>它不是一个单纯的提示词包</h1>
+  <p class="lead">截至 2026-06-25，北京时间，<code>oh-my-openagent</code> 更准确的读法是一个正在从 OpenCode 插件走向多 harness agent OS 的工程项目。它把 agent、hooks、MCP、LSP、AST 工具、规则注入、遥测、Codex 插件和团队协作能力收在同一个仓库里。读者真正需要理解的不是某条命令，而是两条路径：<span class="hl">OpenCode Ultimate 负责完整编排，Codex Light 负责把一组可移植组件装进 Codex 插件体系</span>。</p>
+
+  <div class="metric-grid">
+    <div class="metric"><span class="metric-value">4.13.0</span><span class="metric-label">npm 与 Codex plugin 版本，registry 与本地快照一致 [S14, S19]</span></div>
+    <div class="metric"><span class="metric-value">22</span><span class="metric-label">根 <code>package.json</code> workspaces，覆盖 core、MCP、skills、adapters [S14]</span></div>
+    <div class="metric"><span class="metric-value">11</span><span class="metric-label">OpenCode Ultimate 内置 agent，分 planning、execution、worker 角色 [S07, S17]</span></div>
+    <div class="metric"><span class="metric-value">22</span><span class="metric-label">Codex plugin hooks，来自 <code>.codex-plugin/plugin.json</code> [S15]</span></div>
+  </div>
+
+  <div class="summary-card">
+    <p><strong>一号结论，先看 edition。</strong> 如果你用 OpenCode，希望获得完整 agent 编排、Team Mode、更多 hooks 和 OpenCode 原生集成，入口是 Ultimate。典型命令是 <code>bunx oh-my-openagent install</code>。如果你用 OpenAI Codex CLI，希望装一个轻量插件包，入口是 Light。典型命令是 <code>npx lazycodex-ai install</code> [S04, S05]。</p>
+    <p><strong>二号结论，命名是第一个坑。</strong> 仓库叫 <code>oh-my-openagent</code>，主 npm 包仍叫 <code>oh-my-opencode</code>，也发布了 <code>oh-my-openagent</code>，还有 <code>lazycodex-ai</code> 这个 Codex Light installer。CLI bin 里有 <code>omo</code> alias，但文档提醒不要用 <code>bunx omo</code> 或 <code>npx omo</code>，因为 npm 上的 <code>omo</code> 名称不属于这个项目 [S04, S14, S19]。</p>
+    <p><strong>三号结论，功能主张和事实要分开读。</strong> README 会用很强的产品语言介绍体验，本文只把代码树、registry、GitHub API 和官方文档能确认的内容作为事实。比如 Codex plugin 的 22 个 hooks、5 个 MCP server、10 个 agent TOML 和 2 个 skills，都来自当前代码快照；“好不好用”仍要以自己的任务和模型账户测试 [S03, S15, S16]。</p>
+    <p><strong>四号结论，许可证不是标准宽松许可。</strong> GitHub API 把 license 分类为 <code>NOASSERTION</code>，package 字段写 <code>SUL-1.0</code>，仓库的 <code>LICENSE.md</code> 是 Sustainable Use License。它允许内部、个人和非商业使用，也限制收费分发和商业化提供。企业采用前应按自己的合规流程读完整许可证 [S01, S13, S14]。</p>
+  </div>
+
+  <figure>
+    <svg class="diagram" viewBox="0 0 920 360" role="img" aria-label="oh-my-openagent 两条使用路径">
+      <rect x="36" y="32" width="848" height="54" rx="10" fill="#1B365D"/>
+      <text x="460" y="66" text-anchor="middle" fill="#faf9f5" font-size="20" font-family="TsangerJinKai02">oh-my-openagent · 一个仓库，两条主要落地路径</text>
+      <rect x="52" y="122" width="370" height="168" rx="12" fill="#faf9f5" stroke="#e8e6dc"/>
+      <rect x="498" y="122" width="370" height="168" rx="12" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="237" y="158" text-anchor="middle" fill="#1B365D" font-size="20" font-family="TsangerJinKai02">OpenCode Ultimate</text>
+      <text x="683" y="158" text-anchor="middle" fill="#1B365D" font-size="20" font-family="TsangerJinKai02">Codex Light</text>
+      <text x="237" y="196" text-anchor="middle" fill="#141413" font-size="16" font-family="TsangerJinKai02">11 agents · hooks · MCP · Team Mode</text>
+      <text x="237" y="226" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">适合把 OpenCode 变成完整编排运行时</text>
+      <text x="237" y="256" text-anchor="middle" fill="#3d3d3a" font-size="14" font-family="JetBrains Mono">bunx oh-my-openagent install</text>
+      <text x="683" y="196" text-anchor="middle" fill="#141413" font-size="16" font-family="TsangerJinKai02">22 hooks · 5 MCP · 10 TOML agents</text>
+      <text x="683" y="226" text-anchor="middle" fill="#504e49" font-size="15" font-family="TsangerJinKai02">适合给 Codex CLI 加轻量插件能力</text>
+      <text x="683" y="256" text-anchor="middle" fill="#3d3d3a" font-size="14" font-family="JetBrains Mono">npx lazycodex-ai install</text>
+      <path d="M422 206 L498 206" stroke="#1B365D" stroke-width="3"/>
+      <path d="M486 198 L498 206 L486 214" fill="none" stroke="#1B365D" stroke-width="3"/>
+      <text x="460" y="323" text-anchor="middle" fill="#6b6a64" font-size="14" font-family="TsangerJinKai02">Both 模式存在，但应该先确认两个 harness 的配置边界和权限策略</text>
+    </svg>
+    <figcaption>图 1：本文采用的阅读模型。左侧是完整 OpenCode 编排，右侧是 Codex 插件化移植，二者共享代码和组件，但能力边界不同。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">01 · Names and Entrypoints</div>
+  <h1>从 0 开始：先把名字和入口对齐</h1>
+  <p class="lead">这个项目的第一个门槛不是安装，而是命名。<code>oh-my-openagent</code> 是仓库名和新的产品名；<code>oh-my-opencode</code> 是历史包名和主 npm 包；<code>lazycodex-ai</code> 是面向 Codex Light 的单用途 installer。把这些名字混在一起，很容易装到错误包、调用错误 binary，或误解自己启用的是哪一种 edition。</p>
+
+  <h2>名字表</h2>
+  <table>
+    <thead>
+      <tr><th style="width:24%">名字</th><th style="width:26%">在哪里出现</th><th style="width:30%">实际含义</th><th style="width:20%">证据</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>oh-my-openagent</code></td><td>GitHub 仓库、npm alias、安装命令</td><td>新的项目名称，指向多 harness Agent OS 方向</td><td>[S01, S04, S19]</td></tr>
+      <tr><td><code>oh-my-opencode</code></td><td>主 npm 包、根 <code>package.json</code></td><td>历史包名，当前版本仍是 <code>4.13.0</code>，bin 也从这里发出</td><td>[S14, S19]</td></tr>
+      <tr><td><code>omo</code></td><td>CLI bin alias、Codex plugin name</td><td>仓库内 alias 和 plugin 名。不能用 <code>bunx omo</code> 或 <code>npx omo</code> 当 installer</td><td>[S04, S14, S15]</td></tr>
+      <tr><td><code>lazycodex-ai</code></td><td>npm 包、Codex Light 命令</td><td>面向 Codex Light 的 installer alias，版本同为 <code>4.13.0</code></td><td>[S04, S19]</td></tr>
+      <tr><td><code>sisyphuslabs/omo</code></td><td>Codex marketplace metadata</td><td>Codex marketplace 中的组织和 plugin 标识</td><td>[S15]</td></tr>
+    </tbody>
+  </table>
+
+  <h2>三条命令的真实边界</h2>
+  <pre><code># OpenCode Ultimate
+bunx oh-my-openagent install
+
+# Codex Light
+npx lazycodex-ai install
+
+# Both, only when both harnesses are intentional
+bunx oh-my-openagent install --platform=both</code></pre>
+  <p>README 明确写到，<code>lazycodex-ai</code> 默认走 Codex Light。共享的 <code>omo</code> CLI 仍有 <code>--platform</code> 选项，并且默认平台仍偏向 OpenCode。这意味着“我装了 omo”这句话本身没有信息量，必须补上实际命令、package manager、platform 参数和目标目录 [S04, S05]。</p>
+  <p>另一个容易忽略的点是包管理器。OpenCode Ultimate 主要围绕 Bun 发布，Codex Light 的入口是 Node/npm。目标仓库根 <code>package.json</code> 也说明了这层差异：构建脚本大量使用 Bun，同时 Codex plugin 内部又有 npm 子项目和 Node test 路径 [S14]。</p>
+
+  <h2>仓库快照说明</h2>
+  <table class="compact">
+    <thead>
+      <tr><th style="width:34%">字段</th><th style="width:38%">当前值</th><th style="width:28%">读法</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>默认分支</td><td><code>dev</code></td><td>公开仓库的主活动分支不是 <code>main</code> [S01]</td></tr>
+      <tr><td>本文分析 commit</td><td><code>881e612f825cd44a29e4def46b5618035be13f61</code></td><td>本地克隆快照，证据固定在这个点 [S03]</td></tr>
+      <tr><td>GitHub API license</td><td><code>NOASSERTION</code></td><td>不能按常见开源许可证默认处理 [S01]</td></tr>
+      <tr><td>package license</td><td><code>SUL-1.0</code></td><td>以仓库许可证正文和 package 字段为准 [S13, S14]</td></tr>
+      <tr><td>stars / forks</td><td><span class="num">63490</span> / <span class="num">5180</span></td><td>只是 GitHub API 的时间点快照，不代表质量评分 [S01]</td></tr>
+      <tr><td>主要语言</td><td>TypeScript</td><td>按 GitHub language bytes 和 package 结构一致 [S02, S14]</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">02 · Installation Decision</div>
+  <h1>安装前决策：Ultimate、Light 与 Both</h1>
+  <p class="lead">安装前先回答一个问题：你想改造的是 OpenCode，还是 Codex CLI？两条路径都叫 omo，但它们接入的宿主、权限模型和可用功能不一样。正确选择 edition，比装完后补配置更重要。</p>
+
+  <h2>Edition 对照</h2>
+  <table>
+    <thead>
+      <tr><th style="width:20%">维度</th><th style="width:40%">OpenCode Ultimate</th><th style="width:40%">Codex Light</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>目标宿主</td><td>OpenCode terminal agent</td><td>OpenAI Codex CLI plugin system</td></tr>
+      <tr><td>安装入口</td><td><code>bunx oh-my-openagent install</code></td><td><code>npx lazycodex-ai install</code></td></tr>
+      <tr><td>主要能力</td><td>11 个 agent、54+ base hooks、built-in MCP、slash commands、Team Mode、ultrawork、Hashline edits 等项目主张 [S04, S09]</td><td>rules、comment-checker、git-bash、lsp、ultrawork、ulw-loop、start-work-continuation、telemetry 等 portable components [S04, S05]</td></tr>
+      <tr><td>编排能力</td><td>以 Sisyphus、Prometheus、Atlas 等 agent 编排为核心 [S07, S17]</td><td>README 明确写到 Light 没有 agent orchestration，也没有 <code>team_*</code> tools [S04]</td></tr>
+      <tr><td>MCP</td><td>OpenCode 侧内置 <code>websearch</code>、<code>context7</code>、<code>grep_app</code>、<code>lsp</code>、<code>codegraph</code> [S18]</td><td>Codex plugin 暴露 <code>grep_app</code>、<code>context7</code>、<code>codegraph</code>、<code>git_bash</code>、<code>lsp</code> [S16]</td></tr>
+      <tr><td>适用读者</td><td>希望把 OpenCode 变成多 agent 工程运行时的人</td><td>希望给 Codex 加规则、代码智能和工作流辅助，但仍保持 Codex 主体体验的人</td></tr>
+    </tbody>
+  </table>
+
+  <h2>安装前检查</h2>
+  <p>如果目标是 Ultimate，先确认自己正在用 OpenCode，并且愿意让项目接管 OpenCode 相关配置、hooks、MCP 和本地运行组件。OpenCode 官方文档本身也把 agents、plugins 和 config 作为一等概念，Ultimate 正是沿着这些扩展点做集成 [S25]。</p>
+  <p>如果目标是 Light，先确认 Codex CLI 已安装、plugin 系统可用，并且理解 Codex 的项目指令读取方式。OpenAI 官方文档把 Codex CLI 定位为本地 coding agent，plugin marketplace 和 skills 是其可扩展表面；AGENTS.md 则是项目指令分层的一部分 [S21, S22, S23, S24]。</p>
+
+  <div class="callout">
+    <p><strong>不要从 Both 开始。</strong> Both 模式适合已经清楚知道两个宿主都要被配置的人。新用户先选一个目标宿主，跑通后再考虑是否需要另一个。这样更容易定位问题，也能避免把 OpenCode 和 Codex 的权限、MCP、rules 来源混在一起。</p>
+  </div>
+
+  <h2>一个安全的入门顺序</h2>
+  <ol>
+    <li>先读 <code>README.md</code> 的 edition 段和 <code>docs/guide/installation.md</code>，确认目标平台和命令 [S04, S05]。</li>
+    <li>在干净项目里试装，不在有敏感配置和未提交工作的大仓库里第一次试。</li>
+    <li>记录安装前后的配置差异，尤其是 Codex 的 <code>~/.codex/</code> 或 OpenCode 的 config 路径。</li>
+    <li>只跑最小任务：打开帮助、列出插件、调用一个只读 MCP 或 LSP 查询。</li>
+    <li>确认遥测和权限设置符合自己的要求，再把它放进真实项目。</li>
+  </ol>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">03 · First Working Setup</div>
+  <h1>从 1 到能用：一次安装会改变哪些层</h1>
+  <p class="lead">这类项目的风险不在“能不能装上”，而在“装上后谁在影响 agent 行为”。一个可审计的安装应该能回答四件事：写了哪些配置、启用了哪些 hooks、暴露了哪些 MCP、哪些组件会读项目上下文。</p>
+
+  <h2>四层安装面</h2>
+  <figure>
+    <svg class="diagram" viewBox="0 0 920 430" role="img" aria-label="安装后影响的四层表面">
+      <rect x="72" y="30" width="776" height="50" rx="10" fill="#1B365D"/>
+      <text x="460" y="62" text-anchor="middle" fill="#faf9f5" font-size="19" font-family="TsangerJinKai02">一次安装不是复制一个脚本，而是写入四类运行表面</text>
+      <rect x="80" y="116" width="170" height="206" rx="10" fill="#faf9f5" stroke="#e8e6dc"/>
+      <rect x="286" y="116" width="170" height="206" rx="10" fill="#faf9f5" stroke="#e8e6dc"/>
+      <rect x="492" y="116" width="170" height="206" rx="10" fill="#faf9f5" stroke="#e8e6dc"/>
+      <rect x="698" y="116" width="170" height="206" rx="10" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="165" y="156" text-anchor="middle" fill="#1B365D" font-size="18" font-family="TsangerJinKai02">配置</text>
+      <text x="371" y="156" text-anchor="middle" fill="#1B365D" font-size="18" font-family="TsangerJinKai02">Hooks</text>
+      <text x="577" y="156" text-anchor="middle" fill="#1B365D" font-size="18" font-family="TsangerJinKai02">MCP</text>
+      <text x="783" y="156" text-anchor="middle" fill="#1B365D" font-size="18" font-family="TsangerJinKai02">上下文</text>
+      <text x="165" y="198" text-anchor="middle" fill="#141413" font-size="14" font-family="TsangerJinKai02">平台配置</text>
+      <text x="165" y="224" text-anchor="middle" fill="#504e49" font-size="14" font-family="TsangerJinKai02">用户或项目级</text>
+      <text x="165" y="250" text-anchor="middle" fill="#504e49" font-size="14" font-family="TsangerJinKai02">兼容旧命名</text>
+      <text x="371" y="198" text-anchor="middle" fill="#141413" font-size="14" font-family="TsangerJinKai02">会话与工具守卫</text>
+      <text x="371" y="224" text-anchor="middle" fill="#504e49" font-size="14" font-family="TsangerJinKai02">转换与续跑</text>
+      <text x="371" y="250" text-anchor="middle" fill="#504e49" font-size="14" font-family="TsangerJinKai02">技能注入</text>
+      <text x="577" y="198" text-anchor="middle" fill="#141413" font-size="14" font-family="TsangerJinKai02">检索、代码图</text>
+      <text x="577" y="224" text-anchor="middle" fill="#504e49" font-size="14" font-family="TsangerJinKai02">LSP、Git Bash</text>
+      <text x="577" y="250" text-anchor="middle" fill="#504e49" font-size="14" font-family="TsangerJinKai02">远程或本地工具</text>
+      <text x="783" y="198" text-anchor="middle" fill="#141413" font-size="14" font-family="TsangerJinKai02">规则文件</text>
+      <text x="783" y="224" text-anchor="middle" fill="#504e49" font-size="14" font-family="TsangerJinKai02">AGENTS.md</text>
+      <text x="783" y="250" text-anchor="middle" fill="#504e49" font-size="14" font-family="TsangerJinKai02">skills 与 notepads</text>
+      <path d="M250 219 L286 219 M456 219 L492 219 M662 219 L698 219" stroke="#1B365D" stroke-width="3"/>
+      <text x="460" y="370" text-anchor="middle" fill="#6b6a64" font-size="14" font-family="TsangerJinKai02">排障时按从下到上的顺序查：配置是否加载，hooks 是否触发，MCP 是否可用，上下文是否被注入。</text>
+    </svg>
+    <figcaption>图 2：安装后应检查的四类表面。这个图不是项目官方架构图，是本文根据安装文档和插件结构重绘的审计视角。</figcaption>
+  </figure>
+
+  <h2>Codex marketplace 路径的差异</h2>
+  <p>Codex Light 有两种入口。<code>npx lazycodex-ai install</code> 是 installer 路径，会把 managed state 写入 <code>~/.codex/</code>，并且可以通过 <code>--codex-autonomous</code> 设置更激进的自动模式。marketplace 路径则更接近 Codex plugin model：添加 marketplace、安装 <code>omo@sisyphuslabs</code>、批准 hooks，然后由 bootstrap 写入 managed blocks、复制 agent TOML、链接 CLI 和准备工具。安装文档明确写到，marketplace 路径不会写 permission settings [S05, S15]。</p>
+
+  <table class="compact">
+    <thead>
+      <tr><th style="width:26%">入口</th><th style="width:34%">会做什么</th><th style="width:40%">适合场景</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>npx lazycodex-ai install</code></td><td>走 npm installer，写 Codex 管理状态，可按参数设置 autonomous features</td><td>想快速装 Light，并接受 installer 管理本地 Codex 配置</td></tr>
+      <tr><td>Codex <code>/plugins</code> marketplace</td><td>添加 marketplace，安装 <code>omo@sisyphuslabs</code>，由 plugin bootstrap 写 managed blocks</td><td>想按 Codex 官方 plugin 模型管理安装和启停</td></tr>
+      <tr><td><code>bunx oh-my-openagent install --platform=both</code></td><td>同时面向 OpenCode 与 Codex 写入对应配置</td><td>已经明确需要两个宿主，并能检查两个配置面</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Windows 与 Git Bash</h2>
+  <p>Codex Light 文档特别列出 Windows Git Bash 准备项，包括 <code>OMO_CODEX_GIT_BASH_PATH</code> 与 <code>OMO_CODEX_SKIP_GIT_BASH_AUTO_INSTALL</code>。这不是小字说明。很多 coding agent 的工具行为依赖 shell 语义，Windows 上如果 shell 层没有对齐，后面的 LSP、代码图和脚本调用都会出现不稳定问题 [S05, S10]。</p>
+
+  <div class="callout">
+    <p><strong>排障规则。</strong> 先看宿主是否加载 plugin，再看 hooks 是否被批准，然后看 MCP server 是否启动，最后看任务指令和 rules 是否按预期进入上下文。不要一开始就把问题归因给模型。</p>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">04 · OpenCode Ultimate</div>
+  <h1>OpenCode Ultimate：agent 编排是主线</h1>
+  <p class="lead">Ultimate 的核心不是“给 OpenCode 加一堆工具”，而是把任务拆成 planning、execution 和 worker 三层。OpenCode 官方文档本来就支持 agents 和 plugins，<code>oh-my-openagent</code> 在这条线上做了强意见的角色分工 [S06, S07, S25]。</p>
+
+  <h2>三层角色</h2>
+  <table>
+    <thead>
+      <tr><th style="width:22%">层</th><th style="width:30%">代表 agent</th><th style="width:48%">职责</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Planning</td><td>Prometheus、Metis、Momus</td><td>Prometheus 负责计划和拆解，Metis 找缺口，Momus 做 OKAY / REJECT review loop。文档强调 Prometheus 读多写少，主要写 <code>.omo</code> 内 markdown [S07]</td></tr>
+      <tr><td>Execution</td><td>Atlas</td><td>按 plan 执行，维护 notepad，必要时把工作交给 worker。Atlas 不再继续 delegate 给其他编排层，避免递归失控 [S07]</td></tr>
+      <tr><td>Workers</td><td>Sisyphus-Junior、Oracle、Explore、Librarian、visual-engineering</td><td>做具体读写、检索、研究、视觉检查或类别化任务。<code>task(category=...)</code> 和 <code>task(subagent_type=...)</code> 是两种互斥路由 [S07]</td></tr>
+    </tbody>
+  </table>
+
+  <figure>
+    <svg class="diagram" viewBox="0 0 920 470" role="img" aria-label="OpenCode Ultimate 编排流">
+      <rect x="365" y="28" width="190" height="48" rx="10" fill="#1B365D"/>
+      <text x="460" y="58" text-anchor="middle" fill="#faf9f5" font-size="18" font-family="TsangerJinKai02">Human Task</text>
+      <rect x="86" y="122" width="220" height="72" rx="10" fill="#faf9f5" stroke="#e8e6dc"/>
+      <rect x="350" y="122" width="220" height="72" rx="10" fill="#faf9f5" stroke="#e8e6dc"/>
+      <rect x="614" y="122" width="220" height="72" rx="10" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="196" y="150" text-anchor="middle" fill="#1B365D" font-size="17" font-family="TsangerJinKai02">Prometheus</text>
+      <text x="196" y="176" text-anchor="middle" fill="#504e49" font-size="14" font-family="TsangerJinKai02">plan and decompose</text>
+      <text x="460" y="150" text-anchor="middle" fill="#1B365D" font-size="17" font-family="TsangerJinKai02">Metis</text>
+      <text x="460" y="176" text-anchor="middle" fill="#504e49" font-size="14" font-family="TsangerJinKai02">gap analysis</text>
+      <text x="724" y="150" text-anchor="middle" fill="#1B365D" font-size="17" font-family="TsangerJinKai02">Momus</text>
+      <text x="724" y="176" text-anchor="middle" fill="#504e49" font-size="14" font-family="TsangerJinKai02">review loop</text>
+      <rect x="350" y="254" width="220" height="74" rx="10" fill="#faf9f5" stroke="#1B365D"/>
+      <text x="460" y="284" text-anchor="middle" fill="#1B365D" font-size="18" font-family="TsangerJinKai02">Atlas</text>
+      <text x="460" y="310" text-anchor="middle" fill="#504e49" font-size="14" font-family="TsangerJinKai02">execute plan · own notepad</text>
+      <rect x="70" y="382" width="780" height="54" rx="10" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="460" y="415" text-anchor="middle" fill="#141413" font-size="16" font-family="TsangerJinKai02">Workers: Sisyphus-Junior · Oracle · Explore · Librarian · Multimodal Looker · category agents</text>
+      <path d="M460 76 L460 104" stroke="#1B365D" stroke-width="3"/>
+      <path d="M196 194 L410 254 M460 194 L460 254 M724 194 L510 254" stroke="#1B365D" stroke-width="3" fill="none"/>
+      <path d="M460 328 L460 382" stroke="#1B365D" stroke-width="3"/>
+    </svg>
+    <figcaption>图 3：OpenCode Ultimate 的编排读法。planning agents 负责方向和评审，Atlas 是执行者，workers 做具体任务。该图根据 orchestration 文档重绘。</figcaption>
+  </figure>
+
+  <h2>11 个内置 agent</h2>
+  <p>当前代码快照里的 <code>builtin-agents.ts</code> 列出 11 个内置 agent：Sisyphus、Hephaestus、Prometheus、Atlas、Oracle、Librarian、Explore、Multimodal Looker、Metis、Momus、Sisyphus-Junior。文档把 Sisyphus 和 Hephaestus 放在 primary agent 位置，把 Oracle、Librarian、Explore、Multimodal Looker、Metis、Momus、Sisyphus-Junior 放在 subagent 角色里 [S07, S17]。</p>
+
+  <table class="compact">
+    <thead>
+      <tr><th style="width:20%">Agent</th><th style="width:28%">角色</th><th style="width:32%">读写边界</th><th style="width:20%">适合任务</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Sisyphus</td><td>默认主 agent</td><td>面向 OpenCode 主会话</td><td>综合 coding agent 入口</td></tr>
+      <tr><td>Hephaestus</td><td>specialized primary</td><td>面向视觉和工程任务</td><td>实现与 polish</td></tr>
+      <tr><td>Prometheus</td><td>planner</td><td>主要读，写 <code>.omo</code> markdown</td><td>计划、拆解、任务界定</td></tr>
+      <tr><td>Atlas</td><td>executor</td><td>执行 plan，不再嵌套 delegate</td><td>按计划改代码和收束任务</td></tr>
+      <tr><td>Oracle / Librarian / Explore</td><td>reader workers</td><td>文档声明为只读，不写文件</td><td>查询、资料、探索</td></tr>
+      <tr><td>Metis / Momus</td><td>analysis and review</td><td>偏评审和缺口分析</td><td>找风险、做 OKAY / REJECT</td></tr>
+      <tr><td>Sisyphus-Junior</td><td>category worker</td><td>由 category route 驱动</td><td>visual、deep、quick、writing 等类别任务</td></tr>
+    </tbody>
+  </table>
+
+  <h2>hooks 与 MCP</h2>
+  <p>features 文档把 hook 系统分成 session、tool guard、transform、continuation 和 skill 几类，base total 为 54；启用 Team Mode 后还有额外 session、tool guard 和 transform handler，总量可到 61。这个数字来自文档口径，本文把它写成项目文档主张而不是本地重新计数结果 [S09]。</p>
+  <p>MCP 则分三层：built-in remote MCP、<code>.mcp.json</code> loader 和 skill-embedded MCP。OpenCode 侧代码中的 built-in MCP 包括 <code>websearch</code>、<code>context7</code>、<code>grep_app</code>、<code>lsp</code>、<code>codegraph</code>。这解释了为什么 Ultimate 不只是 agent prompt，它还在工具协议和外部知识接入层加了约束 [S09, S18]。</p>
+
+  <h2>Team Mode 的边界</h2>
+  <p>Team Mode 默认关闭。开启后，项目支持用 team specs 管理多个成员、消息和任务，并暴露一组 <code>team_*</code> 工具。文档写明了上限：最多 8 个成员、4 个并行成员、32 KB message、256 KB unread、10000 messages per run、120 分钟 wall clock、每个 member 500 turns。没有 nested teams，没有同步等待，也没有 member-driven delegate-task。这些限制说明项目作者并不把 team 看成无限递归的 swarm，而是有明确上限的协作运行时 [S08]。</p>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">05 · Codex Light</div>
+  <h1>Codex Light：插件化、轻量化与边界</h1>
+  <p class="lead">Codex Light 的目标是把一组可移植组件放进 Codex CLI，而不是把 Ultimate 原样搬过去。OpenAI 官方文档把 Codex CLI 描述为本地 coding agent，并提供 plugin、skills 和 AGENTS.md 指令层。Light 正是贴着这些扩展面做 [S21, S22, S23, S24]。</p>
+
+  <h2>当前 Codex plugin 快照</h2>
+  <table>
+    <thead>
+      <tr><th style="width:30%">项目</th><th style="width:24%">当前值</th><th style="width:46%">证据和读法</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Plugin name</td><td><code>omo</code></td><td>来自 <code>.codex-plugin/plugin.json</code> [S15]</td></tr>
+      <tr><td>Plugin version</td><td><code>4.13.0</code></td><td>与 npm <code>latest</code> 一致 [S15, S19]</td></tr>
+      <tr><td>Hooks</td><td><span class="num">22</span></td><td>本地快照读取 plugin metadata，而不是 README 文案 [S15]</td></tr>
+      <tr><td>MCP servers</td><td><span class="num">5</span></td><td><code>grep_app</code>、<code>context7</code>、<code>codegraph</code>、<code>git_bash</code>、<code>lsp</code> [S16]</td></tr>
+      <tr><td>Agent TOML</td><td><span class="num">10</span></td><td>位于 <code>components/ultrawork/agents</code>，提供 planner、executor、reviewer 等角色 [S03]</td></tr>
+      <tr><td>Skills</td><td><span class="num">2</span></td><td><code>init-deep</code> 和 <code>ulw-plan</code> [S03]</td></tr>
+      <tr><td>Marketplace</td><td><code>sisyphuslabs</code></td><td>marketplace metadata 指向 <code>omo</code> plugin [S15]</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Light 里真正搬过去的东西</h2>
+  <p>README 和 <code>packages/omo-codex/README.md</code> 把 Light 的可移植组件列成：rules、comment-checker、git-bash、lsp、ultrawork、ulw-loop、start-work-continuation、telemetry。代码树里 plugin components 目录更多，因为还包含 bootstrap、codegraph、workflow-selector、test-support 等工程模块。读者应区分用户可见功能和内部工程目录 [S04, S15]。</p>
+
+  <table class="compact">
+    <thead>
+      <tr><th style="width:22%">组件</th><th style="width:48%">做什么</th><th style="width:30%">采用注意</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>rules</td><td>读取 <code>CONTEXT.md</code>、<code>.omo/rules</code>、<code>.claude/rules</code>、<code>.cursor/rules</code>、<code>.github/instructions</code> 等规则来源；AGENTS.md 交给 Codex 原生处理</td><td>先确认哪些规则会进入上下文，避免重复注入 [S03, S24]</td></tr>
+      <tr><td>comment-checker</td><td>检查代码注释和说明文本的质量</td><td>适合做写后 review，不应替代编译和测试</td></tr>
+      <tr><td>git-bash</td><td>在 Windows 上提供更接近 Unix shell 的工具表面</td><td>需要处理路径和自动安装策略 [S05, S10]</td></tr>
+      <tr><td>lsp</td><td>连接语言服务，提供定义、引用、诊断等代码智能</td><td>依赖本地项目语言环境和 server 可用性</td></tr>
+      <tr><td>ultrawork</td><td>通过关键词注入较强的长程工作 directive</td><td>适合复杂任务，但要有明确验证门和清理动作 [S03]</td></tr>
+      <tr><td>ulw-loop</td><td>面向多目标长程循环的 repo-native scaffold</td><td>文档说明仍处 wave 1 scaffold，应按实验功能对待 [S03]</td></tr>
+      <tr><td>telemetry</td><td>发送匿名日活事件</td><td>可通过环境变量关闭，详见下一章 [S11]</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Light 不做什么</h2>
+  <p>Light 的重要边界写在 README：它不提供 Ultimate 的完整 agent orchestration，也没有 <code>team_*</code> tools。这个边界很关键。Codex 自己已经有模型调用、文件编辑、命令运行和 AGENTS.md 指令读取能力；Light 做的是补规则、补工具、补续跑和补代码智能，不把 Codex 变成另一个 OpenCode [S04, S21, S24]。</p>
+
+  <figure>
+    <img src="assets/orchestrator-atlas.png" alt="oh-my-openagent 官方 orchestrator 与 Atlas 素材">
+    <figcaption>图 4：目标仓库中的官方素材。本文只把它作为项目识别材料，不把图片中的产品叙事当成独立证据。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">06 · Config, Safety and License</div>
+  <h1>配置、安全、遥测与许可证</h1>
+  <p class="lead">采用这类 agent harness，技术问题和治理问题是同一个问题的两面。它会影响上下文、工具、shell、项目规则、遥测和团队协作边界，所以配置优先级、权限和许可证必须提前看。</p>
+
+  <h2>配置优先级和旧命名</h2>
+  <p>configuration 文档列出当前命名和 legacy 命名：项目级可以有 <code>.opencode/oh-my-openagent.json[c]</code>，也兼容 <code>.opencode/oh-my-opencode.json[c]</code>；用户级路径则按系统放在 OpenCode 配置目录。文档还说明同一目录内如果同时存在新旧 basename，legacy <code>oh-my-opencode.*</code> 目前会因为检查顺序先命中而获胜。迁移时不要只新建新文件，还要确认旧文件是否仍在生效 [S10]。</p>
+
+  <table class="compact">
+    <thead>
+      <tr><th style="width:26%">配置项</th><th style="width:38%">需要检查什么</th><th style="width:36%">为什么</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>项目 config</td><td>新旧 basename 是否并存</td><td>避免以为新配置生效，实际仍读旧文件 [S10]</td></tr>
+      <tr><td><code>mcp_env_allowlist</code></td><td>是否只在用户级配置中管理</td><td>文档写明 walked configs 不能扩展该 allowlist [S10]</td></tr>
+      <tr><td>Codex autonomous flags</td><td>是否由用户显式选择</td><td><code>--codex-autonomous</code> 可能设置更开放的审批和沙箱策略 [S05]</td></tr>
+      <tr><td>Windows Git Bash</td><td>路径和跳过自动安装变量</td><td>shell 语义会影响工具调用结果 [S05, S10]</td></tr>
+      <tr><td>LSP decisions</td><td>本地 install decisions 文件是否符合预期</td><td>语言服务安装和跳过决策会持续影响后续项目 [S10]</td></tr>
+    </tbody>
+  </table>
+
+  <h2>遥测边界</h2>
+  <p>Codex telemetry 文档写得比较具体：Light 侧事件名是 <code>omo_codex_daily_active</code>，安装标识用 <code>sha256("omo-codex:" + hostname)</code>，每天每台机器最多一次，state path 放在 XDG data 或 <code>~/.local/share/omo-codex/posthog-activity.json</code>。文档声明不会发送 prompts、transcripts、source files、repo contents、paths、tokens、API keys、raw hostnames、remotes、usernames、emails 和 error diagnostics。发送是 best effort，失败不阻塞使用 [S11]。</p>
+  <p>这类遥测即使匿名，也应该在团队内部显式登记。一个实用做法是：试用阶段先关掉遥测，确认项目边界后再按组织政策决定是否开启。README 和 telemetry 文档都列出了 opt-out 变量 [S04, S11]。</p>
+
+  <h2>许可证和商业边界</h2>
+  <p>目标仓库的许可证不是 MIT、Apache 或 BSD 这类常见宽松许可证。<code>LICENSE.md</code> 是 Sustainable Use License 1.0，package 字段写 <code>SUL-1.0</code>。它授予使用、复制、分发、制作衍生作品和提供访问的权利，但限制使用和修改在 internal business、non-commercial、personal 场景；对外分发或提供给他人也限免费且非商业。还要求保留 notices，并声明 no warranty [S13, S14]。</p>
+  <p>这意味着两件事。个人研究、内部试用和非商业分享有明确空间；把它包装进收费产品、给客户交付、作为商业服务提供，不能按普通宽松开源的直觉处理。企业采用前要让法务或开源合规负责人读完整许可证，而不是只看 GitHub 页面上的 license badge [S01, S13]。</p>
+
+  <div class="callout">
+    <p><strong>安全采用的最低线。</strong> 不在含有生产密钥的真实项目第一次试装；不把 autonomous 模式作为默认；不把 README 的功能主张直接写进团队标准；所有 hooks、MCP、rules、telemetry 和 license 都要有一页内部记录。</p>
+  </div>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">07 · From One to All</div>
+  <h1>从 1 到全部：如何扩展而不失控</h1>
+  <p class="lead">真正用起来以后，问题会从“怎么装”变成“怎么把自己的规则、技能、MCP、团队流程接进去”。ROADMAP 给出的答案不是先抽象一套万能接口，而是先做 package layering refactor，把 core、MCP、skills、adapters、platform 和 web 分开 [S12]。</p>
+
+  <h2>包结构说明了路线</h2>
+  <p>当前根 <code>package.json</code> 有 22 个 workspace。它们不是随意拆分：<code>rules-engine</code>、<code>model-core</code>、<code>prompts-core</code>、<code>hashline-core</code>、<code>team-core</code> 等属于 core 能力；<code>git-bash-mcp</code>、<code>mcp-stdio-core</code>、<code>mcp-client-core</code> 属于 MCP 和工具协议；<code>shared-skills</code>、<code>skills-loader-core</code>、<code>agents-md-core</code> 处理技能和指令；<code>omo-codex</code> 与 <code>omo-opencode</code> 是不同宿主适配器 [S14]。</p>
+
+  <figure>
+    <svg class="diagram" viewBox="0 0 920 430" role="img" aria-label="package layering refactor">
+      <rect x="70" y="34" width="780" height="46" rx="10" fill="#1B365D"/>
+      <text x="460" y="63" text-anchor="middle" fill="#faf9f5" font-size="18" font-family="TsangerJinKai02">ROADMAP 的方向：让可复用层向下，宿主适配向上</text>
+      <rect x="110" y="116" width="700" height="46" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="460" y="145" text-anchor="middle" fill="#141413" font-size="16" font-family="TsangerJinKai02">Platform and Web: CLI binaries, docs, marketing site</text>
+      <rect x="150" y="184" width="620" height="46" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="460" y="213" text-anchor="middle" fill="#141413" font-size="16" font-family="TsangerJinKai02">Adapters: omo-opencode, omo-codex, future harness glue</text>
+      <rect x="190" y="252" width="540" height="46" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="460" y="281" text-anchor="middle" fill="#141413" font-size="16" font-family="TsangerJinKai02">Skills and MCP: shared skills, loaders, protocol servers</text>
+      <rect x="230" y="320" width="460" height="46" rx="8" fill="#faf9f5" stroke="#e8e6dc"/>
+      <text x="460" y="349" text-anchor="middle" fill="#141413" font-size="16" font-family="TsangerJinKai02">Core: rules, prompts, model, team, telemetry, state</text>
+      <path d="M460 162 L460 184 M460 230 L460 252 M460 298 L460 320" stroke="#1B365D" stroke-width="3"/>
+    </svg>
+    <figcaption>图 5：根据 ROADMAP 重绘的 layering 读法。越往下越应该纯粹、可测试、少宿主依赖；越往上越接近 OpenCode 或 Codex 的运行时细节。</figcaption>
+  </figure>
+
+  <h2>扩展优先级</h2>
+  <p>如果只是想让自己的项目更容易被 agent 接手，先写好 AGENTS.md、规则文件和验收命令，不要先写 MCP。Codex 官方文档已经把 AGENTS.md 放在项目指令层，<code>oh-my-openagent</code> 的 rules 组件也明确把 AGENTS.md 留给 Codex 原生处理 [S24, S03]。</p>
+  <p>如果需要把私有知识或工具接入 agent，再考虑 MCP。这里要先区分只读查询和可变更工具。只读 MCP 可以先上，带文件删除、远程执行、凭证访问和生产环境修改能力的 MCP 必须有权限边界、日志和关闭路径。Ultimate 的 tool guard hooks 和 Codex plugin hooks 能提供一部分控制面，但不能替代组织自己的安全策略 [S09, S15, S16]。</p>
+  <p>如果要扩展 agent 角色，先从现有类别路由理解模型选择和权限，再决定是否新增角色。orchestration 文档已经给出 <code>category</code> 与 <code>subagent_type</code> 的互斥路由。乱加角色会让调度路径变得不可预测，尤其是在长程任务里 [S07]。</p>
+
+  <h2>一条从个人到团队的路线</h2>
+  <table>
+    <thead>
+      <tr><th style="width:18%">阶段</th><th style="width:34%">目标</th><th style="width:30%">做法</th><th style="width:18%">不要做</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>个人试用</td><td>确认 edition 和安装面</td><td>在干净项目试装，记录配置、hooks、MCP、遥测</td><td>直接开 autonomous 模式</td></tr>
+      <tr><td>单仓库采用</td><td>让 agent 能稳定完成本仓库任务</td><td>补 AGENTS.md、规则、验证命令、常见失败清单</td><td>用 README 口号代替验收标准</td></tr>
+      <tr><td>多仓库推广</td><td>让规则和技能能复用</td><td>抽出共享 skills、统一 MCP allowlist、记录版本</td><td>把所有项目规则塞进全局配置</td></tr>
+      <tr><td>团队协作</td><td>让并行 agent 有边界</td><td>再考虑 Team Mode、消息上限、shutdown 审批和审计日志</td><td>允许无限嵌套和同步等待</td></tr>
+      <tr><td>平台化</td><td>把 harness 当成内部工具链一层</td><td>固定 package 版本、写回滚流程、做端到端 smoke</td><td>把未审计插件直接放进生产开发环境</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">08 · Checklist and Mistakes</div>
+  <h1>常见误区、检查清单与进一步阅读</h1>
+  <p class="lead"><code>oh-my-openagent</code> 的信息量很大，最容易出错的地方也很明确：名字、edition、权限、遥测、license、Team Mode 和文档主张。下面这张表可以当成安装前的最后复核。</p>
+
+  <h2>常见误区</h2>
+  <table>
+    <thead>
+      <tr><th style="width:36%">误区</th><th style="width:32%">为什么错</th><th style="width:32%">更稳的做法</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>把 <code>oh-my-openagent</code>、<code>oh-my-opencode</code>、<code>omo</code> 当成同一个 npm 入口</td><td>仓库、包名、bin alias 和 marketplace 名称不是同一层</td><td>按目标宿主选择 <code>bunx oh-my-openagent install</code> 或 <code>npx lazycodex-ai install</code></td></tr>
+      <tr><td>从 Both 模式开始</td><td>两个宿主同时写配置，排障成本翻倍</td><td>先跑通 OpenCode 或 Codex 其中一个</td></tr>
+      <tr><td>把 Light 理解成 Ultimate 的完整移植</td><td>README 明确 Light 不含完整 agent orchestration 和 <code>team_*</code> tools</td><td>把 Light 当 Codex 插件组件包</td></tr>
+      <tr><td>把 hooks 数量当质量指标</td><td>hooks 只是控制点数量，不代表任务成功率</td><td>看自己的任务验收、失败日志和回滚能力</td></tr>
+      <tr><td>忽略遥测和许可证</td><td>两者都影响团队采用边界</td><td>试用前记录 opt-out、license、内部审批需求</td></tr>
+      <tr><td>把 Team Mode 当无限多 agent swarm</td><td>文档明确有成员、并发、消息、时长和 turn 上限</td><td>把它当有边界的团队运行时，而不是无限递归</td></tr>
+    </tbody>
+  </table>
+
+  <h2>采用前检查清单</h2>
+  <div class="split">
+    <div class="callout">
+      <p><strong>技术检查。</strong> 确认 host、edition、package 版本、plugin 版本、MCP server、hooks 批准状态、规则注入来源、LSP 可用性和 Windows shell 设置。所有命令都记录到仓库文档或团队 runbook。</p>
+    </div>
+    <div class="callout">
+      <p><strong>治理检查。</strong> 确认遥测策略、license、敏感仓库试用边界、autonomous 模式审批、Team Mode 上限和卸载或回滚路径。没有这几项，不要进入团队默认配置。</p>
+    </div>
+  </div>
+
+  <h2>进一步阅读</h2>
+  <p>最值得先读的是目标仓库 README、installation guide、orchestration guide、features reference 和 ROADMAP。README 负责建立功能地图，installation guide 负责避免装错路径，orchestration guide 负责理解 Ultimate 的 agent 分工，features reference 负责核对 hooks 与 MCP，ROADMAP 负责理解为什么作者正在做 package layering refactor [S04, S05, S07, S09, S12]。</p>
+  <p>外部背景建议读 OpenAI Codex CLI、plugins、skills 和 AGENTS.md 官方文档，再读 OpenCode 的 agents、plugins 和 config 文档。这样能分清什么是宿主原生能力，什么是 <code>oh-my-openagent</code> 加上的能力 [S21, S22, S23, S24, S25]。</p>
+
+  <figure>
+    <img src="assets/omo-overview.png" alt="oh-my-openagent 官方 README 视觉素材">
+    <figcaption>图 6：目标仓库中的官方视觉素材。素材有助于识别项目，但本文的判断以代码、文档、registry 和官方 API 为准。</figcaption>
+  </figure>
+</section>
+
+<section class="chapter">
+  <div class="chapter-num">09 · Sources</div>
+  <h1>来源与证据口径</h1>
+  <p class="lead">本文把证据分成三层：代码和官方接口给出的事实，项目文档中的作者主张，以及本文基于多项材料做出的分析。涉及版本、计数、安装路径、遥测和许可证的内容均以一手来源为准。</p>
+
+  <div class="pill-row">
+    <span class="tag">primary sources</span>
+    <span class="tag">project-authored claims</span>
+    <span class="tag">author analysis</span>
+    <span class="tag">as of 2026-06-25</span>
+  </div>
+
+  <div class="references">
+    <p><span class="ref-id">S01</span> GitHub API repository metadata, <code>code-yeongyu/oh-my-openagent</code>, checked 2026-06-25.</p>
+    <p><span class="ref-id">S02</span> GitHub API languages endpoint, language byte distribution.</p>
+    <p><span class="ref-id">S03</span> Local checkout at <code>881e612f825cd44a29e4def46b5618035be13f61</code>, code structure and counts.</p>
+    <p><span class="ref-id">S04</span> Target repository <code>README.md</code>, edition split, install commands, naming warning and feature claims.</p>
+    <p><span class="ref-id">S05</span> <code>docs/guide/installation.md</code>, OpenCode Ultimate, Codex Light and marketplace paths.</p>
+    <p><span class="ref-id">S06</span> <code>docs/guide/overview.md</code>, architecture and agent role overview.</p>
+    <p><span class="ref-id">S07</span> <code>docs/guide/orchestration.md</code>, planning, execution, workers and delegation categories.</p>
+    <p><span class="ref-id">S08</span> <code>docs/guide/team-mode.md</code>, Team Mode default, tools, limits and shutdown protocol.</p>
+    <p><span class="ref-id">S09</span> <code>docs/reference/features.md</code>, agents, hooks, MCP tiers and feature module taxonomy.</p>
+    <p><span class="ref-id">S10</span> <code>docs/reference/configuration.md</code>, config precedence, environment variables and security boundary.</p>
+    <p><span class="ref-id">S11</span> <code>docs/reference/codex-telemetry.md</code>, telemetry event, hashing, state path and opt-out behavior.</p>
+    <p><span class="ref-id">S12</span> <code>ROADMAP.md</code>, package layering refactor and multi harness direction.</p>
+    <p><span class="ref-id">S13</span> <code>LICENSE.md</code>, Sustainable Use License permissions and limitations.</p>
+    <p><span class="ref-id">S14</span> Root <code>package.json</code>, package name, version, scripts, workspaces, bin aliases and license.</p>
+    <p><span class="ref-id">S15</span> <code>packages/omo-codex/plugin/.codex-plugin/plugin.json</code>, Codex plugin metadata and hooks.</p>
+    <p><span class="ref-id">S16</span> <code>packages/omo-codex/plugin/.mcp.json</code>, Codex plugin MCP server list.</p>
+    <p><span class="ref-id">S17</span> <code>packages/omo-opencode/src/agents/builtin-agents.ts</code>, OpenCode built-in agent inventory.</p>
+    <p><span class="ref-id">S18</span> <code>packages/omo-opencode/src/mcp/index.ts</code>, OpenCode built-in MCP inventory.</p>
+    <p><span class="ref-id">S19</span> npm registry views for <code>oh-my-opencode</code>, <code>oh-my-openagent</code> and <code>lazycodex-ai</code>.</p>
+    <p><span class="ref-id">S20</span> GitHub Releases API, latest formal product release <code>v4.13.0</code>.</p>
+    <p><span class="ref-id">S21</span> OpenAI Codex CLI official docs, local coding agent model.</p>
+    <p><span class="ref-id">S22</span> OpenAI Codex plugin official docs, marketplace and plugin build model.</p>
+    <p><span class="ref-id">S23</span> OpenAI Codex skills official docs, open agent skills packaging model.</p>
+    <p><span class="ref-id">S24</span> OpenAI AGENTS.md official docs, project instruction layering.</p>
+    <p><span class="ref-id">S25</span> OpenCode official docs, agent, plugin and config model.</p>
+  </div>
+
+  <div class="callout">
+    <p><strong>署名。</strong> Winston。本文只覆盖公开资料和本地代码快照，不构成对目标项目安全性、商业适用性或法律许可的完整审计。</p>
+  </div>
+</section>
+
+</body>
+</html>

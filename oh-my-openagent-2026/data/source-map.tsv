@@ -1,0 +1,26 @@
+id	type	evidence_level	source	claim_supported	url_or_path	checked_at_beijing
+S01	primary	repository_snapshot	GitHub API repository metadata	Repository identity, default branch, public counters, license classification, activity timestamps	https://api.github.com/repos/code-yeongyu/oh-my-openagent	2026-06-25
+S02	primary	repository_snapshot	GitHub API languages	Language byte distribution	https://api.github.com/repos/code-yeongyu/oh-my-openagent/languages	2026-06-25
+S03	primary	local_checkout	Local git checkout	Head commit, package files, workspace layout, component counts	/tmp/oh-my-openagent	2026-06-25
+S04	primary	project_document	README.md	Edition split, install commands, naming warning, feature claims, telemetry summary	/tmp/oh-my-openagent/README.md	2026-06-25
+S05	primary	project_document	docs/guide/installation.md	OpenCode Ultimate and Codex Light installation flows, marketplace flow, degraded modes	/tmp/oh-my-openagent/docs/guide/installation.md	2026-06-25
+S06	primary	project_document	docs/guide/overview.md	High-level architecture and agent roles	/tmp/oh-my-openagent/docs/guide/overview.md	2026-06-25
+S07	primary	project_document	docs/guide/orchestration.md	Planning, execution, worker agents, delegation categories, notepad system	/tmp/oh-my-openagent/docs/guide/orchestration.md	2026-06-25
+S08	primary	project_document	docs/guide/team-mode.md	Team Mode default state, tools, limits and shutdown protocol	/tmp/oh-my-openagent/docs/guide/team-mode.md	2026-06-25
+S09	primary	project_document	docs/reference/features.md	Built-in agents, hook counts, MCP tiers and feature module taxonomy	/tmp/oh-my-openagent/docs/reference/features.md	2026-06-25
+S10	primary	project_document	docs/reference/configuration.md	Config precedence, rename compatibility, environment variables and security boundary	/tmp/oh-my-openagent/docs/reference/configuration.md	2026-06-25
+S11	primary	project_document	docs/reference/codex-telemetry.md	Codex Light telemetry event, hashing, state path and opt-out behavior	/tmp/oh-my-openagent/docs/reference/codex-telemetry.md	2026-06-25
+S12	primary	project_document	ROADMAP.md	Package layering refactor, multi-harness direction and abstraction caution	/tmp/oh-my-openagent/ROADMAP.md	2026-06-25
+S13	primary	project_document	LICENSE.md	Sustainable Use License permissions and non-commercial/internal-use limitations	/tmp/oh-my-openagent/LICENSE.md	2026-06-25
+S14	primary	source_code	package.json	Package name, version, scripts, workspaces, bin aliases and license	/tmp/oh-my-openagent/package.json	2026-06-25
+S15	primary	source_code	packages/omo-codex/plugin/.codex-plugin/plugin.json	Codex plugin metadata, hook count and plugin capabilities	/tmp/oh-my-openagent/packages/omo-codex/plugin/.codex-plugin/plugin.json	2026-06-25
+S16	primary	source_code	packages/omo-codex/plugin/.mcp.json	Codex plugin MCP server list	/tmp/oh-my-openagent/packages/omo-codex/plugin/.mcp.json	2026-06-25
+S17	primary	source_code	packages/omo-opencode/src/agents/builtin-agents.ts	OpenCode built-in agent inventory	/tmp/oh-my-openagent/packages/omo-opencode/src/agents/builtin-agents.ts	2026-06-25
+S18	primary	source_code	packages/omo-opencode/src/mcp/index.ts	OpenCode built-in MCP inventory	/tmp/oh-my-openagent/packages/omo-opencode/src/mcp/index.ts	2026-06-25
+S19	primary	registry	npm registry view for oh-my-opencode, oh-my-openagent and lazycodex-ai	Published versions, package aliases, license and optional platform packages	https://registry.npmjs.org/oh-my-opencode	2026-06-25
+S20	primary	release	GitHub Releases API	Latest formal product release v4.13.0	https://api.github.com/repos/code-yeongyu/oh-my-openagent/releases	2026-06-25
+S21	primary	official_docs	OpenAI Codex CLI docs	Codex CLI as local coding agent and plugin/skills surfaces	https://developers.openai.com/codex/cli	2026-06-25
+S22	primary	official_docs	OpenAI Codex plugin docs	Codex plugin marketplace and build model	https://developers.openai.com/codex/plugins	2026-06-25
+S23	primary	official_docs	OpenAI Codex skills docs	Open agent skills packaging model	https://developers.openai.com/codex/skills	2026-06-25
+S24	primary	official_docs	OpenAI AGENTS.md docs	Codex project instruction layering	https://developers.openai.com/codex/guides/agents-md	2026-06-25
+S25	primary	official_docs	OpenCode official docs	OpenCode agent, plugin and config model	https://opencode.ai/docs/	2026-06-25
