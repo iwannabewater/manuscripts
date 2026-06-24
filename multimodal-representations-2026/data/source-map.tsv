@@ -1,0 +1,31 @@
+id	level	source	url	main_use	sections
+S01	A	DeViSE: A Deep Visual-Semantic Embedding Model	https://papers.nips.cc/paper/5204-devise-a-deep-visual-semantic-embedding-model	早期视觉语义嵌入与零样本分类	1,2
+S02	A	ViLBERT	https://arxiv.org/abs/1908.02265	双流 Transformer 与共同注意力	2,4
+S03	A	LXMERT	https://arxiv.org/abs/1908.07490	跨模态编码器与多任务预训练	2,4
+S04	A	UNITER	https://arxiv.org/abs/1909.11740	图文联合表征与词区对齐	2,4
+S05	A	CLIP	https://arxiv.org/abs/2103.00020	自然语言监督、对比学习与零样本迁移	2,3,8
+S06	A	ALIGN	https://arxiv.org/abs/2102.05918	噪声 alt-text 规模化图文对齐	3,8
+S07	A	SigLIP	https://arxiv.org/abs/2303.15343	Pairwise sigmoid loss 与训练效率	3,9
+S08	A	BLIP	https://arxiv.org/abs/2201.12086	图文理解和生成统一、caption bootstrapping	4,9
+S09	A	BLIP-2	https://arxiv.org/abs/2301.12597	Q-Former 与冻结大模型桥接	4,5,9
+S10	A	Flamingo	https://arxiv.org/abs/2204.14198	交错图文输入与少样本 VLM	5
+S11	A	BEiT-3	https://arxiv.org/abs/2208.10442	Multiway Transformer 与统一遮盖建模	4,6
+S12	A	CoCa	https://arxiv.org/abs/2205.01917	对比目标与生成目标合并	4
+S13	A	PaLI	https://arxiv.org/abs/2209.06794	多语言图文生成接口与共同扩展	4,5
+S14	B	Kosmos-1	https://arxiv.org/abs/2302.14045	从头训练 MLLM 与交错语料	5,6
+S15	A	LLaVA	https://arxiv.org/abs/2304.08485	视觉指令数据与轻量连接器	5,8
+S16	A	ImageBind	https://arxiv.org/abs/2305.05665	六模态共享嵌入空间	6,8
+S17	A	data2vec	https://arxiv.org/abs/2202.03555	跨模态统一自监督 latent prediction	1,3
+S18	A	I-JEPA	https://arxiv.org/abs/2301.08243	图像 joint-embedding predictive architecture	3,6
+S19	B	V-JEPA	https://arxiv.org/abs/2404.08471	视频特征预测与无文本视觉表征	3,6
+S20	A	4M	https://arxiv.org/abs/2312.06647	Any-to-any multimodal masked modeling	6,9
+S21	B	Chameleon	https://arxiv.org/abs/2405.09818	Mixed-modal early fusion	6,9
+S22	B	Qwen2.5-VL Technical Report	https://arxiv.org/abs/2502.13923	动态分辨率、文档与长视频视觉接口	5,8
+S23	B	VLM2Vec and MMEB	https://arxiv.org/abs/2410.05160	多模态 embedding 任务集与评测	7,8
+S24	B/D	PinCLIP	https://arxiv.org/abs/2603.03544	工业推荐/检索中的多模态表征约束	8,9
+S25	A	MME	https://arxiv.org/abs/2306.13394	感知与认知能力评测	7
+S26	A	MMBench	https://arxiv.org/abs/2307.06281	双语综合评测与 CircularEval	7
+S27	A	MMMU	https://arxiv.org/abs/2311.16502	多学科专业推理评测	7
+S28	A	HallusionBench	https://arxiv.org/abs/2310.14566	视觉幻觉与语言偏置诊断	7,9
+S29	C/D	GPT-4V system card	https://openai.com/index/gpt-4v-system-card/	公开多模态风险与安全边界	7,9
+S30	C/D	Hello GPT-4o	https://openai.com/index/hello-gpt-4o/	原生多模态产品形态信号	6,9

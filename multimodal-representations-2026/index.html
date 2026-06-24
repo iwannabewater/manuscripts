@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>多模态表征 2026：从共享向量空间到世界接口</title>
+<meta name="author" content="Winston">
+<meta name="description" content="从表征学习基础、图文对齐、视觉语言模型、多模态统一空间、评测和工程落地，系统解释多模态表征截至 2026-06-25 的研究脉络。">
+<meta name="keywords" content="多模态表征, CLIP, ImageBind, LLaVA, VLM, MLLM">
+<meta name="generator" content="Winston">
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 20mm 20mm 20mm;
+    background: #f5f4ed;
+
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02";
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+
+    @bottom-center {
+      content: counter(page) "  ·  多模态表征 2026";
+      font-family: "TsangerJinKai02";
+      font-size: 8.8pt;
+      color: #6b6a64;
+    }
+  }
+
+  @page:first {
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --paper: #f5f4ed;
+    --ivory: #faf9f5;
+    --near-black: #141413;
+    --dark-warm: #3d3d3a;
+    --olive: #504e49;
+    --stone: #6b6a64;
+    --brand: #1B365D;
+    --brand-tint: #EEF2F7;
+    --tag-bg: #E4ECF5;
+    --border: #e8e6dc;
+    --border-strong: #d8d4c7;
+    --publication-font: "TsangerJinKai02";
+    --mono: "JetBrains Mono", "JetBrainsMono", "TsangerJinKai02";
+  }
+
+  html,
+  body { background: var(--paper); }
+
+  @media screen {
+    body {
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 18mm 20mm 20mm 20mm;
+    }
+  }
+
+  body {
+    color: var(--near-black);
+    font-family: var(--publication-font);
+    font-size: 9.75pt;
+    line-height: 1.54;
+    letter-spacing: 0.16pt;
+    widows: 3;
+    orphans: 3;
+  }
+
+  a { color: var(--brand); text-decoration: none; }
+  strong { font-weight: 500; }
+  .hl { color: var(--brand); font-weight: 500; }
+  .mono { font-family: var(--mono); letter-spacing: 0; }
+
+  .cover {
+    min-height: 242mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 30mm;
+    break-after: page;
+  }
+
+  .cover-eyebrow {
+    color: var(--brand);
+    font-family: var(--mono);
+    font-size: 8.6pt;
+    letter-spacing: 1.5pt;
+    text-transform: uppercase;
+    margin-bottom: 16pt;
+  }
+
+  .cover-rule {
+    width: 48mm;
+    height: 2pt;
+    background: var(--brand);
+    border-radius: 2pt;
+    margin: 0 0 18pt 0;
+  }
+
+  .cover-title {
+    max-width: 98%;
+    font-size: 32pt;
+    font-weight: 500;
+    line-height: 1.16;
+    letter-spacing: 0.12pt;
+    margin-bottom: 16pt;
+  }
+
+  .cover-sub {
+    max-width: 91%;
+    color: var(--olive);
+    font-size: 12.8pt;
+    line-height: 1.58;
+  }
+
+  .cover-meta {
+    color: var(--stone);
+    font-size: 9.6pt;
+    line-height: 1.62;
+  }
+
+  .cover-meta strong {
+    color: var(--dark-warm);
+    font-weight: 500;
+  }
+
+  .toc { break-after: page; }
+
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: 14pt;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    gap: 8pt;
+    padding: 5pt 0;
+    border-bottom: 0.35pt dotted var(--border-strong);
+    font-size: 10.6pt;
+  }
+
+  .toc-num {
+    min-width: 28pt;
+    color: var(--brand);
+    font-weight: 500;
+    font-family: var(--mono);
+    letter-spacing: 0.2pt;
+  }
+
+  .toc-title { flex: 1; }
+  .toc-note { color: var(--stone); font-size: 8.5pt; }
+
+  .chapter {
+    margin-top: 22pt;
+    break-before: auto;
+  }
+
+  .chapter:first-of-type { break-before: auto; }
+
+  .chapter-num {
+    color: var(--brand);
+    font-family: var(--mono);
+    font-size: 8.5pt;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+    break-after: avoid;
+  }
+
+  h1 {
+    font-size: 21.5pt;
+    font-weight: 500;
+    line-height: 1.2;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    margin-bottom: 10pt;
+    break-after: avoid;
+  }
+
+  h2 {
+    font-size: 15.2pt;
+    font-weight: 500;
+    line-height: 1.26;
+    margin: 20pt 0 8pt;
+    string-set: section-title content();
+    break-after: avoid;
+  }
+
+  h3 {
+    color: var(--dark-warm);
+    font-size: 12.2pt;
+    font-weight: 500;
+    line-height: 1.32;
+    margin: 14pt 0 6pt;
+    break-after: avoid;
+  }
+
+  p {
+    margin: 0 0 8.2pt;
+    line-height: 1.54;
+  }
+
+  .lead {
+    color: var(--dark-warm);
+    font-size: 11.1pt;
+    line-height: 1.56;
+    margin-bottom: 12pt;
+  }
+
+  ul,
+  ol {
+    margin: 6pt 0 10pt 0;
+    padding-left: 18pt;
+    line-height: 1.5;
+  }
+
+  li { margin-bottom: 3pt; }
+  li::marker { color: var(--brand); }
+
+  .summary-grid,
+  .principle-grid,
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8pt;
+    margin: 10pt 0 12pt;
+  }
+
+  .metric-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .card {
+    background: var(--ivory);
+    border: 0.45pt solid var(--border);
+    border-radius: 7pt;
+    padding: 9pt 10pt;
+    break-inside: avoid;
+  }
+
+  .card-title {
+    color: var(--brand);
+    font-weight: 500;
+    margin-bottom: 4pt;
+  }
+
+  .metric {
+    background: var(--ivory);
+    border: 0.45pt solid var(--border);
+    border-radius: 7pt;
+    padding: 8pt 8pt 7pt;
+    break-inside: avoid;
+  }
+
+  .metric-value {
+    color: var(--brand);
+    display: block;
+    font-family: var(--mono);
+    font-size: 14pt;
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 3pt;
+  }
+
+  .metric-label {
+    color: var(--olive);
+    font-size: 8.4pt;
+    line-height: 1.35;
+  }
+
+  .note,
+  .callout {
+    background: var(--ivory);
+    border-left: 2.2pt solid var(--brand);
+    border-radius: 5pt;
+    padding: 8pt 10pt;
+    margin: 10pt 0 12pt;
+    break-inside: avoid;
+  }
+
+  .note p,
+  .callout p { margin-bottom: 0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10pt 0 12pt;
+    font-size: 8.05pt;
+    break-inside: avoid;
+  }
+
+  th {
+    text-align: left;
+    color: var(--dark-warm);
+    font-weight: 500;
+    padding: 4.8pt 5pt;
+    border-bottom: 1pt solid var(--border-strong);
+  }
+
+  td {
+    vertical-align: top;
+    padding: 4.2pt 5pt;
+    border-bottom: 0.32pt solid var(--border);
+  }
+
+  tbody tr:nth-child(even) td { background: var(--ivory); }
+
+  .compact th,
+  .compact td {
+    font-size: 7.4pt;
+    line-height: 1.34;
+    padding: 3.2pt 4pt;
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--brand);
+    border-radius: 3pt;
+    padding: 1pt 4.5pt;
+    font-family: var(--mono);
+    font-size: 7.5pt;
+    font-weight: 600;
+    letter-spacing: 0.45pt;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  figure {
+    margin: 12pt 0 14pt;
+    background: var(--ivory);
+    border: 0.45pt solid var(--border);
+    border-radius: 7pt;
+    padding: 9pt;
+    break-inside: avoid;
+  }
+
+  figure svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  figcaption {
+    color: var(--olive);
+    font-size: 8.2pt;
+    line-height: 1.45;
+    margin-top: 6pt;
+  }
+
+  .references {
+    column-count: 2;
+    column-gap: 16pt;
+    font-size: 7.1pt;
+    line-height: 1.28;
+  }
+
+  .references p {
+    break-inside: avoid;
+    margin-bottom: 3.8pt;
+  }
+
+  .ref-id {
+    color: var(--brand);
+    font-family: var(--mono);
+    font-weight: 600;
+  }
+
+  .source-note {
+    color: var(--stone);
+    font-size: 8.1pt;
+    line-height: 1.45;
+    margin-top: 8pt;
+  }
+</style>
+</head>
+<body>
+  <section class="cover">
+    <div>
+      <div class="cover-eyebrow">TECHNICAL RESEARCH · EVIDENCE DATE 2026-06-25</div>
+      <div class="cover-rule"></div>
+      <div class="cover-title">多模态表征 2026：<br>从共享向量空间到世界接口</div>
+      <p class="cover-sub">一份从 0 到 1 再到全部的技术读物：先解释表征到底是什么，再拆开图文对齐、视觉语言模型、多模态统一空间、评测与工程落地，最后给出如何选型、训练、评估和上线的判断框架。</p>
+    </div>
+    <div class="cover-meta">
+      <p><strong>Author</strong>：Winston</p>
+      <p><strong>Evidence date</strong>：2026-06-25，Asia/Shanghai</p>
+      <p><strong>Evidence base</strong>：30 个一手来源，覆盖论文、官方系统卡、官方产品页与开源仓库</p>
+      <p><strong>Boundary</strong>：本文讨论公开研究与工程判断，不把闭源产品能力反推为未披露架构结论</p>
+    </div>
+  </section>
+
+  <section class="toc">
+    <h2>目录</h2>
+    <div class="toc-item"><span class="toc-num">00</span><span class="toc-title">执行摘要：表征先解决可比较，再解决可交互</span><span class="toc-note">overview</span></div>
+    <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">从 0 开始：表征不是压缩，是给任务一个可计算的状态</span><span class="toc-note">foundation</span></div>
+    <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">从 1 开始：图文对齐为什么成为多模态表征的入口</span><span class="toc-note">alignment</span></div>
+    <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">目标函数：对比、遮盖、预测与生成</span><span class="toc-note">objectives</span></div>
+    <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">结构谱系：双塔、跨注意力、桥接器和早融合</span><span class="toc-note">architecture</span></div>
+    <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">从图文到全部：ImageBind、4M、Chameleon 与原生多模态</span><span class="toc-note">all-modal</span></div>
+    <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">评测：embedding 好、问答好、推理好是三件事</span><span class="toc-note">evaluation</span></div>
+    <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">工程落地：如何选模型、训数据、上线和监控</span><span class="toc-note">practice</span></div>
+    <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">常见误区与前沿问题</span><span class="toc-note">frontier</span></div>
+    <div class="toc-item"><span class="toc-num">09</span><span class="toc-title">Further Reading 与来源</span><span class="toc-note">sources</span></div>
+  </section>
+
+  <main>
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 00</div>
+      <h1>执行摘要：表征先解决可比较，再解决可交互</h1>
+      <p class="lead">多模态表征的核心问题不是“把图片、文本、音频、视频都塞进一个模型”。真正的问题是：不同模态的观测来自不同传感器、不同采样率和不同符号系统，模型如何把它们变成可比较、可检索、可推理、可生成、可行动的内部状态。</p>
+      <div class="metric-grid">
+        <div class="metric"><span class="metric-value">30</span><span class="metric-label">个一手来源，覆盖论文、官方系统卡和开源仓库</span></div>
+        <div class="metric"><span class="metric-value">10</span><span class="metric-label">类代表性路线，从 DeViSE 到 Chameleon 与 PinCLIP</span></div>
+        <div class="metric"><span class="metric-value">4</span><span class="metric-label">类训练信号：对齐、遮盖、预测、生成</span></div>
+        <div class="metric"><span class="metric-value">3</span><span class="metric-label">个工程问题：延迟、误差成本、可验证性</span></div>
+      </div>
+      <div class="summary-grid">
+        <div class="card">
+          <div class="card-title">第一层：可比较</div>
+          <p>CLIP、ALIGN 和 SigLIP 把图像与文本放进同一个向量空间，检索和零样本分类因此变得简单 [S05-S07]。这一步解决的是“谁和谁语义接近”，不是“模型是否真的理解图像”。</p>
+        </div>
+        <div class="card">
+          <div class="card-title">第二层：可交互</div>
+          <p>BLIP、BLIP-2、Flamingo、LLaVA 把视觉状态接进语言模型，让模型能回答、解释、跟随指令 [S08-S10, S15]。这一步的代价是语言偏置会进入视觉任务。</p>
+        </div>
+        <div class="card">
+          <div class="card-title">第三层：可组合</div>
+          <p>ImageBind 用图像作为枢纽，把文本、音频、深度、热成像、IMU 等模态绑到同一空间 [S16]。4M 和 Chameleon 则尝试把输入输出都纳入统一 token 或 masked modeling 系统 [S20, S21]。</p>
+        </div>
+        <div class="card">
+          <div class="card-title">第四层：可验证</div>
+          <p>MMEB、MME、MMBench、MMMU 和 HallusionBench 指向同一个事实：表征质量不是一个分数，检索、问答、专业推理、视觉抗幻觉需要分开测 [S23, S25-S28]。</p>
+        </div>
+      </div>
+      <p>本文的主线很直接：先把表征看成任务可用的状态空间，再看训练信号如何塑造这个空间，最后把它落回工程系统。读完后，读者应该能回答四个问题：一个多模态模型的内部接口是什么；它用什么信号学到跨模态关系；它适合检索、问答、生成还是行动；它的失败会发生在数据、目标函数、连接器、评测还是产品边界。</p>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 01</div>
+      <h1>从 0 开始：表征不是压缩，是给任务一个可计算的状态</h1>
+      <p class="lead">表征学习把原始观测转成任务能使用的状态。好的表征保留任务需要的变化，丢掉任务不关心的扰动。多模态表征再往前走一步：它要让来自不同模态的状态能互相参照。</p>
+
+      <h2>一个表征至少要回答三件事</h2>
+      <p>第一，<span class="hl">相似性</span>如何定义。图像里两只不同角度的狗、文字里“dog”和“puppy”、音频里的犬吠，原始信号相差很大，但下游任务可能希望它们靠近。第二，<span class="hl">不变性</span>如何选择。分类任务希望光照变化不改变类别；医学图像任务可能不能随便丢掉亮度和纹理；机器人任务还要保留空间、姿态、速度。第三，<span class="hl">接口</span>如何暴露。一个向量可以做检索，一个 token 序列可以接进语言模型，一个时序 latent 可以接控制策略。</p>
+      <p>早期视觉语义嵌入已经把问题摆出来。DeViSE 把视觉模型输出映射到文本语义嵌入空间，用语义空间支持零样本识别 [S01]。这条路线并不复杂，但它改变了视觉分类的边界：类别不再只是固定 softmax 里的索引，而可以被语言描述扩展。</p>
+
+      <figure>
+        <svg viewBox="0 0 1000 420" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100%" height="100%" fill="#f5f4ed"/>
+          <text x="64" y="42" fill="#1B365D" font-size="15" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  1</text>
+          <text x="188" y="42" fill="#504e49" font-size="15" font-family="JetBrains Mono" letter-spacing="3">REPRESENTATION AS INTERFACE</text>
+          <line x1="64" y1="58" x2="936" y2="58" stroke="#1B365D" stroke-width="1"/>
+          <rect x="82" y="114" width="170" height="86" rx="10" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+          <text x="167" y="148" text-anchor="middle" fill="#141413" font-size="24" font-family="TsangerJinKai02" font-weight="500">原始观测</text>
+          <text x="167" y="176" text-anchor="middle" fill="#6b6a64" font-size="15" font-family="JetBrains Mono">pixels · text · audio</text>
+          <path d="M252 157 L346 157" fill="none" stroke="#504e49" stroke-width="2"/>
+          <path d="M338 149 L350 157 L338 165" fill="none" stroke="#504e49" stroke-width="2" stroke-linecap="round"/>
+          <rect x="350" y="96" width="240" height="122" rx="12" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.6"/>
+          <text x="470" y="135" text-anchor="middle" fill="#141413" font-size="25" font-family="TsangerJinKai02" font-weight="500">表征空间</text>
+          <text x="470" y="166" text-anchor="middle" fill="#504e49" font-size="15" font-family="JetBrains Mono">similarity · invariance · state</text>
+          <text x="470" y="192" text-anchor="middle" fill="#504e49" font-size="15" font-family="JetBrains Mono">embedding / tokens / latents</text>
+          <path d="M590 157 L686 157" fill="none" stroke="#1B365D" stroke-width="2"/>
+          <path d="M678 149 L690 157 L678 165" fill="none" stroke="#1B365D" stroke-width="2" stroke-linecap="round"/>
+          <rect x="690" y="84" width="228" height="46" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+          <rect x="690" y="146" width="228" height="46" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+          <rect x="690" y="208" width="228" height="46" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+          <text x="804" y="113" text-anchor="middle" fill="#141413" font-size="20" font-family="TsangerJinKai02" font-weight="500">检索与匹配</text>
+          <text x="804" y="175" text-anchor="middle" fill="#141413" font-size="20" font-family="TsangerJinKai02" font-weight="500">问答与生成</text>
+          <text x="804" y="237" text-anchor="middle" fill="#141413" font-size="20" font-family="TsangerJinKai02" font-weight="500">规划与行动</text>
+          <path d="M392 286 C430 250 514 250 552 286" fill="none" stroke="#d8d4c7" stroke-width="2"/>
+          <text x="472" y="324" text-anchor="middle" fill="#504e49" font-size="17" font-family="TsangerJinKai02">训练信号决定空间形状，任务接口决定什么信息不能丢</text>
+        </svg>
+        <figcaption>Figure 1. 表征不是原始信号的无损压缩，而是任务可用的接口。检索、生成和行动需要的状态不同，同一个 backbone 也可能需要不同投影头、连接器或时序状态。</figcaption>
+      </figure>
+
+      <h2>“多模态”真正增加的是对齐约束</h2>
+      <p>单模态表征只需要在一种观测里找到稳定结构。多模态表征多了一层约束：来自不同模态的样本何时应该靠近，何时应该保持差异。图片和文本描述同一个物体时可以靠近；图片里的空间布局和一句笼统 caption 却不该完全等价。音频里的节奏、视频里的动作、IMU 里的加速度和文本语义也不能被粗暴压成一个概念标签。</p>
+      <p>这也是很多多模态系统失败的来源。模型把跨模态相似性学到了，但把任务需要的局部信息丢了。一个图文 embedding 能找出“有发票截图”的图片，不代表它能读出表格里第 17 行的税额；一个视觉语言模型能描述“有人在骑车”，不代表它能稳定判断轮胎和车道线的几何关系。表征空间越通用，越要问它为哪个接口服务。</p>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 02</div>
+      <h1>从 1 开始：图文对齐为什么成为多模态表征的入口</h1>
+      <p class="lead">图文对齐成为入口，不是因为图像和文字天然最重要，而是因为互联网上有大量图文配对，语言又能给视觉概念一个开放词表接口。CLIP 和 ALIGN 把这个判断推到规模化阶段。</p>
+
+      <h2>CLIP 把分类器改造成语言查询</h2>
+      <p>CLIP 的训练任务很朴素：一批图文对里，模型要判断哪一句文字配哪一张图。OpenAI 论文报告使用 4 亿图文对从头训练，并用自然语言描述来引用视觉概念 [S05]。这让 ImageNet 这类固定类别分类，变成“文本 prompt 与图像表示的相似度”问题。分类头不再是封闭标签集合，而是可由语言扩展的查询接口。</p>
+      <p>这个接口的工程价值很高。向量检索系统已经成熟，图文对齐模型只要输出稳定 embedding，就能进入搜索、素材管理、推荐召回、内容安全初筛、RAG 的图像检索层。它的局限也同样直接：双塔模型在编码后才比较向量，图像和文本没有在 token 级别深入交互，所以细粒度定位、复杂关系、逐步推理不是它的强项。</p>
+
+      <h2>ALIGN 证明噪声可以被规模抵消，但不能被规模洗白</h2>
+      <p>ALIGN 延续双塔加对比学习路线，重点在数据策略：用超过十亿级噪声 alt-text 图文对训练，减少昂贵清洗 [S06]。它的价值不只是“数据更大”，而是说明在开放网页语料里，规模可以抵消一部分标注噪声，简单结构也能产生强迁移。</p>
+      <p>但噪声没有消失。alt-text 带着网页作者的偏见、广告语言、缺失描述和文化分布。规模化图文表征会继承这些偏差。工程上不能只问模型在公开 benchmark 上几分，还要看业务语料里哪些概念被过度关联，哪些边缘类别被稀释，哪些安全词会把图像召回推向错误方向。</p>
+
+      <h2>SigLIP 把“更大 batch”这件事重新拆开</h2>
+      <p>标准 CLIP 式对比学习依赖 batch 内全局 softmax。SigLIP 改用 pairwise sigmoid loss，不要求对整批相似度做全局归一化 [S07]。这条改动看似是训练细节，实质上改变了扩展路径：对齐质量不只靠堆更大的 batch，也可以通过更合适的损失函数降低通信和内存压力。</p>
+      <div class="note">
+        <p><strong>工程判断</strong>，如果任务是高吞吐检索和召回，双塔仍是首选接口：离线批量编码、向量库索引、近似最近邻检索、在线延迟都清楚。只有当任务需要解释图中关系、读文档、跟随复杂指令或生成多轮答案时，才需要更重的跨模态交互。</p>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 03</div>
+      <h1>目标函数：对比、遮盖、预测与生成</h1>
+      <p class="lead">目标函数决定表征空间的形状。对比学习让正样本靠近、负样本远离；遮盖建模要求模型补全缺失信息；预测表征不重建像素，而预测 latent；生成目标要求状态能驱动语言或图像输出。</p>
+
+      <table>
+        <thead>
+          <tr><th>目标</th><th>代表来源</th><th>学到什么</th><th>适合什么</th><th>容易漏掉什么</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><span class="tag">contrastive</span></td><td>CLIP、ALIGN、SigLIP [S05-S07]</td><td>跨模态相似性、开放词表语义</td><td>检索、召回、零样本分类</td><td>空间关系、局部细节、逐步推理</td></tr>
+          <tr><td><span class="tag">masked</span></td><td>UNITER、BEiT-3、4M [S04, S11, S20]</td><td>上下文补全、区域词对齐、多模态 token 结构</td><td>细粒度理解、多任务迁移</td><td>训练复杂，tokenizer 决定上限</td></tr>
+          <tr><td><span class="tag">predictive</span></td><td>data2vec、I-JEPA、V-JEPA [S17-S19]</td><td>上下文 latent 预测、语义块关系、时序视觉状态</td><td>视觉 backbone、视频理解、低文本依赖表征</td><td>语言接口要另接，检索解释性弱</td></tr>
+          <tr><td><span class="tag">generative</span></td><td>BLIP、CoCa、PaLI、Kosmos-1 [S08, S12-S14]</td><td>从视觉状态到文本输出，或从多模态上下文到响应</td><td>caption、VQA、文档理解、对话</td><td>语言先验强，可能说得顺但看错</td></tr>
+        </tbody>
+      </table>
+
+      <h2>对比学习把“相似”变成可检索结构</h2>
+      <p>对比学习的强项是把大量弱标注样本转成可检索空间。只要正样本定义可靠，模型就能把语义相关的图片和文本拉近。问题在于，正样本通常来自 caption 或网页上下文，它描述的只是图像的一部分。图像里没被描述的对象、细节、位置关系，在训练信号里就是弱信号。</p>
+
+      <h2>遮盖建模让模型不得不看上下文</h2>
+      <p>UNITER 用遮盖语言、遮盖区域、图文匹配和词区对齐训练联合表示 [S04]。BEiT-3 把图像看作一种外语，用 Multiway Transformer 在图像、文本和图文对上做统一 masked modeling [S11]。4M 把这个思路推到更宽的输入输出空间，把文本、图像、几何、语义和特征图离散化后用 masked modeling 训练 [S20]。</p>
+      <p>遮盖建模的意义在于，它不只问“这张图和这句话像不像”，而是问“在这个上下文里，缺掉的部分应该是什么”。这更接近文档理解、局部定位和跨区域关系，但训练成本、数据组织和 tokenizer 误差也更难控制。</p>
+
+      <h2>预测表征提醒我们：语言不是唯一监督</h2>
+      <p>data2vec 用同一种 latent prediction 框架处理语音、视觉和语言 [S17]。I-JEPA 从一个图像上下文块预测目标块的表示，不重建像素 [S18]。V-JEPA 在视频上用特征预测学习视觉表征，论文明确强调不使用预训练图像编码器、文本、负样本、重建或其他监督 [S19]。这条线对多模态很重要，因为它把表征学习从“必须借语言监督”里拉出来。</p>
+      <p>语言仍然是最方便的人机接口，但它不是所有感知任务的自然标签。机器人、自动驾驶、医学影像、工业检测、长视频理解都可能需要保留语言描述之外的物理和时间结构。把一切压进文本相似性，反而会丢掉这些结构。</p>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 04</div>
+      <h1>结构谱系：双塔、跨注意力、桥接器和早融合</h1>
+      <p class="lead">同样叫多模态模型，结构差别很大。双塔适合离线编码和检索，跨注意力适合理解细节，桥接器适合复用大语言模型，早融合适合把混合模态文档当作同一种序列建模。</p>
+
+      <figure>
+        <svg viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100%" height="100%" fill="#f5f4ed"/>
+          <text x="64" y="40" fill="#1B365D" font-size="15" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  2</text>
+          <text x="188" y="40" fill="#504e49" font-size="15" font-family="JetBrains Mono" letter-spacing="3">FOUR ARCHITECTURE FAMILIES</text>
+          <line x1="64" y1="56" x2="936" y2="56" stroke="#1B365D" stroke-width="1"/>
+          <rect x="70" y="100" width="200" height="112" rx="12" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.5"/>
+          <text x="170" y="132" text-anchor="middle" fill="#141413" font-size="24" font-family="TsangerJinKai02" font-weight="500">双塔对齐</text>
+          <text x="170" y="164" text-anchor="middle" fill="#504e49" font-size="15" font-family="JetBrains Mono">image encoder</text>
+          <text x="170" y="188" text-anchor="middle" fill="#504e49" font-size="15" font-family="JetBrains Mono">text encoder</text>
+          <rect x="296" y="100" width="200" height="112" rx="12" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+          <text x="396" y="132" text-anchor="middle" fill="#141413" font-size="24" font-family="TsangerJinKai02" font-weight="500">跨注意力</text>
+          <text x="396" y="164" text-anchor="middle" fill="#504e49" font-size="15" font-family="JetBrains Mono">regions + words</text>
+          <text x="396" y="188" text-anchor="middle" fill="#504e49" font-size="15" font-family="JetBrains Mono">joint encoder</text>
+          <rect x="522" y="100" width="200" height="112" rx="12" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+          <text x="622" y="132" text-anchor="middle" fill="#141413" font-size="24" font-family="TsangerJinKai02" font-weight="500">桥接器</text>
+          <text x="622" y="164" text-anchor="middle" fill="#504e49" font-size="15" font-family="JetBrains Mono">vision encoder</text>
+          <text x="622" y="188" text-anchor="middle" fill="#504e49" font-size="15" font-family="JetBrains Mono">adapter to LLM</text>
+          <rect x="748" y="100" width="200" height="112" rx="12" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+          <text x="848" y="132" text-anchor="middle" fill="#141413" font-size="24" font-family="TsangerJinKai02" font-weight="500">早融合</text>
+          <text x="848" y="164" text-anchor="middle" fill="#504e49" font-size="15" font-family="JetBrains Mono">mixed tokens</text>
+          <text x="848" y="188" text-anchor="middle" fill="#504e49" font-size="15" font-family="JetBrains Mono">single transformer</text>
+          <path d="M170 212 L170 278" fill="none" stroke="#1B365D" stroke-width="2"/>
+          <path d="M396 212 L396 278" fill="none" stroke="#504e49" stroke-width="2"/>
+          <path d="M622 212 L622 278" fill="none" stroke="#504e49" stroke-width="2"/>
+          <path d="M848 212 L848 278" fill="none" stroke="#504e49" stroke-width="2"/>
+          <rect x="70" y="278" width="200" height="94" rx="10" fill="#faf9f5" stroke="#d8d4c7" stroke-width="1"/>
+          <rect x="296" y="278" width="200" height="94" rx="10" fill="#faf9f5" stroke="#d8d4c7" stroke-width="1"/>
+          <rect x="522" y="278" width="200" height="94" rx="10" fill="#faf9f5" stroke="#d8d4c7" stroke-width="1"/>
+          <rect x="748" y="278" width="200" height="94" rx="10" fill="#faf9f5" stroke="#d8d4c7" stroke-width="1"/>
+          <text x="170" y="312" text-anchor="middle" fill="#141413" font-size="19" font-family="TsangerJinKai02">检索、召回、零样本</text>
+          <text x="170" y="340" text-anchor="middle" fill="#6b6a64" font-size="14" font-family="JetBrains Mono">CLIP · ALIGN · SigLIP</text>
+          <text x="396" y="312" text-anchor="middle" fill="#141413" font-size="19" font-family="TsangerJinKai02">细粒度理解</text>
+          <text x="396" y="340" text-anchor="middle" fill="#6b6a64" font-size="14" font-family="JetBrains Mono">ViLBERT · LXMERT · UNITER</text>
+          <text x="622" y="312" text-anchor="middle" fill="#141413" font-size="19" font-family="TsangerJinKai02">问答与指令</text>
+          <text x="622" y="340" text-anchor="middle" fill="#6b6a64" font-size="14" font-family="JetBrains Mono">BLIP-2 · Flamingo · LLaVA</text>
+          <text x="848" y="312" text-anchor="middle" fill="#141413" font-size="19" font-family="TsangerJinKai02">混合文档与生成</text>
+          <text x="848" y="340" text-anchor="middle" fill="#6b6a64" font-size="14" font-family="JetBrains Mono">4M · Chameleon</text>
+          <text x="500" y="430" text-anchor="middle" fill="#504e49" font-size="18" font-family="TsangerJinKai02">结构选择先看接口：向量检索要双塔，多轮回答要桥接器，混合模态生成才值得付早融合成本。</text>
+        </svg>
+        <figcaption>Figure 2. 四类结构不是线性替代关系。越靠右，交互能力更强，训练和推理成本也更高；越靠左，服务化更简单，但局部推理能力弱。</figcaption>
+      </figure>
+
+      <h2>跨注意力解决局部关系，代价是重</h2>
+      <p>ViLBERT、LXMERT、UNITER 这一代视觉语言预训练模型，把视觉区域和文本 token 放进互相交互的 Transformer 结构里 [S02-S04]。它们处理的是双塔不擅长的问题：词和区域如何对齐，问题里的关系词如何落到图像对象上，图像上下文如何影响语言理解。</p>
+      <p>这类模型更像“读图”，而不是“查找相似图片”。缺点是在线成本高。每次查询都要让文本和视觉 token 交互，无法像双塔那样把图片离线编码后直接走向量索引。它适合 VQA、视觉推理、文档局部理解，不适合作为大规模召回第一层。</p>
+
+      <h2>桥接器是大语言模型时代的现实主义</h2>
+      <p>BLIP-2 直接承认端到端预训练大模型成本太高，于是冻结图像编码器和 LLM，用轻量 Q-Former 桥接两者 [S09]。Flamingo 用 Perceiver Resampler 接收视觉输入，并让语言模型处理交错图文序列 [S10]。LLaVA 用视觉编码器、投影连接器和视觉指令数据，把图像接进对话式 LLM [S15]。</p>
+      <p>这条路线快，复用语言模型的知识、推理和指令跟随能力。但它也把语言模型的先验带进视觉任务。模型可能回答得很像“懂了”，但视觉证据并不支持。HallusionBench 这类诊断集存在的原因，正是要把语言偏置和视觉证据的冲突暴露出来 [S28]。</p>
+
+      <h2>对比加生成，把 embedding 和 caption 放回一张图里</h2>
+      <p>BLIP 用 captioner 和 filter 改善网页噪声图文对，把理解任务和生成任务放进同一框架 [S08]。CoCa 同时使用对比损失和 captioning 损失，尝试让一个图文 encoder-decoder 同时服务视觉识别、跨模态检索、多模态理解和 caption [S12]。这类模型的关键取舍是目标之间是否互相帮助：检索要稳定相似度，生成要足够表达，二者共享骨干时会争夺容量。</p>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 05</div>
+      <h1>从图文到全部：ImageBind、4M、Chameleon 与原生多模态</h1>
+      <p class="lead">“全部模态”不是把输入类型越堆越多。真正困难的是，不同模态之间不一定两两配对，采样率不一致，token 化方式不同，输出目标也不同。当前公开路线大致分三类：枢纽空间、any-to-any masked modeling、mixed-modal early fusion。</p>
+
+      <h2>ImageBind：用图像作为跨模态枢纽</h2>
+      <p>ImageBind 学习一个包含图像、文本、音频、深度、热成像和 IMU 的共享嵌入空间 [S16]。它的关键判断是：不需要所有模态两两配对，只要每种模态都能和图像配对，就可以通过图像枢纽把空间绑定起来。这个设定很工程化，因为现实数据里“视频加音频”“图像加深度”“图像加 IMU”比任意两模态配对更常见。</p>
+      <p>枢纽空间也有边界。图像决定了很多语义锚点，适合视觉中心任务；但如果任务核心关系发生在音频和文本之间，或者在 IMU 和动作策略之间，图像枢纽可能只提供间接约束。所谓 emergent alignment 要放在任务里看，不宜直接写成任意模态之间都等价连通。</p>
+
+      <h2>4M：把多种输入输出统一进 masked modeling</h2>
+      <p>4M 训练一个统一 Transformer encoder-decoder，用 masked modeling 处理文本、图像、几何、语义和神经网络特征图等多种输入输出 [S20]。这条路线关心的是 any-to-any：任意模态子集作为条件，预测或生成另一组模态。它的优势不是检索延迟，而是任务灵活性。比如一套模型可以从图像预测深度、从语义预测图像、从文本控制编辑。</p>
+      <p>这类模型最依赖 token 化质量。模态被离散化后，模型学到的是 token 序列的统计结构；如果 tokenizer 把空间、纹理或时间切碎得不合适，后面的 Transformer 再大也只能在失真的单位上推理。</p>
+
+      <h2>Chameleon：早融合把混合文档当作同一种序列</h2>
+      <p>Chameleon 把文本和图像都表示为 token，在同一个 early-fusion Transformer 里处理和生成任意交错的图文序列 [S21]。这条线的吸引力很强：它不再把视觉当成 LLM 外面的附件，而是把多模态文档建模为统一序列。</p>
+      <p>早融合的问题也更硬。训练稳定性、tokenizer、上下文长度、混合输出质量、推理成本都会变成一体化问题。工程上如果只需要图片检索，早融合是过度设计；如果要生成真正交错的图文内容，或者要在一个上下文里让输入和输出都混合模态，早融合才有必要。</p>
+
+      <h2>闭源原生多模态是产品信号，不是架构证据</h2>
+      <p>GPT-4V system card 披露的是视觉能力边界、风险和安全缓解，而不是完整模型结构 [S29]。GPT-4o 产品页展示文本、音频、图像更自然地进入同一交互界面 [S30]。这些产品信号说明多模态正在从“上传图片问答”走向“实时、多轮、跨输入输出”的系统体验，但公开材料不足以判断内部表征是共享向量、桥接 latent、统一 token 还是混合路线。</p>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 06</div>
+      <h1>评测：embedding 好、问答好、推理好是三件事</h1>
+      <p class="lead">多模态评测不能只看一个总分。检索 embedding、视觉问答、专业推理、抗幻觉、长视频理解、文档解析，测的是不同接口。把它们混成一个排名，会掩盖模型真实能力边界。</p>
+
+      <table>
+        <thead>
+          <tr><th>评测面</th><th>代表来源</th><th>主要问题</th><th>对表征的启发</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Embedding 任务</td><td>MMEB / VLM2Vec [S23]</td><td>检索、分类、VQA、grounding 等多种 embedding 用法</td><td>同一个 VLM 不一定天然是好 embedding model，需要针对任务训练和评测</td></tr>
+          <tr><td>综合 MLLM</td><td>MME [S25]</td><td>感知与认知能力拆分</td><td>看图回答的错误要分清是视觉错、语言错还是推理错</td></tr>
+          <tr><td>双语与鲁棒评测</td><td>MMBench [S26]</td><td>多选题、CircularEval、中文/英文版本</td><td>指令跟随格式会影响分数，评测要控制输出解析偏差</td></tr>
+          <tr><td>专业推理</td><td>MMMU [S27]</td><td>大学级多学科题和复杂图像类型</td><td>专业知识和图像理解要同时成立，简单图文对齐不够</td></tr>
+          <tr><td>视觉幻觉</td><td>HallusionBench [S28]</td><td>语言偏置压过视觉证据</td><td>模型答得流畅不是证据，必须测视觉依赖问题</td></tr>
+        </tbody>
+      </table>
+
+      <h2>评测要和接口一致</h2>
+      <p>一个图文双塔模型可以在 retrieval 上很强，但它不该被要求直接做复杂多轮推理。一个视觉语言模型可以在 VQA 上强，但它的 embedding 可能不适合向量库召回。VLM2Vec 的价值在于把“视觉语言模型能不能转成 embedding model”单独拿出来测 [S23]。这提醒工程团队：不要把 chat model 的截图问答能力当成检索表征质量。</p>
+
+      <h2>专业推理暴露的是组合能力，不只是视觉能力</h2>
+      <p>MMMU 覆盖 6 个学科、30 个 subjects、183 个 subfields 和多种图像类型 [S27]。这类评测把“看得见”与“会推理”绑在一起。模型要读图表、化学结构、地图、音乐谱、医学图像，还要调用专业知识。只靠更大的图文对齐语料，不一定能解决这种组合问题。</p>
+
+      <h2>视觉幻觉通常发生在语言太强的时候</h2>
+      <p>HallusionBench 关注的是图像上下文推理和视觉幻觉 [S28]。很多错误不是模型完全没看图，而是语言先验太强：题目像某个常见模式，模型就顺着常见答案说下去。对多模态表征来说，这是一条重要边界：语言空间让视觉可问答，也可能覆盖视觉证据。</p>
+      <div class="callout">
+        <p><strong>上线前的最低评测集</strong>，检索系统测 Recall、nDCG、hard negative 和长尾类别；问答系统测 OCR、表格、位置关系、否定问法和拒答；文档系统测来源定位、数值抽取和跨页引用；视频系统测时间定位、事件顺序和长间隔记忆。单一 leaderboard 不能替代业务评测。</p>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 07</div>
+      <h1>工程落地：如何选模型、训数据、上线和监控</h1>
+      <p class="lead">工程上先选接口，再选模型。接口决定延迟、成本、可解释性和可测试性。多模态表征项目失败，常常不是模型不够大，而是一开始把检索、问答、生成、行动混成了同一个需求。</p>
+
+      <h2>先按任务选结构</h2>
+      <table class="compact">
+        <thead>
+          <tr><th>任务</th><th>优先结构</th><th>原因</th><th>不要先做什么</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>图片/视频/商品召回</td><td>双塔 embedding</td><td>可离线编码，向量索引成熟，成本可控</td><td>不要先接重型 MLLM 做在线逐条判断</td></tr>
+          <tr><td>文档截图问答</td><td>桥接器 VLM 加 OCR/解析器</td><td>需要语言接口，也需要可核验来源</td><td>不要把 VLM 输出当作唯一事实来源</td></tr>
+          <tr><td>图表/表格理解</td><td>VLM 加结构化抽取</td><td>视觉布局和数值关系都重要</td><td>不要只测 caption 分数</td></tr>
+          <tr><td>跨传感器机器人感知</td><td>枢纽空间或预测表征</td><td>需要图像、深度、IMU、动作状态共同约束</td><td>不要把文本描述当作全部状态</td></tr>
+          <tr><td>混合图文生成</td><td>早融合或 any-to-any</td><td>输入输出都混合模态，需要统一序列建模</td><td>不要用检索 embedding 冒充生成状态</td></tr>
+          <tr><td>推荐排序</td><td>工业 embedding 加业务特征</td><td>线上目标、延迟和特征稳定性比论文分数更重要</td><td>不要只看公开检索 benchmark</td></tr>
+        </tbody>
+      </table>
+
+      <h2>数据比结构更早决定边界</h2>
+      <p>图文数据的 caption 覆盖什么，模型就更容易学到什么。网页 alt-text 强调对象和场景，但弱化空间关系、数量、细节和否定。文档截图数据强调布局和文字，但不一定覆盖真实业务里的模糊扫描、遮挡、手写、低分辨率和跨页引用。视频数据还多了采样率、关键帧、事件边界和音画不同步问题。</p>
+      <p>训练数据应按错误成本组织。检索任务要准备 hard negatives，比如同款不同颜色、相似包装、同一场景不同动作。文档任务要准备数值相近但含义不同的字段。视频任务要准备时间相邻但事件不同的片段。机器人任务要准备同一语义下动作后果不同的状态。</p>
+
+      <h2>冻结、微调和蒸馏的取舍</h2>
+      <p>冻结 backbone 加轻量连接器，适合快速验证和成本受限场景。BLIP-2 这类路线说明，冻结强视觉编码器和强 LLM 后，用 Q-Former 桥接也能获得强能力 [S09]。全量微调适合分布差异很大、误差成本高、数据足够且需要深度适配的场景。蒸馏适合把重模型的判断迁移到轻模型，尤其在推荐、搜索、广告这类高吞吐系统里。</p>
+      <p>PinCLIP 的工业信号很有代表性：多模态 VLM 进入推荐和检索系统时，会遇到训练目标和 serving 效率不一致的问题，因此需要为内容粒度、邻居关系和线上目标重新组织表征 [S24]。这类经验不能直接推广成所有系统的最佳实践，但足以提醒团队，不要把实验室 embedding 原样塞进线上排序链路。</p>
+
+      <h2>上线监控看五个指标族</h2>
+      <p><strong>召回指标</strong>，看 Recall、nDCG、长尾类别覆盖和 hard negative 错误；<strong>理解指标</strong>，看字段抽取、定位、引用和否定问法；<strong>生成指标</strong>，看忠实度、拒答、来源一致性和格式稳定性；<strong>系统指标</strong>，看编码吞吐、索引更新、向量漂移、缓存命中和 p95 延迟；<strong>安全指标</strong>，看隐私泄露、敏感图像误判、跨模态 prompt 注入和语言偏置。</p>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 08</div>
+      <h1>常见误区与前沿问题</h1>
+      <p class="lead">多模态表征的成熟，不会表现为一个模型吃掉所有任务。更现实的方向是：不同表征接口被组合进同一个系统，检索层、理解层、生成层和行动层各自有可验证边界。</p>
+
+      <h2>误区一：把共享空间当成理解</h2>
+      <p>共享空间能说明样本相似，不能说明模型知道因果、数量、物理关系和任务目标。CLIP 式 embedding 可以找相似图片，但“狗在沙发左边还是右边”“图中有几颗药片”“发票税额是哪一栏”都不是相似度问题。需要局部推理时，要么引入跨注意力和结构化解析，要么把问题拆成检测、OCR、表格解析和语言推理的组合系统。</p>
+
+      <h2>误区二：把语言当成所有模态的真值</h2>
+      <p>语言是强监督，也是强偏置。caption 只描述作者认为值得描述的内容，不描述背景噪声、缺失细节、危险边界和物理状态。data2vec、I-JEPA、V-JEPA 的价值在于提醒我们，表征可以从观测之间的预测关系中学习，而不必总是把文本当作老师 [S17-S19]。</p>
+
+      <h2>误区三：用一个 benchmark 做采购和上线决定</h2>
+      <p>MMBench、MMMU、HallusionBench 这类评测各自有用途 [S26-S28]。它们可以筛模型，不能替代业务评测。真实系统里，错误成本往往集中在少数边界：低清扫描件、长尾商品、跨语言命名、相似 SKU、医学异常、儿童安全、法律和财务数字。上线前最该做的是把这些边界做成固定回归集。</p>
+
+      <h2>接下来最值得看的问题</h2>
+      <p><strong>时间表征</strong>，长视频、实时音频和动作序列要求模型保留事件顺序、持续时间和因果关系；<strong>空间表征</strong>，机器人、AR、自动驾驶和文档理解都需要比 caption 更细的几何状态；<strong>多语言表征</strong>，PaLI 和 Qwen2.5-VL 说明多语言和文档场景已经进入主线 [S13, S22]，但低资源语言、地区视觉语义和文字系统仍难测；<strong>安全表征</strong>，系统卡和幻觉评测提示多模态风险不是文本安全的简单扩展 [S28-S30]。</p>
+      <div class="callout">
+        <p><strong>一句话收束</strong>，多模态表征不是“让模型看到更多东西”，而是把更多观测变成任务可验证的状态。能检索、能回答、能生成、能行动，是四种不同能力；把它们分清楚，系统才有机会稳定。</p>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 09</div>
+      <h1>Further Reading 与来源</h1>
+      <p class="lead">如果只读 5 篇，建议从 CLIP、BLIP-2、ImageBind、VLM2Vec/MMEB 和 HallusionBench 开始。它们分别覆盖共享图文空间、桥接器路线、跨六模态空间、embedding 评测和视觉幻觉诊断。</p>
+
+      <h2>最值得先读的 5 个来源</h2>
+      <table>
+        <thead>
+          <tr><th>优先级</th><th>来源</th><th>为什么先读</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>CLIP [S05]</td><td>理解图文对齐和开放词表视觉分类的入口。</td></tr>
+          <tr><td>2</td><td>BLIP-2 [S09]</td><td>理解冻结视觉编码器、冻结 LLM 和轻量桥接器的现实主义路线。</td></tr>
+          <tr><td>3</td><td>ImageBind [S16]</td><td>理解图像枢纽如何绑定六种模态，以及这种绑定的边界。</td></tr>
+          <tr><td>4</td><td>VLM2Vec / MMEB [S23]</td><td>理解为什么 chat VLM 不等于 embedding model。</td></tr>
+          <tr><td>5</td><td>HallusionBench [S28]</td><td>理解视觉证据和语言偏置如何互相冲突。</td></tr>
+        </tbody>
+      </table>
+
+      <h2>完整来源索引</h2>
+      <div class="references">
+        <p><span class="ref-id">S01</span> DeViSE: A Deep Visual-Semantic Embedding Model. <a href="https://papers.nips.cc/paper/5204-devise-a-deep-visual-semantic-embedding-model">papers.nips.cc</a></p>
+        <p><span class="ref-id">S02</span> ViLBERT: Pretraining Task-Agnostic Visiolinguistic Representations. <a href="https://arxiv.org/abs/1908.02265">arxiv.org/abs/1908.02265</a></p>
+        <p><span class="ref-id">S03</span> LXMERT: Learning Cross-Modality Encoder Representations. <a href="https://arxiv.org/abs/1908.07490">arxiv.org/abs/1908.07490</a></p>
+        <p><span class="ref-id">S04</span> UNITER: UNiversal Image-TExt Representation Learning. <a href="https://arxiv.org/abs/1909.11740">arxiv.org/abs/1909.11740</a></p>
+        <p><span class="ref-id">S05</span> Learning Transferable Visual Models From Natural Language Supervision. <a href="https://arxiv.org/abs/2103.00020">arxiv.org/abs/2103.00020</a></p>
+        <p><span class="ref-id">S06</span> Scaling Up Visual and Vision-Language Representation Learning With Noisy Text Supervision. <a href="https://arxiv.org/abs/2102.05918">arxiv.org/abs/2102.05918</a></p>
+        <p><span class="ref-id">S07</span> Sigmoid Loss for Language Image Pre-Training. <a href="https://arxiv.org/abs/2303.15343">arxiv.org/abs/2303.15343</a></p>
+        <p><span class="ref-id">S08</span> BLIP: Bootstrapping Language-Image Pre-training. <a href="https://arxiv.org/abs/2201.12086">arxiv.org/abs/2201.12086</a></p>
+        <p><span class="ref-id">S09</span> BLIP-2: Bootstrapping Language-Image Pre-training with Frozen Image Encoders and LLMs. <a href="https://arxiv.org/abs/2301.12597">arxiv.org/abs/2301.12597</a></p>
+        <p><span class="ref-id">S10</span> Flamingo: a Visual Language Model for Few-Shot Learning. <a href="https://arxiv.org/abs/2204.14198">arxiv.org/abs/2204.14198</a></p>
+        <p><span class="ref-id">S11</span> Image as a Foreign Language: BEiT Pretraining for All Vision and Vision-Language Tasks. <a href="https://arxiv.org/abs/2208.10442">arxiv.org/abs/2208.10442</a></p>
+        <p><span class="ref-id">S12</span> CoCa: Contrastive Captioners are Image-Text Foundation Models. <a href="https://arxiv.org/abs/2205.01917">arxiv.org/abs/2205.01917</a></p>
+        <p><span class="ref-id">S13</span> PaLI: A Jointly-Scaled Multilingual Language-Image Model. <a href="https://arxiv.org/abs/2209.06794">arxiv.org/abs/2209.06794</a></p>
+        <p><span class="ref-id">S14</span> Language Is Not All You Need: Aligning Perception with Language Models. <a href="https://arxiv.org/abs/2302.14045">arxiv.org/abs/2302.14045</a></p>
+        <p><span class="ref-id">S15</span> Visual Instruction Tuning. <a href="https://arxiv.org/abs/2304.08485">arxiv.org/abs/2304.08485</a></p>
+        <p><span class="ref-id">S16</span> ImageBind: One Embedding Space To Bind Them All. <a href="https://arxiv.org/abs/2305.05665">arxiv.org/abs/2305.05665</a></p>
+        <p><span class="ref-id">S17</span> data2vec: A General Framework for Self-supervised Learning in Speech, Vision and Language. <a href="https://arxiv.org/abs/2202.03555">arxiv.org/abs/2202.03555</a></p>
+        <p><span class="ref-id">S18</span> Self-Supervised Learning from Images with a Joint-Embedding Predictive Architecture. <a href="https://arxiv.org/abs/2301.08243">arxiv.org/abs/2301.08243</a></p>
+        <p><span class="ref-id">S19</span> Revisiting Feature Prediction for Learning Visual Representations from Video. <a href="https://arxiv.org/abs/2404.08471">arxiv.org/abs/2404.08471</a></p>
+        <p><span class="ref-id">S20</span> 4M: Massively Multimodal Masked Modeling. <a href="https://arxiv.org/abs/2312.06647">arxiv.org/abs/2312.06647</a></p>
+        <p><span class="ref-id">S21</span> Chameleon: Mixed-Modal Early-Fusion Foundation Models. <a href="https://arxiv.org/abs/2405.09818">arxiv.org/abs/2405.09818</a></p>
+        <p><span class="ref-id">S22</span> Qwen2.5-VL Technical Report. <a href="https://arxiv.org/abs/2502.13923">arxiv.org/abs/2502.13923</a></p>
+        <p><span class="ref-id">S23</span> VLM2Vec: Training Vision-Language Models for Massive Multimodal Embedding Tasks. <a href="https://arxiv.org/abs/2410.05160">arxiv.org/abs/2410.05160</a></p>
+        <p><span class="ref-id">S24</span> PinCLIP: Large-scale Foundational Multimodal Representation at Pinterest. <a href="https://arxiv.org/abs/2603.03544">arxiv.org/abs/2603.03544</a></p>
+        <p><span class="ref-id">S25</span> MME: A Comprehensive Evaluation Benchmark for Multimodal Large Language Models. <a href="https://arxiv.org/abs/2306.13394">arxiv.org/abs/2306.13394</a></p>
+        <p><span class="ref-id">S26</span> MMBench: Is Your Multi-modal Model an All-around Player? <a href="https://arxiv.org/abs/2307.06281">arxiv.org/abs/2307.06281</a></p>
+        <p><span class="ref-id">S27</span> MMMU: A Massive Multi-discipline Multimodal Understanding and Reasoning Benchmark. <a href="https://arxiv.org/abs/2311.16502">arxiv.org/abs/2311.16502</a></p>
+        <p><span class="ref-id">S28</span> HallusionBench: An Advanced Diagnostic Suite. <a href="https://arxiv.org/abs/2310.14566">arxiv.org/abs/2310.14566</a></p>
+        <p><span class="ref-id">S29</span> GPT-4V(ision) system card. <a href="https://openai.com/index/gpt-4v-system-card/">openai.com/index/gpt-4v-system-card</a></p>
+        <p><span class="ref-id">S30</span> Hello GPT-4o. <a href="https://openai.com/index/hello-gpt-4o/">openai.com/index/hello-gpt-4o</a></p>
+      </div>
+      <p class="source-note">完整证据等级、解释边界和来源映射见同目录 `sources.md`、`data/source-map.tsv` 与 `data/model-map.tsv`。本文所有时间敏感事实按 2026-06-25 公开页面复核。</p>
+    </section>
+  </main>
+</body>
+</html>

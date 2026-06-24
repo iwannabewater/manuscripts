@@ -9,8 +9,8 @@
 1. DeepSeek Transparency Center, `DeepSeek-V4`, release date 2026-04-24.  
    https://www.deepseek.com/en/transparency/
 
-2. DeepSeek-AI, `DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence`, technical report, Hugging Face PDF.  
-   https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/main/DeepSeek_V4.pdf
+2. DeepSeek-AI, `DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence`, technical report, arXiv:2606.19348.
+   https://arxiv.org/abs/2606.19348
 
 3. DeepSeek-AI, `DeepSeek V4 Model Card`, English PDF.  
    https://fe-static.deepseek.com/chat/transparency/deepseek-V4-model-card-EN.pdf

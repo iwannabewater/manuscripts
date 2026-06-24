@@ -1,6 +1,6 @@
 id	title	url	scope
 S1	DeepSeek Transparency Center	https://www.deepseek.com/en/transparency/	Release date and official report entry
-S2	DeepSeek-V4 Technical Report	https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro/blob/main/DeepSeek_V4.pdf	Main architecture, training, post-training, evaluation facts
+S2	DeepSeek-V4 Technical Report	https://arxiv.org/abs/2606.19348	Main architecture, training, post-training, evaluation facts
 S3	DeepSeek V4 Model Card	https://fe-static.deepseek.com/chat/transparency/deepseek-V4-model-card-EN.pdf	Model properties, distribution, license, reasoning modes
 S4	DeepSeek-V3.2 Technical Report	https://huggingface.co/deepseek-ai/DeepSeek-V3.2/blob/main/assets/paper.pdf	Previous-generation DSA, RL, agentic synthesis comparison
 S5	DeepSeek-V3 Technical Report	https://arxiv.org/abs/2412.19437	V3 MLA, DeepSeekMoE, MTP, FP8, training cost comparison

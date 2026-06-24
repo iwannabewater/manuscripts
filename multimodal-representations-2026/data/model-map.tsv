@@ -1,0 +1,11 @@
+family	representative_sources	core_representation	training_signal	best_fit	primary_risk
+视觉语义嵌入	S01	视觉特征映射到语言语义空间	分类标签加文本语义嵌入	零样本分类、开放词表识别	语义空间粗糙，细粒度定位弱
+双塔图文对齐	S05,S06,S07	图像向量与文本向量共享检索空间	对比学习、pairwise sigmoid loss	检索、召回、零样本分类、轻量 embedding 服务	容易学到数据偏置，不能单独完成复杂推理
+跨注意力联合编码	S02,S03,S04	图像区域 token 与文本 token 共同编码	遮盖建模、图文匹配、区域词对齐	VQA、视觉推理、细粒度图文理解	延迟高，不适合大规模实时召回
+对比加生成统一	S08,S12	同一骨干同时服务检索和生成	captioning、contrastive、filtering	检索、caption、VQA、迁移学习	目标冲突与数据清洗成本
+冻结骨干加桥接器	S09,S10,S15	视觉编码器通过 Q-Former、resampler 或 MLP 接入 LLM	视觉语言预训练、指令微调	多轮图文问答、少样本任务、快速产品化	连接器可能丢失空间细节，LLM 语言偏置强
+多语言图文生成	S13	视觉输入和文本输入统一到生成接口	多任务多语言图文预训练	跨语言 OCR、caption、VQA、文档理解	数据覆盖和语言公平性难验证
+非语言预测表征	S17,S18,S19	上下文 latent 预测目标块 latent	自蒸馏、joint-embedding prediction	视频理解、视觉 backbone、低文本依赖场景	与语言接口之间还需要桥接
+多模态枢纽空间	S16	以图像为枢纽绑定文本、音频、深度、热成像、IMU	图像配对数据对齐	跨模态检索、机器人感知、传感器融合	枢纽模态决定边界，非图像关系可能薄弱
+Any-to-any token 建模	S20,S21	多模态输入输出统一为 token 序列或离散单元	多模态 masked modeling、early fusion	编辑、生成、交错文档、多任务 foundation model	训练稳定性、tokenizer 失真和推理成本
+工业检索表征	S23,S24	面向生产系统的多模态 embedding	任务混合训练、邻居对齐、embedding benchmark	推荐、搜索、广告、内容理解	离线 benchmark 与线上目标不一致
