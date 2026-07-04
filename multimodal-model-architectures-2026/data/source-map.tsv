@@ -1,0 +1,41 @@
+source_id	section	claim_supported	evidence_level
+S01	从 0 到 1：MLP 是可学习函数	反向传播让多层网络能够按误差调整连接权重	A
+S02	从 0 到 1：MLP 是可学习函数	MLP 表达能力与训练可行性需要分开讨论	A
+S03	Transformer：把一切转成 token 后再交互	自注意力是 ViT、VLM 和 mixed-modal 模型的共同算子	A
+S04	CNN 与残差网络：视觉归纳偏置仍然重要	残差连接改善深层网络优化，并成为视觉骨干基础	A
+S05	ViT：图像被切成词以后发生了什么	ViT 用 patch 序列和 Transformer 直接处理图像	A
+S06	ViT 的数据效率与蒸馏	DeiT 说明蒸馏和训练策略能降低 ViT 对超大数据的依赖	A
+S07	MLP-Mixer：没有卷积和注意力时还剩什么	Mixer 用 token-mixing 与 channel-mixing 解释空间/通道混合	A
+S08	Swin 与层级视觉骨干	Swin 用 shifted window 和层级结构改善高分辨率密集预测	A
+S09	自监督视觉预训练	BEiT 把 BERT 式 masked modeling 移植到图像 token	A
+S10	自监督视觉预训练	MAE 通过高遮盖率与非对称编码器-解码器提高预训练效率	A
+S11	自监督视觉预训练	DINO 的自蒸馏 ViT 特征可用于 kNN 和语义分割线索	A
+S12	自监督视觉预训练	DINOv2 以 curated 数据、规模和蒸馏获得通用视觉特征	B
+S13	早期 VLP：从 region 特征到跨注意力	ViLBERT 使用视觉语言双流和 co-attention	A
+S14	早期 VLP：从 region 特征到跨注意力	LXMERT 拆分 object relationship、language 和 cross-modality encoder	A
+S15	早期 VLP：从 region 特征到跨注意力	UNITER 用联合图文表示、条件遮盖和词区对齐	A
+S16	CLIP：图搜时代的接口革命	CLIP 的双塔对比学习支持零样本分类与图文检索	A
+S17	ALIGN：规模可以稀释噪声但不能消灭噪声	ALIGN 用十亿级 noisy alt-text 训练双塔图文模型	A
+S18	SigLIP：把 batch 依赖拆出来	SigLIP 用 pairwise sigmoid loss 解耦全局 softmax 与 batch 视图	A
+S19	SigLIP2：图文 encoder 的多语言与 dense feature 方向	SigLIP2 把 captioning、自监督和 online curation 合入图文 encoder recipe	B
+S20	BLIP：理解与生成放回同一张图	BLIP 使用 MED 架构与 caption bootstrapping	A
+S21	BLIP-2：桥接器成为现实主义路线	BLIP-2 通过 Q-Former 连接冻结视觉编码器与冻结 LLM	A
+S22	CoCa：对比和 caption 可以共享计算图	CoCa 同时优化对比损失与 captioning 损失	A
+S23	PaLI/PaliGemma：多语言生成式 VLM	PaLI 通过视觉与语言组件共同扩展支持多语言多任务	A
+S24	PaLI/PaliGemma：多语言生成式 VLM	PaliGemma 基于 SigLIP-So400m 与 Gemma-2B，强调 transfer	B
+S25	PaLI/PaliGemma：多语言生成式 VLM	Google 官方博客说明 PaliGemma 的公开组件组合	C
+S26	LLaVA：投影层、小数据和视觉指令	LLaVA 用视觉编码器到 LLM 的连接器和视觉指令数据训练多模态助手	A
+S27	ImageBind：图像作为跨模态枢纽	ImageBind 用 image-paired 数据绑定六种模态	A
+S28	4M 与 any-to-any masked modeling	4M 将多种输入输出离散 token 化并统一 masked modeling	B
+S29	Chameleon 与 mixed-modal early fusion	Chameleon 把图文混合文档作为统一 token 序列建模	B
+S30	Late interaction：介于双塔与 cross-encoder 之间	ColBERT 说明 late interaction 可保留细粒度匹配并支持离线预编码	A
+S31	视觉文档与 ColPali	ColPali 将页面图像嵌入为 multi-vector 表示并用 late interaction 检索	B
+S32	VLM2Vec 与通用多模态 embedding	VLM2Vec 说明 VLM 可通过对比训练转成 instruction-aware embedding 模型	B
+S33	向量索引：模型输出必须能被系统承载	Faiss 说明大规模向量检索的 GPU/PQ/IVF 工程约束	A/C
+S34	向量索引：模型输出必须能被系统承载	HNSW 说明图索引通过多层邻近图做近似最近邻搜索	A
+S35	工程接口与公开能力	OpenAI CLIP 官方博客说明自然语言监督和零样本使用方式	C
+S36	工程接口与公开能力	OpenAI CLIP 仓库证明代码与模型 release	C
+S37	工程接口与公开能力	big_vision 证明 ViT、MLP-Mixer、SigLIP 等官方代码线	C
+S38	工程接口与公开能力	BLIP 仓库证明官方代码、模型和公开接口	C
+S39	工程接口与公开能力	LAVIS 证明 BLIP/BLIP-2 等模型的统一特征抽取接口	C
+S40	CNN 与残差网络：视觉归纳偏置仍然重要	ConvNeXt 证明现代化 ConvNet 仍可作为视觉 Transformer 的重要对照	A

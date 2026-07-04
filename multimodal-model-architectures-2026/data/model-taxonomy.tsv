@@ -1,0 +1,28 @@
+model_or_family	year	architecture_role	core_mechanism	training_signal	primary_interface	best_fit	caveat	source_ids
+MLP / feed-forward network	1986/1989	基础算子	线性层、非线性、反向传播	监督误差最小化	向量到向量函数	所有深度模型内部的 projection、FFN、adapter	表达能力不等于样本效率和视觉归纳偏置	S01,S02
+ResNet	2015	视觉骨干	残差连接、卷积层级特征	监督分类	图像特征图	分类、检测、分割、传统视觉 pipeline	开放词表和跨模态接口弱	S04
+Transformer	2017	序列骨干	多头自注意力、位置编码、FFN	序列到序列监督	任意 token 序列	语言、ViT、VLM、统一 token 模型	二次注意力成本和 token 设计决定可扩展性	S03
+ViT	2020	视觉编码器	patch embedding、CLS token、全局自注意力	监督或预训练后微调	图像全局向量/patch token	CLIP/SigLIP/PaliGemma 视觉编码器、图像分类	小数据和密集预测需训练策略或结构改造	S05
+DeiT	2020	ViT 训练 recipe	蒸馏 token、teacher-student	监督蒸馏	图像分类向量	资源较少时训练 ViT	不是新的跨模态接口	S06
+MLP-Mixer	2021	视觉骨干对照	跨 patch 的 token-mixing 与跨通道的 channel-mixing	监督分类	图像向量	解释“混合”与归纳偏置，轻量视觉实验	缺少注意力的动态交互结构	S07
+Swin Transformer	2021	层级视觉骨干	shifted window attention、patch merging	监督或预训练	多尺度特征图	检测、分割、文档/高分辨率视觉	全局图文对齐仍需额外训练目标	S08
+ConvNeXt	2022	视觉骨干	modernized convolutional blocks	监督或预训练	多尺度特征图	分类、检测、分割、视觉骨干对照	不是跨模态模型；高层语义检索仍需要对齐目标	S40
+BEiT	2021	自监督视觉预训练	视觉 token 化、masked image modeling	恢复离散视觉 token	预训练视觉编码器	无标注图像预训练、ViT 初始化	视觉 tokenizer 和目标设计影响迁移	S09
+MAE	2021	自监督视觉预训练	高遮盖率、非对称 encoder-decoder	重建 masked patch	预训练视觉编码器	大规模无标注图像预训练	重建目标不直接保证语义对齐	S10
+DINO / DINOv2	2021/2023	自监督视觉特征	teacher-student 自蒸馏、curated 数据、蒸馏	无标签自监督	图像/patch 特征	视觉检索、聚类、分割线索、通用视觉特征	不天然拥有语言查询接口	S11,S12
+ViLBERT / LXMERT / UNITER	2019/2020	早期 VLP 联合编码	cross-attention、region features、masked modeling、ITM	图文预训练多任务	融合表示/任务头	VQA、referring expression、图文匹配	region detector 和 cross-encoder 延迟较高	S13,S14,S15
+CLIP	2021	双塔图文对齐	图像 encoder + 文本 encoder + 对称对比损失	图文配对对比学习	共享向量空间	图搜、零样本分类、跨模态召回	细粒度定位、计数和关系推理弱	S16,S35,S36
+ALIGN	2021	双塔图文对齐	噪声 alt-text 大规模训练	图文配对对比学习	共享向量空间	大规模 web 图文对齐、搜索	数据噪声和偏差仍需治理	S17
+SigLIP / SigLIP2	2023/2025	双塔图文 encoder	pairwise sigmoid loss、多语言与 dense feature recipe	图文配对、captioning、自监督混合	共享向量空间/视觉特征	多语言图搜、VLM 视觉 encoder、dense prediction 初始化	论文与 checkpoint 不能替代业务域 A/B	S18,S19,S37
+BLIP	2022	理解/生成统一 VLP	MED、captioner-filter、bootstrapped captions	ITC、ITM、LM 等混合目标	检索、caption、VQA	图文理解和生成同时需要的场景	训练链路和数据清洗比接口更复杂	S20,S38
+BLIP-2	2023	VLM 桥接器	Q-Former 连接冻结视觉 encoder 与冻结 LLM	两阶段图文表示和生成预训练	图像到语言生成/问答	低成本接入大语言模型	桥接器容量和视觉 token 压缩决定细节保留	S21,S39
+CoCa	2022	对比 + caption foundation model	encoder-decoder、半段 unimodal decoder、半段 cross-attention	对比损失 + captioning 损失	检索、分类、caption	同一模型兼顾表示和生成	训练成本与数据配方要求高	S22
+PaLI / PaliGemma	2022/2024	生成式 VLM	ViT/SigLIP 视觉 encoder + encoder-decoder 或 decoder LLM	多语言多任务预训练、transfer	图文到文本	多语言 VQA、caption、OCR/文档类任务	开源小模型性能不等于闭源旗舰能力	S23,S24,S25
+LLaVA	2023	视觉指令模型	CLIP ViT + projection/MLP connector + LLM	视觉指令微调	多模态对话	低成本构建视觉助手、教学和研究 baseline	视觉编码器冻结时细粒度感知受限	S26
+ImageBind	2023	多模态共享空间	以图像为枢纽绑定 text/audio/depth/thermal/IMU	image-paired multimodal alignment	跨模态 embedding	跨模态检索、组合、生成条件	不是所有模态两两配对都被直接监督	S27
+4M	2023	any-to-any multimodal model	多模态离散 token、统一 encoder-decoder masked modeling	多输入多输出 masked modeling	任意模态条件生成/预测	多任务视觉与多模态编辑	系统复杂度和 tokenizer 设计成本高	S28
+Chameleon	2024	mixed-modal early fusion	图像 token 与文本 token 统一自回归序列	混合文档建模、alignment	图文理解与生成一体化	交错图文文档、统一生成接口	训练稳定性和安全对齐难度高	S29
+ColBERT	2020	late interaction 检索	独立编码 + token-level MaxSim	检索监督	多向量表示	文本检索、rerank、可解释匹配	存储与索引成本高于单向量	S30
+ColPali	2024	视觉文档检索	页面图像 VLM embedding + late interaction	查询-页面对比/检索训练	multi-vector page embedding	PDF/表格/版面丰富文档检索	视觉页向量成本和索引复杂度高	S31
+VLM2Vec	2024	通用多模态 embedding	把 VLM 转成 instruction-aware fixed vector	MMEB 对比训练	固定维向量	跨任务多模态检索与聚类	评测覆盖不等于业务域充分	S32
+Faiss / HNSW	2017/2016	向量检索系统	PQ/IVF/GPU k-selection 或多层邻近图	非模型算法	ANN index	图搜、推荐召回、大规模 embedding serving	索引压缩、召回率和延迟需联合调参	S33,S34

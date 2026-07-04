@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>多模态模型架构 2026：从 MLP、ViT、CLIP 到 BLIP、SigLIP 与图搜系统</title>
+<meta name="author" content="Winston">
+<meta name="description" content="从 MLP、CNN、ViT 到 CLIP、BLIP、SigLIP、PaliGemma、ColPali 与向量检索系统，系统串联多模态模型架构的底层知识框架。">
+<meta name="keywords" content="多模态模型架构、MLP、ViT、CLIP、BLIP、SigLIP、图搜">
+<meta name="generator" content="Winston">
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 20mm 20mm 20mm;
+    background: #f5f4ed;
+
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02", "JetBrains Mono";
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+
+    @bottom-center {
+      content: counter(page) " / 多模态模型架构 2026";
+      font-family: "TsangerJinKai02", "JetBrains Mono";
+      font-size: 8.8pt;
+      color: #6b6a64;
+    }
+  }
+
+  @page:first {
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --publication-font: "TsangerJinKai02", "JetBrains Mono";
+    --paper: #f5f4ed;
+    --ivory: #faf9f5;
+    --near-black: #141413;
+    --dark-warm: #3d3d3a;
+    --olive: #504e49;
+    --stone: #6b6a64;
+    --brand: #1B365D;
+    --brand-tint: #EEF2F7;
+    --tag-bg: #E4ECF5;
+    --border: #e8e6dc;
+    --border-strong: #d8d4c7;
+    --mono: "JetBrains Mono", "JetBrainsMono", "TsangerJinKai02";
+  }
+
+  html,
+  body { background: var(--paper); }
+
+  @media screen {
+    body {
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 18mm 20mm 20mm 20mm;
+    }
+  }
+
+  body {
+    color: var(--near-black);
+    font-family: "TsangerJinKai02", "JetBrains Mono";
+    font-size: 9.75pt;
+    line-height: 1.54;
+    letter-spacing: 0.14pt;
+    widows: 3;
+    orphans: 3;
+  }
+
+  a { color: var(--brand); text-decoration: none; }
+  strong { font-weight: 500; }
+  .hl { color: var(--brand); font-weight: 500; }
+  .mono { font-family: var(--mono); letter-spacing: 0; }
+  .source {
+    color: var(--brand);
+    font-family: var(--mono);
+    font-size: 7.8pt;
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+
+  .cover {
+    min-height: 242mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 30mm;
+    break-after: page;
+  }
+
+  .cover-eyebrow {
+    color: var(--brand);
+    font-family: var(--mono);
+    font-size: 8.6pt;
+    letter-spacing: 1.5pt;
+    text-transform: uppercase;
+    margin-bottom: 16pt;
+  }
+
+  .cover-rule {
+    width: 48mm;
+    height: 2pt;
+    background: var(--brand);
+    border-radius: 2pt;
+    margin: 0 0 18pt 0;
+  }
+
+  .cover-title {
+    max-width: 98%;
+    font-size: 30.6pt;
+    font-weight: 500;
+    line-height: 1.16;
+    letter-spacing: 0.08pt;
+    margin-bottom: 16pt;
+  }
+
+  .cover-sub {
+    max-width: 91%;
+    color: var(--olive);
+    font-size: 12.6pt;
+    line-height: 1.58;
+  }
+
+  .cover-meta {
+    color: var(--stone);
+    font-size: 9.6pt;
+    line-height: 1.62;
+  }
+
+  .cover-meta strong {
+    color: var(--dark-warm);
+    font-weight: 500;
+  }
+
+  .toc { break-after: page; }
+
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: 14pt;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    gap: 8pt;
+    padding: 5pt 0;
+    border-bottom: 0.35pt dotted var(--border-strong);
+    font-size: 10.4pt;
+  }
+
+  .toc-num {
+    min-width: 28pt;
+    color: var(--brand);
+    font-weight: 500;
+    font-family: var(--mono);
+    letter-spacing: 0.2pt;
+  }
+
+  .toc-title { flex: 1; }
+  .toc-note { color: var(--stone); font-size: 8.5pt; }
+
+  .chapter {
+    margin-top: 22pt;
+    break-before: auto;
+  }
+
+  .chapter-num {
+    color: var(--brand);
+    font-family: var(--mono);
+    font-size: 8.5pt;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+    break-after: avoid;
+  }
+
+  h1 {
+    font-size: 21.5pt;
+    font-weight: 500;
+    line-height: 1.2;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    margin-bottom: 10pt;
+    break-after: avoid;
+  }
+
+  h2 {
+    font-size: 15.2pt;
+    font-weight: 500;
+    line-height: 1.26;
+    margin: 20pt 0 8pt;
+    string-set: section-title content();
+    break-after: avoid;
+  }
+
+  h3 {
+    color: var(--dark-warm);
+    font-size: 12.2pt;
+    font-weight: 500;
+    line-height: 1.32;
+    margin: 14pt 0 6pt;
+    break-after: avoid;
+  }
+
+  p {
+    margin: 0 0 8pt;
+    line-height: 1.54;
+  }
+
+  .lead {
+    color: var(--dark-warm);
+    font-size: 11.05pt;
+    line-height: 1.56;
+    margin-bottom: 12pt;
+  }
+
+  ul,
+  ol {
+    margin: 6pt 0 10pt 0;
+    padding-left: 18pt;
+    line-height: 1.5;
+  }
+
+  li { margin-bottom: 3pt; }
+  li::marker { color: var(--brand); }
+
+  .summary-grid,
+  .principle-grid,
+  .decision-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8pt;
+    margin: 10pt 0 12pt;
+  }
+
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 7pt;
+    margin: 9pt 0 12pt;
+  }
+
+  .card,
+  .note,
+  .warning,
+  .figure-box {
+    background: var(--ivory);
+    border: 0.45pt solid var(--border);
+    border-radius: 7pt;
+    padding: 9pt 10pt;
+    break-inside: avoid;
+  }
+
+  .note {
+    border-left: 2.5pt solid var(--brand);
+    background: var(--brand-tint);
+  }
+
+  .warning {
+    border-left: 2.5pt solid #8a6b1f;
+    background: #fbf7e9;
+  }
+
+  .card-title,
+  .note-title {
+    color: var(--brand);
+    font-weight: 500;
+    margin-bottom: 4pt;
+  }
+
+  .metric {
+    background: var(--ivory);
+    border: 0.45pt solid var(--border);
+    border-radius: 7pt;
+    padding: 8pt 8pt;
+    break-inside: avoid;
+  }
+
+  .metric-value {
+    color: var(--brand);
+    font-family: var(--mono);
+    font-size: 14pt;
+    line-height: 1.15;
+    margin-bottom: 3pt;
+  }
+
+  .metric-label {
+    color: var(--stone);
+    font-size: 8.5pt;
+    line-height: 1.35;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10pt 0 12pt;
+    font-size: 8.85pt;
+    line-height: 1.42;
+    break-inside: avoid;
+  }
+
+  th,
+  td {
+    border: 0.35pt solid var(--border-strong);
+    padding: 5pt 5.5pt;
+    vertical-align: top;
+  }
+
+  th {
+    background: var(--brand-tint);
+    color: var(--brand);
+    font-weight: 500;
+  }
+
+  .compact td,
+  .compact th {
+    padding: 4.5pt 5pt;
+    font-size: 8.55pt;
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5pt;
+    margin: 7pt 0 10pt;
+  }
+
+  .tag {
+    display: inline-block;
+    color: var(--brand);
+    background: var(--tag-bg);
+    border: 0.35pt solid var(--border-strong);
+    border-radius: 999pt;
+    padding: 2.3pt 6.5pt;
+    font-size: 8.3pt;
+    line-height: 1.2;
+  }
+
+  figure {
+    margin: 12pt 0 14pt;
+    break-inside: avoid;
+  }
+
+  figcaption {
+    color: var(--stone);
+    font-size: 8.5pt;
+    line-height: 1.42;
+    margin-top: 5pt;
+  }
+
+  .diagram-flow,
+  .diagram-layers,
+  .pipeline-flow,
+  .pipeline-support {
+    display: grid;
+    gap: 8pt;
+  }
+
+  .diagram-flow {
+    grid-template-columns: repeat(5, 1fr);
+    align-items: stretch;
+  }
+
+  .diagram-layers {
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: 9pt;
+  }
+
+  .pipeline-flow {
+    grid-template-columns: repeat(5, 1fr);
+  }
+
+  .pipeline-support {
+    grid-template-columns: repeat(3, 1fr);
+    margin-top: 9pt;
+  }
+
+  .diagram-node,
+  .pipeline-node {
+    min-height: 45pt;
+    border: 0.5pt solid var(--border-strong);
+    background: var(--ivory);
+    border-radius: 7pt;
+    padding: 7pt 6pt;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2pt;
+  }
+
+  .diagram-node.highlight,
+  .pipeline-node.highlight {
+    background: var(--brand-tint);
+    border-color: var(--brand);
+  }
+
+  .diagram-title,
+  .pipeline-title {
+    color: var(--brand);
+    font-weight: 500;
+    font-size: 9.3pt;
+    line-height: 1.15;
+  }
+
+  .diagram-note,
+  .pipeline-note {
+    color: var(--stone);
+    font-size: 7.8pt;
+    line-height: 1.28;
+  }
+
+  .diagram-summary {
+    margin-top: 8pt;
+    padding: 6pt 8pt;
+    border-left: 2pt solid var(--brand);
+    background: #fffdf7;
+    color: var(--stone);
+    font-size: 8.35pt;
+    line-height: 1.35;
+  }
+
+  .quote {
+    margin: 10pt 0 12pt;
+    padding: 8pt 10pt;
+    border-left: 2.5pt solid var(--brand);
+    background: var(--ivory);
+    color: var(--dark-warm);
+    break-inside: avoid;
+  }
+
+  .page-break { break-before: page; }
+  .avoid-break { break-inside: avoid; }
+  .muted { color: var(--stone); }
+</style>
+</head>
+<body>
+<main>
+  <section class="cover">
+    <div>
+      <div class="cover-eyebrow">TECHNICAL REFERENCE / 2026</div>
+      <div class="cover-rule"></div>
+      <div class="cover-title">多模态模型架构 2026：从 MLP、ViT、CLIP 到 BLIP、SigLIP 与图搜系统</div>
+      <p class="cover-sub">一份从 0 到 1 的架构读物：先讲清 MLP、CNN、Transformer 与 ViT 这些底层算子，再进入图文对齐、视觉语言模型、统一多模态 token、late interaction 和向量检索系统。目标不是背模型名，而是建立可迁移的判断框架。</p>
+    </div>
+    <div class="cover-meta">
+      <p><strong>Evidence date</strong>：2026-07-07，Asia/Shanghai。</p>
+      <p><strong>Scope</strong>：公开论文、官方博客与官方仓库。闭源商业模型只在有公开资料时作为产品形态信号，不反推内部架构。</p>
+      <p><strong>Reading path</strong>：基础神经网络、视觉骨干、图文对齐、生成式 VLM、图搜与检索系统、选型误区。</p>
+    </div>
+  </section>
+
+  <section class="toc">
+    <h2>目录</h2>
+    <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">先建立全局地图：多模态模型到底在解决什么</span><span class="toc-note">问题定义</span></div>
+    <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">从 0 到 1：MLP 是所有架构的基本语法</span><span class="toc-note">函数与训练</span></div>
+    <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">视觉骨干：CNN、ResNet、ViT、MLP-Mixer 与 Swin</span><span class="toc-note">图像如何进网络</span></div>
+    <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">预训练目标：监督、遮盖、蒸馏、对比与生成</span><span class="toc-note">学什么</span></div>
+    <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">图文对齐：CLIP、ALIGN、SigLIP 为什么支撑图搜</span><span class="toc-note">共享向量空间</span></div>
+    <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">视觉语言模型：BLIP、BLIP-2、CoCa、PaLI、PaliGemma 与 LLaVA</span><span class="toc-note">从检索到生成</span></div>
+    <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">统一多模态：ImageBind、4M、Chameleon 与 early fusion</span><span class="toc-note">从图文到多模态</span></div>
+    <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">图搜系统：embedding、late interaction、ANN 与 rerank</span><span class="toc-note">模型如何上线</span></div>
+    <div class="toc-item"><span class="toc-num">09</span><span class="toc-title">选型框架：面对业务场景如何判断架构路线</span><span class="toc-note">工程决策</span></div>
+    <div class="toc-item"><span class="toc-num">10</span><span class="toc-title">常见误区、前沿问题与必读资料</span><span class="toc-note">反脆弱知识框架</span></div>
+  </section>
+
+  <article class="chapter">
+    <div class="chapter-num">01 / Mental map</div>
+    <h1>先建立全局地图：多模态模型到底在解决什么</h1>
+    <p class="lead">多模态模型不是“把图片和文字一起塞进大模型”这么简单。它真正解决的是接口问题：视觉、文本、音频、深度、页面版式这些不同观测，如何被映射到可比较、可交互、可生成、可检索的计算结构里。</p>
+
+    <div class="summary-grid">
+      <div class="card">
+        <div class="card-title">第一层：表示</div>
+        <p>把输入变成向量、特征图或 token 序列。MLP、CNN、ResNet、ViT、Swin、DINOv2 都在这一层回答“图像如何被编码”。</p>
+      </div>
+      <div class="card">
+        <div class="card-title">第二层：对齐</div>
+        <p>让两个模态的表示进入同一语义坐标系。CLIP、ALIGN、SigLIP 的核心价值在于图文可比较，因此天然适合图搜和开放词表分类。</p>
+      </div>
+      <div class="card">
+        <div class="card-title">第三层：交互</div>
+        <p>让视觉 token 与语言 token 通过 cross-attention、Q-Former、projection 或 early fusion 发生细粒度作用。BLIP、BLIP-2、CoCa、LLaVA、PaliGemma 都在这一层做取舍。</p>
+      </div>
+      <div class="card">
+        <div class="card-title">第四层：系统</div>
+        <p>模型输出必须被 ANN、缓存、重排、监控和业务指标承载。图搜不是一个 encoder，而是一条从数据、向量、索引到线上反馈的系统链路。</p>
+      </div>
+    </div>
+
+    <p>为了把知识框架串起来，本文把所有模型放在一个连续谱上：最左侧是只处理向量的 MLP，向右是处理局部空间结构的 CNN 和 ResNet，再向右是把图像切成 patch token 的 ViT 和 Swin；进入跨模态以后，双塔模型把图文映射到同一向量空间，cross-attention 模型保留细粒度关系，桥接器模型复用冻结视觉骨干和 LLM，early fusion 模型试图把不同模态变成同一种序列。</p>
+
+    <figure class="figure-box">
+      <div class="diagram-flow" role="img" aria-label="多模态模型架构谱系">
+        <div class="diagram-node highlight">
+          <div class="diagram-title">MLP</div>
+          <div class="diagram-note">向量函数</div>
+        </div>
+        <div class="diagram-node">
+          <div class="diagram-title">CNN / ResNet</div>
+          <div class="diagram-note">局部归纳偏置</div>
+        </div>
+        <div class="diagram-node">
+          <div class="diagram-title">ViT / Swin</div>
+          <div class="diagram-note">图像 token 化</div>
+        </div>
+        <div class="diagram-node highlight">
+          <div class="diagram-title">CLIP / SigLIP</div>
+          <div class="diagram-note">共享向量空间</div>
+        </div>
+        <div class="diagram-node">
+          <div class="diagram-title">BLIP / LLaVA</div>
+          <div class="diagram-note">视觉语言交互</div>
+        </div>
+      </div>
+      <div class="diagram-layers">
+        <div class="diagram-node">
+          <div class="diagram-title">表示学习</div>
+          <div class="diagram-note">把输入变成可计算状态</div>
+        </div>
+        <div class="diagram-node">
+          <div class="diagram-title">图文对齐</div>
+          <div class="diagram-note">让模态能互相检索</div>
+        </div>
+        <div class="diagram-node">
+          <div class="diagram-title">跨模态推理</div>
+          <div class="diagram-note">让 token 细粒度交互</div>
+        </div>
+        <div class="diagram-node highlight">
+          <div class="diagram-title">工程接口</div>
+          <div class="diagram-note">召回、重排、生成</div>
+        </div>
+      </div>
+      <div class="diagram-summary">同一个模型名不等于同一个接口；架构选择必须回到任务需要的输出形态。</div>
+      <figcaption>图 1：多模态架构的主线不是“模型越新越好”，而是表示、对齐、交互和系统接口逐层增加约束。MLP 是基本函数单元，ViT 是视觉 token 化入口，CLIP/SigLIP 是共享空间接口，BLIP/LLaVA/PaliGemma 是视觉语言交互接口。</figcaption>
+    </figure>
+
+    <h2>先分清四种接口</h2>
+    <p>第一种接口是<strong>分类</strong>：模型输出一个类别或概率分布。ResNet、ViT、DeiT、ConvNeXt 这类视觉骨干最早在这个接口下被训练和评估。第二种接口是<strong>检索</strong>：模型输出可比较向量，系统通过相似度寻找近邻。CLIP、ALIGN、SigLIP、ImageBind 和 VLM2Vec 都主要服务这个接口。第三种接口是<strong>生成</strong>：模型输出自然语言或混合模态内容。BLIP、CoCa、PaLI、PaliGemma、LLaVA、Chameleon 更接近这个接口。第四种接口是<strong>执行</strong>：模型必须根据视觉状态使用工具、操作 GUI、调用检索或执行动作，这时纯粹的 encoder 已经不够，需要语言模型、策略层和反馈闭环。</p>
+
+    <div class="note">
+      <div class="note-title">本文的核心判断</div>
+      <p>多模态架构的学习顺序应当是“先接口，后模型”。图搜需要的是稳定 embedding、ANN 索引和负例闭环；视觉问答需要视觉 token 与语言 token 的交互；文档检索可能需要 multi-vector late interaction；视觉 Agent 需要动态分辨率、定位、工具调用和可靠降级。把这些场景都归入“多模态大模型”会遮蔽真正的工程约束。</p>
+    </div>
+  </article>
+
+  <article class="chapter">
+    <div class="chapter-num">02 / MLP</div>
+    <h1>从 0 到 1：MLP 是所有架构的基本语法</h1>
+    <p class="lead">如果把深度模型拆到最小，最常见的部件仍然是 MLP：线性变换、非线性激活、再线性变换。Transformer 的 FFN、ViT 的 MLP block、CLIP 的 projection、LLaVA 的视觉语言 connector、BLIP-2 的 Q-Former 输出映射，本质上都在使用 MLP 这一类可学习函数。</p>
+
+    <h2>MLP 做了三件事</h2>
+    <p>第一，它把输入向量投到新的坐标系。一个线性层可以旋转、缩放、组合特征；非线性激活让多层叠加不再退化为单个线性变换。第二，它通过反向传播学习参数。Rumelhart、Hinton 与 Williams 在 1986 年的工作说明，网络可以根据输出误差反向调整连接权重 <span class="source">[S01]</span>。第三，它提供表达能力。Hornik、Stinchcombe 与 White 证明，标准多层前馈网络在一定条件下具有通用逼近能力 <span class="source">[S02]</span>。</p>
+
+    <p>但这里有一个容易被忽略的分界：<strong>能表示某个函数，不等于能以合理数据量、合理计算量、合理泛化误差学到这个函数</strong>。这也是为什么视觉模型不会停留在朴素 MLP。图像有局部性、平移等变性、多尺度结构、纹理和形状层次。CNN 把局部卷积作为归纳偏置，ResNet 用残差解决深层优化，ViT 把图像切成 patch token 交给自注意力，Swin 再把窗口和层级结构带回高分辨率视觉任务。MLP 是语法，不是整套语言。</p>
+
+    <div class="principle-grid">
+      <div class="card">
+        <div class="card-title">作为基本层</div>
+        <p>Transformer block 里的 FFN 是逐 token 的 MLP。它不负责 token 间通信，而负责对每个 token 的通道维特征做非线性变换。</p>
+      </div>
+      <div class="card">
+        <div class="card-title">作为投影头</div>
+        <p>CLIP/SigLIP 把视觉和文本 encoder 的输出投到同一 embedding 维度。这个 projection 往往决定相似度空间的可训练形态。</p>
+      </div>
+      <div class="card">
+        <div class="card-title">作为连接器</div>
+        <p>LLaVA 系列的视觉到语言连接器可以是线性层或 MLP。它把视觉 token 转成 LLM 能消费的 token 表示 <span class="source">[S26]</span>。</p>
+      </div>
+      <div class="card">
+        <div class="card-title">作为完整视觉骨干</div>
+        <p>MLP-Mixer 证明，重复的 token-mixing 与 channel-mixing 也能构成视觉模型，但它对数据规模和正则更敏感 <span class="source">[S07]</span>。</p>
+      </div>
+    </div>
+
+    <h2>MLP-Mixer 的价值不是“替代 ViT”，而是拆解视觉建模</h2>
+    <p>MLP-Mixer 的设计很干净：一类 MLP 沿着空间 token 维度混合信息，另一类 MLP 沿着通道维度混合信息 <span class="source">[S07]</span>。它没有卷积，也没有注意力。因此它提供了一个重要思想实验：视觉模型至少要解决两种混合，一种是<strong>位置之间的信息交换</strong>，另一种是<strong>通道之间的特征组合</strong>。CNN 用卷积核做局部空间混合，用后续层做通道组合；ViT 用注意力做全局 token 交互，用 FFN 做通道变换；Mixer 则用两个方向的 MLP 完成这两件事。</p>
+
+    <p>这解释了为什么“MLP、CNN、Transformer”不是互斥宗教。一个现代多模态系统里，视觉骨干可能是 ViT，图文 projection 是 MLP，LLM 内部每层有 FFN，adapter 是 MLP，reranker 又可能用 cross-attention。架构不是标签，而是数据流中每一段的函数选择。</p>
+
+    <div class="warning">
+      <div class="card-title">常见误区</div>
+      <p>不要把 MLP 的通用逼近能力解释成“只要足够大就可以不用结构”。在视觉和多模态场景中，结构是样本效率、计算模式、延迟、可解释性和错误形态的共同约束。一个没有合适归纳偏置的模型可能最终能拟合训练集，却很难在长尾图像、商品变体、文档版式和多语言查询上稳定泛化。</p>
+    </div>
+  </article>
+
+  <article class="chapter">
+    <div class="chapter-num">03 / Vision backbone</div>
+    <h1>视觉骨干：CNN、ResNet、ViT、MLP-Mixer 与 Swin</h1>
+    <p class="lead">多模态模型的视觉能力先取决于视觉骨干。语言模型再强，如果视觉 encoder 把图像压坏、丢掉小字、忽略局部关系或无法处理高分辨率，后面的图文对齐和问答都会在错误输入上工作。</p>
+
+    <h2>CNN 与 ResNet：局部结构和深层优化</h2>
+    <p>CNN 的核心偏置是局部感受野和权重共享。图像中相邻像素更相关，同一个边缘或纹理可以在不同位置出现；卷积把这种假设写入结构，因此在有限数据下具有强样本效率。ResNet 的贡献是把深层网络从“直接学习目标映射”改成“学习相对于输入的残差函数”，缓解深层网络退化和优化困难 <span class="source">[S04]</span>。这一点在多模态里仍然重要：很多视觉 encoder、检测器、OCR 和特征提取 pipeline 都继承了 CNN 时代的层级视觉直觉。</p>
+
+    <p>ResNet 之后的视觉模型并不是抛弃 CNN，而是在重新分配归纳偏置。ViT 更依赖数据和预训练，Swin 把局部窗口和层级结构带回 Transformer，ConvNeXt 则反向证明现代化 ConvNet 仍能与 Transformer 竞争 [S40]。工程上应当问的是：任务是否需要高分辨率、定位、密集预测、低延迟、小样本泛化，还是只需要一个全局图像 embedding。</p>
+
+    <h2>ViT：图像被切成词以后发生了什么</h2>
+    <p>ViT 的关键动作很简单：把图像切成固定大小 patch，把每个 patch 投影成 token，再把 token 序列交给标准 Transformer <span class="source">[S05]</span>。这一步把视觉问题改写为序列建模问题。它的优势是全局交互和结构统一，尤其适合与文本 encoder、LLM 和统一 token 模型连接。CLIP、SigLIP、BLIP-2、PaliGemma 等主流图文模型大量使用 ViT 或 ViT 变体作为视觉 encoder <span class="source">[S16,S18,S21,S24]</span>。</p>
+
+    <p>ViT 的代价也很清楚。第一，patch token 会压缩局部细节，patch 太大时小字、细粒度纹理和小物体容易被淹没；patch 太小时 token 数上升，注意力成本增加。第二，原生 ViT 缺少 CNN 的局部平移偏置，在小数据上需要更强训练 recipe。DeiT 用蒸馏 token 和 teacher-student 策略说明，训练方法可以显著改变 ViT 的数据效率 <span class="source">[S06]</span>。第三，密集预测和高分辨率输入需要层级结构、窗口注意力、动态分辨率或特定 decoder。</p>
+
+    <h2>Swin：把层级和窗口带回 Transformer</h2>
+    <p>Swin Transformer 的问题意识来自视觉和语言的差异：图像实体尺度变化大，像素分辨率远高于文本序列。Swin 用 shifted window 限制注意力范围，同时通过窗口偏移连接跨窗口信息；再通过 patch merging 构建层级特征 <span class="source">[S08]</span>。这使它更适合检测、分割和高分辨率密集预测。对多模态系统来说，Swin 的意义不是替代 CLIP-ViT，而是提醒我们：当任务需要定位和局部结构时，全局单向量 embedding 往往不够。</p>
+
+    <h2>自监督视觉预训练：BEiT、MAE、DINO 与 DINOv2</h2>
+    <p>视觉骨干不只靠分类标签训练。BEiT 把 BERT 式 masked modeling 移植到视觉领域，要求模型根据可见 patch 恢复离散视觉 token <span class="source">[S09]</span>。MAE 使用高遮盖率和非对称 encoder-decoder，让 encoder 只处理可见 patch，decoder 负责重建缺失像素，因而降低预训练计算并保持可扩展性 <span class="source">[S10]</span>。DINO 走自蒸馏路线，显示自监督 ViT 特征可以呈现语义分割线索，并在 kNN 分类中表现强 <span class="source">[S11]</span>。DINOv2 进一步强调 curated 数据、规模化训练和蒸馏，目标是得到无需微调也能泛化的通用视觉特征 <span class="source">[S12]</span>。</p>
+
+    <table class="compact">
+      <thead>
+        <tr>
+          <th>骨干/预训练</th>
+          <th>核心机制</th>
+          <th>适合接口</th>
+          <th>主要风险</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ResNet / CNN</td>
+          <td>局部卷积、层级特征、残差优化</td>
+          <td>分类、检测、分割、传统视觉特征</td>
+          <td>开放词表和跨模态语义接口弱</td>
+        </tr>
+        <tr>
+          <td>ViT</td>
+          <td>patch token、全局自注意力</td>
+          <td>图文 encoder、VLM 视觉输入、分类</td>
+          <td>token 数、分辨率、小物体和小数据依赖</td>
+        </tr>
+        <tr>
+          <td>MLP-Mixer</td>
+          <td>token-mixing 与 channel-mixing</td>
+          <td>视觉骨干对照、轻量实验</td>
+          <td>动态关系建模弱，训练依赖 recipe</td>
+        </tr>
+        <tr>
+          <td>Swin</td>
+          <td>窗口注意力、shifted window、层级结构</td>
+          <td>检测、分割、高分辨率视觉任务</td>
+          <td>图文共享空间仍需额外对齐目标</td>
+        </tr>
+        <tr>
+          <td>DINOv2 / MAE / BEiT</td>
+          <td>自蒸馏、遮盖重建、视觉 token 预测</td>
+          <td>通用视觉特征、初始化、无标签预训练</td>
+          <td>未必天然支持语言查询</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>在图搜场景中，视觉骨干最容易被误判。单纯视觉特征可以处理相似款、材质、颜色和构图，但难以理解“适合通勤的深蓝色托特包”这类语言查询。图文对齐模型可以处理自然语言，但可能丢失细粒度 SKU 差异。一个成熟系统通常不会只选一个骨干，而会组合全局 embedding、局部特征、类目/属性模型、OCR、检测器和 reranker。</p>
+  </article>
+
+  <article class="chapter">
+    <div class="chapter-num">04 / Objectives</div>
+    <h1>预训练目标：监督、遮盖、蒸馏、对比与生成</h1>
+    <p class="lead">架构决定信息如何流动，训练目标决定模型被迫学什么。多模态模型的很多差异，不在 encoder 名字，而在目标函数如何定义“相似”“缺失”“正确”“可描述”和“可回答”。</p>
+
+    <h2>监督分类：学类别，不等于学语义空间</h2>
+    <p>ImageNet 式监督分类把图像映射到固定标签集合。它能训练强视觉特征，却把世界压进预定义类别。CLIP 论文的问题意识正来自这里：传统视觉系统需要固定类别，新的视觉概念需要额外标注数据 <span class="source">[S16]</span>。如果业务只需要封闭类目识别，监督分类仍然有效；如果业务要求开放查询、跨语言表达、图文互搜，就需要对齐目标。</p>
+
+    <h2>遮盖与重建：学上下文，不直接学查询</h2>
+    <p>BEiT 和 MAE 说明，模型可以通过恢复被遮盖内容学习视觉结构 <span class="source">[S09,S10]</span>。这类目标的优点是无需人工标签，能利用大量原始图像；缺点是重建像素或视觉 token 不等价于理解用户意图。一个能补全图像 patch 的模型，不一定知道“这张商品图是否符合用户用自然语言描述的风格”。因此自监督视觉特征常作为视觉骨干或初始化，而不是完整图搜系统。</p>
+
+    <h2>蒸馏：把强模型的行为压到可部署模型</h2>
+    <p>DeiT 用蒸馏 token 提高 ViT 在 ImageNet 训练下的效率 <span class="source">[S06]</span>。DINO/DINOv2 用 teacher-student 自蒸馏学习无标签视觉表征 <span class="source">[S11,S12]</span>。在多模态工业系统里，蒸馏还常用于把 cross-encoder、生成式 VLM 或大尺寸 embedding 模型的判断迁移到小模型，换取延迟和成本。蒸馏不只是压缩，它也是把某种判断标准显式传给另一个接口。</p>
+
+    <h2>对比学习：把相似性变成几何结构</h2>
+    <p>CLIP、ALIGN、SigLIP 的核心都是图文配对监督。给定图像和文本，模型要把真实配对拉近，把错误配对推远 <span class="source">[S16-S18]</span>。这种目标特别适合检索，因为它直接训练相似度空间。CLIP 使用 batch 内 N x N 配对和对称 cross entropy；ALIGN 使用更大规模的噪声 alt-text 数据；SigLIP 把 softmax 归一化换成 pairwise sigmoid loss，减少对全局 batch 相似度矩阵的依赖 <span class="source">[S16-S18]</span>。</p>
+
+    <h2>生成目标：让模型学会说，但也带来幻觉风险</h2>
+    <p>BLIP、CoCa、PaLI、PaliGemma、LLaVA 等模型加入语言生成目标，让模型能够 caption、回答问题、执行指令或生成结构化文本 <span class="source">[S20-S26]</span>。这让多模态模型从“可比较”进入“可交互”。但生成目标也会引入语言模型的先验：当视觉证据弱、训练数据有偏或 prompt 暗示强时，模型可能用语言常识补全不存在的图像细节。图文对齐强不等于视觉事实可靠，能生成流畅答案也不等于能稳定定位和计数。</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>目标</th>
+          <th>模型代表</th>
+          <th>模型被迫学习的能力</th>
+          <th>对工程接口的影响</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>监督分类</td>
+          <td>ResNet、ViT、DeiT</td>
+          <td>固定标签边界和类内不变性</td>
+          <td>适合封闭分类，不适合开放语言查询</td>
+        </tr>
+        <tr>
+          <td>遮盖重建</td>
+          <td>BEiT、MAE、4M</td>
+          <td>上下文、结构、被遮盖内容预测</td>
+          <td>适合预训练和 any-to-any 任务，但需下游对齐</td>
+        </tr>
+        <tr>
+          <td>自蒸馏</td>
+          <td>DINO、DINOv2</td>
+          <td>稳定视觉语义特征和聚类结构</td>
+          <td>适合视觉特征、聚类、近邻和初始化</td>
+        </tr>
+        <tr>
+          <td>图文对比</td>
+          <td>CLIP、ALIGN、SigLIP</td>
+          <td>跨模态相似度和共享向量空间</td>
+          <td>适合图搜、跨模态召回、零样本分类</td>
+        </tr>
+        <tr>
+          <td>语言生成</td>
+          <td>BLIP、CoCa、PaLI、LLaVA</td>
+          <td>从视觉证据到语言输出的条件建模</td>
+          <td>适合 caption、VQA、对话和结构化抽取</td>
+        </tr>
+      </tbody>
+    </table>
+  </article>
+
+  <article class="chapter">
+    <div class="chapter-num">05 / Alignment</div>
+    <h1>图文对齐：CLIP、ALIGN、SigLIP 为什么支撑图搜</h1>
+    <p class="lead">图搜的本质是把“图片”和“查询”放到同一个可比较空间。CLIP、ALIGN、SigLIP 的共同贡献，是把图文匹配从任务模型变成可复用的 embedding 接口。</p>
+
+    <h2>CLIP：分类器被改造成语言查询</h2>
+    <p>CLIP 训练一个图像 encoder 和一个文本 encoder，用自然语言监督学习共享 embedding 空间 <span class="source">[S16]</span>。训练时，真实图文对被拉近，batch 内其他图文组合被推远。推理时，分类标签可以写成自然语言 prompt，图片和文本类别名称进入同一向量空间，通过相似度完成零样本分类。OpenAI 官方博客也把这一能力解释为用自然语言概念引用视觉类别 <span class="source">[S35]</span>。</p>
+
+    <p>这一步对图搜的意义极大。传统图像检索依赖颜色、纹理、局部特征或监督类目；CLIP 式模型允许用户用自然语言描述目标，并在同一空间中检索图像。它还允许“以图搜图”和“以文搜图”共享同一索引。缺点是，CLIP 的全局向量会把复杂图像压成一个点，细粒度关系、局部位置、数量、文本小字、属性组合和否定表达都可能出错。</p>
+
+    <h2>ALIGN：噪声数据可以被规模稀释，但不能被规模洗白</h2>
+    <p>ALIGN 用超过十亿图像 alt-text 对训练简单双塔模型，强调在大规模 noisy data 上学习图文表示 <span class="source">[S17]</span>。它证明了一个工业现实：图文数据越大，人工清洗越难；如果训练目标和模型容量合适，规模可以抵消部分噪声。但噪声不会消失，它会转化为偏差、长尾错误、跨语言不均衡和安全问题。对于电商图搜，商品标题、类目、属性、用户行为、详情页和图片质量都在决定 embedding 的语义边界。</p>
+
+    <h2>SigLIP：把全局 softmax 的 batch 依赖拆开</h2>
+    <p>SigLIP 的关键变化是把标准对比学习中的 softmax 换成 pairwise sigmoid loss。论文指出，sigmoid loss 只作用在图文对上，不需要为了归一化而看到全局 pairwise similarity 矩阵，因此在 batch size 和训练效率上提供了不同取舍 <span class="source">[S18]</span>。这对工程训练很重要：很多团队并没有超大 batch 的基础设施，loss 对 batch 全局视图的依赖越强，复现和扩展越困难。</p>
+
+    <p>SigLIP2 则体现了图文 encoder 的下一步方向：在原始 SigLIP 基础上加入 captioning-based pretraining、自监督 loss、online data curation、多语言数据和 native aspect ratio 等 recipe，以提升语义理解、定位和 dense feature <span class="source">[S19]</span>。这说明图文 encoder 不再只是“全局相似度模型”，而是在向多语言、局部特征和 VLM 视觉底座扩展。</p>
+
+    <div class="metric-grid">
+      <div class="metric">
+        <div class="metric-value">2</div>
+        <div class="metric-label">CLIP/SigLIP 的基本塔数：图像 encoder 与文本 encoder。</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">N x N</div>
+        <div class="metric-label">CLIP batch 内图文配对相似度矩阵的直观结构。</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">1B+</div>
+        <div class="metric-label">ALIGN 代表的大规模 noisy alt-text 训练口径。</div>
+      </div>
+      <div class="metric">
+        <div class="metric-value">pair</div>
+        <div class="metric-label">SigLIP loss 的关键粒度：pairwise sigmoid。</div>
+      </div>
+    </div>
+
+    <h2>早期 VLP 为什么没有消失</h2>
+    <p>在 CLIP 之前，ViLBERT、LXMERT、UNITER 这类模型更多依赖 region features 与跨模态 attention。ViLBERT 用视觉和语言双流，通过 co-attentional transformer layers 交互 <span class="source">[S13]</span>；LXMERT 将模型拆成 object relationship encoder、language encoder 和 cross-modality encoder <span class="source">[S14]</span>；UNITER 学习联合图文表示，使用 masked language modeling、masked region modeling、image-text matching 和 word-region alignment <span class="source">[S15]</span>。这些模型不如双塔适合大规模离线召回，但它们提醒我们：细粒度关系需要 token/region 级交互。今天的 reranker、文档理解、VQA 和 grounding 仍在用这个思想。</p>
+
+    <div class="note">
+      <div class="note-title">图搜中的基本取舍</div>
+      <p>如果第一目标是亿级图库召回，优先双塔 embedding，因为商品向量可以离线预编码并进入 ANN 索引。如果第一目标是理解局部关系，例如“左边有红色袖口的白衬衫”，只靠全局向量通常不稳，需要局部 token、检测器、属性模型或 reranker。如果第一目标是用语言解释为什么命中，生成式 VLM 可以补充，但不能替代召回模型。</p>
+    </div>
+  </article>
+
+  <article class="chapter">
+    <div class="chapter-num">06 / VLM</div>
+    <h1>视觉语言模型：BLIP、BLIP-2、CoCa、PaLI、PaliGemma 与 LLaVA</h1>
+    <p class="lead">双塔模型解决“可比较”，视觉语言模型解决“可交互”。从 BLIP 到 BLIP-2，再到 PaliGemma 和 LLaVA，核心问题都是同一个：视觉 token 如何进入语言模型，并保留足够证据让语言输出可信。</p>
+
+    <h2>BLIP：理解与生成被放回同一框架</h2>
+    <p>BLIP 针对早期 VLP 的一个矛盾：很多模型擅长理解任务或生成任务，但不同时擅长两者。BLIP 提出 Multimodal mixture of Encoder-Decoder，并用 captioner 与 filter 对 noisy web captions 做 bootstrapping <span class="source">[S20]</span>。这使它能在图文检索、caption、VQA 等任务之间迁移。架构上，BLIP 说明多模态模型不必在“embedding 模型”和“caption 模型”之间硬切分；同一训练框架可以同时服务表示和生成。</p>
+
+    <h2>BLIP-2：冻结骨干之后，桥接器变成关键</h2>
+    <p>BLIP-2 的现实主义在于降低端到端训练成本。它冻结预训练图像 encoder，冻结大型语言模型，中间用 lightweight Querying Transformer，也就是 Q-Former，桥接视觉和语言 <span class="source">[S21]</span>。两阶段训练先从冻结图像 encoder 学视觉语言表示，再从冻结 LLM 学视觉到语言生成。这条路线后来成为很多 VLM 的基本工程形态：视觉 encoder 提供 token，桥接器压缩和转换 token，LLM 负责语言推理和输出。</p>
+
+    <p>桥接器的代价是信息瓶颈。Q-Former、projection、resampler 或 MLP connector 会决定视觉细节如何进入 LLM。压缩太强会丢失小字、坐标、局部关系；压缩太弱会让 token 数和推理成本失控。很多 VLM 的真实差异，并不只在 LLM 参数量，而在视觉 token 的分辨率、数量、位置编码、连接器容量、训练阶段和数据配比。</p>
+
+    <h2>CoCa：对比与 caption 的合流</h2>
+    <p>CoCa 把 contrastive loss 和 captioning loss 放进一个 encoder-decoder 模型。它在 decoder 前半段保留 unimodal text representation，后半段通过 cross-attention 接入图像 encoder；同时对 unimodal 图文 embedding 做对比学习，对 multimodal decoder 输出做 captioning <span class="source">[S22]</span>。这提供了一个优雅范式：同一计算图可以同时训练检索友好的向量和生成友好的语言输出。</p>
+
+    <h2>PaLI 与 PaliGemma：多语言、开放组件与 transfer</h2>
+    <p>PaLI 将视觉和语言组件共同扩展，使用多语言图文任务训练生成式 VLM <span class="source">[S23]</span>。PaliGemma 则是更开源、可迁移的轻量路线：论文描述其基于 SigLIP-So400m 视觉 encoder 与 Gemma-2B 语言模型 <span class="source">[S24]</span>；Google Developers 博客也公开解释了 PaliGemma 由 SigLIP 视觉模型与 Gemma 语言模型组合而成 <span class="source">[S25]</span>。对工程团队来说，PaliGemma 的价值不只是模型性能，而是它把“强视觉 encoder + 可用语言模型 + 可微调接口”包装成可迁移的开放基线。</p>
+
+    <h2>LLaVA：小连接器也能建立强 baseline</h2>
+    <p>LLaVA 用视觉 encoder、投影层和 LLM 构建多模态助手，并通过语言模型生成的视觉指令数据做 tuning <span class="source">[S26]</span>。它的启发是：不一定要从头训练大规模多模态模型，冻结或复用已有视觉 encoder 和 LLM，再训练连接器和指令数据，也能得到强 baseline。它的边界同样明确：如果视觉 encoder 没有捕获细节，或者指令数据没有覆盖特定任务，LLM 的语言能力可能会掩盖视觉证据不足。</p>
+
+    <table class="compact">
+      <thead>
+        <tr>
+          <th>模型</th>
+          <th>视觉到语言的连接方式</th>
+          <th>主要能力</th>
+          <th>工程判断</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>BLIP</td>
+          <td>MED 框架，理解与生成混合</td>
+          <td>检索、caption、VQA</td>
+          <td>适合需要 embedding 与 caption 同时存在的研究基线</td>
+        </tr>
+        <tr>
+          <td>BLIP-2</td>
+          <td>Q-Former 桥接冻结视觉 encoder 与冻结 LLM</td>
+          <td>图像到文本生成、问答</td>
+          <td>适合复用强骨干、降低预训练成本</td>
+        </tr>
+        <tr>
+          <td>CoCa</td>
+          <td>encoder-decoder，同时训练对比与 caption</td>
+          <td>分类、检索、caption、VQA</td>
+          <td>适合把检索和生成能力放进同一 foundation model</td>
+        </tr>
+        <tr>
+          <td>PaliGemma</td>
+          <td>SigLIP 视觉 encoder + Gemma 语言模型</td>
+          <td>多任务 transfer、VQA、caption、文档/细粒度任务</td>
+          <td>适合开放模型微调和垂直任务迁移</td>
+        </tr>
+        <tr>
+          <td>LLaVA</td>
+          <td>视觉 encoder + projection/MLP connector + LLM</td>
+          <td>视觉指令对话</td>
+          <td>适合快速构建视觉助手 baseline，但需要严肃评测幻觉</td>
+        </tr>
+      </tbody>
+    </table>
+  </article>
+
+  <article class="chapter">
+    <div class="chapter-num">07 / Unified multimodality</div>
+    <h1>统一多模态：ImageBind、4M、Chameleon 与 early fusion</h1>
+    <p class="lead">图文不是多模态的终点。真实世界还有音频、视频、深度、热成像、IMU、文档版式、网页、GUI 和动作。统一多模态的关键问题是：不同模态是否必须两两配对，是否能共享 token 空间，是否能用同一模型完成输入和输出。</p>
+
+    <h2>ImageBind：图像作为跨模态枢纽</h2>
+    <p>ImageBind 学习图像、文本、音频、深度、热成像和 IMU 六种模态的共享 embedding。它的重要判断是：不必收集所有模态两两配对的数据，只要每种模态与图像配对，就可以通过图像枢纽绑定到同一空间 <span class="source">[S27]</span>。这对工程很有启发。现实中 audio-text、depth-text、IMU-text 数据很难大规模配齐，但 image-paired 数据更常见。图像在这里不是唯一真理，而是最方便的公共锚点。</p>
+
+    <h2>4M：把输入输出都 token 化</h2>
+    <p>4M 将文本、图像、几何、语义模态和神经网络 feature maps 映射到离散 token，并用统一 Transformer encoder-decoder 做 multimodal masked modeling <span class="source">[S28]</span>。它的目标不是只做图文检索，而是让模型从任意模态子集预测任意目标模态。这个方向很强，但系统复杂度也高：每个模态的 tokenizer、mask 策略、目标权重、输出空间和评测方式都会影响最终模型。</p>
+
+    <h2>Chameleon：mixed-modal early fusion 的野心</h2>
+    <p>Chameleon 把图像和文本都作为 token，在同一个自回归序列里处理，支持任意交错的图文理解和生成 <span class="source">[S29]</span>。这条路线的优势是接口统一：模型看到的是混合文档，而不是先视觉后语言的管线。它的难点也直接来自统一：图像 token 的数量、压缩和生成质量，文本能力保留，训练稳定性，对齐和安全，都比桥接器路线更难。</p>
+
+    <h2>统一不是免费的</h2>
+    <p>统一多模态常被描述为最终方向，但工程上必须付费。双塔模型可离线编码，成本清晰；cross-attention 精度更强，但实时成本高；桥接器路线复用现有 LLM，但视觉信息会被压缩；early fusion 语义上最统一，但训练、推理和安全成本最大。统一接口的收益，要和业务是否真的需要统一输出一起衡量。</p>
+
+    <div class="decision-grid">
+      <div class="card">
+        <div class="card-title">只需要召回</div>
+        <p>优先 CLIP/SigLIP/VLM2Vec 式 embedding。统一生成式模型的语言能力不一定带来召回收益，反而可能增加成本。</p>
+      </div>
+      <div class="card">
+        <div class="card-title">需要解释和问答</div>
+        <p>需要 BLIP-2、PaliGemma、LLaVA 或同类 VLM。此时评测必须包含幻觉、定位、小字和拒答边界。</p>
+      </div>
+      <div class="card">
+        <div class="card-title">需要页面/文档理解</div>
+        <p>考虑视觉文档 embedding、OCR、layout model 和 late interaction。单纯文本抽取会丢掉版式和图表线索。</p>
+      </div>
+      <div class="card">
+        <div class="card-title">需要跨传感器绑定</div>
+        <p>ImageBind 式图像枢纽提供思路，但生产系统要审查每个模态的数据质量、采样频率和误差成本。</p>
+      </div>
+    </div>
+  </article>
+
+  <article class="chapter">
+    <div class="chapter-num">08 / Search system</div>
+    <h1>图搜系统：embedding、late interaction、ANN 与 rerank</h1>
+    <p class="lead">图搜不是“调用一个 CLIP 模型”。模型只是把图片和文本变成可比较对象；真正的线上系统还需要数据治理、特征生成、向量索引、召回、重排、过滤、监控和反馈闭环。</p>
+
+    <figure class="figure-box">
+      <div class="pipeline-flow" role="img" aria-label="图搜系统流水线">
+        <div class="pipeline-node highlight">
+          <div class="pipeline-title">数据层</div>
+          <div class="pipeline-note">图片、标题、属性、行为</div>
+        </div>
+        <div class="pipeline-node">
+          <div class="pipeline-title">编码层</div>
+          <div class="pipeline-note">CLIP / SigLIP / VLM</div>
+        </div>
+        <div class="pipeline-node">
+          <div class="pipeline-title">索引层</div>
+          <div class="pipeline-note">Faiss / HNSW / PQ</div>
+        </div>
+        <div class="pipeline-node">
+          <div class="pipeline-title">重排层</div>
+          <div class="pipeline-note">late interaction / VLM</div>
+        </div>
+        <div class="pipeline-node highlight">
+          <div class="pipeline-title">反馈层</div>
+          <div class="pipeline-note">CTR、转化、人工标注</div>
+        </div>
+      </div>
+      <div class="pipeline-support">
+        <div class="pipeline-node">
+          <div class="pipeline-title">离线商品向量</div>
+          <div class="pipeline-note">可缓存、可压缩、可重建</div>
+        </div>
+        <div class="pipeline-node">
+          <div class="pipeline-title">在线 query 向量</div>
+          <div class="pipeline-note">文本、图片或混合查询</div>
+        </div>
+        <div class="pipeline-node">
+          <div class="pipeline-title">候选解释与治理</div>
+          <div class="pipeline-note">过滤、去重、类目和安全</div>
+        </div>
+      </div>
+      <div class="diagram-summary">embedding 模型决定相似度空间；索引和反馈决定它能否稳定服务真实流量。</div>
+      <figcaption>图 2：图搜生产链路。模型训练目标、向量维度、索引压缩、负例挖掘和线上反馈必须同时设计。单点模型精度不能代表端到端搜索质量。</figcaption>
+    </figure>
+
+    <h2>单向量召回：最快，也最容易丢细节</h2>
+    <p>CLIP、ALIGN、SigLIP 这类双塔模型适合单向量召回，因为商品向量可离线生成，用户文本或图片 query 在线编码后与索引中向量比较。Faiss 论文说明，大规模相似度搜索要处理 GPU k-selection、PQ、IVF 等工程问题 <span class="source">[S33]</span>；HNSW 则通过多层 navigable small world graph 做近似最近邻搜索 <span class="source">[S34]</span>。这意味着模型维度、向量归一化、索引类型、压缩率和召回率是联动变量。</p>
+
+    <p>单向量的弱点是它只能给每个图片一个全局点。商品图里可能同时有主体、背景、文字、配件、材质、品牌标识和模特姿势；全局 embedding 会把这些因素混合。对于“找同款”或“相似风格”足够时，单向量很强；对于“不要条纹”“左下角有标签”“白底图里小瓶身红字”这样的查询，单向量需要局部特征、OCR、属性模型或 reranker 支撑。</p>
+
+    <h2>Late interaction：介于双塔和 cross-encoder 之间</h2>
+    <p>ColBERT 提出 late interaction：query 和 document 独立编码，但不是压成一个向量，而是保留 token-level 表示，之后用便宜的 MaxSim 交互计算细粒度相似度 <span class="source">[S30]</span>。它比 cross-encoder 更容易离线预编码，比单向量更能保留细节。ColPali 把这个思想迁移到视觉文档检索，直接从页面图像生成 multi-vector embeddings，并使用 late interaction 匹配查询和页面 <span class="source">[S31]</span>。这对 PDF、表格、截图、票据和商品详情页很关键，因为版式本身就是信息。</p>
+
+    <h2>VLM2Vec：把 VLM 转回 embedding 模型</h2>
+    <p>VLM2Vec 的问题意识是，通用文本 embedding 有 MTEB 这类生态，但通用多模态 embedding 进展较慢。论文提出 MMEB，覆盖分类、VQA、多模态检索和 visual grounding，并用对比训练把 VLM 转成 instruction-aware fixed-dimensional embedding 模型 <span class="source">[S32]</span>。这说明生成式 VLM 和 embedding 模型正在合流：VLM 的视觉语言理解能力可以被蒸馏或再训练到检索接口，但最终仍要面对向量维度、索引成本和业务指标。</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>检索形态</th>
+          <th>代表模型/系统</th>
+          <th>优点</th>
+          <th>代价</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>单向量或固定向量 embedding</td>
+          <td>CLIP、ALIGN、SigLIP、VLM2Vec 类模型</td>
+          <td>离线编码、ANN 友好、低延迟、易扩展</td>
+          <td>细粒度关系、局部定位和复杂否定弱</td>
+        </tr>
+        <tr>
+          <td>多向量 late interaction</td>
+          <td>ColBERT、ColPali</td>
+          <td>保留 token/page patch 细节，仍可部分预编码</td>
+          <td>存储、索引和打分成本更高</td>
+        </tr>
+        <tr>
+          <td>Cross-encoder rerank</td>
+          <td>ViLBERT/UNITER 式交互模型、VLM reranker</td>
+          <td>细粒度匹配强，可看 query-candidate 关系</td>
+          <td>无法大规模全库扫，只能重排候选</td>
+        </tr>
+        <tr>
+          <td>生成式解释</td>
+          <td>BLIP-2、PaliGemma、LLaVA</td>
+          <td>能回答原因、抽取属性、生成结构化解释</td>
+          <td>有幻觉风险，延迟和评测成本高</td>
+        </tr>
+      </tbody>
+    </table>
+  </article>
+
+  <article class="chapter">
+    <div class="chapter-num">09 / Decision framework</div>
+    <h1>选型框架：面对业务场景如何判断架构路线</h1>
+    <p class="lead">多模态选型不是模型榜单问题，而是接口、数据、延迟、错误成本和迭代闭环问题。一个高分 VLM 不一定适合做第一阶段召回，一个强 embedding 模型也不一定能回答视觉问答。</p>
+
+    <h2>第一问：你要的输出是什么</h2>
+    <p>如果输出是一个类别，优先考虑监督视觉骨干或轻量 ViT。若输出是候选集合，优先 embedding + ANN；若输出是候选排序，加入 late interaction 或 cross-encoder rerank；若输出是文本解释或结构化字段，使用 VLM；若输出是动作，则还需要工具层、状态机和安全边界。把所有输出都交给同一个 VLM，是最常见的过度设计。</p>
+
+    <h2>第二问：输入的难点在哪里</h2>
+    <p>自然图像以主体和背景为主，CLIP/SigLIP 全局 embedding 往往已经有强 baseline。商品图像难在 SKU 细节、材质、风格、类目和用户行为信号，需要领域 SFT、硬负例和属性建模。文档图像难在小字、表格、版式和跨页引用，可能需要 OCR、layout-aware pipeline 或 ColPali 式视觉页面 embedding。视频和 GUI 难在时间、状态变化和动作反馈，需要动态分辨率、时间编码和工具调用。</p>
+
+    <h2>第三问：错误成本是什么</h2>
+    <p>推荐场景的错误可以通过用户反馈和排序兜底吸收；医疗、金融、合同、合规和工业质检场景不能把“看起来合理的语言输出”当事实。生成式模型的错误更像陈述错误，embedding 的错误更像排序错误，检测器的错误更像定位错误。不同错误类型对应不同监控指标。</p>
+
+    <div class="note">
+      <div class="note-title">一张可执行决策表</div>
+      <table class="compact">
+        <thead>
+          <tr>
+            <th>场景</th>
+            <th>第一选择</th>
+            <th>补强模块</th>
+            <th>上线指标</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>以文搜图 / 以图搜图</td>
+            <td>CLIP/SigLIP 双塔 embedding</td>
+            <td>领域对比 SFT、属性模型、hard negative</td>
+            <td>Recall@K、NDCG、查询覆盖、延迟、索引成本</td>
+          </tr>
+          <tr>
+            <td>商品同款/相似款</td>
+            <td>视觉 embedding + 类目/属性约束</td>
+            <td>局部特征、OCR、rerank</td>
+            <td>同款命中率、误召回率、类目穿透率</td>
+          </tr>
+          <tr>
+            <td>PDF/截图/票据检索</td>
+            <td>视觉文档 embedding 或 OCR + text embedding</td>
+            <td>ColPali late interaction、layout parser</td>
+            <td>page Recall@K、字段命中、表格查询成功率</td>
+          </tr>
+          <tr>
+            <td>视觉问答/客服解释</td>
+            <td>BLIP-2/PaliGemma/LLaVA 类 VLM</td>
+            <td>检索上下文、拒答策略、结构化 validator</td>
+            <td>事实正确率、幻觉率、拒答准确率、人工升级率</td>
+          </tr>
+          <tr>
+            <td>多模态 Agent</td>
+            <td>VLM + 工具调用 + 状态管理</td>
+            <td>视觉定位、GUI grounding、安全沙箱</td>
+            <td>任务成功率、误操作率、恢复率、审计日志完整性</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>第四问：数据闭环是否存在</h2>
+    <p>没有数据闭环时，模型选型很容易停在 paper benchmark。图搜需要正负样本、点击/收藏/购买/跳出信号、人工难例、类目纠错和 query 改写日志。VLM 需要任务指令、标准答案、拒答样本、对抗样本和事实校验器。ANN 系统需要索引重建监控、embedding 漂移监控、召回候选分布和延迟分位数。没有这些，模型越复杂，误差越难定位。</p>
+
+    <div class="warning">
+      <div class="card-title">上线前最低门槛</div>
+      <p>图搜模型至少要分别通过离线检索评测、长尾 query 评测、类目穿透评测、索引压缩评测、线上灰度和人工 badcase review。VLM 至少要通过事实一致性、拒答、定位、小字、表格、幻觉和延迟评测。只看公开 benchmark 或 demo 图片，不能作为上线依据。</p>
+    </div>
+  </article>
+
+  <article class="chapter">
+    <div class="chapter-num">10 / Pitfalls and reading</div>
+    <h1>常见误区、前沿问题与必读资料</h1>
+
+    <h2>误区一：把 embedding 好当成理解好</h2>
+    <p>embedding 好意味着相似度空间对某些任务有用，不代表模型能可靠解释、定位、计数或推理。CLIP/SigLIP 是图搜和零样本分类的强接口，但如果任务要求回答“为什么这两张图不同”，还需要局部证据、属性模型或 VLM。</p>
+
+    <h2>误区二：把 VLM 当成召回系统</h2>
+    <p>VLM 能看图说话，不代表它适合全库检索。召回系统要求离线预编码、低延迟、稳定相似度和可控索引成本。VLM 更适合理解候选、生成解释、抽取字段或做重排。把生成模型放在第一阶段召回，会把成本和延迟推到最难承受的位置。</p>
+
+    <h2>误区三：只看模型，不看数据口径</h2>
+    <p>ALIGN 的 noisy alt-text、BLIP 的 caption bootstrapping、SigLIP2 的 online data curation、DINOv2 的 curated data pipeline 都说明：数据口径不是背景，它就是模型能力的一部分 <span class="source">[S12,S17,S19,S20]</span>。在电商、医疗、工业、文档、短视频等垂直场景，数据分布比模型名更早决定上限。</p>
+
+    <h2>误区四：把多语言当作翻译问题</h2>
+    <p>多语言图搜不是把 query 翻成英文再搜。商品标题、文化偏好、颜色词、类目词、品牌别名和单位表达都会改变检索意图。SigLIP2 和 PaLI/PaliGemma 的多语言路线说明，多语言能力需要进入训练数据和模型接口 <span class="source">[S19,S23,S24]</span>。</p>
+
+    <h2>接下来最值得关注的前沿问题</h2>
+    <ul>
+      <li><strong>视觉 token 的经济学</strong>：分辨率、patch size、token 压缩、动态分辨率和窗口注意力如何共同决定 VLM 成本。</li>
+      <li><strong>VLM-to-embedding</strong>：VLM2Vec 这类路线能否把复杂视觉语言理解稳定转成可索引向量。</li>
+      <li><strong>多向量检索系统</strong>：ColPali 说明视觉文档场景可能从 OCR-first 转向 image-first，但索引成本和服务形态需要进一步工程化。</li>
+      <li><strong>统一 token 模型</strong>：4M 和 Chameleon 指向 any-to-any 与 mixed-modal early fusion，但训练稳定性、可控生成和安全边界仍是核心难题。</li>
+      <li><strong>评测到线上指标的裂缝</strong>：公开 benchmark 很难覆盖业务类目、长尾 query、禁限内容、实时库存、地域语言和反馈偏差。</li>
+    </ul>
+
+    <h2>最值得先读的 7 个来源</h2>
+    <table class="compact">
+      <thead>
+        <tr>
+          <th>顺序</th>
+          <th>来源</th>
+          <th>为什么先读</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>Attention Is All You Need <span class="source">[S03]</span></td>
+          <td>理解 Transformer、自注意力和 token 序列建模的共同底座。</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>An Image is Worth 16x16 Words <span class="source">[S05]</span></td>
+          <td>理解 ViT 如何把图像改写成 token 序列。</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>MLP-Mixer <span class="source">[S07]</span></td>
+          <td>用极简架构拆清空间混合与通道混合。</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>CLIP <span class="source">[S16]</span></td>
+          <td>理解自然语言监督、双塔对比学习和图搜接口。</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>SigLIP <span class="source">[S18]</span></td>
+          <td>理解图文对比 loss 的训练效率和 batch 依赖问题。</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>BLIP-2 <span class="source">[S21]</span></td>
+          <td>理解冻结视觉 encoder、冻结 LLM 和桥接器路线。</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>ColBERT / ColPali <span class="source">[S30,S31]</span></td>
+          <td>理解 late interaction 如何连接高精度匹配和可索引系统。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>完整来源索引</h2>
+    <p>工程复现层面，CLIP、big_vision、BLIP 与 LAVIS 等官方仓库只用于确认公开代码、checkpoint 或接口边界，不用于推断未公开训练细节 <span class="source">[S36,S37,S38,S39]</span>。</p>
+    <p>完整来源、证据等级、事实边界和冲突说明见同目录下的 <span class="mono">sources.md</span>；来源到正文用途的映射见 <span class="mono">data/source-map.tsv</span>；代表性模型、结构类型、训练目标、接口与适用场景见 <span class="mono">data/model-taxonomy.tsv</span>。</p>
+  </article>
+</main>
+</body>
+</html>

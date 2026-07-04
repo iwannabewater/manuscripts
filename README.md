@@ -13,6 +13,7 @@
 
 | 作品 | 主题 | 文件 |
 |---|---|---|
+| 多模态模型架构 2026 | 从 MLP、CNN/ResNet、ViT、CLIP、ALIGN、SigLIP、BLIP、PaliGemma 到图搜与向量检索系统的从 0 到 1 架构读物 | `multimodal-model-architectures-2026/index.html` / `multimodal-model-architectures-2026/multimodal-model-architectures-2026.pdf` |
 | 多模态表征 2026 | 从表征学习基础、图文对齐、视觉语言模型、多模态统一空间、评测到工程落地的系统技术读物 | `multimodal-representations-2026/index.html` / `multimodal-representations-2026/multimodal-representations-2026.pdf` |
 | 多模态 Embedding/Rerank 后训练 2026 | 从对比学习、SFT、RL、OPD、蒸馏、late interaction 到工业级检索闭环的证据化方案手册 | `multimodal-embedding-rerank-post-training-2026/index.html` / `multimodal-embedding-rerank-post-training-2026/multimodal-embedding-rerank-post-training-2026.pdf` |
 | 电商图搜多模态 Embedding 2026 | 多模态 embedding 在电商图搜场景的学术与工业落地 pipeline、收益与成本 ROI、SFT/RL 后训练范式评估 | `ecommerce-visual-search-embedding-2026/index.html` / `ecommerce-visual-search-embedding-2026/ecommerce-visual-search-embedding-2026.pdf` |
