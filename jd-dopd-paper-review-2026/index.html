@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>京东 DOPD 论文 Review 2026</title>
+  <link rel="stylesheet" href="../assets/styles/publication-fonts.css">
+  <style>
+    :root {
+      --paper: #f5f1e7;
+      --ink: #18242d;
+      --muted: #65707a;
+      --blue: #173d67;
+      --blue-deep: #102b4b;
+      --blue-soft: #e5edf4;
+      --gold: #95672c;
+      --rose: #8d4f49;
+      --green: #476f5b;
+      --line: #c9c1b2;
+      --panel: #fbfaf4;
+      --shade: #ece6d8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    @page {
+      size: A4;
+      margin: 17mm 16mm 18mm;
+      @bottom-center {
+        content: "京东 DOPD 论文 Review 2026 · " counter(page);
+        color: #6f766f;
+        font-family: "TsangerJinKai02";
+        font-size: 8pt;
+      }
+    }
+
+    html,
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    body {
+      font-family: var(--serif);
+      font-size: 11.1pt;
+      line-height: 1.72;
+      text-rendering: optimizeLegibility;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration: none;
+      border-bottom: 0.5pt solid rgba(23, 61, 103, 0.35);
+    }
+
+    .paper {
+      max-width: 212mm;
+      margin: 0 auto;
+      background: var(--paper);
+    }
+
+    .cover {
+      height: 260mm;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 10mm;
+      padding: 8mm 0;
+      break-inside: avoid;
+      page-break-after: always;
+    }
+
+    .cover-top {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12mm;
+      align-items: start;
+      border-bottom: 1.4pt solid var(--blue);
+      padding-bottom: 5mm;
+    }
+
+    .eyebrow,
+    .source-label,
+    .metric-label,
+    .tag,
+    .ref,
+    .smallcaps {
+      font-family: var(--mono);
+      letter-spacing: 0.06em;
+    }
+
+    .eyebrow {
+      margin: 0 0 4mm;
+      color: var(--gold);
+      font-size: 8.2pt;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      color: var(--blue-deep);
+      font-size: 29pt;
+      line-height: 1.08;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .subtitle {
+      margin: 5mm 0 0;
+      max-width: 146mm;
+      color: var(--muted);
+      font-size: 12.2pt;
+      line-height: 1.55;
+    }
+
+    .asof {
+      width: 38mm;
+      color: var(--muted);
+      font-size: 8.4pt;
+      line-height: 1.5;
+      text-align: right;
+    }
+
+    .asof strong {
+      display: block;
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 9.6pt;
+      margin-bottom: 1mm;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 8mm;
+      align-items: center;
+    }
+
+    .verdict {
+      border-left: 3pt solid var(--blue);
+      padding: 2mm 0 2mm 6mm;
+    }
+
+    .verdict h2 {
+      margin-top: 0;
+    }
+
+    .verdict p {
+      font-size: 12.1pt;
+      line-height: 1.75;
+      margin: 3mm 0 0;
+    }
+
+    .signal-board {
+      border: 1pt solid var(--line);
+      background: var(--panel);
+      padding: 4.2mm;
+      display: grid;
+      gap: 2.6mm;
+    }
+
+    .signal-row {
+      display: grid;
+      grid-template-columns: 22mm 1fr;
+      gap: 3.4mm;
+      padding-bottom: 2.2mm;
+      border-bottom: 0.5pt solid var(--line);
+    }
+
+    .signal-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .signal-key {
+      color: var(--blue);
+      font-family: var(--mono);
+      font-weight: 800;
+      font-size: 10.8pt;
+    }
+
+    .signal-value {
+      color: var(--ink);
+      font-size: 9.5pt;
+      line-height: 1.55;
+    }
+
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      border: 1pt solid var(--line);
+      background: var(--line);
+    }
+
+    .metric {
+      background: var(--panel);
+      padding: 3.2mm 3.8mm;
+      min-height: 22mm;
+    }
+
+    .metric-value {
+      display: block;
+      color: var(--blue);
+      font-family: var(--mono);
+      font-size: 15.8pt;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .metric-label {
+      display: block;
+      margin-top: 2mm;
+      color: var(--muted);
+      font-size: 7.4pt;
+      line-height: 1.45;
+    }
+
+    main {
+      padding-bottom: 18mm;
+    }
+
+    section {
+      break-inside: auto;
+      margin: 0 0 12mm;
+    }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 18mm 1fr;
+      gap: 5mm;
+      align-items: baseline;
+      border-top: 1.2pt solid var(--blue);
+      padding-top: 4mm;
+      margin-bottom: 4.5mm;
+      break-after: avoid;
+    }
+
+    .section-no {
+      color: var(--gold);
+      font-family: var(--mono);
+      font-size: 9pt;
+      font-weight: 800;
+    }
+
+    h2 {
+      margin: 0;
+      color: var(--blue-deep);
+      font-size: 18.4pt;
+      line-height: 1.22;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    h3 {
+      margin: 7mm 0 2.5mm;
+      color: var(--blue);
+      font-size: 13.8pt;
+      line-height: 1.25;
+      font-weight: 800;
+      break-after: avoid;
+    }
+
+    p {
+      margin: 0 0 3.6mm;
+    }
+
+    .lead {
+      color: var(--ink);
+      font-size: 12.6pt;
+      line-height: 1.78;
+    }
+
+    .note {
+      color: var(--muted);
+      font-size: 9.8pt;
+      line-height: 1.62;
+    }
+
+    .columns {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8mm;
+      align-items: start;
+    }
+
+    .triad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 4mm;
+      margin: 4mm 0 5mm;
+    }
+
+    .card {
+      background: var(--panel);
+      border: 0.8pt solid var(--line);
+      padding: 4.2mm;
+      break-inside: avoid;
+    }
+
+    .card h4 {
+      margin: 0 0 1.8mm;
+      color: var(--blue);
+      font-size: 11.6pt;
+      line-height: 1.25;
+    }
+
+    .card p {
+      margin-bottom: 0;
+      color: var(--ink);
+      font-size: 9.9pt;
+      line-height: 1.62;
+    }
+
+    .quote {
+      margin: 4mm 0;
+      padding: 3.5mm 5mm;
+      background: var(--panel);
+      border-left: 2pt solid var(--gold);
+      color: var(--ink);
+      font-size: 11.4pt;
+      line-height: 1.72;
+      break-inside: avoid;
+    }
+
+    .route-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4mm;
+      margin: 4mm 0 5mm;
+    }
+
+    .route {
+      border: 0.8pt solid var(--line);
+      background: var(--panel);
+      padding: 4mm;
+      break-inside: avoid;
+    }
+
+    .route strong {
+      display: block;
+      color: var(--blue-deep);
+      font-size: 11.4pt;
+      margin-bottom: 1.2mm;
+    }
+
+    .tag {
+      display: inline-block;
+      margin: 0 1.5mm 1.5mm 0;
+      padding: 0.5mm 1.6mm;
+      border: 0.5pt solid var(--line);
+      color: var(--gold);
+      background: var(--shade);
+      font-size: 7.2pt;
+      font-weight: 800;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 3.8mm 0 5mm;
+      font-size: 8.9pt;
+      line-height: 1.42;
+      break-inside: avoid;
+    }
+
+    caption {
+      caption-side: top;
+      color: var(--muted);
+      font-size: 8.7pt;
+      text-align: left;
+      margin-bottom: 1.8mm;
+      line-height: 1.45;
+    }
+
+    th,
+    td {
+      border-top: 0.45pt solid var(--line);
+      border-bottom: 0.45pt solid var(--line);
+      padding: 1.9mm 1.7mm;
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--blue-deep);
+      background: rgba(229, 237, 244, 0.62);
+      font-weight: 800;
+      text-align: left;
+    }
+
+    td.num,
+    th.num {
+      text-align: right;
+      font-family: var(--mono);
+      white-space: nowrap;
+    }
+
+    .score {
+      color: var(--blue);
+      font-weight: 800;
+    }
+
+    .risk {
+      color: var(--rose);
+      font-weight: 800;
+    }
+
+    .ok {
+      color: var(--green);
+      font-weight: 800;
+    }
+
+    .source-label {
+      color: var(--muted);
+      font-size: 7.4pt;
+      white-space: nowrap;
+    }
+
+    ul {
+      margin: 1mm 0 4mm 5mm;
+      padding: 0;
+    }
+
+    li {
+      margin: 0 0 2.1mm;
+      padding-left: 1mm;
+    }
+
+    .toc {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 3mm 8mm;
+      margin: 3mm 0 7mm;
+    }
+
+    .toc a {
+      display: grid;
+      grid-template-columns: 10mm 1fr;
+      gap: 3mm;
+      padding: 1.8mm 0;
+      border-bottom: 0.5pt solid var(--line);
+      color: var(--ink);
+    }
+
+    .toc span:first-child {
+      color: var(--gold);
+      font-family: var(--mono);
+      font-weight: 800;
+    }
+
+    .ref-list {
+      font-size: 9.2pt;
+      line-height: 1.55;
+    }
+
+    .ref-list li {
+      margin-bottom: 2.6mm;
+    }
+
+    .page-break {
+      page-break-before: always;
+    }
+
+    .nowrap {
+      white-space: nowrap;
+    }
+  </style>
+</head>
+<body>
+  <article class="paper">
+    <header class="cover">
+      <div class="cover-top">
+        <div>
+          <p class="eyebrow">Paper Review · Evidence checked 2026-07-07</p>
+          <h1>京东 DOPD 论文 Review 2026</h1>
+          <p class="subtitle">对 `DOPD: Dual On-policy Distillation` 的专业评审：从 privilege illusion、优势感知 token 路由、LLM/VLM 实验到复现边界和工程落地价值。</p>
+        </div>
+        <div class="asof">
+          <strong>arXiv:2606.30626v1</strong>
+          submitted 2026-06-29<br>
+          source class A<br>
+          independent review
+        </div>
+      </div>
+
+      <div class="hero-grid">
+        <div class="verdict">
+          <h2>结论先行</h2>
+          <p>DOPD 的价值不在于把更多特权信息塞给教师或学生，而在于承认特权上下文会制造“看似更强”的监督幻觉，并用 token 级别的优势差值和相对概率，把可迁移能力、信息不对称和学生自洽探索拆开处理。作为 OPD 的 2026 年增量，它提出的问题足够准确，方法足够工程化，实验覆盖也明显强于一般蒸馏论文。</p>
+        </div>
+        <div class="signal-board">
+          <div class="signal-row">
+            <div class="signal-key">Core</div>
+            <div class="signal-value">用 privileged teacher 与 privileged student 的 `A_n`、`q_T`、`q_S` 判定每个 token 应由谁教、教多强、用哪种散度。</div>
+          </div>
+          <div class="signal-row">
+            <div class="signal-key">Gain</div>
+            <div class="signal-value">LLM 主实验平均 51.4，相对学生 +12.3，相对 Vanilla OPD +7.5，恢复 teacher-student gap 的 89.8%。</div>
+          </div>
+          <div class="signal-row">
+            <div class="signal-key">Caveat</div>
+            <div class="signal-value">特权输入由 GPT-5.4 生成并复核，代码和完整数据未在论文页面直接给出，复现成本与独立验证仍是主要风险。</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="metrics">
+        <div class="metric">
+          <span class="metric-value">51.4</span>
+          <span class="metric-label">LLM 平均分，Qwen3-8B 到 Qwen3-1.7B</span>
+        </div>
+        <div class="metric">
+          <span class="metric-value">58.4</span>
+          <span class="metric-label">VLM 平均分，Qwen3-VL-8B 到 Qwen3-VL-2B</span>
+        </div>
+        <div class="metric">
+          <span class="metric-value">4</span>
+          <span class="metric-label">LLM 任务上超过 teacher 的基准数量</span>
+        </div>
+        <div class="metric">
+          <span class="metric-value">32K/25K</span>
+          <span class="metric-label">LLM/VLM 高质量特权训练样本规模</span>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="toc">
+        <div class="section-head">
+          <div class="section-no">00</div>
+          <h2>目录与读法</h2>
+        </div>
+        <div class="toc">
+          <a href="#summary"><span>01</span><span>Executive Review</span></a>
+          <a href="#problem"><span>02</span><span>问题定义</span></a>
+          <a href="#method"><span>03</span><span>方法机制</span></a>
+          <a href="#experiment"><span>04</span><span>实验设计与结果</span></a>
+          <a href="#analysis"><span>05</span><span>深入评价</span></a>
+          <a href="#engineering"><span>06</span><span>工程启示</span></a>
+          <a href="#limitations"><span>07</span><span>局限与复现边界</span></a>
+          <a href="#score"><span>08</span><span>审稿式打分</span></a>
+        </div>
+        <p class="note">本文聚焦一个审稿问题：DOPD 是否真正解决了 privileged-context OPD 的核心失败模式，还是只是一次更复杂的蒸馏调参。结论是前者更接近事实，但仍需要独立代码、训练数据和成本曲线来完成工程闭环。</p>
+      </section>
+
+      <section id="summary">
+        <div class="section-head">
+          <div class="section-no">01</div>
+          <h2>Executive Review</h2>
+        </div>
+        <p class="lead">DOPD 处理的是 OPD 在“特权信息可用”场景中的一个尖锐问题：训练期给教师或学生额外提示，确实可能提高短期监督质量，但这种提升未必来自教师可迁移能力，而可能来自教师拥有学生部署时拿不到的信息。若直接让学生模仿这种输出，训练目标会把能力差距和信息差距混在一起，形成论文所谓 privilege illusion。</p>
+        <p>这篇论文的关键判断是：privileged context 下并非所有 token 都同等可教。少数 token 承载真正的能力差距，另一些 token 只是答案泄漏、提示残留、连接词、局部探索或不可靠片段。DOPD 因此放弃把 teacher logits 当作统一监督源，改为把每个 token 放入四种路由区域，分别采用强教师蒸馏、轻教师蒸馏、弱学生自正则和轻学生蒸馏。</p>
+        <div class="quote">一句话评价：DOPD 是一篇问题意识强于形式复杂度的论文。它没有把 privileged information 当作免费午餐，而是把“什么时候该相信 teacher，什么时候该相信 student，什么时候只做弱正则”变成 token 级别的训练策略。</div>
+        <div class="triad">
+          <div class="card">
+            <h4>贡献质量</h4>
+            <p>“privilege illusion”是有解释力的 failure mode，尤其适用于 RLAIF、OPD、teacher-guided post-training 和多模态标注场景。</p>
+          </div>
+          <div class="card">
+            <h4>实验质量</h4>
+            <p>LLM、VLM、跨规模、持续学习、OOD、稳定性、特权输入形式、token、散度和消融都覆盖到，实验叙事完整。</p>
+          </div>
+          <div class="card">
+            <h4>主要扣分</h4>
+            <p>特权输入依赖 GPT-5.4 生成和复核，代码数据未开放，路由阈值偏启发式，成本曲线披露不足。</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="problem">
+        <div class="section-head">
+          <div class="section-no">02</div>
+          <h2>问题定义：从 OPD 到 Privilege Illusion</h2>
+        </div>
+        <p>传统 OPD 的训练逻辑是：学生从当前策略采样 trajectory，教师对学生生成的 token 提供密集监督，学生在自己的 on-policy 分布上向教师靠拢。这比离线 SFT 更能缓解 exposure bias，也比只看最终 reward 的 RL 提供更密集的 token 级信号。</p>
+        <p>问题出现在“训练时额外信息”被引入以后。比如 LLM 任务中给模型 step-wise hints，VLM 任务中给模型 bounding box、object label 或结构化视觉注释。直觉上，这些信息能让教师更可靠。但部署阶段学生并不拥有同等信息，因此教师的高置信 token 可能只是信息优势，不是可由学生内部化的能力优势。</p>
+        <p>DOPD 对这个现象的命名很准确：privilege illusion。论文并未否定特权信息的价值；关键在于，“特权信息造成的表现提升”和“教师本身更强造成的可迁移能力差距”必须被区分。若不区分，蒸馏会让学生模仿一个部署时不可达的条件分布。</p>
+
+        <h3>论文的诊断路径</h3>
+        <div class="columns">
+          <div>
+            <p>论文先比较三类 OPD 变体：只给教师特权信息、只给学生特权信息、两者都给。前两者早期有收益，但后期更容易出现性能回落和 entropy collapse。其含义是，单侧特权输入会制造训练信号不对称，使学生更容易形成对不可部署上下文的局部过拟合，而难以沉淀为稳定能力。</p>
+            <p>随后，论文将 token 级别的 privilege advantage gap 作为分析工具。若移除 high-advantage tokens，性能增益显著降低；移除 random 或 low-advantage tokens 影响较小。这说明关键监督信号并不平均分布在整条输出上。</p>
+          </div>
+          <div>
+            <table>
+              <caption>问题建模的三个层次</caption>
+              <thead>
+                <tr><th>层次</th><th>论文观点</th><th>评审判断</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>context</td><td>特权输入能提高监督质量，也能制造不可部署信息差。</td><td class="ok">成立</td></tr>
+                <tr><td>policy</td><td>teacher 与 student 在特权上下文中的差异不能直接等同能力差。</td><td class="ok">成立</td></tr>
+                <tr><td>token</td><td>能力信号集中在少数 high-gap token 上。</td><td class="ok">实验支持强，但仍非形式证明</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section id="method">
+        <div class="section-head">
+          <div class="section-no">03</div>
+          <h2>方法机制：Dual On-policy Distillation</h2>
+        </div>
+        <p class="lead">DOPD 的基本做法是让同一个学生在训练期有两个视角：部署学生只看原始输入，privileged student 在训练期额外看到特权信息。教师也在特权上下文下输出分布。路由器比较 privileged teacher 与 privileged student 对每个 token 的 log probability 差值，并结合两者对该 token 的概率高低决定监督源。</p>
+        <p>形式上，论文定义 privilege advantage gap `A_n`，用于度量第 `n` 个 token 上 privileged teacher 与 privileged student 的分歧。实际实现会丢弃 top 5% outliers，并在 batch 内归一化，再用平均值作为高低分界。这个设计不复杂，但把“谁更有资格教这个 token”落实为可计算的 gating 信号。</p>
+
+        <div class="route-grid">
+          <div class="route">
+            <span class="tag">low A</span><span class="tag">high qT</span><span class="tag">high qS</span>
+            <strong>轻教师蒸馏</strong>
+            <p>teacher 与 student 在特权上下文中一致且置信度高。DOPD 用 Top-K reverse KL 和 `beta_l` 进行轻量教师蒸馏，目标是保持稳定共识，而不是过度放大已经一致的 token。</p>
+          </div>
+          <div class="route">
+            <span class="tag">low A</span><span class="tag">low qT</span><span class="tag">low qS</span>
+            <strong>弱学生自正则</strong>
+            <p>双方都不置信，token 可能是连接词、低价值片段或不可靠路径。DOPD 转向 stopped privileged student，以 Top-K reverse KL 和更弱的 `beta_w` 做自正则。</p>
+          </div>
+          <div class="route">
+            <span class="tag">high A</span><span class="tag">high qT</span>
+            <strong>强教师蒸馏</strong>
+            <p>teacher 在该 token 上呈现可信优势。DOPD 使用 full-vocabulary JS divergence 和单位权重，把这部分 token 作为主要能力迁移区域。</p>
+          </div>
+          <div class="route">
+            <span class="tag">high A</span><span class="tag">high qS</span>
+            <strong>轻学生蒸馏</strong>
+            <p>student 在特权上下文中更自洽，可能代表可保留的探索分支或局部 reasoning path。DOPD 使用 stopped privileged student 的 Top-K reverse KL，避免强行贴近 teacher。</p>
+          </div>
+        </div>
+
+        <h3>为什么叫 dual</h3>
+        <p>“dual”的含义不止于简单混合两个 loss，监督源本身具有双侧选择：一侧是 privileged teacher，负责可迁移能力；另一侧是 privileged student，负责稳定学生自身在特权上下文中的合理探索。这个选择按 token 动态发生，而非样本级或任务级静态加权。</p>
+        <table>
+          <caption>DOPD 的方法要素与审稿判断</caption>
+          <thead>
+            <tr><th>要素</th><th>论文实现</th><th>评审判断</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>优势估计</td><td>比较 privileged teacher 与 privileged student 的 token log probability，得到 `A_n`。</td><td>简单、可实现、可解释，但仍是 heuristic proxy。</td></tr>
+            <tr><td>token 路由</td><td>按 `A_n`、`q_T`、`q_S` 划分四类 token，并选择不同监督源。</td><td>是论文最实质的设计，直接回应 privilege illusion。</td></tr>
+            <tr><td>散度策略</td><td>关键 teacher token 用 full-vocabulary JS，其余区域多用 Top-K reverse KL。</td><td>合理兼顾强监督和计算成本，但 full vocabulary 的实际代价需要更多报告。</td></tr>
+            <tr><td>强度控制</td><td>`beta_w=0.3`、`beta_l=0.6`，强 teacher 区域使用单位权重。</td><td>实验给出敏感性支撑，但跨任务是否稳定仍需验证。</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="experiment">
+        <div class="section-head">
+          <div class="section-no">04</div>
+          <h2>实验设计与主要结果</h2>
+        </div>
+        <p class="lead">实验覆盖 LLM 与 VLM 两条线。LLM 主实验为 Qwen3-8B 到 Qwen3-1.7B，VLM 主实验为 Qwen3-VL-8B 到 Qwen3-VL-2B。作者还补充了五组不同规模 teacher-student pair，并测试 continual learning、OOD、训练稳定性、特权输入形式、token routing、散度选择和关键组件消融。</p>
+        <table>
+          <caption>实验设置摘录</caption>
+          <thead>
+            <tr><th>维度</th><th>LLM</th><th>VLM</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>主模型对</td><td>Qwen3-8B 到 Qwen3-1.7B</td><td>Qwen3-VL-8B 到 Qwen3-VL-2B</td></tr>
+            <tr><td>训练数据</td><td>RaR-Science-20K、DAPO-Math-17K、Skywork-OR1-Coding-14K</td><td>ViRL39K</td></tr>
+            <tr><td>特权输入</td><td>GPT-5.4 生成 step-wise decomposition hints，不给最终答案和详细执行过程</td><td>GPT-5.4 生成 query-related bounding boxes、object labels 和坐标</td></tr>
+            <tr><td>清洗规模</td><td>GPT-5.4 再复核后保留 32K 高质量样本</td><td>GPT-5.4 再复核后保留 25K 高质量样本</td></tr>
+            <tr><td>训练配置</td><td>8 张 NVIDIA H200 141GB，AdamW，cosine scheduler，LR `5e-6`，batch 128，4 samples，200 steps</td><td>8 张 NVIDIA H200 141GB，AdamW，cosine scheduler，LR `5e-6`，batch 64，4 samples，300 steps</td></tr>
+          </tbody>
+        </table>
+
+        <h3>主结果：LLM 与 VLM 都显著优于 Vanilla OPD</h3>
+        <table>
+          <caption>主实验平均分，摘自论文表 1 和表 2</caption>
+          <thead>
+            <tr>
+              <th>场景</th>
+              <th class="num">Student</th>
+              <th class="num">Vanilla OPD</th>
+              <th class="num">DOPD</th>
+              <th class="num">Teacher</th>
+              <th class="num">DOPD vs Student</th>
+              <th class="num">DOPD vs Vanilla</th>
+              <th class="num">Gap Recovery</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>LLM: Qwen3-8B 到 Qwen3-1.7B</td>
+              <td class="num">39.1</td>
+              <td class="num">43.9</td>
+              <td class="num score">51.4</td>
+              <td class="num">52.8</td>
+              <td class="num">+12.3</td>
+              <td class="num">+7.5</td>
+              <td class="num">89.8%</td>
+            </tr>
+            <tr>
+              <td>VLM: Qwen3-VL-8B 到 Qwen3-VL-2B</td>
+              <td class="num">48.3</td>
+              <td class="num">52.4</td>
+              <td class="num score">58.4</td>
+              <td class="num">62.9</td>
+              <td class="num">+10.1</td>
+              <td class="num">+6.0</td>
+              <td class="num">69.2%</td>
+            </tr>
+          </tbody>
+        </table>
+        <p>LLM 表 1 中，DOPD 在八个 benchmark 上平均 51.4，低于 teacher 平均 52.8，但在 AIME25、ZebraLogic、BFCLv3、LCBv5 四个更具挑战性的基准上超过 teacher。这个细节值得保留：DOPD 没有总体超过 teacher，却能在特权提示与 token 路由结合后改善若干 reasoning 和 coding 任务。</p>
+        <p>VLM 表 2 中，DOPD 平均 58.4，超过 Vanilla OPD 6.0 分，也超过 Uni-OPD、Vision-OPD 和作者复现的 VA-OPD。由于 VA-OPD 官方代码未发布，论文表中使用 reproduced version，这一比较可用但证据等级低于公开可复现 baseline。</p>
+
+        <h3>跨规模泛化：大 teacher 不再自动拖垮蒸馏</h3>
+        <table>
+          <caption>跨规模结果，摘自论文表 3</caption>
+          <thead>
+            <tr><th>模型对</th><th class="num">Student</th><th class="num">Vanilla OPD</th><th class="num">DOPD</th><th class="num">Teacher</th><th class="num">DOPD Gain</th><th class="num">Gap Recovery</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Qwen3-8B 到 Qwen3-0.6B</td><td class="num">26.2</td><td class="num">29.7</td><td class="num score">40.3</td><td class="num">52.8</td><td class="num">+14.1</td><td class="num">53.0%</td></tr>
+            <tr><td>Qwen3-8B 到 Qwen3-1.7B</td><td class="num">39.1</td><td class="num">43.9</td><td class="num score">51.4</td><td class="num">52.8</td><td class="num">+12.3</td><td class="num">89.8%</td></tr>
+            <tr><td>Qwen3-4B 到 Qwen3-0.6B</td><td class="num">26.2</td><td class="num">30.9</td><td class="num score">39.9</td><td class="num">51.6</td><td class="num">+13.7</td><td class="num">53.9%</td></tr>
+            <tr><td>Qwen3-4B 到 Qwen3-1.7B</td><td class="num">39.1</td><td class="num">44.0</td><td class="num score">50.2</td><td class="num">51.6</td><td class="num">+11.1</td><td class="num">88.8%</td></tr>
+            <tr><td>Qwen3-1.7B 到 Qwen3-0.6B</td><td class="num">26.2</td><td class="num">31.7</td><td class="num score">38.1</td><td class="num">39.1</td><td class="num">+11.9</td><td class="num">92.2%</td></tr>
+          </tbody>
+        </table>
+        <p>最值得注意的是 Qwen3-8B 到 Qwen3-0.6B。Vanilla OPD 只带来 3.5 分增益，而 DOPD 达到 +14.1，并恢复 53.0% 的 teacher-student gap。论文据此主张：当 teacher 与 student 容量差距变大时，简单模仿会变得更困难，DOPD 通过选择性 token 路由缓解这种 scale mismatch。</p>
+
+        <h3>特权输入不是越强越好</h3>
+        <table>
+          <caption>特权输入形式，摘自论文表 4 和表 5</caption>
+          <thead>
+            <tr><th>场景</th><th>特权输入</th><th class="num">Benchmark A</th><th class="num">Benchmark B</th><th>评审解释</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>LLM</td><td>Final Answer</td><td class="num">59.5</td><td class="num">36.7</td><td class="risk">低于无特权输入，提示答案会诱发 shortcut learning。</td></tr>
+            <tr><td>LLM</td><td>Step-wise Hints without Execution</td><td class="num score">71.3</td><td class="num score">49.8</td><td class="ok">最优，提供方向而不泄漏完整执行路径。</td></tr>
+            <tr><td>VLM</td><td>Final Answer</td><td class="num">64.6</td><td class="num">63.2</td><td>有收益但不是最优。</td></tr>
+            <tr><td>VLM</td><td>Bounding Box with Object Label</td><td class="num score">67.4</td><td class="num score">67.2</td><td class="ok">最优，给出可定位视觉上下文而不替代推理。</td></tr>
+          </tbody>
+        </table>
+        <p>这一组实验对论文说服力很重要。它说明 DOPD 的收益不能归因于“更多外部答案”；有效特权信号需要保持中等强度、指向能力而不过度泄漏解法。对 LLM，最终答案反而最差；对 VLM，结构化定位加对象标签优于纯 caption。</p>
+
+        <h3>训练稳定性、持续学习与 OOD</h3>
+        <p>论文报告 DOPD 在 LiveBench 上约 step-80 即超过若干强 baseline 的 step-200 表现；entropy 早期小幅上升、随后下降，并在 step-110 后趋于稳定。自蒸馏路线则在约 step-95 出现 entropy collapse 和性能下滑。这个结果支持作者的解释：单一自监督源容易变得同质化，而 dual routing 能维持必要探索。</p>
+        <p>在 continual learning 设定中，作者按 general、reasoning、coding 三阶段顺序训练，并观察到 DOPD 对新域持续增益，对旧域只有小幅退化。在 OOD 设定中，分别在 coding 或 reasoning 数据上优化，再到另一域评测，DOPD 分别超过第二名 3.1 和 4.3 分。这里的证据仍是作者实验，但覆盖面足够支撑“DOPD 不只是单表格调优”的判断。</p>
+      </section>
+
+      <section id="analysis">
+        <div class="section-head">
+          <div class="section-no">05</div>
+          <h2>深入评价：强点、弱点与真实创新</h2>
+        </div>
+        <h3>强点一：失败模式定义清楚</h3>
+        <p>许多蒸馏论文把 teacher 更强当作默认前提，把监督源质量当作外生常量。DOPD 的进步在于它指出：一旦 teacher 或 student 看到特权上下文，teacher 的优势不再天然等价于能力优势。这个问题在多模态、工具调用、检索增强、自动标注和复杂 reasoning 数据生成中都会出现。</p>
+
+        <h3>强点二：方法与诊断高度对齐</h3>
+        <p>论文没有只停留在现象描述，而是把 privilege advantage gap 落到 token routing 上。high-gap, high-teacher-probability token 被视为能力迁移核心；low-gap 或 low-confidence token 不再被同等强度蒸馏。这样的设计避免了“整段输出同一个 loss”的粗糙性，也使实验消融更容易解释。</p>
+
+        <h3>强点三：实验矩阵较完整</h3>
+        <p>论文覆盖 9 个 LLM baseline 和 4 个 VLM baseline，另有跨模型规模、特权输入形式、token 分类、散度选择、持续学习、OOD 和稳定性分析。尤其是 privileged information analysis 与 token ablation，把方法收益从“模型更强了”追溯到“哪类训练信号有价值”，这比单纯报告平均分更有审稿价值。</p>
+
+        <h3>弱点一：复现链条依赖外部强模型</h3>
+        <p>论文使用 GPT-5.4 生成 LLM hints 与 VLM annotations，并再次用 GPT-5.4 复核后筛选出 32K 和 25K 训练样本。这带来三个问题：成本较高，外部模型可得性影响复现，数据本身可能继承 GPT-5.4 的偏置或隐含知识分布。即使 OpenAI 官方页面确认 GPT-5.4 于 2026-03-05 发布，这也不等于 DOPD 数据构造过程可复现。</p>
+
+        <h3>弱点二：路由规则仍是启发式</h3>
+        <p>`A_n` 以 log probability gap 衡量，batch 内丢弃 top 5% outliers 并归一化，然后用平均水平划分高低。这在论文实验中有效，但没有保证在长上下文、不同 tokenizer、不同语言、不同视觉粒度和工具调用轨迹中稳定。high `A_n` 可能仍包含信息泄漏，low `A_n` 也可能隐藏共享能力信号。</p>
+
+        <h3>弱点三：成本披露不足</h3>
+        <p>DOPD 相比 Vanilla OPD 至少需要额外 student forward pass，且 selected teacher-critical tokens 使用 full-vocabulary JS divergence。论文给出了 GPU、batch、step、Top-K 和系数设置，却没有充分报告 wall-clock、显存、吞吐、特权输入生成成本和单位增益成本。对工业落地而言，这部分缺失会影响优先级判断。</p>
+      </section>
+
+      <section id="engineering">
+        <div class="section-head">
+          <div class="section-no">06</div>
+          <h2>工程启示：何时值得采用 DOPD</h2>
+        </div>
+        <p class="lead">DOPD 的优先场景并非普通 teacher-student compression；它更适合训练期存在额外标注、检索、视觉定位、解释、工具轨迹或专家提示，但部署期学生无法直接访问这些信息的后训练系统。</p>
+        <div class="columns">
+          <div>
+            <h3>适用场景</h3>
+            <ul>
+              <li>小模型承接大模型 reasoning、coding 或视觉推理能力，且 teacher-student gap 较大。</li>
+              <li>训练数据可提供中等强度提示，例如 step hints、证据定位、object labels、检索片段或专家摘要。</li>
+              <li>团队希望减少直接答案泄漏导致的 shortcut learning，而不是追求最短期训练集指标。</li>
+              <li>需要保留学生自身探索路径，避免全量强教师蒸馏带来的 entropy collapse。</li>
+            </ul>
+          </div>
+          <div>
+            <h3>不宜直接采用</h3>
+            <ul>
+              <li>没有可靠特权输入，或特权输入只能是最终答案。</li>
+              <li>成本预算极紧，无法承受额外 forward pass、teacher logits 和 full-vocabulary divergence。</li>
+              <li>业务要求极强可解释审计，而训练数据生成依赖不可公开的外部模型。</li>
+              <li>任务分布变化很快，token routing 阈值无法被周期性重校准。</li>
+            </ul>
+          </div>
+        </div>
+        <table>
+          <caption>落地检查清单</caption>
+          <thead>
+            <tr><th>检查项</th><th>应达到的条件</th><th>原因</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>特权信息质量</td><td>提示应提供结构性线索，不直接泄漏最终答案。</td><td>论文表 4 表明 final answer 会伤害 LLM 蒸馏。</td></tr>
+            <tr><td>路由可观测性</td><td>记录四类 token 占比、loss contribution、entropy 和 benchmark 曲线。</td><td>避免 DOPD 退化为不可解释的 loss soup。</td></tr>
+            <tr><td>成本核算</td><td>单独统计 privileged input 生成、复核、teacher forward、student extra forward 与 full-vocabulary JS。</td><td>论文没有给出完整成本曲线，工程侧必须补齐。</td></tr>
+            <tr><td>对照组</td><td>至少保留 Vanilla OPD、无特权输入、final-answer 特权输入、只 teacher、只 student 五类对照。</td><td>这能验证收益是否来自 DOPD 路由，而非数据增强本身。</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section id="limitations">
+        <div class="section-head">
+          <div class="section-no">07</div>
+          <h2>局限、可复现性与证据边界</h2>
+        </div>
+        <p>DOPD 是强论文，但不能被解读为“OPD 已解决”或“特权信息总能提升蒸馏”。更准确的结论是：在作者给定的 Qwen3/Qwen3-VL、GPT-5.4 生成特权输入、固定 benchmark 和有限步数训练环境中，优势感知双源路由显著优于静态 OPD、自蒸馏和若干 adaptive baseline。</p>
+        <table>
+          <caption>复现风险分层</caption>
+          <thead>
+            <tr><th>风险</th><th>等级</th><th>说明</th><th>建议</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>代码和完整数据未直接给出</td><td class="risk">高</td><td>论文页面没有提供完整训练脚本、生成样本和日志。</td><td>复现前先固定 prompts、过滤规则和 evaluation harness。</td></tr>
+            <tr><td>GPT-5.4 依赖</td><td class="risk">高</td><td>特权输入生成和复核依赖外部强模型，成本和版本影响结果。</td><td>增加本地强模型替代组和多模型生成组。</td></tr>
+            <tr><td>阈值与系数迁移</td><td class="risk">中</td><td>`beta_w`、`beta_l`、Top-K、outlier 比例可能依赖任务分布。</td><td>按任务重新做 sensitivity sweep。</td></tr>
+            <tr><td>baseline 公平性</td><td class="risk">中</td><td>部分 baseline 由作者重跑，VA-OPD 为 reproduced version。</td><td>公开训练日志和同预算对照。</td></tr>
+            <tr><td>外部 benchmark 泛化</td><td class="risk">中</td><td>已有 OOD 结果，但仍在作者设计范围内。</td><td>加入业务私测集和长期回归集。</td></tr>
+          </tbody>
+        </table>
+        <p>论文自身也承认：DOPD 依赖特权信息质量，引入额外计算开销，路由策略仍偏启发式。作者提出的未来方向包括更可靠且低成本的特权信息获取、更好的 advantage gap 检测方式，以及更原则化或可学习的 routing 策略。评审角度看，这些问题会直接决定 DOPD 能否从论文方法变成训练基础设施。</p>
+      </section>
+
+      <section id="score">
+        <div class="section-head">
+          <div class="section-no">08</div>
+          <h2>审稿式打分</h2>
+        </div>
+        <table>
+          <caption>论文 review 评分，满分 100</caption>
+          <thead>
+            <tr><th>维度</th><th class="num">分数</th><th>理由</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>问题重要性</td><td class="num score">19/20</td><td>privilege illusion 抓住了特权上下文蒸馏的核心风险，对 LLM、VLM 和工业后训练都有外延价值。</td></tr>
+            <tr><td>方法原创性</td><td class="num score">18/20</td><td>dual routing 与 advantage-aware token 分区具有清晰增量，但 gap 与阈值仍偏 heuristic。</td></tr>
+            <tr><td>实验充分性</td><td class="num score">18/20</td><td>覆盖面优于同类论文，尤其是 VLM、跨规模、OOD 和稳定性；仍缺独立复现和成本曲线。</td></tr>
+            <tr><td>工程可用性</td><td class="num score">16/20</td><td>训练逻辑可落地，但 GPT-5.4 数据生成、额外 forward 和 full-vocabulary JS 会抬高实施门槛。</td></tr>
+            <tr><td>写作与可解释性</td><td class="num score">18/20</td><td>结构清楚，图表与消融能回扣主张；个别表格编号和正文引用存在轻微排版混淆。</td></tr>
+          </tbody>
+        </table>
+        <p class="lead"><strong>综合评分：89/100。</strong> 若按会议审稿口径，倾向 strong accept 到 weak accept 之间，取决于代码数据开放程度和 reviewer 对外部 GPT-5.4 依赖的容忍度。若作者补充完整复现包、成本分析和更多非 Qwen 家族结果，论文的工程说服力会显著提高。</p>
+
+        <h3>最终判断</h3>
+        <p>DOPD 对 OPD 的贡献是把“教师强不强”改写为“这个 token 上的教师优势是否可迁移”。这是一种更接近后训练真实问题的视角。论文没有证明所有 privileged-context distillation 都应采用 DOPD，但它足够有力地说明：在训练期额外信息存在时，简单强教师模仿已经不是合格基线，至少应当加入 token 级别的信息不对称诊断。</p>
+      </section>
+
+      <section id="sources" class="page-break">
+        <div class="section-head">
+          <div class="section-no">09</div>
+          <h2>Sources</h2>
+        </div>
+        <ol class="ref-list">
+          <li><span class="source-label">S01</span> Yu et al., <a href="https://arxiv.org/abs/2606.30626">DOPD: Dual On-policy Distillation</a>, arXiv:2606.30626, submitted 2026-06-29.</li>
+          <li><span class="source-label">S02</span> Yu et al., <a href="https://arxiv.org/pdf/2606.30626">DOPD PDF</a>, used for tables, settings, methodology, limitations and appendix details.</li>
+          <li><span class="source-label">S03</span> Yu et al., <a href="https://arxiv.org/html/2606.30626">DOPD HTML experimental</a>, used for table and formula cross-checking.</li>
+          <li><span class="source-label">S04</span> OpenAI, <a href="https://openai.com/index/introducing-gpt-5-4/">Introducing GPT-5.4</a>, 2026-03-05, used only to confirm the official model release page cited by the paper.</li>
+          <li><span class="source-label">S05</span> Qwen Team, <a href="https://arxiv.org/abs/2505.09388">Qwen3 Technical Report</a>, 2025-05-14, used as model-family and OPD background.</li>
+          <li><span class="source-label">S06</span> Song and Zheng, <a href="https://arxiv.org/abs/2604.00626">A Survey of On-Policy Distillation for Large Language Models</a>, 2026-04-01, used as OPD research-context background.</li>
+        </ol>
+        <p class="note">证据边界：本文只对公开论文与官方页面负责。作者实验属于 primary source but author-run evidence，不等同于第三方复现。所有结构化摘录见 `data/`，本地证据快照见 `sources/`。</p>
+      </section>
+    </main>
+  </article>
+</body>
+</html>

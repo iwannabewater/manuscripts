@@ -1,0 +1,5 @@
+token_regime,condition,supervision_source,objective,strength,interpretation,source
+low_gap_high_teacher_high_student,"low A, high qT, high qS",teacher,"Top-K reverse KL",light_beta_l,双方在特权上下文中一致且置信度高，适合轻量教师蒸馏以保持稳定共识,S02
+low_gap_low_teacher_low_student,"low A, low qT, low qS",privileged_student,"Top-K reverse KL",weak_beta_w,双方都不置信，信号多为低价值连接或不可靠片段，适合弱自正则,S02
+high_gap_high_teacher,"high A, high qT",teacher,"full-vocabulary JS",strong_unit_weight,教师在该 token 上呈现可信能力优势，是主要能力迁移区域,S02
+high_gap_high_student,"high A, high qS",privileged_student,"Top-K reverse KL",light_beta_l,学生在特权上下文中更自洽，保留探索和局部分支而非强行模仿教师,S02

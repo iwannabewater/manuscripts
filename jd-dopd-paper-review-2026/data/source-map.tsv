@@ -1,0 +1,7 @@
+id	level	source_type	date	url	supports	used_in
+S01	A	arxiv_abs	2026-06-29	https://arxiv.org/abs/2606.30626	题名、作者、提交日期、摘要、DOPD 贡献声明、版本信息	cover,summary,method,assessment
+S02	A	arxiv_pdf	2026-06-29	https://arxiv.org/pdf/2606.30626	表 1 到表 8、实验设置、四类 token 路由、局限与未来方向	method,experiments,limitations,scorecard
+S03	A	arxiv_html	2026-06-29	https://arxiv.org/html/2606.30626	HTML 结构、表格和公式位置的交叉核对	method,experiments
+S04	A	official_release	2026-03-05	https://openai.com/index/introducing-gpt-5-4/	确认 GPT-5.4 官方发布页和发布日期；不支撑 DOPD 性能	approach,evidence_note
+S05	A	technical_report	2025-05-14	https://arxiv.org/abs/2505.09388	Qwen3 后训练背景和模型家族背景	context
+S06	B	survey	2026-04-01	https://arxiv.org/abs/2604.00626	OPD 方法谱系背景	context

@@ -1,0 +1,1269 @@
+                                                                                 DOPD: Dual On-policy Distillation
+
+                                         Xinlei Yu1,2,4 , Gen Li4 , Qingyi Si4 , Guibin Zhang1 , Yuqi Xu4 , Congcong Wang4 ,
+                                         Shuai Dong4 , Kaiwen Tuo4 , Xiangyu Zeng4 , Kaituo Feng2 , Qunzhong Wang2 ,
+                                            Yang Shi3 , Xiaobin Hu1,Q , Xiangyu Yue2 , Jiaqi Wang4 , Shuicheng Yan1
+                                                                                 1 NUS               2 MMLab, CUHK                                3 PKU                     4 Explore Academy, JD
+
+
+
+
+arXiv:2606.30626v1 [cs.AI] 29 Jun 2026
+                                                                                                                                         Abstract
+                                                On-policy distillation (OPD) offers superior capacity transfer by supervising student-sampled tra-
+                                                jectories with dense token-level signals. To furnish high-quality supervision sources and thereby
+                                                elevate the performance frontier of distillation, an intuitive direction is to infuse privileged in-
+                                                formation to either teacher or student itself. However, this additional input induces a potential
+                                                failure mode we dub privilege illusion: a pattern that conflates the transferable capability gap
+                                                that students are meant to close, and the information asymmetry gap that can only be mimicked
+                                                but never replicated. This issue is further amplified by the inherent non-uniformity of token-level
+                                                supervision, where only a small subset of tokens carries pivotal capability-bearing signals. To this
+                                                end, we propose DOPD, an advantage-aware dual distillation paradigm that dynamically routes
+                                                token-level supervision between privileged teacher and privileged student policies based on their
+                                                advantage gap and relative probabilities. Each token receives supervision of different strength, ob-
+                                                jective, and strategy from either teacher or student itself, which transfers credible capability while
+                                                simultaneously receiving auxiliary signals, to alleviate privilege illusion. Extensive experiments on
+                                                both large language model (LLM) and vision-language model (VLM) settings demonstrate that
+                                                DOPD consistently outperforms Vanilla OPD and other counterparts. Further results on stability,
+                                                robustness, continual learning, and out-of-distribution tasks validate its superiority.
+
+
+                                                                   Teacher Policy                        DOPD (Ours)                           Vanilla OPD                         Other Counterparts                            Student Policy
+                                                                                                                                                                        52.8         62.9
+
+
+                                             Average                                                                                                                                                                                                      Average
+                                                       51.4       47.0      46.6     46.1         44.8      44.3        43.9    42.8     42.5         41.8     39.1                           58.4          56.3     55.6        54.2   52.4      52.4
+
+                                                                                                                                                                                           DO  PD
+                                                        DOPD               OP       EO            TI     OP                    SD       OP        SD                                     VA
+                                                                             D        PD            P      CD                    PO       SD        FT                                    Vi
+                                                                                                                                                                                            -O PD
+                                                       ExOP                                                                                                                                  sio
+                                                                                                                                                                                          OP n-
+                                                           D             Un                                                                                                              Un D
+                                                                            i-                                                                                                             i-O  PD
+                                                                 77.1                      53.5                        86.9                    20.2                         71.3                     70.7                        53.8                  67.6
+
+
+
+                                                   71.3   65.2   60.4        49.8   40.9   35.4          81.5   75.6   72.7      23.3   16.7   9.5            67.4   64.7   63.6       67.2   61.8   58.4          45.6   37.1   32.0    60.5   56.2   53.8
+
+                                                       C-Eval                LiveBench                   MATH500                  AIME25                     RealWorldQA                MMStar                     MathVision            DynaMath
+                                                                 25.0                      76.3                        60.0                    23.6                         55.0                     69.6                        55.8                  59.7
+
+
+
+                                                   26.9   15.8   12.1        71.0   64.3   59.8          60.2   55.4   51.9      27.1   17.6   11.3           47.7   40.2   35.5       67.0   58.0   53.2          53.9   46.7   36.4    57.8   54.1   53.6
+
+                                                  ZebraLogic                  AutoLogi                     BFCLv3                      LCBv5                  LogicVista                 MMMU                      MMMU-Pro             VSI-Bench
+                                                       LLM-based OPD (Qwen3-8B->Qwen3-1.7B)                                                                VLM-based OPD (Qwen3-VL-8B->Qwen3-VL-2B)
+
+                                         Figure 1 Performance comparison of our DOPD with competing approaches across eight benchmarks in terms of
+                                         average across all benchmarks (upper bigger bars) and individual values of each benchmark (lower small bars).
+
+
+                                                                                                                                                       1
+1   Introduction
+Distillation, as a powerful paradigm for transferring the capabilities of a high-performing teacher policy into
+a suboptimal student policy, typically relies on off-policy trajectories, which may expose the student to state
+distributions that are misaligned with its own evolving behavior [13, 18, 32, 52, 56]. By contrast, recent OPD
+paradigms address this limitation by rolling out from the current student policy and using the teacher to
+provide token-level supervisory signals [23, 35, 42, 44]. This formulation not only mitigates distribution shift,
+but also delivers dense per-token teacher supervision via student-sampled on-policy trajectories, yielding
+higher distillation efficiency and superior performance.
+Although OPD has emerged as an effective post-training paradigm, its achievable upper bound is funda-
+mentally constrained by the quality of the supervision source [7, 22, 25]. As demonstrated in Figure 2, for
+standard strong-to-weak distillation [12, 17, 21, 23, 40, 51, 53, 60], the student is encouraged to imitate a
+stronger teacher; for self distillation [15, 30, 34, 36, 61], i.e., self-as-teacher pattern, the model improves by
+regularizing itself under different contexts or conditions. In both cases, the effectiveness of OPD implicitly
+relies on the assumption: the supervision signals should reflect a learnable capability beyond the
+current student policy. However, this assumption might be fragile [25, 35, 49], especially when privileged
+information is introduced.
+Privileged information, such as verified reasoning hints for LLMs [15, 30, 49, 61] or structured visual an-
+notations for VLMs [28, 57], can indeed improve the prediction distribution of teacher policy and raise the
+apparent ceiling of distillation. Nevertheless, the theoretical gains afforded by privileged information training
+do not necessarily translate into transferable supervisory signals. Rather, they may stem from a hitherto
+uncharacterized failure mode, i.e., privilege illusion: the ostensible performance gap between teacher and
+student in fact conflates two fundamentally distinct components. The first is the intrinsic teacher-student
+capability gap, which is expected to close through distillation; the second is a gap driven by information asym-
+metry, which arises from the access to privileged inputs that remain almost unlearnable. Indiscriminately
+distilling such a teacher distribution may therefore cause the student to fit privileged outcomes rather than
+acquire transferable ability. To summarize, adding privileged inputs theoretically improves the ceiling,
+but the gains may stem from privilege illusion rather than capability optimization, resulting in rapid
+entropy collapse, reduced exploration, and ultimately poor distillation effectiveness.
+As the distillation signals are highly non-uniform across tokens, the concern of privileged illusion becomes
+more pronounced. For realistic trajectories, only a small subset of tokens may encode decisive branches,
+grounded evidence, critical preferences and other capacity-centric information [18, 46], while many others
+might provide low-value supervision, which might be privilege-dependent. However, the vanilla and most
+variants of OPD methods often optimize all tokens with the same supervision source and objective form,
+implicitly assuming that each token contributes equally to capability transfer [23, 25, 35]. When incorporating
+privileged inputs, part of the teacher-student performance advantage originates from information gap rather
+than transferable capability. In this case, dense supervision might bias the student toward learning privilege-
+related shortcuts that are easier to fit than the underlying transferable capabilities, thereby amplifying
+the information-asymmetry component of the teacher-student gap. Thus, indiscriminately and uniformly
+distilling all tokens from one monolithic policy might intensify the privilege illusion.
+
+Based on these insights, we propose an advantage-aware dual distillation paradigm, termed as DOPD, exploit-
+ing the complementary properties of teacher-based and self-based supervision under the privileged contexts
+to dynamically route token-level supervision between teacher and student policy according to the privilege
+advantage gap and their relative predicted probabilities. For tokens where the privileged teacher demon-
+strates a credible capability advantage, we apply stronger teacher distillation to transfer high-value privilege-
+conditioned capacity. As for tokens that are likely dominated by privileged information or less related to
+capacity, we instead rely on lighter supervision to preserve stability and encourage favorable exploration. In
+this way, dual distillation jointly adapts the supervision source, strength, and granularity, enabling more
+effective, stable, and adaptive distillation with less privilege illusion.
+Extensive experiments demonstrate that our method achieves superior distillation performance across a wide
+range of scenarios, and exhibits excellent robustness, scalability, and generalization. Specifically, averaged
+
+
+                                                        2
+           Student               Student                Student                          Student
+            Policy                Policy                 Policy                           Policy
+
+
+
+
+                                Privileged                                  Privileged             Privileged
+       Teacher Policy                               Teacher Policy
+                              Student Policy                              Student Policy         Teacher Policy
+         (a) Standard            (b) Self             (c) Adaptive                        (d) Dual
+          Distillation          Distillation           Distillation                 Distillation (Ours)
+
+Figure 2 Comparison of existing (a) standard distillation, (b) self distillation, and (c) adaptive distillation paradigms
+with our proposed (d) dual distillation paradigm.
+
+
+across eight benchmarks, our method outperforms Vanilla OPD by 7.5 and 6.0 points on LLM-based and
+VLM-based setups respectively, and sustains consistent improvements ranging from 6.2-10.6 points across
+five model pairs of varying sizes. Furthermore, our method also delivers more favorable performance in
+continual learning, out-of-distribution evaluation, and training stability. Additional token and divergence
+analyses, sensitivity and ablation studies further corroborate the effectiveness and rationality of our approach.
+
+2     Related Works
+2.1    Teacher-student Distillability
+Teacher-student distillation has long been studied as a means of transferring capability from a stronger
+teacher to a weaker student model [20, 32, 55]. In the era of large models, teacher–student distillability has
+become a more nuanced question than mere teacher imitation: recent work shows that teachers can transfer
+not only labels, but also rationales, trajectories, preferences, and broader behavioral patterns to smaller
+students [1, 8, 13]. However, such transfer is not monotonic in teacher strength. Studies on the capacity
+gap suggest that an overly powerful teacher may provide signals that are difficult for a limited student to
+absorb [4, 26, 45]. Recently, some works also report this phenomenon on OPD settings, indicating that a more
+compatible initial distribution may be needed for better teacher-student distillation [1, 7, 22, 25]. Collectively,
+these studies suggest that effective distillation depends not only on a more powerful teacher model but also
+on the content and form of capacity being transferred.
+
+2.2    On-Policy Distillation
+OPD has emerged as a compelling post-training paradigm that unifies the distributional consistency of on-
+policy learning with the dense supervision. As depicted in Figure 2, this field has evolved along three struc-
+tured research directions: (a) standard distillation, i.e., strong-to-weak paradigm, where a higher-capacity
+teacher model transfers knowledge to a weaker student via supervision on student-generated rollouts [1, 21, 23].
+Recent efforts are primarily structural modifications to the baseline to enable more stable, faster or more effec-
+tive: Veto [17], Fast OPD [60], OPCD [53], ExOPD [51], Uni-OPD [12], Lightning OPD [40], Vision-OPD [57],
+and VA-OPD [28]. (b) self distillation, repurposing a single model as both teacher and student under different
+context conditions, including: SDFT [34], SDPO [15], OPSD [61], PI-Distill [30], RLSD [49], and GATES [36].
+(c) adaptive distillation, which dynamically modulates supervision strategy based on student state, or other
+training signals: EOPD [18], TA-OPD [38], TIP [46], REOPOLD [22], and TSD-KD [19].
+Despite remarkable progress attained by such methods, they remain subject to fundamental limitations. In
+Vanilla OPD, student performance is subject to an inherent theoretical ceiling dictated by the performance of
+teacher policy [23, 25, 35]. This constraint becomes particularly pronounced in challenging tasks, where the
+teacher itself exhibits subpar performance. While several lines of research have made preliminary attempts
+to leverage privileged information [15, 28, 30, 34, 36, 49, 57, 61], these approaches generally operate under
+
+
+                                                           3
+              45            T. S.               Priv. S. S.                                          T. S.                Priv. S. S.
+                                                                                          1
+                            Priv. T S.          Priv. T. Priv. S.                                    Priv. T S.           Priv. T. Priv. S.
+                                                                                        0.8
+
+
+Performance
+                                                                              Entropy
+                                                                                        0.6
+              40
+                                                                                        0.4
+
+                                                                                        0.2
+
+              35                                                                         0
+                   0        40      80          120     160         200                       0      40      80          120     160      200
+                                         Step                                                                     Step
+                       (a) Performance vs. Training Step                                          (b) Entropy vs. Training Step
+
+  Figure 3 Comparison of (a) performance and (b) entropy on OPD variants with privileged information. Here, T.,
+  S., and Priv. denote teacher policy, student policy and with privileged information, respectively.
+
+
+  the implicit assumption that transferable capabilities can be enhanced via the direct integration of privileged
+  information, and the supervision signals should be received uniform distillation mechanisms consistently from
+  monolithic source. Critically, these methods fundamentally overlook the risk of privilege illusion, thus may
+  fail to explicitly identify and distill genuine inherent capacity.
+
+  3           Methodology
+  3.1              Background
+  3.1.1            Privilege Illusion
+ Existing OPD fundamentally relies on the assumption that a stronger teacher provides richer and more
+ informative supervision [21, 23]. Thus, in many practical scenarios, an intuitive exploration is to equip
+ teachers or student itself with privileged inputs [35]. For instance, verified hints in reasoning-centric tasks [15,
+ 30, 61], or bounding boxes of objects in visual perception scenarios [28, 57]. Here, as exampled in Figure 11
+ and 12, we employ a moderate form of privileged information that delivers essential cues while refraining from
+ directly disclosing detailed execution procedures and final answers (influence of various forms of privileged
+ information will be discussed in Section 4.3.2). However, when augmented with privileged information,
+ the prediction advantage may arise from information asymmetry rather than genuine inherent capability.
+ Uncurated distilling such signals can encourage the student to imitate privileged outcomes instead of acquiring
+ practical and transferable abilities, or triggers distillability due to irreparable teacher-student gap, leading to
+ inferior and unstable distillation process, and unfavorable entropy collapse [6, 54].
+ As illustrated in Figure 3, we compare the impact of privileged information inclusion on both performance and
+ entropy trends. We evaluate three OPD variants, in which privileged information is granted to the teacher
+ policy only, the student policy only, and both policies, respectively. We observe that introducing privileged
+ information to either the teacher or the student separately delivers modest performance improvements over
+ Vanilla OPD in the very early training phase, yet the information asymmetry between the two policies gives
+ rise to late-stage performance degradation coupled with entropy collapse. When both policies are granted
+ access to privileged information, the superficial advantage conferred by information asymmetry vanishes.
+ Furthermore, uniform distillation across all tokens under this setting fails to enable the student to genuinely
+ internalize the core competencies. Instead, the student merely passively adapts to the privileged information,
+ ultimately yielding only marginal performance improvements less than Vanilla OPD.
+  In summary, the results reveal that straightforward incorporation of privileged information might create a
+
+
+
+                                                                          4
+                          Vanilla OPD                                                             Vanilla OPD
+                          w/o Random Token (20%)                                                  w/o Random Token (20%)
+                          w/o Low Advantage Token (20%)                                           w/o Low Advantage Token (20%)
+              45
+
+
+Performance                                                                Performance
+                          w/o High Advantage Token (20%)                                          w/o High Advantage Token (20%)
+                                                                                         65
+
+              40
+                                                                                         60
+
+              35
+                   0       40       80          120    160      200                           0   60      120          180    240   300
+                                         Step                                                                   Step
+                   (a) Qwen3-8B → Qwen3-1.7B (LiveBench)                                 (b) Qwen3-VL-8B → Qwen3-VL-2B (MMStar)
+
+                        Figure 4 Token ablations on random tokens, and tokens with high or low advantage gap.
+
+
+  failure phenomenon termed privilege illusion: privileged inputs may yield an ostensible advantage, however,
+  such gains often stem from information asymmetry rather than from a genuine enhancement of capability.
+
+  3.1.2              Privilege Advantage Gap
+ As mentioned above, a key limitation of existing OPD methods is their inability to disentangle capability gaps
+ from information gaps. Thus, we argue that, when both with privileged inputs, the relative advantage between
+ a teacher policy and a student policy offers a proxy for privilege-conditioned prediction gap. Consequently, a
+ large advantage gap indicates capability discrepancy under controlled privileged conditions, whereas a small
+ gap suggests that the advantage of teacher policy is primarily attributable to privileged information. This
+ perspective motivates a privilege advantage-aware distillation paradigm that selectively transfers knowledge
+ when the supervision signal reflects authentic competence rather than privilege illusion.
+ For a given original input x, the student policy samples an output sequence from the conditional distribution.
+ To conduct privilege advantage-aware distillation, we aim to investigate the distribution disparity between
+ the teacher policy ΠT and student policy ΠS when both have access to privileged inputs, termed the privilege
+ advantage gap A. Then, we perform forward passes on the two policies respectively, and take the absolute
+ value of their log-probability difference as the final privilege advantage gap:
+                                                                                                    ΠT (yn ∣ x, p, y<n )
+                           A = ∣ log ΠT (yn ∣ x, p, y<n ) − log ΠS (yn ∣ x, p, y<n ) ∣ = ∣log                            ∣,          (1)
+                                                                                                    ΠS (yn ∣ x, p, y<n )
+ where yn denotes the current token to be evaluated by the two policies, and p denotes the privileged infor-
+ mation provided as auxiliary contexts along with previous tokens. The quantity A captures the prediction
+ discrepancy stemming from the performance gap between teacher and student policies under identical privi-
+ leged conditions, which constitutes the idealized learning content.
+ To further verify the rationality of privilege advantage gap to separate capacity and information gap, we
+ conduct comprehensive ablation studies and empirical analyses across both large LLMs and VLMs. Specif-
+ ically, we construct three variants of the Vanilla OPD paradigm, each discarding particular tokens without
+ distillation loss: (1) a reference baseline that randomly drops 20% of tokens; (2) a variant that prunes the
+ 20% of tokens with the smallest advantage gap; (3) a variant that prunes the 20% of tokens with the largest
+ advantage gap. As illustrated in Figure 4, ablating high-advantage tokens incurs substantial performance
+ degradation and a marked reduction in distillation efficiency. At the 100th optimization step, removing
+ high-advantage tokens achieves only approximately 50% of the performance gain obtained by Vanilla OPD.
+ In contrast, pruning random or low-advantage tokens exerts negligible performance impact relative to the
+ Vanilla OPD baseline. This performance disparity is even more pronounced in multimodal models, achieves
+
+
+                                                                       5
+only about 20% of the improvement achieved by Vanilla OPD. It is also noteworthy that despite underper-
+forming relative to all counterparts, the variant with high-advantage tokens removed still yields tangible
+distillation gains by 3.4 and 1.5 points, indicating that the remaining tokens, though less critical, remain
+indispensable to distillation.
+
+3.1.3    Takeaway
+Based on these backgrounds, we summarize the following takeaway to support our proposed method:
+
+
+  Naively injecting privileged information can create a privilege illusion, where apparent gains arise from
+  information asymmetry instead of transferable capability. The privilege advantage gap could highlight
+  high-value tokens whose supervision is most critical for capacity-centric distillation.
+
+
+3.2     DOPD: Dual On-policy Distillation
+3.2.1    Divergence
+As discussed in prior work [15, 18, 25], to learn a student from a teacher under the OPD framework, we first
+consider three common divergence-based objectives derived from Kullback-Leibler (KL) divergence: forward
+KL, reverse KL, and Jensen-Shannon (JS) divergence. For notational simplicity, we omit the distinction
+between privileged and non-privileged observations and denote t as the current contexts of the teacher and
+student policies.
+Forward KL Divergence. It encourages the student to cover the full support of the teacher distribution by
+penalizing actions that receive non-negligible probability under the teacher but are underestimated by the
+student. As a result, this objective promotes comprehensive imitation of the action preferences of teacher:
+                                                                         ΠT (y ∣ t)
+                               KLforward (ΠT ∥ ΠS ) = Ey∼ΠT (⋅∣t) [log              ].                        (2)
+                                                                         ΠS (y ∣ t)
+
+Reverse KL Divergence. It encourages the student to concentrate probability mass on actions strongly
+favored by the teacher, while assigning little emphasis to low-probability regions of the teacher distribu-
+tion. Such mode-seeking behavior often leads to sharper student policies, but may also discard informative
+secondary modes encoded by the teacher:
+                                                                         ΠS (y ∣ t)
+                               KLreverse (ΠS ∥ ΠT ) = Ey∼ΠS (⋅∣t) [log              ].                        (3)
+                                                                         ΠT (y ∣ t)
+
+JS Divergence. It introduces an intermediate average distribution, and calculate the KL divergence of teacher
+and student relative to this medium, without directional bias in forward or reverse directions. Their combi-
+nation provides a more balanced optimization signal, thereby improving the stability of policy distillation:
+                        1               1                                        1    1
+                    JS = KL (ΠT ∥ ΠM ) + KL (ΠS ∥ ΠM ) , where              Π M = ΠT + ΠS .                   (4)
+                        2               2                                        2    2
+
+3.2.2    OPD
+As a promising post-training paradigm, OPD holds its core advantage in performing knowledge transfer with
+samples drawn from the target student policy to effectively mitigate performance bias caused by distribution
+shift, and provide richer supervision signals than conventional reinforcement learning paradigms [23, 25,
+35]. Specifically, given the student policy, for particular inputs x, it samples the sequence of predicted
+trajectory y ∼ ΠS (⋅ ∣ x). Then, the teacher policy, typically a stronger model, will offer token-level signals as
+optimization. Thus, the optimization objective of Vanilla OPD could be summarized as:
+
+                                                 ⎢ 1 ∣y∣
+                                          ⎡      ⎡                      ⎤⎤
+                                          ⎢                             ⎥⎥
+                                          ⎢      ⎢
+                                     Ex∼D ⎢Ey∼ΠS ⎢     ∑ Ln (yn ; t<n )⎥⎥⎥⎥ ,                                 (5)
+                                          ⎢      ⎢ ∣y∣ n=1              ⎥⎥
+                                          ⎣      ⎣                      ⎦⎦
+
+                                                        6
+              Original
+                                                                  Privileged
+               Input                                                                        Original
+                                                                Student Policy
+                                                                                             Input
+                                                                                                +
+                                                                                           Privileged
+          Student Policy                                         Privileged
+                                                                                             Input
+                                                               Teacher Policy
+
+                    On-policy Sampling                 Advantage-aware Dual Distillation
+
+                                                                                              Light
+
+                                                                                              Weak
+
+                                                                                              Deep
+                                         Privilege
+                                      Advantage Gap                                           Light
+         Predicted Probability
+                                                                       Condition            Distillation
+
+                                  Figure 5 Overview of our proposed DOPD.
+
+
+where t denotes the conditioning context, which comprises the original inputs, previously generated tokens,
+and auxiliary information if available, and L quantifies the token-level divergence between the teacher and
+student policies. Conventionally, this penalty term takes the form of divergence-based objectives, e.g., widely
+adopted reverse KL, as well as alternative divergence variants or combinations thereof. Fundamentally, nearly
+all advancements in OPD center on minimizing the objective formalized in Equation 5, so as to yield a student
+model whose behavioral distribution aligns more closely with that of the teacher.
+In addition, OPD approaches have different granularity of teacher supervision, ranging from coarse to fine:
+sampled-token, Top-K token, and full-vocabulary distillation. Sampled-token distillation confines its distilla-
+tion objective exclusively to the predicted target token, while Top-K token distillation expands the scope of
+supervision to cover the k tokens with the highest predictive probabilities. By contrast, full-vocabulary dis-
+tillation aligns the complete probability distribution across the entire vocabulary. The density of informative
+supervisory signals increases monotonically, which theoretically leads to higher efficiency, however, this gain
+comes at the cost of higher computational overhead and potential risk of training instability, which stems
+from overfitting to the inherently noisy distributions of low-probability tokens [15, 25, 61]. Accordingly,
+the selection of distillation paradigm in practical deployment is typically tailored to specific downstream
+objectives and computational budgets.
+
+3.2.3   Advantage-aware Dual Distillation
+As discussed above in Section 3.1, not all tokens should receive supervision of identical objective and strength
+or from the same source. When privileged information is introduced, the apparent superiority of teacher may
+originate either from privilege-conditioned capability discrepancy or from information asymmetry. Therefore,
+indiscriminately distilling the privileged teacher distribution may transfer shortcut-like privileged cues, while
+overly conservative self-teaching may fail to capture genuinely beneficial knowledge. To address this issue,
+we propose advantage-aware dual distillation, which dynamically selects both the supervision source and the
+distillation form according to the token-level privilege advantage gap.
+Concretely, for each on-policy sampling trajectory y, we perform additional privileged forward passes: one
+with the privileged student policy and the other with the privileged teacher policy. For the n-th token,
+we denote their token-level probabilities as: qS = ΠS (yn ∣ x, p, y<n ) and qT = ΠT (yn ∣ x, p, y<n ), while
+
+
+                                                       7
+corresponding token-level log-probabilities as: ℓS = log ΠS (yn ∣ x, p, y<n ) and ℓT = log ΠT (yn ∣ x, p, y<n ).
+Here, the privileged student policy shares parameters with the deployed student policy, but receives the
+privileged input p during training, while the privileged teacher policy remains frozen. As we formally defined
+in Equation 1 of Section 3.1.2, we use the two privileged policies to calculate the privilege advantage gap
+A. For a scored n-th token, we compare its An , qS , and qT with their average A,   ¯ q¯S , and q¯T , respectively.
+In practice, to ensure stability, we first discard the top 5% of outliers and perform normalization within the
+batch, then use them to calculate the average. Based on all these relationships, it yields four token regimes,
+each corresponding to a distinct learning strategy.
+Low A with High qS & qT . When the two privileged policies have low advantage gap with both high predicted
+                               ¯ ∧ (qS + qT ≥ q¯S + q¯T ), the privileged teacher and privileged student make
+probability, i.e., ILH = (An < A)
+consistent and confident predictions. In this case, the bottleneck is mainly attributed to the absence of
+privileged information rather than an inherent capability gap. Thus, directly enforcing full teacher imitation
+is unnecessary and may over-transfer privileged shortcuts. We instead apply a light teacher distillation
+objective, using Top-K reverse KL to absorb useful privileged knowledge in a conservative manner:
+                             LLH = βl KLreverse (ΠS (⋅ ∣ x, y<n ) ∥ ΠT (⋅ ∣ x, p, y<n )) .                     (6)
+where βl denotes the intensity coefficient with light distillation.
+Low A with Low qS & qT . When the two privileged policies have low advantage gap with both low predicted
+probability, i.e., ILL = (An < ¯
+                              A) ∧ (qS + qT < q¯S + q¯T ), both privileged policies assign low probability to the
+current token. Such tokens are likely to lie beyond the reliable competence region of both models, where ag-
+gressive teacher forcing may introduce noisy or even misleading supervision. Therefore, we use the privileged
+student as a weak self-regularizing anchor, using Top-K reverse KL with a smaller coefficient, to stabilize
+training without forcing the student to imitate uncertain teacher predictions:
+                          LLL = βw KLreverse (ΠS (⋅ ∣ x, y<n ) ∥ sg [ΠS (⋅ ∣ x, p, y<n )]) ,                   (7)
+where sg[⋅] denotes stop-gradient to avoid changing the gradient simultaneously to cause target drift, βw
+denotes the intensity coefficient with weak distillation, and βw < βl . In this regime, the privileged student is
+not treated as a knowledge source, but as a parameter-shared consistency anchor that prevents policy drift.
+High A with High qT .     When the two privileged policies have high advantage gap with high predicted
+probability of the teacher policy, i.e., IHT = (An ≥ ¯
+                                                    A) ∧ (qT ≥ qS ), the privileged teacher exhibits a clear and
+confident advantage over the privileged student. Since both policies observe the same privileged information, a
+large privilege advantage gap suggests that, the teacher provides a potentially useful capability signal beyond
+what the student currently captures. Accordingly, these tokens contain critical transferable knowledge and
+should receive stronger supervision. We therefore perform full-vocabulary teacher distillation with unit weight,
+using JS divergence to balance support coverage and mode concentration:
+                                 LHT = JS (ΠS (⋅ ∣ x, y<n ) ∥ ΠT (⋅ ∣ x, p, y<n )) .                           (8)
+
+Compared with Top-K strategy, full-vocabulary alignment provides denser distributional signals, enabling
+the student to acquire both dominant decisions and informative secondary preferences from the teacher.
+High A with High qS . When the two privileged policies have high advantage gap with high predicted
+probability of the student policy, i.e., IHS = (An ≥ ¯ A) ∧ (qT < qS ), the privileged student assigns relative
+larger confidence while the privileged teacher does not provide a comparably reliable signal. In this regime,
+strongly constraining the student toward the teacher may suppress potentially valid exploratory behavior.
+We therefore adopt a light privileged-student distillation objective with Top-K reverse KL, which softly
+encourages consistency between the deployed student and its privileged counterpart while avoiding over-
+regularization:
+                          LHS = βl KLreverse (ΠS (⋅ ∣ x, y<n ) ∥ sg [ΠS (⋅ ∣ x, p, y<n )]) .                (9)
+
+Total Objective. Finally, we combine the four token-wise objectives through indicator masks:
+
+                               LDOPD = ILH LLH + ILL LLL + IHT LHT + IHS LHS ,                                (10)
+
+
+                                                          8
+where the masks are determined by the privilege advantage gap and relative probability comparisons de-
+scribed above, which exhaustively partitions the token space under the defined conditions. Thus, the overall
+optimization objective could be formulated as:
+
+                                             ⎢ 1 ∣y∣ DOP D
+                                     ⎡       ⎡                               ⎤⎤
+                                     ⎢                                       ⎥⎥
+                               Ex∼D ⎢⎢Ey∼ΠS ⎢⎢     ∑ Ln    (yn ; x, p, y<n )⎥⎥⎥⎥ ,                         (11)
+                                     ⎢       ⎢ ∣y∣ n=1                       ⎥⎥
+                                     ⎣       ⎣                               ⎦⎦
+
+Through this adaptive routing mechanism, DOPD assigns strong full-vocabulary teacher supervision only
+to tokens where the privileged teacher demonstrates a credible capability advantage, applies light teacher
+distillation when the signal mainly reflects privileged information, relies on weak privileged-student regu-
+larization for uncertain regions, and preserves student exploration when the privileged student is already
+confident. Consequently, the proposed objective mitigates the entanglement between capability transfer and
+privileged-information imitation, yielding a more selective, stable, and generalizable OPD paradigm.
+
+4     Experiments
+4.1     Settings
+4.1.1    Models
+We perform all the experiments on Qwen3 [48] and Qwen3-VL [3] families of non-thinking versions as both
+teacher and student policies. Specifically, the main experiments and all analyses are conducted on Qwen3-8B
+to Qwen3-1.7B pair, and for VLM scenario is based on Qwen3-VL-8B to Qwen3-VL-2B pair. Besides, to verify
+the generalization ability of our method, we also add Qwen3-8B to Qwen3-0.6B, Qwen3-4B to Qwen3-0.6B,
+Qwen3-4B to Qwen3-1.7B, and Qwen3-1.7B to Qwen3-0.6B pairs.
+For the training datasets of LLM-based OPD, we use the high-quality mixture dataset from RaR-Science-
+20K [9], DAPO-Math-17K [54], and Skywork-OR1-Coding-14K [10], covering general, reasoning, and coding
+tasks. For VLM-based training datasets, we utilize ViRL39K [24] dataset, covering general, visual reasoning
+and visual understanding tasks. For the corresponding privileged input, we use GPT-5.4 [29] (2026-03-05) to
+generate step-wise decomposition hints and structured visual annotations respectively, where the generation
+prompts are provided in Figure 13. As illustrated in Figure 11, for LLM tasks, we utilize verified rationales as
+privileged information, with step-wise decomposition hints, but without direct execution trace or final answer.
+While as shown in Figure 12, for VLM tasks, privileged information denotes structured visual annotations,
+here we use query-related bounding boxes, with object labels and quadruple coordinates to provide explicit
+visual context. To guarantee the data quality, we use GPT-5.4 again to recheck the generated privileged
+contents, and directly discard relatively low-quality samples, eventually resulting in 32K and 25K high-quality
+training data for LLM and VLM, respectively.
+
+4.1.2    Benchmarks
+To evaluate the effectiveness of our method, we employ eight benchmarks for LLM-based OPD, covering
+three core abilities: (1) general: C-Eval [14], and LiveBench [39]; (2) reasoning: MATH500 [11], AIME25 [2],
+ZebraLogic [27], and AutoLogi [62]; and (3) coding: BFCLv3 [47], and LCBv5 [16]. For VLM-based OPD, we
+also include eight benchmarks on three aspects: (1) general: RealWorldQA [41], and MMStar [5]; (2) visual
+reasoning: MathVision [37], DynaMath [63], and LogicVista [43]; and (3) visual understanding: MMMU [58],
+MMMU-Pro [59], and VSI-Bench [50]. All benchmarks are evaluated using their official metrics and evalua-
+tions to ensure fair and consistent comparison.
+
+4.1.3    Baselines
+We compare our DOPD with other nine LLM-based counterparts, including three main paradigms of OPD
+as we discussed in Section 2: (a) standard distillation: Vanilla OPD [23], OPCD [53], ExOPD [51], and
+Uni-OPD [12]; (b) self distillation: SDFT [34], OPSD [61], and SDPO [15]; and (c) adaptive distillation:
+EOPD [18] and TIP [46]. For VLM-based methods, we benchmark DOPD with other four methods: Vanilla
+
+
+                                                       9
+Table 1 Performance comparison of our proposed DOPD with counterparts on general, reasoning, and coding tasks.
+∆ indicates the performance gap between the student and teacher policies with gray cells, while blue for over 50%
+mitigation and green for complete gap removal by employing the OPD paradigms. The best and second best values
+are bolded and underlined, respectively.
+
+                                         General                                  Reasoning                              Coding
+ Method                 Type                                                                                                          Average
+                                  C-Eval LiveBench MATH500 AIME25 ZebraLogic AutoLogi BFCLv3 LCBv5
+ Teacher Policy                    77.1           53.5           86.9         20.2        25.0           76.3          60.0    23.6     52.8
+ Student Policy           -        60.4           35.4           72.7          9.5        12.1           59.8          51.9    11.3     39.1
+ ∆ Performance Gap                +16.7          +18.1          +14.2        +10.7       +12.9          +16.5          +8.1   +12.3    +13.7
+ Vanilla OPD [23]                  65.2          40.9            75.6           16.7      15.8           64.3          55.4    17.6    43.9
+ OPCD [53]                         66.1          41.6            75.3           19.5      17.0           65.2          54.7    15.8    44.3
+                      Standard
+ ExOPD [51]                        68.3          44.7            76.7           18.5      19.9           68.0          57.2    22.6    47.0
+ Uni-OPD [12]                      66.5          42.3            77.5           20.0      22.3           67.2          56.1    20.8    46.6
+ SDFT [34]                         63.4          38.7            73.8           15.0      15.4           62.6          53.2    12.1    41.8
+ OPSD [61]              Self       64.6          39.7            73.8           15.2      14.7           63.1          54.2    14.5    42.5
+ SDPO [15]                         65.4          38.8            74.0           16.4      15.1           62.9          52.3    17.7    42.8
+ EOPD [18]                         67.5          45.7            75.9           17.6      19.3           67.1          56.8    19.0    46.1
+                      Adaptive
+ TIP [46]                          67.0          43.1            74.3           17.2      18.7           65.5          54.5    17.9    44.8
+ DOPD (Ours)            Dual       71.3          49.8            81.5           23.3      26.9           71.0          60.2    27.1    51.4
+
+
+Table 2 Performance comparison of our proposed DOPD with counterparts on general, visual reasoning, and visual
+understanding tasks. ∗ The codes of VA-OPD are not officially released, so we use the results of our reproduced version.
+
+                               General                          Visual Reasoning                    Visual Understanding
+ Method                                                                                                                               Average
+                     RealWorldQA MMStar MathVision DynaMath LogicVista MMMU MMMU-Pro VSI-Bench
+ Teacher Policy          71.3             70.7           53.8            67.6           55.0      69.6       55.8             59.7      62.9
+ Student Policy          63.6             58.4           32.0            53.8           35.5      53.2       36.4             53.6      48.3
+ ∆ Performance Gap       +7.7            +12.3          +21.8           +13.8          +19.5     +16.4      +19.4             +6.1     +14.6
+ Vanilla OPD [23]         64.7            61.8           37.1            56.2          40.2      58.0           46.7          54.1      52.4
+ Uni-OPD [12]             65.0            65.3           43.0            58.2          42.5      59.1           47.0          53.7      54.2
+ Vision-OPD [57]          66.2            66.4           38.0            57.6          43.1      64.9           52.3          56.1      55.6
+ VA-OPD∗ [28]             67.0            66.2           38.7            57.7          43.1      66.1           54.2          57.5      56.3
+ DOPD (Ours)              67.4            67.2           45.6            60.5          47.7      67.0           53.9          57.8     58.4
+
+
+
+OPD [23], Uni-OPD [12], Vision-OPD [57], and VA-OPD [28]. For fair comparison, we rerun all the baselines
+on Qwen3/Qwen3-VL models.
+
+4.1.4     Implementations
+All experiments are conducted on 8 NVIDIA H200 141GB GPUs. During distillation, the teacher policy is
+frozen for stability, while the student policy is optimized by AdamW optimizer and cosine scheduler with a
+learning rate of 5 × 10−6 . The batch sizes are set to 128 and 64 for LLM and VLM with 4 rollout samples,
+optimizing for a maximum of 200 and 300 steps, respectively. The K is set to 128 for Top-K distillation, and
+βw and βl are 0.3 and 0.6 to regulate the strength of distillation.
+
+4.2     Main Results
+4.2.1     Distillation Performance
+As the main LLM-based OPD results reported in Table 1, DOPD substantially narrows the performance gap
+between the student and teacher policies, with a gain of 12.3 points and an 89.8% recovery of the original
+teacher-student gap. Notably, due to the introduction of privileged information that increases the upper limit
+of distillation, DOPD not only approaches the teacher policy on average, but also surpasses the teacher on
+
+
+                                                                        10
+Table 3 Generalization comparison of our proposed DOPD and Vanilla OPD based on five pairs of teacher-student
+models, including Qwen3-8B/4B/1.7B → Qwen3-0.6B, and Qwen3-8B/4B → Qwen3-1.7B.
+
+                                    General                    Reasoning                    Coding
+ Model Pair Method                                                                                       Average
+                               C-Eval LiveBench MATH500 AIME25 ZebraLogic AutoLogi BFCLv3 LCBv5
+                 Qwen3-8B        77.1    53.5       86.9     20.2     25.0       76.3     60.0   23.6     52.8
+ Base            Qwen3-4B        72.2    48.3       84.6     18.9     35.0       75.8     57.4   21.3     51.6
+ Model          Qwen3-1.7B       60.4    35.4       72.7     9.5      12.1       59.8     51.9   11.3     39.1
+                Qwen3-0.6B       42.0    21.8       55.2     2.0       4.1       37.2     44.0    3.5     26.2
+ Qwen3-8B ∆ Performance Gap +35.1       +31.7      +31.7    +18.2    +20.9      +39.1    +16.0   +20.1    +26.6
+     ↓      Vanilla OPD      44.8        24.5       59.3     4.6      5.9        46.5     46.1    6.1      29.7
+ Qwen3-0.6B DOPD (Ours)      56.7        35.5      70.9     17.0      19.6       54.3    55.5    12.7     40.3
+ Qwen3-8B ∆ Performance Gap +16.7       +18.1      +14.2    +10.7    +12.9      +16.5    +8.1    +12.3    +13.7
+     ↓      Vanilla OPD      65.2        40.9       75.6     16.7     15.8       64.3    55.4     17.6     43.9
+ Qwen3-1.7B DOPD (Ours)      71.3        49.8      81.5     23.3      26.9       71.0    60.2    27.1     51.4
+ Qwen3-4B ∆ Performance Gap +30.2       +26.5      +29.4    +16.9    +30.9      +38.6    +13.4   +17.8    +25.4
+     ↓      Vanilla OPD      44.8        24.0       60.9     7.4      7.9        47.4     46.5    8.6      30.9
+ Qwen3-0.6B DOPD (Ours)      54.0        33.8      72.7     16.3      25.1       51.6    52.2    13.7     39.9
+ Qwen3-4B ∆ Performance Gap +11.8       +12.9      +11.9    +9.4     +22.9      +16.0    +5.5    +10.0    +12.5
+     ↓      Vanilla OPD      65.3        41.0       76.3    17.1      16.8       65.6    53.5     16.6     44.0
+ Qwen3-1.7B DOPD (Ours)      69.9        48.1      80.2     22.0      29.1       70.8    57.2    24.4     50.2
+ Qwen3-1.7B ∆ Performance Gap +18.4     +13.6      +17.5    +7.5      +8.0      +22.6    +7.9    +7.8     +12.9
+     ↓      Vanilla OPD        47.3      29.5       60.1     7.8       9.9       43.3    47.1     8.2      31.7
+ Qwen3-0.6B DOPD (Ours)        55.6      35.6      66.7     14.6      16.4       49.4    53.0    13.7     38.1
+
+
+
+four challenging benchmarks, especially on reasoning and coding tasks. Compared with standard (i.e., strong-
+to-weak) and adaptive distillation counterparts, DOPD consistently achieves the best performance across all
+eight benchmarks and improves over the three strongest baselines, ExOPD [51]/Uni-OPD [12]/EOPD [18] by
+4.4/4.8/5.3 points on average, respectively. Self-distillation baselines provide relatively modest improvements,
+suggesting that existing methods relying solely on the self-distillation of the student is possibly insufficient
+for closing the teacher-student gap.
+We further validate the effectiveness on VLM-based OPD, as listed in Table 2. Specifically, our proposed
+DOPD again brings a substantial improvement over the student policy by a 10.1-point absolute gain and a
+69.2% recovery of the teacher-student gap. Compared with existing VLM-oriented OPD baselines, DOPD
+achieves the best average performance, outperforming Vanilla OPD [23], and other three baselines, Uni-
+OPD [12], Vision-OPD [57], and VA-OPD [28], by 6.0 and 4.2/2.8/2.1 points, respectively. It is worth
+mentioning that all methods, including ours, have shown more significant improvements in visual under-
+standing than reasoning and other visual tasks, which may be related to the distillation paradigm of the
+visual center, mainly distilling accurate and grounded focus from teacher on the visual evidence.
+These results demonstrate that advantage-aware dual distillation is more effective than either static teacher
+imitation, self-refinement, or single-sided adaptive weighting, indicating that DOPD transfers not only surface-
+level output preferences but also more essential ability from teacher policy. In addition, beyond text-only
+distillation, the proposed paradigm also provides robust and consistent gains for vision ability distillation.
+
+4.2.2    Robustness & Scalability
+To further examine whether DOPD generalizes across different teacher-student scales, we conduct experiments
+with five teacher-student pairs . Table 3 shows that DOPD consistently outperforms Vanilla OPD [23] on
+every model pair, demonstrating that its effectiveness is not tied to a specific teacher or student size. Our
+proposed method achieves consistent and significant performance improvements, averaging 11.1–14.1 points
+across all pairs, a two- to over three-fold improvement relative to Vanilla OPD.
+More importantly, our method remains robust as the teacher-student size ratio increases. As mentioned
+
+
+                                                      11
+                                      Vanilla OPD            DOPD (Ours)                                                           Vanilla OPD                DOPD (Ours)
+
+
+
+
+Performance Gain                                                                             Gap Reduction Ratio
+                         15                      +13.7                   +14.1                                     100 88.8% 92.2% 89.8%
+                                   +11.9 +12.3                                                                     80              1.7B 8B
+                               +11.1                                                                                         4B
+                                                    4B                 8B
+                         10    4B      1.7B 8B                                                                     60
+                                                                                                                             1.7B 0.6B 1.7B
+                                                                                                                                             53.9%                      53.0%
+                                                                                                                                                4B                    8B
+                                            1.7B 0.6B                  0.6B                                        40
+                               1.7B 0.6B+4.8 +4.7                                                                            39.2%42.6%
+                                                                                                                                        35.0% 0.6B
+                         5                                               +3.5                                      20                                                 0.6B
+                               +4.9 +5.5                                                                                                    18.5%
+                                                                                                                     0                                                  13.2%
+                                           5                  10                  15                                     0                 5                    10              15
+                                               Size Ratio                                                                                          Size Ratio
+         (a) Performance Gain vs. Teacher-student Size Ratio                                               (b) Gap Reduction vs. Teacher-student Size Ratio
+
+    Figure 6 Scalability comparison of proposed DOPD and Vanilla OPD on (a) performance gain and (b) teacher-
+    student gap reduction ratio. Here, the solid and dashed lines represent the 0.6B and 1.7B student policy, respectively.
+
+
+                         100
+
+
+
+
+Normalized Performance
+                                                                                                                                                         74.8
+                                                                                                                                                        72.6
+                          75                                                                                                                       80   74.1
+                                                                                                                                                          77.9
+                          50                                                                                                                                         52.7
+
+
+
+                                                                                                                                     Performance
+                                                                                                                                                                     52.1
+                          25                                                                                                                       60                53.5
+                                                                                                                                                                       57.8
+                           0
+                         -25                                                                                                                       40           ExOPD
+                         -50         General             Specific                                                                                               EOPD
+                         -75         GRPO                Vanilla OPD            DOPD (Ours)                                                        20           Uni-OPD
+                                                                                                                                                                DOPD (Ours)
+                               0      40           80        120         160           200                         240                              0
+                                                             Step                                                                                       Reasoning     Coding
+                 (a) Normalized Performance on Three-stage Continual Learning                                                         (b) Out-of-distribution Evaluation
+
+    Figure 7 Comparison of proposed DOPD and Vanilla OPD on (a) continual learning, where we conduct a three-
+    stage continual learning with general, reasoning, and coding training sub-datasets sequentially. The solid and dashed
+    lines denote the results on general benchmark (LiveBench) and corresponding specific benchmarks (MATH500 and
+    BFCLv3); and (b) out-of-distribution tasks, where we optimize the student policy on coding or reasoning dataset, but
+    evaluated on another out-of-domain benchmarks (MATH500 and BFCLv3).
+
+
+    in previous studies [23, 25, 31], a larger size ratio implies greater initial distribution inconsistency between
+    teachers and students, which may lead to suboptimal distillation effects. For instance, in the largest scale-
+    mismatch setting, i.e., Qwen3-8B → Qwen3-0.6B, Vanilla OPD only reaches a 3.5-point gain; In contrast,
+    DOPD achieves a 14.1-point gain and recovers 53.0% of the teacher-student gap. Similar trends can be
+    observed for Qwen3-4B → Qwen3-0.6B. As illustrated in Figure 6a, when the teacher model has larger
+    parameters, and stronger capabilities, the performance improvement of Vanilla OPD actually decreases,
+    suggesting that naive imitation becomes less effective when the capacity mismatch is large. By contrast,
+    DOPD maintains gradually increasing gains across these settings. Furthermore, as reported in Figure 6b,
+    although the gap reduction inevitably decreases as the size ratio increases, due to the larger initial teacher-
+    student gap and the limitations of the ability limit of student model, our model still effectively alleviates
+    this trend. These results indicate that DOPD provides a more scalable and reliable distillation mechanism,
+    especially when transferring policies from substantially larger teachers to compact students.
+
+    4.2.3                      Continual Learning Evaluation
+    OPD has been demonstrated to yield superior performance in continual learning, mitigating the catastrophic
+    forgetting [15, 34] inherent to several prevalent post-training paradigms, e.g., SFT and GRPO [33]. Thus,
+
+
+                                                                                        12
+                                                                                      1
+              50
+                                                                                    0.8
+
+
+
+Performance
+                                                                                    0.6
+                                                                          Entropy
+              40                                                                    0.4         (a) Standard
+                                                                                                (b) Self
+                            (a) Standard          (c) Adaptive                      0.2         (c) Adaptive
+                            (b) Self              (d) Dual (Ours)                               (d) Dual (Ours)
+                                                                                     0
+                   0        40      80          120    160     200                        0      40      80          120   160   200
+                                         Step                                                                 Step
+                       (a) Performance vs. Training Step                                      (b) Entropy vs. Training Step
+
+  Figure 8 Training stability comparison of proposed DOPD and representative baselines, reporting the (a) perfor-
+  mance and (b) entropy trends over training steps on LiveBench.
+
+
+ we perform a three-stage experiment to evaluate the continual learning performance, where in the first stage
+ only add general training data, while use reasoning and coding data in the next two stages.
+  Figure 7a indicates OPD-based paradigms have significantly better sustained learning performance and less
+  forgetting, and our DOPD further optimizes this advantage. Specifically, it supports steady and effective
+  capability accumulation: performance improves consistently on each newly introduced data domain, with only
+  tiny performance degradation on previously acquired domains. This finding validates that DOPD enables
+  authentic continual learning, where a single model can incrementally gain multiple capabilities instead of
+  relying on simple capability concatenation or overwriting.
+
+  4.2.4             Out-of-distribution Evaluation
+ We further evaluate the out-of-distribution generalization. Specifically, we optimize models on either the
+ coding or reasoning training set separately, and assess their performance on the other unseen out-of-domain
+ tasks. For comparative analysis, we select three best-performing baselines: ExOPD [51], Uni-OPD [12], and
+ EOPD [18]. As demonstrated in Figure 7b, our proposed DOPD outperforms the second-best counterparts
+ by 3.1 and 4.3 points respectively, showcasing superior cross-domain generalization.
+
+  4.3              Additional Analyses
+  4.3.1             Training Stability
+ To further assess training stability, we benchmark our method against the best-performing baselines from
+ three distinct distillation paradigms: ExOPD [51] for standard distillation, SDPO [15] for self-distillation,
+ and EOPD [18] for adaptive distillation. As depicted in Figure 8a, our method consistently delivers stable
+ and superior performance throughout the entire training process, coupled with higher distillation efficiency.
+ Compared with the three competing paradigms, our method surpasses their step-200 performance as early as
+ step-80. As shown in Figure 8b, our method maintains a healthy entropy trajectory: it rises modestly in the
+ early training stage, followed by a gradual decline, and converges to a steady state after step-110. This pattern
+ reflects that the model undergoes stable learning with well-calibrated exploration. Notably, we observe that
+ the self-distillation paradigm encounters entropy collapse around step-95, alongside a subsequent drop in
+ performance. This degradation is likely attributable to the insufficient and overly homogeneous supervision
+ signals inherent to this paradigm, which render the learned distribution deficient in necessary exploration.
+ Collectively, these results corroborate that our proposed method achieves superior performance gains in a
+ stable and efficient manner throughout the distillation process.
+
+
+                                                                     13
+Table 4 Comparison of various LLM-based privileged                    Table 5 Comparison of various VLM-based privileged
+information incorporation.                                            information incorporation.
+
+ Privileged Input                         C-Eval LiveBench              Privileged Input                       RealWorldQA MMStar
+ Final Answer                              59.5        36.7             Final Answer                                 64.6            63.2
+ Step-wise Hints with Execution            63.1        38.9             Bounding Box with Caption                    65.3            66.9
+ Step-wise Hints without Execution         71.3        49.8             Bounding Box with Object Label               67.4            67.2
+ Summarized Hints                          65.8        43.6             Caption                                      64.8            65.6
+ No Privileged Input                       63.0        39.4             No Privileged Input                          63.2            60.0
+
+
+
+        Suppose I have a physical, solid,       We need find minimum number of triangle-s after two parallel cuts through an
+        equilateral triangle, and I make two    equ-ilateral triangle. Since the two cuts are parallel , they divide the triangle
+        cuts. The two cuts are from two         into multiple regions. If the cuts are made parallel to one side of the triangle ,
+        parallel lines, and both cuts pass      then the top small piece will be a triangle, and the other two pieces will be
+        through the interior of the triangle.   trap-ez-oids . So there is at least one triangle , because the point-ed corner
+        Of the resulting pieces, what is the    of the original triangle must remain as a tri-angular piece. Therefore the
+        minimum number of triangles?            minimum number of triangle-s is 1.
+
+
+
+             Low    High High              Low      Low    Low             High    Low     High           High High         Low
+         stable and consensus                low-value                                                   self-consistent
+                                                                        key knowledge from
+           knowledge within           connectives/transition,                                          exploration, or local
+                                                                        inherent ability gap
+        privileged information          or unreliable parts                                             branches of path
+
+Figure 9 Token-level visualization of the four token types, where each token is colored based on their privilege
+advantage gap A and predicted probabilities of teacher qT and student qS policies.
+
+
+4.3.2   Privileged Information Analysis
+To evaluate the impacts of distinct privileged information injection strategies, we conduct comparative ex-
+periments to benchmark the performance of five different privileged information formulations: final answer,
+step-wise hints with detailed execution process, step-wise hints without execution, simplest summarized hints,
+and no privileged input for LLM-based distillation, and final answer, bounding box with descriptive caption,
+bounding box with object label, caption, and no privileged information for VLM-based task. As summarized
+in Table 4 and 5, directly providing ground-truth answers incurs the most severe information gap. The
+student model can only rigidly overfit to the given answers, which induces potential shortcut learning and
+performance degradation, even underperforming the baseline without any privileged information. In contrast,
+providing only step-level high-level hints without detailed execution steps yields the largest LLM distillation
+gains of 8.3 and 10.4 points respectively. Meanwhile, providing bounding boxes paired with corresponding
+object labels proves to be the most suitable privileged information modality for VLM, bringing 4.2 and 7.2
+points of improvement over the baseline. Notably, the efficacy of privileged information does not lie in the
+correctness of the final answers, but rather in its ability to deliver capability-oriented guidance to the student
+model, consistent with our previous discussion in Section 3.1.
+
+4.3.3   Token Analysis
+As detailed and analyzed in Section 3.1 and 3.2, we first compute the privilege advantage gap A and the
+predicted probabilities qT /S of both the teacher and student policies for each token, based on which we
+categorize each token into distinct classes. To intuitively characterize the functional roles of different token
+types during distillation, Figure 9 visualizes the distribution of token categories within a real trajectory.
+Among low-gap tokens, those with both high probabilities typically correspond to stable and consensus
+knowledge within privileged information, whereas tokens with both low probabilities are mostly connectives,
+transitions or unreliable segments with little valid information. Among high-gap tokens, tokens with high
+teacher probability but low student probability generally represent key knowledge arising from the inherent
+privilege-conditioned ability gap, while tokens with high student probability but low teacher probability likely
+
+
+                                                                   14
+Table 6 Effectiveness of individual or combinations         Table 7 Impact of different divergence objectives and
+of four tokens, and adaptive mechanism on LiveBench.        strategies on LiveBench.
+
+                 Adaptive Step-40 Step-80 Step-160           Objective        Strategy          Step-40 Step-80 Step-160
+
+ ✓ ✗ ✗ ✗            ✗      41.0    43.7       45.3                            Sampled Token      37.2    39.8     41.1
+                                                             Forward KL       Top-K Tokens       38.5    40.2     41.3
+ ✓   ✓   ✗   ✗      ✗      39.9    42.9       45.0                            Full Vocabulary    38.0    40.1     41.5
+ ✓   ✗   ✓   ✗      ✗      38.6    41.0       42.7
+ ✓   ✗   ✗   ✓      ✗      39.2    42.7       44.5                            Sampled Token      37.0    38.4     40.6
+                                                             Reverse KL       Top-K Tokens       37.8    39.0     40.8
+ ✓   ✓   ✓   ✓      ✗      38.4    40.9       41.3
+                                                                              Full Vocabulary    38.5    40.6     41.9
+ ✓ ✓ ✗ ✗            ✓      41.0    45.4       47.9
+                                                                           Sampled Token         37.3    39.2     41.0
+ ✓ ✗ ✓ ✗            ✓      39.7    42.3       44.8           JS Divergence Top-K Tokens          38.4    40.9     41.3
+ ✓ ✗ ✗ ✓            ✓      40.1    44.9       47.6                         Full Vocabulary       39.2    41.6     42.5
+ ✓ ✓ ✓ ✓            ✓      45.7    48.4       49.8
+
+Table 8 Ablation study on our DOPD, covering the main                  72
+designs of advantage-aware dual distillation.
+                                                                       70                                       51
+
+                                                              C-Eval                                              LiveBench
+ Variant                                  C-Eval LiveBench                                                      49
+ w/o Privileged Input                      63.6      38.3
+                                                                                         C-Eval             w   47
+ w/o Distillation from Student Policy      70.4      47.9
+ w/o Distillation from Teacher Policy      65.9      41.2                                LiveBench          l
+ w/o Advantage-aware Distillation          67.6      41.3                   0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8
+ w/o Adaptive Divergence Objectives        70.0      46.7
+                                                                                          Value
+ w/o Adaptive Divergence Strategies        70.8      46.1
+                                                               Figure 10 Sensitivity study on the intensity coeffi-
+ DOPD (Ours)                               71.3      49.8      cient of weak βw and light βl distillation.
+
+
+reflect self-consistent or local branches of exploration. This token distribution pattern aligns well with our
+proposed token-level differentiated distillation strategy, enabling targeted and efficient distillation for tokens
+with distinct functional roles.
+To further quantitatively dissect the contributions of individual token types and the adaptive advantage-aware
+dual distillation mechanism to our proposed method, we conduct token-level ablation analysis. Each variant
+performs distillation with signals from only one or combinations of token types, utilizing JS divergence on Top-
+K tokens. The setting without adaptive distillation corresponds to a baseline where all tokens receive identical
+distillation weights and strategies, with no token-wise differentiation. As listed in Table 6, using exclusively
+tokens with high teacher probability and low student probability already outperforms the equal-distillation
+setup using all four token types (equivalent to Vanilla OPD) by 4.6 points. However, naively adding the
+other three token types under an equal distillation scheme yields only marginal performance gains, and may
+even cause performance degradation. In contrast, equipping the framework with the adaptive distillation
+mechanism allows for adjustment of token-level distillation intensity, supervision granularity, and distillation
+content. These designed patterns render the distillation process more efficient and stable, delivering an overall
+improvement of over 8 points than equal distillation, when all four token types are leveraged.
+
+4.3.4    Divergence Analysis
+To further investigate the impacts of different divergence objectives (forward KL, reverse KL, and JS diver-
+gence) and strategies (sampled token, Top-K tokens, and full vocabulary), all introduced in Section 3.2, we
+conduct additional comparative experiments. To isolate the effects of other factors, we apply equal distilla-
+tion across all tokens. Table 7 summarizes how these design choices shape final distillation performance and
+efficiency. Specifically, as the alignment scope expands from sampled to Top-K tokens and further to full vo-
+cabulary, performance improves progressively, yet inevitably incurs higher computational memory overhead.
+Furthermore, in contrast to findings reported in some prior works [18, 61], JS divergence delivers relatively
+
+
+                                                        15
+superior performance than forward or reverse KL methods under our settings. Collectively, these results
+illustrate the inherent trade-off across different divergence configurations, providing empirical justification
+for our differentiated distillation paradigms.
+
+4.3.5   Sensitivity & Ablation Studies
+As illustrated in Figure 10, we conduct an analysis focusing on the distillation intensity assigned to different
+token categories. We observe that setting βw = 0.3 and βl = 0.6 strikes a favorable trade-off across token-wise
+distillation strengths: it amplifies the contribution of critical tokens while preserving the auxiliary role of
+other tokens in stabilizing and providing additional optimization signals.
+Furthermore, to further disentangle the contributions of individual design components in our framework,
+we conduct ablation studies on two core elements: the sources of distillation signals and divergence-based
+designs. As presented in Table 8, privileged input is indispensable to our paradigm, as it directly underpins
+the advantage-aware calculation of our approach. Signals derived from the teacher policy serve as the pri-
+mary driver of performance gains, while the student policy also fulfills an irreplaceable role throughout the
+distillation process. In addition, our token-wise divergence design tailored for distinct token categories is
+empirically validated to be effective.
+
+5   Conclusion
+In this work, we revisit OPD under privileged contexts and identify fundamental limitations: the apparent
+superiority of a privileged teacher does not always correspond to transferable capability, but may instead
+arise from information asymmetry, and these supervision signals are not evenly distributed across tokens.
+Motivated by these observations, we propose DOPD, an advantage-aware dual on-policy distillation frame-
+work that adaptively routes token-level supervision between teacher-driven capability transfer and auxiliary
+self-optimization from the student. By leveraging the privilege advantage gap and relative token probabili-
+ties, DOPD selectively applies strong full-vocabulary teacher distillation to capability-bearing tokens, while
+imposing light or weak distillation on tokens without a capacity advantage gap. Extensive experiments
+across LLM and VLM settings demonstrate that DOPD consistently outperforms Vanilla OPD and strong
+competitive baselines, yielding superior distillation performance, robustness, continual-learning behavior, out-
+of-distribution generalization, and training stability.
+
+6   Limitations and Future Directions
+Notwithstanding the efficacy of our proposed DOPD, we acknowledge that several minor limitations remain.
+First, our method hinges on the availability and quality of privileged information, the construction of which
+incurs additional costs for annotation, generation, and filtering processes. Second, it introduces extra compu-
+tational overhead relative to Vanilla OPD, requiring one additional forward pass of the student model. Third,
+while the current routing strategy is intuitive, and empirically stable, it still relies on heuristic mechanisms.
+Future research may further advance DOPD along directions: developing more reliable and cost-effective
+mechanisms for obtaining privileged information or discovering alternative strategy to detect available ad-
+vantage gap, with more principled or learnable distillation routing. More broadly, the paradigm of dynamic
+distillation from both teacher and student offers a useful lens for selective capacity transfer beyond LLMs
+and VLMs, inviting future work on more interpretable, efficient, and trustworthy distillation paradigms.
+
+References
+ [1] Rishabh Agarwal, Nino Vieillard, Yongchao Zhou, Piotr Stanczyk, Sabela Ramos Garea, Matthieu Geist,
+     and Olivier Bachem. On-policy distillation of language models: Learning from self-generated mistakes. In
+     International Conference on Learning Representations (ICLR), volume 2024, pages 21246–21263, 2024.
+ [2] AIME. Aime problems and solutions, 2025. URL https://artofproblemsolving.com/wiki/index.php/AIME_
+     Problems_and_Solutions.
+
+
+
+                                                       16
+ [3] Shuai Bai, Yuxuan Cai, Ruizhe Chen, Keqin Chen, Xionghui Chen, Zesen Cheng, Lianghao Deng, Wei Ding,
+     Chang Gao, Chunjiang Ge, et al. Qwen3-vl technical report. arXiv preprint arXiv:2511.21631, 2025.
+ [4] Dan Busbridge, Amitis Shidani, Floris Weers, Jason Ramapuram, Etai Littwin, and Russ Webb. Distillation
+     scaling laws. arXiv preprint arXiv:2502.08606, 2025.
+ [5] Lin Chen, Jinsong Li, Xiaoyi Dong, Pan Zhang, Yuhang Zang, Zehui Chen, Haodong Duan, Jiaqi Wang, Yu Qiao,
+     Dahua Lin, et al. Are we on the right way for evaluating large vision-language models? Advances in Neural
+     Information Processing Systems (NeurIPS), 37:27056–27087, 2024.
+ [6] Ganqu Cui, Yuchen Zhang, Jiacheng Chen, Lifan Yuan, Zhi Wang, Yuxin Zuo, Haozhan Li, Yuchen Fan, Huayu
+     Chen, Weize Chen, et al. The entropy mechanism of reinforcement learning for reasoning language models. arXiv
+     preprint arXiv:2505.22617, 2025.
+ [7] Yuqian Fu, Haohuan Huang, Kaiwen Jiang, Jiacai Liu, Zhuo Jiang, Yuanheng Zhu, and Dongbin Zhao. Revisiting
+     on-policy distillation: Empirical failure modes and simple fixes. arXiv preprint arXiv:2603.25562, 2026.
+ [8] Yuxian Gu, Li Dong, Furu Wei, and Minlie Huang. MiniLLM: Knowledge distillation of large language models.
+     In International Conference on Learning Representations (ICLR), 2024.
+ [9] Anisha Gunjal, Anthony Wang, Elaine Lau, Vaskar Nath, Yunzhong He, Bing Liu, and Sean Hendryx. Rubrics
+     as rewards: Reinforcement learning beyond verifiable domains. arXiv preprint arXiv:2507.17746, 2025.
+[10] Jujie He, Jiacai Liu, Chris Yuhao Liu, Rui Yan, Chaojie Wang, Peng Cheng, Xiaoyu Zhang, Fuxiang Zhang,
+     Jiacheng Xu, Wei Shen, et al. Skywork open reasoner 1 technical report. arXiv preprint arXiv:2505.22312, 2025.
+[11] Dan Hendrycks, Collin Burns, Saurav Kadavath, Akul Arora, Steven Basart, Eric Tang, Dawn Song, and Jacob
+     Steinhardt. Measuring mathematical problem solving with the math dataset. arXiv preprint arXiv:2103.03874,
+     2021.
+[12] Wenjin Hou, Shangpin Peng, Weinong Wang, Zheng Ruan, Yue Zhang, Zhenglin Zhou, Mingqi Gao, Yifei Chen,
+     Kaiqi Wang, Hongming Yang, et al. Uni-opd: Unifying on-policy distillation with a dual-perspective recipe.
+     arXiv preprint arXiv:2605.03677, 2026.
+[13] Cheng-Yu Hsieh, Chun-Liang Li, Chih-Kuan Yeh, Hootan Nakhost, Yasuhisa Fujii, Alex Ratner, Ranjay Krishna,
+     Chen-Yu Lee, and Tomas Pfister. Distilling step-by-step! outperforming larger language models with less training
+     data and smaller model sizes. In Findings of the Association for Computational Linguistics: ACL 2023, pages
+     8003–8017, 2023.
+[14] Yuzhen Huang, Yuzhuo Bai, Zhihao Zhu, Junlei Zhang, Jinghan Zhang, Tangjun Su, Junteng Liu, Chuancheng
+     Lv, Yikai Zhang, Yao Fu, et al. C-eval: A multi-level multi-discipline chinese evaluation suite for foundation
+     models. Advances in Neural Information Processing Systems (NeurIPS), 36:62991–63010, 2023.
+[15] Jonas Hübotter, Frederike Lübeck, Lejs Behric, Anton Baumann, Marco Bagatella, Daniel Marta, Ido Hakimi,
+     Idan Shenfeld, Thomas Kleine Buening, Carlos Guestrin, et al. Reinforcement learning via self-distillation. arXiv
+     preprint arXiv:2601.20802, 2026.
+[16] Naman Jain, Alex Gu, Wen-Ding Li, Fanjia Yan, Tianjun Zhang, Sida Wang, Armando Solar-Lezama, Koushik
+     Sen, and Ion Stoica. Livecodebench: Holistic and contamination free evaluation of large language models for
+     code. In International Conference on Learning Representations (ICLR), volume 2025, pages 58791–58831, 2025.
+[17] Ijun Jang, Jewon Yeom, Juan Yeo, Hyunggu Lim, and Taesup Kim. Stable on-policy distillation through adaptive
+     target reformulation. arXiv preprint arXiv:2601.07155, 2026.
+[18] Woogyeol Jin, Taywon Min, Yongjin Yang, Swanand Ravindra Kadhe, Yi Zhou, Dennis Wei, Nathalie Baracaldo,
+     and Kimin Lee. Entropy-aware on-policy distillation of language models. arXiv preprint arXiv:2603.07079, 2026.
+[19] Minsang Kim and Seung Jun Baek. Explain in your own words: Improving reasoning via token-selective dual
+     knowledge distillation. In International Conference on Learning Representations (ICLR), 2026.
+[20] Yoon Kim and Alexander M Rush. Sequence-level knowledge distillation. In Proceedings of Conference on
+     Empirical Methods in Natural Language Processing (EMNLP), pages 1317–1327, 2016.
+[21] Jongwoo Ko, Tianyi Chen, Sungnyun Kim, Tianyu Ding, Luming Liang, Ilya Zharkov, and Se-Young Yun.
+     DistiLLM-2: A contrastive approach boosts the distillation of LLMs. In International Conference on Machine
+     Learning (ICML), 2025.
+
+
+
+                                                         17
+[22] Jongwoo Ko, Sara Abdali, Young Jin Kim, Tianyi Chen, and Pashmina Cameron. Scaling reasoning efficiently
+     via relaxed on-policy distillation. arXiv preprint arXiv:2603.11137, 2026.
+[23] Thinking Machines Lab.          On-policy distillation,   2025.     URL https://thinkingmachines.ai/blog/
+     on-policy-distillation.
+[24] Shufan Li, Konstantinos Kallidromitis, Hritik Bansal, Akash Gokul, Yusuke Kato, Kazuki Kozuka, Jason Kuen,
+     Zhe Lin, Kai-Wei Chang, and Aditya Grover. Lavida: A large diffusion language model for multimodal under-
+     standing. Advances in Neural Information Processing Systems (NeurIPS), 38:105101–105134, 2026.
+[25] Yaxuan Li, Yuxin Zuo, Bingxiang He, Jinqian Zhang, Chaojun Xiao, Cheng Qian, Tianyu Yu, Huan-ang Gao,
+     Wenkai Yang, Zhiyuan Liu, et al. Rethinking on-policy distillation of large language models: Phenomenology,
+     mechanism, and recipe. arXiv preprint arXiv:2604.13016, 2026.
+[26] Yuetai Li, Xiang Yue, Zhangchen Xu, Fengqing Jiang, Luyao Niu, Bill Yuchen Lin, Bhaskar Ramasubramanian,
+     and Radha Poovendran. Small models struggle to learn from strong reasoners. In Findings of the Association
+     for Computational Linguistics: ACL 2025, pages 25366–25394, 2025.
+[27] Bill Yuchen Lin, Ronan Le Bras, Kyle Richardson, Ashish Sabharwal, Radha Poovendran, Peter Clark, and Yejin
+     Choi. Zebralogic: On the scaling limits of llms for logical reasoning. arXiv preprint arXiv:2502.01100, 2025.
+[28] Ruiqi Liu, Xiaolei Lv, Gengsheng Li, Ximo Zhu, Zhiheng Wang, Zhengbo Zhang, Junkai Chen, Zhiheng Li,
+     Bo Li, Jun Gao, et al. Visual-advantage on-policy distillation for vision-language models. arXiv preprint
+     arXiv:2605.21924, 2026.
+[29] OpenAI. Introducing gpt-5.4, 2026. URL https://openai.com/index/introducing-gpt-5-4.
+[30] Emiliano Penaloza, Dheeraj Vattikonda, Nicolas Gontier, Alexandre Lacoste, Laurent Charlin, and Massimo
+     Caccia. Privileged information distillation for language models. arXiv preprint arXiv:2602.04942, 2026.
+[31] Chuanyu Qin, Chenxu Yang, Qingyi Si, Naibin Gu, Dingyu Yao, Zheng Lin, Peng Fu, Nan Duan, and Jiaqi
+     Wang. Near-future policy optimization. arXiv preprint arXiv:2604.20733, 2026.
+[32] Victor Sanh, Lysandre Debut, Julien Chaumond, and Thomas Wolf. Distilbert, a distilled version of bert: smaller,
+     faster, cheaper and lighter. arXiv preprint arXiv:1910.01108, 2019.
+[33] Zhihong Shao, Peiyi Wang, Qihao Zhu, Runxin Xu, Junxiao Song, Xiao Bi, Haowei Zhang, Mingchuan Zhang,
+     YK Li, Yang Wu, et al. Deepseekmath: Pushing the limits of mathematical reasoning in open language models.
+     arXiv preprint arXiv:2402.03300, 2024.
+[34] Idan Shenfeld, Mehul Damani, Jonas Hübotter, and Pulkit Agrawal. Self-distillation enables continual learning.
+     arXiv preprint arXiv:2601.19897, 2026.
+[35] Mingyang Song and Mao Zheng. A survey of on-policy distillation for large language models. arXiv preprint
+     arXiv:2604.00626, 2026.
+[36] Alex Stein, Furong Huang, and Tom Goldstein. Gates: Self-distillation under privileged context with consensus
+     gating. arXiv preprint arXiv:2602.20574, 2026.
+[37] Ke Wang, Junting Pan, Weikang Shi, Zimu Lu, Houxing Ren, Aojun Zhou, Mingjie Zhan, and Hongsheng
+     Li. Measuring multimodal mathematical reasoning with math-vision dataset. Advances in Neural Information
+     Processing Systems (NeurIPS), 37:95095–95169, 2024.
+[38] Yuanyi Wang, Su Lu, Yanggan Gu, Pengkai Wang, Yifan Yang, Zhaoyi Yan, Congkai Xie, Jianmin Wu, and
+     Hongxia Yang. Not all disagreement is learnable: Token teachability in on-policy distillation. arXiv preprint
+     arXiv:2605.26844, 2026.
+[39] Colin White, Samuel Dooley, Manley Roberts, Arka Pal, Ben Feuer, Siddhartha Jain, Ravid Shwartz-Ziv, Neel
+     Jain, Khalid Saifullah, Siddartha Naidu, et al. Livebench: A challenging, contamination-free llm benchmark.
+     arXiv preprint arXiv:2406.19314, 4:2, 2024.
+[40] Yecheng Wu, Song Han, and Hai Cai. Lightning opd: Efficient post-training for large reasoning models with
+     offline on-policy distillation. arXiv preprint arXiv:2604.13010, 2026.
+[41] xAI. Realworldqa: A benchmark for real-world spatial understanding, 2024. URL https://huggingface.co/
+     datasets/xai-org/RealworldQA.
+
+
+
+
+                                                         18
+[42] Bangjun Xiao, Bingquan Xia, Bo Yang, Bofei Gao, Bowen Shen, Chen Zhang, Chenhong He, Chiheng Lou, Fuli
+     Luo, Gang Wang, et al. Mimo-v2-flash technical report. arXiv preprint arXiv:2601.02780, 2026.
+[43] Yijia Xiao, Edward Sun, Tianyu Liu, and Wei Wang. Logicvista: Multimodal llm logical reasoning benchmark
+     in visual contexts. arXiv preprint arXiv:2407.04973, 2024.
+[44] Anyi Xu, Bangcai Lin, Bing Xue, Bingxuan Wang, Bingzheng Xu, Bochao Wu, Bowei Zhang, Chaofan Lin, Chen
+     Dong, Chenchen Ling, et al. Deepseek-v4: Towards highly efficient million-token context intelligence. arXiv
+     preprint arXiv:2606.19348, 2026.
+[45] Wenda Xu, Rujun Han, Zifeng Wang, Long Le, Dhruv Madeka, Lei Li, William Yang Wang, Rishabh Agarwal,
+     Chen-Yu Lee, and Tomas Pfister. Speculative knowledge distillation: Bridging the teacher-student gap through
+     interleaved sampling. In International Conference on Learning Representations (ICLR), 2025.
+[46] Yuanda Xu, Hejian Sang, Zhengze Zhou, Ran He, Zhipeng Wang, and Alborz Geramifard. Tip: Token importance
+     in on-policy distillation. arXiv preprint arXiv:2604.14084, 2026.
+[47] Fanjia Yan, Huanzhi Mao, Charlie Cheng-Jie Ji, Tianjun Zhang, Shishir G. Patil, Ion Stoica, and Joseph
+     E.Gonzalez. Berkeley function calling leaderboard, 2024. URL https://gorilla.cs.berkeley.edu/blogs/8_
+     berkeley_function_calling_leaderboard.html.
+[48] An Yang, Anfeng Li, Baosong Yang, Beichen Zhang, Binyuan Hui, Bo Zheng, Bowen Yu, Chang Gao, Chengen
+     Huang, Chenxu Lv, et al. Qwen3 technical report. arXiv preprint arXiv:2505.09388, 2025.
+[49] Chenxu Yang, Chuanyu Qin, Qingyi Si, Minghui Chen, Naibin Gu, Dingyu Yao, Zheng Lin, Weiping Wang, Jiaqi
+     Wang, and Nan Duan. Self-distilled rlvr. arXiv preprint arXiv:2604.03128, 2026.
+[50] Jihan Yang, Shusheng Yang, Anjali W Gupta, Rilyn Han, Li Fei-Fei, and Saining Xie. Thinking in space: How
+     multimodal large language models see, remember, and recall spaces. In Proceedings of the IEEE/CVF Conference
+     on Computer Vision and Pattern Recognition Conference (CVPR), pages 10632–10643, 2025.
+[51] Wenkai Yang, Weijie Liu, Ruobing Xie, Kai Yang, Saiyong Yang, and Yankai Lin. Learning beyond teacher:
+     Generalized on-policy distillation with reward extrapolation. arXiv preprint arXiv:2602.12125, 2026.
+[52] Dingyu Yao, Junhao Zhou, Chenxu Yang, Chuanyu Qin, Haowen Hou, Zheming Liang, Congcong Wang, Yuhang
+     Cao, Shenglong Ye, Shuai Xie, et al. Joyai-vl-interaction: Real-time vision-language interaction intelligence.
+     arXiv preprint arXiv:2606.14777, 2026.
+[53] Tianzhu Ye, Li Dong, Xun Wu, Shaohan Huang, and Furu Wei. On-policy context distillation for language
+     models. arXiv preprint arXiv:2602.12275, 2026.
+[54] Qiying Yu, Zheng Zhang, Ruofei Zhu, Yufeng Yuan, Xiaochen Zuo, Yu Yue, Weinan Dai, Tiantian Fan, Gaohong
+     Liu, Lingjun Liu, et al. Dapo: An open-source llm reinforcement learning system at scale. Advances in Neural
+     Information Processing Systems (NeurIPS), 38:113222–113244, 2026.
+[55] Xinlei Yu, Zhangquan Chen, Yongbo He, Tianyu Fu, Cheng Yang, Chengming Xu, Yue Ma, Xiaobin Hu, Zhe
+     Cao, Jie Xu, et al. The latent space: Foundation, evolution, mechanism, ability, and outlook. arXiv preprint
+     arXiv:2604.02029, 2026.
+[56] Xinlei Yu, Chengming Xu, Guibin Zhang, Zhangquan Chen, Yudong Zhang, Yongbo He, Peng-Tao Jiang, Jiangn-
+     ing Zhang, Xiaobin Hu, and Shuicheng Yan. Vismem: Latent vision memory unlocks potential of vision-language
+     models. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR),
+     pages 31544–31555, 2026.
+[57] Qianhao Yuan, Jie Lou, Xing Yu, Hongyu Lin, Le Sun, Xianpei Han, and Yaojie Lu. Vision-opd: Learning to
+     see fine details for multimodal llms via on-policy self-distillation. arXiv preprint arXiv:2605.18740, 2026.
+[58] Xiang Yue, Yuansheng Ni, Kai Zhang, Tianyu Zheng, Ruoqi Liu, Ge Zhang, Samuel Stevens, Dongfu Jiang,
+     Weiming Ren, Yuxuan Sun, et al. Mmmu: A massive multi-discipline multimodal understanding and reasoning
+     benchmark for expert agi. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern
+     Recognition (CVPR), pages 9556–9567, 2024.
+[59] Xiang Yue, Tianyu Zheng, Yuansheng Ni, Yubo Wang, Kai Zhang, Shengbang Tong, Yuxuan Sun, Botao Yu,
+     Ge Zhang, Huan Sun, et al. Mmmu-pro: A more robust multi-discipline multimodal understanding benchmark.
+     In Proceedings of the Annual Meeting of the Association for Computational Linguistics (ACL: Long Papers),
+     pages 15134–15186, 2025.
+
+
+                                                        19
+[60] Dongxu Zhang, Zhichao Yang, Sepehr Janghorbani, Jun Han, Andrew Ressler II, Qian Qian, Gregory D Lyng,
+     Sanjit Singh Batra, and Robert E Tillman. Fast and effective on-policy distillation from reasoning prefixes. arXiv
+     preprint arXiv:2602.15260, 2026.
+[61] Siyan Zhao, Zhihui Xie, Mengchen Liu, Jing Huang, Guan Pang, Feiyu Chen, and Aditya Grover. Self-distilled
+     reasoner: On-policy self-distillation for large language models. arXiv preprint arXiv:2601.18734, 2026.
+[62] Qin Zhu, Fei Huang, Runyu Peng, Keming Lu, Bowen Yu, Qinyuan Cheng, Xipeng Qiu, Xuanjing Huang, and
+     Junyang Lin. Autologi: Automated generation of logic puzzles for evaluating reasoning abilities of large language
+     models. arXiv preprint arXiv:2502.16906, 2025.
+[63] Chengke Zou, Xingang Guo, Rui Yang, Junyu Zhang, Bin Hu, and Huan Zhang. Dynamath: A dynamic
+     visual benchmark for evaluating mathematical reasoning robustness of vision language models. In International
+     Conference on Learning Representations (ICLR), volume 2025, pages 48337–48383, 2025.
+
+
+
+
+                                                          20
+Appendix
+A   Details of Privileged Input
+
+    Original Input:
+    Suppose I have a physical, solid square pyramid. The bottom square has vertices A, B, C, D,
+    and the final vertex is E. Then I make a cut through the plane defined by ACE. There are
+    now two pieces. What are the pieces? Are they tetrahedra, squares, square pyramids,
+    circles, triangular prisms, rectangular prisms, or are they both different shapes?
+
+    Privileged Input:
+    1. Identify the plane determined by the two opposite base vertices and the apex.
+    2. Observe how this plane intersects the square base along a diagonal.
+    3. Use that diagonal to partition the base into two congruent triangular regions.
+    4. Extend each triangular base region to the common apex to determine the corresponding
+    three-dimensional subsolid.
+    5. Compare each resulting piece by its vertices, edges, and triangular faces.
+
+                                         Case 1 (LLM-based)
+    Original Input:
+    Factor the following quadratic: 5x2+90x-1040. Please put your final answer in a $\boxed{}$
+
+    Privileged Input:
+    1. Check whether the quadratic has a common numerical factor, if so, simplify quadratic.
+    2. Use the coefficient structure to decide which appropriate factorization strategy.
+    3. Identify the needed pairwise relationship between two numbers for the middle-term split.
+    4. Indicate that the remaining expression can be factored into two linear binomials.
+
+                                         Case 2 (LLM-based)
+    Original Input:
+    Consider all words constituted by eight letters from $\\{C ,H,M, O\\}$. We arrange the
+    words in an alphabet sequence.\nPrecisely, the first word is $CCCCCCCC$, the second one is
+    $CCCCCCCH$, the third is $CCCCCCCM$, the fourth one is $CCCCCCCO, ...,$ and the last
+    word is $OOOOOOOO$.\na) Determine the $2017$th word of the sequence?
+
+    Privileged Input:
+    1. Recognize that the alphabetic ordering induces a four-symbol positional system.
+    2. Assign each letter an ordered digit according to this alphabet.
+    3. Convert the requested ordinal position to a zero-based rank before processing.
+    4. Express this rank as an eight-place base-four representation, preserving leading positions.
+    5. translate each base-four digit back to its corresponding letter.
+
+                                         Case 3 (LLM-based)
+
+                       Figure 11 Demonstrations of LLM-based privileged input.
+
+
+
+
+                                                 21
+Original Input:                       Privileged Input:
+Which is the main topic of the                                       “surfing”
+                                                               [181, 142, 310, 275]
+image:
+     A: A woman surfing,
+     B: A man skating,
+     C: A man surfing,
+     D: A woman skiting.
+                                                                         “surfboard”
+                                                                     [318, 311, 392, 349]
+
+
+                                    Case 1 (VLM-based)
+
+Original Input:                       Privileged Input:
+
+Which one is the correct caption
+of this image?
+A: A bunch of cars sitting                                        “herd”
+still in the middle of a street,                            [22, 92, 268, 118]
+B: Two giraffes near a tree in
+the wild,
+C: Small personal bathroom with
+ a tiny entrance door,
+D: An elephant drinking water
+while the rest of the herd is                                        “elephant”
+walking in dry grass.                                           [139, 122, 193, 183]
+
+
+                                    Case 2 (VLM-based)
+
+Original Input:                       Privileged Input:
+What color are the flowers in
+the room?
+                                                                                  “flowers”
+A: White,
+                                                                             [169, 94, 204, 119]
+B: Yellow,
+C: Red,
+D: Pink
+
+
+                                    Case 3 (VLM-based)
+
+                   Figure 12 Demonstrations of VLM-based privileged input.
+
+
+
+
+                                             22
+Given a question, and corresponding ground-truth label.
+
+Query: {Query}
+Label: {Label}
+
+Add necessary step-wise decomposition hints that support the answer.
+
+Rules:
+1. Please NOT provide the final answer, execution result, calculation result, or
+conclusion.
+2. Please keep each hint concise and avoid overly detailed or case-specific
+explanations.
+3. Please number the hints using Arabic numerals.
+
+Output format:
+1. ...
+2. ...
+3. ...
+               Prompt of Privileged Input Generation (LLM-based)
+
+Given an image, a question, and corresponding ground-truth label.
+
+Image: {Image}
+Query: {Query}
+Label: {Label}
+
+Add necessary query-related bounding boxes that support the answer.
+
+Rules:
+1. Please add multiple boxes if necessary.
+
+2. Please generate both the object label and quadruple coordinates.
+
+3. Please output only valid JSON format without any other redundant content.
+
+Output format:
+[
+  {"label": "object", "bbox": [x1, y1, x2, y2]}
+]
+
+               Prompt of Privileged Input Generation (VLM-based)
+
+                    Figure 13 Prompts of Privileged Input Generation.
+
+
+
+
+                                           23
+

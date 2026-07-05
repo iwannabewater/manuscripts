@@ -1,0 +1,8 @@
+surface,setup,student_avg,vanilla_opd_avg,dopd_avg,teacher_avg,dopd_gain_vs_student,dopd_gain_vs_vanilla,gap_recovery_pct,source
+LLM_main,Qwen3-8B_to_Qwen3-1.7B,39.1,43.9,51.4,52.8,12.3,7.5,89.8,S02
+VLM_main,Qwen3-VL-8B_to_Qwen3-VL-2B,48.3,52.4,58.4,62.9,10.1,6.0,69.2,S02
+LLM_generalization,Qwen3-8B_to_Qwen3-0.6B,26.2,29.7,40.3,52.8,14.1,10.6,53.0,S02
+LLM_generalization,Qwen3-8B_to_Qwen3-1.7B,39.1,43.9,51.4,52.8,12.3,7.5,89.8,S02
+LLM_generalization,Qwen3-4B_to_Qwen3-0.6B,26.2,30.9,39.9,51.6,13.7,9.0,53.9,S02
+LLM_generalization,Qwen3-4B_to_Qwen3-1.7B,39.1,44.0,50.2,51.6,11.1,6.2,88.8,S02
+LLM_generalization,Qwen3-1.7B_to_Qwen3-0.6B,26.2,31.7,38.1,39.1,11.9,6.4,92.2,S02

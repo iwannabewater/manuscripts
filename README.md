@@ -27,6 +27,7 @@
 | verl RL Training Framework 2026 | 大模型强化学习训练框架 verl 的完整架构、训练链路、算法配置、性能调优与源码路线 | `verl-rl-training-framework-2026/index.html` / `verl-rl-training-framework-2026/verl-rl-training-framework-2026.pdf` |
 | LLM RL Algorithms 2026 | 大模型强化学习算法全景，覆盖 RLHF、RLAIF、RLVR、DPO、PPO、GRPO、DAPO、GSPO 等主流算法 | `llm-rl-algorithms-2026/index.html` / `llm-rl-algorithms-2026/llm-rl-algorithms-2026.pdf` |
 | 大模型 OPD 技术概览 2026 | 大模型在线/在策略蒸馏 one-pager，覆盖定义、训练闭环、2026 前沿谱系、工业信号、适用场景与风险边界 | `llm-opd-online-policy-distillation-2026/index.html` / `llm-opd-online-policy-distillation-2026/llm-opd-online-policy-distillation-2026.pdf` |
+| 京东 DOPD 论文 Review 2026 | 对 arXiv:2606.30626 DOPD: Dual On-policy Distillation 的独立专业评审，覆盖 privilege illusion、token 级双源路由、LLM/VLM 实验、局限与工程复现边界 | `jd-dopd-paper-review-2026/index.html` / `jd-dopd-paper-review-2026/jd-dopd-paper-review-2026.pdf` |
 | AI Training Frameworks 2026 | 大模型、多模态大模型与生成模型训练框架技术图谱 | `ai-training-frameworks-2026/index.html` / `ai-training-frameworks-2026/ai-training-frameworks-2026.pdf` |
 | AI Inference Frameworks 2026 | 大模型、多模态大模型与生成模型推理框架技术图谱 | `ai-inference-frameworks-2026/index.html` / `ai-inference-frameworks-2026/ai-inference-frameworks-2026.pdf` |
 | Algorithm Engineer CS Skill Pack 2026 | 面向大模型、搜索、广告、推荐与算法平台工程师的 CS / 软件工程技能包，覆盖生产链路、工具矩阵、标准流程、岗位能力和训练路线 | `algorithm-engineer-cs-skill-pack-2026/index.html` / `algorithm-engineer-cs-skill-pack-2026/algorithm-engineer-cs-skill-pack-2026.pdf` |
