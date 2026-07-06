@@ -22,5 +22,7 @@ scratch/
 assets/fonts/*.ttf
 assets/fonts/*.otf
 assets/fonts/*.woff2
+ecommerce-visual-search-embedding-2026/cover-01.png
+ecommerce-visual-search-embedding-2026/p*-*.png
 otc-us-index-dca-2026/research/**/*.md
 !otc-us-index-dca-2026/research/README.md

@@ -1,0 +1,36 @@
+id	level	source	url	main_use	sections
+S01	A	Representation Learning with Contrastive Predictive Coding	https://arxiv.org/abs/1807.03748	InfoNCE 对比损失来源	5
+S02	A	Distinctive Image Features from Scale-Invariant Keypoints (SIFT)	https://link.springer.com/article/10.1023/B:VISI.0000029664.99615.94	手工局部特征与倒排索引	2,6
+S03	A	FaceNet: A Unified Embedding for Face Recognition and Clustering	https://arxiv.org/abs/1503.03832	Triplet loss 与度量学习	2,5,8
+S04	A	CLIP	https://arxiv.org/abs/2103.00020	图文对齐与共享向量空间	3,5,6,8
+S05	A	ALIGN	https://arxiv.org/abs/2102.05918	噪声 alt-text 规模化对齐	3,6
+S06	A	JD Real Time Visual Search System	https://arxiv.org/abs/1908.07389	电商图搜工业 pipeline	1,2,4,5,7,10
+S07	A	SigLIP	https://arxiv.org/abs/2303.15343	Pairwise sigmoid loss 与训练效率	3,5
+S08	A	Scaling Cross-Domain CBIR for E-commerce	https://arxiv.org/abs/2204.11593	跨域检索与域间差异	1,2,6,11
+S09	A	PinSage	https://arxiv.org/abs/1806.01973	图嵌入召回与行为协同	2,4,6
+S10	B	KARMA (Taobao)	https://arxiv.org/abs/2603.22779	多模态对齐个性化搜索	3,4,6,8
+S11	B	AIGQ (Taobao)	https://arxiv.org/abs/2603.19710	混合生成查询推荐	4
+S12	A	Taobao Generative Re-ranking	https://arxiv.org/abs/2505.07197	列表级多目标重排	4
+S13	A	DINOv2	https://arxiv.org/abs/2304.07193	自监督视觉骨干	3,5,6
+S14	A	Block-SCL	https://arxiv.org/abs/2207.02008	监督对比与商品匹配	2,5,8
+S15	A	JDsearch Dataset	https://arxiv.org/abs/2305.14810	电商搜索数据集与评测	4,10
+S16	A	Monolith (ByteDance)	https://arxiv.org/abs/2209.07663	实时推荐 embedding 基础设施	2,4
+S17	B	Taobao LLM Query Rewriting	https://arxiv.org/abs/2311.03758	LLM 查询改写	4
+S18	A	ADS (ByteDance)	https://arxiv.org/abs/2502.05523	个性化序列建模	4
+S19	B	VLM2Vec	https://arxiv.org/abs/2410.05160	VLM 转 embedding 与 MMEB	3,6,8,10
+S20	C	Amazon Multimodal Product Search	https://www.amazon.science/publications/multimodal-learning-with-online-text-cleaning-for-e-commerce-product-search	多模态商品搜索	4,7
+S21	C	Amazon Web-scale Semantic Search	https://www.amazon.science/publications/web-scale-semantic-product-search-with-large-language-models	LLM 语义匹配	4
+S22	B	RAFT	https://arxiv.org/abs/2304.06767	奖励排序微调与 RL 后训练	9
+S23	A	Large-Scale Product Retrieval with Weakly Supervised Learning	https://arxiv.org/abs/2208.00955	弱监督表征学习	2,4
+S24	B/D	PinCLIP (Pinterest)	https://arxiv.org/abs/2603.03544	工业多模态表征 serving	4
+S25	B	REVISION	https://arxiv.org/abs/2510.22739	图搜系统优化与意图挖掘	4,8,10
+S26	B	From Pixels to Purchase	https://arxiv.org/abs/2601.11769	分类解耦图搜引擎评测	1,4,10
+S27	B	Gemini Embedding 2	https://arxiv.org/abs/2605.27295	原生多模态 embedding	4,5,11
+S28	B	LaME	https://arxiv.org/abs/2606.13061	信息瓶颈 latent 嵌入	4,8,11
+S29	C	PDD Holdings FY2025 Form 20-F	https://www.sec.gov/Archives/edgar/data/1737806/000110465926050727/pdd-20251231x20f.htm	监管披露与治理	4
+S30	A	ColBERTv2	https://arxiv.org/abs/2112.01488	Late interaction 文本检索	5
+S31	A	ColPali	https://arxiv.org/abs/2407.01449	视觉文档检索 token 级匹配	5,6,11
+S32	A	MagicLens	https://arxiv.org/abs/2403.19651	指令条件化图像检索	8
+S33	A	MME	https://arxiv.org/abs/2306.13394	多模态理解评测	10
+S34	A	MMMU	https://arxiv.org/abs/2311.16502	多学科多模态推理评测	10
+S35	B	UniNote	https://arxiv.org/abs/2605.29287	统一表征与排序	11

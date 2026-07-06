@@ -1,0 +1,11 @@
+paradigm	representative_sources	core_mechanism	training_signal	best_fit	primary_risk
+手工局部特征	S02	SIFT/SURF + BoVW + 倒排索引	局部描述子匹配 + TF-IDF	精确查重、同款检索	无类别语义，域间敏感
+CNN 度量学习	S03,S14,S23	CNN 骨干 + embedding 头 + triplet/contrastive	Triplet loss、硬负例挖掘	类别级语义检索、中等规模召回	纯视觉，无法桥接文本，长尾退化
+图嵌入召回	S09,S16	用户行为二部图随机游走	协同过滤信号	行为丰富场景的召回	新品冷启动失效，依赖行为覆盖
+多模态双塔 embedding	S04,S05,S07	图像塔 + 文本塔 + 对比损失	InfoNCE / SigLIP 对比学习	大规模召回、跨模态检索、长尾	细粒度区分弱，需 SFT + late interaction
+多模态精排（cross-attention）	S10,S31	图文 token 级 cross-attention	多任务联合训练	精排阶段细粒度匹配	延迟重，不适合召回阶段
+Late interaction 检索	S30,S31	token 级 MaxSim 匹配	对比 + late interaction	细粒度变体区分、文档检索	索引内存大，工程复杂度高
+领域 SFT 后训练	S03,S14,S19	预训练权重 + 商品图文对 + 硬负例	对比损失继续训练	把通用空间调整到业务分布	点击偏置、灾难性遗忘
+指令化嵌入微调	S19,S32	指令条件化嵌入训练	指令化对比 + 多任务	VLM 转 embedding、指令检索	任务泛化与指令覆盖
+RL 后训练（RAFT/DPO/在线）	S22	奖励信号驱动微调	排序奖励 / 偏好对	精排与生成式检索排序优化	reward hacking、训练不稳定、纯嵌入增益弱
+原生多模态 embedding	S27,S28,S35	原生多模态编码器（非图文对齐）	多模态联合预训练	下一代统一表征与排序	预印本阶段，工程验证不足

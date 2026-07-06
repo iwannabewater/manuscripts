@@ -14,6 +14,7 @@
 | 作品 | 主题 | 文件 |
 |---|---|---|
 | 多模态表征 2026 | 从表征学习基础、图文对齐、视觉语言模型、多模态统一空间、评测到工程落地的系统技术读物 | `multimodal-representations-2026/index.html` / `multimodal-representations-2026/multimodal-representations-2026.pdf` |
+| 电商图搜多模态 Embedding 2026 | 多模态 embedding 在电商图搜场景的学术与工业落地 pipeline、收益与成本 ROI、SFT/RL 后训练范式评估 | `ecommerce-visual-search-embedding-2026/index.html` / `ecommerce-visual-search-embedding-2026/ecommerce-visual-search-embedding-2026.pdf` |
 | oh-my-openagent 2026 | 从命名、安装、OpenCode Ultimate、Codex Light、agent 编排、MCP、配置安全到扩展路线的证据化中文技术读物 | `oh-my-openagent-2026/index.html` / `oh-my-openagent-2026/oh-my-openagent-2026.pdf` |
 | Harness Engineering 2026 | 从执行层原理、八层组件与 Skills/MCP/A2A 生态协同，到 Harness 评测、自优化研究及国内外大厂与社区实践 | `harness-engineering-2026/index.html` / `harness-engineering-2026/harness-engineering-2026.pdf` |
 | RAG 前沿 2026 | 从经典 RAG、Advanced RAG 到 Agentic 检索、多模态知识与国内外平台实践的证据化技术研究 | `rag-frontiers-2026/index.html` / `rag-frontiers-2026/rag-frontiers-2026.pdf` |

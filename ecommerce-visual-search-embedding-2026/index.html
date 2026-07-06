@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>电商图搜多模态 Embedding 2026：从传统检索到后训练范式</title>
+<meta name="author" content="Winston">
+<meta name="description" content="系统梳理多模态 embedding 在电商图搜场景的学术与工业落地 pipeline，对比传统模型的收益与成本 ROI，并评估 SFT/RL 后训练范式是否 work。">
+<meta name="keywords" content="多模态 embedding，电商图搜，视觉检索，CLIP，后训练，SFT，强化学习">
+<meta name="generator" content="Winston">
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 20mm 20mm 20mm;
+    background: #f5f4ed;
+
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02";
+      font-size: 8pt;
+      color: #6b6a64;
+    }
+
+    @bottom-center {
+      content: counter(page) "  ·  电商图搜多模态 Embedding 2026";
+      font-family: "TsangerJinKai02";
+      font-size: 8.8pt;
+      color: #6b6a64;
+    }
+  }
+
+  @page:first {
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --paper: #f5f4ed;
+    --ivory: #faf9f5;
+    --near-black: #141413;
+    --dark-warm: #3d3d3a;
+    --olive: #504e49;
+    --stone: #6b6a64;
+    --brand: #1B365D;
+    --brand-tint: #EEF2F7;
+    --tag-bg: #E4ECF5;
+    --border: #e8e6dc;
+    --border-strong: #d8d4c7;
+    --publication-font: "TsangerJinKai02";
+    --mono: "JetBrains Mono", "JetBrainsMono", "TsangerJinKai02";
+  }
+
+  html,
+  body { background: var(--paper); }
+
+  @media screen {
+    body {
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 18mm 20mm 20mm 20mm;
+    }
+  }
+
+  body {
+    color: var(--near-black);
+    font-family: var(--publication-font);
+    font-size: 9.75pt;
+    line-height: 1.54;
+    letter-spacing: 0.16pt;
+    widows: 3;
+    orphans: 3;
+  }
+
+  a { color: var(--brand); text-decoration: none; }
+  strong { font-weight: 500; }
+  .hl { color: var(--brand); font-weight: 500; }
+  .mono { font-family: var(--mono); letter-spacing: 0; }
+
+  .cover {
+    min-height: 242mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 30mm;
+    break-after: page;
+  }
+
+  .cover-eyebrow {
+    color: var(--brand);
+    font-family: var(--mono);
+    font-size: 8.6pt;
+    letter-spacing: 1.5pt;
+    text-transform: uppercase;
+    margin-bottom: 16pt;
+  }
+
+  .cover-rule {
+    width: 48mm;
+    height: 2pt;
+    background: var(--brand);
+    border-radius: 2pt;
+    margin: 0 0 18pt 0;
+  }
+
+  .cover-title {
+    max-width: 98%;
+    font-size: 30pt;
+    font-weight: 500;
+    line-height: 1.16;
+    letter-spacing: 0.12pt;
+    margin-bottom: 16pt;
+  }
+
+  .cover-sub {
+    max-width: 91%;
+    color: var(--olive);
+    font-size: 12.8pt;
+    line-height: 1.58;
+  }
+
+  .cover-meta {
+    color: var(--stone);
+    font-size: 9.6pt;
+    line-height: 1.62;
+  }
+
+  .cover-meta strong {
+    color: var(--dark-warm);
+    font-weight: 500;
+  }
+
+  .toc { break-after: page; }
+
+  .toc h2 {
+    font-size: 22pt;
+    font-weight: 500;
+    margin-bottom: 14pt;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+  }
+
+  .toc-item {
+    display: flex;
+    align-items: baseline;
+    gap: 8pt;
+    padding: 5pt 0;
+    border-bottom: 0.35pt dotted var(--border-strong);
+    font-size: 10.6pt;
+  }
+
+  .toc-num {
+    min-width: 28pt;
+    color: var(--brand);
+    font-weight: 500;
+    font-family: var(--mono);
+    letter-spacing: 0.2pt;
+  }
+
+  .toc-title { flex: 1; }
+  .toc-note { color: var(--stone); font-size: 8.5pt; }
+
+  .chapter {
+    margin-top: 22pt;
+    break-before: auto;
+  }
+
+  .chapter:first-of-type { break-before: auto; }
+
+  .chapter-num {
+    color: var(--brand);
+    font-family: var(--mono);
+    font-size: 8.5pt;
+    letter-spacing: 1pt;
+    text-transform: uppercase;
+    margin-bottom: 6pt;
+    break-after: avoid;
+  }
+
+  h1 {
+    font-size: 21.5pt;
+    font-weight: 500;
+    line-height: 1.2;
+    border-left: 2.5pt solid var(--brand);
+    border-radius: 1.5pt;
+    padding-left: 8pt;
+    margin-bottom: 10pt;
+    break-after: avoid;
+  }
+
+  h2 {
+    font-size: 15.2pt;
+    font-weight: 500;
+    line-height: 1.26;
+    margin: 20pt 0 8pt;
+    string-set: section-title content();
+    break-after: avoid;
+  }
+
+  h3 {
+    color: var(--dark-warm);
+    font-size: 12.2pt;
+    font-weight: 500;
+    line-height: 1.32;
+    margin: 14pt 0 6pt;
+    break-after: avoid;
+  }
+
+  p {
+    margin: 0 0 8.2pt;
+    line-height: 1.54;
+  }
+
+  .lead {
+    color: var(--dark-warm);
+    font-size: 11.1pt;
+    line-height: 1.56;
+    margin-bottom: 12pt;
+  }
+
+  ul,
+  ol {
+    margin: 6pt 0 10pt 0;
+    padding-left: 18pt;
+    line-height: 1.5;
+  }
+
+  li { margin-bottom: 3pt; }
+  li::marker { color: var(--brand); }
+
+  .summary-grid,
+  .principle-grid,
+  .metric-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8pt;
+    margin: 10pt 0 12pt;
+  }
+
+  .metric-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .card {
+    background: var(--ivory);
+    border: 0.45pt solid var(--border);
+    border-radius: 7pt;
+    padding: 9pt 10pt;
+    break-inside: avoid;
+  }
+
+  .card-title {
+    color: var(--brand);
+    font-weight: 500;
+    margin-bottom: 4pt;
+  }
+
+  .metric {
+    background: var(--ivory);
+    border: 0.45pt solid var(--border);
+    border-radius: 7pt;
+    padding: 8pt 8pt 7pt;
+    break-inside: avoid;
+  }
+
+  .metric-value {
+    color: var(--brand);
+    display: block;
+    font-family: var(--mono);
+    font-size: 14pt;
+    font-weight: 600;
+    line-height: 1.1;
+    margin-bottom: 3pt;
+  }
+
+  .metric-label {
+    color: var(--olive);
+    font-size: 8.4pt;
+    line-height: 1.35;
+  }
+
+  .note,
+  .callout {
+    background: var(--ivory);
+    border-left: 2.2pt solid var(--brand);
+    border-radius: 5pt;
+    padding: 8pt 10pt;
+    margin: 10pt 0 12pt;
+    break-inside: avoid;
+  }
+
+  .note p,
+  .callout p { margin-bottom: 0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 10pt 0 12pt;
+    font-size: 8.05pt;
+    break-inside: avoid;
+  }
+
+  th {
+    text-align: left;
+    color: var(--dark-warm);
+    font-weight: 500;
+    padding: 4.8pt 5pt;
+    border-bottom: 1pt solid var(--border-strong);
+  }
+
+  td {
+    vertical-align: top;
+    padding: 4.2pt 5pt;
+    border-bottom: 0.32pt solid var(--border);
+  }
+
+  tbody tr:nth-child(even) td { background: var(--ivory); }
+
+  .compact th,
+  .compact td {
+    font-size: 7.4pt;
+    line-height: 1.34;
+    padding: 3.2pt 4pt;
+  }
+
+  .tag {
+    display: inline-block;
+    background: var(--tag-bg);
+    color: var(--brand);
+    border-radius: 3pt;
+    padding: 1pt 4.5pt;
+    font-family: var(--mono);
+    font-size: 7.5pt;
+    font-weight: 600;
+    letter-spacing: 0.45pt;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  figure {
+    margin: 12pt 0 14pt;
+    background: var(--ivory);
+    border: 0.45pt solid var(--border);
+    border-radius: 7pt;
+    padding: 9pt;
+    break-inside: avoid;
+  }
+
+  figure svg {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  figcaption {
+    color: var(--olive);
+    font-size: 8.2pt;
+    line-height: 1.45;
+    margin-top: 6pt;
+  }
+
+  .references {
+    column-count: 2;
+    column-gap: 16pt;
+    font-size: 7.1pt;
+    line-height: 1.28;
+  }
+
+  .references p {
+    break-inside: avoid;
+    margin-bottom: 3.8pt;
+  }
+
+  .ref-id {
+    color: var(--brand);
+    font-family: var(--mono);
+    font-weight: 600;
+  }
+
+  .source-note {
+    color: var(--stone);
+    font-size: 8.1pt;
+    line-height: 1.45;
+    margin-top: 8pt;
+  }
+</style>
+</head>
+<body>
+  <section class="cover">
+    <div>
+      <div class="cover-eyebrow">TECHNICAL RESEARCH · EVIDENCE DATE 2026-07-05</div>
+      <div class="cover-rule"></div>
+      <div class="cover-title">电商图搜多模态 Embedding 2026：<br>从传统检索到后训练范式</div>
+      <p class="cover-sub">一份聚焦电商图搜场景的深度技术研究：从问题定义与传统视觉检索的极限出发，拆解多模态 embedding 如何重塑召回管线，梳理国内外大厂落地全景，量化收益与成本 ROI，并诚实评估 SFT 与 RL 后训练范式是否真正 work。</p>
+    </div>
+    <div class="cover-meta">
+      <p><strong>Author</strong>：Winston</p>
+      <p><strong>Evidence date</strong>：2026-07-05，Asia/Shanghai</p>
+      <p><strong>Evidence base</strong>：35 个一手来源，覆盖会议论文、工业系统论文、预印本、官方工程博客与开源仓库</p>
+      <p><strong>Boundary</strong>：本文区分作者报告与独立验证，不把厂商自报 benchmark 写成共识结论</p>
+    </div>
+  </section>
+
+  <section class="toc">
+    <h2>目录</h2>
+    <div class="toc-item"><span class="toc-num">00</span><span class="toc-title">执行摘要：多模态 embedding 把图搜从特征匹配推进到语义检索</span><span class="toc-note">overview</span></div>
+    <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">问题定义：电商图搜为什么难</span><span class="toc-note">problem</span></div>
+    <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">传统视觉检索的极限：手工特征、CNN 度量学习与图方法</span><span class="toc-note">traditional</span></div>
+    <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">多模态 embedding 进入图搜：CLIP 范式为何奏效</span><span class="toc-note">clip</span></div>
+    <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">工业界落地全景：国内外大厂 pipeline 对照</span><span class="toc-note">industry</span></div>
+    <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">架构与训练管线深度拆解</span><span class="toc-note">architecture</span></div>
+    <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">相对传统模型的收益：召回、长尾与跨模态</span><span class="toc-note">benefits</span></div>
+    <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">成本与 ROI 框架：训练、数据与服务的真实代价</span><span class="toc-note">roi</span></div>
+    <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">后训练 SFT 范式：是否 work</span><span class="toc-note">sft</span></div>
+    <div class="toc-item"><span class="toc-num">09</span><span class="toc-title">后训练 RL 范式：是否 work</span><span class="toc-note">rl</span></div>
+    <div class="toc-item"><span class="toc-num">10</span><span class="toc-title">评测：离线 benchmark 与线上指标的裂缝</span><span class="toc-note">eval</span></div>
+    <div class="toc-item"><span class="toc-num">11</span><span class="toc-title">前沿问题与选型决策框架</span><span class="toc-note">frontier</span></div>
+    <div class="toc-item"><span class="toc-num">12</span><span class="toc-title">Further Reading 与来源</span><span class="toc-note">sources</span></div>
+  </section>
+
+  <main>
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 00</div>
+      <h1>执行摘要：多模态 embedding 把图搜从特征匹配推进到语义检索</h1>
+      <p class="lead">电商图搜的核心任务是把用户拍下或截图的商品图片映射到商品库中语义最接近的 SKU。多模态 embedding 用一个共享向量空间同时编码图像和文本，让检索不再依赖纯视觉特征的几何匹配，而是进入语义可比较的阶段。这条转变不是替换 ANN 索引或排序系统，而是替换表征层本身。</p>
+      <div class="metric-grid">
+        <div class="metric"><span class="metric-value">35</span><span class="metric-label">个一手来源，覆盖会议论文、工业系统论文与官方工程材料</span></div>
+        <div class="metric"><span class="metric-value">5</span><span class="metric-label">类公开工业与学术证据被交叉整理</span></div>
+        <div class="metric"><span class="metric-value">3</span><span class="metric-label">代表征范式：手工特征、CNN 度量学习、多模态 embedding</span></div>
+        <div class="metric"><span class="metric-value">2</span><span class="metric-label">条后训练路线：SFT（稳定 work）与 RL（部分 work）</span></div>
+      </div>
+      <div class="summary-grid">
+        <div class="card">
+          <div class="card-title">表征层的范式迁移</div>
+          <p>SIFT + BoVW 解决精确局部匹配，CNN 度量学习解决类别级语义，CLIP 式多模态 embedding 解决跨模态和开放词表 [S04, S07, S10]。三代不是互斥：生产系统常同时跑指纹去重、CNN 召回和多模态精排。</p>
+        </div>
+        <div class="card">
+          <div class="card-title">工业落地的真实形态</div>
+          <p>京东、淘宝、Amazon、Pinterest 都有可核验的搜索、推荐或多模态检索公开材料 [S06, S10-S12, S20-S21, S24]。pipeline 的共同形态是：离线编码商品库 + 在线 query 编码 + ANN 召回 + 多模态精排 [S06, S10, S20]。</p>
+        </div>
+        <div class="card">
+          <div class="card-title">收益集中在长尾与跨模态</div>
+          <p>多模态 embedding 相对纯视觉 CNN 的增量主要来自长尾品类召回、图文交叉检索和新品冷启动 [S04, S10, S19, S24]。精确查重场景指纹哈希仍更快更准，多模态不占优。</p>
+        </div>
+        <div class="card">
+          <div class="card-title">后训练的诚实结论</div>
+          <p>领域 SFT（带硬负例的对比微调）在公开实验中证据更稳定 [S10, S14, S19, S24]；RL 用于纯 embedding 表征的证据弱于精排和生成式检索，且稳定性存疑 [S22, S25]。SFT 是主力，RL 是增量。</p>
+        </div>
+      </div>
+      <p>本文的主线是判断而非罗列。读完后，读者应该能回答五个问题：图搜的检索契约是什么；传统方法在哪个维度触顶；多模态 embedding 的收益和代价各在哪里；SFT 和 RL 各自在哪类任务上 work；以及给定一个图搜系统应该怎么选型、训数据、上线和评测。</p>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 01</div>
+      <h1>问题定义：电商图搜为什么难</h1>
+      <p class="lead">电商图搜的输入是一张用户拍摄或截图的商品图片，输出是商品库中语义最接近的 SKU 列表。听起来像标准图像检索，但电商场景的约束把它推向一个比通用 CBIR 更难的子问题。</p>
+
+      <h2>检索契约：延迟、召回与精度的三角</h2>
+      <p>线上图搜系统通常要求端到端延迟在百毫秒量级完成从 query 编码到结果返回 [S06]。商品库规模动辄数千万到数十亿 SKU，意味着召回阶段必须在近似最近邻索引上完成。检索契约不是单一指标：召回率决定用户能不能找到商品，精度决定前几位的商品是否值得点进，转化率决定图搜是否值得占用首页入口。三者冲突时，业务目标决定取舍。</p>
+
+      <h2>四类核心难点</h2>
+      <p>第一，<span class="hl">域间差异</span>。用户照片的光照、角度、遮挡、背景与商品库的棚拍图差距极大。Cross-domain CBIR 研究把这个问题作为独立课题 [S08]。第二，<span class="hl">意图模糊</span>。用户拍一双鞋，可能想买同款，也可能想买类似风格的替代品。同款检索和相似检索是两种任务，混在一起做会两头不讨好 [S26]。第三，<span class="hl">长尾分布</span>。头部品类样本充足，长尾品类只有几张商品图，传统分类式表征在长尾上迅速退化 [S10]。第四，<span class="hl">SKU 粒度</span>。同一商品的不同颜色、尺码、款式可能共享主图但属于不同 SKU，嵌入空间需要区分这种细粒度差异。</p>
+
+      <figure>
+        <svg viewBox="0 0 1000 400" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100%" height="100%" fill="#f5f4ed"/>
+          <text x="64" y="40" fill="#1B365D" font-size="15" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  1</text>
+          <text x="188" y="40" fill="#504e49" font-size="15" font-family="JetBrains Mono" letter-spacing="3">E-COMMERCE VISUAL SEARCH PIPELINE</text>
+          <line x1="64" y1="56" x2="936" y2="56" stroke="#1B365D" stroke-width="1"/>
+          <rect x="50" y="92" width="120" height="64" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+          <text x="110" y="120" text-anchor="middle" fill="#141413" font-size="15" font-family="TsangerJinKai02">用户拍照</text>
+          <text x="110" y="140" text-anchor="middle" fill="#6b6a64" font-size="12" font-family="JetBrains Mono">query image</text>
+          <path d="M170 124 L210 124" fill="none" stroke="#504e49" stroke-width="1.8"/>
+          <path d="M204 119 L212 124 L204 129" fill="none" stroke="#504e49" stroke-width="1.8"/>
+          <rect x="210" y="92" width="120" height="64" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+          <text x="270" y="120" text-anchor="middle" fill="#141413" font-size="15" font-family="TsangerJinKai02">主体检测</text>
+          <text x="270" y="140" text-anchor="middle" fill="#6b6a64" font-size="12" font-family="JetBrains Mono">crop / bg</text>
+          <path d="M330 124 L370 124" fill="none" stroke="#504e49" stroke-width="1.8"/>
+          <path d="M364 119 L372 124 L364 129" fill="none" stroke="#504e49" stroke-width="1.8"/>
+          <rect x="370" y="88" width="140" height="72" rx="8" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.6"/>
+          <text x="440" y="114" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02" font-weight="500">Embedding</text>
+          <text x="440" y="134" text-anchor="middle" fill="#504e49" font-size="12" font-family="JetBrains Mono">CLIP / SigLIP</text>
+          <text x="440" y="150" text-anchor="middle" fill="#504e49" font-size="12" font-family="JetBrains Mono">+ domain SFT</text>
+          <path d="M510 124 L550 124" fill="none" stroke="#1B365D" stroke-width="1.8"/>
+          <path d="M544 119 L552 124 L544 129" fill="none" stroke="#1B365D" stroke-width="1.8"/>
+          <rect x="550" y="92" width="120" height="64" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+          <text x="610" y="120" text-anchor="middle" fill="#141413" font-size="15" font-family="TsangerJinKai02">ANN 召回</text>
+          <text x="610" y="140" text-anchor="middle" fill="#6b6a64" font-size="12" font-family="JetBrains Mono">HNSW / IVF-PQ</text>
+          <path d="M670 124 L710 124" fill="none" stroke="#504e49" stroke-width="1.8"/>
+          <path d="M704 119 L712 124 L704 129" fill="none" stroke="#504e49" stroke-width="1.8"/>
+          <rect x="710" y="92" width="120" height="64" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+          <text x="770" y="120" text-anchor="middle" fill="#141413" font-size="15" font-family="TsangerJinKai02">多模态精排</text>
+          <text x="770" y="140" text-anchor="middle" fill="#6b6a64" font-size="12" font-family="JetBrains Mono">rerank</text>
+          <path d="M830 124 L870 124" fill="none" stroke="#504e49" stroke-width="1.8"/>
+          <path d="M864 119 L872 124 L864 129" fill="none" stroke="#504e49" stroke-width="1.8"/>
+          <rect x="870" y="92" width="80" height="64" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+          <text x="910" y="120" text-anchor="middle" fill="#141413" font-size="15" font-family="TsangerJinKai02">结果</text>
+          <text x="910" y="140" text-anchor="middle" fill="#6b6a64" font-size="12" font-family="JetBrains Mono">top-K</text>
+          <rect x="370" y="200" width="580" height="56" rx="8" fill="#faf9f5" stroke="#d8d4c7" stroke-width="1" stroke-dasharray="4 3"/>
+          <text x="660" y="224" text-anchor="middle" fill="#504e49" font-size="14" font-family="TsangerJinKai02">商品库离线编码：image + title + attributes → embedding → 向量索引</text>
+          <text x="660" y="244" text-anchor="middle" fill="#6b6a64" font-size="12" font-family="JetBrains Mono">offline batch encode · PQ quantization · index build</text>
+          <path d="M610 156 L610 200" fill="none" stroke="#d8d4c7" stroke-width="1.5" stroke-dasharray="3 2"/>
+          <text x="64" y="300" fill="#504e49" font-size="14" font-family="TsangerJinKai02">难点：域间差异（用户照 vs 棚拍）· 意图模糊（同款 vs 相似）· 长尾分布 · SKU 细粒度</text>
+          <text x="64" y="326" fill="#6b6a64" font-size="13" font-family="TsangerJinKai02">契约：端到端延迟 &lt;100ms · 召回率 &gt;80% · 前位精度驱动转化</text>
+        </svg>
+        <figcaption>Figure 1. 电商图搜的标准 pipeline。表征层（Embedding 模块）是范式迁移的发生地；上游检测和下游 ANN、精排在不同代际间变化较小。商品库离线编码与在线 query 编码共享同一个模型权重。</figcaption>
+      </figure>
+
+      <h2>为什么"通用 CBIR 方法"不够</h2>
+      <p>通用图像检索可以接受"返回视觉风格相似的图"。电商图搜不行：返回一双同品牌但不同尺码的鞋等于失败。检索粒度必须精确到商品变体级，但又不能退化到只做精确查重，否则长尾和新品永远检索不到。这个"比相似更精确、比查重更宽容"的中间地带，正是多模态 embedding 试图填补的。</p>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 02</div>
+      <h1>传统视觉检索的极限：手工特征、CNN 度量学习与图方法</h1>
+      <p class="lead">在多模态 embedding 成为主流之前，电商图搜经历了两代技术。理解它们的极限，才能理解为什么 CLIP 式表征不是锦上添花而是结构性替代。</p>
+
+      <h2>第一代：手工局部特征 + 倒排索引</h2>
+      <p>SIFT、SURF、ORB 等局部特征描述子配合 Bag-of-Visual-Words 和 TF-IDF 加权倒排索引，是 2010 年代早期视觉检索的标准方案 [S02]。它的优势是精确：对同一物体不同视角的匹配能力强，适合精确查重和同款检索。京东 2019 年公开的实时图搜系统就包含基于局部特征的检索分支 [S06]。局限同样明显：局部特征没有类别级语义，"红色连衣裙"和"红色半身裙"在特征空间里可能完全无法区分；对光照、遮挡和低分辨率敏感；倒排索引在亿级库上内存开销大。</p>
+
+      <h2>第二代：CNN 度量学习</h2>
+      <p>用 CNN（ResNet、EfficientNet 等）做骨干，加一个 embedding 头，用 triplet loss 或 contrastive loss 训练，让同款商品靠近、不同款远离 [S03]。这条路线把检索从局部几何匹配推进到语义空间。Weakly Supervised Representation Learning 在大规模商品检索上验证了弱监督训练路径 [S23]。Block-SCL 把 supervised contrastive learning 引入商品匹配，证明分块策略对细粒度匹配有增益 [S14]。</p>
+      <p>CNN 度量学习的结构性局限有三条。第一，<span class="hl">纯视觉空间无法桥接文本</span>。商品库天然带标题、属性、类目文本，但纯视觉 embedding 用不上这些信号。用户用文字"红色碎花裙"搜图时，纯视觉系统需要单独搭一个文本到图像的桥。第二，<span class="hl">长尾退化</span>。分类式预训练依赖标签覆盖，长尾品类样本不足时表征质量下降。第三，<span class="hl">域间泛化弱</span>。在棚拍图上训练的模型面对用户实拍时性能掉幅明显，Cross-Domain CBIR 把这作为独立问题研究 [S08]。</p>
+
+      <h2>图方法：用行为信号补语义</h2>
+      <p>PinSage 在 Pinterest 的 pin-board 二部图上做随机游走，生成 pin 的 embedding [S09]。它不依赖图像特征，而是用用户行为（收藏、board 关联）定义相似性。这条路线的洞察是：当视觉特征不够时，协同过滤信号可以补位。京东 Monolith 系统也展示了实时推荐中碰撞无关 embedding 表的工程方案 [S16]。图方法的局限是依赖行为数据覆盖：新品和冷门商品没有行为边，图嵌入学不到有效向量。</p>
+
+      <table>
+        <thead>
+          <tr><th>维度</th><th>手工特征 (SIFT/BoVW)</th><th>CNN 度量学习</th><th>图方法 (PinSage)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>语义粒度</td><td>实例级几何匹配</td><td>类别级语义</td><td>行为协同语义</td></tr>
+          <tr><td>文本利用</td><td>无</td><td>无（纯视觉）</td><td>间接（图边可含文本节点）</td></tr>
+          <tr><td>长尾表现</td><td>依赖特征匹配，长尾可查重</td><td>退化明显</td><td>无行为边则失效</td></tr>
+          <tr><td>域间泛化</td><td>弱，对光照角度敏感</td><td>弱，需域自适应 [S08]</td><td>不适用（依赖行为图）</td></tr>
+          <tr><td>新品冷启动</td><td>可查重，不可语义检索</td><td>可编码，质量受限</td><td>无行为数据则失效</td></tr>
+          <tr><td>主要证据</td><td>[S02, S06]</td><td>[S03, S14, S23]</td><td>[S09, S16]</td></tr>
+        </tbody>
+      </table>
+
+      <div class="note">
+        <p><strong>结构性结论</strong>，传统三代方法各自解决了一层问题但都触顶于同一个瓶颈：表征空间只能编码单一模态（视觉或行为），无法利用商品库天然的多模态结构。多模态 embedding 不是在同一个空间里做得更好，而是换了一个能同时容纳图像和文本的空间。</p>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 03</div>
+      <h1>多模态 embedding 进入图搜：CLIP 范式为何奏效</h1>
+      <p class="lead">CLIP 用对比学习把图像和文本放进同一个向量空间 [S04]。这个看似简单的改变恰好命中了电商图搜的结构性瓶颈：商品库本身就是多模态的。</p>
+
+      <h2>商品库天然是多模态语料</h2>
+      <p>每个商品 SKU 至少有主图、标题、类目属性、有时还有详情图和评论文本。传统方法只用图像，等于丢掉了免费的语言监督。CLIP 式双塔模型用图像编码器和文本编码器分别编码，再在共享空间里对齐 [S04]。在电商场景，这意味着同一个 embedding 既能从图搜图，也能从文搜图，还能从图文混合 query 检索。淘宝 KARMA 系统把多模态对齐作为个性化搜索的核心组件 [S10]。</p>
+
+      <h2>CLIP / ALIGN / SigLIP：三个关键节点</h2>
+      <p><span class="hl">CLIP</span> 证明 4 亿图文对的对比学习能产生强迁移表征，零样本 ImageNet 接近监督训练水平 [S04]。<span class="hl">ALIGN</span> 把数据推到十亿级噪声 alt-text，证明规模可以抵消部分标注噪声 [S05]。<span class="hl">SigLIP</span> 把全局 softmax 对比换成 pairwise sigmoid loss，降低大 batch 的通信和内存压力，让训练更易扩展 [S07]。对电商而言，这三个节点分别解决了"能不能对齐""能不能规模化""能不能高效训练"三个问题。</p>
+
+      <figure>
+        <svg viewBox="0 0 1000 360" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100%" height="100%" fill="#f5f4ed"/>
+          <text x="64" y="40" fill="#1B365D" font-size="15" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  2</text>
+          <text x="188" y="40" fill="#504e49" font-size="15" font-family="JetBrains Mono" letter-spacing="3">DUAL-TOWER MULTIMODAL EMBEDDING</text>
+          <line x1="64" y1="56" x2="936" y2="56" stroke="#1B365D" stroke-width="1"/>
+          <rect x="80" y="90" width="150" height="60" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+          <text x="155" y="118" text-anchor="middle" fill="#141413" font-size="16" font-family="TsangerJinKai02">商品图</text>
+          <text x="155" y="138" text-anchor="middle" fill="#6b6a64" font-size="12" font-family="JetBrains Mono">product image</text>
+          <path d="M230 120 L280 120" fill="none" stroke="#504e49" stroke-width="1.8"/>
+          <path d="M274 115 L282 120 L274 125" fill="none" stroke="#504e49" stroke-width="1.8"/>
+          <rect x="280" y="84" width="140" height="72" rx="10" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.6"/>
+          <text x="350" y="110" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02" font-weight="500">视觉编码器</text>
+          <text x="350" y="130" text-anchor="middle" fill="#504e49" font-size="12" font-family="JetBrains Mono">ViT / DINOv2</text>
+          <text x="350" y="146" text-anchor="middle" fill="#504e49" font-size="12" font-family="JetBrains Mono">→ embedding</text>
+          <rect x="80" y="210" width="150" height="60" rx="8" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+          <text x="155" y="238" text-anchor="middle" fill="#141413" font-size="16" font-family="TsangerJinKai02">标题+属性</text>
+          <text x="155" y="258" text-anchor="middle" fill="#6b6a64" font-size="12" font-family="JetBrains Mono">title / attrs</text>
+          <path d="M230 240 L280 240" fill="none" stroke="#504e49" stroke-width="1.8"/>
+          <path d="M274 235 L282 240 L274 245" fill="none" stroke="#504e49" stroke-width="1.8"/>
+          <rect x="280" y="204" width="140" height="72" rx="10" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.6"/>
+          <text x="350" y="230" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02" font-weight="500">文本编码器</text>
+          <text x="350" y="250" text-anchor="middle" fill="#504e49" font-size="12" font-family="JetBrains Mono">BERT / LLM</text>
+          <text x="350" y="266" text-anchor="middle" fill="#504e49" font-size="12" font-family="JetBrains Mono">→ embedding</text>
+          <rect x="500" y="140" width="120" height="80" rx="10" fill="#faf9f5" stroke="#1B365D" stroke-width="1.8"/>
+          <text x="560" y="172" text-anchor="middle" fill="#1B365D" font-size="15" font-family="TsangerJinKai02" font-weight="500">对比损失</text>
+          <text x="560" y="194" text-anchor="middle" fill="#504e49" font-size="12" font-family="JetBrains Mono">InfoNCE</text>
+          <text x="560" y="210" text-anchor="middle" fill="#504e49" font-size="12" font-family="JetBrains Mono">SigLIP</text>
+          <path d="M420 120 L500 160" fill="none" stroke="#1B365D" stroke-width="1.5"/>
+          <path d="M420 240 L500 200" fill="none" stroke="#1B365D" stroke-width="1.5"/>
+          <path d="M620 180 L680 180" fill="none" stroke="#1B365D" stroke-width="1.8"/>
+          <path d="M674 175 L682 180 L674 185" fill="none" stroke="#1B365D" stroke-width="1.8"/>
+          <rect x="680" y="140" width="240" height="80" rx="10" fill="#faf9f5" stroke="#504e49" stroke-width="1.2"/>
+          <text x="800" y="168" text-anchor="middle" fill="#141413" font-size="16" font-family="TsangerJinKai02" font-weight="500">共享向量空间</text>
+          <text x="800" y="190" text-anchor="middle" fill="#504e49" font-size="13" font-family="TsangerJinKai02">图搜图 · 文搜图 · 图文混合搜</text>
+          <text x="800" y="208" text-anchor="middle" fill="#6b6a64" font-size="12" font-family="JetBrains Mono">ANN index · PQ quantization</text>
+          <text x="64" y="320" fill="#504e49" font-size="14" font-family="TsangerJinKai02">关键：商品库的图和文编码到同一空间，召回同时利用视觉相似和语义相似</text>
+        </svg>
+        <figcaption>Figure 2. 双塔多模态 embedding 架构。离线编码商品库的图文，在线编码 query（图或文），在同一 ANN 索引上检索。领域 SFT 在此基础上用商品图文对和硬负例继续训练。</figcaption>
+      </figure>
+
+      <h2>DINOv2：不需要文本也能做强视觉表征</h2>
+      <p>并非所有商品都有高质量文本。DINOv2 用自监督蒸馏训练视觉骨干，在纯视觉任务上达到甚至超过有监督预训练 [S13]。在电商场景，DINOv2 可以作为视觉编码器替代 CLIP 的图像塔，或在文本缺失时补充纯视觉表征。实践中的常见做法是混合：CLIP 系编码器负责图文对齐，DINOv2 负责细粒度视觉判别。</p>
+
+      <h2>为什么不是 VLM 直接做检索</h2>
+      <p>视觉语言模型（BLIP-2、LLaVA 等）能做图文问答，但 VLM 不等于 embedding 模型。VLM2Vec 的核心贡献是证明：把 VLM 转成 embedding 模型需要专门的训练（在 MMEB 上做指令化嵌入微调），直接用 VLM 的隐状态做检索效果差 [S19]。这个区分对电商的意义是：不要以为上了 VLM 就有了多模态检索能力，表征质量和交互能力是两件事。</p>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 04</div>
+      <h1>工业界落地全景：国内外大厂 pipeline 对照</h1>
+      <p class="lead">本节整理公开技术证据覆盖的主要平台。需要强调：不同平台的业务目标、流量分配和统计方法不同，指标不可横向排序。预印本中的部署或收益表述按作者报告处理。</p>
+
+      <table class="compact">
+        <thead>
+          <tr><th>平台</th><th>公开系统/证据</th><th>多模态表征路线</th><th>证据等级</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>京东</td><td>实时图搜系统 [S06]；JDsearch 数据集 [S15]</td><td>局部特征 + CNN 双路召回；个性化搜索数据集含图文交互</td><td>A（系统论文 + 数据集）</td></tr>
+          <tr><td>淘宝/天猫</td><td>KARMA 多模态个性化搜索 [S10]；AIGQ 查询推荐 [S11]；生成式重排 [S12]；LLM 查询改写 [S17]</td><td>知识-动作正则化多模态对齐；端到端混合生成架构；列表级多目标重排</td><td>B（多为预印本，作者报告）</td></tr>
+          <tr><td>抖音电商/ByteDance</td><td>ADS 自适应域扩展 [S18]；Monolith 实时推荐 [S16]</td><td>个性化序列建模；碰撞无关 embedding 表；视频驱动电商</td><td>A（系统论文）</td></tr>
+          <tr><td>Amazon</td><td>多模态商品搜索 [S20]；Web-scale 语义搜索 [S21]</td><td>在线文本清洗的多模态学习；LLM 语义匹配</td><td>C（官方研究博客）</td></tr>
+          <tr><td>Pinterest</td><td>PinSage 图嵌入 [S09]；PinCLIP 多模态表征 [S24]</td><td>随机游走图嵌入；大规模多模态 foundation 表征与 serving 约束</td><td>A/B（系统论文 + 预印本）</td></tr>
+          <tr><td>学术前沿</td><td>REVISION 图搜优化 [S25]；From Pixels to Purchase [S26]；Gemini Embedding 2 [S27]；LaME [S28]</td><td>反思意图挖掘与在线推理辅助；分类解耦图搜引擎；原生多模态 embedding；信息瓶颈 latent 思考</td><td>B（2025-2026 预印本）</td></tr>
+        </tbody>
+      </table>
+
+      <h2>国内平台：多模态对齐进入搜索主链路</h2>
+      <p>京东的实时图搜系统是最早公开的电商视觉检索工业系统之一，采用局部特征和 CNN 双路召回的混合架构 [S06]。JDsearch 数据集首次公开了真实搜索查询和完整交互日志，为学术界提供了电商搜索基准 [S15]。淘宝 KARMA 把多模态对齐与个性化搜索结合，用知识-动作正则化约束对齐质量 [S10]；AIGQ 把查询推荐做成端到端混合生成架构 [S11]；生成式重排处理列表级多目标 [S12]。抖音电商通过 ADS 做自适应域扩展的个性化序列建模 [S18]，Monolith 提供碰撞无关 embedding 表的实时推荐基础设施 [S16]。拼多多/Temu 在公开技术论文方面证据有限，母公司 20-F 披露涉及搜索推荐治理但不含可归因的模型架构 [S29]。</p>
+
+      <h2>海外平台：语义搜索与对话式购物的融合</h2>
+      <p>Amazon 公开了多模态商品搜索（含在线文本清洗）[S20] 和 Web-scale 语义搜索（LLM 语义匹配）[S21]。Pinterest 用 PinSage 做图嵌入召回 [S09]，PinCLIP 探索大规模多模态 foundation 表征在生产推荐检索中的 serving 约束 [S24]。Google Lens 虽无详细公开论文，但其视觉搜索产品形态定义了用户预期。Shopee、SHEIN 等平台虽有图搜产品，但缺乏可归因的公开技术论文，本文不纳入证据整理。</p>
+
+      <h2>2025-2026 学术前沿信号</h2>
+      <p>REVISION 把反思意图挖掘和在线推理辅助引入图搜系统优化 [S25]，From Pixels to Purchase 构建了分类解耦的图搜引擎评测 [S26]。Gemini Embedding 2 作为原生多模态 embedding 模型代表了闭源大厂的能力前沿 [S27]。LaME 用信息瓶颈在 latent 空间做"思考"来提升多模态嵌入 [S28]。这些工作均为预印本，属趋势信号而非共识结论。</p>
+
+      <div class="note">
+        <p><strong>证据边界</strong>，上表中的线上收益数字均来自作者报告，不同平台的对照组、流量切片和统计方法不统一，不能横向比较。拼多多/Temu 和 SHEIN 缺乏可归因的模型架构公开论文，本文不推测其内部技术路线。</p>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 05</div>
+      <h1>架构与训练管线深度拆解</h1>
+      <p class="lead">这一节拆解一个典型的多模态图搜 embedding 系统从编码器到索引的完整链路，并标注每个环节的设计取舍。</p>
+
+      <h2>编码器选择</h2>
+      <p>视觉编码器从 CNN（ResNet/EfficientNet）向 ViT 迁移是明确趋势。ViT 的全局注意力更适合捕捉商品整体语义，CNN 的局部归纳偏置在细粒度纹理上仍有优势 [S04, S13]。DINOv2 作为自监督视觉骨干在纯视觉判别上表现强 [S13]。文本编码器从 BERT 家族向 LLM-based 编码器演进，Gemini Embedding 2 代表了原生多模态 embedding 的闭源前沿 [S27]。实践中的常见配置：ViT-L 视觉塔 + BERT-base 或更大文本塔，embedding 维度 512-768。</p>
+
+      <h2>损失函数：不止 InfoNCE</h2>
+      <table>
+        <thead>
+          <tr><th>损失</th><th>机制</th><th>优势</th><th>在图搜中的角色</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>InfoNCE [S01]</td><td>batch 内全局 softmax 对比</td><td>理论清晰，负样本丰富</td><td>CLIP 式预训练主力</td></tr>
+          <tr><td>SigLIP [S07]</td><td>pairwise sigmoid，无全局归一化</td><td>大 batch 友好，通信低</td><td>规模化训练首选</td></tr>
+          <tr><td>Triplet [S03]</td><td>anchor-positive-negative 距离</td><td>精确控制硬负例</td><td>领域 SFT 微调</td></tr>
+          <tr><td>SupCon / Block-SCL [S14]</td><td>监督对比，分块策略</td><td>细粒度匹配增益</td><td>商品变体级匹配</td></tr>
+          <tr><td>多任务</td><td>检索 + 分类 + 匹配联合</td><td>共享骨干，任务互补</td><td>生产系统常见</td></tr>
+        </tbody>
+      </table>
+
+      <h2>硬负例挖掘</h2>
+      <p>硬负例决定对比学习的上限。电商场景的硬负例有天然来源：同品类同色系但不同款式的商品、同款不同变体（颜色/尺码）、视觉相似但价格段不同的商品。常用策略是离线 ANN 挖掘（用当前模型在商品库上检索，取 top-K 中非正例的样本）加在线 in-batch 挖掘混合 [S03, S14]。Block-SCL 证明分块对比策略对细粒度商品匹配有增益 [S14]。</p>
+
+      <h2>多模态融合：早期 vs 晚期 vs 注意力</h2>
+      <p><span class="hl">早期融合</span>把图像和文本特征拼接后送入共享编码器，信息交互充分但计算重。<span class="hl">晚期融合</span>（双塔）各自编码后在向量空间对齐，适合大规模 ANN 召回 [S04]。<span class="hl">注意力融合</span>用 cross-attention 在 token 级别交互图像和文本，精度高但延迟重，适合精排阶段。ColPali 把 late interaction 引入视觉文档检索，用 token 级 MaxSim 匹配替代单向量点积 [S31]，这条路线在电商精排中有迁移潜力。ColBERTv2 在纯文本检索上验证了 late interaction 的效率-精度平衡 [S30]。</p>
+
+      <h2>量化与 ANN 索引</h2>
+      <p>亿级商品库不可能全精度存向量。Product Quantization (PQ) 把向量分块量化，Scalar Quantization (SQ) 按维度截断，二值编码把向量压到 1 bit/维。索引结构上 HNSW 适合低延迟高召回，IVF-PQ 适合内存受限的大规模场景。京东实时图搜系统已公开了工程层面的索引设计 [S06]。Embedding 维度从 512 到 768 是主流区间，更高维度带来边际收益递减但线性增加内存和索引构建成本。</p>
+
+      <h2>服务架构：离线编码 + 在线检索</h2>
+      <p>标准服务形态是：离线批量编码全部商品库图文 → 量化 → 构建 ANN 索引；在线接收 query 图/文 → 实时编码 → ANN 召回 top-K → 多模态精排 → 业务过滤（库存/价格/区域）→ 返回。Query 编码需要 GPU（ViT 推理），商品库编码是离线批处理。索引更新策略取决于商品上新频率：全量重建、增量插入或双索引切换各有取舍。</p>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 06</div>
+      <h1>相对传统模型的收益：召回、长尾与跨模态</h1>
+      <p class="lead">多模态 embedding 相对传统方法的收益不是均匀分布的。它在长尾、跨模态和冷启动上显著，在精确查重上不占优。理解这个不均匀分布比记住一个平均数字更重要。</p>
+
+      <table>
+        <thead>
+          <tr><th>维度</th><th>传统 CNN 度量学习</th><th>多模态 embedding</th><th>收益来源与证据</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>长尾品类召回</td><td>退化明显</td><td>显著提升</td><td>开放词表预训练覆盖长尾概念 [S04, S05]</td></tr>
+          <tr><td>跨模态检索（文搜图）</td><td>需单独桥接</td><td>原生支持</td><td>共享向量空间 [S04, S10]</td></tr>
+          <tr><td>新品冷启动</td><td>可编码，质量受限</td><td>图文联合编码更稳</td><td>文本信号补视觉不足 [S10, S19]</td></tr>
+          <tr><td>域间泛化（实拍 vs 棚拍）</td><td>弱，需域自适应 [S08]</td><td>CLIP 预训练提供跨域先验</td><td>大规模图文对覆盖多域 [S04, S08]</td></tr>
+          <tr><td>精确查重</td><td>局部特征更精确</td><td>不占优</td><td>指纹哈希更快更准 [S02, S06]</td></tr>
+          <tr><td>细粒度变体区分</td><td>依赖硬负例策略</td><td>需 SFT + late interaction</td><td>Block-SCL [S14]、ColPali [S31]</td></tr>
+          <tr><td>推理延迟</td><td>CNN 较快</td><td>ViT 较重，需量化</td><td>工程权衡，非范式劣势</td></tr>
+        </tbody>
+      </table>
+
+      <h2>收益集中在三个区间</h2>
+      <p>第一，<span class="hl">长尾区间</span>。CLIP/ALIGN 在数十亿图文对上预训练，覆盖了传统分类标签无法触及的长尾概念。对长尾品类的召回提升是多模态 embedding 最稳定的收益 [S04, S05]。第二，<span class="hl">跨模态区间</span>。用户用文字描述搜图、用图搜文、用图文混合 query 检索，这些在纯视觉空间里需要额外桥接，在共享空间里是原生操作 [S10]。淘宝 KARMA 的多模态对齐直接服务个性化搜索 [S10]。第三，<span class="hl">冷启动区间</span>。新品没有行为数据但有图文，多模态 embedding 可以直接编码上线，图方法和协同过滤做不到 [S09, S19]。</p>
+
+      <h2>传统方法仍然占优的场景</h2>
+      <p>精确查重（同一张图的副本检测）用感知哈希或局部特征指纹更快更准，不需要语义嵌入 [S02, S06]。极端低延迟场景（端侧检索、离线检索）中轻量 CNN + PQ 仍是务实选择。对视觉细节极度敏感的任务（面料纹理、印花精度）如果文本描述不可靠，DINOv2 式纯视觉自监督可能比 CLIP 式图文对齐更合适 [S13]。</p>
+
+      <div class="callout">
+        <p><strong>一句话判断</strong>，多模态 embedding 的收益是"语义召回 + 跨模态 + 长尾冷启动"的三重叠加，代价是更重的编码器和更复杂的训练管线。精确查重和极端低延迟场景传统方法仍占优。</p>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 07</div>
+      <h1>成本与 ROI 框架：训练、数据与服务的真实代价</h1>
+      <p class="lead">多模态 embedding 的成本不是单一数字。它分布在训练算力、数据构建和服务基础设施三个环节，每个环节的投入随规模非线性增长。ROI 判断必须把收益（召回/转化提升带来的 GMV）和全链路成本放在一起算。</p>
+
+      <table class="compact">
+        <thead>
+          <tr><th>成本项</th><th>预训练</th><th>领域 SFT</th><th>线上服务</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>GPU 算力</td><td>极高（CLIP 级 = 数百 GPU·日）</td><td>中（数 GPU·日）</td><td>中（query 编码需 GPU）</td></tr>
+          <tr><td>数据构建</td><td>亿级图文对（爬取/采购）</td><td>商品图文对 + 硬负例标注</td><td>点击日志隐式反馈</td></tr>
+          <tr><td>向量索引内存</td><td>不适用</td><td>不适用</td><td>亿级 × 512dim × PQ ≈ 数十 GB</td></tr>
+          <tr><td>索引构建时间</td><td>不适用</td><td>不适用</td><td>小时级（全量）</td></tr>
+          <tr><td>维护成本</td><td>低（一次性）</td><td>中（迭代周期）</td><td>高（模型/索引/监控）</td></tr>
+        </tbody>
+      </table>
+
+      <h2>训练成本：预训练 vs SFT 的量级差</h2>
+      <p>从零训练 CLIP 级模型需要数百 GPU 运行数日到数周，这是绝大多数电商团队不会也不该自己做的。现实路径是用开源预训练模型（CLIP、SigLIP、DINOv2 或社区电商微调版）做领域 SFT。SFT 的算力成本比预训练低一两个数量级，核心成本转移到数据构建：商品图文对的清洗、硬负例的挖掘和人工标注的质检 [S03, S14]。Amazon 的多模态商品搜索研究专门讨论了在线文本清洗对数据质量的影响 [S20]。</p>
+
+      <h2>服务成本：向量索引是内存大户</h2>
+      <p>亿级商品库 × 512 维浮点向量 ≈ 200 GB 原始向量。PQ 量化可压缩到 1/8-1/32，但召回率随之下降。HNSW 索引的图结构本身也占内存。Query 编码需要 GPU 做 ViT 推理，单次编码延迟在毫秒级，但高 QPS 下需要 GPU 池。索引更新（新品上新）的频率决定是全量重建还是增量插入，前者停机风险高，后者工程复杂度大。京东实时图搜系统公开了这些工程权衡 [S06]。</p>
+
+      <h2>ROI 判断框架</h2>
+      <p>ROI = （召回提升 × 转化提升 × 图搜贡献 GMV） / （训练 GPU 成本 + 数据标注成本 + 服务基础设施成本 + 维护人力）。关键判断不是绝对数字，而是边际：从无图搜到有图搜的边际收益远大于从 CNN 召回升级到多模态召回的边际收益。升级的 ROI 取决于长尾品类在 GMV 中的占比，长尾占比越高，多模态 embedding 的边际收益越大。如果商品库以头部标准品为主且精确查重已满足需求，升级 ROI 可能为负。</p>
+
+      <figure>
+        <svg viewBox="0 0 1000 340" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100%" height="100%" fill="#f5f4ed"/>
+          <text x="64" y="40" fill="#1B365D" font-size="15" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  3</text>
+          <text x="188" y="40" fill="#504e49" font-size="15" font-family="JetBrains Mono" letter-spacing="3">ROI vs SCALE: WHEN MULTIMODAL PAYS OFF</text>
+          <line x1="64" y1="56" x2="936" y2="56" stroke="#1B365D" stroke-width="1"/>
+          <line x1="100" y1="280" x2="900" y2="280" stroke="#504e49" stroke-width="1.5"/>
+          <line x1="100" y1="280" x2="100" y2="90" stroke="#504e49" stroke-width="1.5"/>
+          <text x="900" y="300" text-anchor="middle" fill="#504e49" font-size="13" font-family="TsangerJinKai02">长尾品类 GMV 占比 →</text>
+          <text x="78" y="185" text-anchor="middle" fill="#504e49" font-size="13" font-family="TsangerJinKai02" transform="rotate(-90 78 185)">边际 ROI</text>
+          <path d="M100 260 C300 250 500 180 900 100" fill="none" stroke="#1B365D" stroke-width="2.5"/>
+          <circle cx="100" cy="260" r="5" fill="#1B365D"/>
+          <text x="124" y="220" fill="#6b6a64" font-size="12" font-family="TsangerJinKai02">头部标准品为主：升级 ROI 低</text>
+          <circle cx="500" cy="180" r="5" fill="#1B365D"/>
+          <text x="430" y="158" fill="#504e49" font-size="12" font-family="TsangerJinKai02">均衡品类：ROI 由正转显著</text>
+          <circle cx="850" cy="115" r="5" fill="#1B365D"/>
+          <text x="700" y="108" fill="#1B365D" font-size="12" font-family="TsangerJinKai02" font-weight="500">长尾为主：多模态收益最大</text>
+          <line x1="300" y1="280" x2="300" y2="90" stroke="#d8d4c7" stroke-width="1" stroke-dasharray="4 3"/>
+          <text x="300" y="298" text-anchor="middle" fill="#6b6a64" font-size="11" font-family="JetBrains Mono">break-even</text>
+          <text x="64" y="326" fill="#504e49" font-size="13" font-family="TsangerJinKai02">判断关键：长尾 GMV 占比越高，多模态 embedding 相对传统方法的边际收益越大</text>
+        </svg>
+        <figcaption>Figure 3. ROI 与长尾 GMV 占比的关系示意。break-even 点取决于具体成本结构，但方向明确：长尾占比高的平台升级收益最大，头部标准品为主的平台边际收益有限。</figcaption>
+      </figure>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 08</div>
+      <h1>后训练 SFT 范式：是否 work</h1>
+      <p class="lead">SFT（监督微调）是多模态 embedding 后训练的主力路线。结论先行：领域 SFT 的公开证据更稳定，机制清晰，是当前最可靠的后训练方法。</p>
+
+      <h2>领域自适应 SFT：在商品图文对上继续对比训练</h2>
+      <p>基本做法是拿 CLIP/SigLIP 预训练权重，在商品库的图文对上继续对比训练，加入从商品库挖掘的硬负例 [S03, S04, S07]。Block-SCL 在商品匹配上验证了监督对比学习的分块策略增益 [S14]。这条路线的机制很直接：预训练空间覆盖通用概念，但商品库的分布（品类、风格、价格段）与互联网图文对不同，SFT 把空间调整到业务分布上。</p>
+
+      <h2>指令化嵌入微调</h2>
+      <p>MagicLens 用自监督方式训练图像检索，支持开放式指令（"找同款但更便宜的"），把检索从纯相似度推进到指令条件化 [S32]。VLM2Vec 在 MMEB 上证明 VLM 需要专门的指令化嵌入训练才能变成有效的 embedding 模型 [S19]。LaME 用信息瓶颈在 latent 空间做"思考"来提升嵌入质量 [S28]。这些工作的共同点是：SFT 不只是"继续训练"，而是把任务结构（指令、偏好、约束）编码进训练目标。</p>
+
+      <h2>SFT 是否 work：证据稳定，但有三个风险</h2>
+      <p>公开实验显示，领域 SFT 在商品检索 benchmark 上通常优于零样本 CLIP 或通用表征 [S10, S14, S19, S24]。SFT work 的原因是：对比学习有明确的优化信号（正例靠近、负例远离），商品库提供了大量天然正负例，机制和预期一致。但三个风险需要管理：</p>
+      <ul>
+        <li><span class="hl">点击偏置</span>：用点击日志构造正例会继承位置偏置和流行度偏置，SFT 把偏置固化进 embedding。</li>
+        <li><span class="hl">灾难性遗忘</span>：纯领域数据微调会丢失预训练空间的通用语义。解法是混合领域数据和通用数据。</li>
+        <li><span class="hl">硬负例过拟合</span>：过度依赖 mined hard negative 会让模型对挖掘策略过拟合。解法是周期性重新挖掘或在线挖掘。</li>
+      </ul>
+
+      <h2>SFT 的最佳实践</h2>
+      <p>混合训练数据（领域商品图文对 + 通用图文对），多任务目标（对比 + 分类 + 匹配），周期性硬负例重挖掘，用 hold-out 商品集做离线回归。淘宝 KARMA 的知识-动作正则化就是一种约束 SFT 质量的工程方案 [S10]。REVISION 把反思意图挖掘引入 SFT 数据构造，提示数据质量比数据量更关键 [S25]。</p>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 09</div>
+      <h1>后训练 RL 范式：是否 work</h1>
+      <p class="lead">RL 用于多模态 embedding 的后训练是一个有吸引力但证据更弱的路线。结论先行：RL 在精排和生成式检索上有收益，在纯 embedding 表征上的收益小于 SFT 且稳定性存疑。</p>
+
+      <h2>为什么想把 RL 用在 embedding 上</h2>
+      <p>SFT 优化的是对比损失（正例靠近、负例远离），但线上真正关心的是排序指标（NDCG、MRR、Recall@K）。对比损失和排序指标之间有 gap：一个样本在对比损失上表现好不代表它在 top-K 排序中位置正确。RL 的吸引力在于可以直接优化排序相关的奖励信号。</p>
+
+      <h2>三条 RL 路线</h2>
+      <p><span class="hl">RAFT</span>（Reward rAnked FineTuning）用奖励模型给生成样本打分，在 top 样本上微调 [S22]。它的机制是"采样-打分-选优-微调"循环，可以用任意奖励函数。<span class="hl">DPO 适配检索</span>把直接偏好优化从语言模型迁移到检索：把相关商品和不相关商品构造成偏好对，用 DPO 目标微调 embedding 模型，目前缺乏电商图搜场景的公开实验验证。<span class="hl">在线 RL</span>用用户点击/购买作为奖励信号，在线更新 embedding。理论上最直接，但工程复杂度和分布漂移风险最高。</p>
+
+      <figure>
+        <svg viewBox="0 0 1000 320" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100%" height="100%" fill="#f5f4ed"/>
+          <text x="64" y="40" fill="#1B365D" font-size="15" font-weight="600" font-family="JetBrains Mono" letter-spacing="3">FIGURE  4</text>
+          <text x="188" y="40" fill="#504e49" font-size="15" font-family="JetBrains Mono" letter-spacing="3">POST-TRAINING PARADIGM MAP</text>
+          <line x1="64" y1="56" x2="936" y2="56" stroke="#1B365D" stroke-width="1"/>
+          <rect x="70" y="100" width="200" height="70" rx="10" fill="#EEF2F7" stroke="#1B365D" stroke-width="1.6"/>
+          <text x="170" y="128" text-anchor="middle" fill="#1B365D" font-size="16" font-family="TsangerJinKai02" font-weight="500">预训练</text>
+          <text x="170" y="150" text-anchor="middle" fill="#504e49" font-size="12" font-family="JetBrains Mono">CLIP / SigLIP</text>
+          <text x="170" y="164" text-anchor="middle" fill="#504e49" font-size="12" font-family="JetBrains Mono">图文对比学习</text>
+          <path d="M270 135 L320 135" fill="none" stroke="#1B365D" stroke-width="1.8"/>
+          <path d="M314 130 L322 135 L314 140" fill="none" stroke="#1B365D" stroke-width="1.8"/>
+          <rect x="320" y="100" width="220" height="70" rx="10" fill="#faf9f5" stroke="#1B365D" stroke-width="1.8"/>
+          <text x="430" y="126" text-anchor="middle" fill="#1B365D" font-size="16" font-family="TsangerJinKai02" font-weight="500">SFT（主力）</text>
+          <text x="430" y="146" text-anchor="middle" fill="#504e49" font-size="12" font-family="JetBrains Mono">领域对比 + 硬负例</text>
+          <text x="430" y="162" text-anchor="middle" fill="#1B365D" font-size="11" font-family="TsangerJinKai02">证据稳定 · 风险可控</text>
+          <path d="M540 135 L590 135" fill="none" stroke="#504e49" stroke-width="1.8"/>
+          <path d="M584 130 L592 135 L584 140" fill="none" stroke="#504e49" stroke-width="1.8"/>
+          <rect x="590" y="100" width="220" height="70" rx="10" fill="#faf9f5" stroke="#504e49" stroke-width="1.5" stroke-dasharray="5 3"/>
+          <text x="700" y="126" text-anchor="middle" fill="#3d3d3a" font-size="16" font-family="TsangerJinKai02" font-weight="500">RL（增量）</text>
+          <text x="700" y="146" text-anchor="middle" fill="#504e49" font-size="12" font-family="JetBrains Mono">RAFT / DPO / 在线</text>
+          <text x="700" y="162" text-anchor="middle" fill="#6b6a64" font-size="11" font-family="TsangerJinKai02">精排有效 · 纯嵌入存疑</text>
+          <rect x="320" y="210" width="490" height="56" rx="8" fill="#faf9f5" stroke="#d8d4c7" stroke-width="1"/>
+          <text x="565" y="234" text-anchor="middle" fill="#504e49" font-size="13" font-family="TsangerJinKai02">收益判断：SFT 解决"空间形状"，RL 尝试解决"排序位置"</text>
+          <text x="565" y="252" text-anchor="middle" fill="#6b6a64" font-size="12" font-family="JetBrains Mono">SFT is the workhorse; RL is incremental on top of SFT</text>
+          <text x="64" y="300" fill="#504e49" font-size="13" font-family="TsangerJinKai02">RL 的奖励信号稀疏、embedding 空间高维，纯表征上的增益不如精排和生成式检索稳定</text>
+        </svg>
+        <figcaption>Figure 4. 后训练范式图谱。SFT 是主力且公开证据更稳定；RL 在 SFT 基础上尝试直接优化排序指标，但在纯 embedding 表征上的稳定增益证据不足。</figcaption>
+      </figure>
+
+      <h2>RL 是否 work：分场景诚实评估</h2>
+      <table>
+        <thead>
+          <tr><th>任务类型</th><th>RL 是否 work</th><th>证据强度</th><th>原因</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>生成式检索 / 重排（LLM-based）</td><td>有收益</td><td>B（预印本）</td><td>RL 优化生成序列，奖励信号密集 [S22]</td></tr>
+          <tr><td>精排（cross-attention 重排）</td><td>可能有收益</td><td>B/C</td><td>排序目标可直接优化，但需 SFT 基座</td></tr>
+          <tr><td>纯 embedding 召回（双塔）</td><td>增益小且不稳定</td><td>弱</td><td>奖励稀疏、空间高维、reward hacking 风险</td></tr>
+          <tr><td>在线 RL（点击反馈）</td><td>理论可行，工程风险高</td><td>D</td><td>分布漂移、延迟反馈、探索-利用矛盾</td></tr>
+        </tbody>
+      </table>
+
+      <h2>RL 的三个核心风险</h2>
+      <p>第一，<span class="hl">reward hacking</span>。模型学会利用奖励信号的漏洞而非真正改善检索。例如奖励模型偏好某些品类的商品，embedding 会系统性偏移。第二，<span class="hl">分布漂移</span>。在线 RL 的反馈有延迟，embedding 更新后用户行为分布变化，形成非平稳优化。第三，<span class="hl">训练不稳定</span>。embedding 空间是高维连续空间，RL 的策略梯度方差大，训练容易震荡。RAFT 用"选优微调"绕过了策略梯度的直接优化，稳定性更好，但本质上更接近 SFT 而非真正的 RL [S22]。</p>
+
+      <div class="callout">
+        <p><strong>诚实结论</strong>，截至 2026-07-05，SFT 是多模态 embedding 后训练的可靠主力，RL 是在 SFT 基座上的增量尝试。RL 在生成式检索和精排上有公开收益证据，在纯 embedding 召回上的稳定增益证据不足。把 RL 写成"多模态 embedding 的标配后训练"不准确；把它写成"完全没用"也不准确。正确表述是：RL 的收益与任务类型强相关，纯表征学习上 SFT 仍是第一选择。</p>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 10</div>
+      <h1>评测：离线 benchmark 与线上指标的裂缝</h1>
+      <p class="lead">评测是多模态图搜最容易自欺的环节。离线 benchmark 的 Recall@K 提升不等于线上转化提升，这个 gap 是工程决策的核心风险。</p>
+
+      <h2>离线评测</h2>
+      <p>标准离线指标是 Recall@K、MRR、NDCG，在人工标注或行为日志构造的评测集上计算。JDsearch 提供了真实查询和完整交互的电商搜索数据集 [S15]。From Pixels to Purchase 构建了分类解耦的图搜评测 [S26]。VLM2Vec 的 MMEB 把多模态嵌入评测标准化为跨任务 benchmark [S19]。MME 和 MMMU 覆盖更广的多模态理解能力 [S33, S34]，但它们测的是理解而非检索，不能直接用于图搜表征评测。</p>
+
+      <h2>线上评测</h2>
+      <p>线上指标包括图搜入口点击率（CTR）、图搜到详情页转化率（CVR）、图搜贡献 GMV、图搜到购买率。A/B 测试是标准方法，但需要注意图搜入口位置变化带来的流量偏置。京东实时图搜系统公开了线上指标体系 [S06]。</p>
+
+      <h2>离线-线上 gap 的三个来源</h2>
+      <p>第一，<span class="hl">位置偏置</span>。离线 Recall@K 假设用户看完全部 top-K，线上用户只看前几位。离线第 20 位的提升在线上可能完全不可见。第二，<span class="hl">业务过滤</span>。线上结果经过库存、价格、区域、多样性过滤后，离线排序可能被打乱。第三，<span class="hl">用户意图</span>。离线评测集假设查询意图固定，线上用户拍同一张图可能想要同款也可能想要相似款，意图分布本身在变 [S26]。REVISION 把反思意图挖掘引入评测正是为了缩小这个 gap [S25]。</p>
+
+      <div class="note">
+        <p><strong>最佳实践</strong>，离线评测用于筛回归（防止明显退化），线上 A/B 用于做发布决策。维护一个固定的边界 case 回归集（低清图、长尾品类、跨类目相似品、遮挡/截断图），每次模型迭代必须通过。离线 Recall@K 提升 &gt;5% 才值得开 A/B，否则线上噪声可能淹没信号。</p>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 11</div>
+      <h1>前沿问题与选型决策框架</h1>
+      <p class="lead">最后把全文的判断收敛为一个可执行的选型框架，并标注尚未解决的前沿问题。</p>
+
+      <h2>选型决策框架</h2>
+      <table>
+        <thead>
+          <tr><th>场景</th><th>推荐方案</th><th>理由</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>精确查重（同图副本）</td><td>感知哈希 / 局部特征指纹</td><td>更快更准，不需语义 [S02]</td></tr>
+          <tr><td>语义相似检索，&lt;100 万 SKU</td><td>CLIP + 领域 SFT</td><td>收益显著，成本可控</td></tr>
+          <tr><td>亿级 SKU，延迟敏感</td><td>SigLIP + PQ + HNSW 双塔</td><td>召回效率与内存平衡 [S06, S07]</td></tr>
+          <tr><td>需要文搜图 / 图文混合搜</td><td>多模态双塔</td><td>共享空间原生支持 [S04, S10]</td></tr>
+          <tr><td>需要细粒度变体区分</td><td>双塔召回 + late interaction 精排</td><td>ColPali 式 token 级匹配 [S31]</td></tr>
+          <tr><td>新品冷启动为主</td><td>多模态 embedding（图文联合）</td><td>不依赖行为数据 [S19]</td></tr>
+          <tr><td>后训练选择</td><td>先 SFT，精排/生成式检索再试 RL</td><td>SFT 证据更稳定，RL 增量且场景相关</td></tr>
+        </tbody>
+      </table>
+
+      <h2>尚未解决的前沿问题</h2>
+      <p><span class="hl">更大不等于更好</span>。在纯检索任务上，embedding 维度和模型大小存在收益递减点，超过后内存和延迟成本上升但 Recall@K 不再提升。找到这个拐点是工程优化的重要课题。<span class="hl">域间泛化</span>仍依赖域自适应或混合数据策略，CLIP 预训练的跨域先验不能完全消除用户实拍与棚拍的 gap [S08]。<span class="hl">偏置放大</span>：多模态 embedding 继承预训练数据和点击日志的双重偏置，长尾品类和少数风格可能被系统性低估。<span class="hl">成本可持续性</span>：随着商品库增长和模型迭代，向量索引重建成本和 GPU 服务成本持续上升，需要工程上做索引分片和增量更新。<span class="hl">原生多模态 embedding</span>：Gemini Embedding 2 代表了从"图文对齐"到"原生多模态"的下一代方向 [S27]，LaME 的信息瓶颈思路 [S28] 和 UniNote 的统一表征+排序 [S35] 都指向更紧凑的嵌入空间，但这些工作截至 2026-07-05 均为预印本。</p>
+
+      <div class="callout">
+        <p><strong>一句话收束</strong>，多模态 embedding 把电商图搜从特征匹配推进到语义检索，在长尾、跨模态和冷启动上收益显著，代价是更重的训练管线和服务基础设施。后训练上 SFT 是可靠主力，RL 是场景相关的增量。选型的核心判断不是"要不要上多模态"，而是"长尾 GMV 占比是否足够让边际收益覆盖全链路成本"。</p>
+      </div>
+    </section>
+
+    <section class="chapter">
+      <div class="chapter-num">CHAPTER 12</div>
+      <h1>Further Reading 与来源</h1>
+      <p class="lead">如果只读 5 篇，建议从 CLIP、京东实时图搜系统、KARMA、VLM2Vec 和 Block-SCL 开始。它们分别覆盖共享图文空间、工业图搜系统、多模态个性化搜索、VLM-to-embedding 和细粒度商品匹配。</p>
+
+      <h2>最值得先读的 5 个来源</h2>
+      <table>
+        <thead>
+          <tr><th>优先级</th><th>来源</th><th>为什么先读</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>CLIP [S04]</td><td>理解图文对齐和共享向量空间的入口。</td></tr>
+          <tr><td>2</td><td>京东实时图搜系统 [S06]</td><td>最早的电商图搜工业系统公开材料，理解 pipeline 工程权衡。</td></tr>
+          <tr><td>3</td><td>KARMA [S10]</td><td>理解多模态对齐如何进入个性化搜索主链路。</td></tr>
+          <tr><td>4</td><td>VLM2Vec [S19]</td><td>理解为什么 VLM 不等于 embedding 模型，以及如何转换。</td></tr>
+          <tr><td>5</td><td>Block-SCL [S14]</td><td>理解细粒度商品匹配的监督对比学习策略。</td></tr>
+        </tbody>
+      </table>
+
+      <h2>完整来源索引</h2>
+      <div class="references">
+        <p><span class="ref-id">S01</span> Representation Learning with Contrastive Predictive Coding. <a href="https://arxiv.org/abs/1807.03748">arxiv.org/abs/1807.03748</a></p>
+        <p><span class="ref-id">S02</span> Distinctive Image Features from Scale-Invariant Keypoints (SIFT). <a href="https://link.springer.com/article/10.1023/B:VISI.0000029664.99615.94">link.springer.com</a></p>
+        <p><span class="ref-id">S03</span> FaceNet: A Unified Embedding for Face Recognition and Clustering. <a href="https://arxiv.org/abs/1503.03832">arxiv.org/abs/1503.03832</a></p>
+        <p><span class="ref-id">S04</span> Learning Transferable Visual Models From Natural Language Supervision (CLIP). <a href="https://arxiv.org/abs/2103.00020">arxiv.org/abs/2103.00020</a></p>
+        <p><span class="ref-id">S05</span> Scaling Up Visual and Vision-Language Representation Learning With Noisy Text Supervision (ALIGN). <a href="https://arxiv.org/abs/2102.05918">arxiv.org/abs/2102.05918</a></p>
+        <p><span class="ref-id">S06</span> The Design and Implementation of a Real Time Visual Search System on JD E-commerce Platform. <a href="https://arxiv.org/abs/1908.07389">arxiv.org/abs/1908.07389</a></p>
+        <p><span class="ref-id">S07</span> Sigmoid Loss for Language Image Pre-Training (SigLIP). <a href="https://arxiv.org/abs/2303.15343">arxiv.org/abs/2303.15343</a></p>
+        <p><span class="ref-id">S08</span> Scaling Cross-Domain Content-Based Image Retrieval for E-commerce Snap and Search Application. <a href="https://arxiv.org/abs/2204.11593">arxiv.org/abs/2204.11593</a></p>
+        <p><span class="ref-id">S09</span> Graph Convolutional Neural Networks for Web-Scale Recommender Systems (PinSage). <a href="https://arxiv.org/abs/1806.01973">arxiv.org/abs/1806.01973</a></p>
+        <p><span class="ref-id">S10</span> KARMA: Knowledge-Action Regularized Multimodal Alignment for Personalized Search at Taobao. <a href="https://arxiv.org/abs/2603.22779">arxiv.org/abs/2603.22779</a></p>
+        <p><span class="ref-id">S11</span> AIGQ: An End-to-End Hybrid Generative Architecture for E-commerce Query Recommendation. <a href="https://arxiv.org/abs/2603.19710">arxiv.org/abs/2603.19710</a></p>
+        <p><span class="ref-id">S12</span> A Generative Re-ranking Model for List-level Multi-objective Optimization at Taobao. <a href="https://arxiv.org/abs/2505.07197">arxiv.org/abs/2505.07197</a></p>
+        <p><span class="ref-id">S13</span> DINOv2: Learning Robust Visual Features without Supervision. <a href="https://arxiv.org/abs/2304.07193">arxiv.org/abs/2304.07193</a></p>
+        <p><span class="ref-id">S14</span> Block-SCL: Blocking Matters for Supervised Contrastive Learning in Product Matching. <a href="https://arxiv.org/abs/2207.02008">arxiv.org/abs/2207.02008</a></p>
+        <p><span class="ref-id">S15</span> JDsearch: A Personalized Product Search Dataset with Real Queries and Full Interactions. <a href="https://arxiv.org/abs/2305.14810">arxiv.org/abs/2305.14810</a></p>
+        <p><span class="ref-id">S16</span> Monolith: Real Time Recommendation System With Collisionless Embedding Table. <a href="https://arxiv.org/abs/2209.07663">arxiv.org/abs/2209.07663</a></p>
+        <p><span class="ref-id">S17</span> Large Language Model based Long-tail Query Rewriting in Taobao Search. <a href="https://arxiv.org/abs/2311.03758">arxiv.org/abs/2311.03758</a></p>
+        <p><span class="ref-id">S18</span> Adaptive Domain Scaling for Personalized Sequential Modeling in Recommenders (ADS). <a href="https://arxiv.org/abs/2502.05523">arxiv.org/abs/2502.05523</a></p>
+        <p><span class="ref-id">S19</span> VLM2Vec: Training Vision-Language Models for Massive Multimodal Embedding Tasks. <a href="https://arxiv.org/abs/2410.05160">arxiv.org/abs/2410.05160</a></p>
+        <p><span class="ref-id">S20</span> Multimodal Learning with Online Text Cleaning for E-commerce Product Search (Amazon). <a href="https://www.amazon.science/publications/multimodal-learning-with-online-text-cleaning-for-e-commerce-product-search">amazon.science</a></p>
+        <p><span class="ref-id">S21</span> Web-scale Semantic Product Search with Large Language Models (Amazon). <a href="https://www.amazon.science/publications/web-scale-semantic-product-search-with-large-language-models">amazon.science</a></p>
+        <p><span class="ref-id">S22</span> RAFT: Reward rAnked FineTuning for Generative Foundation Model Alignment. <a href="https://arxiv.org/abs/2304.06767">arxiv.org/abs/2304.06767</a></p>
+        <p><span class="ref-id">S23</span> Large-Scale Product Retrieval with Weakly Supervised Representation Learning. <a href="https://arxiv.org/abs/2208.00955">arxiv.org/abs/2208.00955</a></p>
+        <p><span class="ref-id">S24</span> PinCLIP: Large-scale Foundational Multimodal Representation at Pinterest. <a href="https://arxiv.org/abs/2603.03544">arxiv.org/abs/2603.03544</a></p>
+        <p><span class="ref-id">S25</span> REVISION: Reflective Intent Mining and Online Reasoning Auxiliary for E-commerce Visual Search System Optimization. <a href="https://arxiv.org/abs/2510.22739">arxiv.org/abs/2510.22739</a></p>
+        <p><span class="ref-id">S26</span> From Pixels to Purchase: Building and Evaluating a Taxonomy-Decoupled Visual Search Engine for Home Goods E-commerce. <a href="https://arxiv.org/abs/2601.11769">arxiv.org/abs/2601.11769</a></p>
+        <p><span class="ref-id">S27</span> Gemini Embedding 2: A Native Multimodal Embedding Model from Gemini. <a href="https://arxiv.org/abs/2605.27295">arxiv.org/abs/2605.27295</a></p>
+        <p><span class="ref-id">S28</span> LaME: Learning to Think in Latent Space for Multimodal Embedding via Information Bottleneck. <a href="https://arxiv.org/abs/2606.13061">arxiv.org/abs/2606.13061</a></p>
+        <p><span class="ref-id">S29</span> PDD Holdings FY2025 Form 20-F. Regulatory filing. <a href="https://www.sec.gov/Archives/edgar/data/1737806/000110465926050727/pdd-20251231x20f.htm">sec.gov</a></p>
+        <p><span class="ref-id">S30</span> ColBERTv2: Effective and Efficient Retrieval via Lightweight Late Interaction. <a href="https://arxiv.org/abs/2112.01488">arxiv.org/abs/2112.01488</a></p>
+        <p><span class="ref-id">S31</span> ColPali: Efficient Document Retrieval with Vision Language Models. <a href="https://arxiv.org/abs/2407.01449">arxiv.org/abs/2407.01449</a></p>
+        <p><span class="ref-id">S32</span> MagicLens: Self-Supervised Image Retrieval with Open-Ended Instructions. <a href="https://arxiv.org/abs/2403.19651">arxiv.org/abs/2403.19651</a></p>
+        <p><span class="ref-id">S33</span> MME: A Comprehensive Evaluation Benchmark for Multimodal Large Language Models. <a href="https://arxiv.org/abs/2306.13394">arxiv.org/abs/2306.13394</a></p>
+        <p><span class="ref-id">S34</span> MMMU: A Massive Multi-disciplinary Multimodal Understanding and Reasoning Benchmark. <a href="https://arxiv.org/abs/2311.16502">arxiv.org/abs/2311.16502</a></p>
+        <p><span class="ref-id">S35</span> UniNote: A Unified Embedding Model for Multimodal Representation and Ranking. <a href="https://arxiv.org/abs/2605.29287">arxiv.org/abs/2605.29287</a></p>
+      </div>
+      <p class="source-note">完整证据等级、解释边界和来源映射见同目录 `sources.md`、`data/source-map.tsv` 与 `data/pipeline-map.tsv`。本文所有时间敏感事实按 2026-07-05 公开页面复核。</p>
+    </section>
+  </main>
+</body>
+</html>
