@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>大模型强化学习算法全景</title>
 <meta name="author" content="Codex">
-<meta name="date" content="2026-05-16">
+<meta name="date" content="2026-06-26">
 <style>
 @font-face{font-family:Tsanger;src:url("../assets/fonts/TsangerJinKai02-W04.ttf") format("truetype"),
        url("https://cdn.jsdelivr.net/gh/tw93/Kami@main/assets/fonts/TsangerJinKai02-W04.ttf") format("truetype");font-weight:400}
@@ -58,18 +58,25 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <h1>大模型强化学习算法全景</h1>
 <p class='lead'>从 <span class='latin'>RLHF</span>、<span class='latin'>RLAIF</span>、<span class='latin'>RLVR</span> 到 <span class='latin'>DPO</span>、<span class='latin'>PPO</span>、<span class='latin'>GRPO</span>、<span class='latin'>DAPO</span>、<span class='latin'>GSPO</span>、<span class='latin'>CISPO</span>、<span class='latin'>VAPO</span> 的公式化理解与工程判据</p>
 <ul class='bullets'>
-<li>范围截至 2026-05-16，重点覆盖国际论文、国内大厂 <span class='latin'>recipe</span>、开源训练系统与推理模型后训练实践。</li>
+<li>范围截至 2026-06-26，重点覆盖国际论文、国内大厂 <span class='latin'>recipe</span>、开源训练系统与推理模型后训练实践。</li>
 <li>所有核心目标函数均以 <span class='latin'>LaTeX</span> 编译为矢量公式，便于 <span class='latin'>PDF</span> 与 <span class='latin'>PPTX</span> 审阅。</li>
 </ul>
 <div class='callout'>主线问题：给定一个预训练语言模型，如何用人类偏好、<span class='latin'>AI</span> 反馈或可验证奖励，稳定地改变整段文本分布而不摧毁已有能力。</div>
-<div class='page'>01 / 67</div>
+<div class='page'>01 / 72</div>
+</section><section class='slide standard'>
+<div class='eyebrow'>Evidence Boundary</div>
+<h2>证据等级比算法名更重要</h2>
+<p class='lead'>本课件把论文、官方技术报告和官方仓库作为主要证据；<span class='latin'>benchmark</span> 提升默认视为作者报告结果，除非有独立复现或官方实现交叉支持。</p>
+<table><tr><td>证据层级</td><td>可支持的说法</td><td>不能直接支持的说法</td></tr><tr><td>论文原文</td><td>目标函数、实验设置、作者报告结果</td><td>跨模型、跨数据集的普遍最优</td></tr><tr><td>官方技术报告</td><td>工业 <span class='latin'>recipe</span>、数据流程、训练阶段</td><td>未披露实现细节的因果归因</td></tr><tr><td>官方仓库</td><td>可用实现、配置入口、系统边界</td><td>论文数字在任意环境可复现</td></tr><tr><td>第三方复现</td><td>实现敏感性、失败模式、工程差异</td><td>替代原论文的定义来源</td></tr></table>
+<div class='callout'>证据日期：2026-06-26。2026 年预印本更新很快，本文把它们作为前沿线索和工程假设，不把单篇论文的 <span class='latin'>SOTA</span> 声称写成行业定论。</div>
+<div class='page'>02 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>全景框架</div>
 <h2><span class='latin'>LLM</span> 强化学习不是单一算法，而是三类目标函数的合流</h2>
 <p class='lead'>同一批算法可以按学习信号分为显式奖励、隐式偏好、可验证奖励；按优化方式分为 <span class='latin'>on-policy</span>、<span class='latin'>offline</span>、<span class='latin'>iterative</span> <span class='latin'>SFT</span>。</p>
 <div class='cols'><div class='col'><h3>显式奖励 <span class='latin'>RL</span></h3><ul><li>先训练或定义奖励函数，再用 <span class='latin'>PPO</span>、<span class='latin'>RLOO</span>、<span class='latin'>GRPO</span>、<span class='latin'>DAPO</span>、<span class='latin'>GSPO</span> 等策略梯度更新。</li><li>优点是可在线采样、可探索；代价是 <span class='latin'>rollout</span>、<span class='latin'>KL</span>、方差和分布漂移都要管理。</li></ul></div><div class='col'><h3>隐式偏好优化</h3><ul><li><span class='latin'>DPO</span>、<span class='latin'>IPO</span>、<span class='latin'>KTO</span>、<span class='latin'>ORPO</span>、<span class='latin'>SimPO</span> 把偏好对直接变成分类或校准损失。</li><li>优点是简单稳定；代价是受离线数据覆盖、<span class='latin'>reference</span>、长度偏置和偏好噪声影响。</li></ul></div><div class='col'><h3>可验证推理 <span class='latin'>RL</span></h3><ul><li><span class='latin'>RLVR</span> 用规则、程序、单测、数学答案或 <span class='latin'>verifier</span> 直接给 <span class='latin'>reward</span>。</li><li>它推动了 <span class='latin'>DeepSeek-R1</span>、<span class='latin'>Kimi</span> <span class='latin'>k1.5</span>、<span class='latin'>DAPO</span>、<span class='latin'>CISPO</span>、<span class='latin'>GSPO</span>、<span class='latin'>VAPO</span> 等长 <span class='latin'>CoT</span> 系列。</li></ul></div></div>
 <div class='source'>Sources: IGPT, DPO, GRPO, R1, DAPO, GSPO</div>
-<div class='page'>02 / 67</div>
+<div class='page'>03 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>基础定义</div>
 <h2>从 <span class='latin'>MDP</span> 到语言模型，状态、动作和回报都被重新解释</h2>
@@ -82,7 +89,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>轨迹：整段输出 <span class='latin'>y_</span>{1:<span class='latin'>T</span>}，奖励可以只在末端给出，也可以在过程步骤给出。</li>
 <li>优势函数 <span class='latin'>A</span> 衡量某动作相对当前状态平均行为的增益，是几乎所有策略梯度算法的核心低方差信号。</li>
 </ul>
-<div class='page'>03 / 67</div>
+<div class='page'>04 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>KL 正则化 RLHF</div>
 <h2>语言模型后训练的核心约束是奖励最大化与分布保持的张力</h2>
@@ -95,13 +102,13 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>DPO</span> 的推导、<span class='latin'>PPO</span> 的 <span class='latin'>KL</span> <span class='latin'>penalty</span>、<span class='latin'>GRPO</span> 的 <span class='latin'>reference</span> <span class='latin'>KL</span> 都可看作这个约束目标的不同求解方式。</li>
 </ul>
 <div class='source'>Sources: IGPT, DPO, RLOO</div>
-<div class='page'>04 / 67</div>
+<div class='page'>05 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Reward Taxonomy</div>
 <h2>奖励信号的来源决定算法可承受的噪声和探索方式</h2>
 <table><tr><td>奖励来源</td><td>典型算法</td><td>优势</td><td>主要风险</td></tr><tr><td>人类偏好 <span class='latin'>RM</span></td><td><span class='latin'>PPO</span>、<span class='latin'>RLOO</span>、<span class='latin'>DPO</span></td><td>覆盖主观质量、安全、有用性</td><td>标注噪声、<span class='latin'>RM</span> 过优化、分布外外推</td></tr><tr><td><span class='latin'>AI</span> <span class='latin'>feedback</span></td><td><span class='latin'>RLAIF</span>、<span class='latin'>Constitutional</span> <span class='latin'>AI</span></td><td>规模化快，原则可控</td><td>裁判模型偏见、同源模型自证</td></tr><tr><td>规则或程序 <span class='latin'>verifier</span></td><td><span class='latin'>GRPO</span>、<span class='latin'>DAPO</span>、<span class='latin'>GSPO</span>、<span class='latin'>CISPO</span></td><td>稀疏但可信，适合数学代码</td><td>奖励稀疏、格式投机、长答案偏置</td></tr><tr><td>过程奖励 <span class='latin'>PRM</span></td><td><span class='latin'>PRM-PPO</span>、<span class='latin'>VAPO</span></td><td>能给中间步骤信用分配</td><td>步骤标注昂贵，<span class='latin'>verifier</span> 误差会传播</td></tr></table>
 <div class='source'>Sources: DRHF, CAI, R1, VAPO, REWARDBENCH</div>
-<div class='page'>05 / 67</div>
+<div class='page'>06 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Reward Modeling</div>
 <h2><span class='latin'>Bradley-Terry</span> 模型把相对偏好变成可优化的奖励差</h2>
@@ -114,14 +121,14 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>当偏好来自多个候选排序时，可用 <span class='latin'>Plackett-Luce</span> 或 <span class='latin'>listwise</span> <span class='latin'>ranking</span>，<span class='latin'>RRHF</span> 和 <span class='latin'>RAFT</span> 属于这一路线的简化工程化形态。</li>
 </ul>
 <div class='source'>Sources: DRHF, IGPT, DPO</div>
-<div class='page'>06 / 67</div>
+<div class='page'>07 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>SFT → RM → RL</div>
 <h2><span class='latin'>RLHF</span> <span class='latin'>pipeline</span> 的每一步都在限制下一步的可学习空间</h2>
 <p class='lead'><span class='latin'>SFT</span> 决定模型能否产生可接受候选；<span class='latin'>RM</span> 决定奖励几何；<span class='latin'>RL</span> 决定如何在不失稳的情况下移动分布。</p>
 <div class='cols'><div class='col'><h3><span class='latin'>SFT</span></h3><ul><li>把 <span class='latin'>foundation</span> <span class='latin'>model</span> 拉到 <span class='latin'>instruction-following</span> 流形。</li><li>数据质量决定后续 <span class='latin'>RL</span> 是否在合理邻域内搜索。</li></ul></div><div class='col'><h3><span class='latin'>RM</span> 或 <span class='latin'>verifier</span></h3><ul><li>把偏好、规则、单测或 <span class='latin'>AI</span> <span class='latin'>critique</span> 映射为标量。</li><li>奖励要有区分度，也要尽量难被利用。</li></ul></div><div class='col'><h3><span class='latin'>Policy</span> <span class='latin'>optimization</span></h3><ul><li><span class='latin'>PPO</span> 系列在线探索，<span class='latin'>DPO</span> 系列离线校准，<span class='latin'>GRPO</span> 系列用 <span class='latin'>group</span> <span class='latin'>baseline</span> 降低价值网络成本。</li><li>最终目标是改 <span class='latin'>response</span> 分布，不只是提高训练集 <span class='latin'>reward</span>。</li></ul></div></div>
 <div class='source'>Sources: IGPT, HH, CAI, R1</div>
-<div class='page'>07 / 67</div>
+<div class='page'>08 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>PPO</div>
 <h2><span class='latin'>PPO</span> 被采用是因为它用剪切 <span class='latin'>surrogate</span> 近似 <span class='latin'>trust</span> <span class='latin'>region</span></h2>
@@ -134,7 +141,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>LLM</span> 中 <span class='latin'>PPO</span> 通常还叠加 <span class='latin'>KL</span> <span class='latin'>penalty</span>、<span class='latin'>value</span> <span class='latin'>loss</span>、<span class='latin'>entropy</span> <span class='latin'>bonus</span>、<span class='latin'>reward</span> <span class='latin'>whitening</span> 和 <span class='latin'>rollout</span> <span class='latin'>buffer</span>。</li>
 </ul>
 <div class='source'>Sources: TRPO, PPO, IGPT</div>
-<div class='page'>08 / 67</div>
+<div class='page'>09 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>TRPO → PPO</div>
 <h2><span class='latin'>TRPO</span> 的约束优化解释了 <span class='latin'>PPO</span> 中 <span class='latin'>KL</span>、<span class='latin'>clip</span> 和 <span class='latin'>trust</span> <span class='latin'>region</span> 的来源</h2>
@@ -147,7 +154,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>当 <span class='latin'>rollout</span> 与训练步数过多时，<span class='latin'>r_t</span> 会快速离开 1 附近，<span class='latin'>PPO</span> 的有效梯度会塌缩。</li>
 </ul>
 <div class='source'>Sources: TRPO, PPO</div>
-<div class='page'>09 / 67</div>
+<div class='page'>10 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Advantage Estimation</div>
 <h2><span class='latin'>GAE</span> 与 <span class='latin'>value</span> <span class='latin'>model</span> 给 <span class='latin'>PPO</span> 低方差，也带来显存、算力和偏差</h2>
@@ -160,7 +167,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>GRPO</span>、<span class='latin'>RLOO</span>、<span class='latin'>ReMax</span>、<span class='latin'>REINFORCE++</span> 的共同动机之一，就是避免训练一个可靠 <span class='latin'>critic</span>。</li>
 </ul>
 <div class='source'>Sources: GAE, RLOO, RPP</div>
-<div class='page'>10 / 67</div>
+<div class='page'>11 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>PPO-RLHF Loss</div>
 <h2><span class='latin'>LLM-PPO</span> 的真实目标通常是四项损失的折中</h2>
@@ -174,7 +181,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>InstructGPT</span> 还使用预训练混合项缓解 <span class='latin'>alignment</span> <span class='latin'>tax</span>，这启发了后续的 <span class='latin'>SFT/RL</span> 混合训练。</li>
 </ul>
 <div class='source'>Sources: IGPT, PPO</div>
-<div class='page'>11 / 67</div>
+<div class='page'>12 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>REINFORCE</div>
 <h2>策略梯度本身并不复杂，难点在于基线、归一化和采样分布</h2>
@@ -186,7 +193,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>如果 <span class='latin'>reward</span> 是 <span class='latin'>response-level</span>，所有 <span class='latin'>token</span> 共享同一回报，长度和格式会影响梯度规模。</li>
 <li><span class='latin'>critic-free</span> 方法的核心差异就是如何构造 <span class='latin'>baseline</span> 与 <span class='latin'>normalization</span>。</li>
 </ul>
-<div class='page'>12 / 67</div>
+<div class='page'>13 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>RLOO</div>
 <h2><span class='latin'>RLOO</span> 用同一 <span class='latin'>prompt</span> 的其他样本作为 <span class='latin'>leave-one-out</span> 基线</h2>
@@ -199,7 +206,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>Back</span> <span class='latin'>to</span> <span class='latin'>Basics</span> 证明在不少 <span class='latin'>RLHF</span> 场景下，<span class='latin'>REINFORCE-style</span> 方法可以达到或超过 <span class='latin'>PPO</span>。</li>
 </ul>
 <div class='source'>Sources: RLOO</div>
-<div class='page'>13 / 67</div>
+<div class='page'>14 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>ReMax</div>
 <h2><span class='latin'>ReMax</span> 用 <span class='latin'>greedy</span> <span class='latin'>response</span> 的奖励作为确定性基线</h2>
@@ -212,7 +219,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>缺点是 <span class='latin'>greedy</span> <span class='latin'>baseline</span> 可能受解码策略影响，并且对 <span class='latin'>group</span> 内多样性利用不如 <span class='latin'>RLOO/GRPO</span>。</li>
 </ul>
 <div class='source'>Sources: REMAX</div>
-<div class='page'>14 / 67</div>
+<div class='page'>15 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>REINFORCE++</div>
 <h2><span class='latin'>REINFORCE++</span> 把 <span class='latin'>critic-free</span> 训练的关键放到全局归一化</h2>
@@ -225,7 +232,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>实现上仍可结合 <span class='latin'>PPO-style</span> <span class='latin'>clip</span> 与 <span class='latin'>reference</span> <span class='latin'>KL</span> <span class='latin'>loss</span>，保持训练稳定。</li>
 </ul>
 <div class='source'>Sources: RPP</div>
-<div class='page'>15 / 67</div>
+<div class='page'>16 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Sampling as Policy Improvement</div>
 <h2><span class='latin'>Best-of-N</span> 和 <span class='latin'>rejection</span> <span class='latin'>sampling</span> 是最朴素的策略改进算子</h2>
@@ -238,7 +245,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>这类方法可看作硬 <span class='latin'>EM</span>：<span class='latin'>E</span> 步生成并选择候选，<span class='latin'>M</span> 步最大似然拟合被选候选。</li>
 </ul>
 <div class='source'>Sources: RAFT, REST, R1</div>
-<div class='page'>16 / 67</div>
+<div class='page'>17 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>DPO Derivation</div>
 <h2><span class='latin'>DPO</span> 的关键洞察是把 <span class='latin'>KL</span> 最优策略反解成隐式奖励</h2>
@@ -251,7 +258,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>DPO</span> 本质是对 <span class='latin'>winner-loser</span> <span class='latin'>log</span> <span class='latin'>odds</span> <span class='latin'>margin</span> 的 <span class='latin'>logistic</span> 校准。</li>
 </ul>
 <div class='source'>Sources: DPO</div>
-<div class='page'>17 / 67</div>
+<div class='page'>18 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>DPO Objective</div>
 <h2><span class='latin'>DPO</span> 把偏好对学习写成 <span class='latin'>reference-corrected</span> <span class='latin'>logistic</span> <span class='latin'>loss</span></h2>
@@ -264,7 +271,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>当偏好数据可分且 β 较大时，<span class='latin'>DPO</span> 可能过度推向确定性 <span class='latin'>winner</span>。</li>
 </ul>
 <div class='source'>Sources: DPO, IPO</div>
-<div class='page'>18 / 67</div>
+<div class='page'>19 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>DPO Failure Modes</div>
 <h2><span class='latin'>DPO</span> 的风险集中在分布外偏好、长度效应和隐式 <span class='latin'>reward</span> 饱和</h2>
@@ -276,7 +283,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>多轮迭代 <span class='latin'>DPO</span>、<span class='latin'>online</span> <span class='latin'>DPO</span>、<span class='latin'>SimPO</span>、<span class='latin'>IPO</span>、<span class='latin'>KTO</span> 都在修补这些问题的不同侧面。</li>
 </ul>
 <div class='source'>Sources: DPO, IPO, SIMPO, ONLINE-DPO</div>
-<div class='page'>19 / 67</div>
+<div class='page'>20 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>SLiC-HF</div>
 <h2><span class='latin'>SLiC-HF</span> 用 <span class='latin'>max-margin</span> 约束校准序列似然</h2>
@@ -289,7 +296,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>相对 <span class='latin'>DPO</span>，<span class='latin'>SLiC-HF</span> 没有从 <span class='latin'>KL-RLHF</span> 最优解中得到同样完整的概率解释。</li>
 </ul>
 <div class='source'>Sources: SLIC</div>
-<div class='page'>20 / 67</div>
+<div class='page'>21 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>RRHF</div>
 <h2><span class='latin'>RRHF</span> 把多个候选的奖励排序蒸馏成 <span class='latin'>log-prob</span> 排序</h2>
@@ -302,7 +309,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>它适合已有高质量候选集的场景，但缺乏在线探索机制。</li>
 </ul>
 <div class='source'>Sources: RRHF</div>
-<div class='page'>21 / 67</div>
+<div class='page'>22 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>IPO</div>
 <h2><span class='latin'>IPO</span> 用平方校准避免 <span class='latin'>DPO</span> 在可分数据上无限推大 <span class='latin'>margin</span></h2>
@@ -315,7 +322,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>当偏好数据噪声较大或可分性很强时，<span class='latin'>IPO</span> 更像校准器而不是无界分类器。</li>
 </ul>
 <div class='source'>Sources: IPO</div>
-<div class='page'>22 / 67</div>
+<div class='page'>23 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>KTO</div>
 <h2><span class='latin'>KTO</span> 把偏好学习从成对比较放宽到单样本好坏标签</h2>
@@ -328,7 +335,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>λ_D 与 λ_U 可处理正负样本不平衡，这是 <span class='latin'>DPO</span> 不天然具备的优势。</li>
 </ul>
 <div class='source'>Sources: KTO</div>
-<div class='page'>23 / 67</div>
+<div class='page'>24 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>ORPO</div>
 <h2><span class='latin'>ORPO</span> 把 <span class='latin'>SFT</span> 和偏好对齐合并为单阶段 <span class='latin'>reference-free</span> <span class='latin'>objective</span></h2>
@@ -341,7 +348,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>适合希望从偏好数据直接做 <span class='latin'>instruction</span> <span class='latin'>tuning</span> 的场景。</li>
 </ul>
 <div class='source'>Sources: ORPO</div>
-<div class='page'>24 / 67</div>
+<div class='page'>25 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>SimPO</div>
 <h2><span class='latin'>SimPO</span> 用长度归一化 <span class='latin'>log-prob</span> 构造 <span class='latin'>reference-free</span> <span class='latin'>reward</span></h2>
@@ -354,7 +361,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>长度归一化直接处理 <span class='latin'>DPO</span> 类 <span class='latin'>loss</span> 的长短回答尺度问题。</li>
 </ul>
 <div class='source'>Sources: SIMPO</div>
-<div class='page'>25 / 67</div>
+<div class='page'>26 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Online Preference Optimization</div>
 <h2><span class='latin'>Online</span> <span class='latin'>DPO</span> 试图修复离线偏好优化的分布漂移</h2>
@@ -365,26 +372,26 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>本质上，它把 <span class='latin'>DPO</span> 从静态 <span class='latin'>supervised</span> <span class='latin'>loss</span> 变成 <span class='latin'>rollout-and-rank</span> 策略迭代。</li>
 </ul>
 <div class='source'>Sources: ONLINE-DPO, REST, R1</div>
-<div class='page'>26 / 67</div>
+<div class='page'>27 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Post-DPO Variants</div>
 <h2><span class='latin'>APO</span>、<span class='latin'>AOT</span>、<span class='latin'>NCA</span>、<span class='latin'>SPPO</span> 等变体主要在偏好几何上重写 <span class='latin'>DPO</span></h2>
 <table><tr><td>算法族</td><td>核心变化</td><td>适用直觉</td></tr><tr><td><span class='latin'>APO</span></td><td>给 <span class='latin'>preference</span> <span class='latin'>margin</span> 加 <span class='latin'>anchor</span> 或正则，防止 <span class='latin'>winner</span> 与 <span class='latin'>loser</span> 同向漂移</td><td>需要更明确控制参考点的离线对齐</td></tr><tr><td><span class='latin'>AOT</span></td><td>用分布匹配或 <span class='latin'>optimal</span> <span class='latin'>transport</span> 视角处理偏好排序</td><td>希望优化整体分布而非独立 <span class='latin'>pair</span></td></tr><tr><td><span class='latin'>NCA/BCO</span></td><td>把 <span class='latin'>winner-loser</span> 区分改写为 <span class='latin'>contrastive</span> 或 <span class='latin'>classifier</span> <span class='latin'>objective</span></td><td>偏好数据噪声大、需要分类校准</td></tr><tr><td><span class='latin'>SPPO/Nash</span></td><td>用自博弈、<span class='latin'>Nash</span> 或 <span class='latin'>mirror</span> <span class='latin'>descent</span> 解释 <span class='latin'>policy</span> <span class='latin'>improvement</span></td><td>多模型互评、<span class='latin'>AI</span> <span class='latin'>feedback</span> 可持续生成</td></tr></table>
 <div class='callout'>这些方法的共同主题不是替代所有 <span class='latin'>DPO</span>，而是改变 <span class='latin'>log-ratio</span> <span class='latin'>margin</span> 的几何、参考点或采样过程。</div>
 <div class='source'>Sources: NASH, APO, AOT, NCA, BCO, SPPO</div>
-<div class='page'>27 / 67</div>
+<div class='page'>28 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Preference Optimization Index</div>
 <h2><span class='latin'>DPO</span> 变体索引显示，偏好优化正在从 <span class='latin'>pairwise</span> <span class='latin'>margin</span> 走向校准与分布对齐</h2>
 <table><tr><td>算法</td><td>训练信号</td><td>相对 <span class='latin'>DPO</span> 的变化</td></tr><tr><td><span class='latin'>Cal-DPO</span></td><td>偏好对与隐式 <span class='latin'>reward</span> 校准项</td><td>不仅比较 <span class='latin'>winner</span> 与 <span class='latin'>loser</span>，还约束隐式 <span class='latin'>reward</span> 的绝对尺度</td></tr><tr><td><span class='latin'>NCA/InfoNCA</span></td><td>显式标量 <span class='latin'>reward</span> 或偏好数据</td><td>用 <span class='latin'>noise-contrastive</span> <span class='latin'>estimation</span> 统一 <span class='latin'>reward</span> <span class='latin'>data</span> 与 <span class='latin'>pairwise</span> <span class='latin'>preference</span></td></tr><tr><td><span class='latin'>BCO</span></td><td>单样本 <span class='latin'>thumbs-up/down</span> 二元反馈</td><td>把 <span class='latin'>alignment</span> 写成 <span class='latin'>binary</span> <span class='latin'>classifier</span>，<span class='latin'>logit</span> 可解释为 <span class='latin'>reward</span></td></tr><tr><td><span class='latin'>AOT</span></td><td>正负样本分布或未配对偏好数据</td><td>用 <span class='latin'>optimal</span> <span class='latin'>transport</span> 约束正样本 <span class='latin'>reward</span> 分布一阶随机占优</td></tr><tr><td><span class='latin'>APO</span></td><td><span class='latin'>AI</span> <span class='latin'>revisions</span> 产生的 <span class='latin'>contrastive</span> <span class='latin'>pair</span></td><td>用 <span class='latin'>anchor</span> 控制 <span class='latin'>winner</span> 与 <span class='latin'>loser</span> 的漂移方向</td></tr></table>
 <div class='source'>Sources: CALDPO, NCA, BCO, AOT, APO</div>
-<div class='page'>28 / 67</div>
+<div class='page'>29 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Self-Play Alignment</div>
 <h2><span class='latin'>Self-play</span> 系列把偏好优化解释为模型与自身或对手策略的博弈</h2>
 <table><tr><td>算法</td><td>核心循环</td><td>工程含义</td></tr><tr><td><span class='latin'>SPIN</span></td><td>当前模型生成负例，<span class='latin'>SFT</span> 模型或数据作为正例</td><td>不依赖新增人工偏好，强调自我改进</td></tr><tr><td><span class='latin'>SPPO</span></td><td>用 <span class='latin'>preference</span> <span class='latin'>model</span> 驱动 <span class='latin'>self-play</span> <span class='latin'>policy</span> <span class='latin'>update</span></td><td>目标是逼近 <span class='latin'>Nash</span> <span class='latin'>equilibrium</span>，处理偏好非传递性</td></tr><tr><td><span class='latin'>SAPO</span></td><td><span class='latin'>EMA</span> <span class='latin'>policy</span> 与 <span class='latin'>replay</span> <span class='latin'>buffer</span> 产生 <span class='latin'>off-policy</span> 自增强数据</td><td>提高数据探索与复用效率</td></tr><tr><td><span class='latin'>Nash-MD</span></td><td><span class='latin'>mirror</span> <span class='latin'>descent</span> 或博弈视角优化 <span class='latin'>preference</span> <span class='latin'>objective</span></td><td>把 <span class='latin'>RLHF</span> 看成寻找稳定策略而非单向爬 <span class='latin'>reward</span></td></tr><tr><td><span class='latin'>ReST</span></td><td>生成、筛选、微调反复迭代</td><td>最稳定的 <span class='latin'>self-training</span> <span class='latin'>baseline</span>，常与 <span class='latin'>DPO/RLVR</span> 混合</td></tr></table>
 <div class='source'>Sources: SPIN, SPPO, SAPO, NASH, REST</div>
-<div class='page'>29 / 67</div>
+<div class='page'>30 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Iterative Self-Training</div>
 <h2><span class='latin'>ReST</span> 与 <span class='latin'>SPIN</span> 类方法把策略改进离散化为生成、筛选、微调循环</h2>
@@ -396,7 +403,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>DeepSeek-R1</span> 的 <span class='latin'>rejection</span> <span class='latin'>sampling</span> 与蒸馏阶段，本质上也使用了这类思想。</li>
 </ul>
 <div class='source'>Sources: REST, R1</div>
-<div class='page'>30 / 67</div>
+<div class='page'>31 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>RL with Verifiable Rewards</div>
 <h2><span class='latin'>RLVR</span> 将奖励模型换成可验证规则，重新打开 <span class='latin'>on-policy</span> <span class='latin'>RL</span> 的价值</h2>
@@ -409,7 +416,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>长 <span class='latin'>CoT</span> 会自然出现探索、反思与自我纠错，但也会产生 <span class='latin'>overthinking</span> 和长度偏置。</li>
 </ul>
 <div class='source'>Sources: GRPO, R1, VAPO</div>
-<div class='page'>31 / 67</div>
+<div class='page'>32 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>GRPO</div>
 <h2><span class='latin'>GRPO</span> 用组内相对优势去掉 <span class='latin'>value</span> <span class='latin'>model</span></h2>
@@ -423,7 +430,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>它特别适合答案可验证、每题可多采样的数学和代码任务。</li>
 </ul>
 <div class='source'>Sources: GRPO, R1</div>
-<div class='page'>32 / 67</div>
+<div class='page'>33 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>GRPO Advantage</div>
 <h2><span class='latin'>GRPO</span> 的优势估计来自组内标准化 <span class='latin'>reward</span></h2>
@@ -436,7 +443,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>DAPO</span> 的 <span class='latin'>Dynamic</span> <span class='latin'>Sampling</span> 正是显式过滤这类无效组。</li>
 </ul>
 <div class='source'>Sources: GRPO, DAPO</div>
-<div class='page'>33 / 67</div>
+<div class='page'>34 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>DeepSeek-R1</div>
 <h2><span class='latin'>DeepSeek-R1</span> 证明 <span class='latin'>rule-based</span> <span class='latin'>reward</span> 能诱导长链推理行为</h2>
@@ -448,7 +455,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>R1</span> 的工程 <span class='latin'>recipe</span> 说明纯 <span class='latin'>RL</span> 可激发推理，<span class='latin'>SFT</span> 与蒸馏仍对可用性关键。</li>
 </ul>
 <div class='source'>Sources: R1</div>
-<div class='page'>34 / 67</div>
+<div class='page'>35 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Dr.GRPO</div>
 <h2><span class='latin'>Dr.GRPO</span> 指出 <span class='latin'>GRPO</span> 的标准差和长度归一化会引入偏置</h2>
@@ -461,7 +468,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>Dr.GRPO</span> 建议移除这些项，使目标更接近 <span class='latin'>unbiased</span> <span class='latin'>Monte</span> <span class='latin'>Carlo</span> <span class='latin'>policy</span> <span class='latin'>gradient</span>。</li>
 </ul>
 <div class='source'>Sources: DRGRPO</div>
-<div class='page'>35 / 67</div>
+<div class='page'>36 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>DAPO</div>
 <h2><span class='latin'>DAPO</span> 是对 <span class='latin'>naive</span> <span class='latin'>GRPO</span> 的四项工程级修复</h2>
@@ -475,7 +482,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>Overlong</span> <span class='latin'>shaping</span>：对超过长度预算的回答做平滑惩罚或过滤，缓解无效长 <span class='latin'>CoT</span>。</li>
 </ul>
 <div class='source'>Sources: DAPO</div>
-<div class='page'>36 / 67</div>
+<div class='page'>37 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>DAPO Mechanics</div>
 <h2><span class='latin'>DAPO</span> 的核心不是新 <span class='latin'>baseline</span>，而是让 <span class='latin'>GRPO</span> 的有效梯度密度上升</h2>
@@ -487,7 +494,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>Overlong</span> <span class='latin'>reward</span> <span class='latin'>shaping</span> 把长度从副作用变成可控约束。</li>
 </ul>
 <div class='source'>Sources: DAPO</div>
-<div class='page'>37 / 67</div>
+<div class='page'>38 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>GSPO</div>
 <h2><span class='latin'>GSPO</span> 把重要性采样比从 <span class='latin'>token</span> <span class='latin'>level</span> 提升到 <span class='latin'>sequence</span> <span class='latin'>level</span></h2>
@@ -500,7 +507,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>在 <span class='latin'>MoE</span> 中，<span class='latin'>sequence-level</span> 更新减少 <span class='latin'>token</span> 级路由噪声带来的不稳定。</li>
 </ul>
 <div class='source'>Sources: GSPO</div>
-<div class='page'>38 / 67</div>
+<div class='page'>39 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>GSPO Ratio</div>
 <h2><span class='latin'>GSPO</span> 的 <span class='latin'>ratio</span> 是整段 <span class='latin'>log-ratio</span> 的长度归一化指数</h2>
@@ -513,7 +520,15 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>如果需要 <span class='latin'>token-level</span> 分析，可以把 <span class='latin'>sequence</span> <span class='latin'>ratio</span> 看成平均 <span class='latin'>log-ratio</span> 的 <span class='latin'>exponentiated</span> <span class='latin'>form</span>。</li>
 </ul>
 <div class='source'>Sources: GSPO</div>
-<div class='page'>39 / 67</div>
+<div class='page'>40 / 72</div>
+</section><section class='slide standard'>
+<div class='eyebrow'>2026 Frontier: Update Granularity</div>
+<h2>2026 的 <span class='latin'>policy-ratio</span> 研究把粒度变成可控旋钮</h2>
+<p class='lead'><span class='latin'>GRPO</span> 到 <span class='latin'>GSPO</span> 之后，争论不再是 <span class='latin'>token-level</span> 或 <span class='latin'>sequence-level</span> 二选一，而是如何按任务、长度、熵和 <span class='latin'>off-policy</span> 程度调节更新粒度。</p>
+<table><tr><td>方向</td><td>代表</td><td>核心判断</td></tr><tr><td><span class='latin'>token</span> 权重</td><td><span class='latin'>TR-GRPO</span>、<span class='latin'>ACPO</span></td><td>低概率 <span class='latin'>token</span> 可能过度主导梯度，<span class='latin'>clip</span> 边界和 <span class='latin'>token</span> 权重应跟更新统计量联动</td></tr><tr><td>中间粒度</td><td><span class='latin'>SSPO</span></td><td><span class='latin'>subsentence</span> <span class='latin'>ratio</span> 试图保留局部 <span class='latin'>credit</span>，同时避免单 <span class='latin'>token</span> <span class='latin'>outlier</span> 与整段稀释</td></tr><tr><td>混合 <span class='latin'>ratio</span></td><td><span class='latin'>DHPO</span></td><td><span class='latin'>token</span> <span class='latin'>ratio</span> 保留细粒度，<span class='latin'>sequence</span> <span class='latin'>ratio</span> 匹配整段 <span class='latin'>reward</span>，二者可在同一 <span class='latin'>surrogate</span> 中组合</td></tr><tr><td>长度无偏</td><td><span class='latin'>LUSPO</span></td><td><span class='latin'>sequence-level</span> <span class='latin'>objective</span> 仍可能有长度偏置，需要显式修正响应长度变化</td></tr><tr><td>熵通道</td><td><span class='latin'>AsymGRPO</span></td><td>正优势和负优势对探索的作用不同，<span class='latin'>productive</span> <span class='latin'>entropy</span> 与 <span class='latin'>noisy</span> <span class='latin'>entropy</span> 应分开调</td></tr></table>
+<div class='callout'>工程判据：先看 <span class='latin'>clip</span> <span class='latin'>fraction</span>、<span class='latin'>importance-ratio</span> 方差、长度分布和 <span class='latin'>token</span> 概率分层，再决定该改 <span class='latin'>ratio</span> 粒度、<span class='latin'>clip</span> 边界还是 <span class='latin'>advantage</span> 权重。</div>
+<div class='source'>Sources: TRGRPO, SSPO, DHPO, LUSPO, ASYMGRPO, ACPO</div>
+<div class='page'>41 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>CISPO</div>
 <h2><span class='latin'>CISPO</span> 剪切 <span class='latin'>IS</span> 权重而不是剪切 <span class='latin'>token</span> 更新</h2>
@@ -526,7 +541,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>适合每个 <span class='latin'>generation</span> <span class='latin'>batch</span> 复用多次的训练设置，但必须监控 <span class='latin'>off-policy</span> <span class='latin'>drift</span>。</li>
 </ul>
 <div class='source'>Sources: MINIMAX</div>
-<div class='page'>40 / 67</div>
+<div class='page'>42 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>VAPO</div>
 <h2><span class='latin'>VAPO</span> 说明 <span class='latin'>value-based</span> <span class='latin'>PPO</span> 仍能在长 <span class='latin'>CoT</span> 上胜出</h2>
@@ -540,7 +555,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>Positive</span> <span class='latin'>NLL</span> <span class='latin'>loss</span> 把正确样本继续作为 <span class='latin'>supervised</span> <span class='latin'>anchor</span>，降低 <span class='latin'>RL</span> 破坏可读性的风险。</li>
 </ul>
 <div class='source'>Sources: VAPO</div>
-<div class='page'>41 / 67</div>
+<div class='page'>43 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Process Reward Models</div>
 <h2><span class='latin'>PRM</span> 把奖励从最终答案推进到推理过程，但也把标注误差推进到每一步</h2>
@@ -553,7 +568,15 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>PRM</span> 的危险是局部正确不保证全局正确，模型可能学习迎合过程裁判的表面模式。</li>
 </ul>
 <div class='source'>Sources: VAPO, REWARDBENCH</div>
-<div class='page'>42 / 67</div>
+<div class='page'>44 / 72</div>
+</section><section class='slide standard'>
+<div class='eyebrow'>2026 Frontier: Reward Structure</div>
+<h2>2026 的奖励研究从最终答案转向可验证中间信号</h2>
+<p class='lead'>最终答案 <span class='latin'>reward</span> 简洁，但它把整条推理链压成一个标量。最新前沿试图把可验证性拆到子问题、步骤、<span class='latin'>rubric</span>、<span class='latin'>reference</span> 或 <span class='latin'>token</span> <span class='latin'>saliency</span>。</p>
+<table><tr><td>方向</td><td>代表</td><td>解决的问题</td></tr><tr><td>子问题课程</td><td><span class='latin'>SCRL</span></td><td>把 <span class='latin'>hard</span> <span class='latin'>problem</span> 的参考推理链拆成可验证子问题，给失败 <span class='latin'>rollout</span> 中的局部进展分配 <span class='latin'>credit</span></td></tr><tr><td>步骤 <span class='latin'>rubric</span></td><td><span class='latin'>SRaR</span></td><td>把 <span class='latin'>rubric</span> <span class='latin'>item</span> 归因到具体步骤，避免正确答案里的错误步骤被整体奖励</td></tr><tr><td><span class='latin'>reference</span> <span class='latin'>reward</span> <span class='latin'>chain</span></td><td><span class='latin'>RLVRR</span></td><td>在开放生成中从高质量参考抽取内容和风格链，缓解无唯一标准答案的问题</td></tr><tr><td><span class='latin'>rubric</span> <span class='latin'>rewards</span></td><td><span class='latin'>RaR</span></td><td>用结构化 <span class='latin'>rubric</span> 替代单一 <span class='latin'>Likert</span> <span class='latin'>judge</span>，把 <span class='latin'>RLVR</span> 扩到医疗、科学等非二元领域</td></tr><tr><td>选择性 <span class='latin'>credit</span></td><td><span class='latin'>S-trace</span>、<span class='latin'>GRAIL</span></td><td>不把 <span class='latin'>trajectory-level</span> <span class='latin'>advantage</span> 均匀广播到所有 <span class='latin'>token</span>，降低 <span class='latin'>filler</span> 与错误步骤的梯度污染</td></tr></table>
+<div class='callout'>边界：更细 <span class='latin'>reward</span> 不自动更可信。步骤裁判、<span class='latin'>rubric</span> <span class='latin'>judge</span> 和 <span class='latin'>reference</span> <span class='latin'>chain</span> 都会把标注偏差或 <span class='latin'>judge</span> 偏差前移到训练目标。</div>
+<div class='source'>Sources: SCRL, SRAR, RLVRR, RAR, STRACE, GRAIL</div>
+<div class='page'>45 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>RLAIF</div>
 <h2><span class='latin'>RLAIF</span> 与 <span class='latin'>Constitutional</span> <span class='latin'>AI</span> 把人类原则转化为可规模化裁判</h2>
@@ -564,24 +587,24 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>RLAIF</span> 不改变优化器本质，仍可接 <span class='latin'>PPO</span>、<span class='latin'>DPO</span>、<span class='latin'>KTO</span> 或 <span class='latin'>rejection</span> <span class='latin'>SFT</span>。</li>
 </ul>
 <div class='source'>Sources: CAI, HH</div>
-<div class='page'>43 / 67</div>
+<div class='page'>46 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Algorithm Matrix</div>
 <h2>算法选择首先看奖励是否可在线生成，其次看是否需要探索</h2>
-<table><tr><td>家族</td><td>代表</td><td>需要 <span class='latin'>rollout</span></td><td>需要 <span class='latin'>RM/critic</span></td><td>最适合</td></tr><tr><td><span class='latin'>PPO/value-based</span></td><td><span class='latin'>PPO</span>、<span class='latin'>VAPO</span></td><td>需要</td><td>通常需要 <span class='latin'>critic</span></td><td>复杂奖励、需要稳定 <span class='latin'>trust</span> <span class='latin'>region</span></td></tr><tr><td><span class='latin'>critic-free</span> <span class='latin'>PG</span></td><td><span class='latin'>RLOO</span>、<span class='latin'>ReMax</span>、<span class='latin'>REINFORCE++</span></td><td>需要</td><td>不需要 <span class='latin'>critic</span></td><td>可多采样、<span class='latin'>reward</span> 噪声可控</td></tr><tr><td><span class='latin'>offline</span> <span class='latin'>preference</span></td><td><span class='latin'>DPO</span>、<span class='latin'>IPO</span>、<span class='latin'>KTO</span>、<span class='latin'>ORPO</span>、<span class='latin'>SimPO</span></td><td>不需要</td><td>不需要 <span class='latin'>critic</span></td><td>已有偏好数据、快速迭代</td></tr><tr><td><span class='latin'>group</span> <span class='latin'>RLVR</span></td><td><span class='latin'>GRPO</span>、<span class='latin'>DAPO</span>、<span class='latin'>GSPO</span>、<span class='latin'>CISPO</span></td><td>需要</td><td>不需要 <span class='latin'>critic</span></td><td>数学代码、规则 <span class='latin'>reward</span>、长 <span class='latin'>CoT</span></td></tr><tr><td><span class='latin'>iterative</span> <span class='latin'>SFT</span></td><td><span class='latin'>RAFT</span>、<span class='latin'>ReST</span>、<span class='latin'>rejection</span> <span class='latin'>SFT</span></td><td>生成即可</td><td>需要筛选器</td><td>稳定蒸馏、高质量候选充足</td></tr></table>
-<div class='page'>44 / 67</div>
+<table><tr><td>家族</td><td>代表</td><td>需要 <span class='latin'>rollout</span></td><td>需要 <span class='latin'>RM/critic</span></td><td>最适合</td></tr><tr><td><span class='latin'>PPO/value-based</span></td><td><span class='latin'>PPO</span>、<span class='latin'>VAPO</span></td><td>需要</td><td>通常需要 <span class='latin'>critic</span></td><td>复杂奖励、需要稳定 <span class='latin'>trust</span> <span class='latin'>region</span></td></tr><tr><td><span class='latin'>critic-free</span> <span class='latin'>PG</span></td><td><span class='latin'>RLOO</span>、<span class='latin'>ReMax</span>、<span class='latin'>REINFORCE++</span></td><td>需要</td><td>不需要 <span class='latin'>critic</span></td><td>可多采样、<span class='latin'>reward</span> 噪声可控</td></tr><tr><td><span class='latin'>offline</span> <span class='latin'>preference</span></td><td><span class='latin'>DPO</span>、<span class='latin'>IPO</span>、<span class='latin'>KTO</span>、<span class='latin'>ORPO</span>、<span class='latin'>SimPO</span></td><td>不需要</td><td>不需要 <span class='latin'>critic</span></td><td>已有偏好数据、快速迭代</td></tr><tr><td><span class='latin'>group</span> <span class='latin'>RLVR</span></td><td><span class='latin'>GRPO</span>、<span class='latin'>DAPO</span>、<span class='latin'>GSPO</span>、<span class='latin'>CISPO</span></td><td>需要</td><td>不需要 <span class='latin'>critic</span></td><td>数学代码、规则 <span class='latin'>reward</span>、长 <span class='latin'>CoT</span></td></tr><tr><td><span class='latin'>structured</span> <span class='latin'>reward</span> <span class='latin'>RL</span></td><td><span class='latin'>RLVRR</span>、<span class='latin'>RaR</span>、<span class='latin'>SRaR</span>、<span class='latin'>SCRL</span></td><td>通常需要</td><td>需要 <span class='latin'>verifier</span> 或 <span class='latin'>judge</span></td><td>开放生成、步骤监督、非二元评价</td></tr><tr><td><span class='latin'>iterative</span> <span class='latin'>SFT</span></td><td><span class='latin'>RAFT</span>、<span class='latin'>ReST</span>、<span class='latin'>rejection</span> <span class='latin'>SFT</span></td><td>生成即可</td><td>需要筛选器</td><td>稳定蒸馏、高质量候选充足</td></tr></table>
+<div class='page'>47 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Offline Preference Matrix</div>
 <h2>离线偏好优化的差异主要是 <span class='latin'>reference</span>、长度归一化和目标 <span class='latin'>margin</span></h2>
 <table><tr><td>算法</td><td>核心 <span class='latin'>loss</span></td><td><span class='latin'>reference</span></td><td>关键修补点</td></tr><tr><td><span class='latin'>DPO</span></td><td><span class='latin'>BT</span> <span class='latin'>logistic</span> <span class='latin'>on</span> <span class='latin'>log-ratio</span> <span class='latin'>margin</span></td><td>需要</td><td>把 <span class='latin'>KL-RLHF</span> 反解成 <span class='latin'>supervised</span> <span class='latin'>loss</span></td></tr><tr><td><span class='latin'>IPO</span></td><td><span class='latin'>square</span> <span class='latin'>margin</span> <span class='latin'>calibration</span></td><td>需要</td><td>防止可分数据上无界推大 <span class='latin'>margin</span></td></tr><tr><td><span class='latin'>KTO</span></td><td><span class='latin'>prospect-theory</span> <span class='latin'>binary</span> <span class='latin'>loss</span></td><td>需要</td><td>不要求成对偏好，处理正负不平衡</td></tr><tr><td><span class='latin'>ORPO</span></td><td><span class='latin'>SFT</span> + <span class='latin'>odds-ratio</span> <span class='latin'>penalty</span></td><td>不需要</td><td>单阶段训练，显存更低</td></tr><tr><td><span class='latin'>SimPO</span></td><td><span class='latin'>length-normalized</span> <span class='latin'>log-prob</span> <span class='latin'>margin</span></td><td>不需要</td><td>对齐生成度量并显式处理长度</td></tr></table>
 <div class='source'>Sources: DPO, IPO, KTO, ORPO, SIMPO</div>
-<div class='page'>45 / 67</div>
+<div class='page'>48 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>On-Policy Matrix</div>
 <h2><span class='latin'>on-policy</span> <span class='latin'>RL</span> 家族的差异主要是 <span class='latin'>advantage</span>、<span class='latin'>clip</span> 和归一化</h2>
-<table><tr><td>算法</td><td><span class='latin'>baseline/advantage</span></td><td><span class='latin'>clip</span> 对象</td><td>主要贡献</td></tr><tr><td><span class='latin'>PPO</span></td><td><span class='latin'>critic</span> + <span class='latin'>GAE</span></td><td><span class='latin'>token</span> <span class='latin'>ratio</span></td><td>稳定通用 <span class='latin'>RLHF</span></td></tr><tr><td><span class='latin'>RLOO</span></td><td>同组 <span class='latin'>leave-one-out</span></td><td>可配 <span class='latin'>PPO</span> <span class='latin'>clip</span></td><td>去 <span class='latin'>critic</span> 降方差</td></tr><tr><td><span class='latin'>GRPO</span></td><td>组均值与组 <span class='latin'>std</span></td><td><span class='latin'>token</span> <span class='latin'>ratio</span></td><td><span class='latin'>RLVR</span> 中去 <span class='latin'>value</span> <span class='latin'>model</span></td></tr><tr><td><span class='latin'>DAPO</span></td><td><span class='latin'>GRPO</span> <span class='latin'>advantage</span></td><td>低高 ε 解耦 <span class='latin'>token</span> <span class='latin'>ratio</span></td><td>提高有效梯度和长 <span class='latin'>CoT</span> 可控性</td></tr><tr><td><span class='latin'>GSPO</span></td><td>组相对 <span class='latin'>response</span> <span class='latin'>advantage</span></td><td><span class='latin'>sequence</span> <span class='latin'>ratio</span></td><td>对齐 <span class='latin'>response</span> <span class='latin'>reward</span> 与 <span class='latin'>MoE</span> 稳定</td></tr><tr><td><span class='latin'>CISPO</span></td><td><span class='latin'>group</span> <span class='latin'>advantage</span></td><td><span class='latin'>IS</span> <span class='latin'>weight</span></td><td>多轮 <span class='latin'>off-policy</span> 更新保留关键 <span class='latin'>token</span> 梯度</td></tr></table>
-<div class='source'>Sources: PPO, RLOO, GRPO, DAPO, GSPO, MINIMAX</div>
-<div class='page'>46 / 67</div>
+<table><tr><td>算法</td><td><span class='latin'>baseline/advantage</span></td><td><span class='latin'>clip</span> 对象</td><td>主要贡献</td></tr><tr><td><span class='latin'>PPO</span></td><td><span class='latin'>critic</span> + <span class='latin'>GAE</span></td><td><span class='latin'>token</span> <span class='latin'>ratio</span></td><td>稳定通用 <span class='latin'>RLHF</span></td></tr><tr><td><span class='latin'>RLOO</span></td><td>同组 <span class='latin'>leave-one-out</span></td><td>可配 <span class='latin'>PPO</span> <span class='latin'>clip</span></td><td>去 <span class='latin'>critic</span> 降方差</td></tr><tr><td><span class='latin'>GRPO</span></td><td>组均值与组 <span class='latin'>std</span></td><td><span class='latin'>token</span> <span class='latin'>ratio</span></td><td><span class='latin'>RLVR</span> 中去 <span class='latin'>value</span> <span class='latin'>model</span></td></tr><tr><td><span class='latin'>DAPO</span></td><td><span class='latin'>GRPO</span> <span class='latin'>advantage</span></td><td>低高 ε 解耦 <span class='latin'>token</span> <span class='latin'>ratio</span></td><td>提高有效梯度和长 <span class='latin'>CoT</span> 可控性</td></tr><tr><td><span class='latin'>GSPO</span></td><td>组相对 <span class='latin'>response</span> <span class='latin'>advantage</span></td><td><span class='latin'>sequence</span> <span class='latin'>ratio</span></td><td>对齐 <span class='latin'>response</span> <span class='latin'>reward</span> 与 <span class='latin'>MoE</span> 稳定</td></tr><tr><td><span class='latin'>CISPO</span></td><td><span class='latin'>group</span> <span class='latin'>advantage</span></td><td><span class='latin'>IS</span> <span class='latin'>weight</span></td><td>多轮 <span class='latin'>off-policy</span> 更新保留关键 <span class='latin'>token</span> 梯度</td></tr><tr><td><span class='latin'>SSPO/DHPO/ACPO</span></td><td><span class='latin'>group</span> 或混合 <span class='latin'>advantage</span></td><td><span class='latin'>subsentence</span>、<span class='latin'>hybrid</span> 或 <span class='latin'>adaptive</span> <span class='latin'>clip</span></td><td>按更新统计量调节粒度和边界</td></tr></table>
+<div class='source'>Sources: PPO, RLOO, GRPO, DAPO, GSPO, MINIMAX, SSPO, DHPO, ACPO</div>
+<div class='page'>49 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Industry Recipe: OpenAI</div>
 <h2><span class='latin'>OpenAI</span> <span class='latin'>InstructGPT</span> 的贡献是把对齐工程流程标准化</h2>
@@ -593,7 +616,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>后续 <span class='latin'>ChatGPT</span>、<span class='latin'>RLHF</span> 标准范式和开源实现都沿用这一流程骨架。</li>
 </ul>
 <div class='source'>Sources: IGPT</div>
-<div class='page'>47 / 67</div>
+<div class='page'>50 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Industry Recipe: Anthropic</div>
 <h2><span class='latin'>Anthropic</span> 把 <span class='latin'>helpfulness</span> 与 <span class='latin'>harmlessness</span> 分开建模，并引入原则驱动反馈</h2>
@@ -604,7 +627,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>这条路线解释了为什么大模型安全对齐常需要多奖励、多阶段、多裁判。</li>
 </ul>
 <div class='source'>Sources: HH, CAI</div>
-<div class='page'>48 / 67</div>
+<div class='page'>51 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Industry Recipe: DeepSeek</div>
 <h2><span class='latin'>DeepSeek</span> 的路线把 <span class='latin'>GRPO</span> 与可验证奖励推到推理模型中心</h2>
@@ -615,7 +638,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>经验启发是：数学代码等领域可以先不用神经 <span class='latin'>RM</span>，而用严格 <span class='latin'>verifier</span> 提供主奖励。</li>
 </ul>
 <div class='source'>Sources: GRPO, R1</div>
-<div class='page'>49 / 67</div>
+<div class='page'>52 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Industry Recipe: Qwen</div>
 <h2><span class='latin'>Qwen/GSPO</span> 的重点是让 <span class='latin'>MoE</span> 与长推理 <span class='latin'>RL</span> 更稳定</h2>
@@ -626,7 +649,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>这说明大厂 <span class='latin'>recipe</span> 越来越重视 <span class='latin'>optimizer</span> 与模型架构之间的耦合。</li>
 </ul>
 <div class='source'>Sources: GSPO</div>
-<div class='page'>50 / 67</div>
+<div class='page'>53 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Industry Recipe: DAPO</div>
 <h2><span class='latin'>ByteDance</span> <span class='latin'>DAPO</span> 的价值在于开源可复现的大规模 <span class='latin'>RLVR</span> 工程闭环</h2>
@@ -637,7 +660,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>开源 <span class='latin'>recipe</span> 的重要性在于让社区能复现实验，而不只看到 <span class='latin'>benchmark</span> 分数。</li>
 </ul>
 <div class='source'>Sources: DAPO</div>
-<div class='page'>51 / 67</div>
+<div class='page'>54 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Industry Recipe: MiniMax</div>
 <h2><span class='latin'>MiniMax-M1</span> 的 <span class='latin'>CISPO</span> 针对的是 <span class='latin'>off-policy</span> 多轮复用下的梯度浪费</h2>
@@ -648,7 +671,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>它展示了推理 <span class='latin'>RL</span> 的瓶颈不只是 <span class='latin'>reward</span>，还包括训练数据复用率和 <span class='latin'>off-policy</span> 修正。</li>
 </ul>
 <div class='source'>Sources: MINIMAX</div>
-<div class='page'>52 / 67</div>
+<div class='page'>55 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Industry Recipe: Kimi</div>
 <h2><span class='latin'>Kimi</span> <span class='latin'>k1.5</span> 把强化学习扩展到长上下文与长测试时计算</h2>
@@ -659,7 +682,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>这类 <span class='latin'>recipe</span> 通常组合 <span class='latin'>SFT</span>、<span class='latin'>RLVR</span>、拒绝采样和蒸馏，而不是单一算法。</li>
 </ul>
 <div class='source'>Sources: KIMI</div>
-<div class='page'>53 / 67</div>
+<div class='page'>56 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Industry Recipe: Open Recipes</div>
 <h2><span class='latin'>Tulu</span> 3 代表开放后训练 <span class='latin'>recipe</span> 的系统化趋势</h2>
@@ -670,14 +693,14 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>研究者应同时报告数据、采样策略、<span class='latin'>reward</span>、<span class='latin'>KL</span>、<span class='latin'>clip</span>、<span class='latin'>batch</span> <span class='latin'>token</span> 和过滤规则。</li>
 </ul>
 <div class='source'>Sources: TULU3, DAPO</div>
-<div class='page'>54 / 67</div>
+<div class='page'>57 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Evaluation</div>
 <h2>评测必须区分训练 <span class='latin'>reward</span>、真实偏好和任务正确性</h2>
 <p class='lead'>一个算法在 <span class='latin'>reward</span> 上升并不等于模型变好；<span class='latin'>RLHF/RLVR</span> 中最常见的误判就是把代理指标当成目标。</p>
 <table><tr><td>评测对象</td><td>常见指标</td><td>常见误区</td></tr><tr><td>偏好质量</td><td><span class='latin'>Arena-Hard</span>、<span class='latin'>AlpacaEval</span>、人工 <span class='latin'>A/B</span></td><td><span class='latin'>judge</span> 偏见、长度偏好、风格偏好</td></tr><tr><td>推理正确性</td><td><span class='latin'>AIME</span>、<span class='latin'>MATH</span>、<span class='latin'>GSM8K</span>、<span class='latin'>Codeforces</span>、单测 <span class='latin'>pass</span> <span class='latin'>rate</span></td><td>污染、格式解析、采样预算不一致</td></tr><tr><td>奖励模型</td><td><span class='latin'>RewardBench</span>、<span class='latin'>held-out</span> <span class='latin'>preference</span> <span class='latin'>accuracy</span></td><td>高准确率不代表可安全优化</td></tr><tr><td>训练稳定性</td><td><span class='latin'>KL</span>、<span class='latin'>entropy</span>、<span class='latin'>clip</span> <span class='latin'>fraction</span>、<span class='latin'>response</span> <span class='latin'>length</span>、<span class='latin'>reward</span> <span class='latin'>std</span></td><td>只看最终分数忽略中途 <span class='latin'>collapse</span></td></tr></table>
 <div class='source'>Sources: REWARDBENCH, R1, DAPO</div>
-<div class='page'>55 / 67</div>
+<div class='page'>58 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Risk Control</div>
 <h2><span class='latin'>reward</span> <span class='latin'>hacking</span> 通常先表现为格式、长度和裁判盲区</h2>
@@ -686,10 +709,11 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>格式投机：输出满足 <span class='latin'>verifier</span> <span class='latin'>parser</span> 的模板，却没有真实推理。</li>
 <li>长度投机：用更长 <span class='latin'>CoT</span> 增加蒙中概率，或用短答规避负 <span class='latin'>token</span> 梯度。</li>
 <li>裁判投机：迎合 <span class='latin'>AI</span> <span class='latin'>judge</span> 的措辞、礼貌、冗长或安全模板。</li>
+<li>未监督信号投机：<span class='latin'>intrinsic</span> <span class='latin'>reward</span> 会放大模型初始置信分布，若置信与正确性错位，训练可能先升后崩。</li>
 <li>控制手段包括 <span class='latin'>KL</span>、长度 <span class='latin'>reward</span>、格式 <span class='latin'>parser</span>、<span class='latin'>held-out</span> <span class='latin'>verifier</span>、多裁判交叉和人工抽检。</li>
 </ul>
-<div class='source'>Sources: REWARDBENCH, DAPO, R1</div>
-<div class='page'>56 / 67</div>
+<div class='source'>Sources: REWARDBENCH, DAPO, R1, URLVR</div>
+<div class='page'>59 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Hyperparameters</div>
 <h2>关键超参数应该按可观测量闭环调节，而不是固定抄论文</h2>
@@ -700,7 +724,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>G</span>：组大小越大，<span class='latin'>advantage</span> 越稳，但 <span class='latin'>rollout</span> 成本线性增长。</li>
 <li><span class='latin'>max</span> <span class='latin'>length</span>：不是越长越好，需要与 <span class='latin'>overlong</span> <span class='latin'>penalty</span>、推理预算和评测协议一致。</li>
 </ul>
-<div class='page'>57 / 67</div>
+<div class='page'>60 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Systems</div>
 <h2>大规模 <span class='latin'>RLVR</span> 的系统瓶颈是 <span class='latin'>rollout</span>、验证器和 <span class='latin'>token</span> 级吞吐</h2>
@@ -710,9 +734,18 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>verifier</span> 要低延迟且可复现，数学解析和代码沙箱尤其容易成为瓶颈。</li>
 <li>训练端要以 <span class='latin'>batch</span> <span class='latin'>token</span> 而非样本数估算负载，否则长 <span class='latin'>CoT</span> 会打破吞吐计划。</li>
 <li><span class='latin'>off-policy</span> 数据复用提高效率，但必须用 <span class='latin'>IS</span>、<span class='latin'>KL</span> 或刷新 <span class='latin'>rollout</span> 控制漂移。</li>
+<li><span class='latin'>RolloutPipe</span> 这类 <span class='latin'>disaggregated</span> <span class='latin'>pipeline</span> 说明，<span class='latin'>on-policy</span> 正确性和训练/<span class='latin'>rollout</span> 重叠并非天然冲突，关键是按完整 <span class='latin'>group</span> 调度。</li>
 </ul>
-<div class='source'>Sources: DAPO, MINIMAX, TULU3</div>
-<div class='page'>58 / 67</div>
+<div class='source'>Sources: DAPO, MINIMAX, TULU3, ROLLPIPE</div>
+<div class='page'>61 / 72</div>
+</section><section class='slide standard'>
+<div class='eyebrow'>2026 Frontier: Sample Efficiency</div>
+<h2><span class='latin'>Rollout</span> 预算已经成为算法的一部分</h2>
+<p class='lead'><span class='latin'>GRPO</span>、<span class='latin'>DAPO</span> 和 <span class='latin'>GSPO</span> 都依赖同题多采样；当 <span class='latin'>rollout</span> 成本成为主瓶颈，算法会直接介入 <span class='latin'>prompt</span> 选择、轨迹保留、<span class='latin'>batch</span> 复用和 <span class='latin'>max</span>@<span class='latin'>K</span> 目标。</p>
+<table><tr><td>方向</td><td>代表</td><td>工程含义</td></tr><tr><td>在线剪枝</td><td><span class='latin'>arrol</span></td><td>生成中预测 <span class='latin'>partial</span> <span class='latin'>rollout</span> 成功率，提前剪掉低价值轨迹并维持组内正确性平衡</td></tr><tr><td>探索信号</td><td><span class='latin'>ExTra</span></td><td>用 <span class='latin'>novelty</span> <span class='latin'>reward</span> 与 <span class='latin'>entropy-guided</span> <span class='latin'>prefix</span> <span class='latin'>regeneration</span>，从全错或全对组中挖可学习信号</td></tr><tr><td>经验复用</td><td><span class='latin'>BAPO</span></td><td>重评历史难题并复用高质量样本，提高 <span class='latin'>off-policy</span> 数据效率</td></tr><tr><td>掌握巩固</td><td><span class='latin'>MCPO</span></td><td>对 <span class='latin'>mastered</span> <span class='latin'>prompts</span> 加 <span class='latin'>hinge-KL</span>，避免无 <span class='latin'>advantage</span> 时漂移和遗忘</td></tr><tr><td>推理预算目标</td><td><span class='latin'>MaxPO</span></td><td>直接分析 <span class='latin'>max</span>@<span class='latin'>K/pass</span>@<span class='latin'>K</span> 的 <span class='latin'>advantage</span> <span class='latin'>baseline</span>，使训练目标更接近多采样评测</td></tr><tr><td>课程采样</td><td><span class='latin'>TAC</span></td><td>多领域 <span class='latin'>RLVR</span> 中用 <span class='latin'>transferability</span> 约束课程，避免只追逐短期 <span class='latin'>learnability</span></td></tr></table>
+<div class='callout'>取舍：样本效率方法通常引入额外预测头、<span class='latin'>replay</span> <span class='latin'>buffer</span>、课程策略或异步系统。它们提升吞吐时，也增加了 <span class='latin'>stale</span> <span class='latin'>data</span>、选择偏差和实现复杂度。</div>
+<div class='source'>Sources: ARROL, EXTRA, BAPO, MCPO, MAXPO, TAC</div>
+<div class='page'>62 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Data Curation</div>
 <h2>数据选择比 <span class='latin'>optimizer</span> 更常决定 <span class='latin'>RL</span> 是否学到推理而不是记忆模板</h2>
@@ -724,12 +757,12 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>偏好数据要保留 <span class='latin'>rejected</span> <span class='latin'>answer</span>，因为负例决定 <span class='latin'>margin</span> 几何。</li>
 </ul>
 <div class='source'>Sources: DAPO, R1, DPO</div>
-<div class='page'>59 / 67</div>
+<div class='page'>63 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Decision Checklist</div>
 <h2>选择算法时先回答五个问题</h2>
 <table><tr><td>问题</td><td>若答案是是</td><td>推荐路线</td></tr><tr><td>能否程序验证正确性</td><td>数学、代码、结构化任务</td><td><span class='latin'>GRPO/DAPO/GSPO/CISPO/RLOO</span></td></tr><tr><td>已有大量偏好对</td><td>离线人类或 <span class='latin'>AI</span> <span class='latin'>preference</span></td><td><span class='latin'>DPO/IPO/KTO/SimPO/ORPO</span></td></tr><tr><td>是否必须在线探索</td><td>需要发现新解法或长 <span class='latin'>CoT</span></td><td><span class='latin'>PPO/RLOO/GRPO</span> 系列</td></tr><tr><td>是否能承担 <span class='latin'>critic</span></td><td><span class='latin'>reward</span> <span class='latin'>dense</span> 或 <span class='latin'>PRM</span> 可靠</td><td><span class='latin'>PPO/VAPO</span></td></tr><tr><td>是否只想稳定蒸馏</td><td>筛选器强、算力有限</td><td><span class='latin'>RAFT/ReST/rejection</span> <span class='latin'>SFT</span></td></tr></table>
-<div class='page'>60 / 67</div>
+<div class='page'>64 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Formula Sheet</div>
 <h2>公式速查一：从 <span class='latin'>KL-RLHF</span> 到 <span class='latin'>DPO</span> 的核心等价</h2>
@@ -742,7 +775,7 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>IPO/KTO/SimPO/ORPO</span> 都是在这个 <span class='latin'>log-ratio</span> 或 <span class='latin'>log-prob</span> 几何上改变 <span class='latin'>link</span>、<span class='latin'>reference</span> 或 <span class='latin'>margin</span>。</li>
 </ul>
 <div class='source'>Sources: DPO, IPO, KTO, ORPO, SIMPO</div>
-<div class='page'>61 / 67</div>
+<div class='page'>65 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Formula Sheet</div>
 <h2>公式速查二：从 <span class='latin'>PPO</span> 到 <span class='latin'>GRPO</span>、<span class='latin'>DAPO</span>、<span class='latin'>GSPO</span> 的核心变化</h2>
@@ -755,12 +788,12 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li><span class='latin'>GSPO</span>：把 <span class='latin'>ratio</span> 与 <span class='latin'>clip</span> 提升到 <span class='latin'>sequence</span> <span class='latin'>level</span>，匹配 <span class='latin'>response-level</span> <span class='latin'>reward</span>。</li>
 </ul>
 <div class='source'>Sources: PPO, GRPO, DAPO, GSPO</div>
-<div class='page'>62 / 67</div>
+<div class='page'>66 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Timeline</div>
 <h2>研究时间线显示，领域从通用 <span class='latin'>RLHF</span> 走向推理专用 <span class='latin'>RLVR</span></h2>
-<table><tr><td>阶段</td><td>代表</td><td>关键词</td></tr><tr><td>2017-2022</td><td><span class='latin'>Human</span> <span class='latin'>Preferences</span>、<span class='latin'>InstructGPT</span>、<span class='latin'>HH</span></td><td><span class='latin'>RM</span> + <span class='latin'>PPO</span> 标准化</td></tr><tr><td>2023</td><td><span class='latin'>RRHF</span>、<span class='latin'>RAFT</span>、<span class='latin'>SLiC</span>、<span class='latin'>DPO</span>、<span class='latin'>ReST</span>、<span class='latin'>ReMax</span>、<span class='latin'>IPO</span></td><td>不用在线 <span class='latin'>RL</span> 的偏好优化爆发</td></tr><tr><td>2024</td><td><span class='latin'>KTO</span>、<span class='latin'>GRPO</span>、<span class='latin'>RLOO</span>、<span class='latin'>ORPO</span>、<span class='latin'>SimPO</span>、<span class='latin'>Online</span> <span class='latin'>DPO</span></td><td><span class='latin'>critic-free</span> 与 <span class='latin'>reference-free</span> 两条线并进</td></tr><tr><td>2025</td><td><span class='latin'>R1</span>、<span class='latin'>REINFORCE++</span>、<span class='latin'>DAPO</span>、<span class='latin'>Dr.GRPO</span>、<span class='latin'>VAPO</span>、<span class='latin'>CISPO</span>、<span class='latin'>GSPO</span></td><td><span class='latin'>RLVR</span>、长 <span class='latin'>CoT</span>、<span class='latin'>group/sequence</span> <span class='latin'>objective</span> 工程化</td></tr><tr><td>2026</td><td>持续演进</td><td>多裁判、工具环境、<span class='latin'>agentic</span> <span class='latin'>RL</span>、跨模态 <span class='latin'>reward</span></td></tr></table>
-<div class='page'>63 / 67</div>
+<table><tr><td>阶段</td><td>代表</td><td>关键词</td></tr><tr><td>2017-2022</td><td><span class='latin'>Human</span> <span class='latin'>Preferences</span>、<span class='latin'>InstructGPT</span>、<span class='latin'>HH</span></td><td><span class='latin'>RM</span> + <span class='latin'>PPO</span> 标准化</td></tr><tr><td>2023</td><td><span class='latin'>RRHF</span>、<span class='latin'>RAFT</span>、<span class='latin'>SLiC</span>、<span class='latin'>DPO</span>、<span class='latin'>ReST</span>、<span class='latin'>ReMax</span>、<span class='latin'>IPO</span></td><td>不用在线 <span class='latin'>RL</span> 的偏好优化爆发</td></tr><tr><td>2024</td><td><span class='latin'>KTO</span>、<span class='latin'>GRPO</span>、<span class='latin'>RLOO</span>、<span class='latin'>ORPO</span>、<span class='latin'>SimPO</span>、<span class='latin'>Online</span> <span class='latin'>DPO</span></td><td><span class='latin'>critic-free</span> 与 <span class='latin'>reference-free</span> 两条线并进</td></tr><tr><td>2025</td><td><span class='latin'>R1</span>、<span class='latin'>REINFORCE++</span>、<span class='latin'>DAPO</span>、<span class='latin'>Dr.GRPO</span>、<span class='latin'>VAPO</span>、<span class='latin'>CISPO</span>、<span class='latin'>GSPO</span></td><td><span class='latin'>RLVR</span>、长 <span class='latin'>CoT</span>、<span class='latin'>group/sequence</span> <span class='latin'>objective</span> 工程化</td></tr><tr><td>2026</td><td><span class='latin'>RLVRR</span>、<span class='latin'>DHPO</span>、<span class='latin'>SSPO</span>、<span class='latin'>LUSPO</span>、<span class='latin'>SCRL</span>、<span class='latin'>SRaR</span>、<span class='latin'>ACPO</span>、<span class='latin'>RolloutPipe</span></td><td>更新粒度、结构化 <span class='latin'>reward</span>、样本效率和系统吞吐成为主战场</td></tr></table>
+<div class='page'>67 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Synthesis</div>
 <h2>不要把算法名当作能力来源，能力来自目标、数据、采样和约束的闭环</h2>
@@ -772,22 +805,27 @@ tr:first-child td{color:#1B365D;font-weight:700;background:#ece7d8}
 <li>专业后训练的核心能力是把公式、系统指标和人工审阅联成闭环。</li>
 </ul>
 <div class='callout'>实践原则：先定义可信 <span class='latin'>reward</span>，再选择最简单足够的 <span class='latin'>optimizer</span>，最后用真实评测验证而不是用训练 <span class='latin'>reward</span> 自证。</div>
-<div class='page'>64 / 67</div>
+<div class='page'>68 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>Glossary</div>
 <h2>术语表把常见混淆拆开</h2>
 <table><tr><td>术语</td><td>精确定义</td></tr><tr><td><span class='latin'>reference</span> <span class='latin'>model</span></td><td><span class='latin'>KL</span> 或 <span class='latin'>log-ratio</span> 的参照策略，通常是 <span class='latin'>SFT</span> 或前一阶段 <span class='latin'>policy</span></td></tr><tr><td><span class='latin'>old</span> <span class='latin'>policy</span></td><td>产生 <span class='latin'>rollout</span> 的策略，用于 <span class='latin'>importance</span> <span class='latin'>ratio</span></td></tr><tr><td><span class='latin'>reward</span> <span class='latin'>model</span></td><td>从偏好或规则估计标量 <span class='latin'>reward</span> 的模型或函数</td></tr><tr><td><span class='latin'>verifier</span></td><td>能判断输出是否满足规则的程序、模型或混合系统</td></tr><tr><td><span class='latin'>advantage</span></td><td>相对 <span class='latin'>baseline</span> 的收益增量，是 <span class='latin'>policy</span> <span class='latin'>gradient</span> 的权重</td></tr><tr><td><span class='latin'>clip</span> <span class='latin'>fraction</span></td><td><span class='latin'>PPO/GRPO</span> 中被剪切 <span class='latin'>token</span> 或序列的比例，反映更新是否过激</td></tr></table>
-<div class='page'>65 / 67</div>
+<div class='page'>69 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>References</div>
 <h2>参考文献一：<span class='latin'>RLHF</span> 与基础策略优化</h2>
 <table><tr><td><span class='latin'>ID</span></td><td><span class='latin'>Source</span></td></tr><tr><td><span class='latin'>TRPO</span></td><td><span class='latin'>Schulman</span> <span class='latin'>et</span> <span class='latin'>al.</span>, <span class='latin'>Trust</span> <span class='latin'>Region</span> <span class='latin'>Policy</span> <span class='latin'>Optimization</span>, 2015</td></tr><tr><td><span class='latin'>GAE</span></td><td><span class='latin'>Schulman</span> <span class='latin'>et</span> <span class='latin'>al.</span>, <span class='latin'>Generalized</span> <span class='latin'>Advantage</span> <span class='latin'>Estimation</span>, 2015</td></tr><tr><td><span class='latin'>PPO</span></td><td><span class='latin'>Schulman</span> <span class='latin'>et</span> <span class='latin'>al.</span>, <span class='latin'>Proximal</span> <span class='latin'>Policy</span> <span class='latin'>Optimization</span> <span class='latin'>Algorithms</span>, 2017</td></tr><tr><td><span class='latin'>DRHF</span></td><td><span class='latin'>Christiano</span> <span class='latin'>et</span> <span class='latin'>al.</span>, <span class='latin'>Deep</span> <span class='latin'>RL</span> <span class='latin'>from</span> <span class='latin'>Human</span> <span class='latin'>Preferences</span>, 2017</td></tr><tr><td><span class='latin'>IGPT</span></td><td><span class='latin'>Ouyang</span> <span class='latin'>et</span> <span class='latin'>al.</span>, <span class='latin'>InstructGPT</span>, 2022</td></tr><tr><td><span class='latin'>HH/CAI</span></td><td><span class='latin'>Anthropic</span> <span class='latin'>Helpful-Harmless</span> <span class='latin'>RLHF</span> <span class='latin'>and</span> <span class='latin'>Constitutional</span> <span class='latin'>AI</span>, 2022</td></tr></table>
-<div class='page'>66 / 67</div>
+<div class='page'>70 / 72</div>
 </section><section class='slide standard'>
 <div class='eyebrow'>References</div>
 <h2>参考文献二：偏好优化与 <span class='latin'>RLVR</span></h2>
 <table><tr><td><span class='latin'>ID</span></td><td><span class='latin'>Source</span></td></tr><tr><td><span class='latin'>DPO/IPO/KTO/ORPO/SimPO</span></td><td><span class='latin'>Direct</span> <span class='latin'>and</span> <span class='latin'>reference-free</span> <span class='latin'>preference</span> <span class='latin'>optimization</span> <span class='latin'>family</span></td></tr><tr><td><span class='latin'>RLOO/ReMax/REINFORCE++</span></td><td><span class='latin'>critic-free</span> <span class='latin'>policy</span> <span class='latin'>gradient</span> <span class='latin'>family</span></td></tr><tr><td><span class='latin'>GRPO/DeepSeek-R1</span></td><td><span class='latin'>group-relative</span> <span class='latin'>RLVR</span> <span class='latin'>and</span> <span class='latin'>reasoning</span> <span class='latin'>model</span> <span class='latin'>training</span></td></tr><tr><td><span class='latin'>DAPO/Dr.GRPO/VAPO</span></td><td><span class='latin'>long-CoT</span> <span class='latin'>RLVR</span> <span class='latin'>stabilization</span> <span class='latin'>and</span> <span class='latin'>bias</span> <span class='latin'>correction</span></td></tr><tr><td><span class='latin'>CISPO/GSPO</span></td><td><span class='latin'>off-policy</span> <span class='latin'>IS</span> <span class='latin'>clipping</span> <span class='latin'>and</span> <span class='latin'>sequence-level</span> <span class='latin'>group</span> <span class='latin'>optimization</span></td></tr><tr><td><span class='latin'>Tulu/Kimi/MiniMax/Qwen</span></td><td><span class='latin'>open</span> <span class='latin'>and</span> <span class='latin'>industrial</span> <span class='latin'>post-training</span> <span class='latin'>recipes</span></td></tr></table>
-<div class='page'>67 / 67</div>
+<div class='page'>71 / 72</div>
+</section><section class='slide standard'>
+<div class='eyebrow'>References</div>
+<h2>参考文献三：2026 <span class='latin'>RLVR</span> 前沿</h2>
+<table><tr><td><span class='latin'>ID</span></td><td><span class='latin'>Source</span></td></tr><tr><td><span class='latin'>TR-GRPO/SSPO/DHPO/LUSPO/ACPO</span></td><td><span class='latin'>update</span> <span class='latin'>granularity</span>, <span class='latin'>adaptive</span> <span class='latin'>clipping</span> <span class='latin'>and</span> <span class='latin'>length-bias</span> <span class='latin'>control</span></td></tr><tr><td><span class='latin'>RLVRR/RaR/SRaR/SCRL</span></td><td><span class='latin'>reference</span> <span class='latin'>chains</span>, <span class='latin'>rubric</span> <span class='latin'>rewards</span>, <span class='latin'>step-wise</span> <span class='latin'>rewards</span> <span class='latin'>and</span> <span class='latin'>verifiable</span> <span class='latin'>subproblems</span></td></tr><tr><td><span class='latin'>S-trace/GRAIL</span></td><td><span class='latin'>non-uniform</span> <span class='latin'>credit</span> <span class='latin'>assignment</span> <span class='latin'>without</span> <span class='latin'>full</span> <span class='latin'>process</span> <span class='latin'>reward</span> <span class='latin'>labels</span></td></tr><tr><td><span class='latin'>arrol/ExTra/BAPO/MCPO/MaxPO/TAC</span></td><td><span class='latin'>rollout</span> <span class='latin'>pruning</span>, <span class='latin'>exploration</span>, <span class='latin'>replay</span>, <span class='latin'>consolidation</span> <span class='latin'>and</span> <span class='latin'>curriculum</span></td></tr><tr><td><span class='latin'>RolloutPipe</span></td><td><span class='latin'>overlapped</span> <span class='latin'>rollout</span> <span class='latin'>and</span> <span class='latin'>training</span> <span class='latin'>for</span> <span class='latin'>disaggregated</span> <span class='latin'>on-policy</span> <span class='latin'>RL</span> <span class='latin'>systems</span></td></tr><tr><td><span class='latin'>URLVR</span></td><td><span class='latin'>unsupervised</span> <span class='latin'>RLVR</span> <span class='latin'>scaling</span> <span class='latin'>limits</span> <span class='latin'>and</span> <span class='latin'>intrinsic-reward</span> <span class='latin'>failure</span> <span class='latin'>modes</span></td></tr></table>
+<div class='page'>72 / 72</div>
 </section>
 </body>
 </html>

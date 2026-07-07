@@ -1,0 +1,19 @@
+id	level	source_type	date	url	supports	used_in
+S01	A	arxiv	2024-10-07	https://arxiv.org/abs/2410.05160	VLM2Vec; MMEB; instruction-conditioned contrastive training; image-text/document retrieval and grounding	embedding_baseline; academic_map
+S02	A	arxiv	2025-07-07	https://arxiv.org/abs/2507.04590	VLM2Vec-V2; MMEB-V2; video/image/visual-document unified embedding tasks	embedding_baseline; evaluation_scope
+S03	A	arxiv_and_official_repo	2025-06-05	https://arxiv.org/abs/2506.05176	Qwen3 Embedding and Reranker; unsupervised pretraining; SFT; multilingual; MRL; reranker yes/no scoring	text_analog; industrial_recipe
+S04	A	arxiv_and_official_repo	2026-01-08	https://arxiv.org/abs/2601.04720	Qwen3-VL-Embedding and Reranker; contrastive pretraining; reranker distillation; 32k context; multimodal rerank	industrial_map; reranker_recipe
+S05	A	arxiv_and_repo	2024-07-01	https://arxiv.org/abs/2407.01449	ColPali; visual document retrieval; page-image multi-vector late interaction; ViDoRe	doc_retrieval; late_interaction
+S06	A	arxiv	2025-06-14	https://arxiv.org/abs/2506.12364	MM-R5; multimodal reasoning reranker; SFT plus RL with task reward and reasoning reward	rl_feasibility; reranker_recipe
+S07	A	arxiv	2025-10-06	https://arxiv.org/abs/2510.05014	Think Then Embed; reasoner before embedder; SFT-generated embedding-centric reasoning traces	reasoning_before_embedding
+S08	B	arxiv_industrial	2026-02-14	https://arxiv.org/abs/2602.13704	Pailitao-VL; industrial visual commerce retrieval; absolute ID recognition; listwise compare-and-calibrate rerank; author-reported A/B impact	industry_map; listwise_policy
+S09	B	arxiv_and_company_blog	2026-05-26	https://arxiv.org/abs/2605.27295	Gemini Embedding 2; native multimodal embedding; video/audio/image/text; large-scale contrastive multitask training	closed_model_signal; evaluation_scope
+S10	C	company_docs	2025-10-28	https://docs.aws.amazon.com/nova/latest/nova2-userguide/embeddings.html	Amazon Nova multimodal embeddings; unified semantic space; modality and context limits	product_signal
+S11	B	arxiv_and_company_page	2026-03-05	https://arxiv.org/abs/2603.03544	PinCLIP; Pinterest multimodal representation for retrieval, ranking and recommendation; neighbor alignment and production constraints	industry_map; recsys_recipe
+S12	B	company_research_page	2025-10-01	https://www.amazon.science/publications/multimodal-learning-with-online-text-cleaning-for-e-commerce-product-search	Amazon MML-TP; online text cleaning and token pruning for product search multimodal learning	data_quality; ecommerce_recipe
+S13	B	research_blog	2025-10-01	https://thinkingmachines.ai/blog/on-policy-distillation/	OPD mechanism; student on-policy trajectories; teacher token-level feedback; SFT/RL/OPD comparison	opd_definition; opd_feasibility
+S14	A	arxiv_survey	2026-04-01	https://arxiv.org/abs/2604.00626	OPD survey; exposure-bias framing; feedback signal, teacher access and loss granularity taxonomy	opd_definition; risk_boundary
+S15	A	arxiv_and_repo	2026-04-30	https://arxiv.org/abs/2604.28123	PRISM; black-box OPD for multimodal RL; SFT to OPD pre-alignment to RLVR; distribution drift control	opd_recipe; multimodal_reasoning
+S16	A	arxiv_and_repo	2026-05-18	https://arxiv.org/abs/2605.18740	Vision-OPD; crop-conditioned teacher; full-image student rollouts; visual grounding and perception alignment	opd_recipe; perception_alignment
+S17	C	company_docs	2026-04-01	https://docs.cohere.com/docs/multimodal-embeddings	Cohere Embed 4 multimodal embeddings; business document and RAG product interface	product_signal
+S18	C	company_docs	2026-01-15	https://www.mongodb.com/docs/voyageai/models/multimodal-embeddings/	Voyage multimodal embedding product interface and model usage	product_signal

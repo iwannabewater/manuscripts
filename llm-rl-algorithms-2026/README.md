@@ -4,19 +4,21 @@
 
 This directory contains an independently designed Chinese slide deck on reinforcement learning algorithms for large language model post-training. It covers RLHF, RLAIF, RLVR, PPO, RLOO, ReMax, REINFORCE++, DPO, IPO, KTO, ORPO, SimPO, GRPO, Dr.GRPO, DAPO, GSPO, CISPO, VAPO, RAFT, ReST, RRHF, SLiC-HF and representative industrial recipes.
 
+Evidence is current as of 2026-06-26. Papers and official technical reports are treated as primary sources for definitions, formulas, and author-reported results; benchmark claims are not presented as independently verified unless a separate reproduction source supports them.
+
 ## Artifacts
 
-- `index.html` — source slide deck for browser and PDF rendering.
-- `llm-rl-algorithms-2026.pdf` — printable PDF deck.
-- `llm-rl-algorithms-2026.pptx` — PowerPoint export with rendered LaTeX formula images.
-- `sources.md` — source map and references.
-- `assets/formulas/` — LaTeX-generated SVG and PNG formula assets.
+- `index.html`: source slide deck for browser and PDF rendering.
+- `llm-rl-algorithms-2026.pdf`: printable PDF deck.
+- `llm-rl-algorithms-2026.pptx`: PowerPoint export with rendered LaTeX formula images.
+- `sources.md`: source map and references.
+- `assets/formulas/`: LaTeX-generated SVG and PNG formula assets.
 
 ## Build
 
 ```bash
-python3 build_deck.py
-python3 -c "from weasyprint import HTML; HTML('index.html').write_pdf('llm-rl-algorithms-2026.pdf')"
+cd llm-rl-algorithms-2026
+../.venv/bin/python build_deck.py
 ```
 
 The formula assets are compiled with `latex` and `dvisvgm`; PPTX export uses `python-pptx`.

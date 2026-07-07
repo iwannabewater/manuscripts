@@ -1,5 +1,5 @@
 # Sources
-本课件截至 2026-05-16 整理。公式与算法解读以论文原文和公开技术报告为主要来源。
+本课件截至 2026-06-26 整理。公式与算法解读以论文原文、公开技术报告和官方仓库为主要来源。论文或技术报告中的 benchmark 提升默认视为作者报告结果，除非正文明确说明独立复现。
 | ID | Source | URL | Used for |
 |---|---|---|---|
 | TRPO | Trust Region Policy Optimization | https://arxiv.org/abs/1502.05477 | TRPO 约束策略改进与 PPO 背景 |
@@ -42,3 +42,23 @@
 | AOT | Distributional Preference Alignment of LLMs via Optimal Transport | https://arxiv.org/abs/2406.05882 | optimal transport 与 distribution-level preference alignment |
 | APO | Anchored Preference Optimization and Contrastive Revisions | https://arxiv.org/abs/2408.06266 | anchored preference optimization 与 AI revisions |
 | CALDPO | Cal-DPO: Calibrated Direct Preference Optimization for Language Model Alignment | https://arxiv.org/abs/2412.14516 | implicit reward calibration |
+| RAR | Rubrics as Rewards: Reinforcement Learning Beyond Verifiable Domains | https://arxiv.org/abs/2507.17746 | rubric-based rewards beyond binary verifiers |
+| TRGRPO | Token-Regulated Group Relative Policy Optimization for Stable Reinforcement Learning in Large Language Models | https://arxiv.org/abs/2511.00066 | token probability weighting for GRPO stability |
+| SSPO | SSPO: Subsentence-level Policy Optimization | https://arxiv.org/abs/2511.04256 | subsentence-level ratio between token and sequence clipping |
+| RLVRR | From Verifiable Dot to Reward Chain: Harnessing Verifiable Reference-based Rewards for Reinforcement Learning of Open-ended Generation | https://arxiv.org/abs/2601.18533 | reference-based reward chains for open-ended generation |
+| DHPO | Orchestrating Tokens and Sequences: Dynamic Hybrid Policy Optimization for RLVR | https://arxiv.org/abs/2601.05607 | hybrid token-level and sequence-level importance ratios |
+| BAPO | Buffer Matters: Unleashing the Power of Off-Policy Reinforcement Learning in Large Language Model Reasoning | https://arxiv.org/abs/2602.20722 | off-policy buffer reuse and batch adaptation for RLVR |
+| LUSPO | Length-Unbiased Sequence Policy Optimization: Revealing and Controlling Response Length Variation in RLVR | https://arxiv.org/abs/2602.05261 | length bias correction for GSPO-style sequence objectives |
+| URLVR | How Far Can Unsupervised RLVR Scale LLM Training? | https://arxiv.org/abs/2603.08660 | unsupervised RLVR limits and confidence-correctness collapse risk |
+| ARROL | Prune as You Generate: Online Rollout Pruning for Faster and Better RLVR | https://arxiv.org/abs/2603.24840 | online rollout pruning for sparse group advantages |
+| ASYMGRPO | Asymmetric Advantage Modulation Calibrates Entropy Dynamics in RLVR | https://arxiv.org/abs/2604.04894 | positive and negative advantage channels for productive entropy |
+| MCPO | MCPO: Mastery-Consolidated Policy Optimization for Large Reasoning Models | https://arxiv.org/abs/2604.16972 | mastered-prompt consolidation and hinge-KL regularization |
+| STRACE | Beyond Uniform Credit Assignment: Selective Eligibility Traces for RLVR | https://arxiv.org/abs/2605.05965 | critic-free selective eligibility traces and non-uniform credit |
+| SCRL | From Reasoning Chains to Verifiable Subproblems: Curriculum Reinforcement Learning Enables Credit Assignment for LLM Reasoning | https://arxiv.org/abs/2605.22074 | verifiable subproblem curriculum for hard reasoning credit assignment |
+| SRAR | Step-wise Rubric Rewards for LLM Reasoning | https://arxiv.org/abs/2605.17291 | step-wise rubric attribution and per-step reward normalization |
+| GRAIL | GRAIL: Gradient-Reweighted Advantages for Reinforcement Learning with Verifiable Rewards | https://arxiv.org/abs/2606.04889 | gradient-saliency token reweighting without PRM labels |
+| MAXPO | On Advantage Estimates for Max@K Policy Gradients | https://arxiv.org/abs/2606.06080 | Max@K policy gradients and leave-two-out baseline |
+| ACPO | What are Key Factors for Updates in RL for LLM Reasoning? | https://arxiv.org/abs/2606.22570 | analysis-driven adaptive clipping from update dynamics |
+| EXTRA | ExTra: Exploratory Trajectory Optimization for Language Model Reinforcement Learning | https://arxiv.org/abs/2606.24994 | novelty rewards and entropy-guided prefix regeneration |
+| TAC | Transferability for General Reasoning: An Automated Curriculum for Multi-Domain RLVR | https://arxiv.org/abs/2606.25178 | transferability-aware curriculum for multi-domain RLVR |
+| ROLLPIPE | RolloutPipe: Overlapping Pipelined Rollout and Training in Disaggregated On-Policy LLM Reinforcement Learning | https://arxiv.org/abs/2606.26997 | disaggregated rollout-training pipeline for on-policy RLVR systems |

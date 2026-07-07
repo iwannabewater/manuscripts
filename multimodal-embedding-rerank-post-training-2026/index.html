@@ -1,0 +1,1027 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>多模态 Embedding/Rerank 后训练 2026：从对比学习到 SFT、RL 与 OPD</title>
+<meta name="author" content="Winston">
+<meta name="description" content="截至 2026-07-07 的多模态 embedding 与 rerank 后训练技术研究，覆盖 SFT、RL、OPD、蒸馏、late interaction、工业落地与评测闭环。">
+<meta name="keywords" content="multimodal embedding, rerank, SFT, RL, OPD, VLM2Vec, Qwen3-VL, ColPali, MM-R5">
+<meta name="generator" content="Winston">
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
+<style>
+  @page {
+    size: A4;
+    margin: 18mm 20mm 20mm 20mm;
+    background: #f6f3ea;
+
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02";
+      font-size: 8pt;
+      color: #6f6a5d;
+    }
+
+    @bottom-center {
+      content: counter(page) " / 多模态 Embedding-Rerank 后训练 2026";
+      font-family: "TsangerJinKai02";
+      font-size: 8.5pt;
+      color: #6f6a5d;
+    }
+  }
+
+  @page:first {
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-main);
+  }
+
+  :root {
+    --paper: #f6f3ea;
+    --panel: #fbfaf5;
+    --ink: #151515;
+    --muted: #635f56;
+    --faint: #8a8578;
+    --line: #ded8c8;
+    --line-strong: #c9c0aa;
+    --blue: #17365d;
+    --blue-soft: #e6edf4;
+    --green: #305b46;
+    --gold: #7b5a1e;
+    --red: #7a2e2e;
+    --font-main: "TsangerJinKai02";
+    --font-code: "JetBrains Mono", "JetBrainsMono", "TsangerJinKai02";
+  }
+
+  html,
+  body { background: var(--paper); }
+
+  @media screen {
+    body {
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 18mm 20mm 20mm 20mm;
+    }
+  }
+
+  body {
+    color: var(--ink);
+    font-family: var(--font-main);
+    font-size: 9.8pt;
+    line-height: 1.58;
+    letter-spacing: 0.08pt;
+    widows: 3;
+    orphans: 3;
+  }
+
+  a { color: var(--blue); text-decoration: none; }
+  strong { font-weight: 500; }
+  .mono { font-family: var(--font-code); letter-spacing: 0; }
+  code,
+  pre,
+  kbd,
+  samp,
+  .cover-eyebrow,
+  .toc-index,
+  .kicker,
+  .ref {
+    font-family: var(--font-code);
+  }
+
+  svg text,
+  svg tspan {
+    font-family: var(--font-main);
+  }
+
+  .ref {
+    color: var(--blue);
+    font-size: 8pt;
+    white-space: nowrap;
+  }
+
+  .cover {
+    min-height: 242mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    break-after: page;
+    padding-top: 29mm;
+  }
+
+  .cover-eyebrow {
+    color: var(--blue);
+    font-size: 8.3pt;
+    letter-spacing: 1.4pt;
+    text-transform: uppercase;
+    margin-bottom: 15pt;
+  }
+
+  .cover-rule {
+    width: 52mm;
+    height: 2pt;
+    background: var(--blue);
+    border-radius: 2pt;
+    margin-bottom: 18pt;
+  }
+
+  .cover-title {
+    max-width: 174mm;
+    font-size: 31pt;
+    font-weight: 500;
+    line-height: 1.16;
+    letter-spacing: 0;
+    margin-bottom: 15pt;
+  }
+
+  .cover-sub {
+    max-width: 166mm;
+    color: var(--muted);
+    font-size: 12.4pt;
+    line-height: 1.62;
+  }
+
+  .cover-meta {
+    color: var(--muted);
+    border-top: 1pt solid var(--line);
+    padding-top: 12pt;
+    font-size: 9.3pt;
+    line-height: 1.65;
+  }
+
+  .toc {
+    break-after: page;
+    padding-top: 3mm;
+  }
+
+  .toc h2,
+  section h2 {
+    color: var(--ink);
+    font-size: 20pt;
+    font-weight: 500;
+    line-height: 1.22;
+    margin-bottom: 10pt;
+    string-set: section-title content();
+  }
+
+  .toc h2 {
+    border-left: 3pt solid var(--blue);
+    padding-left: 8pt;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7pt 14pt;
+    margin-top: 11pt;
+  }
+
+  .toc-item {
+    border-top: 1pt solid var(--line);
+    padding-top: 7pt;
+    min-height: 26pt;
+  }
+
+  .toc-index {
+    color: var(--blue);
+    font-size: 8pt;
+    margin-right: 4pt;
+  }
+
+  section {
+    break-inside: auto;
+    margin-bottom: 15pt;
+  }
+
+  section.page {
+    break-before: page;
+    padding-top: 2mm;
+  }
+
+  h3 {
+    color: var(--blue);
+    font-size: 13pt;
+    font-weight: 500;
+    line-height: 1.32;
+    margin: 11pt 0 5pt 0;
+  }
+
+  h4 {
+    color: var(--ink);
+    font-size: 10.6pt;
+    font-weight: 500;
+    margin: 8pt 0 3pt 0;
+  }
+
+  p { margin: 0 0 6.2pt 0; }
+
+  ul,
+  ol {
+    margin: 3pt 0 8pt 14pt;
+  }
+
+  li { margin-bottom: 3.5pt; }
+
+  .lead {
+    color: var(--muted);
+    font-size: 11.3pt;
+    line-height: 1.66;
+    margin-bottom: 11pt;
+  }
+
+  .kicker {
+    color: var(--blue);
+    font-size: 8pt;
+    letter-spacing: 0.5pt;
+    margin-bottom: 5pt;
+    text-transform: uppercase;
+  }
+
+  .callout {
+    background: var(--panel);
+    border: 1pt solid var(--line);
+    border-left: 3pt solid var(--blue);
+    padding: 9pt 10pt;
+    margin: 9pt 0 11pt 0;
+  }
+
+  .callout strong { color: var(--blue); }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8pt;
+    margin: 9pt 0 12pt 0;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8pt;
+    margin: 9pt 0 12pt 0;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1pt solid var(--line);
+    border-radius: 6pt;
+    padding: 9pt;
+    break-inside: avoid;
+  }
+
+  .card h3,
+  .card h4 {
+    margin-top: 0;
+  }
+
+  .score {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22pt;
+    height: 17pt;
+    padding: 0 5pt;
+    border-radius: 999pt;
+    color: #fff;
+    background: var(--blue);
+    font-family: var(--font-main);
+    font-size: 7.5pt;
+    margin-right: 4pt;
+  }
+
+  .score.mid { background: var(--gold); }
+  .score.low { background: var(--red); }
+  .score.good { background: var(--green); }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8pt 0 12pt 0;
+    break-inside: avoid;
+  }
+
+  th,
+  td {
+    border: 0.8pt solid var(--line);
+    padding: 5.2pt 5.8pt;
+    vertical-align: top;
+    line-height: 1.45;
+  }
+
+  th {
+    color: var(--blue);
+    background: var(--blue-soft);
+    font-weight: 500;
+  }
+
+  td:first-child,
+  th:first-child {
+    width: 23%;
+  }
+
+  .small {
+    color: var(--muted);
+    font-size: 8.7pt;
+    line-height: 1.48;
+  }
+
+  .caption {
+    color: var(--muted);
+    font-size: 8.5pt;
+    margin-top: -6pt;
+    margin-bottom: 9pt;
+  }
+
+  .diagram {
+    background: var(--panel);
+    border: 1pt solid var(--line);
+    border-radius: 6pt;
+    padding: 6pt;
+    margin: 9pt 0 12pt 0;
+    break-inside: avoid;
+  }
+
+  svg { width: 100%; height: auto; display: block; }
+
+  .tag {
+    display: inline-block;
+    color: var(--blue);
+    background: var(--blue-soft);
+    border: 0.8pt solid #d2dfec;
+    border-radius: 999pt;
+    padding: 1pt 5pt;
+    margin: 0 2pt 2pt 0;
+    font-size: 8.3pt;
+  }
+
+  .quote {
+    border-left: 2pt solid var(--line-strong);
+    padding-left: 8pt;
+    color: var(--muted);
+    margin: 6pt 0 8pt 0;
+  }
+
+  .break-avoid { break-inside: avoid; }
+  .source-table td:first-child,
+  .source-table th:first-child { width: 9%; }
+</style>
+</head>
+<body>
+<article>
+  <section class="cover">
+    <div>
+      <div class="cover-eyebrow">Evidence-based Technical Manuscript / 2026</div>
+      <div class="cover-rule"></div>
+      <h1 class="cover-title">多模态 Embedding/Rerank 后训练 2026：从对比学习到 SFT、RL 与 OPD</h1>
+      <p class="cover-sub">面向搜索、推荐、RAG、视觉商品检索与文档理解系统的后训练方案手册。结论并非“把所有后训练方法套到 embedding 上”，而是按模型决策面拆解：向量召回、late interaction、cross-encoder rerank、生成式 rerank 与检索代理，分别需要不同训练信号。</p>
+    </div>
+    <div class="cover-meta">
+      <p><strong>证据日期</strong>：2026-07-07。论文版本、产品能力、榜单结果与工业案例均按该日期解释。</p>
+      <p><strong>覆盖范围</strong>：多模态 embedding、reranker、visual document retrieval、commerce retrieval、OPD/RL 后训练可行性和工程评测闭环。</p>
+      <p><strong>证据边界</strong>：论文和官方仓库作为方法依据；公司论文、博客、产品文档作为工业信号；厂商榜单和 A/B 结果均视为作者报告。</p>
+    </div>
+  </section>
+
+  <section class="toc">
+    <h2>目录</h2>
+    <p class="lead">本文先给结论，再展开证据。读者如果只关心落地，可直接读第 6 节和第 7 节。</p>
+    <div class="toc-grid">
+      <div class="toc-item"><span class="toc-index">01</span>结论摘要：三类模型面，三类后训练</div>
+      <div class="toc-item"><span class="toc-index">02</span>问题边界：embedding、rerank 与生成式决策</div>
+      <div class="toc-item"><span class="toc-index">03</span>证据图谱：学术路线与工业路线</div>
+      <div class="toc-item"><span class="toc-index">04</span>SFT：向量模型的可行路径与误用边界</div>
+      <div class="toc-item"><span class="toc-index">05</span>RL：更适合 rerank 与检索代理</div>
+      <div class="toc-item"><span class="toc-index">06</span>OPD：适合有轨迹的多模态决策面</div>
+      <div class="toc-item"><span class="toc-index">07</span>落地配方：四条可执行训练链路</div>
+      <div class="toc-item"><span class="toc-index">08</span>评测、风险与上线门槛</div>
+      <div class="toc-item"><span class="toc-index">09</span>决策树与资料索引</div>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="kicker">01 / Executive View</div>
+    <h2>结论摘要：三类模型面，三类后训练</h2>
+    <p class="lead">多模态 embedding/rerank 后训练的关键，不是选择一个听起来先进的算法，而是先确认模型在哪里做决策。纯向量模型、cross-encoder reranker、生成式 reranker 或检索代理的可优化信号不同，SFT、RL、OPD 的价值也随之改变。</p>
+
+    <div class="grid-3">
+      <div class="card">
+        <h3><span class="score good">高</span>Embedding</h3>
+        <p>成熟路线是 instruction-conditioned contrastive tuning、hard-negative curriculum、teacher/reranker distillation、synthetic data 与 MRL。VLM2Vec、VLM2Vec-V2、Qwen3/Qwen3-VL 系列均支持这一判断 <span class="ref">[S01][S02][S03][S04]</span>。</p>
+      </div>
+      <div class="card">
+        <h3><span class="score good">高</span>Rerank</h3>
+        <p>reranker 有明确候选集、排序标签和下游指标，SFT 与 RL 都更自然。MM-R5 用 SFT 构造 reasoning chain，再用 reranking reward 和 reasoning reward 优化；Pailitao-VL 把工业重排推向 listwise compare-and-calibrate <span class="ref">[S06][S08]</span>。</p>
+      </div>
+      <div class="card">
+        <h3><span class="score mid">中</span>OPD</h3>
+        <p>OPD 的核心是 student 在自己的状态分布上产生 token 轨迹，teacher 给密集反馈。它适合多模态 reasoning、生成式 rerank、SFT 到 RLVR 的预对齐；对纯 dense embedding 则通常只能作为间接数据和教师信号来源 <span class="ref">[S13][S14][S15][S16]</span>。</p>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><strong>一句话判断</strong>：embedding 后训练不要直接追逐 RL/OPD 名称；先把对比学习、指令化、难负例、蒸馏和评测数据闭环做到位。rerank 或检索代理如果能稳定定义 reward，才进入 SFT plus RL。OPD 放在会生成推理、解释、比较或检索动作的模型面，而不是直接替代向量损失。</p>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>方案</th>
+          <th>对 dense embedding</th>
+          <th>对 rerank</th>
+          <th>上线前必须证明</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>SFT-like 指令调优</td>
+          <td>高可行，但通常表现为带指令的对比训练或蒸馏，不是传统 token likelihood SFT。</td>
+          <td>高可行，可训练输入格式、跨模态证据链、yes/no 或 listwise 打分。</td>
+          <td>跨域 Recall@K、NDCG、难负例鲁棒性、指令迁移收益。</td>
+        </tr>
+        <tr>
+          <td>RL</td>
+          <td>直接做向量训练可行性偏低，常遇到离散 top-k、索引刷新、credit assignment 与高方差问题。</td>
+          <td>中到高，适合候选集固定、reward 稳定、排序或 answerability 可度量的场景。</td>
+          <td>reward 与真实业务指标相关，未发生 judge hacking，延迟预算未被打穿。</td>
+        </tr>
+        <tr>
+          <td>OPD</td>
+          <td>直接可行性低到中，因为纯向量编码器没有 token 轨迹；可间接生成更好的 queries、rationales、教师分数。</td>
+          <td>中到高，尤其是生成式 reranker、视觉推理 reranker、SFT 到 RLVR 的过渡阶段。</td>
+          <td>student-state distribution drift 下降，OPD 之后 RL 或 rerank 指标真实提升。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="page">
+    <div class="kicker">02 / Model Surfaces</div>
+    <h2>问题边界：embedding、rerank 与生成式决策</h2>
+    <p>多模态检索系统通常被拆成召回、粗排、精排、重排和答案生成。embedding 负责把 query、图像、视频、文档页、商品或文本映射到共享空间；reranker 在较小候选集上做更贵的跨注意力或 listwise 比较。二者的训练目标相邻，但不是同一个问题。</p>
+
+    <div class="diagram">
+      <svg viewBox="0 0 960 380" role="img" aria-label="多模态检索后训练决策面" font-family="TsangerJinKai02">
+        <defs>
+          <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+            <path d="M0,0 L8,3 L0,6 Z" fill="#17365d"></path>
+          </marker>
+        </defs>
+        <rect x="26" y="32" width="145" height="70" rx="10" fill="#e6edf4" stroke="#b8c7d8"></rect>
+        <text x="98" y="60" text-anchor="middle" font-size="20" fill="#17365d">Query</text>
+        <text x="98" y="84" text-anchor="middle" font-size="15" fill="#635f56">文本/图/语音/视频</text>
+
+        <rect x="230" y="24" width="170" height="86" rx="10" fill="#fbfaf5" stroke="#c9c0aa"></rect>
+        <text x="315" y="56" text-anchor="middle" font-size="20" fill="#151515">Dense Embedding</text>
+        <text x="315" y="83" text-anchor="middle" font-size="15" fill="#635f56">对比学习/蒸馏/难负例</text>
+
+        <rect x="466" y="24" width="160" height="86" rx="10" fill="#fbfaf5" stroke="#c9c0aa"></rect>
+        <text x="546" y="56" text-anchor="middle" font-size="20" fill="#151515">Top-k Recall</text>
+        <text x="546" y="83" text-anchor="middle" font-size="15" fill="#635f56">ANN / multi-vector</text>
+
+        <rect x="690" y="24" width="205" height="86" rx="10" fill="#fbfaf5" stroke="#c9c0aa"></rect>
+        <text x="793" y="54" text-anchor="middle" font-size="20" fill="#151515">Rerank / Policy</text>
+        <text x="793" y="81" text-anchor="middle" font-size="15" fill="#635f56">SFT / RL / OPD 可用面</text>
+
+        <path d="M171,67 L224,67" stroke="#17365d" stroke-width="2" marker-end="url(#arrow)"></path>
+        <path d="M400,67 L458,67" stroke="#17365d" stroke-width="2" marker-end="url(#arrow)"></path>
+        <path d="M626,67 L682,67" stroke="#17365d" stroke-width="2" marker-end="url(#arrow)"></path>
+
+        <rect x="230" y="182" width="170" height="96" rx="10" fill="#eef5ef" stroke="#adc4b4"></rect>
+        <text x="315" y="216" text-anchor="middle" font-size="20" fill="#305b46">Embedding 后训练</text>
+        <text x="315" y="244" text-anchor="middle" font-size="15" fill="#635f56">pair/triplet/list distill</text>
+        <text x="315" y="267" text-anchor="middle" font-size="15" fill="#635f56">检验召回与泛化</text>
+
+        <rect x="492" y="178" width="182" height="106" rx="10" fill="#fff4df" stroke="#d5bd87"></rect>
+        <text x="583" y="211" text-anchor="middle" font-size="20" fill="#7b5a1e">Rerank 后训练</text>
+        <text x="583" y="239" text-anchor="middle" font-size="15" fill="#635f56">listwise / rationale</text>
+        <text x="583" y="263" text-anchor="middle" font-size="15" fill="#635f56">优化 NDCG 和 top-k</text>
+
+        <rect x="742" y="178" width="170" height="106" rx="10" fill="#f8eaea" stroke="#d6afaf"></rect>
+        <text x="827" y="211" text-anchor="middle" font-size="20" fill="#7a2e2e">OPD/RL 面</text>
+        <text x="827" y="239" text-anchor="middle" font-size="15" fill="#635f56">学生轨迹/教师反馈</text>
+        <text x="827" y="263" text-anchor="middle" font-size="15" fill="#635f56">适合生成式决策</text>
+      </svg>
+    </div>
+    <p class="caption">图 1：同一个检索系统中，embedding、rerank、policy 的后训练信号不同。OPD 和 RL 的自然位置通常在右侧的生成式或可行动决策面。</p>
+
+    <h3>四个概念必须分开</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>模型面</th>
+          <th>输出</th>
+          <th>主要训练信号</th>
+          <th>后训练问题</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Dense embedding</td>
+          <td>单向量或少量向量</td>
+          <td>对比损失、triplet、in-batch negatives、teacher score distillation</td>
+          <td>让相似项更近、混淆项更远，同时保持跨模态泛化。</td>
+        </tr>
+        <tr>
+          <td>Late interaction</td>
+          <td>多向量集合与 max-sim 聚合</td>
+          <td>页面 patch/token 级监督、late-interaction ranking loss</td>
+          <td>保留文档图像细节，换取更高存储和检索计算。</td>
+        </tr>
+        <tr>
+          <td>Cross-encoder reranker</td>
+          <td>候选得分或 yes/no logits</td>
+          <td>pairwise/listwise SFT、teacher ranking、calibrated labels</td>
+          <td>让模型在候选集合内做精细比较，而不是负责全库召回。</td>
+        </tr>
+        <tr>
+          <td>Generative reranker / retrieval agent</td>
+          <td>排序、解释、动作、证据链</td>
+          <td>SFT traces、OPD、RLVR、task reward</td>
+          <td>对齐推理过程、减少分布漂移，并让 reward 绑定业务目标。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>因此，“SFT 是否能训练 embedding”需要拆开回答。如果 SFT 指经典语言模型 token likelihood，它并不是 dense embedding 的主损失；如果 SFT 指面向任务指令、query-document pair、hard negative、teacher score 的监督微调，则它是当前最可落地的后训练范式之一。Qwen3 Embedding/Reranker 与 Qwen3-VL-Embedding/Reranker 的公开资料显示，工业级 embedding 往往使用多阶段训练：无监督或大规模弱监督预训练，随后是任务数据、指令、难负例和 reranker/distillation 信号 <span class="ref">[S03][S04]</span>。</p>
+  </section>
+
+  <section class="page">
+    <div class="kicker">03 / Evidence Map</div>
+    <h2>证据图谱：学术路线与工业路线</h2>
+    <p class="lead">2024 到 2026 年的公开资料给出两个互补方向：学术界把多模态 embedding 从图文检索扩展到文档页、视频、视觉问答和 grounding；工业界把它接入商品检索、推荐、企业 RAG 与统一多模态 API。</p>
+
+    <h3>学术路线</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>工作</th>
+          <th>核心贡献</th>
+          <th>对后训练的启发</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>VLM2Vec / MMEB <span class="ref">[S01]</span></td>
+          <td>把 VLM 转成 embedding model，使用任务指令和对比学习，覆盖分类、VQA、多模态检索、视觉 grounding 等任务。</td>
+          <td>多模态 embedding 的后训练应显式携带任务指令和任务族，而不是只做通用图文对齐。</td>
+        </tr>
+        <tr>
+          <td>VLM2Vec-V2 / MMEB-V2 <span class="ref">[S02]</span></td>
+          <td>把评测扩展到视频、图像、视觉文档、temporal grounding、video QA 等多任务输入。</td>
+          <td>评测集必须覆盖模态混合和任务混合，否则“通用 embedding”只是文本检索或图文检索的局部最优。</td>
+        </tr>
+        <tr>
+          <td>ColPali <span class="ref">[S05]</span></td>
+          <td>直接把文档页面作为图像输入，生成多向量表示，用 late interaction 做视觉文档检索。</td>
+          <td>PDF、票据、合同、长图等场景不应被强行压成单向量。多向量召回能保留布局与局部视觉证据，但要付出索引成本。</td>
+        </tr>
+        <tr>
+          <td>MM-R5 <span class="ref">[S06]</span></td>
+          <td>用 SFT 构造多模态检索 reasoning chain，再用任务 reranking reward 和 template reasoning reward 做 RL。</td>
+          <td>RL 的自然落点是 reranker 和 reasoning surface。它优化的是候选集内排序和解释过程，而不是直接替代 embedding loss。</td>
+        </tr>
+        <tr>
+          <td>Think Then Embed <span class="ref">[S07]</span></td>
+          <td>在 embedding 前引入 reasoner，用 embedding-centric reasoning traces 辅助小模型学习。</td>
+          <td>当 query 需要跨视觉、文本和隐含意图推理时，先生成可控上下文，再训练 embedding 或 reranker，往往比盲目扩大向量模型更有效。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>工业路线</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>系统或模型</th>
+          <th>公开信号</th>
+          <th>落地含义</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Qwen3-VL-Embedding/Reranker <span class="ref">[S04]</span></td>
+          <td>多阶段训练、contrastive pretraining、reranking model distillation、MRL、32k context、多语言和多模态输入。</td>
+          <td>“embedding plus reranker”应作为一套共同训练和共同评测的系统，而不是两个互不校准的模型。</td>
+        </tr>
+        <tr>
+          <td>Pailitao-VL <span class="ref">[S08]</span></td>
+          <td>阿里视觉商品检索工业论文，召回从 contrastive learning 走向 absolute ID recognition，重排从 pointwise 走向 listwise compare-and-calibrate。</td>
+          <td>超大商品库的后训练不只关心 pair 级相似，还关心 ID 级可识别性、候选集比较和业务分布。A/B 与 GMV 结果按作者报告处理。</td>
+        </tr>
+        <tr>
+          <td>Gemini Embedding 2 <span class="ref">[S09]</span></td>
+          <td>Google 发布 native multimodal embedding，覆盖文本、图像、视频、音频，论文描述大规模多任务、多阶段对比训练。</td>
+          <td>闭源 API 路线证明统一多模态 embedding 已成为产品能力，但训练细节和长期稳定性需要本地评测兜底。</td>
+        </tr>
+        <tr>
+          <td>Amazon Nova Multimodal Embeddings <span class="ref">[S10]</span></td>
+          <td>AWS 文档给出统一语义空间、模态输入和上下文限制。</td>
+          <td>企业落地要把模型能力转成输入规范、分片策略、批处理、异步任务和成本控制，而不是只看榜单。</td>
+        </tr>
+        <tr>
+          <td>PinCLIP / MML-TP <span class="ref">[S11][S12]</span></td>
+          <td>Pinterest 和 Amazon 的公开资料强调多模态 representation、邻居对齐、在线文本清洗和商品搜索噪声处理。</td>
+          <td>电商和推荐系统的关键不是“更大 VLM”，而是多模态数据质量、属性噪声、近邻结构和线上分布。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <p><strong>证据合流</strong>：学术界提供任务扩展、损失函数与评测基准；工业界提供长尾商品、文档、视频、API、延迟和线上分布压力。可靠方案必须同时解释二者，否则会变成只在 benchmark 上漂亮、上线后无法维护的模型。</p>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="kicker">04 / SFT</div>
+    <h2>SFT：向量模型的可行路径与误用边界</h2>
+    <p>对多模态 embedding 而言，SFT 最容易被误解。传统语言模型 SFT 通过 teacher-forced token loss 学会输出文本；dense embedding 则输出向量，主要目标是距离结构。因此，严格说，embedding 的“后训练”常常不是 token SFT，而是 supervised representation tuning：在带指令、带正负样本、带教师分数的数据上优化对比或排序蒸馏损失。</p>
+
+    <h3>可行路径一：指令化对比训练</h3>
+    <p>VLM2Vec 的关键信号是把任务说明纳入 embedding 输入，使同一个 VLM 可以在不同任务下形成可比较表示 <span class="ref">[S01]</span>。这对工业系统尤其重要：商品图搜、图文 RAG、视觉文档问答、视频检索的相似性定义不同。如果不把任务写入输入，模型会把“相似图片”“同款商品”“能回答问题的文档页”“同一事件视频片段”混成一种距离。</p>
+    <p>落地时，训练样本至少应包含四元组：<span class="mono">(instruction, query, positive, negatives)</span>。instruction 不是装饰性前缀，而是决定监督语义的条件。负例也不能只靠随机采样，需要包括同类商品、近似布局文档页、相同 OCR 但不同图像证据、相似视频封面但事件不同的 confusers。</p>
+
+    <h3>可行路径二：难负例与 reranker 蒸馏</h3>
+    <p>Qwen3 和 Qwen3-VL 的公开资料都把 embedding 与 reranker 放在同一系统里理解。embedding 负责高覆盖召回，reranker 负责高精度比较；reranker 的分数、排序和失败样本反过来构成 embedding 后训练数据 <span class="ref">[S03][S04]</span>。</p>
+    <p>这个闭环比简单扩充正样本更重要。对于多模态检索，最常见失败不是“模型完全不懂图片”，而是相似外观、同品牌不同型号、同页面不同表格、视频同封面不同片段、商品标题属性缺失等细粒度错误。hard-negative curriculum 能把这些错误显式喂给向量模型。</p>
+
+    <h3>可行路径三：MRL 与多粒度服务</h3>
+    <p>Qwen3 系列公开提到 Matryoshka Representation Learning，这代表一种工程化诉求：同一模型输出可以在不同向量维度上服务不同成本层级 <span class="ref">[S03][S04]</span>。后训练时不能只看最高维度指标，也要验证缩短维度后的 Recall@K、类目长尾、跨语言、跨模态和 latency cost。</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>SFT 数据</th>
+          <th>训练目标</th>
+          <th>可接受证据</th>
+          <th>常见陷阱</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>人工或业务日志 pair/triplet</td>
+          <td>对比损失、margin loss、multi-negative loss</td>
+          <td>冷启动类目和跨模态 holdout 提升，而非只在训练相邻类目提升。</td>
+          <td>随机负例过易，导致线上 top-k 几乎无改善。</td>
+        </tr>
+        <tr>
+          <td>LLM/VLM 合成 queries 与 captions</td>
+          <td>query 多样化、指令泛化、跨语言增强</td>
+          <td>人工抽检通过，合成分布不覆盖真实 query 频率。</td>
+          <td>模型学会 caption 模板，而不是学会视觉证据。</td>
+        </tr>
+        <tr>
+          <td>reranker teacher scores</td>
+          <td>score distillation、排序蒸馏、soft label</td>
+          <td>蒸馏后召回和 rerank pipeline 总 NDCG 同时提升。</td>
+          <td>把 teacher 的 benchmark bias 压进召回模型。</td>
+        </tr>
+        <tr>
+          <td>page image 与 visual document labels</td>
+          <td>late interaction 或多向量对齐</td>
+          <td>ViDoRe 风格页面检索、表格页、扫描件和版式变化测试。</td>
+          <td>OCR 管线已经足够时，盲目引入多向量导致成本上升。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="page">
+    <div class="kicker">05 / RL</div>
+    <h2>RL：更适合 rerank 与检索代理</h2>
+    <p class="lead">RL 的优势是直接优化目标函数以外的任务收益；它的代价是高方差、reward 设计、线上分布模拟和训练成本。对 dense embedding 来说，top-k 检索结果依赖索引、近邻搜索和离散候选集合，直接 credit assignment 很难。对 reranker 来说，候选集固定、排序指标明确，RL 的落点自然得多。</p>
+
+    <h3>为什么 dense embedding 不应优先做直接 RL</h3>
+    <p>纯向量模型的输出是连续向量，但业务 reward 往往来自离散 top-k：用户是否点击、答案是否能被生成、候选是否同款、排序是否正确。训练时还要面对索引刷新、ANN 近似误差、负例池漂移、batch 内样本不代表线上候选集等问题。把这些都塞进 RL，通常会让训练变得复杂而不稳定。</p>
+    <p>这并不表示 RL 与 embedding 无关。更合理的路径是：先用 reranker、检索代理或 query reformulator 做 RL，得到更高质量的排序、查询改写、hard negatives 或 teacher scores，再蒸馏回 embedding。这样 RL 优化发生在能定义动作和 reward 的模型面，embedding 仍用稳定的表征损失吸收结果。</p>
+
+    <h3>reranker 的 RL 可行性更高</h3>
+    <p>MM-R5 是一个明确例子：它先用 SFT 让模型生成多模态检索 reasoning chain，再用任务特定 reranking reward 和 reasoning template reward 继续优化 <span class="ref">[S06]</span>。这说明 RL 在 rerank 面有三个优势：候选集较小，reward 可以绑定 NDCG/MRR/answerability，生成式 reasoning 能被格式或证据奖励约束。</p>
+    <p>Pailitao-VL 的工业信号也指向同一方向：大规模商品视觉检索的后段重排从 pointwise 走向 listwise compare-and-calibrate policy <span class="ref">[S08]</span>。对商品搜索而言，用户看到的是一页结果，而不是孤立的 query-item pair；listwise 信号能显式学习同屏候选之间的替代、互补和校准关系。</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>RL 对象</th>
+          <th>动作空间</th>
+          <th>reward 来源</th>
+          <th>推荐程度</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Dense encoder</td>
+          <td>向量位置或相似度结构</td>
+          <td>top-k 命中、点击、问答成功</td>
+          <td><span class="score low">低</span>仅建议研究性探索或非常成熟的模拟器场景。</td>
+        </tr>
+        <tr>
+          <td>Cross-encoder reranker</td>
+          <td>候选得分、pairwise/listwise order</td>
+          <td>NDCG、MRR、人工偏好、教师排序</td>
+          <td><span class="score good">高</span>候选集稳定时可以做 SFT plus RL。</td>
+        </tr>
+        <tr>
+          <td>Generative reranker</td>
+          <td>解释、证据链、最终排序</td>
+          <td>排序指标、证据引用、格式约束、答案可用性</td>
+          <td><span class="score good">高</span>适合视觉推理和文档检索 rerank。</td>
+        </tr>
+        <tr>
+          <td>Query reformulator / retrieval agent</td>
+          <td>查询改写、检索轮次、过滤条件</td>
+          <td>下游召回、答案正确性、成本惩罚</td>
+          <td><span class="score mid">中</span>需要严格成本和越权检索约束。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <p><strong>上线原则</strong>：没有稳定 candidate generator、离线 reward 与线上业务指标相关性、反作弊 judge、人工抽检和延迟预算，就不要把 RL 接入生产检索链路。RL 的第一批收益应发生在 reranker 或 retrieval policy，而不是直接改向量空间。</p>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="kicker">06 / OPD</div>
+    <h2>OPD：适合有轨迹的多模态决策面</h2>
+    <p>OPD 解决的问题可以概括为：SFT 在 teacher 或数据集前缀上学习，学生部署后却在自己的状态分布上生成；这种 distribution drift 会让后续 RL 或推理轨迹不稳定。OPD 让 student 先在自己的轨迹上 rollout，再由 teacher 在这些状态上给更密集的 token 级或步骤级反馈 <span class="ref">[S13][S14]</span>。</p>
+
+    <h3>为什么 OPD 不是 dense embedding 的直接替代</h3>
+    <p>dense embedding 模型通常不生成 token 轨迹，训练目标也不是“下一个 token”。因此，OPD 无法像作用于语言模型那样直接作用于一个纯向量编码器。若要把 OPD 用到 embedding 系统，通常需要引入一个会生成的中间面：query reasoner、caption/attribute generator、generative reranker、检索代理或 teacher model。OPD 先改善这个中间面的状态分布，再把结果转成 pair、hard negatives、teacher scores 或 reasoning-conditioned inputs，最后仍用对比学习或蒸馏训练 embedding。</p>
+
+    <h3>OPD 对多模态 reranker 的价值</h3>
+    <p>PRISM 将多模态训练链路写成 SFT 到 OPD pre-alignment 到 RLVR，目标是缓解 SFT 到 RL 时的分布漂移 <span class="ref">[S15]</span>。Vision-OPD 则把教师和学生放在不同视觉信息条件下，用 crop-conditioned teacher 指导 full-image student rollout，针对细粒度视觉理解做在策略蒸馏 <span class="ref">[S16]</span>。二者共同说明：OPD 的有效面不是“任何模型”，而是有可观察轨迹、有 teacher feedback、有分布漂移的多模态决策过程。</p>
+
+    <div class="grid-2">
+      <div class="card">
+        <h3>适合 OPD 的场景</h3>
+        <ul>
+          <li>视觉问答式 rerank：模型需要解释为什么某个候选能回答 query。</li>
+          <li>文档页检索：模型需要在表格、图章、版式和文字之间定位证据。</li>
+          <li>商品比较：模型需要生成属性差异、替代关系和排序理由。</li>
+          <li>SFT 到 RLVR 过渡：学生 rollout 与 SFT 数据分布差距很大。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>不适合直接 OPD 的场景</h3>
+        <ul>
+          <li>只输出固定维度向量，且没有可生成的中间状态。</li>
+          <li>业务标签只是 pair 正负，reward 尚未校准。</li>
+          <li>teacher 无法稳定评价学生轨迹，或 teacher 与线上目标冲突。</li>
+          <li>主要瓶颈是数据清洗、负例挖掘、索引刷新和服务成本。</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>OPD 可行方案</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>方案</th>
+          <th>训练流程</th>
+          <th>最终落点</th>
+          <th>验证方式</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>OPD for generative reranker</td>
+          <td>SFT 学会候选比较格式，student 对候选集生成排序和理由，teacher 在学生轨迹上给 token/step feedback。</td>
+          <td>reranker 本身，或蒸馏成轻量 cross-encoder。</td>
+          <td>比较 SFT、SFT plus OPD、SFT plus OPD plus RL 的 NDCG、错误解释率和延迟。</td>
+        </tr>
+        <tr>
+          <td>OPD for visual grounding</td>
+          <td>teacher 看到 crop 或增强证据，student 只看原图或页面，学生 rollout 后接受 teacher 反馈。</td>
+          <td>细粒度视觉理解模块、文档页 rerank、视觉证据提取器。</td>
+          <td>遮挡、裁剪、同款不同属性、视觉反事实测试。</td>
+        </tr>
+        <tr>
+          <td>OPD-assisted embedding</td>
+          <td>reasoner 经 OPD 改善 query decomposition、attribute extraction 和 hard-negative explanation，再转成 embedding 训练数据。</td>
+          <td>dense embedding 的监督数据与蒸馏标签。</td>
+          <td>embedding 本身仍用 Recall@K、MRR、跨域 holdout 和 index 成本验证。</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="page">
+    <div class="kicker">07 / Recipes</div>
+    <h2>落地配方：四条可执行训练链路</h2>
+    <p class="lead">实际团队不应从算法名开始，而应从数据形态、服务延迟、候选规模和评测预算开始。下面四条配方覆盖最常见的生产场景。</p>
+
+    <div class="break-avoid">
+      <h3>配方 A：领域多模态 dense embedding</h3>
+      <p><span class="tag">目标</span>提高一阶段或二阶段召回，覆盖图文、商品、文档页、视频片段等候选。</p>
+      <ol>
+        <li>构建任务说明：每个样本明确是同款、同义、可回答、同事件、同风格还是同属性。</li>
+        <li>整理 pair/triplet/list 数据：保留来源、时间、类目、语言、模态、人工置信度。</li>
+        <li>先训练 instruction contrastive baseline，再引入 hard negatives 和 teacher score distillation。</li>
+        <li>如果服务需要多成本档位，加入 MRL 并在多个向量维度上分别验证。</li>
+        <li>上线前评估 Recall@K、类目长尾、跨模态 query、噪声标题、OCR 错误、视觉反事实和 ANN latency。</li>
+      </ol>
+      <p class="small">适用证据：VLM2Vec、VLM2Vec-V2、Qwen3/Qwen3-VL、Gemini Embedding 2 <span class="ref">[S01][S02][S03][S04][S09]</span>。</p>
+    </div>
+
+    <div class="break-avoid">
+      <h3>配方 B：多模态 reranker</h3>
+      <p><span class="tag">目标</span>在固定候选集上提升 NDCG、MRR、top-1 精度和答案可用性。</p>
+      <ol>
+        <li>从 embedding 或现有召回系统收集真实候选集，不用离线随机负例替代线上候选分布。</li>
+        <li>训练 cross-encoder 或 generative reranker：输入 query、候选文本、图像、页面或视频片段，输出 score、yes/no logits 或 listwise order。</li>
+        <li>用 SFT 固定输入格式、证据引用和排序理由；再视 reward 稳定性引入 RL。</li>
+        <li>把 reranker 的困难样本和软分数蒸馏回 embedding，形成召回与重排协同闭环。</li>
+      </ol>
+      <p class="small">适用证据：Qwen3 reranker、Qwen3-VL reranker、MM-R5、Pailitao-VL <span class="ref">[S03][S04][S06][S08]</span>。</p>
+    </div>
+
+    <div class="break-avoid">
+      <h3>配方 C：视觉文档 late interaction</h3>
+      <p><span class="tag">目标</span>处理 PDF、扫描件、票据、合同、表格、幻灯片和复杂页面。</p>
+      <ol>
+        <li>先判断 OCR text pipeline 是否足够。如果文本结构完整，late interaction 不是默认选择。</li>
+        <li>对页面图像生成多向量表示，保留布局和局部视觉证据，使用 late interaction 做 query-page 匹配。</li>
+        <li>把页面级召回接入 reranker，由 reranker 负责跨页比较、证据定位和答案可用性判断。</li>
+        <li>重点监控 index size、查询延迟、页面压缩、图像分辨率和视觉证据丢失。</li>
+      </ol>
+      <p class="small">适用证据：ColPali 和视觉文档检索路线 <span class="ref">[S05]</span>。</p>
+    </div>
+
+    <div class="break-avoid">
+      <h3>配方 D：OPD 插入 SFT 与 RLVR 之间</h3>
+      <p><span class="tag">目标</span>当 reranker 或检索代理在 SFT 后进入 RL 时，用 OPD 缓解学生状态分布漂移。</p>
+      <ol>
+        <li>用 SFT 学会候选比较、视觉证据描述、查询分解、引用格式和安全边界。</li>
+        <li>让 student 在真实候选集或困难集上 rollout，而不是继续只看 teacher demonstrations。</li>
+        <li>teacher 在 student 的轨迹上给 token、step、evidence 或 preference feedback。</li>
+        <li>OPD 后再接 RLVR 或 ranking reward，最后把提升样本蒸馏回 reranker 或 embedding。</li>
+      </ol>
+      <p class="small">适用证据：OPD 机制、OPD survey、PRISM、Vision-OPD <span class="ref">[S13][S14][S15][S16]</span>。</p>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="kicker">08 / Evaluation</div>
+    <h2>评测、风险与上线门槛</h2>
+    <p>多模态检索的评测最容易被单一指标误导。一个 embedding 模型可以在图文检索 benchmark 上表现很好，却在商品同款、视觉文档问答、长尾类目或多语言 query 上失败。一个 reranker 可以提高离线 NDCG，却因延迟、candidate mismatch 或 judge leakage 无法上线。</p>
+
+    <h3>评测矩阵</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>层级</th>
+          <th>必须指标</th>
+          <th>诊断指标</th>
+          <th>失败信号</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Embedding</td>
+          <td>Recall@K、MRR、NDCG@K、跨模态 holdout、跨语言 holdout。</td>
+          <td>hard-negative 命中率、false negative 审计、MRL 维度退化、ANN recall loss。</td>
+          <td>随机负例提升显著但线上 top-k 无改善；文本字段变化导致视觉检索崩溃。</td>
+        </tr>
+        <tr>
+          <td>Late interaction</td>
+          <td>page-level Recall@K、视觉文档 query NDCG、证据页命中。</td>
+          <td>index size、page token 数、分辨率敏感性、OCR-free 与 OCR-assisted 对比。</td>
+          <td>指标提升来自页面模板记忆，成本却超过 reranker 预算。</td>
+        </tr>
+        <tr>
+          <td>Reranker</td>
+          <td>NDCG@K、top-1 accuracy、MRR、校准误差、延迟。</td>
+          <td>同屏多样性、listwise swap 错误、候选分布漂移、teacher-student gap。</td>
+          <td>离线榜单提升但真实候选集上退化；理由文本正确而排序错误。</td>
+        </tr>
+        <tr>
+          <td>RL/OPD</td>
+          <td>相对 SFT baseline 的稳定增益、reward-业务相关性、人工偏好审计。</td>
+          <td>judge hacking、轨迹长度、格式奖励占比、视觉证据引用准确率。</td>
+          <td>模型学会讨好 reward，但视觉 grounding 或用户目标变差。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>数据和实验卫生</h3>
+    <ul>
+      <li><strong>时间切分</strong>：商品、文档、视频和 query 分布会漂移。训练、验证、测试至少需要时间切分，不能只做随机切分。</li>
+      <li><strong>类目切分</strong>：同类相似负例要进入验证集。只在训练类目内验证，会高估泛化。</li>
+      <li><strong>模态消融</strong>：分别屏蔽文本、图像、OCR、视频帧、音频，检查模型是否依赖捷径。</li>
+      <li><strong>teacher 审计</strong>：teacher score 不是事实。需要抽样人工复核，并记录 teacher 与业务目标冲突的样本。</li>
+      <li><strong>成本约束</strong>：所有指标都要带延迟、QPS、索引大小、显存、批处理吞吐和刷新频率。</li>
+    </ul>
+
+    <h3>上线门槛</h3>
+    <div class="grid-2">
+      <div class="card">
+        <h3>离线通过</h3>
+        <ul>
+          <li>新模型相对强 baseline 在目标任务有稳定提升。</li>
+          <li>hard-negative、跨类目、跨语言、跨模态 holdout 无显著退化。</li>
+          <li>MRL 或压缩维度满足成本档位。</li>
+          <li>reranker 延迟、batch size 和超时策略可上线。</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>线上通过</h3>
+        <ul>
+          <li>灰度 A/B 与业务主指标、护栏指标方向一致。</li>
+          <li>query 分布、类目分布和候选分布与训练评测可解释。</li>
+          <li>失败样本能回流到 hard-negative 和 reranker 蒸馏流程。</li>
+          <li>回滚、索引刷新、模型版本和数据血缘可追踪。</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><strong>最小可发布标准</strong>：embedding 至少要证明召回泛化；reranker 至少要证明候选集内排序提升和延迟可控；RL/OPD 至少要证明相对 SFT baseline 的真实增益，而不是只证明训练曲线或 reward 上升。</p>
+    </div>
+  </section>
+
+  <section class="page">
+    <div class="kicker">09 / Decision Tree</div>
+    <h2>决策树与资料索引</h2>
+    <p class="lead">下面的决策树把本文判断压缩成执行顺序。大多数团队应先完成数据、对比训练、难负例、reranker 蒸馏和评测，再考虑 RL/OPD。</p>
+
+    <table>
+      <thead>
+        <tr>
+          <th>问题</th>
+          <th>如果是</th>
+          <th>如果不是</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>主要瓶颈是召回覆盖不足吗？</td>
+          <td>先做 instruction contrastive tuning、hard negatives、合成 query 和 reranker distillation。</td>
+          <td>不要先改 embedding，检查 rerank、候选生成和业务排序目标。</td>
+        </tr>
+        <tr>
+          <td>候选集内 top-k 顺序错误明显吗？</td>
+          <td>训练 cross-encoder 或 generative reranker，先 SFT，后续再看 RL。</td>
+          <td>继续优化召回、多样性或 query understanding。</td>
+        </tr>
+        <tr>
+          <td>模型需要生成解释、查询分解或检索动作吗？</td>
+          <td>可以考虑 OPD 或 RL，因为存在轨迹和 teacher feedback。</td>
+          <td>OPD 通常不是第一优先级。</td>
+        </tr>
+        <tr>
+          <td>文档页视觉布局是关键信号吗？</td>
+          <td>评估 ColPali 式 late interaction 或多向量检索。</td>
+          <td>单向量 embedding 加 reranker 可能更经济。</td>
+        </tr>
+        <tr>
+          <td>离线 reward 与线上目标相关吗？</td>
+          <td>小规模 RL/OPD 灰度，配合人工审计和成本护栏。</td>
+          <td>先校准评测，不要用 RL 放大错误目标。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>推荐路线图</h3>
+    <ol>
+      <li><strong>第 0 周</strong>：定义任务口径，建立 source map、数据血缘、验证集和线上候选采样。</li>
+      <li><strong>第 1 到 2 周</strong>：训练或接入 baseline embedding，完成 task instruction、hard negatives、跨模态 holdout。</li>
+      <li><strong>第 3 到 4 周</strong>：训练 reranker，建立 embedding-reranker 蒸馏闭环。</li>
+      <li><strong>第 5 到 6 周</strong>：对文档页或视觉商品引入 late interaction、listwise rerank 或 attribute reasoning。</li>
+      <li><strong>第 7 周以后</strong>：只有当生成式 rerank 或检索代理成为瓶颈，并且 reward 已校准，才引入 RL/OPD。</li>
+    </ol>
+
+    <h3>资料索引</h3>
+    <table class="source-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>资料</th>
+          <th>本文用途</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>S01</td><td>VLM2Vec, MMEB</td><td>指令化多模态 embedding 与任务基准。</td></tr>
+        <tr><td>S02</td><td>VLM2Vec-V2, MMEB-V2</td><td>视频、视觉文档和扩展任务评测。</td></tr>
+        <tr><td>S03</td><td>Qwen3 Embedding/Reranker</td><td>文本 embedding/reranker 的多阶段训练与工业接口类比。</td></tr>
+        <tr><td>S04</td><td>Qwen3-VL-Embedding/Reranker</td><td>多模态 embedding plus reranker 系统范式。</td></tr>
+        <tr><td>S05</td><td>ColPali</td><td>视觉文档 late interaction。</td></tr>
+        <tr><td>S06</td><td>MM-R5</td><td>SFT plus RL reranker。</td></tr>
+        <tr><td>S07</td><td>Think Then Embed</td><td>reasoning before embedding。</td></tr>
+        <tr><td>S08</td><td>Pailitao-VL</td><td>工业视觉商品检索与 listwise rerank。</td></tr>
+        <tr><td>S09-S12</td><td>Gemini Embedding 2, Nova, PinCLIP, Amazon MML-TP</td><td>工业产品能力、数据质量和推荐检索落地约束。</td></tr>
+        <tr><td>S13-S16</td><td>OPD blog, OPD survey, PRISM, Vision-OPD</td><td>OPD 机制、多模态 reasoning 和视觉对齐。</td></tr>
+        <tr><td>S17-S18</td><td>Cohere, Voyage product docs</td><td>托管多模态 embedding 产品信号。</td></tr>
+      </tbody>
+    </table>
+
+    <div class="quote">
+      <p>最终判断：多模态 embedding/rerank 后训练的成熟形态是一条系统链路，而不是单点算法。embedding 用稳定的表征学习吸收任务语义，reranker 用更强交互模型处理候选内细节，RL 和 OPD 只在可定义轨迹、reward 与 teacher feedback 的地方承担后训练增益。</p>
+    </div>
+  </section>
+</article>
+</body>
+</html>

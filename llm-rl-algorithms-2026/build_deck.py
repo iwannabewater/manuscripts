@@ -23,7 +23,7 @@ ROOT = Path(__file__).resolve().parent
 SLUG = "llm-rl-algorithms-2026"
 TITLE = "大模型强化学习算法全景"
 SUBTITLE = "从 RLHF、DPO 到 GRPO、DAPO、GSPO 的公式化理解与工程判据"
-TODAY = "2026-05-16"
+TODAY = "2026-06-26"
 
 
 SOURCES: list[dict[str, str]] = [
@@ -67,6 +67,26 @@ SOURCES: list[dict[str, str]] = [
     {"id": "AOT", "title": "Distributional Preference Alignment of LLMs via Optimal Transport", "url": "https://arxiv.org/abs/2406.05882", "used": "optimal transport 与 distribution-level preference alignment"},
     {"id": "APO", "title": "Anchored Preference Optimization and Contrastive Revisions", "url": "https://arxiv.org/abs/2408.06266", "used": "anchored preference optimization 与 AI revisions"},
     {"id": "CALDPO", "title": "Cal-DPO: Calibrated Direct Preference Optimization for Language Model Alignment", "url": "https://arxiv.org/abs/2412.14516", "used": "implicit reward calibration"},
+    {"id": "RAR", "title": "Rubrics as Rewards: Reinforcement Learning Beyond Verifiable Domains", "url": "https://arxiv.org/abs/2507.17746", "used": "rubric-based rewards beyond binary verifiers"},
+    {"id": "TRGRPO", "title": "Token-Regulated Group Relative Policy Optimization for Stable Reinforcement Learning in Large Language Models", "url": "https://arxiv.org/abs/2511.00066", "used": "token probability weighting for GRPO stability"},
+    {"id": "SSPO", "title": "SSPO: Subsentence-level Policy Optimization", "url": "https://arxiv.org/abs/2511.04256", "used": "subsentence-level ratio between token and sequence clipping"},
+    {"id": "RLVRR", "title": "From Verifiable Dot to Reward Chain: Harnessing Verifiable Reference-based Rewards for Reinforcement Learning of Open-ended Generation", "url": "https://arxiv.org/abs/2601.18533", "used": "reference-based reward chains for open-ended generation"},
+    {"id": "DHPO", "title": "Orchestrating Tokens and Sequences: Dynamic Hybrid Policy Optimization for RLVR", "url": "https://arxiv.org/abs/2601.05607", "used": "hybrid token-level and sequence-level importance ratios"},
+    {"id": "BAPO", "title": "Buffer Matters: Unleashing the Power of Off-Policy Reinforcement Learning in Large Language Model Reasoning", "url": "https://arxiv.org/abs/2602.20722", "used": "off-policy buffer reuse and batch adaptation for RLVR"},
+    {"id": "LUSPO", "title": "Length-Unbiased Sequence Policy Optimization: Revealing and Controlling Response Length Variation in RLVR", "url": "https://arxiv.org/abs/2602.05261", "used": "length bias correction for GSPO-style sequence objectives"},
+    {"id": "URLVR", "title": "How Far Can Unsupervised RLVR Scale LLM Training?", "url": "https://arxiv.org/abs/2603.08660", "used": "unsupervised RLVR limits and confidence-correctness collapse risk"},
+    {"id": "ARROL", "title": "Prune as You Generate: Online Rollout Pruning for Faster and Better RLVR", "url": "https://arxiv.org/abs/2603.24840", "used": "online rollout pruning for sparse group advantages"},
+    {"id": "ASYMGRPO", "title": "Asymmetric Advantage Modulation Calibrates Entropy Dynamics in RLVR", "url": "https://arxiv.org/abs/2604.04894", "used": "positive and negative advantage channels for productive entropy"},
+    {"id": "MCPO", "title": "MCPO: Mastery-Consolidated Policy Optimization for Large Reasoning Models", "url": "https://arxiv.org/abs/2604.16972", "used": "mastered-prompt consolidation and hinge-KL regularization"},
+    {"id": "STRACE", "title": "Beyond Uniform Credit Assignment: Selective Eligibility Traces for RLVR", "url": "https://arxiv.org/abs/2605.05965", "used": "critic-free selective eligibility traces and non-uniform credit"},
+    {"id": "SCRL", "title": "From Reasoning Chains to Verifiable Subproblems: Curriculum Reinforcement Learning Enables Credit Assignment for LLM Reasoning", "url": "https://arxiv.org/abs/2605.22074", "used": "verifiable subproblem curriculum for hard reasoning credit assignment"},
+    {"id": "SRAR", "title": "Step-wise Rubric Rewards for LLM Reasoning", "url": "https://arxiv.org/abs/2605.17291", "used": "step-wise rubric attribution and per-step reward normalization"},
+    {"id": "GRAIL", "title": "GRAIL: Gradient-Reweighted Advantages for Reinforcement Learning with Verifiable Rewards", "url": "https://arxiv.org/abs/2606.04889", "used": "gradient-saliency token reweighting without PRM labels"},
+    {"id": "MAXPO", "title": "On Advantage Estimates for Max@K Policy Gradients", "url": "https://arxiv.org/abs/2606.06080", "used": "Max@K policy gradients and leave-two-out baseline"},
+    {"id": "ACPO", "title": "What are Key Factors for Updates in RL for LLM Reasoning?", "url": "https://arxiv.org/abs/2606.22570", "used": "analysis-driven adaptive clipping from update dynamics"},
+    {"id": "EXTRA", "title": "ExTra: Exploratory Trajectory Optimization for Language Model Reinforcement Learning", "url": "https://arxiv.org/abs/2606.24994", "used": "novelty rewards and entropy-guided prefix regeneration"},
+    {"id": "TAC", "title": "Transferability for General Reasoning: An Automated Curriculum for Multi-Domain RLVR", "url": "https://arxiv.org/abs/2606.25178", "used": "transferability-aware curriculum for multi-domain RLVR"},
+    {"id": "ROLLPIPE", "title": "RolloutPipe: Overlapping Pipelined Rollout and Training in Disaggregated On-Policy LLM Reinforcement Learning", "url": "https://arxiv.org/abs/2606.26997", "used": "disaggregated rollout-training pipeline for on-policy RLVR systems"},
 ]
 
 
@@ -210,9 +230,22 @@ SLIDES: list[dict[str, Any]] = [
         "大模型强化学习算法全景",
         "LLM RL ALGORITHMS",
         "从 RLHF、RLAIF、RLVR 到 DPO、PPO、GRPO、DAPO、GSPO、CISPO、VAPO 的公式化理解与工程判据",
-        ["范围截至 2026-05-16，重点覆盖国际论文、国内大厂 recipe、开源训练系统与推理模型后训练实践。", "所有核心目标函数均以 LaTeX 编译为矢量公式，便于 PDF 与 PPTX 审阅。"],
+        [f"范围截至 {TODAY}，重点覆盖国际论文、国内大厂 recipe、开源训练系统与推理模型后训练实践。", "所有核心目标函数均以 LaTeX 编译为矢量公式，便于 PDF 与 PPTX 审阅。"],
         callout="主线问题：给定一个预训练语言模型，如何用人类偏好、AI 反馈或可验证奖励，稳定地改变整段文本分布而不摧毁已有能力。",
         kind="cover",
+    ),
+    slide(
+        "证据等级比算法名更重要",
+        "Evidence Boundary",
+        "本课件把论文、官方技术报告和官方仓库作为主要证据；benchmark 提升默认视为作者报告结果，除非有独立复现或官方实现交叉支持。",
+        table=[
+            ["证据层级", "可支持的说法", "不能直接支持的说法"],
+            ["论文原文", "目标函数、实验设置、作者报告结果", "跨模型、跨数据集的普遍最优"],
+            ["官方技术报告", "工业 recipe、数据流程、训练阶段", "未披露实现细节的因果归因"],
+            ["官方仓库", "可用实现、配置入口、系统边界", "论文数字在任意环境可复现"],
+            ["第三方复现", "实现敏感性、失败模式、工程差异", "替代原论文的定义来源"],
+        ],
+        callout=f"证据日期：{TODAY}。2026 年预印本更新很快，本文把它们作为前沿线索和工程假设，不把单篇论文的 SOTA 声称写成行业定论。",
     ),
     slide(
         "LLM 强化学习不是单一算法，而是三类目标函数的合流",
@@ -700,6 +733,21 @@ SLIDES: list[dict[str, Any]] = [
         source="GSPO",
     ),
     slide(
+        "2026 的 policy-ratio 研究把粒度变成可控旋钮",
+        "2026 Frontier: Update Granularity",
+        "GRPO 到 GSPO 之后，争论不再是 token-level 或 sequence-level 二选一，而是如何按任务、长度、熵和 off-policy 程度调节更新粒度。",
+        table=[
+            ["方向", "代表", "核心判断"],
+            ["token 权重", "TR-GRPO、ACPO", "低概率 token 可能过度主导梯度，clip 边界和 token 权重应跟更新统计量联动"],
+            ["中间粒度", "SSPO", "subsentence ratio 试图保留局部 credit，同时避免单 token outlier 与整段稀释"],
+            ["混合 ratio", "DHPO", "token ratio 保留细粒度，sequence ratio 匹配整段 reward，二者可在同一 surrogate 中组合"],
+            ["长度无偏", "LUSPO", "sequence-level objective 仍可能有长度偏置，需要显式修正响应长度变化"],
+            ["熵通道", "AsymGRPO", "正优势和负优势对探索的作用不同，productive entropy 与 noisy entropy 应分开调"],
+        ],
+        callout="工程判据：先看 clip fraction、importance-ratio 方差、长度分布和 token 概率分层，再决定该改 ratio 粒度、clip 边界还是 advantage 权重。",
+        source="TRGRPO, SSPO, DHPO, LUSPO, ASYMGRPO, ACPO",
+    ),
+    slide(
         "CISPO 剪切 IS 权重而不是剪切 token 更新",
         "CISPO",
         "MiniMax-M1 在多轮 off-policy 更新中发现，PPO/GRPO clip 会丢掉许多稀有但关键的反思 token 梯度。",
@@ -740,6 +788,21 @@ SLIDES: list[dict[str, Any]] = [
         source="VAPO, REWARDBENCH",
     ),
     slide(
+        "2026 的奖励研究从最终答案转向可验证中间信号",
+        "2026 Frontier: Reward Structure",
+        "最终答案 reward 简洁，但它把整条推理链压成一个标量。最新前沿试图把可验证性拆到子问题、步骤、rubric、reference 或 token saliency。",
+        table=[
+            ["方向", "代表", "解决的问题"],
+            ["子问题课程", "SCRL", "把 hard problem 的参考推理链拆成可验证子问题，给失败 rollout 中的局部进展分配 credit"],
+            ["步骤 rubric", "SRaR", "把 rubric item 归因到具体步骤，避免正确答案里的错误步骤被整体奖励"],
+            ["reference reward chain", "RLVRR", "在开放生成中从高质量参考抽取内容和风格链，缓解无唯一标准答案的问题"],
+            ["rubric rewards", "RaR", "用结构化 rubric 替代单一 Likert judge，把 RLVR 扩到医疗、科学等非二元领域"],
+            ["选择性 credit", "S-trace、GRAIL", "不把 trajectory-level advantage 均匀广播到所有 token，降低 filler 与错误步骤的梯度污染"],
+        ],
+        callout="边界：更细 reward 不自动更可信。步骤裁判、rubric judge 和 reference chain 都会把标注偏差或 judge 偏差前移到训练目标。",
+        source="SCRL, SRAR, RLVRR, RAR, STRACE, GRAIL",
+    ),
+    slide(
         "RLAIF 与 Constitutional AI 把人类原则转化为可规模化裁判",
         "RLAIF",
         "Anthropic 的 Constitutional AI 显示，原则、critique、revision 和 AI feedback 可以替代一部分人类 harmlessness 标注。",
@@ -759,6 +822,7 @@ SLIDES: list[dict[str, Any]] = [
             ["critic-free PG", "RLOO、ReMax、REINFORCE++", "需要", "不需要 critic", "可多采样、reward 噪声可控"],
             ["offline preference", "DPO、IPO、KTO、ORPO、SimPO", "不需要", "不需要 critic", "已有偏好数据、快速迭代"],
             ["group RLVR", "GRPO、DAPO、GSPO、CISPO", "需要", "不需要 critic", "数学代码、规则 reward、长 CoT"],
+            ["structured reward RL", "RLVRR、RaR、SRaR、SCRL", "通常需要", "需要 verifier 或 judge", "开放生成、步骤监督、非二元评价"],
             ["iterative SFT", "RAFT、ReST、rejection SFT", "生成即可", "需要筛选器", "稳定蒸馏、高质量候选充足"],
         ],
     ),
@@ -786,8 +850,9 @@ SLIDES: list[dict[str, Any]] = [
             ["DAPO", "GRPO advantage", "低高 ε 解耦 token ratio", "提高有效梯度和长 CoT 可控性"],
             ["GSPO", "组相对 response advantage", "sequence ratio", "对齐 response reward 与 MoE 稳定"],
             ["CISPO", "group advantage", "IS weight", "多轮 off-policy 更新保留关键 token 梯度"],
+            ["SSPO/DHPO/ACPO", "group 或混合 advantage", "subsentence、hybrid 或 adaptive clip", "按更新统计量调节粒度和边界"],
         ],
-        source="PPO, RLOO, GRPO, DAPO, GSPO, MINIMAX",
+        source="PPO, RLOO, GRPO, DAPO, GSPO, MINIMAX, SSPO, DHPO, ACPO",
     ),
     slide(
         "OpenAI InstructGPT 的贡献是把对齐工程流程标准化",
@@ -899,9 +964,10 @@ SLIDES: list[dict[str, Any]] = [
             "格式投机：输出满足 verifier parser 的模板，却没有真实推理。",
             "长度投机：用更长 CoT 增加蒙中概率，或用短答规避负 token 梯度。",
             "裁判投机：迎合 AI judge 的措辞、礼貌、冗长或安全模板。",
+            "未监督信号投机：intrinsic reward 会放大模型初始置信分布，若置信与正确性错位，训练可能先升后崩。",
             "控制手段包括 KL、长度 reward、格式 parser、held-out verifier、多裁判交叉和人工抽检。",
         ],
-        source="REWARDBENCH, DAPO, R1",
+        source="REWARDBENCH, DAPO, R1, URLVR",
     ),
     slide(
         "关键超参数应该按可观测量闭环调节，而不是固定抄论文",
@@ -923,8 +989,25 @@ SLIDES: list[dict[str, Any]] = [
             "verifier 要低延迟且可复现，数学解析和代码沙箱尤其容易成为瓶颈。",
             "训练端要以 batch token 而非样本数估算负载，否则长 CoT 会打破吞吐计划。",
             "off-policy 数据复用提高效率，但必须用 IS、KL 或刷新 rollout 控制漂移。",
+            "RolloutPipe 这类 disaggregated pipeline 说明，on-policy 正确性和训练/rollout 重叠并非天然冲突，关键是按完整 group 调度。",
         ],
-        source="DAPO, MINIMAX, TULU3",
+        source="DAPO, MINIMAX, TULU3, ROLLPIPE",
+    ),
+    slide(
+        "Rollout 预算已经成为算法的一部分",
+        "2026 Frontier: Sample Efficiency",
+        "GRPO、DAPO 和 GSPO 都依赖同题多采样；当 rollout 成本成为主瓶颈，算法会直接介入 prompt 选择、轨迹保留、batch 复用和 max@K 目标。",
+        table=[
+            ["方向", "代表", "工程含义"],
+            ["在线剪枝", "arrol", "生成中预测 partial rollout 成功率，提前剪掉低价值轨迹并维持组内正确性平衡"],
+            ["探索信号", "ExTra", "用 novelty reward 与 entropy-guided prefix regeneration，从全错或全对组中挖可学习信号"],
+            ["经验复用", "BAPO", "重评历史难题并复用高质量样本，提高 off-policy 数据效率"],
+            ["掌握巩固", "MCPO", "对 mastered prompts 加 hinge-KL，避免无 advantage 时漂移和遗忘"],
+            ["推理预算目标", "MaxPO", "直接分析 max@K/pass@K 的 advantage baseline，使训练目标更接近多采样评测"],
+            ["课程采样", "TAC", "多领域 RLVR 中用 transferability 约束课程，避免只追逐短期 learnability"],
+        ],
+        callout="取舍：样本效率方法通常引入额外预测头、replay buffer、课程策略或异步系统。它们提升吞吐时，也增加了 stale data、选择偏差和实现复杂度。",
+        source="ARROL, EXTRA, BAPO, MCPO, MAXPO, TAC",
     ),
     slide(
         "数据选择比 optimizer 更常决定 RL 是否学到推理而不是记忆模板",
@@ -985,7 +1068,7 @@ SLIDES: list[dict[str, Any]] = [
             ["2023", "RRHF、RAFT、SLiC、DPO、ReST、ReMax、IPO", "不用在线 RL 的偏好优化爆发"],
             ["2024", "KTO、GRPO、RLOO、ORPO、SimPO、Online DPO", "critic-free 与 reference-free 两条线并进"],
             ["2025", "R1、REINFORCE++、DAPO、Dr.GRPO、VAPO、CISPO、GSPO", "RLVR、长 CoT、group/sequence objective 工程化"],
-            ["2026", "持续演进", "多裁判、工具环境、agentic RL、跨模态 reward"],
+            ["2026", "RLVRR、DHPO、SSPO、LUSPO、SCRL、SRaR、ACPO、RolloutPipe", "更新粒度、结构化 reward、样本效率和系统吞吐成为主战场"],
         ],
     ),
     slide(
@@ -1037,6 +1120,19 @@ SLIDES: list[dict[str, Any]] = [
             ["DAPO/Dr.GRPO/VAPO", "long-CoT RLVR stabilization and bias correction"],
             ["CISPO/GSPO", "off-policy IS clipping and sequence-level group optimization"],
             ["Tulu/Kimi/MiniMax/Qwen", "open and industrial post-training recipes"],
+        ],
+    ),
+    slide(
+        "参考文献三：2026 RLVR 前沿",
+        "References",
+        table=[
+            ["ID", "Source"],
+            ["TR-GRPO/SSPO/DHPO/LUSPO/ACPO", "update granularity, adaptive clipping and length-bias control"],
+            ["RLVRR/RaR/SRaR/SCRL", "reference chains, rubric rewards, step-wise rewards and verifiable subproblems"],
+            ["S-trace/GRAIL", "non-uniform credit assignment without full process reward labels"],
+            ["arrol/ExTra/BAPO/MCPO/MaxPO/TAC", "rollout pruning, exploration, replay, consolidation and curriculum"],
+            ["RolloutPipe", "overlapped rollout and training for disaggregated on-policy RL systems"],
+            ["URLVR", "unsupervised RLVR scaling limits and intrinsic-reward failure modes"],
         ],
     ),
 ]
@@ -1164,7 +1260,7 @@ def write_html() -> None:
 
 
 def write_sources() -> None:
-    rows = ["# Sources\n", "本课件截至 2026-05-16 整理。公式与算法解读以论文原文和公开技术报告为主要来源。\n"]
+    rows = ["# Sources\n", f"本课件截至 {TODAY} 整理。公式与算法解读以论文原文、公开技术报告和官方仓库为主要来源。论文或技术报告中的 benchmark 提升默认视为作者报告结果，除非正文明确说明独立复现。\n"]
     rows.append("| ID | Source | URL | Used for |\n|---|---|---|---|\n")
     for src in SOURCES:
         rows.append(f"| {src['id']} | {src['title']} | {src['url']} | {src['used']} |\n")
@@ -1183,19 +1279,21 @@ def write_readme() -> None:
 
 This directory contains an independently designed Chinese slide deck on reinforcement learning algorithms for large language model post-training. It covers RLHF, RLAIF, RLVR, PPO, RLOO, ReMax, REINFORCE++, DPO, IPO, KTO, ORPO, SimPO, GRPO, Dr.GRPO, DAPO, GSPO, CISPO, VAPO, RAFT, ReST, RRHF, SLiC-HF and representative industrial recipes.
 
+Evidence is current as of {TODAY}. Papers and official technical reports are treated as primary sources for definitions, formulas, and author-reported results; benchmark claims are not presented as independently verified unless a separate reproduction source supports them.
+
 ## Artifacts
 
-- `index.html` — source slide deck for browser and PDF rendering.
-- `{SLUG}.pdf` — printable PDF deck.
-- `{SLUG}.pptx` — PowerPoint export with rendered LaTeX formula images.
-- `sources.md` — source map and references.
-- `assets/formulas/` — LaTeX-generated SVG and PNG formula assets.
+- `index.html`: source slide deck for browser and PDF rendering.
+- `{SLUG}.pdf`: printable PDF deck.
+- `{SLUG}.pptx`: PowerPoint export with rendered LaTeX formula images.
+- `sources.md`: source map and references.
+- `assets/formulas/`: LaTeX-generated SVG and PNG formula assets.
 
 ## Build
 
 ```bash
-python3 build_deck.py
-python3 -c "from weasyprint import HTML; HTML('index.html').write_pdf('{SLUG}.pdf')"
+cd llm-rl-algorithms-2026
+../.venv/bin/python build_deck.py
 ```
 
 The formula assets are compiled with `latex` and `dvisvgm`; PPTX export uses `python-pptx`.
