@@ -1,0 +1,7 @@
+metric,pointwise,chunkwise,unit,source
+MLLM Forward Passes,800,100,count,S02
+Total Time,18.22,7.50,seconds,S02
+Latency per Query,182.25,75.01,milliseconds,S02
+Latency per Pair,22.78,9.38,milliseconds,S02
+Throughput query/s,5.49,13.33,queries_per_second,S02
+Throughput pair/s,43.90,106.65,pairs_per_second,S02

@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Pailitao-VL 论文 Review 2026</title>
+<meta name="author" content="Winston">
+<meta name="description" content="对 Alibaba Pailitao-VL 论文的中文深度 review，覆盖算法思路、公式、实现链路、实验收益、稳定性边界与工程复现门槛。">
+<meta name="keywords" content="Pailitao-VL; multimodal retrieval; embedding; reranker; ecommerce search; paper review">
+<meta name="generator" content="Winston">
+<link rel="stylesheet" href="../assets/styles/publication-fonts.css">
+<style>
+  @page {
+    size: A4;
+    margin: 17mm 18mm 19mm 18mm;
+    background: #f5f4ed;
+
+    @top-right {
+      content: string(section-title);
+      font-family: "TsangerJinKai02";
+      font-size: 8pt;
+      color: #67645d;
+    }
+
+    @bottom-center {
+      content: counter(page) "  ·  Pailitao-VL 论文 Review 2026";
+      font-family: "TsangerJinKai02";
+      font-size: 8.5pt;
+      color: #67645d;
+    }
+  }
+
+  @page:first {
+    @top-right { content: ""; }
+    @bottom-center { content: ""; }
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --paper: #f5f4ed;
+    --panel: #fbfaf5;
+    --panel-blue: #edf2f7;
+    --ink: #151615;
+    --muted: #5f5b53;
+    --faint: #817a6e;
+    --line: #ded7c8;
+    --line-strong: #c9bfaa;
+    --blue: #1b365d;
+    --blue-deep: #102846;
+    --green: #315a47;
+    --gold: #806027;
+    --red: #7a3434;
+    --font-main: "TsangerJinKai02";
+    --font-code: "JetBrains Mono", "JetBrainsMono", "TsangerJinKai02";
+  }
+
+  html,
+  body { background: var(--paper); }
+
+  @media screen {
+    body {
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 18mm;
+    }
+  }
+
+  body {
+    color: var(--ink);
+    font-family: var(--font-main);
+    font-size: 9.85pt;
+    line-height: 1.56;
+    letter-spacing: 0.08pt;
+    widows: 3;
+    orphans: 3;
+  }
+
+  body,
+  body * {
+    font-family: var(--font-main) !important;
+  }
+
+  a {
+    color: var(--blue);
+    text-decoration: none;
+    border-bottom: 0.35pt solid rgba(27, 54, 93, 0.35);
+  }
+
+  strong { font-weight: 500; }
+
+  .mono,
+  code,
+  pre,
+  .cover-eyebrow,
+  .toc-num,
+  .tag,
+  .ref,
+  .metric-value,
+  .score {
+    font-family: var(--font-code) !important;
+    letter-spacing: 0;
+  }
+
+  .paper {
+    max-width: 210mm;
+    margin: 0 auto;
+  }
+
+  .cover {
+    min-height: 244mm;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding-top: 27mm;
+    break-after: page;
+  }
+
+  .cover-eyebrow {
+    color: var(--blue);
+    font-size: 8.2pt;
+    letter-spacing: 1.4pt;
+    text-transform: uppercase;
+    margin-bottom: 14pt;
+  }
+
+  .cover-rule {
+    width: 52mm;
+    height: 2pt;
+    background: var(--blue);
+    margin-bottom: 18pt;
+  }
+
+  .cover-title {
+    max-width: 178mm;
+    color: var(--blue-deep);
+    font-size: 30pt;
+    font-weight: 500;
+    line-height: 1.16;
+    letter-spacing: 0;
+    margin-bottom: 15pt;
+  }
+
+  .cover-sub {
+    max-width: 170mm;
+    color: var(--muted);
+    font-size: 12.2pt;
+    line-height: 1.62;
+  }
+
+  .cover-grid {
+    display: grid;
+    grid-template-columns: 1.08fr 0.92fr;
+    gap: 10pt;
+    margin-top: 22pt;
+  }
+
+  .verdict-box,
+  .signal-box {
+    background: var(--panel);
+    border: 1pt solid var(--line);
+    padding: 11pt 12pt;
+  }
+
+  .verdict-box {
+    border-left: 3pt solid var(--blue);
+  }
+
+  .verdict-box p,
+  .signal-box p {
+    margin-bottom: 6pt;
+  }
+
+  .signal-row {
+    display: grid;
+    grid-template-columns: 23mm 1fr;
+    gap: 8pt;
+    padding: 5pt 0;
+    border-bottom: 0.35pt solid var(--line);
+  }
+
+  .signal-row:last-child { border-bottom: 0; }
+
+  .tag {
+    color: var(--gold);
+    font-size: 7.4pt;
+    text-transform: uppercase;
+  }
+
+  .cover-meta {
+    color: var(--faint);
+    border-top: 1pt solid var(--line);
+    padding-top: 12pt;
+    font-size: 9.2pt;
+    line-height: 1.65;
+  }
+
+  .toc {
+    break-after: page;
+    padding-top: 3mm;
+  }
+
+  .toc h2,
+  section h2 {
+    color: var(--blue-deep);
+    font-size: 20pt;
+    font-weight: 500;
+    line-height: 1.22;
+    margin-bottom: 10pt;
+    string-set: section-title content();
+  }
+
+  .toc h2 {
+    border-left: 3pt solid var(--blue);
+    padding-left: 8pt;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7pt 14pt;
+    margin-top: 12pt;
+  }
+
+  .toc-item {
+    border-top: 1pt solid var(--line);
+    padding-top: 7pt;
+    min-height: 30pt;
+  }
+
+  .toc-num {
+    color: var(--blue);
+    font-size: 8.2pt;
+    margin-right: 4pt;
+  }
+
+  .toc-note {
+    display: block;
+    color: var(--faint);
+    font-size: 8.2pt;
+    margin-top: 1pt;
+  }
+
+  section {
+    margin-bottom: 15pt;
+    break-inside: auto;
+  }
+
+  section.page {
+    break-before: page;
+    padding-top: 2mm;
+  }
+
+  h3 {
+    color: var(--blue);
+    font-size: 13.2pt;
+    font-weight: 500;
+    line-height: 1.32;
+    margin: 13pt 0 5pt;
+    break-after: avoid;
+  }
+
+  h4 {
+    color: var(--ink);
+    font-size: 10.7pt;
+    font-weight: 500;
+    margin: 9pt 0 3pt;
+    break-after: avoid;
+  }
+
+  p { margin: 0 0 7.2pt; }
+
+  ul,
+  ol {
+    margin: 3pt 0 8pt 16pt;
+  }
+
+  li { margin-bottom: 3.4pt; }
+
+  .lead {
+    color: var(--muted);
+    font-size: 11.2pt;
+    line-height: 1.62;
+    margin-bottom: 12pt;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 9pt;
+    margin: 8pt 0 11pt;
+  }
+
+  .grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8pt;
+    margin: 8pt 0 11pt;
+  }
+
+  .card {
+    background: var(--panel);
+    border: 1pt solid var(--line);
+    padding: 9pt 10pt;
+    break-inside: avoid;
+  }
+
+  .card h4 { margin-top: 0; color: var(--blue-deep); }
+
+  .callout {
+    background: var(--panel-blue);
+    border: 1pt solid #c9d5e3;
+    border-left: 3pt solid var(--blue);
+    padding: 9pt 10pt;
+    margin: 10pt 0 11pt;
+    break-inside: avoid;
+  }
+
+  .risk {
+    border-left-color: var(--red);
+    background: #f6eeee;
+    border-color: #ddc9c9;
+  }
+
+  .ok {
+    border-left-color: var(--green);
+    background: #edf4ef;
+    border-color: #c9d8ce;
+  }
+
+  .formula {
+    background: var(--panel);
+    border: 1pt solid var(--line);
+    padding: 7pt 9pt;
+    margin: 7pt 0 9pt;
+    font-family: var(--font-code) !important;
+    font-size: 8.15pt;
+    line-height: 1.48;
+    white-space: pre-wrap;
+    break-inside: avoid;
+  }
+
+  .formula-title {
+    color: var(--blue);
+    font-family: var(--font-code) !important;
+    font-size: 7.5pt;
+    margin-bottom: 3pt;
+    text-transform: uppercase;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8pt 0 11pt;
+    font-size: 8.15pt;
+    line-height: 1.36;
+    break-inside: avoid;
+  }
+
+  th,
+  td {
+    border: 0.45pt solid var(--line);
+    padding: 4.4pt 5pt;
+    vertical-align: top;
+  }
+
+  th {
+    color: var(--blue-deep);
+    background: #ece7d9;
+    font-weight: 500;
+  }
+
+  .tight-table {
+    font-size: 7.45pt;
+  }
+
+  .right { text-align: right; }
+  .center { text-align: center; }
+  .blue { color: var(--blue); }
+  .green { color: var(--green); }
+  .red { color: var(--red); }
+
+  figure {
+    margin: 10pt 0 12pt;
+    break-inside: avoid;
+  }
+
+  figcaption {
+    color: var(--faint);
+    font-size: 8.25pt;
+    line-height: 1.42;
+    margin-top: 4pt;
+  }
+
+  svg {
+    width: 100%;
+    height: auto;
+    background: var(--panel);
+    border: 1pt solid var(--line);
+  }
+
+  svg text,
+  svg tspan {
+    font-family: "TsangerJinKai02" !important;
+  }
+
+  .source-note {
+    color: var(--faint);
+    font-size: 8.5pt;
+    line-height: 1.45;
+    margin-top: 5pt;
+  }
+
+  .ref {
+    color: var(--blue);
+    font-size: 7.5pt;
+    white-space: nowrap;
+  }
+
+  .score {
+    color: var(--blue);
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+<article class="paper">
+  <header class="cover">
+    <div>
+      <div class="cover-eyebrow">Paper Review · Alibaba Pailitao-VL · arXiv:2602.13704v2</div>
+      <div class="cover-rule"></div>
+      <h1 class="cover-title">Pailitao-VL 论文 Review：从对比学习到原型 ID 识别，再到列表式重排</h1>
+      <p class="cover-sub">一份面向检索、搜索和多模态系统工程师的中文深度评审，逐项拆解论文的算法目标、公式、训练管线、工业收益、实现代价和稳定工作边界。</p>
+
+      <div class="cover-grid">
+        <div class="verdict-box">
+          <p class="tag">Independent verdict</p>
+          <p><strong>结论</strong>，Pailitao-VL 是一篇很有工业价值的系统论文。它的关键贡献不是提出一个更大的 VLM，而是把电商图搜的两个核心瓶颈分别改写为可监督、可并行、可线上部署的问题：embedding 侧用十亿级原型 ID 分类替代松散对比学习，reranker 侧用 chunkwise listwise 比较加绝对分数校准替代逐 pair 判断。</p>
+          <p><strong>稳定性判断</strong>，在 Alibaba 自有商品库、SKU 元数据、行为日志、强工程平台和持续数据治理闭环都成立的场景下，它大概率能稳定 work。离开这些条件后，方法不是即插即用的通用检索方案，最脆弱的环节是原型簇纯度、跨品类分数校准和线上长期指标。</p>
+        </div>
+        <div class="signal-box">
+          <div class="signal-row"><span class="tag">Paper</span><span>Pailitao-VL / arXiv v2 / 2026-03-05</span></div>
+          <div class="signal-row"><span class="tag">System</span><span>Embedding 召回 + MLLM reranker 重排的两阶段工业搜索系统</span></div>
+          <div class="signal-row"><span class="tag">Claim</span><span>作者报告 embedding 平台全流量 GMV +2%，list reranker 标准品类 GMV +6%，SKU 比价场景 GMV +20%</span></div>
+          <div class="signal-row"><span class="tag">Boundary</span><span>未公开代码、数据、A/B 显著性区间和流量分桶，本文不把线上收益写成第三方复现</span></div>
+        </div>
+      </div>
+    </div>
+    <p class="cover-meta">证据复核：2026-07-08，北京时间。主证据为 arXiv PDF、HTML 与 TeX 源包；所有线上收益均按作者报告处理。本文采用 <code>index.html</code> 作为排版源文件，PDF 由 WeasyPrint 渲染。</p>
+  </header>
+
+  <nav class="toc">
+    <h2>目录</h2>
+    <div class="toc-grid">
+      <div class="toc-item"><span class="toc-num">01</span>评审结论<span class="toc-note">论文到底解决了什么，哪些地方不能外推</span></div>
+      <div class="toc-item"><span class="toc-num">02</span>任务形式化<span class="toc-note">十亿级 corpus、百级候选、embedding 到 reranker</span></div>
+      <div class="toc-item"><span class="toc-num">03</span>Embedding 算法<span class="toc-note">MRL、原型 ID、角度 margin、稀疏负样本</span></div>
+      <div class="toc-item"><span class="toc-num">04</span>Reranker 算法<span class="toc-note">pointwise、chunkwise、NULL、绝对分数和混合合并</span></div>
+      <div class="toc-item"><span class="toc-num">05</span>实验收益<span class="toc-note">离线指标、效率指标和线上 GMV 口径</span></div>
+      <div class="toc-item"><span class="toc-num">06</span>稳定性判断<span class="toc-note">为什么能 work，什么时候会失效</span></div>
+      <div class="toc-item"><span class="toc-num">07</span>实现清单<span class="toc-note">复现所需的数据、训练、服务和监控条件</span></div>
+      <div class="toc-item"><span class="toc-num">08</span>最终评价<span class="toc-note">贡献、缺口、可追问问题和推荐读法</span></div>
+    </div>
+  </nav>
+
+  <main>
+    <section class="page">
+      <h2>01 · 评审结论</h2>
+      <p class="lead">Pailitao-VL 把工业多模态搜索拆成两个层次：先用 embedding 从约十亿级商品文档中召回百级候选，再用 MLLM reranker 做高精度重排。论文认为传统 contrastive embedding 在商品级、型号级、细节级检索上不够稳定，pointwise generative reranker 又太慢、太孤立，因此分别提出绝对 ID 识别和 compare-and-calibrate listwise rerank。<span class="ref">[S02]</span></p>
+
+      <div class="grid-3">
+        <div class="card">
+          <h4>最重要的算法变化</h4>
+          <p>Embedding 不再只学习 query-document 的相对距离，而是把每个商品实例绑定到原型 ID anchor 上，把召回问题改写成超大规模分类。这个选择把监督从“谁更近”变成“它是谁”。</p>
+        </div>
+        <div class="card">
+          <h4>最重要的工程变化</h4>
+          <p>Reranker 不再对每个候选单独问 Yes/No，而是把候选切成小 chunk 做相互比较，同时用四级绝对相关性分数完成跨 chunk 校准。这样保留 listwise 信息，又避免一次塞入全部候选。</p>
+        </div>
+        <div class="card">
+          <h4>最重要的评审边界</h4>
+          <p>论文实验可信地说明这套路线在作者场景中有效，但还没有证明它能无条件迁移。公开稿缺少代码、数据、置信区间、负向指标和长期线上观测。</p>
+        </div>
+      </div>
+
+      <div class="callout ok">
+        <p><strong>我的判断</strong>，这篇论文的价值在于把“多模态大模型做检索”推进到一个真正工业化的形态。它没有停在模型能力叙述，而是给出了数据治理、训练目标、并行训练、服务延迟和线上收益。若团队拥有足够大的商品库、行为日志、可稳定维护的 SKU/ID 体系和 GPU serving 平台，这条路线值得认真复现。</p>
+      </div>
+
+      <div class="callout risk">
+        <p><strong>需要克制的地方</strong>，论文把许多关键能力放在“agent-driven data curation”和内部平台工程上，但这些并没有完整开源。原型库如何验纯、A/B 如何分桶、GMV 是否牺牲了长期满意度、跨域迁移是否需要重建 ID 空间，公开版本都没有给出足够细节。</p>
+      </div>
+    </section>
+
+    <section class="page">
+      <h2>02 · 任务形式化：先召回百级候选，再做细粒度重排</h2>
+      <p class="lead">论文的任务设定很清楚：文档库约为十亿级，每个文档包含图片和文本；查询也可以同时包含图片和文本。系统需要在低延迟条件下从全库召回候选，再把百级候选排成更符合用户意图的结果列表。<span class="ref">[S02]</span></p>
+
+      <div class="formula"><div class="formula-title">Corpus and candidate recall</div>D = {d_i}_{i=1}^L, L ≈ 10^9
+d = (d_img, d_txt), q = (q_img, q_txt)
+D_cand = arg-top-N_{d_i in D} sim(Φ_embd(q), Φ_embd(d_i)), N ≈ 10^2</div>
+
+      <p>这一定义解释了为什么论文必须同时解决 embedding 和 reranker。Embedding 的核心是吞吐，文档向量可以离线算好，用 ANN 或向量库在全库中快速取 Top-N。Reranker 的核心是精度，它在候选集上读取 query-document 的细节交互，解决 embedding 单向量压缩掉的细粒度差异。</p>
+
+      <table>
+        <thead>
+          <tr><th>阶段</th><th>输入规模</th><th>核心模型</th><th>输出</th><th>主要瓶颈</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Embedding 召回</td><td>全库约 10^9 文档</td><td>Φ_embd / MLLM2vec backbone</td><td>约 10^2 候选</td><td>单向量压缩导致实例级差异丢失</td></tr>
+          <tr><td>Generative reranking</td><td>每 query 约百级候选</td><td>Φ_rank / MLLM cross-modal reasoning</td><td>最终排序与过滤</td><td>点对点推理太慢，且缺少候选间比较</td></tr>
+        </tbody>
+      </table>
+
+      <p>论文的场景不是通用“图片找图片”或“文本找图片”。电商检索里的 query 图片可能有暗光、遮挡、水印、OCR 覆盖、低分辨率；query 文本可能有拼写错误、缩写、单复数不一致。更麻烦的是，很多候选在大类上相似，但商品版本、局部结构、材质和 SKU 属性不同。CLIP 式对比学习能区分 sedan 和 SUV，并不保证能稳定区分一个小改款车型的灯组轮廓。</p>
+    </section>
+
+    <section class="page">
+      <h2>03 · Embedding：把相对距离问题改成原型 ID 分类问题</h2>
+      <p class="lead">Pailitao-VL-Embedding 的中心判断是：工业图搜需要的不是“语义相近”，而是“实例身份稳定”。传统对比学习依赖 batch 内正负样本和 hard negative mining，负样本质量会波动，false negative 会把同一 ID 的不同视角推远。论文改用十亿级语义原型 ID，把每个样本锚定到全局一致的语义坐标中。<span class="ref">[S02]</span></p>
+
+      <figure>
+        <svg font-family="TsangerJinKai02" viewBox="0 0 980 330" role="img" aria-label="Pailitao-VL Embedding pipeline">
+          <rect x="28" y="42" width="190" height="72" fill="#edf2f7" stroke="#1b365d"/>
+          <text x="123" y="73" text-anchor="middle" font-size="17" fill="#102846">Stage 1</text>
+          <text x="123" y="96" text-anchor="middle" font-size="14" fill="#151615">MLLM2vec + MRL</text>
+          <rect x="286" y="42" width="205" height="72" fill="#fbfaf5" stroke="#c9bfaa"/>
+          <text x="388" y="73" text-anchor="middle" font-size="17" fill="#102846">Stage 2</text>
+          <text x="388" y="96" text-anchor="middle" font-size="14" fill="#151615">Prototype ID Head</text>
+          <rect x="565" y="42" width="205" height="72" fill="#fbfaf5" stroke="#c9bfaa"/>
+          <text x="667" y="73" text-anchor="middle" font-size="17" fill="#102846">Stage 3</text>
+          <text x="667" y="96" text-anchor="middle" font-size="14" fill="#151615">Angular Margin CE</text>
+          <rect x="825" y="42" width="125" height="72" fill="#edf4ef" stroke="#315a47"/>
+          <text x="887" y="73" text-anchor="middle" font-size="17" fill="#315a47">Serving</text>
+          <text x="887" y="96" text-anchor="middle" font-size="14" fill="#151615">512-dim ANN</text>
+          <path d="M218 78 H286" stroke="#1b365d" stroke-width="2"/>
+          <path d="M491 78 H565" stroke="#1b365d" stroke-width="2"/>
+          <path d="M770 78 H825" stroke="#1b365d" stroke-width="2"/>
+          <path d="M123 114 C123 184 388 184 388 114" fill="none" stroke="#806027" stroke-width="2"/>
+          <path d="M388 114 C388 214 667 214 667 114" fill="none" stroke="#806027" stroke-width="2"/>
+          <rect x="80" y="232" width="820" height="78" fill="#f5f4ed" stroke="#ded7c8"/>
+          <text x="490" y="254" text-anchor="middle" font-size="13" fill="#151615">Data flywheel: metadata + behavior logs + generative inference</text>
+          <text x="490" y="276" text-anchor="middle" font-size="13" fill="#151615">organizer expansion -> reranker review -> purer prototypes -> stronger embedding</text>
+          <text x="490" y="297" text-anchor="middle" font-size="12" fill="#5f5b53">关键风险：如果原型簇不纯，分类目标会把噪声固化成全局 anchor。</text>
+        </svg>
+        <figcaption>Figure 1. Pailitao-VL-Embedding 的三阶段训练和数据闭环。图为本文重绘的结构化解释，基于论文方法节。</figcaption>
+      </figure>
+
+      <h3>Stage 1：MLLM2vec backbone 与 MRL 多粒度对比训练</h3>
+      <p>第一阶段仍然使用对比学习。论文以 3B 参数 dense MLLM 初始化 MLLM2vec，输入由任务 instruction、文本、图片和特殊 <code>EMB</code> token 组成。模型取 <code>EMB</code> 位置的最后隐状态作为向量表示。训练数据约为 20 亿图文对和人工/日志构造的 <code>(anc, pos, neg)</code> triplet。<span class="ref">[S02]</span></p>
+
+      <div class="formula"><div class="formula-title">MRL contrastive objective</div>G = {256, 512, 1024, 2048, 3072}
+L_embd^mrl = Σ_{g in G} λ_g · [ -1/|B| Σ_i log
+  exp(sim(h_{i, 1:g}^{que}, h_{i, 1:g}^{doc+}) / τ)
+  / Σ_j exp(sim(h_{i, 1:g}^{que}, h_{j, 1:g}^{doc}) / τ) ]</div>
+
+      <p>MRL 的价值在 serving 侧很实际：同一个模型可以输出不同前缀维度，论文最终在工业检索中采用 512 维，以便在召回质量和向量存储、检索成本之间取平衡。这个阶段解决的是概念级对齐和部署弹性，还没有解决实例级身份。</p>
+
+      <h3>Stage 2：用高纯度原型簇初始化全局 ID head</h3>
+      <p>第二阶段是论文最核心也最难复现的部分。作者构建一个十亿级语义原型库，每个 prototype-ID 是一个高纯度实例簇的质心。论文称数据治理由 MLLM planner 组织成 Plan-Propose-Organize-Review 管线：Proposer 从 SKU-tree 等确定性元数据、点击/购买行为日志、生成式语义推理中提出候选链接；Organizer 用 SOTA embedding 进行密度式 manifold expansion，把长尾和未标注文档吸收到候选簇；Reviewer 调用 SOTA reranker 做属性核验和多视角一致性检查，剔除语义漂移样本。<span class="ref">[S02]</span></p>
+
+      <p>实现上，global identification head 是一个超大线性投影层，权重矩阵每一行对应一个原型 anchor。用预计算质心初始化 head，可以避免在巨大 label space 中随机初始化带来的不稳定。这个设计把“query 和 document 是否近”转成“样本是否被分到正确 prototype-ID”。</p>
+
+      <h3>Stage 3：Additive angular margin 分类</h3>
+      <p>第三阶段联合优化 backbone 和 ID head。设样本向量为 h_i，目标 ID 为 y_i，第 u 个原型 anchor 为 w_u；h_i 和 w_u 均 L2 归一化。论文采用类似 ArcFace 的 additive angular margin，让目标类的角度多加一个 margin 后再进入 softmax，迫使模型把同 ID 样本压得更紧，也把近邻 ID 拉得更开。<span class="ref">[S02][S07]</span></p>
+
+      <div class="formula"><div class="formula-title">Angular-margin ID probability</div>θ_{i, u} = arccos(h_i^T w_u)
+P(y_i | h_i) =
+  exp(sim(θ_{i, y_i} + margin) / τ)
+  / [ exp(sim(θ_{i, y_i} + margin) / τ) + Σ_{u != y_i} exp(sim(θ_{i, u}) / τ) ]
+
+L_embd^joint = Σ_{g in G} λ_g · [ -1/|B| Σ_i log P(y_i | h_{i, 1:g}) ]</div>
+
+      <p>工程扩展上，论文用 backbone 数据并行、ID head tensor parallel，把 U × D 的原型矩阵按 ID 切到多卡上。为了避免 full softmax 带来的 massive all-to-all 通信，训练时只比较目标 ID 附近的稀疏负 anchor，论文写为维护 prototype similarity matrix 并取近邻负样本，同时周期性动态更新代理矩阵。</p>
+
+      <div class="callout">
+        <p><strong>关键评审</strong>，这条路线的理论直觉很强：商品实例识别更像 face recognition 或 product matching，而不是开放世界图文语义对齐。风险也同样明确：原型 ID 本身就是监督标签，如果数据治理错了，模型会非常稳定地学错。工业上这不是单模型问题，而是一个持续维护的 label system。</p>
+      </div>
+    </section>
+
+    <section class="page">
+      <h2>04 · Reranker：从逐 pair 判别到 compare-and-calibrate listwise policy</h2>
+      <p class="lead">Embedding 解决候选召回后，reranker 才真正决定用户看到的排序。论文先给出 pointwise 方案，再指出它的三个缺陷：二元判断太粗、缺少候选间比较、每个候选都重复处理 query 导致 O(N) 前向开销。Pailitao-VL-Reranker-List 用 chunkwise listwise 比较和绝对相关性校准同时处理这三个问题。<span class="ref">[S02]</span></p>
+
+      <h3>Pointwise reranker：简单但上限明显</h3>
+      <p>Pointwise 版本把 query 和单个候选 document 拼成输入，让 MLLM 只生成 <code>Yes</code> 或 <code>No</code>，相关性分数是 positive token 的概率。训练目标是标准二元交叉熵。</p>
+
+      <div class="formula"><div class="formula-title">Pointwise scoring and BCE</div>E_i = Concat(T_inst, q_txt, q_img, d_{i, txt}, d_{i, img})
+s_i = P(Yes | E_i; Φ_rank^point)
+L_rank^point = -1/|B| Σ_i [ y_i log s_i + (1 - y_i) log(1 - s_i) ]</div>
+
+      <p>论文还披露了 pointwise 数据治理：先在 prototype-ID 库上做工业适配；再用人标 seed 构造 reasoning model，借助大型 MLLM 生成 CoT 轨迹并 SFT 冷启动；之后用 GRPO 对齐人类偏好；最后用 reasoning model 标注百万级真实搜索日志，并用 Qwen3-VL-32B 一类大模型做专家 judge，只保留 reasoning 与 label 跨模型一致的高置信样本。<span class="ref">[S02]</span></p>
+
+      <h3>Listwise reranker：chunk 内比较，chunk 间校准</h3>
+      <p>朴素 listwise 会把所有百级候选一次塞进 prompt，理论上能比较全局，实践上会被长上下文 prefill 成本和信息稀释击穿。Pailitao-VL 采用折中策略：将候选切成 K 个 chunk，每个 chunk 最多 M=10 个候选；模型在 chunk 内选择最相关文档索引，若没有相关项则输出 <code>NULL</code>。同时，相关性标签从二元扩展为四级：0 表示实例级匹配，1 表示概念级匹配，2 表示功能级匹配，3 表示无关。</p>
+
+      <figure>
+        <svg font-family="TsangerJinKai02" viewBox="0 0 980 350" role="img" aria-label="Pailitao-VL Reranker hybrid ranking policy">
+          <rect x="38" y="42" width="190" height="78" fill="#edf2f7" stroke="#1b365d"/>
+          <text x="133" y="72" text-anchor="middle" font-size="16" fill="#102846">Candidate Set</text>
+          <text x="133" y="96" text-anchor="middle" font-size="14" fill="#151615">N ≈ 100</text>
+          <path d="M228 80 H298" stroke="#1b365d" stroke-width="2"/>
+          <rect x="298" y="32" width="150" height="45" fill="#fbfaf5" stroke="#c9bfaa"/>
+          <text x="373" y="60" text-anchor="middle" font-size="14" fill="#151615">Chunk 1, M=10</text>
+          <rect x="298" y="92" width="150" height="45" fill="#fbfaf5" stroke="#c9bfaa"/>
+          <text x="373" y="120" text-anchor="middle" font-size="14" fill="#151615">Chunk 2, M=10</text>
+          <rect x="298" y="152" width="150" height="45" fill="#fbfaf5" stroke="#c9bfaa"/>
+          <text x="373" y="180" text-anchor="middle" font-size="14" fill="#151615">Chunk K</text>
+          <path d="M448 56 H530" stroke="#1b365d" stroke-width="2"/>
+          <path d="M448 116 H530" stroke="#1b365d" stroke-width="2"/>
+          <path d="M448 176 H530" stroke="#1b365d" stroke-width="2"/>
+          <rect x="530" y="32" width="190" height="78" fill="#edf4ef" stroke="#315a47"/>
+          <text x="625" y="63" text-anchor="middle" font-size="16" fill="#315a47">Local ranking</text>
+          <text x="625" y="88" text-anchor="middle" font-size="14" fill="#151615">pairwise + NULL loss</text>
+          <rect x="530" y="132" width="190" height="78" fill="#edf2f7" stroke="#1b365d"/>
+          <text x="625" y="163" text-anchor="middle" font-size="16" fill="#102846">Absolute score</text>
+          <text x="625" y="188" text-anchor="middle" font-size="14" fill="#151615">4-level MLP, no extra pass</text>
+          <path d="M720 70 C760 70 760 120 800 120" fill="none" stroke="#806027" stroke-width="2"/>
+          <path d="M720 170 C760 170 760 130 800 130" fill="none" stroke="#806027" stroke-width="2"/>
+          <rect x="800" y="86" width="142" height="72" fill="#fbfaf5" stroke="#c9bfaa"/>
+          <text x="871" y="115" text-anchor="middle" font-size="16" fill="#102846">Hybrid merge</text>
+          <text x="871" y="139" text-anchor="middle" font-size="14" fill="#151615">preserve local order</text>
+          <rect x="164" y="250" width="652" height="58" fill="#f5f4ed" stroke="#ded7c8"/>
+          <text x="490" y="276" text-anchor="middle" font-size="15" fill="#151615">最终排序：chunk 内相对顺序不可打破，跨 chunk 用绝对分数多路归并</text>
+          <text x="490" y="299" text-anchor="middle" font-size="13" fill="#5f5b53">关键风险：如果绝对分数跨品类失准，合并会保留局部错误并影响全局列表。</text>
+        </svg>
+        <figcaption>Figure 2. Pailitao-VL-Reranker-List 的 compare-and-calibrate 流程。图为本文重绘的工程解释。</figcaption>
+      </figure>
+
+      <div class="formula"><div class="formula-title">Chunk partition and local score</div>K = ceil(N / M), C^k = {d_1, ..., d_m}, m <= M
+E = Concat(T_inst, q_txt, q_img, d_{1, txt}, d_{1, img}, ..., d_{m, txt}, d_{m, img})
+s = (s_1, ..., s_m, s_null) in R^{m+1}</div>
+
+      <p>Chunkwise local ranking 的监督由两部分构成。第一部分是 pairwise ranking loss，对于任意标签更差的 i 和标签更好的 j，鼓励 s_j 大于 s_i；权重 w_ij = max(y_i - y_j, 1)，标签差距越大梯度越强。第二部分是 NULL-token loss，把标签 0 的实例级匹配推到 NULL 之上，把其他候选推到 NULL 之下。这样 NULL 不只是“没有答案”，而是 exact match 的边界锚点。</p>
+
+      <div class="formula"><div class="formula-title">Chunkwise pair and null losses</div>P = {(i, j) | y_i > y_j}
+L_rank^pair = 1/|P| Σ_(i, j) w_ij · log(1 + exp(-(s_j - s_i) / τ))
+
+S = {i | y_i = 0}, O = {i | y_i > 0}
+L_rank^null =
+  1/|S| Σ_{i in S} log(1 + exp(-(s_i - s_null) / τ))
+  + 1/|O| Σ_{i in O} log(1 + exp(-(s_null - s_i) / τ))
+
+L_rank^chunk = 1/K Σ_k (L_rank^{k, pair} + L_rank^{k, null})</div>
+
+      <h3>绝对相关性分数：解决跨 chunk 不可比</h3>
+      <p>Chunk 内 logits 只能表示本 chunk 内相对偏好，不同 chunk 之间不能直接比较。论文为此增加 absolute relevance scoring。它不再多跑一次 MLLM，而是复用 chunkwise 前向已经算出的 hidden states，把 query 和每个 document 的 image token segment 分组并 mean pooling，得到 z_0 和 z_i，再拼接进轻量 MLP，输出四级相关性概率。</p>
+
+      <div class="formula"><div class="formula-title">Absolute relevance scoring</div>p_i = Φ_MLP([z_0 || z_i]) in R^4
+r_i = softmax(p_i)
+L_rank^abs = -1/|B| Σ_i log r_{i, y_i}
+L_rank = L_rank^ntp + L_rank^chunk + L_rank^abs</div>
+
+      <h3>Hybrid ranking：保留局部顺序，用绝对分数做多路合并</h3>
+      <p>最终排序不是简单把 local score 和 absolute score 加权相加。论文的策略更保守：每个 chunk 先按 local chunkwise score 排好，形成 chunk 内序列；全局合并时维护每个 chunk 的指针，每一步只比较各 chunk 当前队首候选的 absolute score，选择最高者加入最终列表，并推进该 chunk 指针。公式上，k* = argmax_k r^k_{t_k}。这个贪心多路合并保留 chunk 内相对比较结果，又让跨 chunk 顺序依赖一个共享四级标签空间。</p>
+    </section>
+
+    <section class="page">
+      <h2>05 · 实验收益：离线有效，线上结果有价值但仍是作者报告</h2>
+      <p class="lead">论文的实验分为 embedding 离线、reranker 离线、reranker 分类、ablation、效率和线上 A/B。测试集来自真实用户曝光请求。Embedding 测试集包含 5K 电商 query 和 150 万文档；reranker 测试集包含 2K query，每个 query 平均 50 个候选。<span class="ref">[S02]</span></p>
+
+      <h3>Embedding 离线结果</h3>
+      <table class="tight-table">
+        <thead>
+          <tr><th>Method</th><th class="right">I-HR@1</th><th class="right">I-HR@5</th><th class="right">I-HR@10</th><th class="right">C-HR@1</th><th class="right">C-HR@5</th><th class="right">C-HR@10</th><th class="right">Avg</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Qwen3-VL-Embedding</td><td class="right">57.83</td><td class="right">58.21</td><td class="right">60.11</td><td class="right">73.43</td><td class="right">72.23</td><td class="right">71.14</td><td class="right">65.49</td></tr>
+          <tr><td>CLIP-IDClass-Embedding</td><td class="right">60.05</td><td class="right">60.28</td><td class="right">62.44</td><td class="right">80.38</td><td class="right">80.28</td><td class="right">79.90</td><td class="right">70.56</td></tr>
+          <tr><td>TBStars-VL-Embedding</td><td class="right">60.40</td><td class="right">60.50</td><td class="right">63.36</td><td class="right">78.27</td><td class="right">77.56</td><td class="right">77.18</td><td class="right">69.55</td></tr>
+          <tr><td><strong>Pailitao-VL-Embedding</strong></td><td class="right"><strong>64.52</strong></td><td class="right"><strong>64.89</strong></td><td class="right"><strong>67.66</strong></td><td class="right"><strong>82.01</strong></td><td class="right"><strong>81.72</strong></td><td class="right"><strong>81.54</strong></td><td class="right"><strong>73.73</strong></td></tr>
+        </tbody>
+      </table>
+
+      <p>Pailitao-VL-Embedding 的平均分 73.73，比 TBStars-VL-Embedding 高 4.18 个百分点，比 CLIP-IDClass-Embedding 高 3.17 个百分点。更关键的是 CLIP-IDClass-Embedding 虽然架构较小，但使用同类 ID 分类监督后平均分 70.56，超过对比学习训练的 TBStars 69.55。这个对照支持论文主张：在细粒度商品检索中，训练目标的改变比单纯扩大 backbone 更重要。</p>
+
+      <h3>Reranker 离线与分类结果</h3>
+      <table class="tight-table">
+        <thead>
+          <tr><th>Method</th><th class="right">I-HR@1</th><th class="right">I-HR@15</th><th class="right">C-HR@1</th><th class="right">C-HR@15</th><th class="right">Avg</th><th class="right">Instance F1</th><th class="right">Concept F1</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Qwen3-VL-Embedding</td><td class="right">50.10</td><td class="right">46.23</td><td class="right">90.59</td><td class="right">86.38</td><td class="right">67.99</td><td class="right">49.87</td><td class="right">67.30</td></tr>
+          <tr><td>CLIP-IDClass-Embedding</td><td class="right">54.48</td><td class="right">50.60</td><td class="right">91.57</td><td class="right">86.16</td><td class="right">70.36</td><td class="right">67.03</td><td class="right">85.31</td></tr>
+          <tr><td>Qwen3-VL-Reranker</td><td class="right">51.99</td><td class="right">47.90</td><td class="right">92.08</td><td class="right">87.35</td><td class="right">69.47</td><td class="right">60.68</td><td class="right">86.66</td></tr>
+          <tr><td>Pailitao-Point</td><td class="right">56.45</td><td class="right">52.74</td><td class="right">92.93</td><td class="right">87.51</td><td class="right">72.21</td><td class="right">72.35</td><td class="right">88.51</td></tr>
+          <tr><td><strong>Pailitao-List</strong></td><td class="right"><strong>57.92</strong></td><td class="right"><strong>54.20</strong></td><td class="right"><strong>94.14</strong></td><td class="right"><strong>90.09</strong></td><td class="right"><strong>73.79</strong></td><td class="right"><strong>74.10</strong></td><td class="right"><strong>91.33</strong></td></tr>
+        </tbody>
+      </table>
+
+      <p>Pailitao-VL-Reranker-List 的平均分 73.79，比 Pailitao-Point 高 1.58 个百分点，比 Qwen3-VL-Reranker 高 4.32 个百分点。分类指标更能说明 listwise 的价值：Pailitao-List 的 instance precision 为 74.28，比 pointwise 的 63.85 高 10.43 个百分点；虽然 instance recall 从 83.46 降到 73.93，但 F1 仍从 72.35 升到 74.10。它牺牲一部分召回，换来更紧的 exact-match 决策边界。</p>
+
+      <h3>Ablation 与效率</h3>
+      <table class="tight-table">
+        <thead>
+          <tr><th>Variant</th><th class="right">I-HR@1</th><th class="right">C-HR@1</th><th class="right">C-HR@10</th><th class="right">Avg</th><th>解释</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Chunkwise Ranking</td><td class="right">57.46</td><td class="right">93.74</td><td class="right">87.68</td><td class="right">72.30</td><td>只有 chunk 内比较。</td></tr>
+          <tr><td>+ NULL-Token Loss</td><td class="right">58.07</td><td class="right">93.93</td><td class="right">88.60</td><td class="right">73.10</td><td>exact match 边界更清楚，I-HR@1 提升。</td></tr>
+          <tr><td>+ Abs Rel Score</td><td class="right">57.68</td><td class="right">94.13</td><td class="right">90.73</td><td class="right">73.59</td><td>跨 chunk 的概念级稳定性增强。</td></tr>
+          <tr><td>+ Hybrid Ranking</td><td class="right">57.92</td><td class="right">94.14</td><td class="right">91.05</td><td class="right">73.79</td><td>局部比较和全局校准叠加得到最佳平均分。</td></tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+          <tr><th>效率指标</th><th class="right">Pointwise</th><th class="right">Chunkwise</th><th>变化</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>MLLM forward passes</td><td class="right">800</td><td class="right">100</td><td>减少 8 倍</td></tr>
+          <tr><td>Total time</td><td class="right">18.22 s</td><td class="right">7.50 s</td><td>总耗时下降 58.8%</td></tr>
+          <tr><td>Latency / query</td><td class="right">182.25 ms</td><td class="right">75.01 ms</td><td>约 2.43 倍加速</td></tr>
+          <tr><td>Throughput</td><td class="right">5.49 query/s</td><td class="right">13.33 query/s</td><td>约 2.43 倍吞吐</td></tr>
+        </tbody>
+      </table>
+
+      <p>效率实验在单张 NVIDIA A800、vLLM engine、100 个 query 和 800 个 query-document pair 上进行。线上部署部分，论文报告 Pailitao-VL-Embedding 推理延迟压到 67 ms/query；Pailitao-VL-Reranker-List 平均 76 ms/query；作者报告 embedding 带来全平台流量 GMV +2%，list reranker 在标准化品类 GMV +6%，SKU-price comparison 等 AI search 场景 GMV +20%。这些是强工业信号，但公开稿没有提供置信区间、样本量、分桶策略和长期指标，所以只能作为作者报告的线上效果。</p>
+    </section>
+
+    <section class="page">
+      <h2>06 · 是否能稳定 work：结论是有条件成立</h2>
+      <p class="lead">这套方法不是靠一个单点 trick 成立，而是靠数据治理、训练目标、服务并行和线上反馈共同成立。稳定性也必须按这个链路判断。</p>
+
+      <div class="grid-2">
+        <div class="callout ok">
+          <p><strong>稳定 work 的条件</strong>，平台有足够大的商品库、可靠 SKU-tree 或等价 ID 体系、真实点击/购买日志、可持续的人标与大模型 judge 预算、线上可回滚的 A/B 系统，以及能承受 embedding 重训、原型库更新和 reranker serving 的基础设施。</p>
+        </div>
+        <div class="callout risk">
+          <p><strong>容易失效的条件</strong>，小数据平台、SKU 身份混乱、商品生命周期极短、跨境多语言属性不一致、视觉近似但实际不可替代的商品很多，或者没有能力校验原型簇纯度。此时绝对 ID 分类会把业务噪声学成模型确信。</p>
+        </div>
+      </div>
+
+      <h3>为什么我认为它在作者场景中可信</h3>
+      <p>一方面，论文的离线和线上指标彼此吻合。Embedding 在 instance-level 和 concept-level HR 上都优于强基线，说明原型 ID 训练不是只优化某个局部指标；reranker 的 ablation 逐层提升，能解释 NULL、绝对分数和混合合并各自贡献；效率表说明 chunkwise 不是牺牲线上时延换精度，而是明确减少 MLLM forward pass。另一方面，Pailitao 是 Alibaba 自有电商场景，作者有机会拿到 SKU 树、行为日志和线上 A/B，这些正是该方法依赖的条件。</p>
+
+      <h3>为什么我不会把它写成通用稳定方案</h3>
+      <p>公开论文缺少三个关键证据。第一，原型库质量没有量化审计，比如簇纯度、误合并率、误拆分率、长尾覆盖率和更新频率。第二，线上 A/B 没有提供显著性、样本量、负向指标、长期指标和品类拆分。第三，代码和数据没有开放，论文描述中的 agent curation 和基础设施优化无法独立复验。严格说，论文证明的是“在作者可控工业场景中强信号有效”，不是“任意电商平台照着公式就能稳定复现”。</p>
+
+      <table>
+        <thead>
+          <tr><th>稳定性维度</th><th>论文证据</th><th>本文判断</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>检索粒度</td><td>ID 分类、angular margin、I-HR 指标全表领先</td><td>证据较强，特别适合 SKU/实例级检索。</td></tr>
+          <tr><td>抗噪声</td><td>训练和测试 query 含暗光、遮挡、水印、拼写等噪声，pointwise 输入包含 full image + crop</td><td>有设计和数据描述，但缺少按噪声类型拆分的指标。</td></tr>
+          <tr><td>服务延迟</td><td>Embedding 67 ms/query；List reranker 76 ms/query；chunkwise latency 75.01 ms</td><td>作者场景可信，迁移时依赖 GPU、vLLM、batching 和候选规模。</td></tr>
+          <tr><td>业务收益</td><td>GMV +2%、+6%、+20% 作者报告</td><td>重要但不能独立验证，不能跨平台横向比较。</td></tr>
+          <tr><td>复现性</td><td>公式、prompt、训练配置较完整</td><td>代码、数据和原型治理细节缺失，复现难度高。</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="page">
+      <h2>07 · 具体实现清单：照论文做，真正难在数据和服务</h2>
+      <p class="lead">如果把 Pailitao-VL 当成工程方案，而不是只当论文读，实施顺序应当从数据身份系统开始，而不是从模型训练开始。模型公式清楚，真正决定成败的是原型库、负样本、分数校准和线上监控。</p>
+
+      <h3>Embedding 侧最小可行实现</h3>
+      <ol>
+        <li><strong>建立商品身份层</strong>，从 SKU-tree、SPU、品牌型号、属性表和人工审核中定义“实例级相同”的边界。</li>
+        <li><strong>构造原型簇</strong>，用确定性元数据作 seed，用行为日志补充 query-document 连接，用 embedding 召回长尾候选，再用强 reranker 或人工审核做 reviewer。</li>
+        <li><strong>训练 MLLM2vec</strong>，用 instruction + image + text + <code>EMB</code> token 输出向量，先做 MRL 对比训练，维度集合可按论文设为 256/512/1024/2048/3072。</li>
+        <li><strong>初始化 ID head</strong>，用每个原型簇的向量质心填充 head 权重，避免随机初始化的巨大 label space 不稳定。</li>
+        <li><strong>联合训练</strong>，用 additive angular margin 分类目标，并用 KNN sparse negatives 降低 full softmax 通信成本。</li>
+        <li><strong>上线召回</strong>，去掉 ID head，只保留 backbone 输出 512 维向量，离线建索引，线上 query 向量召回百级候选。</li>
+      </ol>
+
+      <h3>Reranker 侧最小可行实现</h3>
+      <ol>
+        <li><strong>定义四级标签</strong>，0 为实例级匹配，1 为概念级匹配，2 为功能级匹配，3 为无关。这个标签体系必须和业务展示规则一致。</li>
+        <li><strong>先训练 pointwise</strong>，它可以作为 reviewer、distiller 和初版线上 reranker，虽然不是最终最优。</li>
+        <li><strong>构造 chunkwise prompt</strong>，每个 chunk 最多 10 个候选，输出候选索引或 NULL，训练 pairwise ranking loss 与 NULL-token loss。</li>
+        <li><strong>加绝对分数头</strong>，从同一次 MLLM forward 的 hidden states 中抽取 query/document image token segment；mean pooling 后过轻量 MLP 输出四级概率。</li>
+        <li><strong>做 hybrid merge</strong>，chunk 内按 local score 排序，跨 chunk 用 absolute score 多路归并，保持局部相对顺序。</li>
+        <li><strong>线上监控</strong>，同时看 GMV、CVR、CTR、退款/差评、无库存点击、商家集中度、长尾覆盖、延迟 P95/P99 和回退率。</li>
+      </ol>
+
+      <div class="callout">
+        <p><strong>复现难点排序</strong>，第一是原型 ID 数据治理，第二是大规模 ID head 训练工程，第三是 reranker 四级标签和跨 chunk 校准，第四才是模型结构本身。没有足够干净的 ID 体系，后面的公式会变成高成本噪声放大器。</p>
+      </div>
+    </section>
+
+    <section class="page">
+      <h2>08 · 最终评价：强工业论文，但公开复现还不完整</h2>
+      <p class="lead">Pailitao-VL 值得认真读。它把多模态搜索的“语义对齐”问题重新压回商品工业系统的核心事实：商品有身份、候选在列表中互相竞争、线上延迟不能让位于模型优雅。这个问题设定很实，也使论文的贡献比一般 VLM benchmark 刷分更有工程含量。</p>
+
+      <table>
+        <thead>
+          <tr><th>评审项</th><th>判断</th><th>理由</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>算法原创性</td><td class="green">高</td><td>把 ID-recognition、ArcFace 式 margin、MLLM2vec、chunkwise listwise rerank 和 absolute calibration 组合成工业闭环，问题定义清楚。</td></tr>
+          <tr><td>公式与实现清晰度</td><td class="green">较高</td><td>主要 loss、prompt、训练配置和效率实验都披露了；但 agent curation、prototype quality 和线上工程细节仍不够公开。</td></tr>
+          <tr><td>实验可信度</td><td class="green">较高</td><td>离线表格、ablation 和效率数据互相支撑；线上 GMV 是强信号，但仍是作者报告。</td></tr>
+          <tr><td>可复现性</td><td class="red">中等偏低</td><td>未公开代码、权重、训练数据、ID 原型库和 A/B 细节，外部团队只能复现思想，难以复现结果。</td></tr>
+          <tr><td>稳定 work 可能性</td><td class="green">有条件高</td><td>在强商品身份系统和强基础设施下成立；跨平台迁移要重建数据治理与校准。</td></tr>
+        </tbody>
+      </table>
+
+      <h3>我会追问作者的五个问题</h3>
+      <ol>
+        <li>原型簇的验纯指标是什么，误合并和误拆分如何统计，更新周期是多少？</li>
+        <li>KNN sparse negatives 中“10% of U”在十亿级 ID 下如何落地，候选负 anchor 的存储和通信开销是多少？</li>
+        <li>四级 absolute relevance scorer 在不同品类、不同 query 类型、不同 chunk 位置上的 calibration error 如何监控？</li>
+        <li>线上 GMV +2%、+6%、+20% 的样本量、置信区间、实验周期、负向指标和回滚规则是什么？</li>
+        <li>Prototype cardinality 的 scaling law 是否有公开曲线，是否存在收益饱和点或 label-noise 反转点？</li>
+      </ol>
+
+      <div class="callout ok">
+        <p><strong>推荐读法</strong>，做多模态检索的人应该重点看 Section 4 的 ID-recognition 和 hybrid parallel training；做搜索排序的人应该重点看 Section 5 的 chunkwise local ranking、NULL-token loss 和 hybrid merge；做平台工程的人应该重点看 Table 5 和线上 A/B 口径。不要只记住“GMV +20%”，更应该记住它背后的前提：强 ID 体系、强数据治理、强 serving 平台。</p>
+      </div>
+
+      <h3>来源</h3>
+      <p class="source-note">本文主证据来自 Pailitao-VL arXiv v2 页面、PDF、HTML 和 TeX 源包。背景来源包括 VLM2Vec、Qwen3-VL-Embedding/Reranker、ArcFace 和 Alibaba 早期 Visual Search 论文。完整来源、证据等级、本地归档与不确定性说明见 <code>sources.md</code>；结构化数字见 <code>data/</code>。</p>
+    </section>
+  </main>
+</article>
+</body>
+</html>

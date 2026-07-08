@@ -1,0 +1,9 @@
+id	level	source_type	date	url	supports	used_in
+S01	A	arxiv_abs	2026-03-05	https://arxiv.org/abs/2602.13704	题名、作者、v1/v2 日期、主题分类、摘要和 arXiv DOI	cover;metadata;sources
+S02	A	arxiv_pdf	2026-03-05	https://arxiv.org/pdf/2602.13704	正文公式、方法定义、训练配置、表 1 到表 5、在线 A/B 作者报告	method;experiments;scorecard
+S03	A	arxiv_html	2026-03-05	https://arxiv.org/html/2602.13704	HTML 结构、公式位置、表格位置和章节交叉核对	method;experiments
+S04	A	arxiv_source	2026-03-05	https://arxiv.org/e-print/2602.13704	TeX 源文件、表格原始数字、prompt 模板和参考文献键	method;data
+S05	A	arxiv_background	2024-10-07	https://arxiv.org/abs/2410.05160	VLM2Vec 将 VLM 转为通用多模态 embedding 的对比学习背景	context
+S06	A	arxiv_background	2026-01-08	https://arxiv.org/abs/2601.04720	Qwen3-VL-Embedding/Reranker 作为论文中的强基线与多阶段训练背景	context;experiments
+S07	A	cvpr_background	2019	https://arxiv.org/abs/1801.07698	ArcFace/additive angular margin 的几何动机和分类式度量学习背景	method
+S08	A	arxiv_background	2021-02-09	https://arxiv.org/abs/2102.04674	Alibaba 早期大规模视觉搜索系统背景和电商图搜工程约束	context

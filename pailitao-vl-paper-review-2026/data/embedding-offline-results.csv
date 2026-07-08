@@ -1,0 +1,5 @@
+method,i_hr_1,i_hr_5,i_hr_10,c_hr_1,c_hr_5,c_hr_10,average,source
+Qwen3-VL-Embedding,57.83,58.21,60.11,73.43,72.23,71.14,65.49,S02
+CLIP-IDClass-Embedding,60.05,60.28,62.44,80.38,80.28,79.90,70.56,S02
+TBStars-VL-Embedding,60.40,60.50,63.36,78.27,77.56,77.18,69.55,S02
+Pailitao-VL-Embedding,64.52,64.89,67.66,82.01,81.72,81.54,73.73,S02

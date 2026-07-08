@@ -1,0 +1,1284 @@
+                                           Pailitao-VL: Unified Embedding and Reranker for
+                                                Real-Time Multi-Modal Industrial Search
+
+                                                           Lei Chen, Chen Ju# , Xu Chen, Zhicheng Wang,
+                                               Yuheng Jiao, Hongfeng Zhan, Zhaoyang Li, Shihao Xu, Zhixiang Zhao,
+                                            Tong Jia, Lin Li, Yuan Gao, Jun Song, Jinsong Lan, Xiaoyong Zhu, Bo Zheng
+
+                                                                                    Alibaba Group
+                                                     {realchenleicu,cju.void}@gmail.com, huaisong.cx@alibaba-inc.com
+
+
+
+
+arXiv:2602.13704v2 [cs.IR] 5 Mar 2026
+                                                                                       Abstract
+                                                 This paper introduces Pailitao-VL, a unified multi-modal retrieval system specifically
+                                                 engineered for the high-precision, real-time industrial search. We here address three
+                                                 critical challenges in the current SOTA solution: insufficient retrieval granularity,
+                                                 vulnerability to environmental noise, and prohibitive efficiency-performance gap.
+                                                 Pailitao-VL-Embedding: Despite significant advances in embedding, a substantial
+                                                 gap persists between coarse concept-level alignment and instance-level precision
+                                                 required for the industrial search. Current solutions, predominantly optimized via
+                                                 contrastive learning on web-crawled data, excel at distinguishing broad categories,
+                                                 such as a sedan from an SUV, but often fail to resolve subtle intra-concept variations,
+                                                 e.g., identifying a specific facelifted car model by its minor headlight contours. This
+                                                 limitation stems from the inherent stochasticity and “semantic drift” of contrastive
+                                                 objectives in billion-scale environments, where reliance on local, relative proximity
+                                                 fails to establish the absolute identity necessary for high-fidelity retrieval. To bridge
+                                                 the gap, we explore two synergistic breakthroughs. We first transition to absolute
+                                                 ID-recognition, replacing open-ended alignment with deterministic supervision. By
+                                                 anchoring instances to billion-scale semantic prototypes, we reformulate objective
+                                                 as ultra-scale classification, enabling the backbone to resolve fine-grained structural
+                                                 differences required for instance-level discrimination. To ensure the label purity
+                                                 essential for an absolute space, we develop agent-driven high-capacity data curation,
+                                                 i.e., employing one “plan-propose-organize-review” pipeline to transform noisy
+                                                 industrial manifolds into high-purity ID clusters, establishing a reliable supervisory
+                                                 that far exceeds the capabilities of traditional heuristic mining.
+                                                 Pailitao-VL-Reranking: While high-precision embeddings effectively narrow the
+                                                 search space, generative reranking often constitutes the primary bottleneck, strug-
+                                                 gling to reconcile fine-grained retrieval with the operational efficiency. Existing
+                                                 pointwise solutions evaluate candidates in isolation, suffering from binary reduction-
+                                                 ism, where complex relevance is collapsed into a coarse “Yes/No” judgment, and a
+                                                 total lack of comparative context between candidate documents. To transcend these
+                                                 constraints, we evolve the paradigm from pointwise to one “compare-and-calibrate”
+                                                 listwise policy. By synergizing chunk-based comparative reasoning with calibrated
+                                                 absolute relevance scoring, our system captures nuanced relative preferences within
+                                                 a shared context while ensuring global consistency across independently processed
+                                                 chunks. Such one hybrid ranking policy facilitates massive parallel processing,
+                                                 effectively neutralizing prohibitive computational overhead of large-scale MLLM
+                                                 inference and achieving great speedup in throughput, thereby bridging the gap
+                                                 between peak ranking precision and real-time industrial adoptability.
+                                                 Extensive evaluations confirm that Pailitao-VL achieves state-of-the-art performance
+                                                 while meeting strict industrial latency requirements. The online A/B tests on the
+
+                                        #: Corresponding Author & Project Leader.
+                          Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+          Alibaba’s e-commerce platform demonstrate substantial business value, such as a
+          20% GMV gain in some specific AI search scenarios.
+
+
+
+
+Contents
+
+1   Introduction                                                                                      3
+
+2   Related Work                                                                                      4
+
+3 Task Formalization                                                                                  5
+
+4   Discriminative Embedding                                                                          6
+    4.1   Contrastive Learning Paradigm . . . . . . . . . . . . . . . . . . . . . . . . . . . .       6
+    4.2   Absolute ID-Recognition Paradigm . . . . . . . . . . . . . . . . . . . . . . . . . .        7
+          4.2.1    Stage 1: MLLM2vec Φmllm
+                                      embd       . . . . . . . . . . . . . . . . . . . . . . . . .   7
+          4.2.2    Stage 2: Global Identification Head Φhead
+                                                        embd
+                                                             . . . . . . . . . . . . . . . . . .     8
+          4.2.3    Stage 3: End-to-End Joint Optimization . . . . . . . . . . . . . . . . . . .       9
+    4.3   Self-Loop Gain . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     10
+
+5   Generative Reranking                                                                             10
+                                 point
+    5.1   Pointwise Reranker Φrank . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     10
+    5.2   Listwise Reranker Φlist
+                             rank
+                                  . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    12
+          5.2.1    Chunkwise Local Ranking . . . . . . . . . . . . . . . . . . . . . . . . . .       12
+          5.2.2    Absolute Relevance Scoring . . . . . . . . . . . . . . . . . . . . . . . . .      13
+          5.2.3    Hybrid Ranking Policy . . . . . . . . . . . . . . . . . . . . . . . . . . . .     14
+
+6   Experiments                                                                                      14
+    6.1   Experimental Settings . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .    14
+    6.2   Offline Embedding Performance . . . . . . . . . . . . . . . . . . . . . . . . . . .        16
+    6.3   Offline Reranking Performance . . . . . . . . . . . . . . . . . . . . . . . . . . . .      17
+    6.4   Online A/B Results . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .     18
+
+7   Conclusion                                                                                       18
+
+8   Contributors                                                                                     19
+
+
+
+
+                                                       2
+                          Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+1   Introduction
+
+The exponential proliferation of multi-modal content across the internet has fundamentally reshaped
+the landscape of digital information. Modern ecosystems are increasingly defined by a heterogeneous
+mix of data modalities, ranging from natural images and text to complex infographics and videos,
+necessitating retrieval systems that transcend traditional text-only paradigms. In demanding industrial
+contexts such as e-commerce and intellectual property protection, the objective of multi-modal search
+has evolved: it is no longer sufficient to achieve broad concept-level alignment (e.g., identifying
+a category). Instead, systems must now deliver instance-level discriminability, capturing minute
+structural and textural differences to resolve subtle intra-concept variations. This shift makes high-
+precision multi-modal retrieval essential for real-world applications, including social media navigation,
+SKU product discovery, and scientific exploration.
+To achieve the goal, contemporary multi-modal retrieval systems typically adopt a cascaded framework
+consisting of two sequential stages: coarse-grained embedding followed by fine-grained reranking.
+This pipeline is built upon the principle of progressive refinement, which systematically narrows down
+the candidate pool to converge on most relevant results while balancing computational throughput
+with semantic depth. Specifically, the embedding stage enables rapid, large-scale candidate generation
+across the entire search space by projecting heterogeneous data into a unified latent space. Subsequently,
+the reranking stage performs exhaustive cross-modal semantic reasoning over a significantly smaller
+candidate set, delivering high-precision alignment necessary for complex, real-world queries.
+The primary objective of embedding is to reliably retrieve one hundred-scale candidate set from billion-
+scale corpora. The standard solution involves projecting heterogeneous image-text data into a unified,
+low-dimensional latent space where semantic similarity is evaluated by vector proximity, e.g., cosine
+similarity. Optimization is typically driven by large-scale contrastive alignment, which constructs a
+shared manifold by pulling positive pairs together while pushing negatives apart. Architecturally, the
+field has evolved from traditional CLIP-style dual-encoders Radford et al. [2021b] to contemporary
+MLLM2vec-style architectures Jiang et al. [2024b,a], Zhang et al. [2024] that leverage sophisticated
+attention dependencies for deeper alignment. For deployment, these embeddings facilitate the offline
+pre-computation of billion-scale repositories, which are indexed in the specialized vector databases
+(e.g., Faiss or Milvus) to achieve sub-millisecond retrieval latency. However, condensing the rich
+multi-modal inputs into a single fixed-dimensional vector inherently creates an information bottleneck,
+fundamentally limiting the system’s capacity for fine-grained discrimination.
+The primary objective of reranking is to perform refinement for the candidate results within a drastically
+narrowed search space, typically operates on a constrained set of hundred-scale documents per query.
+The reranking architecture has evolved from early cross-encoders of shallow Transformer layers, to
+contemporary MLLMs Sun et al. [2023], Liu et al. [2025], facilitating exhaustive semantic interaction.
+By taking query-document pairs as input, these models are often trained to generate designated tokens
+(e.g., “Relevant/Irrelevant”), using their predicted probabilities as calibrated reranking scores. Despite
+superior precision, the massive computational overhead of deep cross-modal reasoning remains a
+critical barrier to real-time, large-scale industrial deployment.
+Despite the significant progress of this two-stage framework, we identify three fundamental challenges
+that hinder its effective deployment in demanding industrial scenarios:
+• Insufficient Retrieval Granularity. Most existing solutions optimize for concept- or category-level
+retrieval, learning coarse alignments from large-scale web-crawled data via contrastive objectives.
+While effective at distinguishing broad concepts (e.g., sedan vs. SUV), they lack the instance-level
+discriminability needed to resolve subtle intra-concept variations (e.g., distinguishing a facelifted
+model from its predecessor by minor headlight contours), making them fall short in high-precision
+scenarios demanding identification of specific product versions or minute structural differences.
+• Pronounced Vulnerability to Domain Shift or Environmental Noise. In production environments,
+query-document images often deviate substantially from clean, curated pre-training data. Adverse
+factors, including poor lighting, cluttered backgrounds, physical occlusions, and visual artifacts (OCR
+overlays, watermarks), induce severe retrieval drift. Existing solutions struggle to disentangle core
+semantics from such perturbations, leading to degraded performance in unconstrained settings.
+• Fundamental Efficiency-Performance Gap Preventing Real-Time Adoption. Recent performance
+gains often come at the cost of massive parameterization, complex cross-modal interactions, and
+
+
+                                                        3
+                          Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+autoregressive decoding, all of which impose prohibitive computational overhead. For industrial
+platforms requiring high-concurrency processing (thousands of queries per second), bridging the gap
+between peak semantic precision and operational throughput remains a primary bottleneck.
+To bridge the gaps, we present Pailitao-VL, a comprehensive suite comprising Pailitao-VL-Embedding
+and Pailitao-VL-Reranker, specifically engineered for high-precision, real-time industrial search.
+Built upon the foundation of Multi-Modal Large Language Model (MLLM), our framework integrates
+advanced data governance, efficient architecture with specialized large-scale training methodologies.
+Pailitao-VL-Embedding departs from traditional contrastive learning by introducing semantic catego-
+rization for absolute ID-identification. Its central is an MLLM-driven data governance agent that
+utilizes a “Plan-Propose-Organize-Review” pipeline to purify raw industrial corpora into a billion-scale
+semantic prototype library. By reformulating retrieval as ultra-scale classification, we map instances
+to these prototypes as absolute semantic anchors in the latent space. Optimized via an additive margin
+angular objective in the three-stage pipeline, the embedding resolves minute structural and textural
+nuances, achieving the high-precision discriminability required for instance-level identification.
+Complementing the embedding, the Pailitao-VL-Reranker series evolves the reranking paradigm
+from isolated pointwise evaluation to a sophisticated “compare-and-calibrate” listwise process. To
+resolve the efficiency-performance trade-off, we introduce a hybrid ranking policy that synergizes
+chunkwise local ranking with absolute relevance scoring. While chunkwise reasoning allows the
+model to capture fine-grained relative preferences across candidate groups, absolute relevance scoring,
+grounded in a fixed four-level hierarchy, ensures global consistency across independently processed
+chunks. This architecture facilitates parallelized processing, significantly reducing end-to-end latency
+while maintaining peak ranking precision.
+We evaluate the Pailitao-VL series across one rigorous suite of offline benchmarks and large-scale
+industrial deployments. Experimental results demonstrate that our models achieve state-of-the-art
+performance offline, while extensive online A/B testing on the Alibaba e-commerce platform confirms
+their substantial business vlaue and operational efficiency. Concretely, Pailitao-VL-Embedding and
+Pailitao-VL-Reranker-List achieve optimized inference latencies of 67 ms and 76 ms per query,
+meeting stringent requirements of high-concurrency production environments. Multi-Day average
+statistics reveal that these technical breakthroughs translate directly into tangible growth: Pailitao-VL-
+Embedding delivers a 2% GMV gain across platform-wide traffic, while Pailitao-VL-Reranker-List
+yields a 6% GMV increase within standardized product categories. Notably, in emerging AI-driven
+scenarios such as SKU-price comparison, our architecture achieves an impressive 20% GMV gain,
+showing the immense potential of Pailitao-VL for modern, large-scale practical search systems.
+
+
+2   Related Work
+
+Multi-Modal Embeddings. Early approaches to multi-modal information retrieval were predomi-
+nantly characterized by dual-encoder architectures, exemplified by models such as CLIP [Radford
+et al., 2021a], ALIGN [Jia et al., 2021], and SigLIP [Zhai et al., 2023]. These baselines leverage
+contrastive learning to map images and text into a shared embedding space, where representational
+similarity is designed to correlate with semantic relevance. A fundamental limitation of this paradigm,
+however, is its inherent difficulty in handling complex, interleaved visual and linguistic inputs, as the
+separate encoders preclude deep, early-stage fusion of modalities.
+To address this challenge, subsequent methods explored for richer multi-modal integration. Initial
+efforts, UniVL-DR [Liu et al., 2022] and UniIR [Wei et al., 2024], adopted late-stage fusion strategies
+to combine features extracted from separate CLIP [Radford et al., 2021a] or BLIP [Li et al., 2022]
+encoders. Concurrently, VISTA [Zhou et al., 2024a], Holism [Wang et al., 2025a] and MARVEL [Zhou
+et al., 2024b] augmented powerful pretrained text encoders with visual “plug-in”.
+A more profound paradigm shift has emerged with the repurposing of MLLMs as universal embedding
+encoders. By leveraging contrastive fine-tuning, pioneering frameworks such as E5-V [Jiang et al.,
+2024a], VLM2Vec [Jiang et al., 2024b], LamRA [Liu et al., 2025], PDF Wang et al. [2025b], and
+GME [Zhang et al., 2024] have adapted MLLMs to generate high-quality, unified representations
+capable of distilling interleaved image-text content. To further optimize these foundations, CAFe [Yu
+et al., 2025] synergizes contrastive objectives with autoregressive language modeling losses, aiming
+to preserve the MLLM’s generative versatility while bolstering its discriminative precision. Com-
+
+
+                                                        4
+                          Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+plementing these efforts, LLaVE [Lan et al., 2025a] and UniME [Gu et al., 2025] focus on refining
+embedding quality through sophisticated hard-negative mining. Pushing the frontier even further,
+TTE [Cui et al., 2025] and UME-R1 [Lan et al., 2025b] have introduced the concept of “generative
+embeddings”. In this paradigm, the model first produces explicit Chain-of-Thought reasoning [Wei
+et al., 2022b] or semantic summaries prior to embedding generation, effectively infusing the final
+latent vector with the model’s internal reasoning process to achieve deeper semantic density.
+In all aforementioned methods, retrieval is performed by computing embedding similarity between
+query and document. While powerful, these methods, which are predominantly trained via contrastive
+learning, face two key limitations. First, the resulted embeddings often lack a sufficiently fine-grained
+understanding of instance-level details. Second, their performance is heavily reliant on the challenging
+task of mining effective hard negatives. In contrast, we diverge from this embedding learning paradigm
+by semantic ID-recognition for absolute anchor learning. Besides that, we reformulate retrieval as the
+task of discriminative classification and re-ranking, thereby directly leveraging the powerful prior
+knowledge and implicit reasoning capabilities of MLLMs to reorder documents.
+LLM for Reranking. Large Language Models have been increasingly employed for reranking tasks,
+which can be broadly categorized into pointwise and listwise strategies.
+Pointwise re-rankers independently assess the relevance of individual query-document pairs [Sun
+et al., 2023, Ma et al., 2024, Liu et al., 2025, Lin et al., 2024, Niu et al., 2024]. In this paradigm,
+the model generates a standalone relevance score for each candidate, with the final ranking derived
+through a subsequent descending sort. While pointwise effectively reframes ranking as a classification
+or regression task, its optimization objective often remains misaligned with global ranking metrics.
+Notably, by evaluating documents in isolation, pointwise fails to capture the comparative context among
+candidates, overlooking the relative semantic nuances essential for high-precision discrimination.
+Conversely, listwise re-rankers jointly process all candidates of one query to produce a holistically
+ordered permutation [Sun et al., 2023, Liu et al., 2025, Zhuang et al., 2024, 2025]. The primary
+strength lies in its capacity for side-by-side comparison, using global contexts to resolve subtle relative
+nuances that are often imperceptible in isolation. Moreover, the listwise objective allows for training
+that aligns directly with ranking-specific metrics such as NDCG. However, these gains in precision
+often come at a prohibitive computational cost. Existing listwise solutions frequently suffer from
+severe inference latency and memory overhead, as the requirement to ingest exhaustive candidate lists
+as a single, long input sequence creates a great efficiency bottleneck for real-time deployment.
+To mitigate the computational burden of extensive input contexts, we introduce a hybrid architecture
+that decomposes global listwise reranking into parallelizable chunks. By synergizing chunkwise local
+ranking with absolute relevance scoring, the system effectively circumvents the latency bottlenecks
+inherent in processing exhaustive candidate lists. And this design facilitates massively parallelized
+inference across multiple document chunks, drastically compressing end-to-end response times.
+Crucially, while the local chunks enable deep comparative reasoning, the integration of calibrated
+absolute anchors ensures seamless global consistency across chunk boundaries, striking an optimal
+balance between semantic depth and operational efficiency.
+
+
+3   Task Formalization
+
+               𝐿 denote one large-scale corpus consisting of 𝐿 documents (𝐿 ≈ 109 ), where each
+Let D = {d𝑖 }𝑖=1
+document d = (dimg , dtxt ) consisting of image-text content. For a multi-modal query q = (qimg , qtxt )
+given by the user, our objective is to retrieve and rank documents from D that best meets the relevance
+criteria. Note that qtxt is usually a high-precision requirement for instance-level discrimination of
+subtle intra-concept variations, with some spelling errors, informal abbreviations, etc. While qimg is
+often noise-aware, i.e., the image may be subject to low lighting, cluttered backgrounds, physical
+occlusions, low resolution and “visual noise” (OCR overlays or advertising watermarks).
+Following the modern multi-modal retrieval paradigm, we formulate the task as: coarse-grained
+discriminative embedding followed by fine-grained generative reranking.
+Coarse-Grained Discriminative Embedding Φembd aims to map the query and documents into a
+visual-textual alignment latent space R𝐷 , where 𝐷 refers to the embedding dimension. We retrieve a
+candidate set Dcand ⊂ D of 𝑁 documents (𝑁 ≪ 𝐿, typically 𝑁 ≈ 102 ) by calculating the embedding
+
+
+                                                         5
+                          Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+similarity between query and documents, and retaining the top-N most similar documents.
+
+                          Dcand = arg-top-𝑁 (sim (Φembd (q), Φembd (d𝑖 ))) ,                        (1)
+                                      d𝑖 ∈ D
+
+where sim(·, ·) denotes the proximity metric such as cosine similarity. The embedding emphasizes
+high-throughput recall across the exhaustive search space via Approximate Nearest Neighbor search.
+Fine-Grained Generative Reranker Φrank aims to refine relevance results in Dcand = {d1 , . . . , d 𝑁 }
+by capturing intricate, token-level cross-modal interactions. It usually takes the concatenation of
+query q and each document d𝑖 ∈ Dcand as input to facilitate exhaustive reasoning. Given the MLLMs’
+generative nature, we formulate the calibrated scoring as a conditional probability estimation:
+
+                             s𝑖 = 𝑃(“Rel” | q, d𝑖 ; Φrank ),   ∀d𝑖 ∈ Dcand ,                        (2)
+
+where s𝑖 ∈ [0, 1] is derived from the logit of a specific positive token “Rel”. After this, we determine
+an optimal permutation of the indices {1, . . . , 𝑁 } that reorders Dcand through s. By resolving the
+instance-level discrimination and environmental noise that were collapsed in the embedding space,
+Φrank effectively aligns the final ranking with the user’s high-precision intent.
+
+
+4     Discriminative Embedding
+
+The embedding Φembd serves as the cornerstone of multi-modal retrieval. In this section, we begin by
+reviewing existing approaches and subsequently present our solution: semantic ID-recognition for
+absolute anchor learning (termed as Pailitao-VL-Embedding).
+
+4.1   Contrastive Learning Paradigm
+
+Despite significant progress in the embedding architecture (from separated dual-encoders to VLM2vec),
+the training paradigm still follows the old path of contrastive learning. Typically, mainstream methods
+construct positive-negative pairs based on the self-supervised signals, such as image-text co-occurrence
+in general web data, implicit user behavior in e-commerce platforms (e.g., query-click/non-click
+logs) or consistency across multi-view images of the same ID product. These models are primarily
+optimized via contrastive objectives like InfoNCE, aiming to pull positive pairs together while pushing
+apart randomly sampled in-batch negatives or mined hard negatives.
+However, this contrastive paradigm inherently struggles with high-precision, instance-level retrieval,
+which motivates us to advocate for one shift toward an absolute ID-recognition paradigm. We identify
+three critical deficiencies of contrastive learning that a ID-recognition idea can effectively address:
+Stochasticity vs. Deterministic Supervision: Contrastive learning relies heavily on quality of negative
+pairs. Random in-batch negatives are usually too semantically distant to provide effective gradients,
+while heuristic hard-negative mining frequently introduces “false negatives” (e.g., pulling apart
+different views of the same ID). This stochastic supervision leads to unstable decision boundaries. The
+ID-recognition paradigm eliminates this noise by replacing random pair-mining with deterministic
+labels, ensuring that every gradient update is guided by high-quality, pre-defined instance-ID clusters.
+Relative Proximity vs. Absolute Identity: The contrastive objective only optimizes for relative dis-
+tances within a local batch, rather than anchoring instances to a global semantic coordinate. Con-
+sequently, the latent space lacks global consistency, and embeddings tend to “drift” across training
+stages. By reformulating the task as ultra-scale ID-recognition, each instance is provided with an
+absolute semantic identity, ensuring that every document is aligned with a stable, globally-consistent
+prototype, acting as a permanent anchor in the latent space.
+Coarse-Grained Partitioning vs. High-Precision Resolution: Standard contrastive methods lack an
+explicit mechanism to partition the latent space into high-resolution regions, often leading to coarse
+embeddings. An ultra-scale ID-recognition addresses this by utilizing a global identification head to
+supervise exhaustive clusters. By strategically sampling proximal ID centers, it imposes a much more
+rigorous discriminative constraint, compelling the backbone to capture minute structural or textural
+differences that are typically ignored by coarse-grained contrastive objectives.
+
+
+                                                         6
+                             Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+
+
+   MLLM2vec       →               MLLM2vec         → G-ID Head        MLLM2vec   → G-ID Head →
+
+      Stage 1: Continuous               Stage 2: Identification              Stage 3: End-to-End
+         Pre-Training                     Head Initialization                  ID Classification
+
+Figure 1: Pailitao-VL-Embedding evolves from popular contrastive learning to absolute prototype-ID
+recognition, enhancing instance-level discriminative capability through three-stage optimization.
+
+
+4.2     Absolute ID-Recognition Paradigm
+
+Our Pailitao-VL-Embedding constructs a fundamental paradigm shift in both data governance and
+optimization objective, transitioning from stochastic pair-based contrast to deterministic ID-based
+discrimination. Next, we introduce the three-stage training pipeline: firstly, continuous pre-training
+with image-text contrastive learning on the MLLM2vec backbone; secondly, bootstrapping a global
+identification head initialized by billion-scale ID prototypes to establish absolute semantic anchors; and
+finally, conducting end-to-end joint optimization of the MLLM2vec backbone and the identification
+head to identify the instance-IDs through ultra-scale deterministic classification.
+
+4.2.1    Stage 1: MLLM2vec Φmllm
+                            embd
+
+Recognizing the superior cross-modal potential of MLLMs over traditional dual-encoder architectures,
+we build the backbone following the VLM2vec framework Jiang et al. [2024a,b], Liu et al. [2025],
+Zhang et al. [2024], by employing a 3B-parameter dense model as the initialization.
+
+      Prompt Template for MLLM2vec Embedding Φmllm
+                                              embd
+
+      <|im_start|> system
+      You are a relevance embedding generator. Given a query or a document, each consisting of an
+      image and a text description, please summarize its semantic embedding.
+      <|im_end|>
+      <|im_start|> user
+      Input Text: {xtxt }
+      Input Image: <image:     ximg >
+      <|im_end|>
+      <|im_start|> assistant
+      <|EMB|>
+
+
+Input/Output Formulation. Given one multi-modal data x ∈ {q, d}, where query q = (qimg , qtxt ) and
+document d = (dimg , dtxt ), the MLLM2vec backbone Φmllm   embd is employed to project x into a unified
+latent space. Specifically, as shown in the above prompt template, we construct an input sequence E
+by prepending a task-specific instruction Tinst to the multi-modal content:
+                                                            
+                             E = Concat Tinst , xtxt , ximg , x ∈ {q, d}.                            (3)
+
+Following the decoder-only paradigm, we append a special <|EMB|> token to the end of the input
+sequence, allowing it to aggregate contextual information from all preceding tokens through causal
+attention. We then extract the final hidden state h ∈ R𝐷 at the <|EMB|> position as the contextualized
+embedding of x. During retrieval, we compute the embedding similarity between the query and
+all candidate documents, and retain the top-𝑁 documents with the highest scores, thereby enabling
+high-throughput recall of the candidate set.
+Continuous Pre-training with MRL. Initialized from general-purpose MLLM checkpoints, we con-
+duct continued pre-training on a massive industrial-scale corpus comprising approximately two billion
+image-text pairs and curated (anc, pos, neg) triplets. To satisfy diverse downstream requirements,
+particularly the need for low-cost storage in specialized vector databases, we integrate Matryoshka
+Representation Learning (MRL) into the optimization objective. We define a set of target dimensions
+G = {256, 512, 1024, 2048, 3072}, then for each granularity 𝑔 ∈ G, the embedding h is truncated
+
+
+                                                                  7
+                          Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+to its first 𝑔 components to compute one dimension-specific contrastive loss. Let hque = Φmllm
+                                                                                            embd (q)
+and hdoc = Φmllmembd (d) be the full-dimensional embeddings for query and document,  the total MRL
+objective is formulated as the weighted sum of InfoNCE losses across all granularities:
+                                                                      que
+                            ∑︁          © 1 ∑︁             exp(sim(h𝑖,1:𝑔 , hdoc+
+                                                                             𝑖,1:𝑔 )/𝜏) ª
+                   mrl
+                  Lembd =        𝜆 𝑔 · ­­−           log Í             que
+                                                                                           ®,        (4)
+                            𝑔∈ G
+                                           |B| 𝑖 ∈ B         exp(sim(h𝑖,1:𝑔 , hdoc
+                                                                                𝑗,1:𝑔 )/𝜏)
+                                                                                           ®
+                                        «                𝑗∈B                               ¬
+where 𝜆 𝑔 is the balancing weight for granularity 𝑔, 𝜏 is the temperature, and B is the mini-batch. hdoc+
+represents the positive document corresponding to query (derived from image-text pairs or triplets),
+while the denominator incorporates both randomly sampled in-batch negatives and mined hard
+negatives to provide one rigorous contrastive signal. This multi-granularity optimization objective
+effectively compels the MLLM backbone to compress the most critical discriminative features into
+lower-dimensional prefixes of the embedding space. As a result, Pailitao-VL-Embedding allows for
+flexible trade-offs between retrieval precision and computational efficiency.
+Upon completion of this stage, the MLLM2vec backbone exhibits robust concept-level alignment,
+effectively grouping semantically related images and texts. However, relying solely on contrastive
+signals derived from noisy co-occurrence or user behavior remains insufficient for instance-level
+discrimination, as it frequently fails to identify subtle variations required for exact ID matching. This
+limitation necessitates the subsequent introduction of the global identification head.
+
+4.2.2   Stage 2: Global Identification Head Φhead
+                                             embd
+
+To bridge the gap between relative proximity and absolute identity, we establish a fixed coordinate
+system for the latent space via the global identification head. And the foundation of this stage is the
+construction of one high-purity, billion-scale semantic prototype library, where each prototype acts as
+a deterministic semantic anchor for a unique instance-ID.
+Agent-Driven Data Curation. Recognizing that raw industrial data is inherently plagued by label noise
+and semantic redundancies, we propose a high-capacity MLLM-based agent system for hierarchical
+data purification, which operates as a strategic “Plan-Propose-Organize-Review” pipeline:
+Proposers (Multi-Source Knowledge): To ensure exhaustive coverage, the MLLM planner orches-
+trates instance candidates from three hierarchical layers of certainty: (1) Deterministic Metadata:
+leveraging native structural relations, e.g., SKU-tree, as the hard-labeled seeds. (2) Probabilistic
+Behavioral Logs: distilling user click/buy-through trajectories to bridge diverse queries with target
+documents via the temporal co-occurrence. (3) Generative Semantic Inference: utilizing the planner
+to synthesize latent links between visually disparate but ID-identical documents, particularly for
+bridging the gap between cross-domain catalogs.
+Organizer (Manifold Structuralization): To address unannotated documents and the “cold-start”
+problem, the MLLM planner employs SOTA embedding solutions as topological organizers. Rather
+than simple clustering, the organizer performs density-based manifold expansion to identify long-tail
+and unannotated documents that reside in the semantic proximity of the proposers’ seeds, effectively
+absorbing isolated data points into cohesive, high-resolution instance clusters.
+Reviewer (Consensus Adjudication): For each proposed prototype cluster, the MLLM planner acts
+as a judge, invoking existing SOTA rerankers as high-precision reviewers. This stage implements a
+multi-view consensus mechanism: the reviewer conducts zero-shot attribute verification and cross-
+perspective consistency checks. Any document that exhibits semantic drift or structural misalignment
+with the cluster’s centroid is pruned. This iterative refinement ensures that each resulting prototype
+represents a strictly aligned, unique instance-ID entity.
+Through this governance, we distill an exhaustive corpus into the purified clusters. Each prototype-ID
+is computed as the centroid of its respective cluster in the latent space.
+Head Initialization. The global identification head is implemented as an ultra-scale linear projection
+layer. To mitigate convergence instability typically associated with random initialization in massive
+label spaces, we explicitly populate the layer weights using the pre-computed centroids of purified
+prototype-IDs. Under this architecture, each row of the weight matrix serves as a dedicated semantic
+anchor for a specific instance identity. By anchoring these prototypes as permanent semantic targets,
+
+
+                                                           8
+                          Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+we establish a globally consistent reference that transforms traditionally open-ended retrieval into
+one deterministic, absolute categorization task. This initialization provides the necessary structural
+stability and semantic alignment for the subsequent optimization.
+
+4.2.3   Stage 3: End-to-End Joint Optimization
+By leveraging the absolute semantic anchors established in Stage 2, we here perform joint optimization
+of the MLLM2vec backbone Φmllm                                           head
+                                embd and the global identification head Φembd . We reformulate retrieval
+as an ultra-scale deterministic classification task, compelling the model to resolve minute differences
+between billion-scale instance-IDs.
+Learning via Additive Angular Margin. To enhance intra-ID compactness and inter-ID separation,
+we incorporate an additive angular margin penalty Deng et al. [2019] between each embedding and its
+prototype anchor. Specifically, for a data with prototype-ID label y𝑖 ∈ {1, . . . , 𝑈}, where 𝑈 is the ID
+cardinality, we denote its MLLM2vec-generated embedding as h𝑖 ∈ R𝐷 and the 𝑢-th weight vector
+(anchor) of the identification head as w𝑢 . Both h𝑖 and w𝑢 are ℓ2 -normalized to ensure they reside on
+a unit 𝐷-dimensional hypersphere. The classification probability for the target identity y𝑖 is:
+                                                                       
+                                            exp sim(𝜃 𝑖,y𝑖 + margin)/𝜏
+                𝑃(y𝑖 | h𝑖 ) =                              Í                            ,             (5)
+                              exp sim(𝜃 𝑖,y𝑖 + margin)/𝜏 + 𝑢≠y𝑖 exp(sim(𝜃 𝑖,𝑢 )/𝜏)
+where 𝜏 refers to the temperature, 𝜃 𝑖,𝑢 = arccos(h⊤
+                                                   𝑖 w𝑢 ) denotes the angle between h𝑖 and w𝑢 .
+Intra-ID Compactness: Through adding the margin to the target angle 𝜃 𝑖,y𝑖 , the model is forced
+to compress the embedding distribution within one tighter arc around the absolute semantic anchor,
+effectively resolving intra-prototype variations such as viewpoint and occlusion.
+Inter-ID Diversity: The angular penalty increases the difficulty of target ID assignment, thus maxi-
+mizing the angular separation between proximal ID centers. By strategically sampling semantically
+similar prototypes in the batch, MLLM2vec is compelled to capture fine structural-textural differences.
+To maintain multi-dimensional flexibility, we extend the classification objective to all granularities in
+G via MRL, ensuring that each truncated prefix h1:𝑔 possesses independent and robust discriminative
+power. The total joint loss is formulated as:
+                                                                             !
+                             joint
+                                    ∑︁           1 ∑︁
+                           Lembd =       𝜆𝑔 · −           log 𝑃(y𝑖 | h𝑖,1:𝑔 ) .                       (6)
+                                    𝑔∈ G
+                                                |B| 𝑖 ∈ B
+This holistic transformation from relative comparison to absolute, margin-enhanced categorization
+allows Pailitao-VL-Embedding to establish high-resolution semantic boundaries. For production
+deployment, the identification head is decoupled, leaving only the MLLM2vec backbone for high-
+throughput real-time embedding generation. By the end of this stage, MLLM2vec transcends coarse
+concept-level matching, achieving instance-level precision required for industrial retrieval scenarios.
+Hybrid Parallel Training. Scaling global identification head to billion-scale IDs presents three key
+challenges: massive data throughput, memory footprint of the 𝑈 × 𝐷 weight matrix, and prohibitive
+inter-GPU communication overhead. We hence implement hybrid parallel training:
+Data and Model Parallelism: We employ standard data parallelism for the MLLM2vec backbone,
+replicating it across all GPUs to handle massive data batches. Conversely, for the identification head,
+we utilize tensor parallelism. Given that the weight matrix W ∈ R𝑈×𝐷 can exceed the memory
+capacity of one GPU, we partition the 𝑈 prototype anchors across the aggregate memory of GPU
+cluster, ensuring each device only maintains a subset of global semantic space.
+KNN-based Sparse Similarity: To mitigate the inter-GPU communication bottleneck during the
+cross-entropy calculation, we implement a KNN-comparison mechanism. Rather than computing
+the similarity between an instance h𝑖 and all 𝑈 anchors, which would trigger the massive all-to-all
+communication, we only consider a sparse subset of proximal anchors. For each target ID, we maintain
+a similarity matrix between prototypes to identify the most relevant negative anchors (10% of 𝑈).
+This sparse approximation focuses the optimization on the most challenging negative boundaries
+while significantly reducing cross-GPU traffic and accelerating convergence.
+Dynamic Proxy Update: The prototype similarity matrix is updated periodically during training to
+reflect the evolving latent space. This ensures that the KNN-based selection remains topologically
+
+
+                                                        9
+                          Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+                                 Yes/No                       1   3    2     0
+                                   →                                                        A/B/C/D
+                                                              →   →    →     →     Index
+                                       Yes/No
+                                                                                              NULL
+                   MLLM                   →           Absolute Scoring Head         →
+
+            →           MLLM →                                    MLLM
+           query           docD
+                   →              →                  →        →   →    →     →
+                query             docA             query docA docB docC docD          Chunk
+Figure 2: Pailitao-VL-Reranker evolves from pointwise (Pailitao-VL-Reranker-Point) to listwise
+(Pailitao-VL-Reranker-List), becoming more interpretable, efficient, and performing better.
+
+
+accurate, allowing Pailitao-VL-Embedding to maintain ultra-high-resolution discrimination even
+under the extreme billion-scale constraints.
+
+4.3   Self-Loop Gain
+
+The effectiveness of Pailitao-VL-Embedding is anchored in quality and cardinality of the semantic
+prototype library. Beyond a static training procedure, we observe a self-loop gain: one virtuous cycle
+between agent-driven data curation and the discriminative capacity of underlying models.
+Recursive Refinement Flywheel. In Pailitao-VL-Embedding, the agent system serves as the forge for
+high-purity data, where embedding and reranker act as the organizer and reviewer to structuralize the
+raw industrial corpus. Crucially, as the models undergo the three-stage optimization, their improved
+discriminative power allows the agent system to perform even more rigorous data governance,
+identifying subtler near-duplicate redundancies and rectifying deeper label noises. This enhanced
+data purity, in turn, provides a superior supervisory signal for subsequent iteration of model training.
+Such recursive refinements ensure Pailitao-VL-Embedding is not merely a one-time optimization but
+an evolving paradigm that continuously pushes the upper bound of semantic alignment.
+Scaling Laws in Prototype Cardinality. We further investigate the efficacy of prototype-ID scale on
+retrieval reuslts, and empirically observe a scaling law governed by the cardinality of the identity space:
+as the number of unique prototypes transitions from billion-scale to billion-scale, the model exhibits a
+steady, power-law-like improvement in instance-level recall and precision. Unlike traditional scaling
+which mainly focuses on parameter count or dataset volume, Pailitao-VL-Embedding demonstrates
+that increasing resolution of the identity space (i.e., granularity of absolute semantic anchors) is a
+critical factor for performance scaling in multi-modal retrieval.
+
+5     Generative Reranking
+While the discriminative Φembd enables high-throughput recall, the inherent semantic compression
+of its fixed-dimensional embedding naturally constitutes an information bottleneck. To transcend
+this limitation, we propose the generative Pailitao-VL-Reranker series Φrank , which leverages the
+deep multi-modal comprehension of MLLMs for fine-grained, token-level cross-reasoning. This
+series encompasses two paradigms: one pointwise reranker for independent candidate evaluation via
+binary relevance classification, and a listwise reranker for collective comparative reasoning, optimized
+through multi-level relevance supervision and a hybrid ranking policy.
+
+                               point
+5.1   Pointwise Reranker Φrank
+
+Given the hundred-scale document candidate set per query, one natural way is to pair the query with
+each document, and then input them into MLLM for the binary classification, i.e., predicting either a
+special yes token (relevant) or no token (irrelevant). We refer to this pointwise reranker variant as
+Pailitao-VL-Reranker-Point.
+Input/Output Formulation. Given a candidate document d𝑖 = (d𝑖,img , d𝑖,txt ) ∈ Dcand of one query
+q = (qimg , qtxt ), the pointwise reranker takes the concatenation of the query–document pair as input
+
+
+                                                         10
+                          Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+and produces a binary relevance judgment. The input sequence is constructed as:
+                                                                           
+                          E𝑖 = Concat Tinst , qtxt , qimg , d𝑖,txt , d𝑖,img ,                         (7)
+where Tinst is a task-specific instruction prompt. The model is then asked to generate a single token
+from the binary vocabulary {Yes, No}, indicating whether d𝑖 is relevant to q. The relevance score s𝑖
+is derived from the generation probability of the positive token:
+                                                        
+                                                   point
+                               s𝑖 = 𝑃 Yes | E𝑖 ; Φrank , ∀ d𝑖 ∈ Dcand .                            (8)
+
+The final candidate ranking follow the descending order of s𝑖 . The prompt template is shown below.
+                                                  point
+    Prompt Template for Pointwise Reranker Φrank
+
+   <|im_start|> system
+   You are a relevance assessor. Given a query and a candidate document, each consisting of
+   an image and a text description, determine whether the document is relevant to the query.
+   Answer with Yes or No.
+   <|im_end|>
+   <|im_start|> user
+   Query Text: {qtxt }
+   Query Image: <image: qimg >
+   Document Text: {d𝑖,txt }
+   Document Image: <image: d𝑖,img >
+   <|im_end|>
+
+
+Training Objective. The model is optimized via next-token prediction to align the predicted relevance
+score s𝑖 with the ground-truth supervision. Formally, let y𝑖 ∈ {0, 1} be a binary indicator where
+y𝑖 = 1 if the query–document pair is labeled as relevant (Yes), and y𝑖 = 0 otherwise, the training
+objective is to minimize the binary cross-entropy loss over a batch B:
+                           point     1 ∑︁                                     
+                        Lrank = −            y𝑖 log s𝑖 + (1 − y𝑖 ) log(1 − s𝑖 ) .                  (9)
+                                   |B| 𝑖 ∈ B
+
+Under the restricted binary vocabulary {Yes, No}, such one objective effectively compels the MLLM
+to assign higher probabilistic mass to the ground-truth relevance indicator, thereby capturing the
+fine-grained multi-modal correlation between queries and candidates.
+                                                      point
+Data Governance. To train the pointwise reranker Φrank , we implement a multi-stage data governance
+pipeline that transitions from the industry-specific adaptation to reasoning-based label synthesis.
+(1) Industrial Adaptation: We first conduct continuous pre-training on the ultra-scale prototype-ID
+library to adapt general-purpose MLLM checkpoints. Within this stage, documents sharing the same
+instance-ID are treated as positive pairs, while those from disparate IDs serve as negatives, ensuring
+the model captures fine-grained, industry-specific semantic nuances. (2) Reasoning-Based Labeling:
+Building upon a seed set of human-annotated query-document pairs, we construct an offline reasoning
+model Φreason
+          rank
+               , through a two-step optimization process. First, we employ state-of-the-art MLLMs
+(e.g., Gemini-3.0) to generate CoT reasoning trajectories Wei et al. [2022a] for relevance assessment,
+which serve as targets for supervised fine-tuning to achieve a cold-start initialization. Second, we
+apply Group Relative Policy Optimization (GRPO) Guo et al. [2025] to further align the model with
+human preference, using a rule-based reward function that evaluates the correctness of predicted
+relevance labels. (3) Scalable Annotation and Distillation: The optimized Φreason
+                                                                              rank
+                                                                                    is then deployed to
+annotate millions of query-document pairs sampled from real-world search logs. To mitigate noise
+of CoT and label at scale, we utilize large-scale MLLMs (e.g., Qwen3-VL-32B) as an expert judge,
+retaining only high-confidence samples where reasoning and labels exhibit cross-model consensus.
+And finally, we obtain the large-scale, high-purity supervised dataset.
+                                     point
+However, the pointwise reranking Φrank still suffers from inherent bottlenecks in semantic granularity,
+contextual reasoning, and computational scalability, as detailed below:
+Binary Semantic Reductionism: The pointwise solution reduces relevance to a binary judgment
+(relevant vs. irrelevant), producing overly coarse outputs. In practice, relevance exists on a continuous
+
+
+                                                          11
+                           Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+spectrum, from exact matches to weak correlations, and visually similar candidates often differ in
+subtle but important ways. Binary classification cannot capture these fine-grained distinctions, leaving
+the model unable to reliably rank highly competitive candidates.
+Absence of Comparative Contextual Awareness: The pointwise solution evaluates each document in
+isolation, ignoring the comparative signals among documents. In practice, effective ranking requires
+contrastive reasoning, as subtle differences in texture, color, or perspective are far easier to resolve
+when documents are compared side by side. Without such a global context, the model struggles to
+maintain a coherent relevance standard, leading to inconsistent and fragile rankings.
+Prohibitive Computational Redundancy: Pointwise is hampered by suboptimal inference efficiency,
+particularly in real-time deployment. Executing a full forward pass for every query-document pair
+leads to a linear increase O(N) in computational complexity as the candidate set expands. Moreover,
+the query is redundantly re-processed for each evaluation, resulting in significant resource waste.
+This high inference latency and constrained throughput bottleneck the system’s ability to support
+high-concurrency applications, where response time (RT) is as paramount as ranking precision.
+
+5.2     Listwise Reranker Φlist
+                           rank
+
+To transcend the constraints of isolated evaluation, we next propose a listwise reranking pipeline
+designed to perform joint reasoning across multiple candidates within a shared context. However, a
+naive listwise idea that ingests the entire hundred-scale candidate set into a single prompt is practically
+infeasible. Not only does the prefill complexity of Transformer backbone escalate quadratically with
+the sequence length, but the sheer density of information also risks “contextual dilution”, where
+existing MLLMs struggles to maintain fine-grained discriminative resolution over excessive inputs.
+To strike a balance between contextual depth and computational tractability, we introduce Pailitao-VL-
+Reranker-List Φlistrank
+                        , which decomposes the global ranking problem into a hierarchical “compare-
+and-calibrate” process. To pursue high-precision relevance, we expand the judgment from a coarse
+binary scale (Yes/No) to the nuanced four-level hierarchy (0: instance-level match, 1: concept-level
+match, 2: functional-level match, 3: irrelevant). By capturing nuanced relevance levels, the model
+gains the discriminative power to separate competitive candidates, ensuring reranking is both precise
+and interpretable. Φlist
+                      rank
+                           consists of three synergistic components:
+Chunkwise Local Ranking (§5.2.1) partitions the candidate list into manageable groups to enable
+side-by-side comparison among co-occurring documents. By leveraging fine-grained multi-level
+relevance labels to construct pairwise ranking supervision across documents within each chunk, it
+captures the subtle hierarchy of relevance that isolated binary evaluation typically overlooks.
+Absolute Relevance Scoring (§5.2.2) estimates each candidate’s relevance on a fixed, four-level scale,
+to ensure global comparability across independently processed chunks. Absolute metric serves as a
+calibrated anchor for a chunk-agnostic reference, enabling consistent cross-chunk score alignment.
+Hybrid Ranking Policy (§5.2.3): Finally, we merge the intra-chunk relative orderings with the absolute
+scores, producing a coherent global ranking that inherits both the comparative precision of listwise
+reasoning within each chunk and cross-chunk consistency provided by absolute relevance calibration.
+
+5.2.1    Chunkwise Local Ranking
+Input/Output Formulation. Given the candidate set Dcand = {d1 , . . . , d 𝑁 } for a query q = (qimg , qtxt ),
+we partition it into 𝐾 = ⌈𝑁/𝑀⌉ chunks {C 1 , . . . , C 𝐾 }. For the generality, let C = {d1 , . . . , d𝑚 }
+denote a representative chunk, where 𝑚 ≤ 𝑀 is the chunk size (e.g., 𝑀 = 10). For each chunk, the
+input sequence E is constructed by interleaving the query q with all 𝑚 candidate documents:
+                                                                                            
+                  E = Concat Tinst , qtxt , qimg , d1,txt , d1,img , . . . , d𝑚,txt , d𝑚,img ,        (10)
+
+where Tinst is a task-specific instruction prompt that assigns each document d𝑖 a unique index identifier
+for 𝑖 ∈ {1, . . . , 𝑚}. The model is prompted to select the index of the most relevant document. Rather
+than relying solely on the generated output, we extract the logits at the generated token position
+corresponding to each of the 𝑚 index identifiers as well as an additional [NULL] token (indicating the
+absence of any relevant document). The logit assigned to each index token serves as the relevance
+score s𝑖 for document d𝑖 : a higher logit indicates greater model confidence that d𝑖 is the most relevant
+
+
+                                                         12
+                           Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+document, and documents are ranked accordingly. This yields a local score vector:
+                                   s = (s1 , . . . , s𝑚 , snull ) ∈ R𝑚+1 .                        (11)
+By processing all 𝐾 chunks independently and in parallel, this chunkwise paradigm achieves significant
+throughput gains over the O(N) pointwise evaluation. The prompt template is shown below.
+
+    Prompt Template for Listwise Reranker ΦList
+                                           rank
+
+   <|im_start|> system
+   You are a relevance assessor. Given a query and a list of candidate documents, each consisting
+   of an image and a text description, select the index of the document that best matches the
+   query. If none is relevant, output NULL.
+   <|im_end|>
+   <|im_start|> user
+   Query Text: {qtxt }
+   Query Image: <image: qimg >
+   Document Text: {d1,txt } Document Image: <image: d1,img >
+   Document Text: {d2,txt } Document Image: <image: d2,img >
+   ..
+    .
+   Document Text: {d𝑚,txt } Document Image: <image: d𝑚,img >
+   <|im_end|>
+
+
+Training Objective. For each document in one chunk, we construct the multi-level relevance label
+y𝑖 ∈ {0, 1, 2, 3}, where smaller values indicate higher relevance (0: instance-level match, 1: concept-
+level match, 2: functional-level match, 3: irrelevant). The index and [NULL] tokens are supervised
+with a chunkwise training objective consisting of two components.
+Ranking Loss. For one given chunk, we define the set of discordant pairs as P = {(𝑖, 𝑗) | y𝑖 > y 𝑗 },
+where document 𝑗 is more relevant than document 𝑖. We optimize the following pairwise loss to
+encourage s 𝑗 to exceed s𝑖 :
+                                   1 ∑︁                               s 𝑗 − s𝑖  
+                             pair
+                         Lrank =                   𝑤 𝑖 𝑗 · log 1 + exp −             ,            (12)
+                                  |P |                                      𝜏
+                                       (𝑖, 𝑗 ) ∈ P
+                                                                              
+where 𝜏 > 0 is a temperature hyperparameter, and 𝑤 𝑖 𝑗 = max y𝑖 − y 𝑗 , 1 assigns stronger gradients to
+pairs with larger relevance gaps.
+Null-Token Loss. The [NULL] token serves as a decision boundary to separate instance-level matches
+(y = 0) from other cases (y > 0). Here, let S = {𝑖 | y𝑖 = 0} be the set of instance-level matches and
+O = {𝑖 | y𝑖 > 0} be the other set. We enforce that instance-level matches score above snull while
+others score below it:
+                                      s −s
+                  1 ∑︁                                    1 ∑︁                    null − s𝑖
+                                                                           s           
+          null                           𝑖     null
+        Lrank  =        log 1 + exp −                  +        log 1 + exp −                  . (13)
+                 |S|                         𝜏           |O|                         𝜏
+                     𝑖∈S                                          𝑖∈ O
+
+The total chunkwise loss is computed by averaging the components across all 𝐾 chunks in a batch:
+                                               𝐾
+                                  chunk     1 ∑︁  𝑘,pair  𝑘,null
+                                                                  
+                                 Lrank  =         Lrank + Lrank     .                             (14)
+                                            𝐾 𝑘=1
+
+5.2.2   Absolute Relevance Scoring
+While chunkwise ranking enables efficient local ordering, the score s is only meaningful within a
+chunk due to the local logit normalization. Scores across different chunks are not directly comparable,
+leading to inconsistent global ranking. To tackle this, we employ a complementary absolute relevance
+scoring that estimates the relevance of each query–document pair on one fixed, globally shared scale.
+Architecture. The absolute scorer reuses the hidden embeddings already computed during chunkwise
+inference, requiring no additional forward pass. For one chunkwise input sequence E, we extract
+
+
+                                                         13
+                          Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+per-image embeddings directly from the MLLM’s final hidden states, by identifying image token
+positions and grouping them into 𝑚 + 1 contiguous segments {I0 , I1 , . . . , I𝑚 }, where I0 corresponds
+to the query and I𝑖 to the 𝑖-th candidate document. For the MLLM’s final hidden states of each
+segment, we apply mean pooling over the token length, and then obtain z ∈ R𝐷 , where 𝐷 refers to
+the embedding dimension. After that, for each candidate document 𝑖 ∈ {1, . . . , 𝑚}, we form a joint
+representation by concatenating the query embedding z0 with the document embedding z𝑖 , and pass it
+through a lightweight MLP head ΦMLP to predict relevance logits p𝑖 :
+                          p𝑖 = ΦMLP ( [z0 ∥ z𝑖 ]) ∈ R4 ,                  r𝑖 = softmax(p𝑖 ),        (15)
+where 4 is the number of relevance levels (y ∈ {0, 1, 2, 3}). At inference, the absolute relevance score
+r𝑖 is the probability of the most relevant level. Since r𝑖 is derived from a fixed label taxonomy rather
+than intra-chunk competition, it provides a calibrated metric that is comparable across all chunks.
+Training Objective. The absolute scorer is optimized via a cross-entropy loss over the ground-truth
+relevance levels y𝑖 ∈ {0, 1, 2, 3}. Let r𝑖,y𝑖 denote the predicted probability of the target level y𝑖 for
+candidate document 𝑖, this loss is formulated as:
+                                         abs       1 ∑︁
+                                      Lrank   =−            log r𝑖,y𝑖 ,                             (16)
+                                                  |B| 𝑖 ∈ B
+where B refers to the collection of all candidate documents within the training batch. And the final
+multi-task objective combines all components:
+                                                       ntp
+                                                       chunk    abs
+                                      Lrank = Lrank + Lrank  + Lrank ,                              (17)
+       ntp
+where Lrank is the standard next-token prediction loss. This design introduces negligible overhead
+while ensuring robust cross-chunk comparability.
+
+5.2.3    Hybrid Ranking Policy
+Chunkwise scorings and absolute scorings provide the complementary signals: (1) chunkwise scores
+s𝑖𝑘 capture fine-grained relative preferences within each chunk, while (2) absolute scores 𝑟 𝑖𝑘 provide
+chunk-agnostic absolute relevance estimates. To exploit both local comparative reasoning and global
+comparability, we adopt a two-stage hybrid ranking policy.
+Stage 1: Within-Chunk Ordering. For each chunk C 𝑘 (𝑘 ∈ {1, . . . , 𝐾 }), we first sort its candidates in
+descending order of their local chunkwise scores. This yields a locally permuted sequence:
+                              d1𝑘 , d2𝑘 , . . . , d𝑚
+                                                   𝑘
+                                                        s.t.    𝑠1𝑘 ≥ 𝑠2𝑘 ≥ · · · ≥ 𝑠 𝑚
+                                                                                      𝑘
+                                                                                        .           (18)
+
+Stage 2: Cross-Chunk Merging. We aggregate the 𝐾 locally-sorted chunks into one unified global
+ranking using a multi-way merge procedure. This process ensures that the local relative order within
+each chunk is strictly preserved. Specifically, we maintain a pointer t 𝑘 for the chunk 𝑘, initially
+pointing to the top-ranked candidate. In each step, we examine the candidates currently indexed by
+{t 𝑘 } 𝐾
+       𝑘=1 across all chunks and select the one with the highest absolute score r:
+                                               𝑘 ★ = arg max 𝑟 t𝑘𝑘 ,                                (19)
+                                                               𝑘:t 𝑘 ≤𝑚
+                                                                           ★
+where 𝑘 ★ identifies the winning chunk. The document dt𝑘𝑘★ is then moved to the global list, and its
+chunk pointer t 𝑘★ is advanced to the next position. This greedy selection continues until all candidate
+documents are merged. This hybrid policy preserves the fine-grained relative orderings established
+by listwise comparison within each chunk, while leveraging the calibrated absolute scorer to resolve
+the "global" priority across chunk boundaries. Consequently, the final ranking inherits the benefits of
+both precise intra-chunk discrimination and robust, chunk-independent estimation.
+
+6     Experiments
+6.1     Experimental Settings
+
+Model Initialization. We build upon advanced MLLM foundations: TBstars-VL-Embedding-3B
+is utilized for MLLM2vec of the embedding model, while Qwen3-VL-2B [Bai et al., 2025] is adopted
+
+
+                                                                  14
+                          Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+for the reranking model (both point and list). 2B/3B parameter scale is deliberately selected to strike
+an optimal balance between representational capacity and inference efficiency.
+Evaluation Datasets. For embedding Φembd , the retrieval test set comprises 5K e-commerce queries
+and 1.5 million e-commerce documents. The annotators assess each document’s relevance to its
+query, labeling relevance as instance-level matching, concept-level or irrelevant.
+For reranker Φrank , the candidate test set comprises 2K e-commerce queries, averaging 50 associated
+documents per query. Each query–document pair is manually labeled with four types of relevance, i.e.,
+instance-level matching (0), concept-level matching (1), functional-level matching (2), irrelevant (3).
+All queries here are sourced from real-world user exposure requests, which are subject to various
+types of noise. From the visual view, noise is low lighting, cluttered backgrounds, physical overlays,
+and low resolution; while from the textual view, noise is singular/plural mismatches, punctuation
+inconsistencies, typos, misspellings, and informal abbreviations (e.g., “BBQ” for “Barbecue”).
+Metrics. To fully meet needs of real-world applications, we use two types of elasticity for evaluation:
+concept-/category-level relevance (e.g., differentiating a sedan from an SUV), instance-level relevance
+(e.g., differentiating a facelifted model from its predecessor based on subtle headlight contours).
+For embedding Φembd , we employ an adaptive Hit Rate@𝐾 (HR@𝐾) as metric, to simultaneously
+evaluate recall and precision. For each query, relevant documents are defined as those labeled with 0
+(instance-level match) or 1 (concept-level match). Let G denote the total number of such relevant
+documents available in the retrieval set. For a given cutoff 𝐾, the HR@𝐾 is defined as the proportion
+of relevant items successfully ranked within the top min(K,G) positions:
+                   Ímin(𝐾 ,𝐺)                                   Ímin(𝐾 ,𝐺)
+                              I(label𝑖 ∈ {0})                              I(label𝑖 ∈ {0, 1})
+      I-HR@𝐾 = 𝑖=1                            , C-HR@𝐾 = 𝑖=1                                  ,  (20)
+                           min(𝐾, 𝐺)                                    min(𝐾, 𝐺)
+where I(·) is the indicator function. This adaptive normalization ensures that the metric is calibrated
+against the maximum achievable hits within the specified search window. Unlike the standard Hit Rate
+or Precision@k which often use a fixed denominator 𝐾, our HR@k formulation specifically evaluates
+the model’s ranking density, i.e., its ability to consolidate all available ground-truth items at the
+absolute head of the list. Such a metric is particularly vital for high-precision e-commerce scenarios,
+where the number of relevant products per query may be smaller than the cutoff 𝐾. By accounting for
+the scarcity of positive samples, HR@k provides rigorous/fair assessment of the model’s effectiveness
+in satisfying user intent within limited display slots.
+In addition to HR@𝐾, we further evaluate the reranker Φrank from a relevance classification perspective
+to assess its intrinsic precision across different semantic granularities. Since reranker estimates a
+calibrated relevance score for each candidate document, we could examine its ability to distinguish
+positive instances from negatives at both instance-level and concept-level.
+Instance-level Alignment evaluates the model’s capacity to isolate exact SKU match. We define the
+positive class as documents with label {0}, while all other labels {1, 2, 3} are treated as negatives.
+Conceptual-level Alignment assesses whether the model can identify the same item or product
+category. Here, the positive class comprises labels {0, 1}, and the negative class includes {2, 3}.
+For both settings, we compute Precision, Recall, and F1-Score across the full candidate documents.
+Unlike ranking-based metrics that focus on relative permutations, these classification metrics provide
+an absolute measure of the model’s decision-making quality. This is particularly crucial for industrial
+downstream applications—such as automated product filtering and quality assurance—where the
+model must not only rank items correctly but also exhibit a robust capability to reject irrelevant
+candidates via an absolute decision threshold.
+Hyperparameters. For Pailitao-VL-Embedding Φembd , we employ the AdamW optimizer with a
+peak learning rate of 2 × 10−5 , a cosine decay schedule, and a warmup ratio of 0.05. To provide
+sufficiently diverse contrastive signals within each batch, we utilize a global batch size of 256 and train
+the model for one full epoch. During inference, we adopt the 512-dimensional for industrial-scale
+retrieval, striking an optimal balance between retrieval precision and computational efficiency. For
+                                 point
+Pailitao-VL-Reranker, both Φrank and Φlist  rank fine-tune all parameters, including the vision encoder,
+the vision-language adapter, and the LLM, with AdamW using an initial learning rate of 5 × 10−6 ,
+
+
+                                                        15
+                          Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+       Table 1: Offline Performance of Embedding. Pailitao-VL-Embedding is far ahead.
+                               Instance-Level (I-HR@𝐾)           Conceptual-Level (C-HR@𝐾)
+  Method                                                                                             Average
+                                @1        @5           @10       @1        @5             @10
+  Qwen3-VL-Embedding           57.83     58.21         60.11     73.43    72.23           71.14       65.49
+  CLIP-IDClass-Embedding       60.05     60.28         62.44     80.38    80.28           79.90       70.56
+  TBStars-VL-Embedding         60.40     60.50         63.36     78.27    77.56           77.18       69.55
+  Pailitao-VL-Embedding        64.52     64.89         67.66     82.01    81.72           81.54       73.73
+
+
+Table 2: Offline Performance of Reranker. Pailitao-VL-Reranker demonstrates the great superiority
+in both instance-level and concept-level retrieval.
+                                Instance-Level (I-HR@𝐾)          Conceptual-Level (C-HR@𝐾)
+ Method                                                                                             Average
+                               @1      @5        @10     @15      @1     @5       @10       @15
+ Qwen3-VL-Embedding           50.10    47.79   46.75     46.23   90.59   88.72    87.33     86.38    67.99
+ CLIP-IDClass-Embedding       54.48    52.38   51.24     50.60   91.57   89.05    87.36     86.16    70.36
+ Qwen3-VL-Reranker            51.99    49.56   48.50     47.90   92.08   90.05    88.36     87.35    69.47
+ Pailitao-VL-Reranker-Point   56.45    54.54   53.30     52.74   92.93   90.49    88.71     87.51    72.21
+ Pailitao-VL-Reranker-List    57.92    55.79   54.74     54.20   94.14   92.36    91.05     90.09    73.79
+
+
+
+cosine decay, and a warmup ratio of 0.03. The batch size is 64, and each image is natively resized so
+that the number of visual tokens does not exceed 80. The pointwise variant is trained for 2 epochs
+and receives both the full image and its cropped region as visual inputs, enhancing robustness to
+cluttered backgrounds and localized object details. The listwise variant is trained for 5 epochs, with
+the maximum chunk size being 𝑀 = 10 during both training and inference.
+
+6.2   Offline Embedding Performance
+
+We compare against three SOTA competitors, as follows:
+Qwen3-VL-Embedding [Li et al., 2026] represents the leading VLM2vec in general scenarios, driven
+by superior data governance and advanced optimization paradigms.
+TBStars-VL-Embedding represents the powerful VLM2vec in industry scenarios, performing large-
+scale continued training on downstream E-commerce data.
+CLIP-IDClass-Embedding follows the CLIP dual-encoder architecture, inherits data governance of
+Pailitao-VL-Embedding and is optimized by ultra-scale ID-recognition for absolute anchor learning.
+Table 1 provides a comprehensive evaluation. A cross-methodological analysis reveals several key
+insights regarding domain-specific data and optimization paradigms.
+First, the comparison between Qwen3-VL-Embedding and TBStars-VL-Embedding highlights the
+impact of domain-specific pre-training. TBStars consistently outperforms Qwen3-VL across both
+levels, particularly achieving a higher I-HR@1 (60.40 vs. 57.83). This performance gap is consistent
+with expectations, as TBStars is pre-trained on massive, in-domain industry data, allowing it to
+capture specialized data distribution more effectively than the general-domain foundation model.
+Crucially, the results highlight the inherent advantages of ID-recognition paradigm. Unlike Qwen3-VL
+and TBStars, which rely on the standard contrastive learning, CLIP-IDClass-Embedding is optimized
+through ultra-scale classification. Notably, despite its smaller parameter, CLIP-IDClass-Embedding
+(70.56) significantly outperforms the larger, contrastive-based TBStars-VL (69.55). This empirical
+evidence suggests that ultra-scale ID-recognition serves as a more effective objective for multi-modal
+embedding; through providing explicit and dense supervisory signals, it better captures fine-grained
+semantic boundaries compared to the often noise-prone sampling of contrastive pairs.
+Finally, Pailitao-VL-Embedding achieves state-of-the-art across all metrics, reaching an Average score
+of 73.73. By augmenting the MLLM2vec backbone with ultra-scale ID classification, we improve
+I-HR@1 from 60.40 (TBStars) to 64.52 at the instance-level evaluation, validating that the classification-
+
+
+                                                          16
+                            Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+
+Table 3: Offline performance (Precision, Recall, F1-Score) on the test set. For embedding models,
+the decision thresholds are selected on the validation set to maximize F1-Score.
+                                         Precision                     Recall                  F1-Score
+      Method
+                                    Instance    Concept        Instance    Concept        Instance   Concept
+      Qwen3-VL-Embedding             37.86        87.72         73.05           54.60       49.87     67.30
+      CLIP-IDClass-Embedding         60.34        78.29         75.38           93.72       67.03     85.31
+      Qwen3-VL-Reranker              59.75        80.36         61.65           94.09       60.68     86.66
+      Pailitao-VL-Reranker-Point     63.85        82.50         83.46           95.46       72.35     88.51
+      Pailitao-VL-Reranker-List      74.28        88.73         73.93           94.09       74.10     91.33
+
+Table 4: Ablation of Pailitao-VL-Reranker-List. All components contribute together to the best.
+                              Instance-Level (I-HR@𝐾)            Conceptual-Level (C-HR@𝐾)
+      Method                                                                                         Average
+                             @1       @5       @10     @15        @1       @5       @10      @15
+      Chunkwise Ranking     57.46    55.27     54.82   52.66     93.74    91.23     87.68    87.53    72.30
+      + NULL-Token Loss     58.07    55.95     54.60   54.03     93.93    91.61     88.60    88.02    73.10
+      + Abs Rel Score       57.68    55.73     54.61   54.07     94.13    92.06     90.73    89.74    73.59
+      + Hybrid Ranking      57.92    55.79     54.82   54.20     94.14    92.36     91.05    90.09    73.79
+
+
+
+
+based training objective further enhances the MLLM’s sophisticated visual understanding, enabling it
+to better resolve challenging intra-ID variations in complex retrieval scenarios.
+
+6.3    Offline Reranking Performance
+
+We compare against competitors: Two embedding-based models from §6.2, Qwen3-VL-Embedding
+and CLIP-IDClass-Embedding, are repurposed as reranking baselines by scoring each candidate via
+cosine similarity with the query embedding. In addition, we include one dedicated reranking baseline:
+Qwen3-VL-Reranker [Li et al., 2026] is a leading pointwise solution in general scenarios, driven by
+superior data governance and advanced optimization paradigms. It scores each query–document pair
+through sigmoid(logit(yes) − logit(no)).
+Top-𝐾 Hit Rate. As shown in Table 2, both of our variants outperform all baselines across instance-
+level and concept-level metrics at every cutoff. Pailitao-VL-Reranker-List achieves the best overall
+performance, improving I-HR@1 by +3.44 over CLIP-IDClass-Embedding and C-HR@1 by +2.06
+over Qwen3-VL-Reranker. Compared to the pointwise variant, the listwise one provides further gains,
+confirming the benefit of combining local chunkwise ordering with global absolute scores.
+Relevance Classification. Table 3 reports Precision, Recall, and F1-Score under two label groupings.
+For embedding models, decision thresholds are tuned on the validation set. Embedding-based models
+suffer from one clear precision–recall imbalance when repurposed as classifiers (e.g., Qwen3-VL-
+Embedding achieves only 37.86 instance-level precision despite 73.05 recall). Among dedicated
+rerankers, our pointwise variant already surpasses Qwen3-VL-Reranker by +11.67 instance-level
+F1, and the listwise variant further improves precision (74.28 vs. 63.85) without sacrificing recall,
+confirming that chunkwise comparison yields better-calibrated scores and tighter decision boundaries.
+Our listwise model shows best F1-Score on both instance-level (74.10) and concept-level (91.33),
+proving not only superior ranking but also robust absolute decision quality for industrial deployment.
+Component for Reranking. In Table 4, we ablate the key components of Pailitao-VL-Reranker-List
+by incrementally adding each module. The Chunkwise Ranking uses only chunkwise training. Adding
+the NULL-Token Loss to the training objective improves instance-level metrics at small cutoffs (e.g.,
+I-HR@1: 57.46 → 58.07) and provides consistent gains on concept-level metrics, indicating that
+an explicit boundary signal for label-0 items helps the model better separate exact ID matches from
+near-duplicate candidates. Incorporating the Abs Rel Score (i.e., the absolute relevance head) further
+boosts concept-level hit rates. Finally, the full Hybrid Ranking variant, which combines chunkwise
+scores with absolute relevance scores, achieves the best overall performance, demonstrating that local
+relative ranking and global absolute calibration are complementary signals.
+
+
+                                                          17
+                         Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+
+Table 5: Inference Efficiency Comparison of Reranking between pointwise and chunkwise.
+Chunkwise demonstrates overwhelming throughput advantages over pointwise.
+                         Metric                     Pointwise    Chunkwise
+                         # MLLM Forward Passes         800          100
+                         Total Time (s)               18.22         7.50
+                         Latency / Query (ms) ↓       182.25        75.01
+                         Latency / Pair (ms) ↓         22.78         9.38
+                         Throughput (query/s) ↑        5.49         13.33
+                         Throughput (pair/s) ↑        43.90        106.65
+
+
+Efficiency for Reranker. Although the above performance is impressive, the reranker efficiency
+has always been a key bottleneck restricting its deployment of applications. This report evolves the
+paradigm of generative reranking from pointwise to chunkwise, significantly improving efficiency.
+As shown in Table 5, we evaluate the inference efficiency on a benchmark of 100 queries with 800
+query-document pairs using the vLLM engine on a single NVIDIA A800 GPU. By transition from
+pointwise to chunkwise, the number of MLLM forward passes is drastically reduced from 800 to 100.
+The pipeline optimization yields a significant efficiency gain: the per-query latency drops from 182.25
+ms to 75.01 ms, representing the 2.4× speedup. Moreover, the system throughput is boosted from
+5.49 to 13.33 queries per second. These empirical results demonstrate that our chunkwise solution
+effectively mitigates the computational overhead of generative models, ensuring high-throughput
+processing while maintaining superior ranking quality for large-scale industrial retrieval.
+
+6.4   Online A/B Results
+
+To evaluate real-world efficacy, we conduct extensive online A/B testing within the high-concurrency
+environment of the Pailitao e-commerce platform. Benefiting from the unrelenting optimization efforts
+of the AI infrastructure team, the system achieves strict real-time performance during deployment.
+Specifically, the inference latency of Pailitao-VL-Embedding is compressed to 67 ms per query, while
+Pailitao-VL-Reranker-List achieves an average latency of 76 ms per query.
+Multi-Day average statistics demonstrate that these technical breakthroughs translated directly into
+substantial business impact: Pailitao-VL-Embedding yielded the 2% GMV gain across the entire
+platform’s traffic, while Pailitao-VL-Reranker-List delivered a significant 6% GMV gain within
+standardized product categories. Besides that, in some emerging scenarios of AI search (such as
+e-commerce SKU-price comparison), Pailitao-VL-Reranker-List has brought about a impressive
+GMV gain of 20%, demonstrating the strong potentials.
+These outcomes validate Pailitao-VL’s substantial business value and the engineering resilience
+essential for scaling multi-modal retrieval in demanding industrial environments.
+
+
+7     Conclusion
+
+In this work, we presented Pailitao-VL, a comprehensive multi-modal retrieval system engineered
+for high-precision, real-time industrial search. Our primary contribution lies in two fundamental
+paradigm shifts. First, we transitioned the embedding paradigm from traditional contrastive learning
+to an absolute ID-recognition task. Through anchoring instances to a globally consistent latent space
+defined by billions of semantic prototypes, we successfully overcome the stochasticity and granularity
+bottlenecks inherent in existing embedding solutions. Second, we evolved the generative reranker
+from isolated pointwise evaluation to the “compare-and-calibrate” listwise policy. By synergizing
+chunk-based comparative reasoning with calibrated absolute relevance scoring, the system achieves
+nuanced discriminative resolution while circumventing the prohibitive latency typically associated
+with conventional reranking methods. Extensive offline benchmarks and online A/B tests on Alibaba’s
+e-commerce platform confirm that Pailitao-VL achieves state-of-the-art performance and delivers
+substantial business impact. This work demonstrates a robust and scalable path for deploying advanced
+MLLM-based retrieval architectures in demanding, large-scale production environments.
+
+
+                                                      18
+                        Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+8   Contributors
+Core Contributors: Lei Chen, Chen Ju, Xu Chen, Zhicheng Wang
+Algorithm Contributors: Yuheng Jiao, Hongfeng Zhan, Zhaoyang Li, Shihao Xu, Lianyu Du,
+Xiaohan Ye, Yunmeng Shu, Jinsong Lan, Xiaoyong Zhu, Bo Zheng
+Engineering Contributors: Zhixiang Zhao, Tong Jia, Dongzi Zhao, Shuaiqi Jia, Jiacheng Li, Zhilong
+Hu, Gaofeng Li, Bo Xie, Chong Ma, Tengfei Xie
+Special Contributors (TBStars-VL-Embedding & Adaptation): Lin Li, Yuan Gao, Jun Song
+
+
+
+
+                                                   19
+                         Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+References
+Shuai Bai, Yuxuan Cai, Ruizhe Chen, Keqin Chen, Xionghui Chen, Zesen Cheng, Lianghao Deng,
+  Wei Ding, Chang Gao, Chunjiang Ge, Wenbin Ge, Zhifang Guo, Qidong Huang, Jie Huang, Fei
+  Huang, Binyuan Hui, Shutong Jiang, Zhaohai Li, Mingsheng Li, Mei Li, Kaixin Li, Zicheng Lin,
+  Junyang Lin, Xuejing Liu, Jiawei Liu, Chenglong Liu, Yang Liu, Dayiheng Liu, Shixuan Liu,
+  Dunjie Lu, Ruilin Luo, Chenxu Lv, Rui Men, Lingchen Meng, Xuancheng Ren, Xingzhang Ren,
+  Sibo Song, Yuchong Sun, Jun Tang, Jianhong Tu, Jianqiang Wan, Peng Wang, Pengfei Wang,
+  Qiuyue Wang, Yuxuan Wang, Tianbao Xie, Yiheng Xu, Haiyang Xu, Jin Xu, Zhibo Yang, Mingkun
+  Yang, Jianxin Yang, An Yang, Bowen Yu, Fei Zhang, Hang Zhang, Xi Zhang, Bo Zheng, Humen
+  Zhong, Jingren Zhou, Fan Zhou, Jing Zhou, Yuanzhi Zhu, and Ke Zhu. Qwen3-vl technical report.
+  arXiv preprint arXiv:2511.21631, 2025.
+Xuanming Cui, Jianpeng Cheng, Hong-you Chen, Satya Narayan Shukla, Abhijeet Awasthi, Xichen
+  Pan, Chaitanya Ahuja, Shlok Kumar Mishra, Yonghuan Yang, Jun Xiao, et al. Think then embed:
+  Generative context improves multimodal embedding. arXiv preprint arXiv:2510.05014, 2025.
+Jiankang Deng, Jia Guo, Niannan Xue, and Stefanos Zafeiriou. Arcface: Additive angular margin
+   loss for deep face recognition. In Proceedings of the IEEE/CVF conference on computer vision
+   and pattern recognition, pages 4690–4699, 2019.
+Tiancheng Gu, Kaicheng Yang, Ziyong Feng, Xingjun Wang, Yanzhao Zhang, Dingkun Long, Yingda
+  Chen, Weidong Cai, and Jiankang Deng. Breaking the modality barrier: Universal embedding
+  learning with multimodal llms. In Proceedings of the 33rd ACM International Conference on
+  Multimedia, pages 2860–2869, 2025.
+Daya Guo, Dejian Yang, Haowei Zhang, Junxiao Song, Ruoyu Zhang, Runxin Xu, Qihao Zhu, Shirong
+  Ma, Peiyi Wang, Xiao Bi, et al. Deepseek-r1: Incentivizing reasoning capability in llms via
+  reinforcement learning. arXiv preprint arXiv:2501.12948, 2025.
+Chao Jia, Yinfei Yang, Ye Xia, Yi-Ting Chen, Zarana Parekh, Hieu Pham, Quoc Le, Yun-Hsuan Sung,
+  Zhen Li, and Tom Duerig. Scaling up visual and vision-language representation learning with
+  noisy text supervision. In International conference on machine learning, pages 4904–4916. PMLR,
+  2021.
+Ting Jiang, Minghui Song, Zihan Zhang, Haizhen Huang, Weiwei Deng, Feng Sun, Qi Zhang, Deqing
+  Wang, and Fuzhen Zhuang. E5-v: Universal embeddings with multimodal large language models.
+  arXiv preprint arXiv:2407.12580, 2024a.
+Ziyan Jiang, Rui Meng, Xinyi Yang, Semih Yavuz, Yingbo Zhou, and Wenhu Chen. Vlm2vec: Training
+  vision-language models for massive multimodal embedding tasks. arXiv preprint arXiv:2410.05160,
+  2024b.
+Zhibin Lan, Liqiang Niu, Fandong Meng, Jie Zhou, and Jinsong Su. Llave: Large language and vision
+  embedding models with hardness-weighted contrastive learning. arXiv preprint arXiv:2503.04812,
+  2025a.
+Zhibin Lan, Liqiang Niu, Fandong Meng, Jie Zhou, and Jinsong Su. Ume-r1: Exploring reasoning-
+  driven generative multimodal embeddings. arXiv preprint arXiv:2511.00405, 2025b.
+Junnan Li, Dongxu Li, Caiming Xiong, and Steven Hoi. Blip: Bootstrapping language-image
+  pre-training for unified vision-language understanding and generation. In International conference
+  on machine learning, pages 12888–12900. PMLR, 2022.
+Mingxin Li, Yanzhao Zhang, Dingkun Long, Keqin Chen, Sibo Song, Shuai Bai, Zhibo Yang, Pengjun
+ Xie, An Yang, Dayiheng Liu, et al. Qwen3-vl-embedding and qwen3-vl-reranker: A unified
+ framework for state-of-the-art multimodal retrieval and ranking. arXiv preprint arXiv:2601.04720,
+ 2026.
+Sheng-Chieh Lin, Chankyu Lee, Mohammad Shoeybi, Jimmy Lin, Bryan Catanzaro, and Wei Ping.
+  Mm-embed: Universal multimodal retrieval with multimodal llms. arXiv preprint arXiv:2411.02571,
+  2024.
+
+
+                                                    20
+                         Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+Yikun Liu, Yajie Zhang, Jiayin Cai, Xiaolong Jiang, Yao Hu, Jiangchao Yao, Yanfeng Wang, and
+  Weidi Xie. Lamra: Large multimodal model as your advanced retrieval assistant. In Proceedings
+  of the Computer Vision and Pattern Recognition Conference, pages 4015–4025, 2025.
+Zhenghao Liu, Chenyan Xiong, Yuanhuiyi Lv, Zhiyuan Liu, and Ge Yu. Universal vision-language
+  dense retrieval: Learning a unified representation space for multi-modal retrieval. arXiv preprint
+  arXiv:2209.00179, 2022.
+Xueguang Ma, Liang Wang, Nan Yang, Furu Wei, and Jimmy Lin. Fine-tuning llama for multi-stage
+  text retrieval. In Proceedings of the 47th International ACM SIGIR Conference on Research and
+  Development in Information Retrieval, pages 2421–2425, 2024.
+Tong Niu, Shafiq Joty, Ye Liu, Caiming Xiong, Yingbo Zhou, and Semih Yavuz. Judgerank: Leveraging
+  large language models for reasoning-intensive reranking. arXiv preprint arXiv:2411.00142, 2024.
+Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal,
+  Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learning transferable visual
+  models from natural language supervision. In International conference on machine learning, pages
+  8748–8763. PmLR, 2021a.
+Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal,
+  Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et al. Learning transferable visual
+  models from natural language supervision. In International conference on machine learning, pages
+  8748–8763. PmLR, 2021b.
+Weiwei Sun, Lingyong Yan, Xinyu Ma, Shuaiqiang Wang, Pengjie Ren, Zhumin Chen, Dawei Yin,
+ and Zhaochun Ren. Is chatgpt good at search? investigating large language models as re-ranking
+ agents. arXiv preprint arXiv:2304.09542, 2023.
+Haicheng Wang, Chen Ju, Weixiong Lin, Shuai Xiao, Mengting Chen, Yixuan Huang, Chang Liu,
+  Mingshuai Yao, Jinsong Lan, Ying Chen, et al. Advancing myopia to holism: Fully contrastive
+  language-image pre-training. In Proceedings of the Computer Vision and Pattern Recognition
+  Conference, pages 29791–29802, 2025a.
+Zhicheng Wang, Chen Ju, Xu Chen, Shuai Xiao, Jinsong Lan, Xiaoyong Zhu, Ying Chen, and Zhiguo
+  Cao. Explore more, learn better: Parallel mllm embeddings under mutual information minimization.
+  arXiv preprint arXiv:2511.01588, 2025b.
+Cong Wei, Yang Chen, Haonan Chen, Hexiang Hu, Ge Zhang, Jie Fu, Alan Ritter, and Wenhu Chen.
+  Uniir: Training and benchmarking universal multimodal information retrievers. In European
+  Conference on Computer Vision, pages 387–404. Springer, 2024.
+Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Fei Xia, Ed Chi, Quoc V Le, Denny
+  Zhou, et al. Chain-of-thought prompting elicits reasoning in large language models. Advances in
+  neural information processing systems, 35:24824–24837, 2022a.
+Jason Wei, Xuezhi Wang, Dale Schuurmans, Maarten Bosma, Fei Xia, Ed Chi, Quoc V Le, Denny
+  Zhou, et al. Chain-of-thought prompting elicits reasoning in large language models. Advances in
+  neural information processing systems, 35:24824–24837, 2022b.
+Hao Yu, Zhuokai Zhao, Shen Yan, Lukasz Korycki, Jianyu Wang, Baosheng He, Jiayi Liu, Lizhu
+  Zhang, Xiangjun Fan, and Hanchao Yu. Cafe: Unifying representation and generation with
+  contrastive-autoregressive finetuning. arXiv preprint arXiv:2503.19900, 2025.
+Xiaohua Zhai, Basil Mustafa, Alexander Kolesnikov, and Lucas Beyer. Sigmoid loss for language
+  image pre-training. In Proceedings of the IEEE/CVF international conference on computer vision,
+  pages 11975–11986, 2023.
+Xin Zhang, Yanzhao Zhang, Wen Xie, Mingxin Li, Ziqi Dai, Dingkun Long, Pengjun Xie, Meishan
+  Zhang, Wenjie Li, and Min Zhang. Gme: Improving universal multimodal retrieval by multimodal
+  llms. arXiv preprint arXiv:2412.16855, 2024.
+Junjie Zhou, Zheng Liu, Shitao Xiao, Bo Zhao, and Yongping Xiong. Vista: Visualized text
+  embedding for universal multi-modal retrieval. arXiv preprint arXiv:2406.04292, 2024a.
+
+
+                                                    21
+                         Technical Report: Embedding & Reranker of Pailitao-VL
+
+
+Tianshuo Zhou, Sen Mei, Xinze Li, Zhenghao Liu, Chenyan Xiong, Zhiyuan Liu, Yu Gu, and Ge Yu.
+  Marvel: unlocking the multi-modal capability of dense retrieval via visual module plugin. In
+  Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics (Volume
+  1: Long Papers), pages 14608–14624, 2024b.
+Shengyao Zhuang, Honglei Zhuang, Bevan Koopman, and Guido Zuccon. A setwise approach for
+  effective and highly efficient zero-shot ranking with large language models. In Proceedings of the
+  47th International ACM SIGIR Conference on Research and Development in Information Retrieval,
+  pages 38–47, 2024.
+Shengyao Zhuang, Xueguang Ma, Bevan Koopman, Jimmy Lin, and Guido Zuccon. Rank-r1:
+  Enhancing reasoning in llm-based document rerankers via reinforcement learning. arXiv preprint
+  arXiv:2503.06034, 2025.
+
+
+
+
+                                                    22
+
