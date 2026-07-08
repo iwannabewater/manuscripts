@@ -17,7 +17,7 @@
 | S01 | Chen et al., [Pailitao-VL arXiv page](https://arxiv.org/abs/2602.13704) | 2026-03-05 | A | 题名、作者、v1/v2 日期、主题分类、摘要、DOI 与公开来源入口。 |
 | S02 | Chen et al., [Pailitao-VL PDF](https://arxiv.org/pdf/2602.13704) | 2026-03-05 | A | 方法正文、公式、表 1 到表 5、训练配置、线上 A/B 作者报告；本地归档见 `sources/`。 |
 | S03 | Chen et al., [Pailitao-VL HTML](https://arxiv.org/html/2602.13704) | 2026-03-05 | A | 用于交叉核对章节结构、公式位置和表格位置。 |
-| S04 | Chen et al., [Pailitao-VL TeX source](https://arxiv.org/e-print/2602.13704) | 2026-03-05 | A | TeX 原始表格、prompt 模板、公式和参考文献键；本地解包见 `sources/latex/`。 |
+| S04 | Chen et al., [Pailitao-VL TeX source](https://arxiv.org/e-print/2602.13704) | 2026-03-05 | A | TeX 原始表格、prompt 模板、公式和参考文献键；本地归档见 `sources/pailitao-vl-2602.13704-source.tar`。 |
 
 ## 背景来源
 

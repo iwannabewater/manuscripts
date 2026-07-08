@@ -5,6 +5,8 @@
 ## Files
 
 - `index.html`: 正文与排版源文件。
+- `build_math.py`: 从 LaTeX 公式生成路径化 SVG 数学资产。
+- `assets/math/`: PDF 与 HTML 共用的公式 SVG。
 - `pailitao-vl-paper-review-2026.pdf`: 由 `index.html` 渲染得到的 PDF 成品。
 - `sources.md`: 证据等级、来源边界和不确定性说明。
 - `data/source-map.tsv`: 正文 claim 到来源的映射。
@@ -24,6 +26,7 @@
 
 ```bash
 make fonts
+.venv/bin/python pailitao-vl-paper-review-2026/build_math.py
 .venv/bin/python -c "from pathlib import Path; from weasyprint import HTML; d=Path('pailitao-vl-paper-review-2026'); HTML(filename=str(d/'index.html'), base_url=str(d)).write_pdf(str(d/'pailitao-vl-paper-review-2026.pdf'))"
 make verify
 ```

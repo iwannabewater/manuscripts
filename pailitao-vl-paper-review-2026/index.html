@@ -327,24 +327,33 @@
     border-color: #c9d8ce;
   }
 
-  .formula {
-    background: var(--panel);
-    border: 1pt solid var(--line);
-    padding: 7pt 9pt;
-    margin: 7pt 0 9pt;
-    font-family: var(--font-code) !important;
-    font-size: 8.15pt;
-    line-height: 1.48;
-    white-space: pre-wrap;
-    break-inside: avoid;
-  }
-
-  .formula-title {
+  .equation-title {
     color: var(--blue);
     font-family: var(--font-code) !important;
     font-size: 7.5pt;
     margin-bottom: 3pt;
     text-transform: uppercase;
+  }
+
+  .equation {
+    background: var(--panel);
+    border: 1pt solid var(--line);
+    padding: 7pt 9pt 8pt;
+    margin: 7pt 0 9pt;
+    break-inside: avoid;
+  }
+
+  .equation img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 0;
+    background: transparent;
+    margin: 2pt auto 0;
+  }
+
+  .equation.narrow img {
+    width: 78%;
   }
 
   table {
@@ -434,13 +443,13 @@
       <div class="cover-grid">
         <div class="verdict-box">
           <p class="tag">Independent verdict</p>
-          <p><strong>结论</strong>，Pailitao-VL 是一篇很有工业价值的系统论文。它的关键贡献不是提出一个更大的 VLM，而是把电商图搜的两个核心瓶颈分别改写为可监督、可并行、可线上部署的问题：embedding 侧用十亿级原型 ID 分类替代松散对比学习，reranker 侧用 chunkwise listwise 比较加绝对分数校准替代逐 pair 判断。</p>
-          <p><strong>稳定性判断</strong>，在 Alibaba 自有商品库、SKU 元数据、行为日志、强工程平台和持续数据治理闭环都成立的场景下，它大概率能稳定 work。离开这些条件后，方法不是即插即用的通用检索方案，最脆弱的环节是原型簇纯度、跨品类分数校准和线上长期指标。</p>
+          <p><strong>结论</strong>，Pailitao-VL 是一篇工业价值很高的系统论文。它的关键贡献不是提出一个更大的 VLM，而是把电商图搜的两个核心瓶颈分别改写为可监督、可并行、可线上部署的问题：Embedding（向量表征模型）侧用十亿级 Prototype-ID（原型身份标识）分类替代松散对比学习，Reranker（重排模型）侧用 Chunkwise Listwise Reranking（分块列表式重排）加 Absolute Relevance Scoring（绝对相关性评分）替代逐 pair 判断。</p>
+          <p><strong>稳定性判断</strong>，在 Alibaba 自有商品库、SKU 元数据、行为日志、强工程平台和持续数据治理闭环都成立的场景下，它具有较高稳定工作概率。离开这些条件后，方法不是即插即用的通用检索方案，最脆弱的环节是原型簇纯度、跨品类分数校准和线上长期指标。</p>
         </div>
         <div class="signal-box">
           <div class="signal-row"><span class="tag">Paper</span><span>Pailitao-VL / arXiv v2 / 2026-03-05</span></div>
-          <div class="signal-row"><span class="tag">System</span><span>Embedding 召回 + MLLM reranker 重排的两阶段工业搜索系统</span></div>
-          <div class="signal-row"><span class="tag">Claim</span><span>作者报告 embedding 平台全流量 GMV +2%，list reranker 标准品类 GMV +6%，SKU 比价场景 GMV +20%</span></div>
+          <div class="signal-row"><span class="tag">System</span><span>Embedding 召回 + MLLM Reranker 重排的两阶段工业搜索系统</span></div>
+          <div class="signal-row"><span class="tag">Claim</span><span>作者报告 Embedding 平台全流量 GMV +2%，List Reranker 标准品类 GMV +6%，SKU 比价场景 GMV +20%</span></div>
           <div class="signal-row"><span class="tag">Boundary</span><span>未公开代码、数据、A/B 显著性区间和流量分桶，本文不把线上收益写成第三方复现</span></div>
         </div>
       </div>
@@ -452,11 +461,11 @@
     <h2>目录</h2>
     <div class="toc-grid">
       <div class="toc-item"><span class="toc-num">01</span>评审结论<span class="toc-note">论文到底解决了什么，哪些地方不能外推</span></div>
-      <div class="toc-item"><span class="toc-num">02</span>任务形式化<span class="toc-note">十亿级 corpus、百级候选、embedding 到 reranker</span></div>
+      <div class="toc-item"><span class="toc-num">02</span>任务形式化<span class="toc-note">十亿级 corpus、百级候选、Embedding 到 Reranker</span></div>
       <div class="toc-item"><span class="toc-num">03</span>Embedding 算法<span class="toc-note">MRL、原型 ID、角度 margin、稀疏负样本</span></div>
-      <div class="toc-item"><span class="toc-num">04</span>Reranker 算法<span class="toc-note">pointwise、chunkwise、NULL、绝对分数和混合合并</span></div>
+      <div class="toc-item"><span class="toc-num">04</span>Reranker 算法<span class="toc-note">Pointwise、Chunkwise、NULL、绝对分数和混合合并</span></div>
       <div class="toc-item"><span class="toc-num">05</span>实验收益<span class="toc-note">离线指标、效率指标和线上 GMV 口径</span></div>
-      <div class="toc-item"><span class="toc-num">06</span>稳定性判断<span class="toc-note">为什么能 work，什么时候会失效</span></div>
+      <div class="toc-item"><span class="toc-num">06</span>稳定性判断<span class="toc-note">为什么能稳定工作，什么时候会失效</span></div>
       <div class="toc-item"><span class="toc-num">07</span>实现清单<span class="toc-note">复现所需的数据、训练、服务和监控条件</span></div>
       <div class="toc-item"><span class="toc-num">08</span>最终评价<span class="toc-note">贡献、缺口、可追问问题和推荐读法</span></div>
     </div>
@@ -465,49 +474,67 @@
   <main>
     <section class="page">
       <h2>01 · 评审结论</h2>
-      <p class="lead">Pailitao-VL 把工业多模态搜索拆成两个层次：先用 embedding 从约十亿级商品文档中召回百级候选，再用 MLLM reranker 做高精度重排。论文认为传统 contrastive embedding 在商品级、型号级、细节级检索上不够稳定，pointwise generative reranker 又太慢、太孤立，因此分别提出绝对 ID 识别和 compare-and-calibrate listwise rerank。<span class="ref">[S02]</span></p>
+      <p class="lead">Pailitao-VL 把工业 Multimodal Search（多模态搜索）拆成两个层次：先用 Embedding（向量表征模型）从约十亿级商品文档中召回百级候选，再用 MLLM Reranker（多模态大语言模型重排器）做高精度重排。论文认为传统 Contrastive Embedding（对比式向量表征）在商品级、型号级、细节级检索上不够稳定，Pointwise Generative Reranker（逐对生成式重排器）又太慢、太孤立，因此分别提出 Absolute ID Recognition（绝对身份识别）和 Compare-and-Calibrate Listwise Policy（比较并校准的列表式策略）。<span class="ref">[S02]</span></p>
+
+      <h3>术语口径：首次出现保留英文原词</h3>
+      <p>本文不把关键术语机械翻译成中文。第一次出现时采用“英文术语（专业中文口径）”，后文在不造成歧义时沿用英文缩写或英文术语。</p>
+      <table class="tight-table">
+        <thead>
+          <tr><th>英文术语</th><th>中文口径</th><th>本文含义</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Embedding</td><td>向量表征模型</td><td>把 query/document 压缩为可 ANN 检索的单向量。</td></tr>
+          <tr><td>Reranker</td><td>重排模型</td><td>读取候选的细节交互，决定最终排序和过滤。</td></tr>
+          <tr><td>MLLM</td><td>多模态大语言模型</td><td>同时处理图像、文本和生成式判别信号的基础模型。</td></tr>
+          <tr><td>Prototype-ID</td><td>原型身份标识</td><td>高纯度实例簇的全局类别标识，用作分类监督。</td></tr>
+          <tr><td>MRL</td><td>Matryoshka Representation Learning，套娃表征学习</td><td>让不同前缀维度共享一个可部署向量空间。</td></tr>
+          <tr><td>Hard Negative Mining</td><td>难负样本挖掘</td><td>选择语义接近但标签不同的负样本，提高判别边界。</td></tr>
+          <tr><td>False Negative</td><td>伪负样本</td><td>实际同 ID 或可替代商品被误当作负例。</td></tr>
+          <tr><td>Chunkwise Listwise Reranking</td><td>分块列表式重排</td><td>在小候选块内做候选间比较，再跨块合并。</td></tr>
+          <tr><td>Absolute Relevance Scoring</td><td>绝对相关性评分</td><td>把每个候选映射到共享的四级相关性标签空间。</td></tr>
+          <tr><td>Hybrid Ranking</td><td>混合排序</td><td>保留块内相对顺序，用绝对分数做跨块多路归并。</td></tr>
+        </tbody>
+      </table>
 
       <div class="grid-3">
         <div class="card">
           <h4>最重要的算法变化</h4>
-          <p>Embedding 不再只学习 query-document 的相对距离，而是把每个商品实例绑定到原型 ID anchor 上，把召回问题改写成超大规模分类。这个选择把监督从“谁更近”变成“它是谁”。</p>
+          <p>Embedding 不再只学习 query-document 的相对距离，而是把每个商品实例绑定到 Prototype-ID anchor 上，把召回问题改写成超大规模分类。这个选择把监督从“谁更近”变成“它是谁”。</p>
         </div>
         <div class="card">
           <h4>最重要的工程变化</h4>
-          <p>Reranker 不再对每个候选单独问 Yes/No，而是把候选切成小 chunk 做相互比较，同时用四级绝对相关性分数完成跨 chunk 校准。这样保留 listwise 信息，又避免一次塞入全部候选。</p>
+          <p>Reranker 不再对每个候选单独问 Yes/No，而是把候选切成小 chunk 做相互比较，同时用四级 Absolute Relevance Score 完成跨 chunk 校准。这样保留 listwise 信息，又避免一次塞入全部候选。</p>
         </div>
         <div class="card">
           <h4>最重要的评审边界</h4>
-          <p>论文实验可信地说明这套路线在作者场景中有效，但还没有证明它能无条件迁移。公开稿缺少代码、数据、置信区间、负向指标和长期线上观测。</p>
+          <p>论文实验可信地说明这套路线在作者场景中有效，但还没有证明它能无条件迁移。公开稿缺少代码、数据、置信区间、负向指标和长期线上观测；原型库验纯、A/B 分桶和长期满意度仍需审慎看待。</p>
         </div>
       </div>
 
       <div class="callout ok">
-        <p><strong>我的判断</strong>，这篇论文的价值在于把“多模态大模型做检索”推进到一个真正工业化的形态。它没有停在模型能力叙述，而是给出了数据治理、训练目标、并行训练、服务延迟和线上收益。若团队拥有足够大的商品库、行为日志、可稳定维护的 SKU/ID 体系和 GPU serving 平台，这条路线值得认真复现。</p>
+        <p><strong>本文判断</strong>，这篇论文的价值在于把“多模态大模型做检索”推进到可工程化部署的形态。它没有停留在模型能力叙述，而是给出了数据治理、训练目标、并行训练、服务延迟和线上收益。若团队拥有足够大的商品库、行为日志、可稳定维护的 SKU/ID 体系和 GPU serving 平台，这条路线值得认真复现。</p>
       </div>
 
-      <div class="callout risk">
-        <p><strong>需要克制的地方</strong>，论文把许多关键能力放在“agent-driven data curation”和内部平台工程上，但这些并没有完整开源。原型库如何验纯、A/B 如何分桶、GMV 是否牺牲了长期满意度、跨域迁移是否需要重建 ID 空间，公开版本都没有给出足够细节。</p>
-      </div>
     </section>
 
     <section class="page">
       <h2>02 · 任务形式化：先召回百级候选，再做细粒度重排</h2>
       <p class="lead">论文的任务设定很清楚：文档库约为十亿级，每个文档包含图片和文本；查询也可以同时包含图片和文本。系统需要在低延迟条件下从全库召回候选，再把百级候选排成更符合用户意图的结果列表。<span class="ref">[S02]</span></p>
 
-      <div class="formula"><div class="formula-title">Corpus and candidate recall</div>D = {d_i}_{i=1}^L, L ≈ 10^9
-d = (d_img, d_txt), q = (q_img, q_txt)
-D_cand = arg-top-N_{d_i in D} sim(Φ_embd(q), Φ_embd(d_i)), N ≈ 10^2</div>
+      <div class="equation">
+        <div class="equation-title">Corpus and candidate recall</div>
+        <img src="assets/math/task-recall.svg" alt="LaTeX formula for candidate recall over a billion-scale document corpus">
+      </div>
 
-      <p>这一定义解释了为什么论文必须同时解决 embedding 和 reranker。Embedding 的核心是吞吐，文档向量可以离线算好，用 ANN 或向量库在全库中快速取 Top-N。Reranker 的核心是精度，它在候选集上读取 query-document 的细节交互，解决 embedding 单向量压缩掉的细粒度差异。</p>
+      <p>其中，<code>D</code> 是十亿级文档库，<code>d_i</code> 是第 <code>i</code> 个商品文档，<code>q</code> 是多模态查询，<code>Phi_embd</code> 表示 Embedding 模型，<code>D_cand</code> 是由 ANN（Approximate Nearest Neighbor，近似最近邻）检索得到的 Top-N 候选集。这一定义解释了为什么论文必须同时解决 Embedding 和 Reranker。Embedding 的核心是吞吐，文档向量可以离线算好，用 ANN 或向量库在全库中快速取 Top-N。Reranker 的核心是精度，它在候选集上读取 query-document 的细节交互，解决 Embedding 单向量压缩掉的细粒度差异。</p>
 
       <table>
         <thead>
           <tr><th>阶段</th><th>输入规模</th><th>核心模型</th><th>输出</th><th>主要瓶颈</th></tr>
         </thead>
         <tbody>
-          <tr><td>Embedding 召回</td><td>全库约 10^9 文档</td><td>Φ_embd / MLLM2vec backbone</td><td>约 10^2 候选</td><td>单向量压缩导致实例级差异丢失</td></tr>
-          <tr><td>Generative reranking</td><td>每 query 约百级候选</td><td>Φ_rank / MLLM cross-modal reasoning</td><td>最终排序与过滤</td><td>点对点推理太慢，且缺少候选间比较</td></tr>
+          <tr><td>Embedding 召回</td><td>全库约 10^9 文档</td><td>Phi_embd / MLLM2vec backbone</td><td>约 10^2 候选</td><td>单向量压缩导致实例级差异丢失</td></tr>
+          <tr><td>Generative Reranking</td><td>每 query 约百级候选</td><td>Phi_rank / MLLM cross-modal reasoning</td><td>最终排序与过滤</td><td>点对点推理太慢，且缺少候选间比较</td></tr>
         </tbody>
       </table>
 
@@ -516,7 +543,7 @@ D_cand = arg-top-N_{d_i in D} sim(Φ_embd(q), Φ_embd(d_i)), N ≈ 10^2</div>
 
     <section class="page">
       <h2>03 · Embedding：把相对距离问题改成原型 ID 分类问题</h2>
-      <p class="lead">Pailitao-VL-Embedding 的中心判断是：工业图搜需要的不是“语义相近”，而是“实例身份稳定”。传统对比学习依赖 batch 内正负样本和 hard negative mining，负样本质量会波动，false negative 会把同一 ID 的不同视角推远。论文改用十亿级语义原型 ID，把每个样本锚定到全局一致的语义坐标中。<span class="ref">[S02]</span></p>
+      <p class="lead">Pailitao-VL-Embedding 的中心判断是：工业图搜需要的不是“语义相近”，而是“实例身份稳定”。传统 Contrastive Learning（对比学习）依赖 batch 内正负样本和 Hard Negative Mining，负样本质量会波动，False Negative 会把同一 ID 的不同视角推远。论文改用十亿级 Semantic Prototype（语义原型）与 Prototype-ID，把每个样本锚定到全局一致的语义坐标中。<span class="ref">[S02]</span></p>
 
       <figure>
         <svg font-family="TsangerJinKai02" viewBox="0 0 980 330" role="img" aria-label="Pailitao-VL Embedding pipeline">
@@ -546,31 +573,42 @@ D_cand = arg-top-N_{d_i in D} sim(Φ_embd(q), Φ_embd(d_i)), N ≈ 10^2</div>
       </figure>
 
       <h3>Stage 1：MLLM2vec backbone 与 MRL 多粒度对比训练</h3>
-      <p>第一阶段仍然使用对比学习。论文以 3B 参数 dense MLLM 初始化 MLLM2vec，输入由任务 instruction、文本、图片和特殊 <code>EMB</code> token 组成。模型取 <code>EMB</code> 位置的最后隐状态作为向量表示。训练数据约为 20 亿图文对和人工/日志构造的 <code>(anc, pos, neg)</code> triplet。<span class="ref">[S02]</span></p>
+      <p>第一阶段仍然使用对比学习。论文以 3B 参数 Dense MLLM（稠密多模态大语言模型）初始化 MLLM2vec，输入由任务 instruction、文本、图片和特殊 <code>EMB</code> token 组成。模型取 <code>EMB</code> 位置的最后隐状态作为向量表示。训练数据约为 20 亿图文对和人工/日志构造的 <code>(anc, pos, neg)</code> triplet。<span class="ref">[S02]</span></p>
 
-      <div class="formula"><div class="formula-title">MRL contrastive objective</div>G = {256, 512, 1024, 2048, 3072}
-L_embd^mrl = Σ_{g in G} λ_g · [ -1/|B| Σ_i log
-  exp(sim(h_{i, 1:g}^{que}, h_{i, 1:g}^{doc+}) / τ)
-  / Σ_j exp(sim(h_{i, 1:g}^{que}, h_{j, 1:g}^{doc}) / τ) ]</div>
+      <div class="equation">
+        <div class="equation-title">MRL contrastive objective</div>
+        <img src="assets/math/mrl-objective.svg" alt="LaTeX formula for the Matryoshka Representation Learning contrastive objective">
+      </div>
 
-      <p>MRL 的价值在 serving 侧很实际：同一个模型可以输出不同前缀维度，论文最终在工业检索中采用 512 维，以便在召回质量和向量存储、检索成本之间取平衡。这个阶段解决的是概念级对齐和部署弹性，还没有解决实例级身份。</p>
+      <p>公式中，<code>G</code> 是可裁剪的前缀维度集合，<code>h_{i,1:g}</code> 表示向量前 <code>g</code> 维，<code>tau</code> 是温度系数。MRL 的价值在 Serving（在线服务）侧很实际：同一个模型可以输出不同前缀维度，论文最终在工业检索中采用 512 维，以便在召回质量和向量存储、检索成本之间取平衡。这个阶段解决的是概念级对齐和部署弹性，还没有解决实例级身份。</p>
 
       <h3>Stage 2：用高纯度原型簇初始化全局 ID head</h3>
-      <p>第二阶段是论文最核心也最难复现的部分。作者构建一个十亿级语义原型库，每个 prototype-ID 是一个高纯度实例簇的质心。论文称数据治理由 MLLM planner 组织成 Plan-Propose-Organize-Review 管线：Proposer 从 SKU-tree 等确定性元数据、点击/购买行为日志、生成式语义推理中提出候选链接；Organizer 用 SOTA embedding 进行密度式 manifold expansion，把长尾和未标注文档吸收到候选簇；Reviewer 调用 SOTA reranker 做属性核验和多视角一致性检查，剔除语义漂移样本。<span class="ref">[S02]</span></p>
+      <p>第二阶段是论文最核心也最难复现的部分。作者构建一个十亿级语义原型库，每个 Prototype-ID 是一个高纯度实例簇的质心。论文称数据治理由 MLLM Planner 组织成 Plan-Propose-Organize-Review 管线：Proposer 从 SKU-tree 等确定性元数据、点击/购买行为日志、生成式语义推理中提出候选链接；Organizer 用 SOTA Embedding 进行密度式 Manifold Expansion（流形扩展），把长尾和未标注文档吸收到候选簇；Reviewer 调用 SOTA Reranker 做属性核验和多视角一致性检查，剔除语义漂移样本。<span class="ref">[S02]</span></p>
 
-      <p>实现上，global identification head 是一个超大线性投影层，权重矩阵每一行对应一个原型 anchor。用预计算质心初始化 head，可以避免在巨大 label space 中随机初始化带来的不稳定。这个设计把“query 和 document 是否近”转成“样本是否被分到正确 prototype-ID”。</p>
+      <p>实现上，Global Identification Head（全局身份识别头）是一个超大线性投影层，权重矩阵每一行对应一个原型 anchor。用预计算质心初始化 head，可以避免在巨大 Label Space（标签空间）中随机初始化带来的不稳定。这个设计把“query 和 document 是否近”转成“样本是否被分到正确 Prototype-ID”。如果按十亿级 prototype 和 3072 维、fp16 权重粗略估算，仅 head 权重就约为 6 TB，tensor parallel、稀疏负样本和周期性代理矩阵更新不是附加优化，而是训练可落地的必要条件。</p>
 
-      <h3>Stage 3：Additive angular margin 分类</h3>
-      <p>第三阶段联合优化 backbone 和 ID head。设样本向量为 h_i，目标 ID 为 y_i，第 u 个原型 anchor 为 w_u；h_i 和 w_u 均 L2 归一化。论文采用类似 ArcFace 的 additive angular margin，让目标类的角度多加一个 margin 后再进入 softmax，迫使模型把同 ID 样本压得更紧，也把近邻 ID 拉得更开。<span class="ref">[S02][S07]</span></p>
+      <table>
+        <thead>
+          <tr><th>Embedding 阶段</th><th>监督信号</th><th>实现要点</th><th>收益与风险</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Stage 1</td><td>图文对与 triplet 对比监督</td><td>MRL 多前缀维度训练，输出 <code>EMB</code> hidden state。</td><td>得到通用对齐和部署弹性，但实例级边界仍不稳定。</td></tr>
+          <tr><td>Stage 2</td><td>高纯度 Prototype-ID 质心</td><td>Plan-Propose-Organize-Review 数据治理和 head 初始化。</td><td>把全局身份注入模型；风险集中在簇纯度和更新策略。</td></tr>
+          <tr><td>Stage 3</td><td>Additive Angular Margin 分类</td><td>Backbone 与 ID head 联合训练，使用 sparse negative anchors。</td><td>强化实例级分离；工程瓶颈是十亿级类别通信和负样本选择。</td></tr>
+        </tbody>
+      </table>
 
-      <div class="formula"><div class="formula-title">Angular-margin ID probability</div>θ_{i, u} = arccos(h_i^T w_u)
-P(y_i | h_i) =
-  exp(sim(θ_{i, y_i} + margin) / τ)
-  / [ exp(sim(θ_{i, y_i} + margin) / τ) + Σ_{u != y_i} exp(sim(θ_{i, u}) / τ) ]
+      <h3>Stage 3：Additive Angular Margin 分类</h3>
+      <p>第三阶段联合优化 backbone 和 ID head。设样本向量为 <code>h_i</code>，目标 ID 为 <code>y_i</code>，第 <code>u</code> 个原型 anchor 为 <code>w_u</code>；<code>h_i</code> 和 <code>w_u</code> 均 L2 归一化。论文采用类似 ArcFace 的 Additive Angular Margin（加性角度间隔），让目标类的角度多加一个 margin 后再进入 softmax，迫使模型把同 ID 样本压得更紧，也把近邻 ID 拉得更开。<span class="ref">[S02][S07]</span></p>
 
-L_embd^joint = Σ_{g in G} λ_g · [ -1/|B| Σ_i log P(y_i | h_{i, 1:g}) ]</div>
+      <div class="equation">
+        <div class="equation-title">Angular-margin ID probability</div>
+        <img src="assets/math/angular-margin.svg" alt="LaTeX formula for additive angular-margin ID probability and joint embedding loss">
+      </div>
 
-      <p>工程扩展上，论文用 backbone 数据并行、ID head tensor parallel，把 U × D 的原型矩阵按 ID 切到多卡上。为了避免 full softmax 带来的 massive all-to-all 通信，训练时只比较目标 ID 附近的稀疏负 anchor，论文写为维护 prototype similarity matrix 并取近邻负样本，同时周期性动态更新代理矩阵。</p>
+      <p>工程扩展上，论文用 backbone Data Parallel（数据并行）、ID head Tensor Parallel（张量并行），把 <code>U x D</code> 的原型矩阵按 ID 切到多卡上。为了避免 full softmax 带来的 massive all-to-all 通信，训练时只比较目标 ID 附近的 sparse negative anchors（稀疏负原型），论文写为维护 prototype similarity matrix 并取近邻负样本，同时周期性动态更新代理矩阵。服务时 ID head 被移除，只保留 backbone 输出向量，因此这个分类头是训练约束，不是线上分类器。</p>
+
+      <p>论文还提出 Self-loop Gain（自循环收益）和 Prototype Cardinality Scaling（原型规模扩展规律）两个经验判断：更强的 Embedding 能提升 Organizer 的扩展质量，更强的 Reranker 能提升 Reviewer 的验纯质量，二者反过来产生更干净的 Prototype-ID 监督；更大的 prototype cardinality 会提高实例分辨率。公开稿对这些机制给出方向性描述，但没有发布完整曲线、置信区间或反例分析，因此本文把它们视作合理的系统假设，而不是已被外部量化验证的规律。</p>
 
       <div class="callout">
         <p><strong>关键评审</strong>，这条路线的理论直觉很强：商品实例识别更像 face recognition 或 product matching，而不是开放世界图文语义对齐。风险也同样明确：原型 ID 本身就是监督标签，如果数据治理错了，模型会非常稳定地学错。工业上这不是单模型问题，而是一个持续维护的 label system。</p>
@@ -579,19 +617,20 @@ L_embd^joint = Σ_{g in G} λ_g · [ -1/|B| Σ_i log P(y_i | h_{i, 1:g}) ]</div>
 
     <section class="page">
       <h2>04 · Reranker：从逐 pair 判别到 compare-and-calibrate listwise policy</h2>
-      <p class="lead">Embedding 解决候选召回后，reranker 才真正决定用户看到的排序。论文先给出 pointwise 方案，再指出它的三个缺陷：二元判断太粗、缺少候选间比较、每个候选都重复处理 query 导致 O(N) 前向开销。Pailitao-VL-Reranker-List 用 chunkwise listwise 比较和绝对相关性校准同时处理这三个问题。<span class="ref">[S02]</span></p>
+      <p class="lead">Embedding 解决候选召回后，Reranker 才真正决定用户看到的排序。论文先给出 Pointwise 方案，再指出它的三个缺陷：二元判断太粗、缺少候选间比较、每个候选都重复处理 query 导致 <code>O(N)</code> 前向开销。Pailitao-VL-Reranker-List 用 Chunkwise Listwise 比较和 Absolute Relevance 校准同时处理这三个问题。<span class="ref">[S02]</span></p>
 
-      <h3>Pointwise reranker：简单但上限明显</h3>
-      <p>Pointwise 版本把 query 和单个候选 document 拼成输入，让 MLLM 只生成 <code>Yes</code> 或 <code>No</code>，相关性分数是 positive token 的概率。训练目标是标准二元交叉熵。</p>
+      <h3>Pointwise Reranker：简单但上限明显</h3>
+      <p>Pointwise 版本把 query 和单个候选 document 拼成输入，让 MLLM 只生成 <code>Yes</code> 或 <code>No</code>，相关性分数是 positive token 的概率。训练目标是 Binary Cross-Entropy（二元交叉熵）。</p>
 
-      <div class="formula"><div class="formula-title">Pointwise scoring and BCE</div>E_i = Concat(T_inst, q_txt, q_img, d_{i, txt}, d_{i, img})
-s_i = P(Yes | E_i; Φ_rank^point)
-L_rank^point = -1/|B| Σ_i [ y_i log s_i + (1 - y_i) log(1 - s_i) ]</div>
+      <div class="equation">
+        <div class="equation-title">Pointwise scoring and BCE</div>
+        <img src="assets/math/pointwise.svg" alt="LaTeX formula for pointwise reranker scoring and binary cross-entropy">
+      </div>
 
-      <p>论文还披露了 pointwise 数据治理：先在 prototype-ID 库上做工业适配；再用人标 seed 构造 reasoning model，借助大型 MLLM 生成 CoT 轨迹并 SFT 冷启动；之后用 GRPO 对齐人类偏好；最后用 reasoning model 标注百万级真实搜索日志，并用 Qwen3-VL-32B 一类大模型做专家 judge，只保留 reasoning 与 label 跨模型一致的高置信样本。<span class="ref">[S02]</span></p>
+      <p>论文还披露了 Pointwise 数据治理：先在 Prototype-ID 库上做工业适配；再用人标 seed 构造 Reasoning Model（推理模型），借助大型 MLLM 生成 CoT（Chain-of-Thought，思维链）轨迹并用 SFT（Supervised Fine-Tuning，监督微调）冷启动；之后用 GRPO（Group Relative Policy Optimization，组相对策略优化）对齐人类偏好；最后用 Reasoning Model 标注百万级真实搜索日志，并用 Qwen3-VL-32B 一类大模型做 expert judge，只保留 reasoning 与 label 跨模型一致的高置信样本。<span class="ref">[S02]</span></p>
 
-      <h3>Listwise reranker：chunk 内比较，chunk 间校准</h3>
-      <p>朴素 listwise 会把所有百级候选一次塞进 prompt，理论上能比较全局，实践上会被长上下文 prefill 成本和信息稀释击穿。Pailitao-VL 采用折中策略：将候选切成 K 个 chunk，每个 chunk 最多 M=10 个候选；模型在 chunk 内选择最相关文档索引，若没有相关项则输出 <code>NULL</code>。同时，相关性标签从二元扩展为四级：0 表示实例级匹配，1 表示概念级匹配，2 表示功能级匹配，3 表示无关。</p>
+      <h3>Listwise Reranker：chunk 内比较，chunk 间校准</h3>
+      <p>朴素 Listwise 会把所有百级候选一次塞进 prompt，理论上能比较全局，实践上会被长上下文 prefill 成本和信息稀释击穿。Pailitao-VL 采用折中策略：将候选切成 <code>K</code> 个 chunk，每个 chunk 最多 <code>M=10</code> 个候选；模型在 chunk 内选择最相关文档索引，若没有相关项则输出 <code>NULL</code>。同时，相关性标签从二元扩展为四级：<code>0</code> 表示实例级匹配，<code>1</code> 表示概念级匹配，<code>2</code> 表示功能级匹配，<code>3</code> 表示无关。这个标签方向很重要：数值越小，相关性越强。</p>
 
       <figure>
         <svg font-family="TsangerJinKai02" viewBox="0 0 980 350" role="img" aria-label="Pailitao-VL Reranker hybrid ranking policy">
@@ -626,37 +665,50 @@ L_rank^point = -1/|B| Σ_i [ y_i log s_i + (1 - y_i) log(1 - s_i) ]</div>
         <figcaption>Figure 2. Pailitao-VL-Reranker-List 的 compare-and-calibrate 流程。图为本文重绘的工程解释。</figcaption>
       </figure>
 
-      <div class="formula"><div class="formula-title">Chunk partition and local score</div>K = ceil(N / M), C^k = {d_1, ..., d_m}, m <= M
-E = Concat(T_inst, q_txt, q_img, d_{1, txt}, d_{1, img}, ..., d_{m, txt}, d_{m, img})
-s = (s_1, ..., s_m, s_null) in R^{m+1}</div>
+      <div class="equation">
+        <div class="equation-title">Chunk partition and local score</div>
+        <img src="assets/math/chunk-input.svg" alt="LaTeX formula for chunk partition, listwise input, and local score vector">
+      </div>
 
-      <p>Chunkwise local ranking 的监督由两部分构成。第一部分是 pairwise ranking loss，对于任意标签更差的 i 和标签更好的 j，鼓励 s_j 大于 s_i；权重 w_ij = max(y_i - y_j, 1)，标签差距越大梯度越强。第二部分是 NULL-token loss，把标签 0 的实例级匹配推到 NULL 之上，把其他候选推到 NULL 之下。这样 NULL 不只是“没有答案”，而是 exact match 的边界锚点。</p>
+      <p>Chunkwise local ranking 的监督由两部分构成。第一部分是 Pairwise Ranking Loss（成对排序损失），对于任意标签更差的 <code>i</code> 和标签更好的 <code>j</code>，鼓励 <code>s_j</code> 大于 <code>s_i</code>；权重 <code>w_ij=max(y_i-y_j,1)</code>，标签差距越大梯度越强。第二部分是 NULL-token Loss，把标签 <code>0</code> 的实例级匹配推到 <code>NULL</code> 之上，把 <code>1/2/3</code> 候选推到 <code>NULL</code> 之下。这样 <code>NULL</code> 不只是“没有答案”，而是 exact match 的边界锚点。</p>
 
-      <div class="formula"><div class="formula-title">Chunkwise pair and null losses</div>P = {(i, j) | y_i > y_j}
-L_rank^pair = 1/|P| Σ_(i, j) w_ij · log(1 + exp(-(s_j - s_i) / τ))
+      <div class="equation">
+        <div class="equation-title">Chunkwise pair and null losses</div>
+        <img src="assets/math/chunk-losses.svg" alt="LaTeX formula for chunkwise pairwise ranking loss, null-token loss, and chunk loss">
+      </div>
 
-S = {i | y_i = 0}, O = {i | y_i > 0}
-L_rank^null =
-  1/|S| Σ_{i in S} log(1 + exp(-(s_i - s_null) / τ))
-  + 1/|O| Σ_{i in O} log(1 + exp(-(s_null - s_i) / τ))
+      <h3>Absolute Relevance Scoring：解决跨 chunk 不可比</h3>
+      <p>Chunk 内 logits 只能表示本 chunk 内相对偏好，不同 chunk 之间不能直接比较。论文为此增加 Absolute Relevance Scoring。它不再多跑一次 MLLM，而是复用 chunkwise 前向已经算出的 hidden states，把 query 和每个 document 的 Image Token Segment（图像 token 片段）分组并 mean pooling，得到 <code>z_0</code> 和 <code>z_i</code>，再拼接进轻量 MLP，输出四级相关性概率。</p>
 
-L_rank^chunk = 1/K Σ_k (L_rank^{k, pair} + L_rank^{k, null})</div>
+      <div class="equation">
+        <div class="equation-title">Absolute relevance scoring</div>
+        <img src="assets/math/absolute-relevance.svg" alt="LaTeX formula for absolute relevance scoring, absolute loss, and final rank loss">
+      </div>
 
-      <h3>绝对相关性分数：解决跨 chunk 不可比</h3>
-      <p>Chunk 内 logits 只能表示本 chunk 内相对偏好，不同 chunk 之间不能直接比较。论文为此增加 absolute relevance scoring。它不再多跑一次 MLLM，而是复用 chunkwise 前向已经算出的 hidden states，把 query 和每个 document 的 image token segment 分组并 mean pooling，得到 z_0 和 z_i，再拼接进轻量 MLP，输出四级相关性概率。</p>
+      <p>该校准头的工程价值在于复用同一次前向的 token 表示，因此不会抵消 Listwise 的效率优势。但它也引入新的校准风险：四级标签必须在品类、query 类型和 chunk 位置之间保持可比，否则后面的 Hybrid Ranking 会把局部排序结果合并到错误的全局位置。</p>
 
-      <div class="formula"><div class="formula-title">Absolute relevance scoring</div>p_i = Φ_MLP([z_0 || z_i]) in R^4
-r_i = softmax(p_i)
-L_rank^abs = -1/|B| Σ_i log r_{i, y_i}
-L_rank = L_rank^ntp + L_rank^chunk + L_rank^abs</div>
+      <h3>Hybrid Ranking：保留局部顺序，用绝对分数做多路合并</h3>
+      <p>最终排序不是简单把 local score 和 absolute score 加权相加。论文的策略更保守：每个 chunk 先按 local chunkwise score 排好，形成 chunk 内序列；全局合并时维护每个 chunk 的指针，每一步只比较各 chunk 当前队首候选的 absolute score，选择最高者加入最终列表，并推进该 chunk 指针。</p>
 
-      <h3>Hybrid ranking：保留局部顺序，用绝对分数做多路合并</h3>
-      <p>最终排序不是简单把 local score 和 absolute score 加权相加。论文的策略更保守：每个 chunk 先按 local chunkwise score 排好，形成 chunk 内序列；全局合并时维护每个 chunk 的指针，每一步只比较各 chunk 当前队首候选的 absolute score，选择最高者加入最终列表，并推进该 chunk 指针。公式上，k* = argmax_k r^k_{t_k}。这个贪心多路合并保留 chunk 内相对比较结果，又让跨 chunk 顺序依赖一个共享四级标签空间。</p>
+      <div class="equation narrow">
+        <div class="equation-title">Hybrid merge policy</div>
+        <img src="assets/math/hybrid-merge.svg" alt="LaTeX formula for preserving local chunk order and selecting the next chunk by absolute relevance score">
+      </div>
+
+      <p>这个贪心多路合并保留 chunk 内相对比较结果，又让跨 chunk 顺序依赖一个共享四级标签空间。它的优势是不会让一个未充分校准的 absolute score 完全破坏局部比较结果；代价是局部排序一旦出错，后续 merge 不会主动纠正该 chunk 内部顺序。</p>
+
+      <div class="callout">
+        <p><strong>Reranker 小结</strong>，Pointwise 提供可解释的 pair 级教师和数据治理入口，Chunkwise Listwise 提供候选间比较，Absolute Relevance Scoring 提供跨 chunk 共享尺度，Hybrid Ranking 则把两类分数合成可服务的最终列表。稳定性瓶颈不在单个 loss，而在四级标签的一致性和 absolute score 的跨分布校准。</p>
+      </div>
     </section>
 
     <section class="page">
       <h2>05 · 实验收益：离线有效，线上结果有价值但仍是作者报告</h2>
-      <p class="lead">论文的实验分为 embedding 离线、reranker 离线、reranker 分类、ablation、效率和线上 A/B。测试集来自真实用户曝光请求。Embedding 测试集包含 5K 电商 query 和 150 万文档；reranker 测试集包含 2K query，每个 query 平均 50 个候选。<span class="ref">[S02]</span></p>
+      <p class="lead">论文的实验分为 Embedding 离线、Reranker 离线、Reranker 分类、Ablation（消融实验）、效率和线上 A/B。测试集来自真实用户曝光请求。Embedding 测试集包含 5K 电商 query 和 150 万文档；Reranker 测试集包含 2K query，每个 query 平均 50 个候选。<span class="ref">[S02]</span></p>
+
+      <div class="callout">
+        <p><strong>读表口径</strong>，I-HR 衡量 instance-level exact match，C-HR 衡量 concept-level match。前者更接近“找到同一商品或同一实例”，后者更接近“找到语义同类或可比较商品”。Pailitao-VL 的核心收益应优先看 I-HR 与实例分类 F1，而不只是平均分。</p>
+      </div>
 
       <h3>Embedding 离线结果</h3>
       <table class="tight-table">
@@ -671,7 +723,7 @@ L_rank = L_rank^ntp + L_rank^chunk + L_rank^abs</div>
         </tbody>
       </table>
 
-      <p>Pailitao-VL-Embedding 的平均分 73.73，比 TBStars-VL-Embedding 高 4.18 个百分点，比 CLIP-IDClass-Embedding 高 3.17 个百分点。更关键的是 CLIP-IDClass-Embedding 虽然架构较小，但使用同类 ID 分类监督后平均分 70.56，超过对比学习训练的 TBStars 69.55。这个对照支持论文主张：在细粒度商品检索中，训练目标的改变比单纯扩大 backbone 更重要。</p>
+      <p>Pailitao-VL-Embedding 的平均分 73.73，比 Qwen3-VL-Embedding 高 8.24 个百分点，比 TBStars-VL-Embedding 高 4.18 个百分点，比 CLIP-IDClass-Embedding 高 3.17 个百分点。更关键的是 CLIP-IDClass-Embedding 虽然架构较小，但使用同类 ID 分类监督后平均分 70.56，超过对比学习训练的 TBStars 69.55。这个对照支持论文主张：在细粒度商品检索中，训练目标的改变比单纯扩大 backbone 更重要。</p>
 
       <h3>Reranker 离线与分类结果</h3>
       <table class="tight-table">
@@ -687,7 +739,7 @@ L_rank = L_rank^ntp + L_rank^chunk + L_rank^abs</div>
         </tbody>
       </table>
 
-      <p>Pailitao-VL-Reranker-List 的平均分 73.79，比 Pailitao-Point 高 1.58 个百分点，比 Qwen3-VL-Reranker 高 4.32 个百分点。分类指标更能说明 listwise 的价值：Pailitao-List 的 instance precision 为 74.28，比 pointwise 的 63.85 高 10.43 个百分点；虽然 instance recall 从 83.46 降到 73.93，但 F1 仍从 72.35 升到 74.10。它牺牲一部分召回，换来更紧的 exact-match 决策边界。</p>
+      <p>Pailitao-VL-Reranker-List 的平均分 73.79，比 Pailitao-Point 高 1.58 个百分点，比 Qwen3-VL-Reranker 高 4.32 个百分点。分类指标更能说明 Listwise 的价值：Pailitao-List 的 instance precision 为 74.28，比 Pointwise 的 63.85 高 10.43 个百分点；虽然 instance recall 从 83.46 降到 73.93，但 F1 仍从 72.35 升到 74.10。它牺牲一部分召回，换来更紧的 exact-match 决策边界。</p>
 
       <h3>Ablation 与效率</h3>
       <table class="tight-table">
@@ -702,6 +754,8 @@ L_rank = L_rank^ntp + L_rank^chunk + L_rank^abs</div>
         </tbody>
       </table>
 
+      <p>消融结果的增量结构明确：NULL-token Loss 把平均分从 72.30 提到 73.10，主要收益在 exact-match 边界；Absolute Relevance Score 进一步到 73.59，主要改善跨 chunk 的概念级排序；Hybrid Ranking 到 73.79，增量较小但方向一致。这个序列说明论文的 Listwise 设计不是单一技巧，而是围绕“局部比较”和“全局校准”逐层补齐。</p>
+
       <table>
         <thead>
           <tr><th>效率指标</th><th class="right">Pointwise</th><th class="right">Chunkwise</th><th>变化</th></tr>
@@ -714,68 +768,85 @@ L_rank = L_rank^ntp + L_rank^chunk + L_rank^abs</div>
         </tbody>
       </table>
 
-      <p>效率实验在单张 NVIDIA A800、vLLM engine、100 个 query 和 800 个 query-document pair 上进行。线上部署部分，论文报告 Pailitao-VL-Embedding 推理延迟压到 67 ms/query；Pailitao-VL-Reranker-List 平均 76 ms/query；作者报告 embedding 带来全平台流量 GMV +2%，list reranker 在标准化品类 GMV +6%，SKU-price comparison 等 AI search 场景 GMV +20%。这些是强工业信号，但公开稿没有提供置信区间、样本量、分桶策略和长期指标，所以只能作为作者报告的线上效果。</p>
+      <p>效率实验在单张 NVIDIA A800、vLLM engine、100 个 query 和 800 个 query-document pair 上进行。Chunkwise 把 MLLM forward passes 从 800 次降到 100 次，前向次数减少 8 倍；latency/query 从 182.25 ms 降到 75.01 ms，吞吐从 5.49 query/s 提升到 13.33 query/s，两者约为 2.43 倍改善。线上部署部分，论文报告 Pailitao-VL-Embedding 推理延迟压到 67 ms/query；Pailitao-VL-Reranker-List 平均 76 ms/query；作者报告 Embedding 带来全平台流量 GMV +2%，List Reranker 在标准化品类 GMV +6%，SKU-price comparison 等 AI search 场景 GMV +20%。这些是强工业信号，但公开稿没有提供置信区间、样本量、分桶策略和长期指标，所以只能作为作者报告的线上效果。</p>
     </section>
 
     <section class="page">
-      <h2>06 · 是否能稳定 work：结论是有条件成立</h2>
-      <p class="lead">这套方法不是靠一个单点 trick 成立，而是靠数据治理、训练目标、服务并行和线上反馈共同成立。稳定性也必须按这个链路判断。</p>
+      <h2>06 · 是否能稳定工作：结论是有条件成立</h2>
+      <p class="lead">这套方法不是由单一技巧支撑，而是由 Data Curation、训练目标、服务并行和线上反馈共同支撑。稳定性也必须按这个链路判断。</p>
 
       <div class="grid-2">
         <div class="callout ok">
-          <p><strong>稳定 work 的条件</strong>，平台有足够大的商品库、可靠 SKU-tree 或等价 ID 体系、真实点击/购买日志、可持续的人标与大模型 judge 预算、线上可回滚的 A/B 系统，以及能承受 embedding 重训、原型库更新和 reranker serving 的基础设施。</p>
+          <p><strong>稳定工作的条件</strong>，平台有足够大的商品库、可靠 SKU-tree 或等价 ID 体系、真实点击/购买日志、可持续的人标与大模型 judge 预算、线上可回滚的 A/B 系统，以及能承受 Embedding 重训、原型库更新和 Reranker serving 的基础设施。</p>
         </div>
         <div class="callout risk">
           <p><strong>容易失效的条件</strong>，小数据平台、SKU 身份混乱、商品生命周期极短、跨境多语言属性不一致、视觉近似但实际不可替代的商品很多，或者没有能力校验原型簇纯度。此时绝对 ID 分类会把业务噪声学成模型确信。</p>
         </div>
       </div>
 
-      <h3>为什么我认为它在作者场景中可信</h3>
-      <p>一方面，论文的离线和线上指标彼此吻合。Embedding 在 instance-level 和 concept-level HR 上都优于强基线，说明原型 ID 训练不是只优化某个局部指标；reranker 的 ablation 逐层提升，能解释 NULL、绝对分数和混合合并各自贡献；效率表说明 chunkwise 不是牺牲线上时延换精度，而是明确减少 MLLM forward pass。另一方面，Pailitao 是 Alibaba 自有电商场景，作者有机会拿到 SKU 树、行为日志和线上 A/B，这些正是该方法依赖的条件。</p>
+      <h3>为什么本文认为它在作者场景中可信</h3>
+      <p>一方面，论文的离线和线上指标彼此吻合。Embedding 在 instance-level 和 concept-level HR 上都优于强基线，说明原型 ID 训练不是只优化某个局部指标；Reranker 的 ablation 逐层提升，能解释 NULL、绝对分数和混合合并各自贡献；效率表说明 Chunkwise 不是牺牲线上时延换精度，而是明确减少 MLLM forward pass。另一方面，Pailitao 是 Alibaba 自有电商场景，作者有机会拿到 SKU 树、行为日志和线上 A/B，这些正是该方法依赖的条件。</p>
 
-      <h3>为什么我不会把它写成通用稳定方案</h3>
-      <p>公开论文缺少三个关键证据。第一，原型库质量没有量化审计，比如簇纯度、误合并率、误拆分率、长尾覆盖率和更新频率。第二，线上 A/B 没有提供显著性、样本量、负向指标、长期指标和品类拆分。第三，代码和数据没有开放，论文描述中的 agent curation 和基础设施优化无法独立复验。严格说，论文证明的是“在作者可控工业场景中强信号有效”，不是“任意电商平台照着公式就能稳定复现”。</p>
+      <h3>为什么本文不会把它写成通用稳定方案</h3>
+      <p>公开论文缺少三个关键证据。第一，原型库质量没有量化审计，比如簇纯度、误合并率、误拆分率、长尾覆盖率和更新频率。第二，线上 A/B 没有提供显著性、样本量、负向指标、长期指标和品类拆分。第三，代码和数据没有开放，论文描述中的 agent curation 和基础设施优化无法独立复验。严格说，论文证明的是“在作者可控工业场景中强信号有效”，不是“任意电商平台仅依照公式就能稳定复现”。</p>
 
       <table>
         <thead>
           <tr><th>稳定性维度</th><th>论文证据</th><th>本文判断</th></tr>
         </thead>
         <tbody>
-          <tr><td>检索粒度</td><td>ID 分类、angular margin、I-HR 指标全表领先</td><td>证据较强，特别适合 SKU/实例级检索。</td></tr>
-          <tr><td>抗噪声</td><td>训练和测试 query 含暗光、遮挡、水印、拼写等噪声，pointwise 输入包含 full image + crop</td><td>有设计和数据描述，但缺少按噪声类型拆分的指标。</td></tr>
-          <tr><td>服务延迟</td><td>Embedding 67 ms/query；List reranker 76 ms/query；chunkwise latency 75.01 ms</td><td>作者场景可信，迁移时依赖 GPU、vLLM、batching 和候选规模。</td></tr>
+          <tr><td>检索粒度</td><td>ID 分类、Angular Margin、I-HR 指标全表领先</td><td>证据较强，特别适合 SKU/实例级检索。</td></tr>
+          <tr><td>抗噪声</td><td>训练和测试 query 含暗光、遮挡、水印、拼写等噪声，Pointwise 输入包含 full image + crop</td><td>有设计和数据描述，但缺少按噪声类型拆分的指标。</td></tr>
+          <tr><td>服务延迟</td><td>Embedding 67 ms/query；List Reranker 76 ms/query；Chunkwise latency 75.01 ms</td><td>作者场景可信，迁移时依赖 GPU、vLLM、batching 和候选规模。</td></tr>
           <tr><td>业务收益</td><td>GMV +2%、+6%、+20% 作者报告</td><td>重要但不能独立验证，不能跨平台横向比较。</td></tr>
           <tr><td>复现性</td><td>公式、prompt、训练配置较完整</td><td>代码、数据和原型治理细节缺失，复现难度高。</td></tr>
         </tbody>
       </table>
+
+      <h3>生产环境应持续监控的指标</h3>
+      <table>
+        <thead>
+          <tr><th>链路</th><th>核心监控</th><th>失效信号</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Prototype-ID 数据层</td><td>簇纯度、误合并率、误拆分率、长尾覆盖率、更新滞后。</td><td>新品召回下降、同款误拆分、跨品牌误合并。</td></tr>
+          <tr><td>Embedding 召回层</td><td>I-HR@K、C-HR@K、ANN recall、向量漂移、索引刷新延迟。</td><td>热门 SKU 召回稳定但长尾下滑，或近邻负样本命中率异常。</td></tr>
+          <tr><td>Reranker 校准层</td><td>四级标签 ECE/ACE、按品类和 chunk 位置的 calibration error、NULL 命中率。</td><td>某些品类 absolute score 系统性偏高，Hybrid merge 误排。</td></tr>
+          <tr><td>线上业务层</td><td>GMV、CVR、CTR、退款、差评、无库存点击、长尾曝光、P95/P99 延迟。</td><td>短期 GMV 上升但售后或满意度恶化。</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout">
+        <p><strong>迁移前审查</strong>，外部团队不应先问“能否复现模型”，而应先问四个工程问题：是否有可持续维护的商品身份层，是否能量化 Prototype-ID 簇纯度，是否能按品类校准 Reranker 的四级标签，是否能在 A/B 中同时追踪短期转化和长期负向指标。四个问题缺一项，论文中的收益都只能视为方向参考。</p>
+      </div>
     </section>
 
     <section class="page">
       <h2>07 · 具体实现清单：照论文做，真正难在数据和服务</h2>
-      <p class="lead">如果把 Pailitao-VL 当成工程方案，而不是只当论文读，实施顺序应当从数据身份系统开始，而不是从模型训练开始。模型公式清楚，真正决定成败的是原型库、负样本、分数校准和线上监控。</p>
+      <p class="lead">如果把 Pailitao-VL 当成工程方案，而不是只当论文读，实施顺序应当从数据身份系统开始，而不是从模型训练开始。模型公式路径已经清楚，真正决定成败的是原型库、负样本、分数校准和线上监控。</p>
 
       <h3>Embedding 侧最小可行实现</h3>
       <ol>
         <li><strong>建立商品身份层</strong>，从 SKU-tree、SPU、品牌型号、属性表和人工审核中定义“实例级相同”的边界。</li>
-        <li><strong>构造原型簇</strong>，用确定性元数据作 seed，用行为日志补充 query-document 连接，用 embedding 召回长尾候选，再用强 reranker 或人工审核做 reviewer。</li>
+        <li><strong>构造 Prototype-ID 簇</strong>，用确定性元数据作 seed，用行为日志补充 query-document 连接，用 Embedding 召回长尾候选，再用强 Reranker 或人工审核做 Reviewer。</li>
         <li><strong>训练 MLLM2vec</strong>，用 instruction + image + text + <code>EMB</code> token 输出向量，先做 MRL 对比训练，维度集合可按论文设为 256/512/1024/2048/3072。</li>
-        <li><strong>初始化 ID head</strong>，用每个原型簇的向量质心填充 head 权重，避免随机初始化的巨大 label space 不稳定。</li>
-        <li><strong>联合训练</strong>，用 additive angular margin 分类目标，并用 KNN sparse negatives 降低 full softmax 通信成本。</li>
+        <li><strong>初始化 ID head</strong>，用每个原型簇的向量质心填充 head 权重，避免随机初始化的巨大 Label Space 不稳定。</li>
+        <li><strong>联合训练</strong>，用 Additive Angular Margin 分类目标，并用 KNN Sparse Negatives 降低 full softmax 通信成本。</li>
         <li><strong>上线召回</strong>，去掉 ID head，只保留 backbone 输出 512 维向量，离线建索引，线上 query 向量召回百级候选。</li>
       </ol>
 
       <h3>Reranker 侧最小可行实现</h3>
       <ol>
         <li><strong>定义四级标签</strong>，0 为实例级匹配，1 为概念级匹配，2 为功能级匹配，3 为无关。这个标签体系必须和业务展示规则一致。</li>
-        <li><strong>先训练 pointwise</strong>，它可以作为 reviewer、distiller 和初版线上 reranker，虽然不是最终最优。</li>
-        <li><strong>构造 chunkwise prompt</strong>，每个 chunk 最多 10 个候选，输出候选索引或 NULL，训练 pairwise ranking loss 与 NULL-token loss。</li>
-        <li><strong>加绝对分数头</strong>，从同一次 MLLM forward 的 hidden states 中抽取 query/document image token segment；mean pooling 后过轻量 MLP 输出四级概率。</li>
-        <li><strong>做 hybrid merge</strong>，chunk 内按 local score 排序，跨 chunk 用 absolute score 多路归并，保持局部相对顺序。</li>
+        <li><strong>先训练 Pointwise</strong>，它可以作为 Reviewer、Distiller 和初版线上 Reranker，虽然不是最终最优。</li>
+        <li><strong>构造 Chunkwise prompt</strong>，每个 chunk 最多 10 个候选，输出候选索引或 NULL，训练 Pairwise Ranking Loss 与 NULL-token Loss。</li>
+        <li><strong>加 Absolute Score 头</strong>，从同一次 MLLM forward 的 hidden states 中抽取 query/document image token segment；mean pooling 后过轻量 MLP 输出四级概率。</li>
+        <li><strong>做 Hybrid Merge</strong>，chunk 内按 local score 排序，跨 chunk 用 absolute score 多路归并，保持局部相对顺序。</li>
         <li><strong>线上监控</strong>，同时看 GMV、CVR、CTR、退款/差评、无库存点击、商家集中度、长尾覆盖、延迟 P95/P99 和回退率。</li>
       </ol>
 
       <div class="callout">
-        <p><strong>复现难点排序</strong>，第一是原型 ID 数据治理，第二是大规模 ID head 训练工程，第三是 reranker 四级标签和跨 chunk 校准，第四才是模型结构本身。没有足够干净的 ID 体系，后面的公式会变成高成本噪声放大器。</p>
+        <p><strong>复现难点排序</strong>，第一是 Prototype-ID 数据治理，第二是大规模 ID head 训练工程，第三是 Reranker 四级标签和跨 chunk 校准，第四才是模型结构本身。没有足够干净的 ID 体系，后面的公式会变成高成本噪声放大器。</p>
       </div>
     </section>
 
@@ -788,11 +859,11 @@ L_rank = L_rank^ntp + L_rank^chunk + L_rank^abs</div>
           <tr><th>评审项</th><th>判断</th><th>理由</th></tr>
         </thead>
         <tbody>
-          <tr><td>算法原创性</td><td class="green">高</td><td>把 ID-recognition、ArcFace 式 margin、MLLM2vec、chunkwise listwise rerank 和 absolute calibration 组合成工业闭环，问题定义清楚。</td></tr>
+          <tr><td>算法原创性</td><td class="green">高</td><td>把 ID-recognition、ArcFace 式 margin、MLLM2vec、Chunkwise Listwise Reranking 和 Absolute Calibration 组合成工业闭环，问题定义清楚。</td></tr>
           <tr><td>公式与实现清晰度</td><td class="green">较高</td><td>主要 loss、prompt、训练配置和效率实验都披露了；但 agent curation、prototype quality 和线上工程细节仍不够公开。</td></tr>
           <tr><td>实验可信度</td><td class="green">较高</td><td>离线表格、ablation 和效率数据互相支撑；线上 GMV 是强信号，但仍是作者报告。</td></tr>
           <tr><td>可复现性</td><td class="red">中等偏低</td><td>未公开代码、权重、训练数据、ID 原型库和 A/B 细节，外部团队只能复现思想，难以复现结果。</td></tr>
-          <tr><td>稳定 work 可能性</td><td class="green">有条件高</td><td>在强商品身份系统和强基础设施下成立；跨平台迁移要重建数据治理与校准。</td></tr>
+          <tr><td>稳定工作可能性</td><td class="green">有条件高</td><td>在强商品身份系统和强基础设施下成立；跨平台迁移要重建数据治理与校准。</td></tr>
         </tbody>
       </table>
 
@@ -800,13 +871,13 @@ L_rank = L_rank^ntp + L_rank^chunk + L_rank^abs</div>
       <ol>
         <li>原型簇的验纯指标是什么，误合并和误拆分如何统计，更新周期是多少？</li>
         <li>KNN sparse negatives 中“10% of U”在十亿级 ID 下如何落地，候选负 anchor 的存储和通信开销是多少？</li>
-        <li>四级 absolute relevance scorer 在不同品类、不同 query 类型、不同 chunk 位置上的 calibration error 如何监控？</li>
+        <li>四级 Absolute Relevance Scorer 在不同品类、不同 query 类型、不同 chunk 位置上的 calibration error 如何监控？</li>
         <li>线上 GMV +2%、+6%、+20% 的样本量、置信区间、实验周期、负向指标和回滚规则是什么？</li>
         <li>Prototype cardinality 的 scaling law 是否有公开曲线，是否存在收益饱和点或 label-noise 反转点？</li>
       </ol>
 
       <div class="callout ok">
-        <p><strong>推荐读法</strong>，做多模态检索的人应该重点看 Section 4 的 ID-recognition 和 hybrid parallel training；做搜索排序的人应该重点看 Section 5 的 chunkwise local ranking、NULL-token loss 和 hybrid merge；做平台工程的人应该重点看 Table 5 和线上 A/B 口径。不要只记住“GMV +20%”，更应该记住它背后的前提：强 ID 体系、强数据治理、强 serving 平台。</p>
+        <p><strong>推荐读法</strong>，做多模态检索的人应该重点看 Section 4 的 ID-recognition 和 Hybrid Parallel Training；做搜索排序的人应该重点看 Section 5 的 Chunkwise Local Ranking、NULL-token Loss 和 Hybrid Merge；做平台工程的人应该重点看 Table 5 和线上 A/B 口径。不要只记住“GMV +20%”，更应该记住它背后的前提：强 ID 体系、强数据治理、强 serving 平台。</p>
       </div>
 
       <h3>来源</h3>
