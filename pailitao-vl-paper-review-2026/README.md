@@ -4,6 +4,8 @@
 
 ## Files
 
+- Public HTML: <https://whynotsleep.cc/manuscripts/pailitao-vl-paper-review-2026/>
+- Public PDF: <https://whynotsleep.cc/manuscripts/pailitao-vl-paper-review-2026/pailitao-vl-paper-review-2026.pdf>
 - `index.html`: 正文与排版源文件。
 - `build_math.py`: 从 LaTeX 公式生成路径化 SVG 数学资产。
 - `assets/math/`: PDF 与 HTML 共用的公式 SVG。
