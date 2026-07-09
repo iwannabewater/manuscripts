@@ -1,0 +1,11 @@
+family	core_formula_or_signal	representative_papers	production_use	stability_judgement
+Two-tower contrastive recall	L_NCE(q,i) = -log exp(sim(q,i+)/tau) / sum_j exp(sim(q,i_j)/tau)；item embeddings precompute；ANN topK	P05; P12; P14; P15; P16; P17	第一阶段召回主干；文本 query、图像 query、图文 query 均可统一为向量检索	最稳定，但细粒度同款和属性反转需要 hard negatives、ID supervision 或 rerank
+Pairwise sigmoid alignment	L_sig = -sum_(q,i) log sigmoid(y_qi * s(q,i))；避免大 batch softmax 归一化	P27	大规模图文预训练和 teacher 初始化	稳定，但电商实例级需要领域微调
+Prototype or ID classification	L_id = -log exp(s cos(theta_y + m)) / [exp(s cos(theta_y + m)) + sum_{j!=y} exp(s cos theta_j)]	P01; P25	同款、近同款、SKU 级高精召回	在高纯 ID 簇上很稳；簇污染和类新增需要治理
+Text-guided fine-grained grounding	L = lambda_dual(L_q2i + L_SDD) + lambda_item(lambda_v2t L_v2t + lambda_i2v L_i2v + lambda_SRD L_SRD)	P02; P03; P18	截图/裁剪图搜、海报图、背景干扰、多主体商品图	离线证据强；上线前必须做 clutter、遮挡、商家模板分层 A/B
+Gated multimodal fusion	g = sigmoid(W[x_img;x_txt;x_attn])；z = g * z_cross + (1-g) * z_raw	P04; P05; P14; P16	统一图文 item tower、跨入口统一搜索	稳定收益来自“按品类和 query 动态取模态权重”；要监控单模态退化
+Listwise MLLM reranking	score = merge(local rank within chunk, absolute relevance score)；chunk parallelization	P01; P11	召回后 TopK 到 TopN 高精重排；同款和标品比价	收益强但成本高，必须限定候选数、chunk size 和超时降级
+Attribute generation and RL reward	R(x,a)=|P_x cap topK(x,a)| / |P_x|；GRPO with KL to SFT policy	P09; P19; P21	细粒度属性、可解释召回、复杂组合意图	前沿但不宜直接接全流量；适合做 teacher、数据增强和评测生成
+Multi-channel LTR fusion	R(q)=union_k Top_nk(R_k(q))；f(q,i,c,h)->score；y=w1 click+w2 atc+w3 purchase	P08; P23	多路召回合并、冷启/趋势/语义/视觉/倒排统一出候选	工业最稳的系统层增益之一；依赖 feature freshness 和反偏置校正
+Generative retrieval	SID = [c1,c2,...,cm]；train p(SID|query) with CE, then RL reward from click/exposure/ranker	P06; P07	作为召回补充、可编辑倒排替代、长尾语义簇召回	2026 线上证据开始变强，但覆盖、beam、热品偏置和可编辑一致性仍需 guardrail
+Late interaction and multi-vector	MaxSim(q,d)=sum_t max_v q_t dot d_v；保留 token/patch 级局部匹配	P26; P28	高精 rerank、视觉文档或局部属性匹配	第一阶段成本较高，适合作为二阶段或少量候选精排

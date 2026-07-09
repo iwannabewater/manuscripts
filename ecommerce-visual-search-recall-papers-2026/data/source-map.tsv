@@ -1,0 +1,31 @@
+id	level	source_type	date	url	supports	used_in
+S01	A	arxiv_abs	2026-03-05	https://arxiv.org/abs/2602.13704	Pailitao-VL 题名、版本、方法摘要、工业搜索定位	cover;top-list;method-id;risk
+S02	A	arxiv_abs	2026-05-18	https://arxiv.org/abs/2605.18434	TIGER-FG 图搜召回任务、10M 训练集、Recall@1 提升、85.7M query 参数	top-list;method-grounding;recipe
+S03	A	arxiv_abs	2026-05-17	https://arxiv.org/abs/2605.17366	TGQ-Former 文本引导视觉 token、H@100 提升、低 GFLOPs I2I 召回	top-list;method-grounding;recipe
+S04	A	arxiv_abs	2025-08-20	https://arxiv.org/abs/2508.13843	UniECS 统一电商多模态搜索、M-BEER、线上 SCR/CTR/CVR/order/revenue 提升	top-list;method-unified;online
+S05	A	arxiv_abs	2026-06-11	https://arxiv.org/abs/2606.13533	OneRetrieval 可编辑生成式多路召回、KAE、线上替换倒排和近全召回	stage-fusion;generative;frontier
+S06	A	arxiv_abs	2026-05-20	https://arxiv.org/abs/2605.14434	CQ-SID 和 EG-GRPO 生成式电商召回、TmallAPP 线上 GMV/UCTCVR、延迟和 QPS	stage-fusion;generative;frontier
+S07	A	arxiv_abs	2026-07-06	https://arxiv.org/abs/2603.04836	Target Text-Image Fusion 双塔召回、20M query-item、MoE+Bilinear、CPU ANN 部署	top-list;method-twotower;recipe
+S08	A	arxiv_abs	2026-03-06	https://arxiv.org/abs/2602.23530	Target 多通道召回 LTR 融合、conversion-weighted label、p95 低于 50ms	stage-fusion;recipe;online
+S09	A	acl_paper	2026-07-02	https://aclanthology.org/2026.findings-acl.704/	AFMRL 属性增强细粒度多模态表征、AGCL、RAR、GRPO	reasoning;method-rl;watch
+S10	A	arxiv_abs	2025-11-18	https://arxiv.org/abs/2511.11305	MOON Embedding 搜索广告全链路部署、image-based search recall exchange rate、CTR 提升	reasoning;industrial;metric
+S11	A	arxiv_abs	2026-01-19	https://arxiv.org/abs/2601.04720	Qwen3-VL-Embedding/Reranker 多阶段训练、蒸馏、Matryoshka、MMEB-V2	scorecard;baseline;rerank
+S12	A	amazon_science	2024	https://www.amazon.science/publications/bringing-multimodality-to-amazon-visual-search-system	Amazon 3-tower/4-tower 视觉搜索，多模态 image matching CTR 提升	industry;baseline;method-twotower
+S13	A	amazon_science	2023	https://www.amazon.science/publications/unsupervised-multi-modal-representation-learning-for-high-quality-retrieval-of-similar-products-at-e-commerce-scale	Amazon CL+ANNS 商品相似召回，质量速度 Pareto 前沿	industry;ann;baseline
+S14	A	amazon_science	2024	https://www.amazon.science/publications/de-noised-vision-language-fusion-guided-by-visual-cues-for-e-commerce-product-search	Amazon MM-LTP 去噪视觉语言融合、视觉线索引导商品搜索	fusion;denoise;watch
+S15	A	arxiv_abs	2023-11-29	https://arxiv.org/abs/2311.17954	Shopee MIEM 图搜平台部署、clicks/user 和 orders/user 提升	industry;baseline;online
+S16	A	arxiv_abs	2023-02-18	https://arxiv.org/abs/2301.12646	MAKE Taobao Search V+L 预训练商品召回，线上部署	industry;baseline;pretraining
+S17	A	arxiv_abs	2023-04-17	https://arxiv.org/abs/2304.04377	Taobao V+L pre-training product retrieval，负采样和在线召回通道	industry;baseline;pretraining
+S18	A	arxiv_abs	2025-01-13	https://arxiv.org/abs/2501.07365	Amazon Multimodal Semantic Retrieval，3-tower/4-tower 商品检索对比	industry;baseline;twotower
+S19	A	arxiv_abs	2026-04-01	https://arxiv.org/abs/2604.00513	MOON3.0 reasoning-aware product representation、MBE3.0、RL	reasoning;frontier;watch
+S20	A	arxiv_abs	2026-04-11	https://arxiv.org/abs/2604.10297	FashionMV 多视角商品级 composed image retrieval 数据和 ProCIR	composed;dataset;watch
+S21	A	amazon_science	2026	https://www.amazon.science/publications/rmir-a-benchmark-dataset-for-reasoning-intensive-multimodal-image-retrieval	RMIR 复杂推理式多模态图像检索，CVPR 2026 benchmark	reasoning;benchmark;watch
+S22	A	arxiv_abs	2024-03-28	https://arxiv.org/abs/2403.19651	MagicLens 开放式指令图像检索，composed/query-conditioned retrieval 背景	composed;baseline;watch
+S23	A	arxiv_abs	2021-02-26	https://arxiv.org/abs/2103.00020	CLIP 对比式图文对齐基础公式和双塔范式	method-foundation
+S24	A	arxiv_abs	2023-03-27	https://arxiv.org/abs/2303.15343	SigLIP pairwise sigmoid loss 与大规模对齐训练	method-foundation
+S25	A	arxiv_abs	2024-10-07	https://arxiv.org/abs/2410.05160	VLM2Vec 将 VLM 转 embedding，MMEB，多模态通用向量背景	baseline;rerank;watch
+S26	A	arxiv_abs	2024-07-01	https://arxiv.org/abs/2407.01449	ColPali/late interaction 视觉文档检索，token 级 MaxSim 背景	method-late-interaction
+S27	A	arxiv_abs	2022-04-13	https://arxiv.org/abs/2204.11593	Snap and Search 跨域 CBIR 级联系统、视觉检索工程约束	industry;classic;ann
+S28	A	arxiv_abs	2022-08-01	https://arxiv.org/abs/2208.00955	弱监督商品检索、伪属性、多模型集成、CVPR FGVC eProduct 竞赛	classic;weak-supervision
+S29	A	amazon_science	2021	https://www.amazon.science/publications/graph-based-multilingual-product-retrieval-in-e-commerce-search	Amazon 多语种商品召回，图注意力，五国数据 recall/mAP 提升	classic;multilingual;graph
+S30	A	arxiv_abs	2025-07-07	https://arxiv.org/abs/2507.04590	VLM2Vec-V2 多模态 embedding 扩展到图像、视频、视觉文档	baseline;watch
