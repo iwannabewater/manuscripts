@@ -1,15 +1,15 @@
-# 电商图搜 · Reasoning-then-Embed 论文读单 2026
+# 电商图搜先推理后表征 Paper List 2026：从工业图搜到 latent think
 
 交付内容：
 
-- `index.html`：可阅读、可打印的中文读单源文件
+- `index.html`：可阅读、可打印的中文清单源文件
 - `ecommerce-reasoning-then-embed-papers-2026.pdf`：正式 PDF 成品
 - `sources.md`：来源、证据等级、口径与不确定性
 - `data/paper-list.tsv`：15 篇论文清单
 - `data/source-map.tsv`：来源到正文事实的映射
 - `data/reading-paths.tsv`：按角色/场景的连读路径
 
-与《电商图搜召回 Paper List 2026》的关系：并列读物。本文只覆盖 **Reasoning-then-Embed** 主线；不覆盖也不替换更广的图搜召回 paper list。
+与《电商图搜召回 Paper List 2026》的关系：并列读物。本文只覆盖 **先推理后表征（Reasoning-then-Embed）** 主线；不覆盖也不替换更广的图搜召回 paper list。
 
 重新生成 PDF：
 

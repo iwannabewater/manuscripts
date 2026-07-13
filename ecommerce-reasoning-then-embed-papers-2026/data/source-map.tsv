@@ -3,7 +3,7 @@ S01	P01	https://arxiv.org/abs/2604.00513	结构化属性推理；MBE3.0 R@10 与
 S02	P02	https://arxiv.org/abs/2605.18434	隐式 grounding；R@1 +6.1/+34.4pp；85.7M；256 维	A	作者报告离线数字
 S03	P03	https://arxiv.org/abs/2602.13704	ID 原型 embedding；listwise reranker；GMV；67/76ms	A	线上 A/B 为作者报告
 S04	P04	https://arxiv.org/abs/2511.11305	MOON Embedding 搜索广告部署与 CTR 约 +20%	A	系列累计收益，不可单独归因 MOON3.0
-S05	P04	MOON / MOON2.0 series	生成式表征、模态不平衡、噪声与 many-to-one 对齐演进	B	演进描述据读单整理；连读 MOON3.0
+S05	P04	MOON / MOON2.0 series	生成式表征、模态不平衡、噪声与 many-to-one 对齐演进	B	演进描述据正文整理；连读 MOON3.0
 S06	P05	https://arxiv.org/abs/2605.17366	TGQ-Former；H@100 +6.04%	A	作者报告全库检索
 S07	P06	https://arxiv.org/abs/2510.22739	意图挖掘；无点击优化；WSDM 2026	A	摘要未披露统一百分比
 S08	P07	https://arxiv.org/abs/2510.05014	Reasoner->Embedder；MMEB-V2	A	通用方法可迁移
