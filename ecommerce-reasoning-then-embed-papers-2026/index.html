@@ -448,17 +448,17 @@
       <div class="cover-eyebrow">Reading List · Reasoning-then-Embed · Visual Search 2026</div>
       <div class="cover-rule"></div>
       <h1 class="cover-title">电商图搜 · Reasoning-then-Embed<br>论文读单 2026</h1>
-      <p class="cover-sub">一份按“电商图搜直接相关 -> 通用推理表征可迁移 -> 找相似+修改意图 -> 低延迟前沿”排序的精读清单。主线不是再堆一批多模态召回论文，而是把 <strong>先推理、后表征</strong> 这条路线在商品理解、图搜非对称匹配、工业召回重排、CIR 与 latent 加速上的关键工作串成可读地图。</p>
+      <p class="cover-sub">按“电商图搜直接相关 -> 通用推理表征可迁移 -> 组合修改意图 (CIR) -> 低延迟前沿”四层编排的精读读单。对象不是泛化的多模态召回文献集合，而是 <strong>先推理、后表征</strong> 这一技术路线在商品理解、非对称图搜、工业召回与重排、组合检索及 latent 加速上的代表性工作。</p>
       <div class="cover-grid">
         <div class="verdict-box">
-          <p><strong>读单定位：</strong>15 篇核心工作，覆盖工业电商图搜、Reasoner->Embedder 通用范式、Composed Image Retrieval，以及把长 CoT 压成固定预算的 latent think。</p>
-          <p style="margin-top:7pt;"><strong>使用方式：</strong>先按四段分层建立地图，再按场景挑 3-5 篇精读。2026 年新工作多数仍是 arXiv 预印本；重点看方法与公开实验，不默认视为已正式录用。</p>
+          <p><strong>范围：</strong>15 篇核心工作，覆盖工业电商图搜、Reasoner->Embedder 训练范式、Composed Image Retrieval，以及将长文本 CoT 压缩为固定计算预算的 latent think 方法。</p>
+          <p style="margin-top:7pt;"><strong>读法：</strong>先建立四层结构，再按任务场景选取 3-5 篇精读。2026 年条目多数仍为 arXiv 预印本；正文以方法与公开实验为据，不将其默认等同于正式录用结论。</p>
         </div>
         <div class="signal-box">
           <div class="signal-row"><span class="tag">as of</span><span>证据日期：2026-07-13</span></div>
           <div class="signal-row"><span class="tag">axis</span><span>Reasoning-then-Embed / 电商图搜 / CIR / 低延迟</span></div>
-          <div class="signal-row"><span class="tag">count</span><span>15 篇核心 · 4 个阅读层 · 含工业 A/B 信号</span></div>
-          <div class="signal-row"><span class="tag">scope</span><span>图搜、同款、属性推理、组合修改意图、生产延迟</span></div>
+          <div class="signal-row"><span class="tag">count</span><span>15 篇核心 · 4 个阅读层 · 含工业 A/B 报告</span></div>
+          <div class="signal-row"><span class="tag">scope</span><span>图搜、同款、属性推理、组合修改意图、服务延迟</span></div>
         </div>
       </div>
     </div>
@@ -472,44 +472,44 @@
   <section class="toc">
     <h2>目录</h2>
     <div class="toc-grid">
-      <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">怎么用这份读单</span></div>
-      <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">总览地图与优先序</span></div>
+      <div class="toc-item"><span class="toc-num">01</span><span class="toc-title">使用说明与阅读边界</span></div>
+      <div class="toc-item"><span class="toc-num">02</span><span class="toc-title">分层地图与优先序</span></div>
       <div class="toc-item"><span class="toc-num">03</span><span class="toc-title">一、直接面向电商图搜：优先精读</span></div>
       <div class="toc-item"><span class="toc-num">04</span><span class="toc-title">二、“先推理后表征”通用方法</span></div>
       <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">三、找相似+修改意图：CIR</span></div>
       <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">四、低延迟前沿探索</span></div>
-      <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">场景选型与阅读路径</span></div>
+      <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">场景选型与连读路径</span></div>
       <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">来源与证据边界</span></div>
     </div>
   </section>
 
   <section class="break">
-    <h2>01 · 怎么用这份读单</h2>
-    <p class="lead">这不是“最新多模态论文合集”，而是围绕一条方法主线的读单：模型是否先把任务相关结构显式化，再把结果压成可检索向量。电商图搜里，这条主线对应属性推理、区域定位、意图挖掘、组合修改意图，以及能否在固定延迟预算内完成。</p>
+    <h2>01 · 使用说明与阅读边界</h2>
+    <p class="lead">本读单沿一条方法主线组织：检索模型是否先将任务相关结构显式化，再将其压缩为可检索向量。在电商图搜中，该主线对应属性推理、目标区域定位、意图挖掘、组合修改意图，以及固定延迟预算下的可部署性。</p>
 
     <div class="grid-3">
       <div class="card">
-        <h3>读什么</h3>
-        <p>方法：推理如何进入表征；数据：商品属性、难负样本、修改文本；系统：召回、重排、策略路由、延迟预算。</p>
+        <h3>关注点</h3>
+        <p>方法上，推理如何进入表征；数据上，商品属性、难负样本与修改文本；系统上，召回、重排、策略路由与延迟预算。</p>
       </div>
       <div class="card">
-        <h3>不读什么</h3>
-        <p>不把通用 benchmark 第一名直接当作可上线图搜方案；不把作者报告的 GMV/CTR 写成独立审计结论。</p>
+        <h3>边界</h3>
+        <p>通用 benchmark 的领先结果不能直接外推为可上线的图搜方案；论文作者报告的 GMV 或 CTR 亦不构成独立审计结论。</p>
       </div>
       <div class="card">
-        <h3>怎么挑</h3>
-        <p>做同款/近同款：P01-P03；做难 Query 自适应：P07/P11；做改颜色/改材质：P12-P13；做高 QPS：P14-P15。</p>
+        <h3>场景入口</h3>
+        <p>同款 / 近同款：P01-P03；困难 Query 自适应：P07、P11；属性修改意图：P12-P13；高 QPS 约束：P14-P15。</p>
       </div>
     </div>
 
     <div class="callout warning">
-      <h3>预印本纪律</h3>
-      <p>2026 年清单中多数工作仍是 arXiv 预印本。正文把它们当作方法与公开实验信号；录用状态、线上收益和跨平台可迁移性分开表述。REVISION 为 WSDM 2026 Full Paper，其余以 arXiv 为准。</p>
+      <h3>预印本与证据分层</h3>
+      <p>清单中 2026 年工作多数仍为 arXiv 预印本，正文仅将其视为方法与公开实验信号；录用状态、线上收益与跨平台可迁移性分开表述。REVISION 为 WSDM 2026 Full Paper，其余以 arXiv 公开版本为准。</p>
     </div>
   </section>
 
   <section>
-    <h2>02 · 总览地图与优先序</h2>
+    <h2>02 · 分层地图与优先序</h2>
 
 
     <div class="grid-4" style="margin-top:10pt;">
@@ -519,11 +519,11 @@
       </div>
       <div class="card">
         <h3>II · 推理-&gt;表征</h3>
-        <p>Think Then Embed<br>UME / Embed-RL / MMEmb<br><span class="note">自适应 Think When Needed</span></p>
+        <p>Think Then Embed<br>UME / Embed-RL / MMEmb<br><span class="note">自适应路由见 Think When Needed</span></p>
       </div>
       <div class="card">
         <h3>III · CIR</h3>
-        <p>CIR-CoT · MCoT-MVS<br>参考图 + 修改文本<br><span class="note">找相似且改属性 · CIR</span></p>
+        <p>CIR-CoT · MCoT-MVS<br>参考图 + 修改文本<br><span class="note">相似检索下的属性修改</span></p>
       </div>
       <div class="card">
         <h3>IV · 低延迟</h3>
@@ -531,8 +531,8 @@
       </div>
     </div>
     <div class="callout" style="margin-top:2pt;">
-      <h3>生产链路落点</h3>
-      <p style="margin:0;">Query 推理 / 属性结构化 -&gt; 256 维或 MRL 向量 -&gt; ANN 召回 -&gt; listwise 重排 -&gt; 难 Query 才开 CoT。工业主干参考 Pailitao-VL 的 ID 原型 embedding + compare-and-calibrate reranker；推理能力蒸馏目标：MOON3.0 -&gt; LaME / TTE-Flash Query Tower。</p>
+      <h3>系统落点</h3>
+      <p style="margin:0;">Query 侧属性或意图推理 -&gt; 256 维或 MRL 向量 -&gt; ANN 召回 -&gt; listwise 重排；仅对困难 Query 启用显式 CoT。工业主干可参考 Pailitao-VL 的 ID 原型 embedding 与 compare-and-calibrate reranker。中长期蒸馏目标是将 MOON3.0 一类推理能力压缩至 LaME / TTE-Flash 形态的低延迟 Query Tower。</p>
     </div>
 
 
@@ -547,46 +547,46 @@
         </tr>
       </thead>
       <tbody>
-        <tr><td>01</td><td>MOON3.0</td><td>电商图搜</td><td>先结构化属性推理，再得到统一商品向量</td><td><a href="https://arxiv.org/abs/2604.00513">2604.00513</a></td></tr>
-        <tr><td>02</td><td>TIGER-FG</td><td>电商图搜</td><td>文本引导隐式细粒度 grounding，解决裁剪图非对称</td><td><a href="https://arxiv.org/abs/2605.18434">2605.18434</a></td></tr>
+        <tr><td>01</td><td>MOON3.0</td><td>电商图搜</td><td>结构化属性推理后形成统一商品向量</td><td><a href="https://arxiv.org/abs/2604.00513">2604.00513</a></td></tr>
+        <tr><td>02</td><td>TIGER-FG</td><td>电商图搜</td><td>文本引导隐式细粒度 grounding，处理裁剪图与全图非对称</td><td><a href="https://arxiv.org/abs/2605.18434">2605.18434</a></td></tr>
         <tr><td>03</td><td>Pailitao-VL</td><td>电商图搜</td><td>工业统一 embedding + listwise reranker</td><td><a href="https://arxiv.org/abs/2602.13704">2602.13704</a></td></tr>
-        <tr><td>04</td><td>MOON / MOON2.0</td><td>电商图搜</td><td>MOON3.0 的生成式->推理式演进底座</td><td>系列演进</td></tr>
-        <tr><td>05</td><td>TGQ-Former</td><td>电商图搜</td><td>标题/类目/元数据引导视觉 token 抗噪</td><td><a href="https://arxiv.org/abs/2605.17366">2605.17366</a></td></tr>
+        <tr><td>04</td><td>MOON / MOON2.0</td><td>电商图搜</td><td>生成式表征到推理式表征的演进基础</td><td>系列演进</td></tr>
+        <tr><td>05</td><td>TGQ-Former</td><td>电商图搜</td><td>标题、类目与元数据引导视觉 token，抑制噪声</td><td><a href="https://arxiv.org/abs/2605.17366">2605.17366</a></td></tr>
         <tr><td>06</td><td>REVISION</td><td>电商图搜</td><td>无点击意图挖掘与线上策略路由</td><td><a href="https://arxiv.org/abs/2510.22739">2510.22739</a> · WSDM 2026</td></tr>
-        <tr><td>07</td><td>Think Then Embed</td><td>通用 RTE</td><td>Reasoner 生成 embedding-centric reasoning 再编码</td><td><a href="https://arxiv.org/abs/2510.05014">2510.05014</a></td></tr>
-        <tr><td>08</td><td>UME-R1</td><td>通用 RTE</td><td>直接 embedding 与生成式 embedding 双通道</td><td><a href="https://arxiv.org/abs/2511.00405">2511.00405</a></td></tr>
-        <tr><td>09</td><td>Embed-RL</td><td>通用 RTE</td><td>Embedder 指导 RL，强制指向检索证据</td><td><a href="https://arxiv.org/abs/2602.13823">2602.13823</a></td></tr>
-        <tr><td>10</td><td>MMEmb-R1</td><td>通用 RTE</td><td>pair-aware 选择，只在有收益时用 reasoning</td><td><a href="https://arxiv.org/abs/2604.06156">2604.06156</a></td></tr>
-        <tr><td>11</td><td>Think When Needed</td><td>通用 RTE</td><td>路由门控：干净样本直出，难样本再推理</td><td><a href="https://arxiv.org/abs/2605.14448">2605.14448</a></td></tr>
+        <tr><td>07</td><td>Think Then Embed</td><td>通用 RTE</td><td>Reasoner 生成检索导向 reasoning 后再编码</td><td><a href="https://arxiv.org/abs/2510.05014">2510.05014</a></td></tr>
+        <tr><td>08</td><td>UME-R1</td><td>通用 RTE</td><td>discriminative 与 generative embedding 双通道</td><td><a href="https://arxiv.org/abs/2511.00405">2511.00405</a></td></tr>
+        <tr><td>09</td><td>Embed-RL</td><td>通用 RTE</td><td>Embedder 指导 RL，约束推理指向检索证据</td><td><a href="https://arxiv.org/abs/2602.13823">2602.13823</a></td></tr>
+        <tr><td>10</td><td>MMEmb-R1</td><td>通用 RTE</td><td>pair-aware 选择：仅在改善正负间隔时启用 reasoning</td><td><a href="https://arxiv.org/abs/2604.06156">2604.06156</a></td></tr>
+        <tr><td>11</td><td>Think When Needed</td><td>通用 RTE</td><td>路由门控：常规样本直出，困难样本再推理</td><td><a href="https://arxiv.org/abs/2605.14448">2605.14448</a></td></tr>
         <tr><td>12</td><td>CIR-CoT</td><td>CIR</td><td>Caption->Reasoning->Conclusion->embedding</td><td><a href="https://arxiv.org/abs/2510.08003">2510.08003</a></td></tr>
         <tr><td>13</td><td>MCoT-MVS</td><td>CIR</td><td>推理线索反向选择视觉 patch/instance</td><td><a href="https://arxiv.org/abs/2603.17360">2603.17360</a></td></tr>
-        <tr><td>14</td><td>TTE-Flash</td><td>低延迟</td><td>latent think tokens 替代长文本 CoT</td><td><a href="https://arxiv.org/abs/2605.16638">2605.16638</a></td></tr>
-        <tr><td>15</td><td>LaME</td><td>低延迟</td><td>固定 reason tokens 的 latent 信息瓶颈</td><td><a href="https://arxiv.org/abs/2606.13061">2606.13061</a></td></tr>
+        <tr><td>14</td><td>TTE-Flash</td><td>低延迟</td><td>以 latent think tokens 替代长文本 CoT</td><td><a href="https://arxiv.org/abs/2605.16638">2605.16638</a></td></tr>
+        <tr><td>15</td><td>LaME</td><td>低延迟</td><td>固定数量 reason tokens 构成 latent 信息瓶颈</td><td><a href="https://arxiv.org/abs/2606.13061">2606.13061</a></td></tr>
       </tbody>
     </table>
   </section>
 
   <section class="break">
     <h2>03 · 一、直接面向电商图搜：优先精读</h2>
-    <p class="lead">这一层最贴近生产图搜：商品多图文、裁剪 Query、复杂背景、同款近同款、召回后重排、无点击闭环。建议按 MOON 演进线 + 工业系统线两条并行读。</p>
+    <p class="lead">本层直接对应生产图搜：商品多图文、裁剪 Query、复杂背景、同款与近同款、召回后重排及无点击闭环。建议并行阅读 MOON 演进线与工业系统线。</p>
 
     <!-- P01 -->
     <article class="paper-card tier-s">
       <div class="paper-head">
         <span class="pid">01</span>
-        <div class="paper-title">MOON3.0: Reasoning-aware Multimodal Representation Learning for E-commerce Product Understanding</div>
+        <div class="paper-title"><a href="https://arxiv.org/abs/2604.00513">MOON3.0: Reasoning-aware Multimodal Representation Learning for E-commerce Product Understanding</a></div>
         <span class="badge">精读</span>
       </div>
       <p class="meta-line"><a href="https://arxiv.org/abs/2604.00513">arXiv:2604.00513</a> · 电商商品统一表征 · 先推理、后表征</p>
       <div class="kv">
         <div class="k">思路</div>
-        <div>典型“先推理、后表征”。先从商品图像和标题生成类别、颜色、材质、设计元素等结构化属性，再通过 <span class="mono">&lt;emb&gt;</span> 表征、原始图文多头融合和 FIRE 细粒度残差增强，得到 256 维向量。</div>
+        <div>先推理、后表征：由商品图像与标题生成类别、颜色、材质、设计元素等结构化属性，再经 <span class="mono">&lt;emb&gt;</span> 表征、原始图文多头融合与 FIRE 细粒度残差增强，输出 256 维向量。</div>
         <div class="k">收益</div>
-        <div>相较 MOON2.0，MBE3.0 上 Image->MM R@10 从 50.41 提升至 56.39，Text->MM 从 35.33 提升至 48.10；分类准确率从 67.27 提升至 86.40，属性准确率从 36.36 提升至 49.92。</div>
+        <div>相对 MOON2.0，MBE3.0 上 Image->MM R@10 由 50.41 升至 56.39，Text->MM 由 35.33 升至 48.10；分类准确率由 67.27 升至 86.40，属性准确率由 36.36 升至 49.92。</div>
         <div class="k">模态</div>
         <div>图片->图文商品、文本->图文商品、图文->图文、文搜图、图搜文本。</div>
-        <div class="k">推荐</div>
-        <div>当前最贴近“电商商品多模态统一表征 + 推理召回”的工作。</div>
+        <div class="k">阅读价值</div>
+        <div>与“电商商品多模态统一表征 + 推理召回”问题设定最为接近的代表工作。</div>
       </div>
     </article>
 
@@ -594,19 +594,19 @@
     <article class="paper-card tier-s">
       <div class="paper-head">
         <span class="pid">02</span>
-        <div class="paper-title">TIGER-FG: Text-Guided Implicit Fine-Grained Grounding for E-commerce Retrieval</div>
+        <div class="paper-title"><a href="https://arxiv.org/abs/2605.18434">TIGER-FG: Text-Guided Implicit Fine-Grained Grounding for E-commerce Retrieval</a></div>
         <span class="badge">精读</span>
       </div>
       <p class="meta-line"><a href="https://arxiv.org/abs/2605.18434">arXiv:2605.18434</a> · 裁剪 Query 非对称 · 隐式目标定位</p>
       <div class="kv">
         <div class="k">思路</div>
-        <div>针对“裁剪商品 Query 图 vs 带背景的完整商品图 + 文本”这一真实图搜非对称问题，用商品文本引导候选图像进行隐式目标定位，无需额外检测框；再通过空间一致性和相似度结构双重蒸馏强化细粒度匹配。</div>
+        <div>针对裁剪商品 Query 图与“完整商品图 + 文本”之间的模态与粒度非对称，以商品文本引导候选图像完成隐式目标定位，无需额外检测框；再以空间一致性与相似度结构双重蒸馏强化细粒度匹配。</div>
         <div class="k">收益</div>
-        <div>在标准和复杂背景测试集上，相对最强基线 Recall@1 分别提升 6.1 和 34.4 个百分点；Query 侧仅 85.7M 参数，输出 256 维向量。</div>
+        <div>在标准与复杂背景测试集上，相对最强基线 Recall@1 分别提升 6.1 与 34.4 个百分点；Query 侧参数量 85.7M，输出 256 维向量。</div>
         <div class="k">模态</div>
         <div>裁剪图片 Query -> 完整商品图片 + 标题 / 属性。</div>
-        <div class="k">推荐</div>
-        <div>对拍照图、子图、复杂背景、多商品干扰等电商图搜问题最直接。</div>
+        <div class="k">阅读价值</div>
+        <div>对拍照图、子图、复杂背景与多商品干扰等非对称图搜设定具有直接针对性。</div>
       </div>
     </article>
 
@@ -614,19 +614,19 @@
     <article class="paper-card tier-s">
       <div class="paper-head">
         <span class="pid">03</span>
-        <div class="paper-title">Pailitao-VL: Unified Embedding and Reranker for Real-Time Multi-Modal Industrial Search</div>
+        <div class="paper-title"><a href="https://arxiv.org/abs/2602.13704">Pailitao-VL: Unified Embedding and Reranker for Real-Time Multi-Modal Industrial Search</a></div>
         <span class="badge">工业</span>
       </div>
       <p class="meta-line"><a href="https://arxiv.org/abs/2602.13704">arXiv:2602.13704</a> · 阿里拍立淘 · 召回 + 重排 + 实时部署</p>
       <div class="kv">
         <div class="k">思路</div>
-        <div>阿里拍立淘工业系统。Embedding 从相对式对比学习转为超大规模 Absolute ID Recognition，让每个高纯商品实例对应稳定的全局语义原型；Reranker 从 pointwise 判断转为 chunk 内比较与跨 chunk 绝对分数校准。</div>
+        <div>阿里拍立淘工业系统。Embedding 由相对式对比学习转为超大规模 Absolute ID Recognition，使高纯度商品实例对应稳定的全局语义原型；Reranker 由 pointwise 判定转为 chunk 内比较与跨 chunk 绝对分数校准。</div>
         <div class="k">收益</div>
-        <div>公开线上 A/B 中，部分 AI 搜索场景报告约 20% GMV 增长；Embedding 与 listwise reranker 平均延迟分别压至约 67 ms 和 76 ms。</div>
+        <div>公开线上 A/B 中，部分 AI 搜索场景作者报告约 20% GMV 增长；Embedding 与 listwise reranker 平均延迟分别约为 67 ms 与 76 ms。</div>
         <div class="k">模态</div>
         <div>多模态商品召回、同款 / 近同款检索、召回后高精度重排。</div>
-        <div class="k">推荐</div>
-        <div>最值得参考的完整“召回 + 重排 + 线上 A/B + 实时部署”工业方案。</div>
+        <div class="k">阅读价值</div>
+        <div>覆盖召回、重排、线上 A/B 与实时部署闭环的完整工业参考。</div>
       </div>
     </article>
 
@@ -634,23 +634,23 @@
     <article class="paper-card tier-a">
       <div class="paper-head">
         <span class="pid">04</span>
-        <div class="paper-title">MOON / MOON2.0：MOON3.0 的基础演进路线</div>
+        <div class="paper-title"><a href="https://arxiv.org/abs/2511.11305">MOON / MOON2.0：MOON3.0 的基础演进路线</a></div>
         <span class="badge">演进</span>
       </div>
-      <p class="meta-line">系列演进 · 建议 MOON -> MOON2.0 -> MOON3.0 连读</p>
+      <p class="meta-line">系列演进 · 建议按 MOON -> MOON2.0 -> MOON3.0 顺序阅读</p>
       <div class="kv">
         <div class="k">MOON</div>
-        <div>使用生成式 MLLM 学习商品统一表征，引入 guided MoE、核心视觉区域识别及电商难负样本策略，解决商品多图、多文本的 many-to-one 对齐问题。</div>
+        <div>以生成式 MLLM 学习商品统一表征，引入 guided MoE、核心视觉区域识别与电商难负样本策略，处理商品多图、多文本的 many-to-one 对齐。</div>
         <div class="k">2.0</div>
-        <div>进一步解决图文训练中的模态不平衡、商品内部图文关系利用不足以及电商噪声问题。</div>
+        <div>针对图文训练中的模态不平衡、商品内部图文关系利用不足及电商噪声作进一步约束与建模。</div>
         <div class="k">模态</div>
-        <div>商品多图 + 标题 / 属性，支持跨模态检索、分类和属性预测。</div>
-        <div class="k">推荐</div>
-        <div>按 MOON -> MOON2.0 -> MOON3.0 阅读，可完整理解阿里从生成式商品表征到推理式商品表征的演进。</div>
+        <div>商品多图 + 标题 / 属性；支持跨模态检索、分类与属性预测。</div>
+        <div class="k">阅读价值</div>
+        <div>连读 MOON 至 MOON3.0，可系统把握从生成式商品表征到推理式商品表征的演进逻辑。</div>
       </div>
       <div class="callout" style="margin-top:8pt;border-left-color:var(--gold);">
-        <h4 style="margin:0 0 4pt;color:var(--gold);">工业报告补充 · MOON Embedding</h4>
-        <p style="margin:0;">MOON Embedding 工业报告称，该系列已部署于淘宝搜索广告的召回、相关性和排序阶段，并报告整体 CTR 预测累计提升约 20%。该数字是 MOON 系列多次迭代的系统收益，不能单独归因于 MOON3.0 或某个召回模型。入口：<a href="https://arxiv.org/abs/2511.11305">MOON Embedding Technical Report (arXiv:2511.11305)</a>。</p>
+        <h4 style="margin:0 0 4pt;color:var(--gold);">工业报告 · MOON Embedding</h4>
+        <p style="margin:0;">MOON Embedding 技术报告称，该系列已部署于淘宝搜索广告的召回、相关性与排序阶段，并报告整体 CTR 预测累计提升约 20%。该数字为系列多次迭代的系统收益，不可单独归因于 MOON3.0 或某一召回模型。报告入口：<a href="https://arxiv.org/abs/2511.11305">MOON Embedding Technical Report (arXiv:2511.11305)</a>。</p>
       </div>
     </article>
 
@@ -658,19 +658,19 @@
     <article class="paper-card tier-s">
       <div class="paper-head">
         <span class="pid">05</span>
-        <div class="paper-title">Text-Guided Visual Representation Learning for Robust Multimodal E-Commerce Recommendation</div>
+        <div class="paper-title"><a href="https://arxiv.org/abs/2605.17366">Text-Guided Visual Representation Learning for Robust Multimodal E-Commerce Recommendation</a></div>
         <span class="badge">抗噪</span>
       </div>
       <p class="meta-line"><a href="https://arxiv.org/abs/2605.17366">arXiv:2605.17366</a> · TGQ-Former · 元数据引导视觉 token</p>
       <div class="kv">
         <div class="k">思路</div>
-        <div>提出 TGQ-Former，用商品标题、类目和结构化元数据引导视觉 token 选择；同时保留 metadata-guided 与 exploratory 两路视觉 query，并利用可靠性双门控抑制促销文字、背景和装饰噪声。</div>
+        <div>提出 TGQ-Former：以商品标题、类目与结构化元数据引导视觉 token 选择；保留 metadata-guided 与 exploratory 两路视觉 query，并以可靠性双门控抑制促销文字、背景与装饰噪声。</div>
         <div class="k">收益</div>
-        <div>在真实大规模全库商品检索中，平均 Hit Rate@100 提升 6.04%。</div>
+        <div>在大规模全库商品检索中，平均 Hit Rate@100 提升 6.04%。</div>
         <div class="k">模态</div>
         <div>商品图片 + 标题 / 类目 / 属性 -> 商品 I2I 或多模态召回。</div>
-        <div class="k">推荐</div>
-        <div>非常适合解决商详海报、促销角标、背景复杂、商品主体不突出等线上噪声问题。</div>
+        <div class="k">阅读价值</div>
+        <div>针对商详海报、促销角标、复杂背景与主体不突出等线上视觉噪声具有明确针对性。</div>
       </div>
     </article>
 
@@ -678,139 +678,139 @@
     <article class="paper-card tier-a">
       <div class="paper-head">
         <span class="pid">06</span>
-        <div class="paper-title">REVISION: Reflective Intent Mining and Online Reasoning Auxiliary for E-commerce Visual Search System Optimization</div>
+        <div class="paper-title"><a href="https://arxiv.org/abs/2510.22739">REVISION: Reflective Intent Mining and Online Reasoning Auxiliary for E-commerce Visual Search System Optimization</a></div>
         <span class="badge">系统</span>
       </div>
       <p class="meta-line"><a href="https://arxiv.org/abs/2510.22739">arXiv:2510.22739</a> · WSDM 2026 Full Paper · 无点击闭环</p>
       <div class="kv">
         <div class="k">思路</div>
-        <div>针对图搜无点击请求，离线从历史 Query 图、浏览商品和行为日志中挖掘用户隐式意图；线上由轻量推理模型生成优化计划，并动态调度搜索链路中的策略。</div>
+        <div>针对图搜无点击请求：离线从历史 Query 图、浏览商品与行为日志挖掘用户隐式意图；线上由轻量推理模型生成优化计划，并动态调度检索链路中的策略模块。</div>
         <div class="k">收益</div>
-        <div>论文报告可提高隐式意图挖掘效率并显著降低无点击率，但摘要未披露统一的具体百分比。</div>
+        <div>作者报告可提高隐式意图挖掘效率并显著降低无点击率；摘要未给出统一量化百分比。</div>
         <div class="k">模态</div>
-        <div>Query 图片 + 历史商品 + 用户行为；更偏系统策略优化，而非单一 embedding。</div>
-        <div class="k">推荐</div>
-        <div>适合研究图搜场景识别、兜底通道、策略路由以及无点击问题闭环。</div>
+        <div>Query 图片 + 历史商品 + 用户行为；重心在系统策略层，而非单一 embedding 模型。</div>
+        <div class="k">阅读价值</div>
+        <div>适用于图搜场景识别、兜底通道、策略路由与无点击闭环的系统设计讨论。</div>
       </div>
     </article>
   </section>
 
   <section class="break">
     <h2>04 · 二、“先推理后表征”通用方法：重点迁移</h2>
-    <p class="lead">这一层提供可迁移的 Reasoner->Embedder 训练与推理范式。对电商图搜，价值不在 benchmark 名次本身，而在：如何让 CoT 服务正负商品区分、何时开推理、如何控制延迟。</p>
+    <p class="lead">本层给出可迁移的 Reasoner->Embedder 训练与推理范式。对电商图搜而言，关键不在通用 benchmark 名次，而在 CoT 是否服务于正负样本区分、何时启用推理，以及如何控制延迟。</p>
 
     <article class="paper-card tier-a">
       <div class="paper-head">
         <span class="pid">07</span>
-        <div class="paper-title">Think Then Embed: Generative Context Improves Multimodal Embedding</div>
+        <div class="paper-title"><a href="https://arxiv.org/abs/2510.05014">Think Then Embed: Generative Context Improves Multimodal Embedding</a></div>
         <span class="badge">基线</span>
       </div>
       <p class="meta-line"><a href="https://arxiv.org/abs/2510.05014">arXiv:2510.05014</a> · Reasoner + Embedder · MMEB-V2</p>
       <div class="kv">
         <div class="k">思路</div>
-        <div>Reasoner 先生成与检索任务相关的 Embedding-Centric Reasoning，Embedder 再联合原始输入和 reasoning 生成向量；同时研究“大 Reasoner + 小 Embedder”、蒸馏 Reasoner 以及统一模型等配置。</div>
+        <div>Reasoner 先生成与检索任务相关的 Embedding-Centric Reasoning，Embedder 再联合原始输入与 reasoning 生成向量；并比较“大 Reasoner + 小 Embedder”、Reasoner 蒸馏与统一模型等配置。</div>
         <div class="k">收益</div>
-        <div>论文在 MMEB-V2 上报告当时领先表现，证明显式 reasoning 对复杂多模态约束和组合意图尤其有效。</div>
+        <div>在 MMEB-V2 上报告当时领先结果；显式 reasoning 对复杂多模态约束与组合意图更为有效。</div>
         <div class="k">模态</div>
         <div>图片、文本、视频、视觉文档及图文组合 Query。</div>
         <div class="k">迁移</div>
-        <div>可作为 MOON3.0 之外最标准的 Reasoner->Embedder baseline。</div>
+        <div>可作为除 MOON3.0 外的标准 Reasoner->Embedder 对照基线。</div>
       </div>
     </article>
 
     <article class="paper-card tier-a">
       <div class="paper-head">
         <span class="pid">08</span>
-        <div class="paper-title">UME-R1: Exploring Reasoning-Driven Generative Multimodal Embeddings</div>
+        <div class="paper-title"><a href="https://arxiv.org/abs/2511.00405">UME-R1: Exploring Reasoning-Driven Generative Multimodal Embeddings</a></div>
         <span class="badge">双通道</span>
       </div>
       <p class="meta-line"><a href="https://arxiv.org/abs/2511.00405">arXiv:2511.00405</a> · discriminative + generative embedding</p>
       <div class="kv">
         <div class="k">思路</div>
-        <div>同一模型同时输出直接 discriminative embedding 和“生成 reasoning 后得到的 generative embedding”；采用 Cold-start SFT + RL，并探索多次采样产生多个 reasoning / embedding。</div>
+        <div>同一模型并行输出 discriminative embedding 与经 reasoning 得到的 generative embedding；训练采用 Cold-start SFT + RL，并考察多次采样生成多组 reasoning / embedding。</div>
         <div class="k">收益</div>
-        <div>相对相同数据规模的 DUME，图像、视频和视觉文档任务总分分别提升 4.1、9.0 和 11.1；相对 VLM2Vec-V2 总体提升 2.1。</div>
+        <div>相对同数据规模的 DUME，图像、视频与视觉文档任务总分分别提升 4.1、9.0 与 11.1；相对 VLM2Vec-V2 总体提升 2.1。</div>
         <div class="k">模态</div>
         <div>图像、视频、视觉文档、图文组合检索。</div>
         <div class="k">迁移</div>
-        <div>适合探索图搜中“直接向量 + 推理向量”双通道召回及 inference-time sampling。</div>
+        <div>可用于图搜中“直接向量 + 推理向量”双通道召回及 inference-time sampling 设计。</div>
       </div>
     </article>
 
     <article class="paper-card tier-a">
       <div class="paper-head">
         <span class="pid">09</span>
-        <div class="paper-title">Embed-RL: Reinforcement Learning for Reasoning-Driven Multimodal Embeddings</div>
+        <div class="paper-title"><a href="https://arxiv.org/abs/2602.13823">Embed-RL: Reinforcement Learning for Reasoning-Driven Multimodal Embeddings</a></div>
         <span class="badge">RL</span>
       </div>
       <p class="meta-line"><a href="https://arxiv.org/abs/2602.13823">arXiv:2602.13823</a> · Embedder-Guided RL · T-CoT</p>
       <div class="kv">
         <div class="k">思路</div>
-        <div>提出 Embedder-Guided RL，由 Embedder 直接评价 Reasoner 生成的 CoT 是否有利于检索；T-CoT 强制推理指出图片、文本中的具体检索证据，而不是只生成泛化解释。</div>
+        <div>提出 Embedder-Guided RL：由 Embedder 直接评估 Reasoner 生成的 CoT 是否利于检索；T-CoT 要求推理指明图像与文本中的具体检索证据，而非仅生成泛化说明。</div>
         <div class="k">收益</div>
-        <div>在 MMEB-V2 和 UVRB 上超过其对比的早期 reasoning embedding 模型，重点提升跨模态一致性和细粒度匹配。</div>
+        <div>在 MMEB-V2 与 UVRB 上优于文中对照的早期 reasoning embedding 模型，主要提升跨模态一致性与细粒度匹配。</div>
         <div class="k">模态</div>
         <div>图片 / 图文 Query -> 图片、文本或多模态候选。</div>
         <div class="k">迁移</div>
-        <div>非常适合训练商品属性 reasoning，使其真正服务于正负商品区分。</div>
+        <div>可用于商品属性 reasoning 训练，使推理内容直接服务于正负样本区分。</div>
       </div>
     </article>
 
     <article class="paper-card tier-a">
       <div class="paper-head">
         <span class="pid">10</span>
-        <div class="paper-title">MMEmb-R1: Reasoning-Enhanced Multimodal Embedding with Pair-Aware Selection and Adaptive Control</div>
+        <div class="paper-title"><a href="https://arxiv.org/abs/2604.06156">MMEmb-R1: Reasoning-Enhanced Multimodal Embedding with Pair-Aware Selection and Adaptive Control</a></div>
         <span class="badge">难负</span>
       </div>
       <p class="meta-line"><a href="https://arxiv.org/abs/2604.06156">arXiv:2604.06156</a> · pair-level 监督对齐 · 自适应启用 reasoning</p>
       <div class="kv">
         <div class="k">思路</div>
-        <div>指出普通 CoT 是 instance-level，而对比学习是 query-target pair-level，二者存在监督错位；通过 pair-aware reasoning selection、反事实比较和自适应控制，只在 reasoning 能改善正负间隔时使用它。</div>
+        <div>指出常规 CoT 监督为 instance-level，而对比学习为 query-target pair-level，二者存在监督错位；通过 pair-aware reasoning selection、反事实比较与自适应控制，仅在 reasoning 能改善正负间隔时启用。</div>
         <div class="k">收益</div>
-        <div>论文报告在提高检索准确率的同时，相对 UME-R1 获得约 2.5x 推理延迟改善。</div>
+        <div>作者报告在提高检索准确率的同时，相对 UME-R1 获得约 2.5x 推理延迟改善。</div>
         <div class="k">模态</div>
         <div>通用图片、文本、视频、视觉文档检索。</div>
         <div class="k">迁移</div>
-        <div>适合电商难负样本训练，避免 reasoning 只学到格式、类目等无判别信息。</div>
+        <div>适用于电商难负样本训练，抑制仅学到格式、类目等无判别信息的空转 reasoning。</div>
       </div>
     </article>
 
     <article class="paper-card tier-s">
       <div class="paper-head">
         <span class="pid">11</span>
-        <div class="paper-title">Think When Needed: Adaptive Reasoning-Driven Multimodal Embeddings</div>
+        <div class="paper-title"><a href="https://arxiv.org/abs/2605.14448">Think When Needed: Adaptive Reasoning-Driven Multimodal Embeddings</a></div>
         <span class="badge">生产</span>
       </div>
       <p class="meta-line"><a href="https://arxiv.org/abs/2605.14448">arXiv:2605.14448</a> · Routing Gate · Reasoning LoRA + Embedding LoRA</p>
       <div class="kv">
         <div class="k">思路</div>
-        <div>共享冻结的 MLLM backbone，分别挂载 Reasoning LoRA 和 Embedding LoRA；Routing Gate 自动决定当前样本走直接 embedding 还是先生成 CoT，并用固定 Embedder 作为稳定 RL reward 环境。</div>
+        <div>共享冻结的 MLLM backbone，分别挂载 Reasoning LoRA 与 Embedding LoRA；Routing Gate 判定当前样本直接编码或先生成 CoT，并以固定 Embedder 作为稳定 RL reward 环境。</div>
         <div class="k">收益</div>
-        <div>在 MMEB-V2 的 78 个任务上报告领先结果，仅增加 backbone 约 3%-5% 参数，并最多减少 50% reasoning token。</div>
+        <div>在 MMEB-V2 的 78 个任务上报告领先结果；相对 backbone 约增加 3%-5% 参数，reasoning token 最多减少 50%。</div>
         <div class="k">模态</div>
         <div>通用多模态召回。</div>
         <div class="k">迁移</div>
-        <div>很适合图搜生产系统--干净商品图直接编码，截图、复杂背景、组合约束等困难 Query 才启动推理。</div>
+        <div>贴近图搜在线约束：常规商品图直接编码，截图、复杂背景与组合约束等困难 Query 再启用推理。</div>
       </div>
     </article>
   </section>
 
   <section class="break">
     <h2>05 · 三、找相似+修改意图：重点关注 CIR</h2>
-    <p class="lead">Composed Image Retrieval 对应“保持版型，把红色改成黑色”“保留鞋型，去除图案”一类需求。推理不再只是解释，而是要决定保留什么、删除什么、新增什么。</p>
+    <p class="lead">Composed Image Retrieval 对应“保持版型，将红色改为黑色”“保留鞋型，去除图案”等条件检索。此时推理的任务不是事后解释，而是显式决定应保留、应删除与应新增的视觉语义。</p>
 
     <article class="paper-card tier-a">
       <div class="paper-head">
         <span class="pid">12</span>
-        <div class="paper-title">CIR-CoT: Towards Interpretable Composed Image Retrieval via End-to-End Chain-of-Thought Reasoning</div>
+        <div class="paper-title"><a href="https://arxiv.org/abs/2510.08003">CIR-CoT: Towards Interpretable Composed Image Retrieval via End-to-End Chain-of-Thought Reasoning</a></div>
         <span class="badge">CIR</span>
       </div>
       <p class="meta-line"><a href="https://arxiv.org/abs/2510.08003">arXiv:2510.08003</a> · FashionIQ / CIRR / CIRCO</p>
       <div class="kv">
         <div class="k">思路</div>
-        <div>输入参考图片和修改文本，依次生成 Caption、Reasoning、Conclusion，最后将目标检索意图压缩到专用 embedding。</div>
+        <div>输入参考图片与修改文本，依次生成 Caption、Reasoning、Conclusion，再将目标检索意图压缩为专用 embedding。</div>
         <div class="k">收益</div>
-        <div>在 FashionIQ、CIRR 上取得有竞争力的结果，并在未参与训练的 CIRCO 上表现出较强泛化。</div>
+        <div>在 FashionIQ、CIRR 上取得有竞争力的结果，并在未参与训练的 CIRCO 上表现较好泛化。</div>
         <div class="k">模态</div>
         <div>参考图片 + 修改文本 -> 目标图片。</div>
         <div class="k">场景</div>
@@ -821,84 +821,84 @@
     <article class="paper-card tier-s">
       <div class="paper-head">
         <span class="pid">13</span>
-        <div class="paper-title">MCoT-MVS: Multi-level Vision Selection by Multi-modal CoT Reasoning for Composed Image Retrieval</div>
+        <div class="paper-title"><a href="https://arxiv.org/abs/2603.17360">MCoT-MVS: Multi-level Vision Selection by Multi-modal CoT Reasoning for Composed Image Retrieval</a></div>
         <span class="badge">SOTA</span>
       </div>
       <p class="meta-line"><a href="https://arxiv.org/abs/2603.17360">arXiv:2603.17360</a> · 视觉区域选择受 reasoning 控制 · 公开代码与模型</p>
       <div class="kv">
         <div class="k">思路</div>
-        <div>MLLM 先输出“应保留、应删除、目标新增”的文本线索，再用这些线索选择参考图中的 patch-level 和 instance-level 视觉特征，最后融合修改文本和目标描述。</div>
+        <div>MLLM 先输出“应保留、应删除、应新增”的文本线索，据此选择参考图中的 patch-level 与 instance-level 视觉特征，再融合修改文本与目标描述。</div>
         <div class="k">收益</div>
-        <div>论文在 CIRR 和 FashionIQ 上报告新的 SOTA，并公开代码和模型。</div>
+        <div>作者在 CIRR 与 FashionIQ 上报告新的 SOTA，并公开代码与模型。</div>
         <div class="k">模态</div>
         <div>参考图 + 商品修改描述 -> 目标商品图。</div>
         <div class="k">迁移</div>
-        <div>比仅将 CoT 文本拼入 embedding 更进一步，因为 reasoning 会反向控制视觉区域选择。</div>
+        <div>相较将 CoT 文本直接拼入 embedding，其 reasoning 可反向控制视觉区域选择，结构性更强。</div>
       </div>
     </article>
   </section>
 
   <section class="break">
     <h2>06 · 四、低延迟前沿探索</h2>
-    <p class="lead">显式文本 CoT 在检索准确率上有效，但对高 QPS 图搜过重。这一层探索把“想”放进 latent space：固定 token 预算、单次前向、可蒸馏的 Query Tower。</p>
+    <p class="lead">显式文本 CoT 可提升检索准确率，但在高 QPS 图搜中计算代价过高。本层讨论将推理移入 latent space：固定 token 预算、单次前向，以及可蒸馏的 Query Tower。</p>
 
     <article class="paper-card tier-b">
       <div class="paper-head">
         <span class="pid">14</span>
-        <div class="paper-title">TTE-Flash: Accelerating Reasoning-based Multimodal Representations via Think-Then-Embed Tokens</div>
+        <div class="paper-title"><a href="https://arxiv.org/abs/2605.16638">TTE-Flash: Accelerating Reasoning-based Multimodal Representations via Think-Then-Embed Tokens</a></div>
         <span class="badge">加速</span>
       </div>
       <p class="meta-line"><a href="https://arxiv.org/abs/2605.16638">arXiv:2605.16638</a> · latent think tokens · 可解释</p>
       <div class="kv">
         <div class="k">思路</div>
-        <div>不再自回归生成长文本 CoT，而是在同一 backbone 中使用 latent think tokens，再由 embedding token 汇总。</div>
+        <div>不以自回归方式生成长文本 CoT，而在同一 backbone 中使用 latent think tokens，再由 embedding token 汇总。</div>
         <div class="k">收益</div>
-        <div>TTE-Flash-2B 在 MMEB-V2 上超过其显式 CoT 对照模型，同时 latent token 可通过文本和视觉方式进行解释。</div>
+        <div>TTE-Flash-2B 在 MMEB-V2 上超过其显式 CoT 对照模型；latent token 仍可通过文本与视觉途径解释。</div>
         <div class="k">模态</div>
         <div>通用图片、文本、视频及视觉文档。</div>
-        <div class="k">价值</div>
-        <div>适合高 QPS 图搜，把几十步文本 decode 压缩为固定 token 的一次前向传播。</div>
+        <div class="k">探索价值</div>
+        <div>面向高 QPS 图搜，将数十步文本 decode 压缩为固定 token 的一次前向传播。</div>
       </div>
     </article>
 
     <article class="paper-card tier-b">
       <div class="paper-head">
         <span class="pid">15</span>
-        <div class="paper-title">LaME: Learning to Think in Latent Space for Multimodal Embedding</div>
+        <div class="paper-title"><a href="https://arxiv.org/abs/2606.13061">LaME: Learning to Think in Latent Space for Multimodal Embedding</a></div>
         <span class="badge">蒸馏</span>
       </div>
       <p class="meta-line"><a href="https://arxiv.org/abs/2606.13061">arXiv:2606.13061</a> · 信息瓶颈 · 无需 CoT 文本标签</p>
       <div class="kv">
         <div class="k">思路</div>
-        <div>用固定数量的 learnable reason tokens 作为信息瓶颈，在 latent space 完成 reasoning；无需 CoT 文本标签，也无需自回归生成。</div>
+        <div>以固定数量的 learnable reason tokens 作为信息瓶颈，在 latent space 完成 reasoning；无需 CoT 文本标签，亦无需自回归生成。</div>
         <div class="k">收益</div>
-        <div>核心优势是单次 forward、固定计算预算，并降低 embedding 对教师 CoT 质量的依赖。</div>
+        <div>主要优势为单次 forward、固定计算预算，并降低 embedding 对教师 CoT 质量的依赖。</div>
         <div class="k">模态</div>
         <div>通用多模态 embedding。</div>
-        <div class="k">价值</div>
-        <div>适合长期研究“MOON3.0 推理能力蒸馏到低延迟 Query Tower”。</div>
+        <div class="k">探索价值</div>
+        <div>可作为将 MOON3.0 类推理能力蒸馏至低延迟 Query Tower 的长期研究路径。</div>
       </div>
     </article>
   </section>
 
   <section class="break">
-    <h2>07 · 场景选型与阅读路径</h2>
+    <h2>07 · 场景选型与连读路径</h2>
 
     <div class="grid-2">
       <div class="card">
-        <h3>按角色挑 3 篇</h3>
+        <h3>按职责选取 3 篇</h3>
         <ul>
-          <li><strong>图搜算法 owner：</strong>P01 MOON3.0、P02 TIGER-FG、P03 Pailitao-VL</li>
-          <li><strong>训练 / 后训练：</strong>P07 Think Then Embed、P09 Embed-RL、P10 MMEmb-R1</li>
+          <li><strong>图搜算法负责人：</strong>P01 MOON3.0、P02 TIGER-FG、P03 Pailitao-VL</li>
+          <li><strong>训练与后训练：</strong>P07 Think Then Embed、P09 Embed-RL、P10 MMEmb-R1</li>
           <li><strong>在线系统：</strong>P03 Pailitao-VL、P06 REVISION、P11 Think When Needed</li>
-          <li><strong>服饰改款 / 组合意图：</strong>P12 CIR-CoT、P13 MCoT-MVS、P01 属性推理</li>
-          <li><strong>延迟 / 成本：</strong>P11 自适应路由、P14 TTE-Flash、P15 LaME</li>
+          <li><strong>服饰改款与组合意图：</strong>P12 CIR-CoT、P13 MCoT-MVS、P01 属性推理</li>
+          <li><strong>延迟与成本：</strong>P11 自适应路由、P14 TTE-Flash、P15 LaME</li>
         </ul>
       </div>
       <div class="card">
-        <h3>推荐连读路径</h3>
+        <h3>建议连读路径</h3>
         <ol>
-          <li><strong>演进线：</strong>MOON -> MOON2.0 -> MOON3.0 -> MOON Embedding 工业报告</li>
+          <li><strong>演进线：</strong>MOON -> MOON2.0 -> MOON3.0 -> MOON Embedding 技术报告</li>
           <li><strong>非对称图搜：</strong>TIGER-FG -> TGQ-Former -> Think When Needed</li>
           <li><strong>工业闭环：</strong>Pailitao-VL -> REVISION -> 延迟侧 TTE-Flash / LaME</li>
           <li><strong>推理训练：</strong>Think Then Embed -> Embed-RL -> MMEmb-R1 -> UME-R1</li>
@@ -910,62 +910,62 @@
     <table class="dense">
       <thead>
         <tr>
-          <th>生产问题</th>
-          <th>优先读</th>
-          <th>可迁移动作</th>
-          <th>别先做</th>
+          <th>问题设定</th>
+          <th>优先阅读</th>
+          <th>可迁移要点</th>
+          <th>常见误用</th>
         </tr>
       </thead>
       <tbody>
         <tr>
-          <td>商品属性细粒度不足，同款混类</td>
+          <td>属性细粒度不足，同款混类</td>
           <td>P01, P04, P09</td>
           <td>结构化属性推理 + 难负样本上的证据型 CoT</td>
-          <td>无验真地生成长 CoT 直接拼进 embedding</td>
+          <td>无验真地生成长 CoT 并直接拼入 embedding</td>
         </tr>
         <tr>
-          <td>裁剪图 / 拍照图 / 复杂背景召回差</td>
+          <td>裁剪图 / 拍照图 / 复杂背景召回不足</td>
           <td>P02, P05, P11</td>
-          <td>文本引导 grounding + 抗噪视觉 token + 难 Query 路由</td>
-          <td>一律上大模型长推理，不做干净样本直出</td>
+          <td>文本引导 grounding + 抗噪视觉 token + 困难 Query 路由</td>
+          <td>对全部流量启用大模型长推理，不做常规样本直出</td>
         </tr>
         <tr>
-          <td>需要召回 + 重排 + 线上可观测</td>
+          <td>需召回、重排与线上可观测闭环</td>
           <td>P03, P06</td>
           <td>原型 ID embedding + listwise 校准 + 无点击策略闭环</td>
-          <td>只抄离线 R@K，不看延迟与分场景 A/B</td>
+          <td>仅复制离线 R@K，忽略延迟与分场景 A/B</td>
         </tr>
         <tr>
-          <td>“找相似但改某属性”</td>
+          <td>相似检索下的属性修改意图</td>
           <td>P12, P13, P01</td>
           <td>修改意图 CoT + 视觉区域选择 + 属性结构</td>
-          <td>把普通 I2I 相似度当 CIR</td>
+          <td>将普通 I2I 相似度检索当作 CIR</td>
         </tr>
         <tr>
-          <td>推理有效但 QPS 扛不住</td>
+          <td>推理有效但服务 QPS 不足</td>
           <td>P11, P14, P15</td>
-          <td>自适应开推理；latent think 固定预算蒸馏到 Query Tower</td>
-          <td>全量 Query 自回归长 CoT</td>
+          <td>自适应启用推理；以 latent think 固定预算蒸馏 Query Tower</td>
+          <td>对全量 Query 做自回归长 CoT</td>
         </tr>
       </tbody>
     </table>
 
     <div class="callout good">
-      <h3>一条可执行的系统拼法</h3>
-      <p>主干：可预计算 item embedding + ANN 召回 + listwise 重排(P03)。Item 侧吸收属性推理与抗噪(P01 / P05)。Query 侧默认直出向量，困难样本再开推理(P11)，中长期用 latent think 蒸馏(P14 / P15)。裁剪与复杂背景走细粒度 grounding 通道(P02)。无点击与策略路由单独成系统层(P06)。CIR 作为“修改意图”产品入口，不与同款召回混为一谈(P12 / P13)。</p>
+      <h3>系统组合参考</h3>
+      <p>主干采用可预计算 item embedding、ANN 召回与 listwise 重排 (P03)。Item 侧吸收属性推理与抗噪 (P01 / P05)。Query 侧默认直接编码，困难样本再启用推理 (P11)；中长期以 latent think 蒸馏 (P14 / P15)。裁剪与复杂背景走细粒度 grounding 通道 (P02)。无点击与策略路由独立为系统层 (P06)。CIR 作为修改意图入口，不与同款召回混用 (P12 / P13)。</p>
     </div>
   </section>
 
   <section>
     <h2>08 · 来源与证据边界</h2>
-    <p>本读单按作者公开材料整理思路、收益与适用模态。线上 GMV、CTR、延迟等数字均为作者报告，不是独立审计；预印本工作以方法与公开实验为主，不默认等同正式录用结论。下列编号均可点击跳转 arXiv。</p>
+    <p>本读单依据作者公开材料整理方法要点、报告收益与适用模态。线上 GMV、CTR、延迟等数字均为作者报告，不构成独立审计；预印本工作以方法与公开实验为主，不默认等同正式录用结论。下列条目中的 arXiv 编号可直接点击访问。</p>
 
     <div class="callout warning">
-      <h3>必须分开写的三类信号</h3>
+      <h3>三类信号宜分开引用</h3>
       <ul style="margin-bottom:0;">
-        <li><strong>离线指标：</strong>MBE3.0、MMEB-V2、FashionIQ、CIRR、Recall@1 / H@100 等，便于方法比较，不能单独证明线上可买与可部署。</li>
-        <li><strong>工业 A/B：</strong>如 Pailitao-VL 部分场景 GMV、MOON Embedding 全链路 CTR，属于高价值产业信号，迁移时要对照数据治理、品类与延迟预算。</li>
-        <li><strong>系统层收益：</strong>REVISION 的无点击下降等，属于链路策略结果，不宜直接写成 embedding 模型增益。</li>
+        <li><strong>离线指标：</strong>MBE3.0、MMEB-V2、FashionIQ、CIRR、Recall@1 / H@100 等，用于方法比较，不能单独证明线上可交易性与可部署性。</li>
+        <li><strong>工业 A/B：</strong>如 Pailitao-VL 部分场景 GMV、MOON Embedding 全链路 CTR，属于有价值的产业信号；跨平台迁移须对照数据治理、品类结构与延迟预算。</li>
+        <li><strong>系统层收益：</strong>如 REVISION 报告的无点击率下降，属于链路策略结果，不宜直接表述为 embedding 模型增益。</li>
       </ul>
     </div>
 
