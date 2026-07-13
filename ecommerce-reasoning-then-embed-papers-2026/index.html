@@ -437,8 +437,7 @@
   }
 
   .sources { font-size: 7.6pt; line-height: 1.35; }
-  .sources li { margin-bottom: 3pt; }
-  .sources li { margin-bottom: 5pt; }
+  .sources li { margin-bottom: 3.5pt; }
 </style>
 </head>
 <body>
@@ -466,7 +465,7 @@
     <div class="cover-meta">
       作者：Winston<br>
       版本：2026-07-13<br>
-      边界：收益数字均按论文作者报告整理；预印本状态以 arXiv 公开版本为准。与“电商图搜召回 Paper List 2026”并列，不覆盖后者。数据见 <span class="mono">data/paper-list.tsv</span>。
+      证据边界：文中收益与线上数字均按论文作者公开报告整理；预印本以 arXiv 公开版本为准，不默认等同正式录用结论。
     </div>
   </section>
 
@@ -480,7 +479,7 @@
       <div class="toc-item"><span class="toc-num">05</span><span class="toc-title">三、找相似+修改意图：CIR</span></div>
       <div class="toc-item"><span class="toc-num">06</span><span class="toc-title">四、低延迟前沿探索</span></div>
       <div class="toc-item"><span class="toc-num">07</span><span class="toc-title">场景选型与阅读路径</span></div>
-      <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">来源、边界与自检</span></div>
+      <div class="toc-item"><span class="toc-num">08</span><span class="toc-title">来源与证据边界</span></div>
     </div>
   </section>
 
@@ -548,21 +547,21 @@
         </tr>
       </thead>
       <tbody>
-        <tr><td>01</td><td>MOON3.0</td><td>电商图搜</td><td>先结构化属性推理，再得到统一商品向量</td><td>2604.00513</td></tr>
-        <tr><td>02</td><td>TIGER-FG</td><td>电商图搜</td><td>文本引导隐式细粒度 grounding，解决裁剪图非对称</td><td>2605.18434</td></tr>
-        <tr><td>03</td><td>Pailitao-VL</td><td>电商图搜</td><td>工业统一 embedding + listwise reranker</td><td>2602.13704</td></tr>
+        <tr><td>01</td><td>MOON3.0</td><td>电商图搜</td><td>先结构化属性推理，再得到统一商品向量</td><td><a href="https://arxiv.org/abs/2604.00513">2604.00513</a></td></tr>
+        <tr><td>02</td><td>TIGER-FG</td><td>电商图搜</td><td>文本引导隐式细粒度 grounding，解决裁剪图非对称</td><td><a href="https://arxiv.org/abs/2605.18434">2605.18434</a></td></tr>
+        <tr><td>03</td><td>Pailitao-VL</td><td>电商图搜</td><td>工业统一 embedding + listwise reranker</td><td><a href="https://arxiv.org/abs/2602.13704">2602.13704</a></td></tr>
         <tr><td>04</td><td>MOON / MOON2.0</td><td>电商图搜</td><td>MOON3.0 的生成式->推理式演进底座</td><td>系列演进</td></tr>
-        <tr><td>05</td><td>TGQ-Former</td><td>电商图搜</td><td>标题/类目/元数据引导视觉 token 抗噪</td><td>2605.17366</td></tr>
-        <tr><td>06</td><td>REVISION</td><td>电商图搜</td><td>无点击意图挖掘与线上策略路由</td><td>2510.22739 · WSDM 2026</td></tr>
-        <tr><td>07</td><td>Think Then Embed</td><td>通用 RTE</td><td>Reasoner 生成 embedding-centric reasoning 再编码</td><td>2510.05014</td></tr>
-        <tr><td>08</td><td>UME-R1</td><td>通用 RTE</td><td>直接 embedding 与生成式 embedding 双通道</td><td>2511.00405</td></tr>
-        <tr><td>09</td><td>Embed-RL</td><td>通用 RTE</td><td>Embedder 指导 RL，强制指向检索证据</td><td>2602.13823</td></tr>
-        <tr><td>10</td><td>MMEmb-R1</td><td>通用 RTE</td><td>pair-aware 选择，只在有收益时用 reasoning</td><td>2604.06156</td></tr>
-        <tr><td>11</td><td>Think When Needed</td><td>通用 RTE</td><td>路由门控：干净样本直出，难样本再推理</td><td>2605.14448</td></tr>
-        <tr><td>12</td><td>CIR-CoT</td><td>CIR</td><td>Caption->Reasoning->Conclusion->embedding</td><td>2510.08003</td></tr>
-        <tr><td>13</td><td>MCoT-MVS</td><td>CIR</td><td>推理线索反向选择视觉 patch/instance</td><td>2603.17360</td></tr>
-        <tr><td>14</td><td>TTE-Flash</td><td>低延迟</td><td>latent think tokens 替代长文本 CoT</td><td>2605.16638</td></tr>
-        <tr><td>15</td><td>LaME</td><td>低延迟</td><td>固定 reason tokens 的 latent 信息瓶颈</td><td>2606.13061</td></tr>
+        <tr><td>05</td><td>TGQ-Former</td><td>电商图搜</td><td>标题/类目/元数据引导视觉 token 抗噪</td><td><a href="https://arxiv.org/abs/2605.17366">2605.17366</a></td></tr>
+        <tr><td>06</td><td>REVISION</td><td>电商图搜</td><td>无点击意图挖掘与线上策略路由</td><td><a href="https://arxiv.org/abs/2510.22739">2510.22739</a> · WSDM 2026</td></tr>
+        <tr><td>07</td><td>Think Then Embed</td><td>通用 RTE</td><td>Reasoner 生成 embedding-centric reasoning 再编码</td><td><a href="https://arxiv.org/abs/2510.05014">2510.05014</a></td></tr>
+        <tr><td>08</td><td>UME-R1</td><td>通用 RTE</td><td>直接 embedding 与生成式 embedding 双通道</td><td><a href="https://arxiv.org/abs/2511.00405">2511.00405</a></td></tr>
+        <tr><td>09</td><td>Embed-RL</td><td>通用 RTE</td><td>Embedder 指导 RL，强制指向检索证据</td><td><a href="https://arxiv.org/abs/2602.13823">2602.13823</a></td></tr>
+        <tr><td>10</td><td>MMEmb-R1</td><td>通用 RTE</td><td>pair-aware 选择，只在有收益时用 reasoning</td><td><a href="https://arxiv.org/abs/2604.06156">2604.06156</a></td></tr>
+        <tr><td>11</td><td>Think When Needed</td><td>通用 RTE</td><td>路由门控：干净样本直出，难样本再推理</td><td><a href="https://arxiv.org/abs/2605.14448">2605.14448</a></td></tr>
+        <tr><td>12</td><td>CIR-CoT</td><td>CIR</td><td>Caption->Reasoning->Conclusion->embedding</td><td><a href="https://arxiv.org/abs/2510.08003">2510.08003</a></td></tr>
+        <tr><td>13</td><td>MCoT-MVS</td><td>CIR</td><td>推理线索反向选择视觉 patch/instance</td><td><a href="https://arxiv.org/abs/2603.17360">2603.17360</a></td></tr>
+        <tr><td>14</td><td>TTE-Flash</td><td>低延迟</td><td>latent think tokens 替代长文本 CoT</td><td><a href="https://arxiv.org/abs/2605.16638">2605.16638</a></td></tr>
+        <tr><td>15</td><td>LaME</td><td>低延迟</td><td>固定 reason tokens 的 latent 信息瓶颈</td><td><a href="https://arxiv.org/abs/2606.13061">2606.13061</a></td></tr>
       </tbody>
     </table>
   </section>
@@ -578,7 +577,7 @@
         <div class="paper-title">MOON3.0: Reasoning-aware Multimodal Representation Learning for E-commerce Product Understanding</div>
         <span class="badge">精读</span>
       </div>
-      <p class="meta-line">arXiv:2604.00513 · 电商商品统一表征 · 先推理、后表征</p>
+      <p class="meta-line"><a href="https://arxiv.org/abs/2604.00513">arXiv:2604.00513</a> · 电商商品统一表征 · 先推理、后表征</p>
       <div class="kv">
         <div class="k">思路</div>
         <div>典型“先推理、后表征”。先从商品图像和标题生成类别、颜色、材质、设计元素等结构化属性，再通过 <span class="mono">&lt;emb&gt;</span> 表征、原始图文多头融合和 FIRE 细粒度残差增强，得到 256 维向量。</div>
@@ -598,7 +597,7 @@
         <div class="paper-title">TIGER-FG: Text-Guided Implicit Fine-Grained Grounding for E-commerce Retrieval</div>
         <span class="badge">精读</span>
       </div>
-      <p class="meta-line">arXiv:2605.18434 · 裁剪 Query 非对称 · 隐式目标定位</p>
+      <p class="meta-line"><a href="https://arxiv.org/abs/2605.18434">arXiv:2605.18434</a> · 裁剪 Query 非对称 · 隐式目标定位</p>
       <div class="kv">
         <div class="k">思路</div>
         <div>针对“裁剪商品 Query 图 vs 带背景的完整商品图 + 文本”这一真实图搜非对称问题，用商品文本引导候选图像进行隐式目标定位，无需额外检测框；再通过空间一致性和相似度结构双重蒸馏强化细粒度匹配。</div>
@@ -618,7 +617,7 @@
         <div class="paper-title">Pailitao-VL: Unified Embedding and Reranker for Real-Time Multi-Modal Industrial Search</div>
         <span class="badge">工业</span>
       </div>
-      <p class="meta-line">arXiv:2602.13704 · 阿里拍立淘 · 召回 + 重排 + 实时部署</p>
+      <p class="meta-line"><a href="https://arxiv.org/abs/2602.13704">arXiv:2602.13704</a> · 阿里拍立淘 · 召回 + 重排 + 实时部署</p>
       <div class="kv">
         <div class="k">思路</div>
         <div>阿里拍立淘工业系统。Embedding 从相对式对比学习转为超大规模 Absolute ID Recognition，让每个高纯商品实例对应稳定的全局语义原型；Reranker 从 pointwise 判断转为 chunk 内比较与跨 chunk 绝对分数校准。</div>
@@ -662,7 +661,7 @@
         <div class="paper-title">Text-Guided Visual Representation Learning for Robust Multimodal E-Commerce Recommendation</div>
         <span class="badge">抗噪</span>
       </div>
-      <p class="meta-line">arXiv:2605.17366 · TGQ-Former · 元数据引导视觉 token</p>
+      <p class="meta-line"><a href="https://arxiv.org/abs/2605.17366">arXiv:2605.17366</a> · TGQ-Former · 元数据引导视觉 token</p>
       <div class="kv">
         <div class="k">思路</div>
         <div>提出 TGQ-Former，用商品标题、类目和结构化元数据引导视觉 token 选择；同时保留 metadata-guided 与 exploratory 两路视觉 query，并利用可靠性双门控抑制促销文字、背景和装饰噪声。</div>
@@ -682,7 +681,7 @@
         <div class="paper-title">REVISION: Reflective Intent Mining and Online Reasoning Auxiliary for E-commerce Visual Search System Optimization</div>
         <span class="badge">系统</span>
       </div>
-      <p class="meta-line">arXiv:2510.22739 · WSDM 2026 Full Paper · 无点击闭环</p>
+      <p class="meta-line"><a href="https://arxiv.org/abs/2510.22739">arXiv:2510.22739</a> · WSDM 2026 Full Paper · 无点击闭环</p>
       <div class="kv">
         <div class="k">思路</div>
         <div>针对图搜无点击请求，离线从历史 Query 图、浏览商品和行为日志中挖掘用户隐式意图；线上由轻量推理模型生成优化计划，并动态调度搜索链路中的策略。</div>
@@ -706,7 +705,7 @@
         <div class="paper-title">Think Then Embed: Generative Context Improves Multimodal Embedding</div>
         <span class="badge">基线</span>
       </div>
-      <p class="meta-line">arXiv:2510.05014 · Reasoner + Embedder · MMEB-V2</p>
+      <p class="meta-line"><a href="https://arxiv.org/abs/2510.05014">arXiv:2510.05014</a> · Reasoner + Embedder · MMEB-V2</p>
       <div class="kv">
         <div class="k">思路</div>
         <div>Reasoner 先生成与检索任务相关的 Embedding-Centric Reasoning，Embedder 再联合原始输入和 reasoning 生成向量；同时研究“大 Reasoner + 小 Embedder”、蒸馏 Reasoner 以及统一模型等配置。</div>
@@ -725,7 +724,7 @@
         <div class="paper-title">UME-R1: Exploring Reasoning-Driven Generative Multimodal Embeddings</div>
         <span class="badge">双通道</span>
       </div>
-      <p class="meta-line">arXiv:2511.00405 · discriminative + generative embedding</p>
+      <p class="meta-line"><a href="https://arxiv.org/abs/2511.00405">arXiv:2511.00405</a> · discriminative + generative embedding</p>
       <div class="kv">
         <div class="k">思路</div>
         <div>同一模型同时输出直接 discriminative embedding 和“生成 reasoning 后得到的 generative embedding”；采用 Cold-start SFT + RL，并探索多次采样产生多个 reasoning / embedding。</div>
@@ -744,7 +743,7 @@
         <div class="paper-title">Embed-RL: Reinforcement Learning for Reasoning-Driven Multimodal Embeddings</div>
         <span class="badge">RL</span>
       </div>
-      <p class="meta-line">arXiv:2602.13823 · Embedder-Guided RL · T-CoT</p>
+      <p class="meta-line"><a href="https://arxiv.org/abs/2602.13823">arXiv:2602.13823</a> · Embedder-Guided RL · T-CoT</p>
       <div class="kv">
         <div class="k">思路</div>
         <div>提出 Embedder-Guided RL，由 Embedder 直接评价 Reasoner 生成的 CoT 是否有利于检索；T-CoT 强制推理指出图片、文本中的具体检索证据，而不是只生成泛化解释。</div>
@@ -763,7 +762,7 @@
         <div class="paper-title">MMEmb-R1: Reasoning-Enhanced Multimodal Embedding with Pair-Aware Selection and Adaptive Control</div>
         <span class="badge">难负</span>
       </div>
-      <p class="meta-line">arXiv:2604.06156 · pair-level 监督对齐 · 自适应启用 reasoning</p>
+      <p class="meta-line"><a href="https://arxiv.org/abs/2604.06156">arXiv:2604.06156</a> · pair-level 监督对齐 · 自适应启用 reasoning</p>
       <div class="kv">
         <div class="k">思路</div>
         <div>指出普通 CoT 是 instance-level，而对比学习是 query-target pair-level，二者存在监督错位；通过 pair-aware reasoning selection、反事实比较和自适应控制，只在 reasoning 能改善正负间隔时使用它。</div>
@@ -782,7 +781,7 @@
         <div class="paper-title">Think When Needed: Adaptive Reasoning-Driven Multimodal Embeddings</div>
         <span class="badge">生产</span>
       </div>
-      <p class="meta-line">arXiv:2605.14448 · Routing Gate · Reasoning LoRA + Embedding LoRA</p>
+      <p class="meta-line"><a href="https://arxiv.org/abs/2605.14448">arXiv:2605.14448</a> · Routing Gate · Reasoning LoRA + Embedding LoRA</p>
       <div class="kv">
         <div class="k">思路</div>
         <div>共享冻结的 MLLM backbone，分别挂载 Reasoning LoRA 和 Embedding LoRA；Routing Gate 自动决定当前样本走直接 embedding 还是先生成 CoT，并用固定 Embedder 作为稳定 RL reward 环境。</div>
@@ -806,7 +805,7 @@
         <div class="paper-title">CIR-CoT: Towards Interpretable Composed Image Retrieval via End-to-End Chain-of-Thought Reasoning</div>
         <span class="badge">CIR</span>
       </div>
-      <p class="meta-line">arXiv:2510.08003 · FashionIQ / CIRR / CIRCO</p>
+      <p class="meta-line"><a href="https://arxiv.org/abs/2510.08003">arXiv:2510.08003</a> · FashionIQ / CIRR / CIRCO</p>
       <div class="kv">
         <div class="k">思路</div>
         <div>输入参考图片和修改文本，依次生成 Caption、Reasoning、Conclusion，最后将目标检索意图压缩到专用 embedding。</div>
@@ -825,7 +824,7 @@
         <div class="paper-title">MCoT-MVS: Multi-level Vision Selection by Multi-modal CoT Reasoning for Composed Image Retrieval</div>
         <span class="badge">SOTA</span>
       </div>
-      <p class="meta-line">arXiv:2603.17360 · 视觉区域选择受 reasoning 控制 · 公开代码与模型</p>
+      <p class="meta-line"><a href="https://arxiv.org/abs/2603.17360">arXiv:2603.17360</a> · 视觉区域选择受 reasoning 控制 · 公开代码与模型</p>
       <div class="kv">
         <div class="k">思路</div>
         <div>MLLM 先输出“应保留、应删除、目标新增”的文本线索，再用这些线索选择参考图中的 patch-level 和 instance-level 视觉特征，最后融合修改文本和目标描述。</div>
@@ -849,7 +848,7 @@
         <div class="paper-title">TTE-Flash: Accelerating Reasoning-based Multimodal Representations via Think-Then-Embed Tokens</div>
         <span class="badge">加速</span>
       </div>
-      <p class="meta-line">arXiv:2605.16638 · latent think tokens · 可解释</p>
+      <p class="meta-line"><a href="https://arxiv.org/abs/2605.16638">arXiv:2605.16638</a> · latent think tokens · 可解释</p>
       <div class="kv">
         <div class="k">思路</div>
         <div>不再自回归生成长文本 CoT，而是在同一 backbone 中使用 latent think tokens，再由 embedding token 汇总。</div>
@@ -868,7 +867,7 @@
         <div class="paper-title">LaME: Learning to Think in Latent Space for Multimodal Embedding</div>
         <span class="badge">蒸馏</span>
       </div>
-      <p class="meta-line">arXiv:2606.13061 · 信息瓶颈 · 无需 CoT 文本标签</p>
+      <p class="meta-line"><a href="https://arxiv.org/abs/2606.13061">arXiv:2606.13061</a> · 信息瓶颈 · 无需 CoT 文本标签</p>
       <div class="kv">
         <div class="k">思路</div>
         <div>用固定数量的 learnable reason tokens 作为信息瓶颈，在 latent space 完成 reasoning；无需 CoT 文本标签，也无需自回归生成。</div>
@@ -958,8 +957,8 @@
   </section>
 
   <section>
-    <h2>08 · 来源、边界与自检</h2>
-    <p>本读单按作者公开材料整理思路、收益与适用模态。线上 GMV、CTR、延迟等数字均为作者报告，不是独立审计；预印本工作以方法与公开实验为主，不默认等同正式录用结论。</p>
+    <h2>08 · 来源与证据边界</h2>
+    <p>本读单按作者公开材料整理思路、收益与适用模态。线上 GMV、CTR、延迟等数字均为作者报告，不是独立审计；预印本工作以方法与公开实验为主，不默认等同正式录用结论。下列编号均可点击跳转 arXiv。</p>
 
     <div class="callout warning">
       <h3>必须分开写的三类信号</h3>
@@ -972,41 +971,23 @@
 
     <h3>引用索引</h3>
     <ol class="sources">
-      <li><span class="ref">P01</span> Wu et al., <a href="https://arxiv.org/abs/2604.00513">MOON3.0: Reasoning-aware Multimodal Representation Learning for E-commerce Product Understanding</a>. arXiv:2604.00513.</li>
-      <li><span class="ref">P02</span> Sun et al., <a href="https://arxiv.org/abs/2605.18434">TIGER-FG: Text-Guided Implicit Fine-Grained Grounding for E-commerce Retrieval</a>. arXiv:2605.18434.</li>
-      <li><span class="ref">P03</span> Chen et al., <a href="https://arxiv.org/abs/2602.13704">Pailitao-VL: Unified Embedding and Reranker for Real-Time Multi-Modal Industrial Search</a>. arXiv:2602.13704.</li>
-      <li><span class="ref">P04</span> MOON / MOON2.0 系列：作为 MOON3.0 演进底座阅读；工业部署与 CTR 系统收益见 <a href="https://arxiv.org/abs/2511.11305">MOON Embedding Technical Report</a> (arXiv:2511.11305)，该 CTR 数字为系列累计收益，不可单独归因于 MOON3.0。</li>
-      <li><span class="ref">P05</span> Guo et al., <a href="https://arxiv.org/abs/2605.17366">Text-Guided Visual Representation Learning for Robust Multimodal E-Commerce Recommendation</a>. arXiv:2605.17366.</li>
-      <li><span class="ref">P06</span> REVISION: Reflective Intent Mining and Online Reasoning Auxiliary for E-commerce Visual Search System Optimization. arXiv:2510.22739. WSDM 2026 Full Paper.</li>
-      <li><span class="ref">P07</span> <a href="https://arxiv.org/abs/2510.05014">Think Then Embed: Generative Context Improves Multimodal Embedding</a>. arXiv:2510.05014.</li>
-      <li><span class="ref">P08</span> <a href="https://arxiv.org/abs/2511.00405">UME-R1: Exploring Reasoning-Driven Generative Multimodal Embeddings</a>. arXiv:2511.00405.</li>
-      <li><span class="ref">P09</span> <a href="https://arxiv.org/abs/2602.13823">Embed-RL: Reinforcement Learning for Reasoning-Driven Multimodal Embeddings</a>. arXiv:2602.13823.</li>
-      <li><span class="ref">P10</span> <a href="https://arxiv.org/abs/2604.06156">MMEmb-R1: Reasoning-Enhanced Multimodal Embedding with Pair-Aware Selection and Adaptive Control</a>. arXiv:2604.06156.</li>
-      <li><span class="ref">P11</span> <a href="https://arxiv.org/abs/2605.14448">Think When Needed: Adaptive Reasoning-Driven Multimodal Embeddings</a>. arXiv:2605.14448.</li>
-      <li><span class="ref">P12</span> <a href="https://arxiv.org/abs/2510.08003">CIR-CoT: Towards Interpretable Composed Image Retrieval via End-to-End Chain-of-Thought Reasoning</a>. arXiv:2510.08003.</li>
-      <li><span class="ref">P13</span> <a href="https://arxiv.org/abs/2603.17360">MCoT-MVS: Multi-level Vision Selection by Multi-modal CoT Reasoning for Composed Image Retrieval</a>. arXiv:2603.17360.</li>
-      <li><span class="ref">P14</span> <a href="https://arxiv.org/abs/2605.16638">TTE-Flash: Accelerating Reasoning-based Multimodal Representations via Think-Then-Embed Tokens</a>. arXiv:2605.16638.</li>
-      <li><span class="ref">P15</span> <a href="https://arxiv.org/abs/2606.13061">LaME: Learning to Think in Latent Space for Multimodal Embedding</a>. arXiv:2606.13061.</li>
+      <li><span class="ref">P01</span> Wu et al., <a href="https://arxiv.org/abs/2604.00513">MOON3.0: Reasoning-aware Multimodal Representation Learning for E-commerce Product Understanding</a>. <a href="https://arxiv.org/abs/2604.00513">arXiv:2604.00513</a>.</li>
+      <li><span class="ref">P02</span> Sun et al., <a href="https://arxiv.org/abs/2605.18434">TIGER-FG: Text-Guided Implicit Fine-Grained Grounding for E-commerce Retrieval</a>. <a href="https://arxiv.org/abs/2605.18434">arXiv:2605.18434</a>.</li>
+      <li><span class="ref">P03</span> Chen et al., <a href="https://arxiv.org/abs/2602.13704">Pailitao-VL: Unified Embedding and Reranker for Real-Time Multi-Modal Industrial Search</a>. <a href="https://arxiv.org/abs/2602.13704">arXiv:2602.13704</a>.</li>
+      <li><span class="ref">P04</span> MOON / MOON2.0 系列：作为 MOON3.0 演进底座阅读；工业部署与 CTR 系统收益见 <a href="https://arxiv.org/abs/2511.11305">MOON Embedding Technical Report</a> (<a href="https://arxiv.org/abs/2511.11305">arXiv:2511.11305</a>)，该 CTR 数字为系列累计收益，不可单独归因于 MOON3.0。</li>
+      <li><span class="ref">P05</span> Guo et al., <a href="https://arxiv.org/abs/2605.17366">Text-Guided Visual Representation Learning for Robust Multimodal E-Commerce Recommendation</a>. <a href="https://arxiv.org/abs/2605.17366">arXiv:2605.17366</a>.</li>
+      <li><span class="ref">P06</span> <a href="https://arxiv.org/abs/2510.22739">REVISION: Reflective Intent Mining and Online Reasoning Auxiliary for E-commerce Visual Search System Optimization</a>. <a href="https://arxiv.org/abs/2510.22739">arXiv:2510.22739</a>. WSDM 2026 Full Paper.</li>
+      <li><span class="ref">P07</span> <a href="https://arxiv.org/abs/2510.05014">Think Then Embed: Generative Context Improves Multimodal Embedding</a>. <a href="https://arxiv.org/abs/2510.05014">arXiv:2510.05014</a>.</li>
+      <li><span class="ref">P08</span> <a href="https://arxiv.org/abs/2511.00405">UME-R1: Exploring Reasoning-Driven Generative Multimodal Embeddings</a>. <a href="https://arxiv.org/abs/2511.00405">arXiv:2511.00405</a>.</li>
+      <li><span class="ref">P09</span> <a href="https://arxiv.org/abs/2602.13823">Embed-RL: Reinforcement Learning for Reasoning-Driven Multimodal Embeddings</a>. <a href="https://arxiv.org/abs/2602.13823">arXiv:2602.13823</a>.</li>
+      <li><span class="ref">P10</span> <a href="https://arxiv.org/abs/2604.06156">MMEmb-R1: Reasoning-Enhanced Multimodal Embedding with Pair-Aware Selection and Adaptive Control</a>. <a href="https://arxiv.org/abs/2604.06156">arXiv:2604.06156</a>.</li>
+      <li><span class="ref">P11</span> <a href="https://arxiv.org/abs/2605.14448">Think When Needed: Adaptive Reasoning-Driven Multimodal Embeddings</a>. <a href="https://arxiv.org/abs/2605.14448">arXiv:2605.14448</a>.</li>
+      <li><span class="ref">P12</span> <a href="https://arxiv.org/abs/2510.08003">CIR-CoT: Towards Interpretable Composed Image Retrieval via End-to-End Chain-of-Thought Reasoning</a>. <a href="https://arxiv.org/abs/2510.08003">arXiv:2510.08003</a>.</li>
+      <li><span class="ref">P13</span> <a href="https://arxiv.org/abs/2603.17360">MCoT-MVS: Multi-level Vision Selection by Multi-modal CoT Reasoning for Composed Image Retrieval</a>. <a href="https://arxiv.org/abs/2603.17360">arXiv:2603.17360</a>.</li>
+      <li><span class="ref">P14</span> <a href="https://arxiv.org/abs/2605.16638">TTE-Flash: Accelerating Reasoning-based Multimodal Representations via Think-Then-Embed Tokens</a>. <a href="https://arxiv.org/abs/2605.16638">arXiv:2605.16638</a>.</li>
+      <li><span class="ref">P15</span> <a href="https://arxiv.org/abs/2606.13061">LaME: Learning to Think in Latent Space for Multimodal Embedding</a>. <a href="https://arxiv.org/abs/2606.13061">arXiv:2606.13061</a>.</li>
     </ol>
 
-    <h3>发布前自检</h3>
-    <table class="dense">
-      <thead>
-        <tr><th>项目</th><th>权重</th><th>状态</th><th>自评分</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>证据准确与可追溯</td><td>25</td><td>15 篇核心均给出 arXiv 或系列出处；线上收益标明作者报告与不可单独归因处</td><td class="score">25.0</td></tr>
-        <tr><td>结构与专业表达</td><td>20</td><td>按四层读单组织，保留思路 / 收益 / 模态 / 推荐迁移字段，无堆砌</td><td class="score">20.0</td></tr>
-        <tr><td>版式与 PDF</td><td>20</td><td>Kami 纸面、共享字体、无系统字体回退；封面/总览/卡片/来源页已抽检</td><td class="score">20.0</td></tr>
-        <tr><td>数据与可复现</td><td>15</td><td>paper-list / source-map / reading-paths 结构化数据</td><td class="score">15.0</td></tr>
-        <tr><td>验证 gates</td><td>15</td><td>make verify 通过（44 works）；pdffonts 仅批准字体</td><td class="score">15.0</td></tr>
-        <tr><td>Git 卫生</td><td>5</td><td>新建目录，不覆盖既有 recall paper list</td><td class="score">5.0</td></tr>
-      </tbody>
-    </table>
-    <div class="callout good" style="margin-top:6pt;">
-      <h3>发布结论</h3>
-      <p style="margin:0;">文档层自评 <span class="score">99.95 / 100</span>。本地 <span class="mono">make verify</span> 已通过，PDF 仅嵌入 TsangerJinKai02 / JetBrains Mono，页面抽检覆盖封面、总览、精读卡片与来源页。与既有《电商图搜召回 Paper List 2026》并列发布，不覆盖。</p>
-    </div>
   </section>
 
 </main>
