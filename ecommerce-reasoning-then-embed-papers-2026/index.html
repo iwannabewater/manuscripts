@@ -2,10 +2,10 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>电商图搜先推理后表征 Paper List 2026：从工业图搜到 latent think</title>
+<title>电商图搜多模态表征 Paper List 2026：工业部署、推理增强与低延迟</title>
 <meta name="author" content="Winston">
-<meta name="description" content="面向电商图搜的先推理后表征（Reasoning-then-Embed）论文清单：MOON3.0、TIGER-FG、Pailitao-VL、通用推理表征、CIR 与 latent 低延迟。">
-<meta name="keywords" content="reasoning-then-embed,电商图搜,多模态召回,MOON3.0,TIGER-FG,Pailitao-VL,CIR,latent reasoning">
+<meta name="description" content="电商图搜多模态表征论文清单：工业 embedding/rerank、文本引导 grounding、Reasoner->Embedder、CIR 与 latent 低延迟；先推理后表征仅是其中一类方法。">
+<meta name="keywords" content="电商图搜, multimodal representation, reasoning-then-embed, visual search, Pailitao-VL, MOON3.0, CIR, latent embedding">
 <meta name="generator" content="Kami">
 <link rel="stylesheet" href="../assets/styles/publication-fonts.css">
 <style>
@@ -22,7 +22,7 @@
     }
 
     @bottom-center {
-      content: counter(page) "  ·  先推理后表征 Paper List 2026";
+      content: counter(page) "  ·  电商图搜多模态表征 Paper List 2026";
       font-family: "TsangerJinKai02";
       font-size: 8.5pt;
       color: #67645d;
@@ -445,20 +445,20 @@
 
   <section class="cover">
     <div>
-      <div class="cover-eyebrow">Paper List · Reasoning-then-Embed · Visual Search 2026</div>
+      <div class="cover-eyebrow">Paper List · E-commerce Visual Search · Multimodal Representation 2026</div>
       <div class="cover-rule"></div>
-      <h1 class="cover-title">电商图搜先推理后表征 Paper List 2026：<br>从工业图搜到 latent think</h1>
-      <p class="cover-sub">按“电商图搜直接相关 -> 通用推理表征可迁移 -> 组合修改意图 (CIR) -> 低延迟前沿”四层编排的精读清单。对象不是泛化的多模态召回文献集合，而是 <strong>先推理、后表征</strong> 这一技术路线在商品理解、非对称图搜、工业召回与重排、组合检索及 latent 加速上的代表性工作。</p>
+      <h1 class="cover-title">电商图搜多模态表征 Paper List 2026：<br>工业部署、推理增强与低延迟</h1>
+      <p class="cover-sub">面向电商图搜的多模态表征精读清单，按“工业与场景直接相关 -> 可迁移的 Reasoner->Embedder -> 组合修改意图 (CIR) -> 低延迟前沿”四层编排。<strong>先推理后表征（Reasoning-then-Embed）只是其中一类方法</strong>，并非全部条目的共同定义；另含 ID 原型 embedding、文本引导 grounding、系统策略推理等相邻工作。</p>
       <div class="cover-grid">
         <div class="verdict-box">
-          <p><strong>范围：</strong>15 篇核心工作，覆盖工业电商图搜、Reasoner->Embedder 训练范式、Composed Image Retrieval，以及将长文本 CoT 压缩为固定计算预算的 latent think 方法。</p>
-          <p style="margin-top:7pt;"><strong>读法：</strong>先建立四层结构，再按任务场景选取 3-5 篇精读。2026 年条目多数仍为 arXiv 预印本；正文以方法与公开实验为据，不将其默认等同于正式录用结论。</p>
+          <p><strong>范围：</strong>15 篇核心工作，覆盖工业图搜闭环、抗噪与非对称匹配、严格 Reasoner->Embedder、CIR 条件检索，以及 latent think 低延迟路径。</p>
+          <p style="margin-top:7pt;"><strong>读法：</strong>先建立四层结构与方法族归属，再按任务选取 3-5 篇精读。2026 年条目多数仍为 arXiv 预印本；正文以方法与公开实验为据，不默认等同正式录用结论。</p>
         </div>
         <div class="signal-box">
           <div class="signal-row"><span class="tag">as of</span><span>证据日期：2026-07-13</span></div>
-          <div class="signal-row"><span class="tag">axis</span><span>Reasoning-then-Embed / 电商图搜 / CIR / 低延迟</span></div>
-          <div class="signal-row"><span class="tag">count</span><span>15 篇核心 · 4 个阅读层 · 含工业 A/B 报告</span></div>
-          <div class="signal-row"><span class="tag">scope</span><span>图搜、同款、属性推理、组合修改意图、服务延迟</span></div>
+          <div class="signal-row"><span class="tag">axis</span><span>多模态表征 / 工业部署 / 推理增强 / 低延迟</span></div>
+          <div class="signal-row"><span class="tag">count</span><span>15 篇核心 · 4 个阅读层 · 3 个方法族</span></div>
+          <div class="signal-row"><span class="tag">scope</span><span>图搜、同款、抗噪、属性推理、CIR、服务延迟</span></div>
         </div>
       </div>
     </div>
@@ -485,22 +485,49 @@
 
   <section class="break">
     <h2>01 · 使用说明与阅读边界</h2>
-    <p class="lead">本文沿一条方法主线组织：检索模型是否先将任务相关结构显式化，再将其压缩为可检索向量。在电商图搜中，该主线对应属性推理、目标区域定位、意图挖掘、组合修改意图，以及固定延迟预算下的可部署性。</p>
+    <p class="lead">本文按电商图搜多模态表征的问题谱系组织，而非假定 15 篇均属同一范式。严格意义的先推理后表征（Reasoner 显式生成任务相关结构，再编码为检索向量）主要对应 P01 与第 II、IV 层；第 I 层含工业系统、文本引导 grounding 与抗噪表征，第 III 层为组合修改意图检索。</p>
 
     <div class="grid-3">
       <div class="card">
         <h3>关注点</h3>
-        <p>方法上，推理如何进入表征；数据上，商品属性、难负样本与修改文本；系统上，召回、重排、策略路由与延迟预算。</p>
+        <p>方法如何进入可检索表征；商品属性、难负样本与修改文本如何进入训练；召回、重排、策略路由与延迟预算如何约束上线形态。</p>
       </div>
       <div class="card">
         <h3>边界</h3>
-        <p>通用 benchmark 的领先结果不能直接外推为可上线的图搜方案；论文作者报告的 GMV 或 CTR 亦不构成独立审计结论。</p>
+        <p>通用 benchmark 领先不能直接外推为可上线图搜方案；作者报告的 GMV / CTR 不构成独立审计；不得把工业系统文或 grounding 文直接标为 Reasoning-then-Embed。</p>
       </div>
       <div class="card">
         <h3>场景入口</h3>
-        <p>同款 / 近同款：P01-P03；困难 Query 自适应：P07、P11；属性修改意图：P12-P13；高 QPS 约束：P14-P15。</p>
+        <p>同款 / 近同款：P01-P03；抗噪与非对称：P02、P05；严格 RTE：P07-P11、P14-P15；属性修改意图：P12-P13；无点击策略：P06。</p>
       </div>
     </div>
+
+    <table class="dense">
+      <thead>
+        <tr>
+          <th>方法族</th>
+          <th>条目</th>
+          <th>与 Reasoning-then-Embed 的关系</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>严格 Reasoner->Embedder</td>
+          <td>P01, P07-P11, P14-P15</td>
+          <td>先生成/先 think，再得到 embedding；含自适应启用与 latent 压缩变体</td>
+        </tr>
+        <tr>
+          <td>推理服务检索，但非标准 RTE 管线</td>
+          <td>P06, P12, P13</td>
+          <td>系统策略推理或 CIR 的 CoT / 视觉选择；未必是“生成后压成双塔向量”的统一管线</td>
+        </tr>
+        <tr>
+          <td>工业表征、抗噪与演进底座</td>
+          <td>P02-P05</td>
+          <td>ID 原型 embedding、文本引导 grounding、元数据引导 token、MOON 演进；与推理增强相邻，但不宜标为 RTE</td>
+        </tr>
+      </tbody>
+    </table>
 
     <div class="callout warning">
       <h3>预印本与证据分层</h3>
@@ -519,7 +546,7 @@
       </div>
       <div class="card">
         <h3>II · 推理-&gt;表征</h3>
-        <p>Think Then Embed<br>UME / Embed-RL / MMEmb<br><span class="note">自适应路由见 Think When Needed</span></p>
+        <p>Think Then Embed<br>UME / Embed-RL / MMEmb<br><span class="note">严格 RTE 与自适应路由</span></p>
       </div>
       <div class="card">
         <h3>III · CIR</h3>

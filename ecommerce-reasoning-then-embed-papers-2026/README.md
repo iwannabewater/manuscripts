@@ -1,4 +1,4 @@
-# 电商图搜先推理后表征 Paper List 2026：从工业图搜到 latent think
+# 电商图搜多模态表征 Paper List 2026：工业部署、推理增强与低延迟
 
 交付内容：
 
@@ -9,7 +9,7 @@
 - `data/source-map.tsv`：来源到正文事实的映射
 - `data/reading-paths.tsv`：按角色/场景的连读路径
 
-与《电商图搜召回 Paper List 2026》的关系：并列读物。本文只覆盖 **先推理后表征（Reasoning-then-Embed）** 主线；不覆盖也不替换更广的图搜召回 paper list。
+与《电商图搜召回 Paper List 2026》的关系：并列读物。本文围绕电商图搜多模态表征精读，其中严格 Reasoning-then-Embed 仅为方法族之一；不覆盖也不替换更广的图搜召回 paper list。
 
 重新生成 PDF：
 

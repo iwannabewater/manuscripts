@@ -1,8 +1,8 @@
-# 电商图搜先推理后表征 Paper List 2026：来源说明
+# 电商图搜多模态表征 Paper List 2026：来源说明
 
 证据复核时间：2026-07-13，北京时间。
 
-本文是一份 **先推理后表征（Reasoning-then-Embed）** 主线精读清单，按「电商图搜直接相关 → 通用推理表征可迁移 → CIR 修改意图 → 低延迟前沿」组织 15 篇核心工作。它与仓库中的《电商图搜召回 Paper List 2026》并列：后者覆盖更广的召回系统论文，本文只收与「先推理、后表征」相关的精读集合。
+本文是一份电商图搜 **多模态表征** 精读清单，按「工业与场景直接相关 → 可迁移 Reasoner->Embedder → CIR → 低延迟」四层组织 15 篇工作。严格先推理后表征（Reasoning-then-Embed）仅覆盖部分条目（主要为 P01 与第 II、IV 层）；P02-P05 等为工业表征、grounding 或演进底座，不宜整体标为 RTE。与《电商图搜召回 Paper List 2026》并列：后者覆盖更广的召回系统论文。
 
 ## 证据分层
 
@@ -32,6 +32,14 @@
 | S14 | [MCoT-MVS](https://arxiv.org/abs/2603.17360) | arXiv:2603.17360 | A | 视觉选择受 CoT 控制；CIR SOTA |
 | S15 | [TTE-Flash](https://arxiv.org/abs/2605.16638) | arXiv:2605.16638 | A | latent think tokens |
 | S16 | [LaME](https://arxiv.org/abs/2606.13061) | arXiv:2606.13061 | A | latent reason tokens / 信息瓶颈 |
+
+## 方法族口径（与 RTE 的关系）
+
+| 方法族 | 条目 | 使用方式 |
+|---|---|---|
+| 严格 Reasoner->Embedder | P01, P07-P11, P14-P15 | 可写为先推理后表征或其 latent 变体 |
+| 推理服务检索、非标准 RTE | P06, P12, P13 | 系统策略推理或 CIR CoT，不直接等同双塔 RTE |
+| 工业表征 / 抗噪 / 演进 | P02-P05 | 工业 ID embedding、grounding、元数据引导、MOON 演进 |
 
 ## 口径与不确定性
 
